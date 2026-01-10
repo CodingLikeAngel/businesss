@@ -63,15 +63,15 @@ export interface CardPremiumCustomStyles {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div [ngClass]="hostClasses" [style.background]="config.gradient">
+    <div [ngClass]="hostClasses" [style.background]="config?.gradient">
       <div class="icon">
         <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path [attr.d]="getIconPath(config.icon)" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+          <path [attr.d]="getIconPath(config?.icon || 'heroStar')" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
         </svg>
       </div>
       <div class="content">
-        <h2>{{ config.title }}</h2>
-        <p>{{ config.description }}</p>
+        <h2>{{ config?.title }}</h2>
+        <p>{{ config?.description }}</p>
       </div>
     </div>
   `,

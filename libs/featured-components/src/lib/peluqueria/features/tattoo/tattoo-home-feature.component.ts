@@ -391,12 +391,18 @@ export class TattooHomeFeatureComponent implements OnDestroy, OnInit {
 
   ngOnInit() {
     this.startVariantRotation();
-    this.isMobile = window.innerWidth < 768;
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobile = window.innerWidth < 768;
+    } else {
+      this.isMobile = false;
+    }
   }
 
   @HostListener('window:resize')
   onResize() {
-    this.isMobile = window.innerWidth < 768;
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobile = window.innerWidth < 768;
+    }
   }
 
   ngOnDestroy() {
