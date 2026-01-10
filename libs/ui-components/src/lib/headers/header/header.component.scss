@@ -1,7 +1,36 @@
-
 @use './styles/index' as *;
 
+/* Base header styles */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: var(--header-bg, #1f2937);
+  color: var(--header-color, #f9fafb);
+  border-bottom: 1px solid var(--header-border, transparent);
+  box-shadow: var(--header-shadow, none);
+  transition: all 0.3s ease;
+}
 
+.header--glass {
+  background: rgba(255, 255, 255, 0.04) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+}
 
-  /* Estilos para el menú desplegable en temas específicos */
+.align-left { justify-content: flex-start; }
+.align-center { justify-content: center; }
+.align-right { justify-content: flex-end; }
 
+.menu-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: var(--header-bg, #1f2937);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+}

@@ -5,7 +5,7 @@ import { heroStar, heroRocketLaunch, heroArrowRight } from '@ng-icons/heroicons/
 import { variants as globalVariants } from '../models/ui-components-data.model';
 
 // Variantes específicas del botón
-export const buttonSpecificVariants = ['icon-only', 'text-only'] as const;
+export const buttonSpecificVariants = ['icon-only', 'text-only', 'glass'] as const;
 
 // Combinamos variantes globales y específicas
 export const baseButtonVariants = [...globalVariants, ...buttonSpecificVariants] as const;
