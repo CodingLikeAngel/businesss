@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {
   UIFooterComponent,
@@ -27,6 +27,29 @@ import { MainLayoutBaseComponent } from '../main-layout-base.component';
 })
 export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
   isSidebarCollapsed = false;
+  sidebarWidth = 450;
+  isResizing = false;
+
+  @HostListener('window:mousemove', ['$event'])
+  onMouseMove(event: MouseEvent) {
+    if (!this.isResizing) return;
+    const newWidth = event.clientX;
+    if (newWidth >= 300 && newWidth <= 800) {
+      this.sidebarWidth = newWidth;
+    }
+  }
+
+  @HostListener('window:mouseup')
+  onMouseUp() {
+    this.isResizing = false;
+    document.body.style.cursor = 'default';
+  }
+
+  startResizing(event: MouseEvent) {
+    event.preventDefault();
+    this.isResizing = true;
+    document.body.style.cursor = 'col-resize';
+  }
 
   tabsConfig: any[] = [
     { label: 'Servicios', sectionId: 'servicios', icon: '🛠️' },

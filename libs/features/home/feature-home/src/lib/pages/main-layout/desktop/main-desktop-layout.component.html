@@ -34,11 +34,24 @@
 
   <div class="workspace">
     <!-- Tools Sidebar (Semi-transparent floating) -->
-    <aside *ngIf="builderStep === 'editor'" class="tools-sidebar" [class.is-collapsed]="isSidebarCollapsed">
+    <aside *ngIf="builderStep === 'editor'" 
+           class="tools-sidebar" 
+           [class.is-collapsed]="isSidebarCollapsed"
+           [class.is-resizing]="isResizing"
+           [style.width.px]="isSidebarCollapsed ? 90 : sidebarWidth">
+      
       <lib-variant-selector 
+        style="width: 100%; display: block;"
         [isCollapsed]="isSidebarCollapsed" 
         (toggleCollapse)="isSidebarCollapsed = !isSidebarCollapsed">
       </lib-variant-selector>
+
+      <!-- Drag Handle -->
+      <div *ngIf="!isSidebarCollapsed" 
+           class="sidebar-resizer" 
+           (mousedown)="startResizing($event)">
+        <div class="resizer-knob"></div>
+      </div>
     </aside>
 
     <!-- THE CANVAS -->
