@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, Input, HostBinding, Inject, PLATFORM_ID, ViewEncapsulation } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, Input, HostBinding, Inject, PLATFORM_ID, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { isPlatformBrowser } from '@angular/common';
 import { variants as baseVariants } from '../models/ui-components-data.model';
@@ -73,6 +73,8 @@ export class BubbleAnimationComponent implements AfterViewInit {
   private curY = 0;
   private tgX = 0;
   private tgY = 0;
+  private rafId: number | null = null;
+  private mouseHandler: ((e: MouseEvent) => void) | null = null;
 
   constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
@@ -82,11 +84,24 @@ export class BubbleAnimationComponent implements AfterViewInit {
     }
   }
 
+  ngOnDestroy(): void {
+    if (this.mouseHandler && typeof window !== 'undefined') {
+      window.removeEventListener('mousemove', this.mouseHandler);
+      this.mouseHandler = null;
+    }
+    if (this.rafId != null && typeof window !== 'undefined') {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
+  }
+
   private initializeAnimation() {
-    window.addEventListener('mousemove', (event) => {
+    if (typeof window === 'undefined') return;
+    this.mouseHandler = (event: MouseEvent) => {
       this.tgX = event.clientX;
       this.tgY = event.clientY;
-    });
+    };
+    window.addEventListener('mousemove', this.mouseHandler);
 
     this.move();
   }
@@ -100,8 +115,8 @@ export class BubbleAnimationComponent implements AfterViewInit {
         `translate(${Math.round(this.curX)}px, ${Math.round(this.curY)}px)`;
     }
 
-    if (isPlatformBrowser(this.platformId)) {
-      requestAnimationFrame(() => this.move());
+    if (typeof window !== 'undefined') {
+      this.rafId = requestAnimationFrame(() => this.move());
     }
   }
 }

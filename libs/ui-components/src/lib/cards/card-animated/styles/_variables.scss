@@ -1,6 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Press+Start+2P&display=swap');
-/* Importar fuente si es necesaria */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+/* removed external Google Fonts imports to avoid build-time inlining/network issues */
 
 /* Theme Variables */
 $rayman-blue: #00A2FF;
