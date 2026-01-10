@@ -61,7 +61,7 @@
         class="mb-6"
       ></lib-ui-components-title>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ng-container *ngFor="let product of productsConfig.items; let i = index; trackBy: trackByProductId">
+        <ng-container *ngFor="let product of productsConfig.items; let i = index; trackBy: trackByProductName">
           <lib-ui-components-card-animated
             *ngIf="i % 2 === 0 && i !== 2"
             [title]="product.name"
@@ -109,7 +109,7 @@
     ></lib-ui-components-title>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <lib-testimonials-card
-        *ngFor="let testimonial of testimonials; trackBy: trackByTestimonialId"
+        *ngFor="let testimonial of testimonialsConfig.items; trackBy: trackByTestimonialId"
         [testimonial]="testimonial"
       ></lib-testimonials-card>
     </div>

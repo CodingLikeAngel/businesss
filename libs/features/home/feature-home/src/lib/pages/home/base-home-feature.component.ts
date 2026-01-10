@@ -65,6 +65,8 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
     testimonial: Testimonial
   ) => testimonial.author;
 
+  trackByProductName: TrackByFunction<any> = (index: number, product: any) => product.name;
+
   constructor(@Inject(PLATFORM_ID) protected platformId: object, protected variantService: VariantService, protected router: Router, protected route: ActivatedRoute) {
     this.isMobile = false;
     this.navBarConfig = this.variantService.getCurrentNavBarConfig();

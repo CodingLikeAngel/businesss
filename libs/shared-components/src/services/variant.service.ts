@@ -187,6 +187,9 @@ export interface ProductsConfig {
   providedIn: 'root',
 })
 export class VariantService {
+  constructor() {
+    this.loadFromLocalStorage();
+  }
   // Existing BehaviorSubjects
   private headerConfigSubject = new BehaviorSubject<HeaderConfig>({
     variant: 'cartoon',
@@ -526,6 +529,7 @@ export class VariantService {
       config.variant = current.variant;
     }
     this.headerConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
 
   setFooterConfig(config: Partial<FooterConfig>) {
@@ -534,6 +538,7 @@ export class VariantService {
       config.variant = current.variant;
     }
     this.footerConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
 
   setNavBarConfig(config: Partial<NavBarConfig>) {
@@ -542,11 +547,13 @@ export class VariantService {
       config.variant = current.variant;
     }
     this.navBarConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
 
   setTestimonialsConfig(config: Partial<TestimonialsConfig>) {
     const current = this.testimonialsConfigSubject.getValue();
     this.testimonialsConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
   
   getCurrentTestimonialsConfig(): TestimonialsConfig {
@@ -561,6 +568,7 @@ export class VariantService {
       config.variant = current.variant;
     }
     this.heroConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
 
   setBubbleConfig(config: Partial<BubbleConfig>) {
@@ -569,6 +577,7 @@ export class VariantService {
       config.variant = current.variant;
     }
     this.bubbleConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
 
   setCardConfig(config: Partial<CardConfig>) {
@@ -577,6 +586,7 @@ export class VariantService {
       config.variant = current.variant;
     }
     this.cardConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
 
   setTitleConfig(config: Partial<TitleConfig>) {
@@ -585,37 +595,44 @@ export class VariantService {
       config.variant = current.variant;
     }
     this.titleConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
 
   // New setters for component data
   setServiceCardsConfig(config: Partial<ServiceCardsConfig>) {
     const current = this.serviceCardsConfigSubject.getValue();
     this.serviceCardsConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
 
   setFaqConfig(config: Partial<FaqConfig>) {
     const current = this.faqConfigSubject.getValue();
     this.faqConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
 
   setPricingConfig(config: Partial<PricingConfig>) {
     const current = this.pricingConfigSubject.getValue();
     this.pricingConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
 
   setPromotionsConfig(config: Partial<PromotionsConfig>) {
     const current = this.promotionsConfigSubject.getValue();
     this.promotionsConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
 
   setGalleryConfig(config: Partial<GalleryConfig>) {
     const current = this.galleryConfigSubject.getValue();
     this.galleryConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
 
   setProductsConfig(config: Partial<ProductsConfig>) {
     const current = this.productsConfigSubject.getValue();
     this.productsConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
   }
 
   setGlobalVariant(variant: string) {
@@ -633,6 +650,7 @@ export class VariantService {
       this.setBubbleConfig({ variant });
       this.setCardConfig({ variant });
       this.setTitleConfig({ variant });
+      this.saveToLocalStorage();
     }
   }
 
@@ -650,6 +668,7 @@ export class VariantService {
       const { [component]: _, ...rest } = current;
       this.componentVariantsSubject.next(rest);
     }
+    this.saveToLocalStorage();
   }
 
   getVariantForComponent(component: string): string {
@@ -709,5 +728,64 @@ export class VariantService {
 
   getCurrentProductsConfig(): ProductsConfig {
     return this.productsConfigSubject.getValue();
+  }
+
+  // Persistence
+  private saveToLocalStorage() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const state = {
+        header: this.headerConfigSubject.getValue(),
+        footer: this.footerConfigSubject.getValue(),
+        navBar: this.navBarConfigSubject.getValue(),
+        hero: this.heroConfigSubject.getValue(),
+        bubble: this.bubbleConfigSubject.getValue(),
+        card: this.cardConfigSubject.getValue(),
+        title: this.titleConfigSubject.getValue(),
+        serviceCards: this.serviceCardsConfigSubject.getValue(),
+        faq: this.faqConfigSubject.getValue(),
+        pricing: this.pricingConfigSubject.getValue(),
+        promotions: this.promotionsConfigSubject.getValue(),
+        gallery: this.galleryConfigSubject.getValue(),
+        products: this.productsConfigSubject.getValue(),
+        globalVariant: this.globalVariantSubject.getValue(),
+        componentVariants: this.componentVariantsSubject.getValue(),
+      };
+      localStorage.setItem('anto_studios_config', JSON.stringify(state));
+    }
+  }
+
+  private loadFromLocalStorage() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const saved = localStorage.getItem('anto_studios_config');
+      if (saved) {
+        try {
+          const state = JSON.parse(saved);
+          if (state.header) this.headerConfigSubject.next(state.header);
+          if (state.footer) this.footerConfigSubject.next(state.footer);
+          if (state.navBar) this.navBarConfigSubject.next(state.navBar);
+          if (state.hero) this.heroConfigSubject.next(state.hero);
+          if (state.bubble) this.bubbleConfigSubject.next(state.bubble);
+          if (state.card) this.cardConfigSubject.next(state.card);
+          if (state.title) this.titleConfigSubject.next(state.title);
+          if (state.serviceCards) this.serviceCardsConfigSubject.next(state.serviceCards);
+          if (state.faq) this.faqConfigSubject.next(state.faq);
+          if (state.pricing) this.pricingConfigSubject.next(state.pricing);
+          if (state.promotions) this.promotionsConfigSubject.next(state.promotions);
+          if (state.gallery) this.galleryConfigSubject.next(state.gallery);
+          if (state.products) this.productsConfigSubject.next(state.products);
+          if (state.globalVariant) this.globalVariantSubject.next(state.globalVariant);
+          if (state.componentVariants) this.componentVariantsSubject.next(state.componentVariants);
+        } catch (e) {
+          console.error('Error loading config from localStorage', e);
+        }
+      }
+    }
+  }
+
+  resetConfig() {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      localStorage.removeItem('anto_studios_config');
+      window.location.reload();
+    }
   }
 }

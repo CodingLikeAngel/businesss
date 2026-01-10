@@ -48,16 +48,9 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
   ],
 })
 export class HomeDesktopFeatureComponent extends BaseHomeFeatureComponent implements OnInit {
-  testimonials: Testimonial[] = [];
-  trackByProductId: TrackByFunction<Product> = (index: number, product: Product) => product.name;
-
   override ngOnInit() {
     super.ngOnInit();
     this.isMobile = false;
-    // Inicializar testimonials desde testimonialsConfig
-    // this.testimonialsConfig$.subscribe((config: { items: Testimonial[]; }) => {
-    //   this.testimonials = config.items;
-    // });
   }
 
   onTabSelected(sectionId: string) {

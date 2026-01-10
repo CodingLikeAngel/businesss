@@ -1,85 +1,312 @@
-@use 'sass:color';
 @use 'variables.scss' as vars;
 
-.variant-selector {
-  padding: 1rem;
-  margin: 1rem auto;
-  max-width: 500px;
-  background: rgba(vars.$color-dark-bg, 0.8); /* Use $color-dark-bg instead of $color-dark */
-  border-radius: 12px;
-  box-shadow: 0 0 20px rgba(vars.$color-rayman-yellow, 0.7); /* Use $color-rayman-yellow instead of $color-gold */
-  font-family: 'Orbitron', sans-serif;
-  color: vars.$color-white; /* Use $color-white for text */
-  position: relative;
-  z-index: 1000;
+.builder-container {
+  display: flex;
+  height: 100%;
+  background: vars.$color-dark-bg;
+  color: vars.$color-white;
+  font-family: vars.$font-family-sans;
 
-  h2 {
-    font-size: 1.5rem;
-    text-shadow: 0 0 10px vars.$color-rayman-yellow; /* Use $color-rayman-yellow for glow */
-    margin-bottom: 1rem;
-    text-align: center;
-  }
-
-  .config-section {
-    margin-bottom: 1rem;
-    border-bottom: 1px dashed vars.$color-rayman-yellow; /* Use $color-rayman-yellow for border */
-    padding-bottom: 1rem;
-  }
-
-  .collapsible {
-    cursor: pointer;
-    font-size: 1.2rem;
-    text-shadow: 0 0 5px vars.$color-rayman-blue; /* Use $color-rayman-blue instead of $color-rayman */
-    margin-bottom: 0.5rem;
-
-    &:hover {
-      color: vars.$color-rayman-yellow; /* Use $color-rayman-yellow for hover */
-    }
-
-    &:focus {
-      outline: 2px solid vars.$color-rayman-blue; /* Add focus outline for accessibility */
-      outline-offset: 2px;
-    }
-  }
-
-  .config-content {
+  .builder-sidebar {
+    width: 60px;
+    background: vars.$color-gray-900;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-    background: rgba(vars.$color-dark-bg, 0.5); /* Use $color-dark-bg for background */
+    align-items: center;
+    padding: 1rem 0;
+    border-right: 1px solid rgba(vars.$color-white, 0.1);
+
+    .nav-item {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.2rem;
+      position: relative;
+
+      &:hover {
+        background: rgba(vars.$color-white, 0.1);
+      }
+
+      &.active {
+        background: vars.$color-primary;
+        color: white;
+        box-shadow: 0 0 10px vars.$color-primary;
+      }
+
+      .tooltip {
+        position: absolute;
+        left: 100%;
+        margin-left: 10px;
+        background: vars.$color-gray-800;
+        color: white;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.2s ease;
+        z-index: 100;
+      }
+
+      &:hover .tooltip {
+        opacity: 1;
+      }
+    }
+  }
+
+  .builder-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: vars.$color-primary transparent;
+
+    &::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: vars.$color-primary;
+      border-radius: 10px;
+    }
+
+    header {
+      margin-bottom: 2rem;
+      h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(
+          to right,
+          vars.$color-primary,
+          vars.$color-accent
+        );
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+      p {
+        color: vars.$color-secondary;
+        font-size: 0.9rem;
+      }
+    }
+
+    .config-group {
+      margin-bottom: 2rem;
+      background: rgba(vars.$color-white, 0.03);
+      padding: 1.5rem;
+      border-radius: 12px;
+      border: 1px solid rgba(vars.$color-white, 0.05);
+
+      h3 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: vars.$color-indigo;
+      }
+
+      .input-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+    }
+  }
+}
+
+.item-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  .list-item {
+    background: rgba(vars.$color-white, 0.05);
+    padding: 0.75rem;
     border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: rgba(vars.$color-primary, 0.3);
+      background: rgba(vars.$color-primary, 0.05);
+    }
+
+    .item-info {
+      display: flex;
+      flex-direction: column;
+      .item-label {
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+      .item-sublabel {
+        font-size: 0.75rem;
+        color: vars.$color-secondary;
+      }
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 0.5rem;
+      button {
+        background: none;
+        border: none;
+        color: vars.$color-secondary;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: rgba(vars.$color-white, 0.1);
+          color: vars.$color-white;
+        }
+
+        &.delete-btn:hover {
+          color: vars.$color-danger;
+        }
+      }
+    }
   }
 
-  :host ::ng-deep .input {
-    &.input-cyberpunk {
-      background: linear-gradient(135deg, vars.$color-rayman-yellow, vars.$color-dark-bg 60%, vars.$color-dark-bg); /* Use $color-rayman-yellow and $color-dark-bg */
-      color: vars.$color-white; /* Use $color-white for text */
-      border: 3px dashed vars.$color-rayman-yellow; /* Use $color-rayman-yellow for border */
-      box-shadow: 0 0 15px rgba(vars.$color-rayman-yellow, 0.7), inset 0 0 8px rgba(vars.$color-rayman-blue, 0.4); /* Use $color-rayman-blue for inset shadow */
+  .add-item-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: transparent;
+    border: 1px dashed rgba(vars.$color-white, 0.2);
+    color: vars.$color-white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.85rem;
 
-      &:focus {
-        box-shadow: 0 0 20px rgba(vars.$color-rayman-yellow, 0.9); /* Use $color-rayman-yellow for focus glow */
-      }
-
-      option {
-        background: vars.$color-dark-bg; /* Use $color-dark-bg for dropdown options */
-        color: vars.$color-white; /* Use $color-white for text */
-      }
-    }
-
-    &.input-disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    &.input-textarea {
-      min-height: 100px;
+    &:hover {
+      border-color: vars.$color-primary;
+      color: vars.$color-primary;
+      background: rgba(vars.$color-primary, 0.05);
     }
   }
+}
 
-  @media (max-width: 768px) {
-    max-width: 100%;
-    padding: 0.5rem;
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+
+  .modal-card {
+    background: vars.$color-gray-900;
+    width: 100%;
+    max-width: 500px;
+    border-radius: 16px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(vars.$color-white, 0.1);
+    display: flex;
+    flex-direction: column;
+    max-height: 90vh;
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(vars.$color-white, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      h3 {
+        margin: 0;
+        font-size: 1.2rem;
+      }
+      button {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+        font-size: 1.5rem;
+      }
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .modal-footer {
+      padding: 1.5rem;
+      border-top: 1px solid rgba(vars.$color-white, 0.1);
+      display: flex;
+      justify-content: flex-end;
+      gap: 1rem;
+
+      button {
+        padding: 0.6rem 1.2rem;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+        transition: all 0.2s ease;
+
+        &.cancel {
+          background: transparent;
+          border: 1px solid rgba(vars.$color-white, 0.2);
+          color: white;
+          &:hover {
+            background: rgba(vars.$color-white, 0.05);
+          }
+        }
+
+        &.confirm {
+          background: vars.$color-primary;
+          border: none;
+          color: white;
+          &:hover {
+            box-shadow: 0 0 15px vars.$color-primary;
+          }
+        }
+      }
+    }
+  }
+}
+
+.reset-btn {
+  margin-top: 2rem;
+  width: 100%;
+  padding: 0.75rem;
+  background: rgba(vars.$color-danger, 0.1);
+  color: vars.$color-danger;
+  border: 1px solid rgba(vars.$color-danger, 0.2);
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background: vars.$color-danger;
+    color: white;
   }
 }

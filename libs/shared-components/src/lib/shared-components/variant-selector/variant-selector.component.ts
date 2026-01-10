@@ -17,6 +17,7 @@ import {
   PromotionsConfig,
   GalleryConfig,
   ProductsConfig,
+  TestimonialsConfig,
 } from '../../../services/variant.service';
 import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from '@negocio/ui-components';
 
@@ -25,560 +26,196 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
   standalone: true,
   imports: [CommonModule, FormsModule, UIInputComponent],
   template: `
-    <div class="variant-selector">
-      <h2>Configurar Componentes</h2>
+    <div class="builder-container">
+      <!-- Sidebar Navigation -->
+      <aside class="builder-sidebar">
+        <div class="nav-item" [class.active]="activeTab === 'general'" (click)="setActiveTab('general')">
+          <span>⚙️</span>
+          <div class="tooltip">General</div>
+        </div>
+        <div class="nav-item" [class.active]="activeTab === 'header'" (click)="setActiveTab('header')">
+          <span>🔝</span>
+          <div class="tooltip">Header & Navbar</div>
+        </div>
+        <div class="nav-item" [class.active]="activeTab === 'hero'" (click)="setActiveTab('hero')">
+          <span>🚀</span>
+          <div class="tooltip">Hero Section</div>
+        </div>
+        <div class="nav-item" [class.active]="activeTab === 'content'" (click)="setActiveTab('content')">
+          <span>📝</span>
+          <div class="tooltip">Contenido</div>
+        </div>
+        <div class="nav-item" [class.active]="activeTab === 'layout'" (click)="setActiveTab('layout')">
+          <span>🎨</span>
+          <div class="tooltip">Estilos & Variantes</div>
+        </div>
+        <div class="nav-item" [class.active]="activeTab === 'footer'" (click)="setActiveTab('footer')">
+          <span>👣</span>
+          <div class="tooltip">Footer</div>
+        </div>
+      </aside>
 
-      <!-- Global Variant Selector -->
-      <div class="config-section">
-        <h3>Variante Global</h3>
-        <lib-ui-components-input
-          type="select"
-          [variant]="selectorVariant"
-          [size]="'md'"
-          [placeholder]="'Selecciona una variante global'"
-          [(ngModel)]="globalVariant"
-          (ngModelChange)="onGlobalVariantChange()"
-          [options]="variantOptions"
-        ></lib-ui-components-input>
-      </div>
+      <!-- Main Content Area -->
+      <div class="builder-content">
+        <header>
+          <h2>Visual Builder</h2>
+          <p>Personaliza cada detalle de tu sitio web en tiempo real.</p>
+        </header>
 
-      <!-- Component-Specific Variants -->
-      <div class="config-section">
-        <h3>Variantes por Componente</h3>
-        <div *ngFor="let component of components" class="component-config">
-          <lib-ui-components-input
-            type="select"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Selecciona una variante para ' + component.label"
-            [(ngModel)]="componentVariants[component.id]"
-            (ngModelChange)="onComponentVariantChange(component.id)"
-            [options]="componentVariantOptions"
-          ></lib-ui-components-input>
+        <!-- General Tab -->
+        <div *ngIf="activeTab === 'general'" class="tab-content">
+          <div class="config-group">
+            <h3>Variante Global</h3>
+            <lib-ui-components-input
+              type="select"
+              [variant]="selectorVariant"
+              [(ngModel)]="globalVariant"
+              (ngModelChange)="onGlobalVariantChange()"
+              [options]="variantOptions"
+            ></lib-ui-components-input>
+          </div>
+
+          <div class="config-group">
+            <h3>Gestión de Proyecto</h3>
+            <div class="input-grid">
+              <button class="add-item-btn" (click)="exportProject()">📥 Exportar Configuración</button>
+              <button class="reset-btn" (click)="resetConfiguration()">🔴 Restablecer Todo</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Header & Navbar Tab -->
+        <div *ngIf="activeTab === 'header'" class="tab-content">
+          <div class="config-group">
+            <h3>Configuración del Header</h3>
+            <div class="input-grid">
+              <lib-ui-components-input type="text" label="Título" [(ngModel)]="headerConfig.title" (ngModelChange)="updateHeaderConfig()"></lib-ui-components-input>
+              <lib-ui-components-input type="text" label="Subtítulo" [(ngModel)]="headerConfig.subtitle" (ngModelChange)="updateHeaderConfig()"></lib-ui-components-input>
+              <lib-ui-components-input type="select" label="Alineación" [(ngModel)]="headerConfig.align" [options]="alignOptions" (ngModelChange)="updateHeaderConfig()"></lib-ui-components-input>
+            </div>
+          </div>
+
+          <div class="config-group">
+            <h3>Navbar Settings</h3>
+            <div class="input-grid">
+              <lib-ui-components-input type="text" label="Texto Logo" [(ngModel)]="navBarConfig.logoText" (ngModelChange)="updateNavBarConfig()"></lib-ui-components-input>
+              <lib-ui-components-input type="checkbox" [(ngModel)]="navBarConfig.isFixed" (ngModelChange)="updateNavBarConfig()">Navbar Fijo</lib-ui-components-input>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Tab -->
+        <div *ngIf="activeTab === 'hero'" class="tab-content">
+          <div class="config-group">
+            <h3>Contenido del Hero</h3>
+            <div class="input-grid">
+              <lib-ui-components-input type="text" label="Título Principal" [(ngModel)]="heroConfig.title" (ngModelChange)="updateHeroConfig()"></lib-ui-components-input>
+              <lib-ui-components-input type="textarea" label="Subtítulo" [(ngModel)]="heroConfig.subtitle" (ngModelChange)="updateHeroConfig()"></lib-ui-components-input>
+              <lib-ui-components-input type="text" label="Botón CTA" [(ngModel)]="heroConfig.ctaLabel" (ngModelChange)="updateHeroConfig()"></lib-ui-components-input>
+            </div>
+          </div>
+
+          <div class="config-group">
+              <h3>Fondo de Video</h3>
+              <div class="input-grid">
+                <lib-ui-components-input type="checkbox" [(ngModel)]="heroConfig.videoBackground" (ngModelChange)="updateHeroConfig()">Habilitar Video</lib-ui-components-input>
+                <lib-ui-components-input *ngIf="heroConfig.videoBackground" type="text" label="URL Video" [(ngModel)]="heroConfig.videoUrl" (ngModelChange)="updateHeroConfig()"></lib-ui-components-input>
+              </div>
+          </div>
+        </div>
+
+        <!-- Content Tab -->
+        <div *ngIf="activeTab === 'content'" class="tab-content">
+          <div class="config-group">
+            <h3>Servicios</h3>
+            <div class="item-list">
+              <div *ngFor="let item of serviceCardsConfig.items; let i = index" class="list-item">
+                <div class="item-info">
+                  <span class="item-label">{{item.routeName}}</span>
+                  <span class="item-sublabel">{{item.description | slice:0:40}}...</span>
+                </div>
+                <div class="item-actions">
+                  <button (click)="openEditModal('service', item, i)">✏️</button>
+                  <button class="delete-btn" (click)="removeItem('service', i)">🗑️</button>
+                </div>
+              </div>
+              <button class="add-item-btn" (click)="openAddModal('service')">+ Añadir Servicio</button>
+            </div>
+          </div>
+
+          <div class="config-group">
+            <h3>Testimonios</h3>
+            <div class="item-list">
+              <div *ngFor="let t of testimonialsConfig.items; let i = index" class="list-item">
+                <div class="item-info">
+                  <span class="item-label">{{t.author}}</span>
+                </div>
+                <div class="item-actions">
+                  <button (click)="removeItem('testimonial', i)">🗑️</button>
+                </div>
+              </div>
+              <button class="add-item-btn" (click)="openAddModal('testimonial')">+ Añadir Testimonio</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Layout & Variantes Tab -->
+        <div *ngIf="activeTab === 'layout'" class="tab-content">
+           <div class="config-group" *ngFor="let comp of components">
+              <h3>{{comp.label}}</h3>
+              <lib-ui-components-input
+                type="select"
+                [placeholder]="'Variante para ' + comp.label"
+                [(ngModel)]="componentVariants[comp.id]"
+                (ngModelChange)="onComponentVariantChange(comp.id)"
+                [options]="componentVariantOptions"
+              ></lib-ui-components-input>
+           </div>
+        </div>
+
+        <!-- Footer Tab -->
+        <div *ngIf="activeTab === 'footer'" class="tab-content">
+          <div class="config-group">
+            <h3>Configuración del Footer</h3>
+            <div class="input-grid">
+              <lib-ui-components-input type="text" label="Título" [(ngModel)]="footerConfig.title" (ngModelChange)="updateFooterConfig()"></lib-ui-components-input>
+              <lib-ui-components-input type="textarea" label="Descripción" [(ngModel)]="footerConfig.description" (ngModelChange)="updateFooterConfig()"></lib-ui-components-input>
+              <lib-ui-components-input type="checkbox" [(ngModel)]="footerConfig.showParticles" (ngModelChange)="updateFooterConfig()">Mostrar Partículas</lib-ui-components-input>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
 
-      <!-- Header Config -->
-      <div class="config-section">
-        <h3 class="collapsible" tabindex="0" (click)="toggleHeaderConfig()" (keyup)="onKeyUpHeader($event)">
-          Configuración del Header {{ showHeaderConfig ? '▼' : '▶' }}
-        </h3>
-        <div *ngIf="showHeaderConfig" class="config-content">
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Título del header'"
-            [(ngModel)]="headerConfig.title"
-            (ngModelChange)="updateHeaderConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Subtítulo del header'"
-            [(ngModel)]="headerConfig.subtitle"
-            (ngModelChange)="updateHeaderConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="select"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Alineación'"
-            [(ngModel)]="headerConfig.align"
-            (ngModelChange)="updateHeaderConfig()"
-            [options]="alignOptions"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="checkbox"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [(ngModel)]="headerConfig.dark"
-            (ngModelChange)="updateHeaderConfig()"
-          >
-            Modo Oscuro
-          </lib-ui-components-input>
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Nav Items (JSON)'"
-            [(ngModel)]="navItemsJson"
-            (ngModelChange)="updateNavItems()"
-          ></lib-ui-components-input>
+    <!-- Edit Item Modal -->
+    <div *ngIf="showItemModal" class="modal-overlay">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Editar {{modalItemType}}</h3>
+          <button (click)="closeItemModal()">×</button>
+        </div>
+        <div class="modal-body" *ngIf="editingItem">
+          <!-- Dinamyc Form based on item type -->
+          <ng-container [ngSwitch]="modalItemType">
+            <div *ngSwitchCase="'service'" class="input-grid">
+              <lib-ui-components-input type="text" placeholder="Nombre del servicio" [(ngModel)]="editingItem.routeName"></lib-ui-components-input>
+              <lib-ui-components-input type="textarea" placeholder="Descripción" [(ngModel)]="editingItem.description"></lib-ui-components-input>
+              <lib-ui-components-input type="text" placeholder="URL Imagen" [(ngModel)]="editingItem.imageUrl"></lib-ui-components-input>
+              <lib-ui-components-input type="text" placeholder="Dificultad/Tiempo" [(ngModel)]="editingItem.difficulty"></lib-ui-components-input>
+            </div>
+            <div *ngSwitchCase="'testimonial'" class="input-grid">
+              <lib-ui-components-input type="textarea" placeholder="Cita" [(ngModel)]="editingItem.quote"></lib-ui-components-input>
+              <lib-ui-components-input type="text" placeholder="Autor" [(ngModel)]="editingItem.author"></lib-ui-components-input>
+            </div>
+            <!-- Add other types here... -->
+          </ng-container>
+        </div>
+        <div class="modal-footer">
+          <button class="cancel" (click)="closeItemModal()">Cancelar</button>
+          <button class="confirm" (click)="saveItem()">Guardar Cambios</button>
         </div>
       </div>
-
-      <!-- Navbar Config -->
-      <div class="config-section">
-        <h3 class="collapsible" tabindex="0" (click)="toggleNavBarConfig()" (keyup)="onKeyUpNavBar($event)">
-          Configuración del Navbar {{ showNavBarConfig ? '▼' : '▶' }}
-        </h3>
-        <div *ngIf="showNavBarConfig" class="config-content">
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Texto del logo'"
-            [(ngModel)]="navBarConfig.logoText"
-            (ngModelChange)="updateNavBarConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="checkbox"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [(ngModel)]="navBarConfig.showMobileMenu"
-            (ngModelChange)="updateNavBarConfig()"
-          >
-            Mostrar Menú Móvil
-          </lib-ui-components-input>
-          <lib-ui-components-input
-            type="checkbox"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [(ngModel)]="navBarConfig.isFixed"
-            (ngModelChange)="updateNavBarConfig()"
-          >
-            Navbar Fijo
-          </lib-ui-components-input>
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Nav Links (JSON)'"
-            [(ngModel)]="navLinksJson"
-            (ngModelChange)="updateNavLinks()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Estilos Personalizados (JSON)'"
-            [(ngModel)]="navCustomStylesJson"
-            (ngModelChange)="updateNavCustomStyles()"
-          ></lib-ui-components-input>
-        </div>
-      </div>
-
-      <!-- Hero Config -->
-      <div class="config-section">
-        <h3 class="collapsible" tabindex="0" (click)="toggleHeroConfig()" (keyup)="onKeyUpHero($event)">
-          Configuración del Hero {{ showHeroConfig ? '▼' : '▶' }}
-        </h3>
-        <div *ngIf="showHeroConfig" class="config-content">
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Título del Hero'"
-            [(ngModel)]="heroConfig.title"
-            (ngModelChange)="updateHeroConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Subtítulo del Hero'"
-            [(ngModel)]="heroConfig.subtitle"
-            (ngModelChange)="updateHeroConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="checkbox"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [(ngModel)]="heroConfig.showCta"
-            (ngModelChange)="updateHeroConfig()"
-          >
-            Mostrar CTA
-          </lib-ui-components-input>
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Texto del CTA'"
-            [(ngModel)]="heroConfig.ctaLabel"
-            (ngModelChange)="updateHeroConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="checkbox"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [(ngModel)]="heroConfig.showScrollIcon"
-            (ngModelChange)="updateHeroConfig()"
-          >
-            Mostrar Icono de Scroll
-          </lib-ui-components-input>
-          <lib-ui-components-input
-            type="checkbox"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [(ngModel)]="heroConfig.videoBackground"
-            (ngModelChange)="updateHeroConfig()"
-          >
-            Fondo de Video
-          </lib-ui-components-input>
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'URL del Video'"
-            [(ngModel)]="heroConfig.videoUrl"
-            (ngModelChange)="updateHeroConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'URL del Poster del Video'"
-            [(ngModel)]="heroConfig.videoPoster"
-            (ngModelChange)="updateHeroConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Navigation Cards (JSON)'"
-            [(ngModel)]="navigationCardsJson"
-            (ngModelChange)="updateNavigationCards()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Carousel Items (JSON)'"
-            [(ngModel)]="carouselItemsJson"
-            (ngModelChange)="updateCarouselItems()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Estilos Personalizados (JSON)'"
-            [(ngModel)]="heroCustomStylesJson"
-            (ngModelChange)="updateHeroCustomStyles()"
-          ></lib-ui-components-input>
-        </div>
-      </div>
-
-      <!-- Bubble Config -->
-      <div class="config-section">
-        <h3 class="collapsible" tabindex="0" (click)="toggleBubbleConfig()" (keyup)="onKeyUpBubble($event)">
-          Configuración del Bubble {{ showBubbleConfig ? '▼' : '▶' }}
-        </h3>
-        <div *ngIf="showBubbleConfig" class="config-content">
-          <lib-ui-components-input
-            type="number"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Velocidad (0.1 - 10)'"
-            [(ngModel)]="bubbleConfig.speed"
-            (ngModelChange)="updateBubbleConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="number"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Desenfoque (0 - 100)'"
-            [(ngModel)]="bubbleConfig.blur"
-            (ngModelChange)="updateBubbleConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="number"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Opacidad (0 - 1)'"
-            [(ngModel)]="bubbleConfig.opacity"
-            (ngModelChange)="updateBubbleConfig()"
-          ></lib-ui-components-input>
-        </div>
-      </div>
-
-      <!-- Card Config -->
-      <div class="config-section">
-        <h3 class="collapsible" tabindex="0" (click)="toggleCardConfig()" (keyup)="onKeyUpCard($event)">
-          Configuración del Card {{ showCardConfig ? '▼' : '▶' }}
-        </h3>
-        <div *ngIf="showCardConfig" class="config-content">
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Color de Fondo (e.g., rgba(255,255,255,0.1))'"
-            [(ngModel)]="cardConfig.backgroundColor"
-            (ngModelChange)="updateCardConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Color de Texto (e.g., #FACC15)'"
-            [(ngModel)]="cardConfig.textColor"
-            (ngModelChange)="updateCardConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Color de Acento (e.g., #FF1E56)'"
-            [(ngModel)]="cardConfig.accentColor"
-            (ngModelChange)="updateCardConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="select"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Animación'"
-            [(ngModel)]="cardConfig.animation"
-            (ngModelChange)="updateCardConfig()"
-            [options]="cardAnimationOptions"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="checkbox"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [(ngModel)]="cardConfig.isMobile"
-            (ngModelChange)="updateCardConfig()"
-          >
-            Modo Móvil
-          </lib-ui-components-input>
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Estilos Personalizados (JSON)'"
-            [(ngModel)]="cardCustomStylesJson"
-            (ngModelChange)="updateCardCustomStyles()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Service Cards (JSON)'"
-            [(ngModel)]="serviceCardsJson"
-            (ngModelChange)="updateServiceCards()"
-          ></lib-ui-components-input>
-        </div>
-      </div>
-
-      <!-- Title Config -->
-      <div class="config-section">
-        <h3 class="collapsible" tabindex="0" (click)="toggleTitleConfig()" (keyup)="onKeyUpTitle($event)">
-          Configuración del Title {{ showTitleConfig ? '▼' : '▶' }}
-        </h3>
-        <div *ngIf="showTitleConfig" class="config-content">
-          <lib-ui-components-input
-            type="select"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Nivel del Título'"
-            [(ngModel)]="titleConfig.level"
-            (ngModelChange)="updateTitleConfig()"
-            [options]="titleLevelOptions"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Texto del Título'"
-            [(ngModel)]="titleConfig.text"
-            (ngModelChange)="updateTitleConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="select"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Animación'"
-            [(ngModel)]="titleConfig.animation"
-            (ngModelChange)="updateTitleConfig()"
-            [options]="titleAnimationOptions"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="select"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Alineación'"
-            [(ngModel)]="titleConfig.align"
-            (ngModelChange)="updateTitleConfig()"
-            [options]="alignOptions"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Estilos Personalizados (JSON)'"
-            [(ngModel)]="titleCustomStylesJson"
-            (ngModelChange)="updateTitleCustomStyles()"
-          ></lib-ui-components-input>
-        </div>
-      </div>
-
-      <!-- FAQ Config -->
-      <div class="config-section">
-        <h3 class="collapsible" tabindex="0" (click)="toggleFaqConfig()" (keyup)="onKeyUpFaq($event)">
-          Configuración del FAQ {{ showFaqConfig ? '▼' : '▶' }}
-        </h3>
-        <div *ngIf="showFaqConfig" class="config-content">
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'FAQ Items (JSON)'"
-            [(ngModel)]="faqItemsJson"
-            (ngModelChange)="updateFaqItems()"
-          ></lib-ui-components-input>
-        </div>
-      </div>
-
-      <!-- Pricing Config -->
-      <div class="config-section">
-        <h3 class="collapsible" tabindex="0" (click)="togglePricingConfig()" (keyup)="onKeyUpPricing($event)">
-          Configuración del Pricing {{ showPricingConfig ? '▼' : '▶' }}
-        </h3>
-        <div *ngIf="showPricingConfig" class="config-content">
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Price Columns (JSON)'"
-            [(ngModel)]="priceColumnsJson"
-            (ngModelChange)="updatePriceColumns()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Price Rows (JSON)'"
-            [(ngModel)]="priceRowsJson"
-            (ngModelChange)="updatePriceRows()"
-          ></lib-ui-components-input>
-        </div>
-      </div>
-
-      <!-- Promotions Config -->
-      <div class="config-section">
-        <h3 class="collapsible" tabindex="0" (click)="togglePromotionsConfig()" (keyup)="onKeyUpPromotions($event)">
-          Configuración del Promotions {{ showPromotionsConfig ? '▼' : '▶' }}
-        </h3>
-        <div *ngIf="showPromotionsConfig" class="config-content">
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Premium Cards (JSON)'"
-            [(ngModel)]="premiumCardsJson"
-            (ngModelChange)="updatePremiumCards()"
-          ></lib-ui-components-input>
-        </div>
-      </div>
-
-      <!-- Gallery Config -->
-      <div class="config-section">
-        <h3 class="collapsible" tabindex="0" (click)="toggleGalleryConfig()" (keyup)="onKeyUpGallery($event)">
-          Configuración del Gallery {{ showGalleryConfig ? '▼' : '▶' }}
-        </h3>
-        <div *ngIf="showGalleryConfig" class="config-content">
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Gallery Images (JSON)'"
-            [(ngModel)]="galleryImagesJson"
-            (ngModelChange)="updateGalleryImages()"
-          ></lib-ui-components-input>
-        </div>
-      </div>
-
-      <!-- Products Config -->
-      <div class="config-section">
-        <h3 class="collapsible" tabindex="0" (click)="toggleProductsConfig()" (keyup)="onKeyUpProducts($event)">
-          Configuración del Products {{ showProductsConfig ? '▼' : '▶' }}
-        </h3>
-        <div *ngIf="showProductsConfig" class="config-content">
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Products (JSON)'"
-            [(ngModel)]="productsJson"
-            (ngModelChange)="updateProducts()"
-          ></lib-ui-components-input>
-        </div>
-      </div>
-
-      <!-- Footer Config -->
-      <div class="config-section">
-        <h3 class="collapsible" tabindex="0" (click)="toggleFooterConfig()" (keyup)="onKeyUpFooter($event)">
-          Configuración del Footer {{ showFooterConfig ? '▼' : '▶' }}
-        </h3>
-        <div *ngIf="showFooterConfig" class="config-content">
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Título del footer'"
-            [(ngModel)]="footerConfig.title"
-            (ngModelChange)="updateFooterConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Descripción del footer'"
-            [(ngModel)]="footerConfig.description"
-            (ngModelChange)="updateFooterConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Explore Links (JSON)'"
-            [(ngModel)]="exploreLinksJson"
-            (ngModelChange)="updateExploreLinks()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Trend Links (JSON)'"
-            [(ngModel)]="trendLinksJson"
-            (ngModelChange)="updateTrendLinks()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="textarea"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Social Icons (JSON)'"
-            [(ngModel)]="socialIconsJson"
-            (ngModelChange)="updateSocialIcons()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="text"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [placeholder]="'Texto de copyright'"
-            [(ngModel)]="footerConfig.copyrightText"
-            (ngModelChange)="updateFooterConfig()"
-          ></lib-ui-components-input>
-          <lib-ui-components-input
-            type="checkbox"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [(ngModel)]="footerConfig.showParticles"
-            (ngModelChange)="updateFooterConfig()"
-          >
-            Mostrar Partículas
-          </lib-ui-components-input>
-          <lib-ui-components-input
-            type="checkbox"
-            [variant]="selectorVariant"
-            [size]="'md'"
-            [(ngModel)]="footerConfig.dark"
-            (ngModelChange)="updateFooterConfig()"
-          >
-            Modo Oscuro
-          </lib-ui-components-input>
-        </div>
-      </div>
+    </div>
     </div>
   `,
   styleUrls: ['./variant-selector.component.scss'],
@@ -602,6 +239,15 @@ export class VariantSelectorComponent implements OnInit {
   promotionsConfig: PromotionsConfig;
   galleryConfig: GalleryConfig;
   productsConfig: ProductsConfig;
+  testimonialsConfig: TestimonialsConfig;
+  activeTab: 'general' | 'header' | 'hero' | 'layout' | 'content' | 'footer' = 'general';
+  
+  // Modal state for editing items
+  showItemModal = false;
+  modalItemType: 'service' | 'product' | 'testimonial' | 'faq' | 'gallery' | 'pricing' | 'promotion' | null = null;
+  editingItem: any = null;
+  editingIndex: number = -1;
+
   showHeaderConfig = false;
   showFooterConfig = false;
   showNavBarConfig = false;
@@ -705,6 +351,7 @@ export class VariantSelectorComponent implements OnInit {
     this.promotionsConfig = this.variantService.getCurrentPromotionsConfig();
     this.galleryConfig = this.variantService.getCurrentGalleryConfig();
     this.productsConfig = this.variantService.getCurrentProductsConfig();
+    this.testimonialsConfig = this.variantService.getCurrentTestimonialsConfig();
     this.navItemsJson = JSON.stringify(this.headerConfig.navItems, null, 2);
     this.exploreLinksJson = JSON.stringify(this.footerConfig.exploreLinks, null, 2);
     this.trendLinksJson = JSON.stringify(this.footerConfig.trendLinks, null, 2);
@@ -723,6 +370,164 @@ export class VariantSelectorComponent implements OnInit {
     this.premiumCardsJson = JSON.stringify(this.promotionsConfig.premiumCards, null, 2);
     this.galleryImagesJson = JSON.stringify(this.galleryConfig.images, null, 2);
     this.productsJson = JSON.stringify(this.productsConfig.items, null, 2);
+  }
+
+  setActiveTab(tab: any) {
+    this.activeTab = tab;
+  }
+
+  exportProject() {
+    const config = this.variantService.getCurrentHeaderConfig(); // Simplified for now
+    const fullConfig = {
+       header: this.headerConfig,
+       footer: this.footerConfig,
+       navBar: this.navBarConfig,
+       hero: this.heroConfig,
+       serviceCards: this.serviceCardsConfig,
+       testimonials: this.testimonialsConfig,
+       globalVariant: this.globalVariant,
+       componentVariants: this.componentVariants
+    };
+    const blob = new Blob([JSON.stringify(fullConfig, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'mi-web-config.json';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  resetConfiguration() {
+    if (confirm('¿Estás seguro de que quieres restablecer toda la configuración? Se perderán todos los cambios.')) {
+      this.variantService.resetConfig();
+    }
+  }
+
+  // --- List Management ---
+
+  openAddModal(type: any) {
+    this.modalItemType = type;
+    this.editingItem = this.getEmptyItem(type);
+    this.editingIndex = -1;
+    this.showItemModal = true;
+  }
+
+  openEditModal(type: any, item: any, index: number) {
+    this.modalItemType = type;
+    this.editingItem = { ...item };
+    this.editingIndex = index;
+    this.showItemModal = true;
+  }
+
+  closeItemModal() {
+    this.showItemModal = false;
+    this.editingItem = null;
+    this.modalItemType = null;
+  }
+
+  saveItem() {
+    if (!this.modalItemType) return;
+
+    switch (this.modalItemType) {
+      case 'service':
+        const services = [...this.serviceCardsConfig.items];
+        if (this.editingIndex >= 0) { services[this.editingIndex] = this.editingItem; }
+        else { services.push(this.editingItem); }
+        this.variantService.setServiceCardsConfig({ items: services });
+        break;
+      case 'product':
+        const products = [...this.productsConfig.items];
+        if (this.editingIndex >= 0) { products[this.editingIndex] = this.editingItem; }
+        else { products.push(this.editingItem); }
+        this.variantService.setProductsConfig({ items: products });
+        break;
+      case 'testimonial':
+        const testimonials = [...this.testimonialsConfig.items];
+        if (this.editingIndex >= 0) { testimonials[this.editingIndex] = this.editingItem; }
+        else { testimonials.push(this.editingItem); }
+        this.variantService.setTestimonialsConfig({ items: testimonials });
+        break;
+      case 'faq':
+        const faq = [...this.faqConfig.items];
+        if (this.editingIndex >= 0) { faq[this.editingIndex] = this.editingItem; }
+        else { faq.push(this.editingItem); }
+        this.variantService.setFaqConfig({ items: faq });
+        break;
+      case 'gallery':
+        const gallery = [...this.galleryConfig.images];
+        if (this.editingIndex >= 0) { gallery[this.editingIndex] = this.editingItem; }
+        else { gallery.push(this.editingItem); }
+        this.variantService.setGalleryConfig({ images: gallery });
+        break;
+      case 'pricing':
+        const rows = [...this.pricingConfig.rows];
+        if (this.editingIndex >= 0) { rows[this.editingIndex] = this.editingItem; }
+        else { rows.push(this.editingItem); }
+        this.variantService.setPricingConfig({ rows });
+        break;
+      case 'promotion':
+        const promotions = [...this.promotionsConfig.premiumCards];
+        if (this.editingIndex >= 0) { promotions[this.editingIndex] = this.editingItem; }
+        else { promotions.push(this.editingItem); }
+        this.variantService.setPromotionsConfig({ premiumCards: promotions });
+        break;
+    }
+    this.closeItemModal();
+  }
+
+  removeItem(type: any, index: number) {
+    if (confirm('¿Eliminar este elemento?')) {
+      switch (type) {
+        case 'service':
+          const services = [...this.serviceCardsConfig.items];
+          services.splice(index, 1);
+          this.variantService.setServiceCardsConfig({ items: services });
+          break;
+        case 'product':
+          const products = [...this.productsConfig.items];
+          products.splice(index, 1);
+          this.variantService.setProductsConfig({ items: products });
+          break;
+        case 'testimonial':
+          const testimonials = [...this.testimonialsConfig.items];
+          testimonials.splice(index, 1);
+          this.variantService.setTestimonialsConfig({ items: testimonials });
+          break;
+        case 'faq':
+          const faq = [...this.faqConfig.items];
+          faq.splice(index, 1);
+          this.variantService.setFaqConfig({ items: faq });
+          break;
+        case 'gallery':
+          const gallery = [...this.galleryConfig.images];
+          gallery.splice(index, 1);
+          this.variantService.setGalleryConfig({ images: gallery });
+          break;
+        case 'pricing':
+          const rows = [...this.pricingConfig.rows];
+          rows.splice(index, 1);
+          this.variantService.setPricingConfig({ rows });
+          break;
+        case 'promotion':
+          const promotions = [...this.promotionsConfig.premiumCards];
+          promotions.splice(index, 1);
+          this.variantService.setPromotionsConfig({ premiumCards: promotions });
+          break;
+      }
+    }
+  }
+
+  private getEmptyItem(type: any): any {
+    switch (type) {
+      case 'service': return { routeName: 'Nuevo Servicio', description: 'Descripción aquí', imageUrl: '', features: [], link: '#' };
+      case 'product': return { name: 'Nuevo Producto', description: 'Descripción aquí', image: '', price: '0€' };
+      case 'testimonial': return { quote: 'Cita espectacular', author: 'Nombre del Autor' };
+      case 'faq': return { title: 'Pregunta frecuente', content: 'Respuesta detallada', expanded: false };
+      case 'gallery': return { src: '', alt: 'Descripción de imagen' };
+      case 'pricing': return { service: 'Servicio', description: 'Detalles', price: '0€' };
+      case 'promotion': return { title: 'Oferta Especial', description: 'Detallitos', image: '', price: '0€', discount: '0%', icon: 'heroStar', tooltip: '¡Aprovecha!' };
+      default: return {};
+    }
   }
 
   ngOnInit() {
