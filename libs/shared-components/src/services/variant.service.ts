@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants, NavLink, variants } from '@negocio/ui-components';
 
 // Existing interfaces (NavLink, HeaderConfig, FooterConfig, NavBarConfig, HeroConfig, BubbleConfig, CardConfig, TitleConfig) remain unchanged
@@ -181,6 +182,13 @@ export interface Product {
 
 export interface ProductsConfig {
   items: Product[];
+}
+
+export interface PageSection {
+  id: string;
+  type: 'hero' | 'services' | 'products' | 'testimonials' | 'pricing' | 'promotions' | 'faq' | 'gallery' | 'contact' | 'bubble';
+  label: string; // User friendly name
+  visible: boolean;
 }
 
 @Injectable({
@@ -495,12 +503,34 @@ export class VariantService {
     ],
   });
 
+  private sectionsSubject = new BehaviorSubject<PageSection[]>([
+    { id: 'sec_hero', type: 'hero', label: 'Portada Hero', visible: true },
+    { id: 'sec_bubble', type: 'bubble', label: 'Efecto Burbujas', visible: true },
+    { id: 'sec_services', type: 'services', label: 'Servicios', visible: true },
+    { id: 'sec_products', type: 'products', label: 'Módulos/Productos', visible: true },
+    { id: 'sec_testimonials', type: 'testimonials', label: 'Testimonios', visible: true },
+    { id: 'sec_pricing', type: 'pricing', label: 'Tablas de Precio', visible: true },
+    { id: 'sec_promotions', type: 'promotions', label: 'Promociones', visible: true },
+    { id: 'sec_faq', type: 'faq', label: 'Preguntas Frecuentes', visible: true },
+    { id: 'sec_gallery', type: 'gallery', label: 'Galería', visible: true },
+    { id: 'sec_contact', type: 'contact', label: 'Contacto y Formulario', visible: true },
+  ]);
+  sections$ = this.sectionsSubject.asObservable();
+
 
   
 
   testimonialsConfig$: Observable<TestimonialsConfig> = this.testimonialsConfigSubject.asObservable();
   private componentVariantsSubject = new BehaviorSubject<{ [component: string]: string }>({});
   private globalVariantSubject = new BehaviorSubject<string>('glass');
+  // Replaced simple boolean with full step state
+  private builderStepSubject = new BehaviorSubject<'welcome' | 'editor' | 'preview'>('welcome');
+  builderStep$ = this.builderStepSubject.asObservable();
+  
+  // Keep previewMode$ for backward campatibility if needed, mapping from step
+  previewMode$ = this.builderStepSubject.pipe(
+    map((step) => step === 'preview')
+  );
 
   private allValidVariants = [
     'default',
@@ -684,6 +714,15 @@ export class VariantService {
     this.saveToLocalStorage();
   }
 
+  setBuilderStep(step: 'welcome' | 'editor' | 'preview') {
+    this.builderStepSubject.next(step);
+  }
+
+  // Deprecated/Adapter
+  setPreviewMode(enabled: boolean) {
+    this.setBuilderStep(enabled ? 'preview' : 'editor');
+  }
+
   getVariantForComponent(component: string): string {
     const componentVariants = this.componentVariantsSubject.getValue();
     return componentVariants[component] || this.globalVariantSubject.getValue();
@@ -719,6 +758,14 @@ export class VariantService {
   }
 
   // New getters
+  getCurrentSections(): PageSection[] {
+    return this.sectionsSubject.getValue();
+  }
+
+  setSections(sections: PageSection[]) {
+    this.sectionsSubject.next(sections);
+    this.saveToLocalStorage();
+  }
   getCurrentServiceCardsConfig(): ServiceCardsConfig {
     return this.serviceCardsConfigSubject.getValue();
   }
@@ -762,6 +809,7 @@ export class VariantService {
         products: this.productsConfigSubject.getValue(),
         globalVariant: this.globalVariantSubject.getValue(),
         componentVariants: this.componentVariantsSubject.getValue(),
+        sections: this.sectionsSubject.getValue(),
       };
       localStorage.setItem('anto_studios_config', JSON.stringify(state));
     }
@@ -773,7 +821,8 @@ export class VariantService {
       if (saved) {
         try {
           const state = JSON.parse(saved);
-          if (state.header) this.headerConfigSubject.next(state.header);
+          if (state.componentVariants) this.componentVariantsSubject.next(state.componentVariants);
+          if (state.sections) this.sectionsSubject.next(state.sections);
           if (state.footer) this.footerConfigSubject.next(state.footer);
           if (state.navBar) this.navBarConfigSubject.next(state.navBar);
           if (state.hero) this.heroConfigSubject.next(state.hero);

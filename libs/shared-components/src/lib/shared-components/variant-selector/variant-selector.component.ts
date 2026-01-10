@@ -18,6 +18,7 @@ import {
   GalleryConfig,
   ProductsConfig,
   TestimonialsConfig,
+  PageSection
 } from '../../../services/variant.service';
 import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from '@negocio/ui-components';
 
@@ -26,7 +27,22 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
   standalone: true,
   imports: [CommonModule, FormsModule, UIInputComponent],
   template: `
-    <div class="builder-container">
+    <div class="stepper-wrapper">
+      <!-- STEP 1: WELCOME SPLASH -->
+      <div *ngIf="isStep('welcome')" class="welcome-screen">
+        <div class="splash-card">
+          <div class="nintendo-logo-anim">
+            <div class="joy-con-left"></div>
+            <div class="joy-con-right"></div>
+          </div>
+          <h1>Anto Studios Builder <span>V3</span></h1>
+          <p>Bienvenido al editor táctil premium. Crea tu experiencia digital con precisión de milisegundos.</p>
+          <button class="start-btn" (click)="setStep('editor')">EMPEZAR A CREAR 🎮</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: THE EDITOR & PREVIEW (Shared Container) -->
+      <div *ngIf="isStep('editor') || isStep('preview')" class="builder-container" [class.preview-mode]="isStep('preview')">
       <!-- Sidebar Navigation -->
       <aside class="builder-sidebar">
         <div class="logo">AS</div>
@@ -41,6 +57,10 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
         <div class="nav-item" [class.active]="activeTab === 'hero'" [attr.activeTab]="'hero'" (click)="setActiveTab('hero')">
           <i class="icon-hero">🚀</i>
           <div class="tooltip">Sección Principal</div>
+        </div>
+        <div class="nav-item" [class.active]="activeTab === 'structure'" [attr.activeTab]="'structure'" (click)="setActiveTab('structure')">
+          <i class="icon-structure">🏗️</i>
+          <div class="tooltip">Estructura Página</div>
         </div>
         <div class="nav-item" [class.active]="activeTab === 'content'" [attr.activeTab]="'content'" (click)="setActiveTab('content')">
           <i class="icon-content">📝</i>
@@ -65,6 +85,15 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
         <div class="nav-item" [class.active]="activeTab === 'footer'" [attr.activeTab]="'footer'" (click)="setActiveTab('footer')">
           <i class="icon-footer">👣</i>
           <div class="tooltip">Pie de Página</div>
+        </div>
+
+        <div class="nav-item preview-tab" (click)="setStep('preview')">
+          <i class="icon-preview">👁️</i>
+          <div class="tooltip">Ver Resultado Final</div>
+        </div>
+
+        <div class="sidebar-footer">
+          <button class="preview-btn" (click)="setStep('preview')">👁️</button>
         </div>
       </aside>
 
@@ -141,6 +170,46 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
                 <lib-ui-components-input type="checkbox" [(ngModel)]="heroConfig.videoBackground" (ngModelChange)="updateHeroConfig()">Habilitar Video</lib-ui-components-input>
                 <lib-ui-components-input *ngIf="heroConfig.videoBackground" type="text" label="URL Video" [(ngModel)]="heroConfig.videoUrl" (ngModelChange)="updateHeroConfig()"></lib-ui-components-input>
               </div>
+          </div>
+        </div>
+
+        <!-- Structure Tab -->
+        <div *ngIf="activeTab === 'structure'" class="tab-content">
+          <div class="config-group">
+            <h3>Organizar Secciones</h3>
+            <p class="helper-text">Reordena o activa las secciones de tu página. Arrastra desde el icono de menú.</p>
+            
+            <div class="section-list" style="display: flex; flex-direction: column; gap: 10px; margin-top: 1rem;">
+              <div *ngFor="let section of sections; let i = index" 
+                   class="section-item" 
+                   [class.hidden-section]="!section.visible"
+                   style="display: flex; align-items: center; padding: 12px; background: rgba(255,255,255,0.05); border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                
+                <div class="section-drag-handle" style="cursor: grab; padding: 0 10px; opacity: 0.5;">☰</div>
+                
+                <div class="section-info" style="flex: 1; display: flex; flex-direction: column;">
+                  <span class="section-type" style="font-size: 0.7em; opacity: 0.5; text-transform: uppercase; letter-spacing: 1px;">{{ section.type }}</span>
+                  <span class="section-label" style="font-weight: bold; font-size: 1.1em;">{{ section.label }}</span>
+                </div>
+                
+                <div class="section-actions" style="display: flex; gap: 8px;">
+                  <button class="action-btn" (click)="toggleSectionVisibility(section)" 
+                          [style.opacity]="section.visible ? '1' : '0.5'"
+                          style="background: none; border: none; font-size: 1.2rem; cursor: pointer;">
+                    {{ section.visible ? '👁️' : '🚫' }}
+                  </button>
+                  <div style="display: flex; flex-direction: column; gap: 2px;">
+                    <button class="action-btn" (click)="moveSection(i, 'up')" [disabled]="i === 0" style="background:none; border:none; cursor:pointer; font-size: 0.8rem;">▲</button>
+                    <button class="action-btn" (click)="moveSection(i, 'down')" [disabled]="i === sections.length - 1" style="background:none; border:none; cursor:pointer; font-size: 0.8rem;">▼</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 2rem; padding: 1rem; background: rgba(0, 160, 237, 0.1); border-radius: 12px; border: 1px dashed rgba(0, 160, 237, 0.3); text-align: center;">
+              <p style="margin-bottom: 1rem; font-size: 0.9em; opacity: 0.8;">¿Necesitas más contenido?</p>
+              <button class="add-item-btn full-width" (click)="activeTab = 'content'" style="width: 100%;">➕ Gestionar Contenido Detallado</button>
+            </div>
           </div>
         </div>
 
@@ -302,6 +371,17 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
           </div>
         </div>
       </div>
+
+      <!-- STEP 3: FULL SCREEN PREVIEW OVERLAY -->
+      <div *ngIf="isStep('preview')" class="full-preview-overlay">
+        <div class="preview-actions">
+           <button class="back-btn" (click)="setStep('editor')">↩ Volver al Editor</button>
+           <button class="save-final" (click)="exportProject()">📥 Descargar Resultado</button>
+        </div>
+        <div class="preview-disclaimer">
+          MODO PREVIEW: Así es como los usuarios verán tu web.
+        </div>
+      </div>
     </div>
 
     <!-- Edit Item Modal -->
@@ -381,7 +461,19 @@ export class VariantSelectorComponent implements OnInit {
   galleryConfig: GalleryConfig;
   productsConfig: ProductsConfig;
   testimonialsConfig: TestimonialsConfig;
-  activeTab: 'general' | 'header' | 'hero' | 'layout' | 'content' | 'footer' | 'pricing' | 'promotions' | 'gallery' = 'general';
+  
+  private _currentStep: 'welcome' | 'editor' | 'preview' = 'welcome';
+  get currentStep(): 'welcome' | 'editor' | 'preview' {
+    return this._currentStep;
+  }
+  set currentStep(val: 'welcome' | 'editor' | 'preview') {
+    this._currentStep = val;
+  }
+
+  activeTab: 'general' | 'header' | 'hero' | 'structure' | 'layout' | 'content' | 'footer' | 'pricing' | 'promotions' | 'gallery' = 'general';
+  
+  // Sections state
+  sections: PageSection[] = [];
   
   // Modal state for editing items
   showItemModal = false;
@@ -751,6 +843,51 @@ export class VariantSelectorComponent implements OnInit {
       this.productsConfig = config;
       this.productsJson = JSON.stringify(config.items, null, 2);
     });
+
+    // Enforce WELCOME state on init
+    this.currentStep = 'welcome';
+    // Async update to service to avoid NG0100 in parent layout
+    setTimeout(() => {
+      this.variantService.setBuilderStep('welcome');
+    });
+
+    this.variantService.sections$.subscribe(sections => {
+      this.sections = sections;
+    });
+  }
+
+  toggleSectionVisibility(section: PageSection) {
+    const updatedSections = this.sections.map(s => 
+      s.id === section.id ? { ...s, visible: !s.visible } : s
+    );
+    this.variantService.setSections(updatedSections);
+  }
+
+  moveSection(index: number, direction: 'up' | 'down') {
+    if (direction === 'up' && index === 0) return;
+    if (direction === 'down' && index === this.sections.length - 1) return;
+
+    const newSections = [...this.sections];
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    
+    // Swap
+    [newSections[index], newSections[targetIndex]] = [newSections[targetIndex], newSections[index]];
+    
+    this.variantService.setSections(newSections);
+  }
+
+  setStep(step: 'welcome' | 'editor' | 'preview') {
+    this.currentStep = step;
+    
+    // Fix NG0100: Defer the service update to the next macrotask
+    setTimeout(() => {
+      // Allow the layout to know exactly which step we are in
+      this.variantService.setBuilderStep(step);
+    });
+  }
+
+  isStep(step: string): boolean {
+    return this.currentStep === step;
   }
 
   onGlobalVariantChange() {

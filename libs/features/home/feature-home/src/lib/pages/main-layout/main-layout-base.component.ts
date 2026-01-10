@@ -13,8 +13,11 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
   navBarConfig!: NavBarConfig;
   componentVariants: { [key: string]: string } = {};
   globalVariant = 'default';
+  previewMode = false;
+  builderStep: 'welcome' | 'editor' | 'preview' = 'welcome';
   private navBarConfigSub?: Subscription;
   private variantSub?: Subscription;
+  private stepSub?: Subscription;
 
   constructor(protected variantService: VariantService, protected router: Router) {
 
@@ -29,6 +32,11 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
 
     this.variantService.globalVariant$.subscribe((variant) => {
       this.globalVariant = variant;
+    });
+
+    this.stepSub = this.variantService.builderStep$.subscribe((step) => {
+      this.builderStep = step;
+      this.previewMode = step === 'preview';
     });
   }
 
@@ -47,6 +55,7 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.navBarConfigSub?.unsubscribe();
     this.variantSub?.unsubscribe();
+    this.stepSub?.unsubscribe();
   }
 
   onLinkClick(href: string) {

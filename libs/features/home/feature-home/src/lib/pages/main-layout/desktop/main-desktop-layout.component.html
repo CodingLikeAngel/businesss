@@ -1,6 +1,21 @@
 <div class="min-h-screen text-white flex flex-row bg-[#0f172a]">
   <!-- Visual Builder Sidebar -->
-  <aside class="w-[450px] h-screen sticky top-0 border-r border-white/10 shadow-2xl z-40 bg-[#1e293b]">
+  <!-- Visual Builder Sidebar -->
+  <aside 
+    [class.w-0]="previewMode" 
+    [class.overflow-visible]="previewMode" 
+    [class.bg-transparent]="previewMode"
+    [class.border-none]="previewMode"
+    [class.shadow-none]="previewMode"
+    [class.w-[450px]]="!previewMode && builderStep === 'editor'" 
+    [class.overflow-y-auto]="!previewMode"
+    
+    [class.fixed]="builderStep === 'welcome'"
+    [class.inset-0]="builderStep === 'welcome'"
+    [class.w-full]="builderStep === 'welcome'"
+    [class.z-[9999]]="builderStep === 'welcome'"
+    
+    class="h-screen sticky top-0 border-r border-white/10 shadow-2xl z-40 bg-[#1e293b] transition-all duration-500">
     <lib-variant-selector></lib-variant-selector>
   </aside>
 

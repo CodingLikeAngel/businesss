@@ -56,18 +56,14 @@ if (typeof (globalThis as any).document === 'undefined') {
 }
 
 // Minimal Hammer.js mock for server to avoid runtime errors during prerender.
+// Minimal Hammer.js mock for server to avoid runtime errors during prerender.
 if (typeof (globalThis as any).Hammer === 'undefined') {
-	(globalThis as any).Hammer = class {
-		// Intentionally left empty for server-side Hammer.js mock
-		// Empty constructor intentionally omitted as it's not needed
-		on() { //}
-		destroy() {}
-	};
+  (globalThis as any).Hammer = class {
+    on() {}
+    destroy() {}
+  };
 }
-const bootstrap = (context: BootstrapContext) => bootstrapApplication(AppComponent, config, context);
 
+const bootstrap = (context: BootstrapContext) => bootstrapApplication(AppComponent, config);
 export default bootstrap;
-    function destroy() {
-        throw new Error('Function not implemented.');
-    }
 

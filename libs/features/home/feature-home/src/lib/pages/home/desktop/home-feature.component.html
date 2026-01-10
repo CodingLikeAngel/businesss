@@ -1,175 +1,190 @@
 <router-outlet></router-outlet>
 
+<router-outlet></router-outlet>
+<div class="sections-container min-h-screen">
+  <ng-container *ngFor="let section of sections$ | async; trackBy: trackBySectionId">
+    <ng-container [ngSwitch]="section.type" *ngIf="section.visible">
       
-<section id="hero" class="relative z-20">
-  <lib-ui-components-hero
-    [variant]="getVariant('hero')"
-    [title]="heroConfig.title"
-    [subtitle]="heroConfig.subtitle"
-    [showCta]="heroConfig.showCta"
-    [ctaLabel]="heroConfig.ctaLabel"
-    [showScrollIcon]="heroConfig.showScrollIcon"
-    [videoBackground]="heroConfig.videoBackground"
-    [videoUrl]="heroConfig.videoUrl"
-    [videoPoster]="heroConfig.videoPoster"
-    [navigationCards]="heroConfig.navigationCards"
-    [carouselItems]="heroConfig.carouselItems"
-    [customStyles]="heroConfig.customStyles"
-    (sectionSelected)="scrollToSection($event)"
-  ></lib-ui-components-hero>
-</section>
+      <!-- HERO -->
+      <section *ngSwitchCase="'hero'" [id]="section.id" class="relative z-20">
+        <lib-ui-components-hero
+          [variant]="getVariant('hero')"
+          [title]="heroConfig.title"
+          [subtitle]="heroConfig.subtitle"
+          [showCta]="heroConfig.showCta"
+          [ctaLabel]="heroConfig.ctaLabel"
+          [showScrollIcon]="heroConfig.showScrollIcon"
+          [videoBackground]="heroConfig.videoBackground"
+          [videoUrl]="heroConfig.videoUrl"
+          [videoPoster]="heroConfig.videoPoster"
+          [navigationCards]="heroConfig.navigationCards"
+          [carouselItems]="heroConfig.carouselItems"
+          [customStyles]="heroConfig.customStyles"
+          (sectionSelected)="scrollToSection($event)"
+        ></lib-ui-components-hero>
+      </section>
 
+      <!-- BUBBLE -->
+      <lib-bubble-animation *ngSwitchCase="'bubble'"
+        [variant]="getVariant('bubble')"
+        [config]="bubbleConfig"
+      ></lib-bubble-animation>
 
-<lib-bubble-animation
-  [variant]="getVariant('bubble')"
-  [config]="bubbleConfig"
-></lib-bubble-animation>
+      <!-- SERVICES -->
+      <section *ngSwitchCase="'services'" [id]="section.id" class="relative z-20 py-12">
+        <div class="container mx-auto px-6 max-w-7xl">
+          <lib-ui-components-title
+            [level]="titleConfig.level"
+            [text]="titleConfig.text"
+            [variant]="getVariant('title')"
+            [align]="titleConfig.align"
+            class="mb-8"
+          ></lib-ui-components-title>
+          <lib-ui-components-ui-card-rutas
+            [items]="serviceCardsConfig.items"
+            [variant]="getVariant('card')"
+            [backgroundColor]="cardConfig.backgroundColor"
+            [animation]="cardConfig.animation"
+          ></lib-ui-components-ui-card-rutas>
+        </div>
+      </section>
 
-<section id="servicios" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-ui-components-title
-      [level]="titleConfig.level"
-      [text]="titleConfig.text"
-      [variant]="getVariant('title')"
-      [align]="titleConfig.align"
-      class="mb-8"
-    ></lib-ui-components-title>
-    <lib-ui-components-ui-card-rutas
-      [items]="serviceCardsConfig.items"
-      [variant]="getVariant('card')"
-      [backgroundColor]="cardConfig.backgroundColor"
-      [animation]="cardConfig.animation"
-    ></lib-ui-components-ui-card-rutas>
-  </div>
-</section>
+      <!-- PRODUCTS -->
+      <section *ngSwitchCase="'products'" [id]="section.id" class="relative z-20 py-12">
+        <div class="container mx-auto px-6 max-w-7xl">
+          <div class="backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(113,255,219,0.5)] border-2 border-neon-blue">
+            <lib-ui-components-title
+              [level]="titleConfig.level"
+              [text]="'Nuestros Módulos'"
+              [variant]="getVariant('title')"
+              [align]="titleConfig.align"
+              class="mb-4"
+            ></lib-ui-components-title>
+            <lib-ui-components-title
+              [level]="'h5'"
+              [text]="'Descubre nuestra selección premium de módulos para tu web, diseñados para escalar tu negocio con eficiencia'"
+              [variant]="getVariant('title')"
+              [align]="titleConfig.align"
+              class="mb-6"
+            ></lib-ui-components-title>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <ng-container *ngFor="let product of productsConfig.items; let i = index; trackBy: trackByProductName">
+                <lib-ui-components-card-animated
+                  *ngIf="i % 2 === 0 && i !== 2"
+                  [title]="product.name"
+                  [description]="product.description"
+                  [image]="product.image"
+                  [variant]="getVariant('products')"
+                  [animation]="'bounce'"
+                  [borderColor]="'#22d3ee'"
+                  [backgroundColor]="'rgba(47, 79, 79, 0.9)'"
+                  (addToCart)="addToCart(product)"
+                  (viewDetails)="openServiceModal(product)"
+                ></lib-ui-components-card-animated>
+                <lib-ui-components-card
+                  *ngIf="i % 2 === 0 && i !== 0"
+                  [title]="product.name"
+                  [image]="'1029.png'"
+                  [description]="product.description"
+                  [variant]="getVariant('products')"
+                  [animation]="'fade'"
+                  [size]="'medium'"
+                ></lib-ui-components-card>
+                <lib-card-products
+                  *ngIf="i % 2 !== 0"
+                  [product]="product"
+                  [variant]="getVariant('products')"
+                ></lib-card-products>
+              </ng-container>
+              <ng-template *ngIf="!productsConfig.items?.length">
+                <p class="text-white text-center">No hay módulos disponibles en este momento.</p>
+              </ng-template>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<section id="productos" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <div class="backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(113,255,219,0.5)] border-2 border-neon-blue">
-      <lib-ui-components-title
-        [level]="titleConfig.level"
-        [text]="'Nuestros Módulos'"
-        [variant]="getVariant('title')"
-        [align]="titleConfig.align"
-        class="mb-4"
-      ></lib-ui-components-title>
-      <lib-ui-components-title
-        [level]="'h5'"
-        [text]="'Descubre nuestra selección premium de módulos para tu web, diseñados para escalar tu negocio con eficiencia'"
-        [variant]="getVariant('title')"
-        [align]="titleConfig.align"
-        class="mb-6"
-      ></lib-ui-components-title>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ng-container *ngFor="let product of productsConfig.items; let i = index; trackBy: trackByProductName">
-          <lib-ui-components-card-animated
-            *ngIf="i % 2 === 0 && i !== 2"
-            [title]="product.name"
-            [description]="product.description"
-            [image]="product.image"
-            [variant]="getVariant('products')"
-            [animation]="'bounce'"
-            [borderColor]="'#22d3ee'"
-            [backgroundColor]="'rgba(47, 79, 79, 0.9)'"
-            (addToCart)="addToCart(product)"
-            (viewDetails)="openServiceModal(product)"
-          ></lib-ui-components-card-animated>
-          <lib-ui-components-card
-          *ngIf="i % 2 === 0 && i !== 0"
-          [title]="product.name"
-          [image]="'1029.png'"
-          [description]="product.description"
-          [variant]="getVariant('products')"
-          [animation]="'fade'"
-          [size]="'medium'"
-       
-        ></lib-ui-components-card>
-          <lib-card-products
-            *ngIf="i % 2 !== 0"
-            [product]="product"
-            [variant]="getVariant('products')"
-          ></lib-card-products>
-        </ng-container>
-        <ng-template *ngIf="!productsConfig.items?.length">
-          <p class="text-white text-center">No hay módulos disponibles en este momento.</p>
-        </ng-template>
-      </div>
-    </div>
-  </div>
-</section>
+      <!-- TESTIMONIALS -->
+      <section *ngSwitchCase="'testimonials'" [id]="section.id" class="relative z-20 py-12">
+        <div class="container mx-auto px-6 max-w-7xl">
+          <lib-ui-components-title
+            [level]="titleConfig.level"
+            [text]="'Lo que Dicen Nuestros Clientes'"
+            [variant]="getVariant('title')"
+            [align]="titleConfig.align"
+            class="mb-8"
+          ></lib-ui-components-title>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <lib-testimonials-card
+              *ngFor="let testimonial of testimonialsConfig.items; trackBy: trackByTestimonialId"
+              [testimonial]="testimonial"
+              [variant]="getVariant('testimonials')"
+            ></lib-testimonials-card>
+          </div>
+        </div>
+      </section>
 
-<section id="testimonios" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-ui-components-title
-      [level]="titleConfig.level"
-      [text]="'Lo que Dicen Nuestros Clientes'"
-      [variant]="getVariant('title')"
-      [align]="titleConfig.align"
-      class="mb-8"
-    ></lib-ui-components-title>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <lib-testimonials-card
-        *ngFor="let testimonial of testimonialsConfig.items; trackBy: trackByTestimonialId"
-        [testimonial]="testimonial"
-        [variant]="getVariant('testimonials')"
-      ></lib-testimonials-card>
-    </div>
-  </div>
-</section>
+      <!-- PRICING -->
+      <section *ngSwitchCase="'pricing'" [id]="section.id" class="relative z-20 py-12">
+        <div class="container mx-auto px-6 max-w-7xl">
+          <lib-pricing-section
+            [variant]="getVariant('pricing')"
+            [priceColumns]="pricingConfig.columns"
+            [priceRows]="pricingConfig.rows"
+          ></lib-pricing-section>
+        </div>
+      </section>
 
-<section id="precios" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-pricing-section
-      [variant]="getVariant('pricing')"
-      [priceColumns]="pricingConfig.columns"
-      [priceRows]="pricingConfig.rows"
-    ></lib-pricing-section>
-  </div>
-</section>
+      <!-- PROMOTIONS -->
+      <section *ngSwitchCase="'promotions'" [id]="section.id" class="relative z-20 py-12">
+        <div class="container mx-auto px-6 max-w-7xl">
+          <lib-promotions-section
+              [selectedVariant]="getVariant('promotions')"
+              [variant]="getVariant('promotions')"
+              [premiumCardConfigs]="promotionsConfig.premiumCards"
+            ></lib-promotions-section>
+        </div>
+      </section>
 
-<section id="promociones" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-promotions-section
-        [selectedVariant]="getVariant('promotions')"
-        [variant]="getVariant('promotions')"
-        [premiumCardConfigs]="promotionsConfig.premiumCards"
-      ></lib-promotions-section>
-  </div>
-</section>
+      <!-- FAQ -->
+      <section *ngSwitchCase="'faq'" [id]="section.id" class="relative z-20 py-12">
+        <div class="container mx-auto px-6 max-w-7xl">
+          <lib-faq-section
+            [variant]="getVariant('faq')"
+            [faqItems]="faqConfig.items"
+          ></lib-faq-section>
+        </div>
+      </section>
 
-<section id="faq" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-faq-section
-      [variant]="getVariant('faq')"
-      [faqItems]="faqConfig.items"
-    ></lib-faq-section>
-  </div>
-</section>
+      <!-- GALLERY -->
+      <section *ngSwitchCase="'gallery'" [id]="section.id" class="relative z-20 py-12">
+        <div class="container mx-auto px-6 max-w-7xl">
+          <lib-gallery-section
+            [variant]="getVariant('gallery')"
+            [images]="galleryConfig.images"
+          ></lib-gallery-section>
+        </div>
+      </section>
 
-<section id="galeria" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-gallery-section
-      [variant]="getVariant('gallery')"
-      [images]="galleryConfig.images"
-    ></lib-gallery-section>
-  </div>
-</section>
-
-<section id="contacto" class="relative z-20 py-16 mb-16">
-  <div class="container mx-auto px-6 max-w-7xl py-16">
-    <lib-ui-components-title
-      [level]="titleConfig.level"
-      [text]="'Solicita tu Demo Personalizada'"
-      [variant]="getVariant('title')"
-      [align]="titleConfig.align"
-      class="mb-8"
-    ></lib-ui-components-title>
-    <lib-reservation-form
-      [variant]="getVariant('form')"
-    ></lib-reservation-form>
-  </div>
-</section>
-
+      <!-- CONTACT -->
+      <section *ngSwitchCase="'contact'" [id]="section.id" class="relative z-20 py-16 mb-16">
+        <div class="container mx-auto px-6 max-w-7xl py-16">
+          <lib-ui-components-title
+            [level]="titleConfig.level"
+            [text]="'Solicita tu Demo Personalizada'"
+            [variant]="getVariant('title')"
+            [align]="titleConfig.align"
+            class="mb-8"
+          ></lib-ui-components-title>
+          <lib-reservation-form
+            [variant]="getVariant('form')"
+          ></lib-reservation-form>
+        </div>
+      </section>
+      
+    </ng-container>
+  </ng-container>
+</div>
 <lib-ui-components-modal
   [isOpen]="modalOpen"
   [variant]="'glass'"

@@ -58,7 +58,7 @@ aside.overflow-y-auto {
 
 
 
-aside {
+aside:not(.w-0) {
   width: 100%;
   max-width: 900px;
   min-width: 300px;

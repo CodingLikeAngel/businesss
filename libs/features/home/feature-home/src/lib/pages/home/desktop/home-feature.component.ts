@@ -1,7 +1,8 @@
-import { Component, OnInit, TrackByFunction } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
 import { BaseHomeFeatureComponent } from '../base-home-feature.component';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { RouterModule, Router, ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 import {
   UIHeroSectionComponent,
   UIModalComponent,
@@ -15,7 +16,7 @@ import {
   UINavBarComponent,
   UITabsComponent,
 } from '@negocio/ui-components';
-import { Product, Testimonial } from '@negocio/shared-components';
+import { Product, Testimonial, PageSection, VariantService } from '@negocio/shared-components';
 import { FaqSectionComponent } from '../../../components/faq-section/faq-section.component';
 import { GallerySectionComponent } from '../../../components/gallery-section/gallery-section.component';
 import { PricingSectionComponent } from '../../../components/pricing-section/pricing-section.component';
@@ -48,6 +49,18 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
   ],
 })
 export class HomeDesktopFeatureComponent extends BaseHomeFeatureComponent implements OnInit {
+  sections$: Observable<PageSection[]>;
+
+  constructor(
+    @Inject(PLATFORM_ID) protected override platformId: object, 
+    protected override variantService: VariantService, 
+    protected override router: Router, 
+    protected override route: ActivatedRoute
+  ) {
+    super(platformId, variantService, router, route);
+    this.sections$ = this.variantService.sections$;
+  }
+
   override ngOnInit() {
     super.ngOnInit();
     this.isMobile = false;
@@ -62,10 +75,16 @@ export class HomeDesktopFeatureComponent extends BaseHomeFeatureComponent implem
   }
 
   scrollToSection(sectionId: string) {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    if (typeof document !== 'undefined') {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
+  }
+
+  trackBySectionId(index: number, section: PageSection): string {
+    return section.id;
   }
 }
 
