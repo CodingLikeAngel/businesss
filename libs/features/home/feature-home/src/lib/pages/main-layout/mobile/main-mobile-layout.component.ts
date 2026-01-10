@@ -32,4 +32,8 @@ export class MainMobileLayoutComponent extends MainLayoutBaseComponent {
   switchTab(tab: 'configurator' | 'content') {
     this.activeTab = tab;
   }
+
+  returnToEditor() {
+    this.variantService.setBuilderStep('editor');
+  }
 }

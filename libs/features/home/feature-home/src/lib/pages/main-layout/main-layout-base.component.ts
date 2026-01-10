@@ -15,6 +15,7 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
   globalVariant = 'default';
   previewMode = false;
   builderStep: 'welcome' | 'editor' | 'preview' = 'welcome';
+  previewSize: 'mobile' | 'tablet' | 'desktop' = 'desktop';
   private navBarConfigSub?: Subscription;
   private variantSub?: Subscription;
   private stepSub?: Subscription;
@@ -73,6 +74,10 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
 
   getVariant(componentId: string): any {
     return this.componentVariants[componentId] || this.globalVariant;
+  }
+
+  setPreviewSize(size: 'mobile' | 'tablet' | 'desktop') {
+    this.previewSize = size;
   }
 
 }

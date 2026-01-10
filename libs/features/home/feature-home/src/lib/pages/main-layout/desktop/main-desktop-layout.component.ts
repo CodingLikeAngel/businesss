@@ -65,4 +65,8 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
     }
   }
 
+  returnToEditor() {
+    this.variantService.setBuilderStep('editor');
+  }
+
 }

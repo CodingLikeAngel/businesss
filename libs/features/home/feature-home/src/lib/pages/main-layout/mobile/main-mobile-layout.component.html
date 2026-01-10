@@ -1,6 +1,6 @@
 <div class="min-h-screen text-white flex flex-col">
-  <!-- Tabs -->
-  <div class="flex border-b border-gray-700">
+  <!-- Tabs (Hidden in Preview) -->
+  <div *ngIf="builderStep !== 'preview'" class="flex border-b border-gray-700">
     <button
       class="flex-1 py-2 px-4 text-center"
       [class.bg-gray-800]="activeTab === 'content'"
@@ -20,57 +20,55 @@
   </div>
 
   <!-- Tab Content -->
-  <div class="flex-1 flex flex-col">
+  <div class="flex-1 flex flex-col overflow-y-auto">
+    <!-- Floating Return to Editor (Only in Preview) -->
+    <button 
+      *ngIf="builderStep === 'preview'"
+      (click)="returnToEditor()"
+      class="fixed bottom-4 right-4 z-[100] bg-[#ff3c28] text-white p-4 rounded-full shadow-2xl transition-transform"
+    >
+      ✏️
+    </button>
+
     <!-- Configurator Tab -->
-    <div *ngIf="activeTab === 'configurator'" class="p-6 bg-gray-800 overflow-y-auto">
+    <div *ngIf="builderStep !== 'preview' && activeTab === 'configurator'" class="p-6 bg-gray-800 overflow-y-auto">
       <h2 class="text-2xl font-bold mb-4 text-rayman-yellow">Variant Configurator</h2>
       <lib-variant-selector></lib-variant-selector>
     </div>
 
-    <!-- Content Tab -->
-    <div *ngIf="activeTab === 'content'" >
-      <!-- Header -->
-    
-  
-  <!-- Main Content (Right) -->
-  <main class="flex-1 flex flex-col">
-    <!-- Header -->
-    <div>
-      <lib-ui-components-header
-        [variant]="headerConfig.variant"
-        [align]="headerConfig.align"
-        [dark]="headerConfig.dark"
-        [title]="headerConfig.title"
-        [subtitle]="headerConfig.subtitle"
-        [navItems]="headerConfig.navItems"
-        [customStyles]="headerConfig.customStyles"
-      ></lib-ui-components-header>
+    <!-- Content Tab / Preview Mode -->
+    <div *ngIf="builderStep === 'preview' || activeTab === 'content'" class="flex-1 flex flex-col">
+        <!-- Main Content -->
+        <main class="flex-1 flex flex-col">
+          <lib-ui-components-header
+            [variant]="headerConfig.variant"
+            [align]="headerConfig.align"
+            [dark]="headerConfig.dark"
+            [title]="headerConfig.title"
+            [subtitle]="headerConfig.subtitle"
+            [navItems]="headerConfig.navItems"
+            [customStyles]="headerConfig.customStyles"
+          ></lib-ui-components-header>
 
-    </div>
-  </main>
+          <section class="flex-1">
+            <router-outlet></router-outlet>
+          </section>
 
-
-
-      <!-- Main Content -->
-      <section class="flex-1">
-        <router-outlet></router-outlet>
-      </section>
-
-      <!-- Footer -->
-      <lib-ui-components-footer
-        [variant]="footerConfig.variant"
-        [dark]="footerConfig.dark"
-        [showParticles]="footerConfig.showParticles"
-        [title]="footerConfig.title"
-        [description]="footerConfig.description"
-        [exploreLinks]="footerConfig.exploreLinks"
-        [trendLinks]="footerConfig.trendLinks"
-        [socialIcons]="footerConfig.socialIcons"
-        [copyrightText]="footerConfig.copyrightText"
-        [customStyles]="footerConfig.customStyles"
-        (linkClicked)="onLinkClick($event)"
-        (socialClicked)="onSocialClick($event)"
-      ></lib-ui-components-footer>
+          <lib-ui-components-footer
+            [variant]="footerConfig.variant"
+            [dark]="footerConfig.dark"
+            [showParticles]="footerConfig.showParticles"
+            [title]="footerConfig.title"
+            [description]="footerConfig.description"
+            [exploreLinks]="footerConfig.exploreLinks"
+            [trendLinks]="footerConfig.trendLinks"
+            [socialIcons]="footerConfig.socialIcons"
+            [copyrightText]="footerConfig.copyrightText"
+            [customStyles]="footerConfig.customStyles"
+            (linkClicked)="onLinkClick($event)"
+            (socialClicked)="onSocialClick($event)"
+          ></lib-ui-components-footer>
+        </main>
     </div>
   </div>
 </div>

@@ -1,0 +1,432 @@
+<div class="stepper-wrapper">
+  
+  <!-- MAIN EDITOR CONTAINER -->
+  <div class="builder-container">
+  <!-- Sidebar Navigation -->
+  <aside class="builder-sidebar">
+    <div class="logo">AS</div>
+    
+    <div class="sidebar-nav">
+      <div class="nav-item" [class.active]="activeTab === 'general'" [attr.activeTab]="'general'" (click)="setActiveTab('general')">
+        <i>⚙️</i>
+        <div class="tooltip">Configuración General</div>
+      </div>
+      <div class="nav-item" [class.active]="activeTab === 'header'" [attr.activeTab]="'header'" (click)="setActiveTab('header')">
+        <i>🔝</i>
+        <div class="tooltip">Cabecera y Menú</div>
+      </div>
+      <div class="nav-item" [class.active]="activeTab === 'hero'" [attr.activeTab]="'hero'" (click)="setActiveTab('hero')">
+        <i>🚀</i>
+        <div class="tooltip">Sección Principal</div>
+      </div>
+      <div class="nav-item" [class.active]="activeTab === 'structure'" [attr.activeTab]="'structure'" (click)="setActiveTab('structure')">
+        <i>🏗️</i>
+        <div class="tooltip">Estructura Página</div>
+      </div>
+      <div class="nav-item" [class.active]="activeTab === 'content'" [attr.activeTab]="'content'" (click)="setActiveTab('content')">
+        <i>📝</i>
+        <div class="tooltip">Gestión de Contenido</div>
+      </div>
+      <div class="nav-item" [class.active]="activeTab === 'layout'" [attr.activeTab]="'layout'" (click)="setActiveTab('layout')">
+        <i>🎨</i>
+        <div class="tooltip">Diseño y Variantes</div>
+      </div>
+      <div class="nav-item" [class.active]="activeTab === 'pricing'" [attr.activeTab]="'pricing'" (click)="setActiveTab('pricing')">
+        <i>💰</i>
+        <div class="tooltip">Precios y Tablas</div>
+      </div>
+      <div class="nav-item" [class.active]="activeTab === 'promotions'" [attr.activeTab]="'promotions'" (click)="setActiveTab('promotions')">
+        <i>🎁</i>
+        <div class="tooltip">Promociones</div>
+      </div>
+      <div class="nav-item" [class.active]="activeTab === 'gallery'" [attr.activeTab]="'gallery'" (click)="setActiveTab('gallery')">
+        <i>🖼️</i>
+        <div class="tooltip">Galería</div>
+      </div>
+      <div class="nav-item" [class.active]="activeTab === 'footer'" [attr.activeTab]="'footer'" (click)="setActiveTab('footer')">
+        <i>👣</i>
+        <div class="tooltip">Pie de Página</div>
+      </div>
+    </div>
+
+    <div class="nav-item preview-tab" (click)="setStep('preview')">
+      <i>👁️</i>
+      <div class="tooltip">Ver Resultado Final</div>
+    </div>
+  </aside>
+
+  <div class="builder-content">
+    <header class="builder-header">
+      <div class="header-top">
+        <h2>Anto Studios <span class="badge">PRO</span></h2>
+        <div class="save-status">
+          <span class="status-dot"></span>
+          Estado: Guardado
+        </div>
+      </div>
+      <p>Configurador visual activo. Los cambios se sincronizan en tiempo real.</p>
+    </header>
+
+    <!-- General Tab -->
+    <div *ngIf="activeTab === 'general'" class="tab-content">
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Variante Global</h3>
+          <p class="helper-text">Esta variante se aplicará a todos los componentes que no tengan una variante específica seleccionada.</p>
+        </div>
+        <lib-ui-components-input
+          type="select"
+          [variant]="selectorVariant"
+          [(ngModel)]="globalVariant"
+          (ngModelChange)="onGlobalVariantChange()"
+          [options]="variantOptions"
+        ></lib-ui-components-input>
+        <button class="warning-btn mt-4" (click)="clearComponentVariants()">🧹 Limpiar Personalizaciones</button>
+      </div>
+
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Gestión de Proyecto</h3>
+          <p class="helper-text">Exporta tu configuración para guardarla o restablece todo el proyecto.</p>
+        </div>
+        <div class="flex flex-col gap-4">
+          <button class="add-item-btn export-btn" (click)="exportProject()">📥 Exportar Configuración</button>
+          <button class="reset-btn" (click)="resetConfiguration()">🔴 Restablecer Todo</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Header & Navbar Tab -->
+    <div *ngIf="activeTab === 'header'" class="tab-content">
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Configuración del Header</h3>
+        </div>
+        <div class="input-grid">
+          <lib-ui-components-input type="checkbox" [(ngModel)]="headerConfig.visible" (ngModelChange)="updateHeaderConfig()">Mostrar Header</lib-ui-components-input>
+          <lib-ui-components-input type="text" label="Título" [(ngModel)]="headerConfig.title" (ngModelChange)="updateHeaderConfig()"></lib-ui-components-input>
+          <lib-ui-components-input type="text" label="Subtítulo" [(ngModel)]="headerConfig.subtitle" (ngModelChange)="updateHeaderConfig()"></lib-ui-components-input>
+          <lib-ui-components-input type="select" label="Alineación" [(ngModel)]="headerConfig.align" [options]="alignOptions" (ngModelChange)="updateHeaderConfig()"></lib-ui-components-input>
+        </div>
+      </div>
+
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Navbar Settings</h3>
+        </div>
+        <div class="input-grid">
+          <lib-ui-components-input type="checkbox" [(ngModel)]="navBarConfig.visible" (ngModelChange)="updateNavBarConfig()">Mostrar Navbar</lib-ui-components-input>
+          <lib-ui-components-input type="text" label="Texto Logo" [(ngModel)]="navBarConfig.logoText" (ngModelChange)="updateNavBarConfig()"></lib-ui-components-input>
+          <lib-ui-components-input type="checkbox" [(ngModel)]="navBarConfig.isFixed" (ngModelChange)="updateNavBarConfig()">Navbar Fijo</lib-ui-components-input>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Tab -->
+    <div *ngIf="activeTab === 'hero'" class="tab-content">
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Contenido del Hero</h3>
+        </div>
+        <div class="input-grid">
+          <lib-ui-components-input type="text" label="Título Principal" [(ngModel)]="heroConfig.title" (ngModelChange)="updateHeroConfig()"></lib-ui-components-input>
+          <lib-ui-components-input type="textarea" label="Subtítulo" [(ngModel)]="heroConfig.subtitle" (ngModelChange)="updateHeroConfig()"></lib-ui-components-input>
+          <lib-ui-components-input type="text" label="Botón CTA" [(ngModel)]="heroConfig.ctaLabel" (ngModelChange)="updateHeroConfig()"></lib-ui-components-input>
+        </div>
+      </div>
+
+      <div class="config-group">
+          <div class="group-header">
+            <h3>Fondo de Video</h3>
+          </div>
+          <div class="input-grid">
+            <lib-ui-components-input type="checkbox" [(ngModel)]="heroConfig.videoBackground" (ngModelChange)="updateHeroConfig()">Habilitar Video</lib-ui-components-input>
+            <lib-ui-components-input *ngIf="heroConfig.videoBackground" type="text" label="URL Video" [(ngModel)]="heroConfig.videoUrl" (ngModelChange)="updateHeroConfig()"></lib-ui-components-input>
+          </div>
+      </div>
+    </div>
+
+    <!-- Structure Tab -->
+    <div *ngIf="activeTab === 'structure'" class="tab-content">
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Estructura de la Página</h3>
+          <p class="helper-text">Reordena o activa las secciones de tu página para personalizar el recorrido del usuario.</p>
+        </div>
+        
+        <div class="section-list">
+          <div *ngFor="let section of sections; let i = index" 
+               class="section-item" 
+               [class.hidden-section]="!section.visible">
+            
+            <div class="section-drag-handle">☰</div>
+            
+            <div class="section-info">
+              <span class="section-type">{{ section.type }}</span>
+              <span class="section-label">{{ section.label }}</span>
+            </div>
+            
+            <div class="section-actions">
+              <button class="action-btn toggle-btn" 
+                      [class.active]="section.visible"
+                      (click)="toggleSectionVisibility(section)" 
+                      [title]="section.visible ? 'Ocultar sección' : 'Mostrar sección'">
+                {{ section.visible ? '👁️' : '🚫' }}
+              </button>
+              <div class="move-btns">
+                <button class="move-btn" (click)="moveSection(i, 'up')" [disabled]="i === 0" title="Mover arriba">▲</button>
+                <button class="move-btn" (click)="moveSection(i, 'down')" [disabled]="i === sections.length - 1" title="Mover abajo">▼</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="structure-footer">
+          <p>¿Quieres añadir contenido personalizado?</p>
+          <button class="add-item-btn" (click)="activeTab = 'content'">
+            ➕ Gestionar Contenido Detallado
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content Tab -->
+    <div *ngIf="activeTab === 'content'" class="tab-content">
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Servicios Ofrecidos</h3>
+          <p class="helper-text">Gestiona los servicios principales que se muestran en las tarjetas de la sección de servicios.</p>
+        </div>
+        <div class="item-list">
+          <div *ngFor="let item of serviceCardsConfig.items; let i = index" class="list-item">
+            <div class="item-info">
+              <span class="item-label">{{item.routeName}}</span>
+              <span class="item-sublabel">{{item.description}}</span>
+            </div>
+            <div class="item-actions">
+              <button class="edit-btn" (click)="openEditModal('service', item, i)" title="Editar">✎</button>
+              <button class="delete-btn" (click)="removeItem('service', i)" title="Eliminar">×</button>
+            </div>
+          </div>
+          <button class="add-item-btn" (click)="openAddModal('service')">✚ Añadir Nuevo Servicio</button>
+        </div>
+      </div>
+
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Productos y Módulos</h3>
+          <p class="helper-text">Configura los módulos adicionales que tus clientes pueden adquirir para sus proyectos.</p>
+        </div>
+        <div class="item-list">
+          <div *ngFor="let p of productsConfig.items; let i = index" class="list-item">
+            <div class="item-info">
+              <span class="item-label">{{p.name}}</span>
+              <span class="item-sublabel">{{p.price}} — {{p.description}}</span>
+            </div>
+            <div class="item-actions">
+              <button class="edit-btn" (click)="openEditModal('product', p, i)" title="Editar">✎</button>
+              <button class="delete-btn" (click)="removeItem('product', i)" title="Eliminar">×</button>
+            </div>
+          </div>
+          <button class="add-item-btn" (click)="openAddModal('product')">✚ Añadir Nuevo Producto</button>
+        </div>
+      </div>
+
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Testimonios de Clientes</h3>
+          <p class="helper-text">Añade pruebas sociales de clientes satisfechos para generar confianza.</p>
+        </div>
+        <div class="item-list">
+          <div *ngFor="let t of testimonialsConfig.items; let i = index" class="list-item">
+            <div class="item-info">
+              <span class="item-label">{{t.author}}</span>
+              <span class="item-sublabel">"{{t.quote}}"</span>
+            </div>
+            <div class="item-actions">
+              <button class="edit-btn" (click)="openEditModal('testimonial', t, i)" title="Editar">✎</button>
+              <button class="delete-btn" (click)="removeItem('testimonial', i)" title="Eliminar">×</button>
+            </div>
+          </div>
+          <button class="add-item-btn" (click)="openAddModal('testimonial')">✚ Añadir Testimonio</button>
+        </div>
+      </div>
+
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Preguntas Frecuentes</h3>
+          <p class="helper-text">Resuelve las dudas más comunes de tus visitantes de forma rápida.</p>
+        </div>
+        <div class="item-list">
+          <div *ngFor="let f of faqConfig.items; let i = index" class="list-item">
+            <div class="item-info">
+              <span class="item-label">{{f.title}}</span>
+              <span class="item-sublabel">{{f.content}}</span>
+            </div>
+            <div class="item-actions">
+              <button class="edit-btn" (click)="openEditModal('faq', f, i)" title="Editar">✎</button>
+              <button class="delete-btn" (click)="removeItem('faq', i)" title="Eliminar">×</button>
+            </div>
+          </div>
+          <button class="add-item-btn" (click)="openAddModal('faq')">✚ Añadir Nueva FAQ</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout & Variantes Tab -->
+    <div *ngIf="activeTab === 'layout'" class="tab-content">
+       <div class="config-group" *ngFor="let comp of components">
+          <div class="group-header">
+            <h3>{{comp.label}}</h3>
+          </div>
+          <lib-ui-components-input
+            type="select"
+            [placeholder]="'Variante para ' + comp.label"
+            [(ngModel)]="componentVariants[comp.id]"
+            (ngModelChange)="onComponentVariantChange(comp.id)"
+            [options]="componentVariantOptions"
+          ></lib-ui-components-input>
+       </div>
+    </div>
+
+    <!-- Pricing Tab -->
+    <div *ngIf="activeTab === 'pricing'" class="tab-content">
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Gestión de Precios</h3>
+          <p class="helper-text">Define los servicios y sus costes en la tabla de precios.</p>
+        </div>
+        <div class="item-list">
+          <div *ngFor="let row of pricingConfig.rows; let i = index" class="list-item">
+            <div class="item-info">
+              <span class="item-label">{{row['service']}}</span>
+              <span class="item-sublabel">{{row['price']}} — {{row['description']}}</span>
+            </div>
+            <div class="item-actions">
+              <button class="edit-btn" (click)="openEditModal('pricing', row, i)">✎</button>
+              <button class="delete-btn" (click)="removeItem('pricing', i)">×</button>
+            </div>
+          </div>
+          <button class="add-item-btn" (click)="openAddModal('pricing')">✚ Añadir Fila de Precio</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Promotions Tab -->
+    <div *ngIf="activeTab === 'promotions'" class="tab-content">
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Tarjetas de Promoción</h3>
+          <p class="helper-text">Crea ofertas especiales para llamar la atención sobre servicios específicos.</p>
+        </div>
+        <div class="item-list">
+          <div *ngFor="let promo of promotionsConfig.premiumCards; let i = index" class="list-item">
+            <div class="item-info">
+              <span class="item-label">{{promo.title}}</span>
+              <span class="item-sublabel">{{promo.price}} ({{promo.discount}})</span>
+            </div>
+            <div class="item-actions">
+              <button class="edit-btn" (click)="openEditModal('promotion', promo, i)">✎</button>
+              <button class="delete-btn" (click)="removeItem('promotion', i)">×</button>
+            </div>
+          </div>
+          <button class="add-item-btn" (click)="openAddModal('promotion')">✚ Añadir Promoción</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Gallery Tab -->
+    <div *ngIf="activeTab === 'gallery'" class="tab-content">
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Imágenes de la Galería</h3>
+          <p class="helper-text">Gestiona las imágenes que muestran tus trabajos anteriores.</p>
+        </div>
+        <div class="item-list">
+          <div *ngFor="let img of galleryConfig.images; let i = index" class="list-item">
+            <div class="item-info">
+              <span class="item-label">{{img.alt}}</span>
+              <span class="item-sublabel">{{img.src}}</span>
+            </div>
+            <div class="item-actions">
+              <button class="edit-btn" (click)="openEditModal('gallery', img, i)">✎</button>
+              <button class="delete-btn" (click)="removeItem('gallery', i)">×</button>
+            </div>
+          </div>
+          <button class="add-item-btn" (click)="openAddModal('gallery')">✚ Añadir Imagen</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer Tab -->
+    <div *ngIf="activeTab === 'footer'" class="tab-content">
+      <div class="config-group">
+        <div class="group-header">
+          <h3>Diseño del Pie de Página</h3>
+        </div>
+        <div class="input-grid">
+          <lib-ui-components-input type="checkbox" [(ngModel)]="footerConfig.visible" (ngModelChange)="updateFooterConfig()">Mostrar Footer</lib-ui-components-input>
+          <lib-ui-components-input type="text" label="Título" [(ngModel)]="footerConfig.title" (ngModelChange)="updateFooterConfig()"></lib-ui-components-input>
+          <lib-ui-components-input type="textarea" label="Descripción" [(ngModel)]="footerConfig.description" (ngModelChange)="updateFooterConfig()"></lib-ui-components-input>
+          <lib-ui-components-input type="checkbox" [(ngModel)]="footerConfig.showParticles" (ngModelChange)="updateFooterConfig()">Mostrar Partículas</lib-ui-components-input>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  </div>
+</div>
+
+<!-- Edit Item Modal -->
+<div *ngIf="showItemModal" class="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Personalizar {{modalItemType | uppercase}}</h3>
+      <button (click)="closeItemModal()">×</button>
+    </div>
+    <div class="modal-body" *ngIf="editingItem">
+      <ng-container [ngSwitch]="modalItemType">
+        <div *ngSwitchCase="'service'" class="input-grid">
+          <lib-ui-components-input label="Nombre" type="text" [(ngModel)]="editingItem.routeName"></lib-ui-components-input>
+          <lib-ui-components-input label="Descripción" type="textarea" [(ngModel)]="editingItem.description"></lib-ui-components-input>
+          <lib-ui-components-input label="URL Imagen" type="text" [(ngModel)]="editingItem.imageUrl"></lib-ui-components-input>
+          <lib-ui-components-input label="Dificultad" type="text" [(ngModel)]="editingItem.difficulty"></lib-ui-components-input>
+        </div>
+        <div *ngSwitchCase="'product'" class="input-grid">
+          <lib-ui-components-input label="Nombre" type="text" [(ngModel)]="editingItem.name"></lib-ui-components-input>
+          <lib-ui-components-input label="Descripción" type="textarea" [(ngModel)]="editingItem.description"></lib-ui-components-input>
+          <lib-ui-components-input label="Imagen (Nombre archivo)" type="text" [(ngModel)]="editingItem.image"></lib-ui-components-input>
+          <lib-ui-components-input label="Precio" type="text" [(ngModel)]="editingItem.price"></lib-ui-components-input>
+        </div>
+        <div *ngSwitchCase="'testimonial'" class="input-grid">
+          <lib-ui-components-input label="Autor" type="text" [(ngModel)]="editingItem.author"></lib-ui-components-input>
+          <lib-ui-components-input label="Cita / Testimonio" type="textarea" [(ngModel)]="editingItem.quote"></lib-ui-components-input>
+        </div>
+        <div *ngSwitchCase="'faq'" class="input-grid">
+          <lib-ui-components-input label="Pregunta" type="text" [(ngModel)]="editingItem.title"></lib-ui-components-input>
+          <lib-ui-components-input label="Respuesta" type="textarea" [(ngModel)]="editingItem.content"></lib-ui-components-input>
+        </div>
+        <div *ngSwitchCase="'pricing'" class="input-grid">
+          <lib-ui-components-input label="Servicio" type="text" [(ngModel)]="editingItem.service"></lib-ui-components-input>
+          <lib-ui-components-input label="Descripción" type="text" [(ngModel)]="editingItem.description"></lib-ui-components-input>
+          <lib-ui-components-input label="Precio" type="text" [(ngModel)]="editingItem.price"></lib-ui-components-input>
+        </div>
+        <div *ngSwitchCase="'promotion'" class="input-grid">
+          <lib-ui-components-input label="Título" type="text" [(ngModel)]="editingItem.title"></lib-ui-components-input>
+          <lib-ui-components-input label="Descripción" type="textarea" [(ngModel)]="editingItem.description"></lib-ui-components-input>
+          <lib-ui-components-input label="Precio" type="text" [(ngModel)]="editingItem.price"></lib-ui-components-input>
+          <lib-ui-components-input label="Descuento/Badge" type="text" [(ngModel)]="editingItem.discount"></lib-ui-components-input>
+          <lib-ui-components-input label="Tooltip" type="text" [(ngModel)]="editingItem.tooltip"></lib-ui-components-input>
+        </div>
+        <div *ngSwitchCase="'gallery'" class="input-grid">
+          <lib-ui-components-input label="Alt Text" type="text" [(ngModel)]="editingItem.alt"></lib-ui-components-input>
+          <lib-ui-components-input label="URL Imagen" type="text" [(ngModel)]="editingItem.src"></lib-ui-components-input>
+        </div>
+      </ng-container>
+    </div>
+    <div class="modal-footer">
+      <button class="cancel" (click)="closeItemModal()">Cancelar</button>
+      <button class="confirm" (click)="saveItem()">Guardar Cambios</button>
+    </div>
+  </div>
+</div>
