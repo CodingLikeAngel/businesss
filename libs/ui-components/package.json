@@ -12,7 +12,5 @@
     "hammerjs": "^2.0.8"
   },
   "sideEffects": false,
-  "dependencies": {
-    "@negocio/ui-components": "file:"
-  }
+  "dependencies": {}
 }

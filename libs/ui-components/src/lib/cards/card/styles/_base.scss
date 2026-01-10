@@ -1,5 +1,9 @@
 @use "sass:map";
 @use "./variables" as var;
+@use "./variants/variants-2" as *;
+@use "./variants/variants-3" as *;
+@use "./variants/variants-4" as *;
+@use "./variants/variants-5" as *;
 
 .card {
   width: 100%;
@@ -156,10 +160,6 @@
 }
 
 // Variantes (mantenidas de archivos separados)
-@import "./variants/variants-2";
-@import "./variants/variants-3";
-@import "./variants/variants-4";
-@import "./variants/variants-5";
 
 // Estilos para las pipes
 .highlight-text {
