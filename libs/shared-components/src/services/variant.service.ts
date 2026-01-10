@@ -827,8 +827,7 @@ export class VariantService {
       if (saved) {
         try {
           const state = JSON.parse(saved);
-          if (state.componentVariants) this.componentVariantsSubject.next(state.componentVariants);
-          if (state.sections) this.sectionsSubject.next(state.sections);
+          if (state.header) this.headerConfigSubject.next(state.header);
           if (state.footer) this.footerConfigSubject.next(state.footer);
           if (state.navBar) this.navBarConfigSubject.next(state.navBar);
           if (state.hero) this.heroConfigSubject.next(state.hero);
@@ -843,6 +842,7 @@ export class VariantService {
           if (state.products) this.productsConfigSubject.next(state.products);
           if (state.globalVariant) this.globalVariantSubject.next(state.globalVariant);
           if (state.componentVariants) this.componentVariantsSubject.next(state.componentVariants);
+          if (state.sections) this.sectionsSubject.next(state.sections);
         } catch (e) {
           console.error('Error loading config from localStorage', e);
         }

@@ -26,7 +26,6 @@ import { MainLayoutBaseComponent } from '../main-layout-base.component';
   styleUrl: './main-desktop-layout.component.scss',
 })
 export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
-  isLandingPage: any;
 
   tabsConfig: any[] = [
     { label: 'Servicios', sectionId: 'servicios', icon: '🛠️' },

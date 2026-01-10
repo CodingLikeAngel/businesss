@@ -441,10 +441,8 @@ export class VariantSelectorComponent implements OnInit {
       this.productsJson = JSON.stringify(config.items, null, 2);
     });
 
-    // Start directly in EDITOR mode
-    this.currentStep = 'editor';
-    setTimeout(() => {
-      this.variantService.setBuilderStep('editor');
+    this.variantService.builderStep$.subscribe((step) => {
+      this.currentStep = step;
     });
 
     this.variantService.sections$.subscribe(sections => {

@@ -63,12 +63,12 @@
           </div>
 
           <!-- Navbar -->
-          <div *ngIf="navBarConfig.visible" class="fixed absolute top-0 z-50 bg-black/50 backdrop-blur-md w-full">
+          <div *ngIf="navBarConfig.visible" class="sticky top-0 z-50 bg-black/50 backdrop-blur-md w-full">
             <lib-ui-components-tabs
               [tabs]="tabsConfig"
               [variant]="getVariant('navbar')"
               [showAs]="'tabs'"
-              [isMobile]="true"
+              [isMobile]="previewSize === 'mobile'"
               (tabSelected)="onTabSelected($event)"
             ></lib-ui-components-tabs>
           </div>
