@@ -1,171 +1,261 @@
 @import '../../../../../../../../shared-components/src/lib/shared-components/variant-selector/variables.scss';
 
-// HUD PREVIEW STYLES
-.preview-hud {
-  height: 70px;
-  background: rgba(13, 17, 23, 0.95);
+.builder-shell {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #0d1117;
+  color: white;
+  overflow: hidden;
+  font-family: 'Outfit', sans-serif;
+}
+
+// 🔝 TOP HUBBAR
+.builder-hub {
+  height: 64px;
+  background: rgba(13, 17, 23, 0.8);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
   z-index: 1000;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
 
-  .hud-back-btn {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    color: white;
-    padding: 0.6rem 1.2rem;
-    border-radius: 12px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: all 0.3s ease;
+  .hub-left {
     display: flex;
     align-items: center;
-    gap: 8px;
-
-    &:hover {
+    gap: 1rem;
+    
+    .logo-mark {
       background: #ff3c28;
-      border-color: #ff3c28;
-      transform: translateX(-4px);
-    }
-  }
-
-  .device-selector {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 6px;
-    border-radius: 16px;
-    display: flex;
-    gap: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-
-    button {
-      background: transparent;
-      border: none;
-      color: rgba(255,255,255,0.4);
-      padding: 0.6rem 1.2rem;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      justify-content: center;
+      font-weight: 900;
+      box-shadow: 0 4px 12px rgba(255, 60, 40, 0.4);
+    }
 
-      span { font-size: 0.85rem; }
-
-      &:hover { color: white; background: rgba(255,255,255,0.05); }
-
-      &.active {
-        background: white;
-        color: #0d1117;
-        box-shadow: 0 4px 15px rgba(255,255,255,0.2);
-        transform: scale(1.05);
+    .project-info {
+      display: flex;
+      flex-direction: column;
+      .project-name { font-weight: 700; font-size: 0.9rem; }
+      .save-status { 
+        font-size: 0.65rem; 
+        color: #10b981; 
+        display: flex; 
+        align-items: center; 
+        gap: 4px;
+        .dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; }
       }
     }
   }
 
-  .hud-status {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: rgba(255,255,255,0.5);
+  .hub-center {
+    .device-dock {
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px;
+      border-radius: 12px;
+      display: flex;
+      gap: 2px;
+      border: 1px solid rgba(255, 255, 255, 0.05);
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      &.green { background: #10b981; box-shadow: 0 0 10px #10b981; }
+      button {
+        background: transparent;
+        border: none;
+        color: rgba(255, 255, 255, 0.4);
+        padding: 6px 14px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 1.1rem;
+
+        &:hover { color: white; background: rgba(255, 255, 255, 0.05); }
+        &.active { background: white; color: #0d1117; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+      }
+    }
+  }
+
+  .hub-right {
+    display: flex;
+    gap: 0.5rem;
+
+    button {
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.8rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      white-space: nowrap;
+
+      span {
+        display: inline-block;
+      }
+
+      @media (max-width: 1200px) {
+        span:not(:first-child) { display: none; } // Hide text, keep emoji
+        padding: 8px;
+      }
+    }
+
+    .btn-preview {
+      background: rgba(255, 255, 255, 0.05);
+      color: white;
+      border-color: rgba(255, 255, 255, 0.1);
+      &:hover { border-color: #6366f1; color: #6366f1; }
+    }
+
+    .btn-editor {
+      background: #6366f1;
+      color: white;
+      &:hover { background: #4f46e5; }
+    }
+
+    .btn-publish {
+      background: white;
+      color: #0d1117;
+      &:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,255,255,0.1); }
+      
+      @media (max-width: 1200px) {
+        display: none; // Hide publish on very small builder views to prioritize preview
+      }
     }
   }
 }
 
-// PREVIEW FRAME CONTAINER
-.preview-frame-container {
-  flex: 1;
-  background: #1e293b; 
-  display: flex;
-  justify-content: center;
-  overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  padding: 0;
-
-  &.frame-active {
-    background: radial-gradient(circle at center, #1e293b 0%, #0d1117 100%);
-    padding: 2rem;
+@media (max-width: 1100px) {
+  .builder-hub {
+    padding: 0 0.75rem;
+    .project-info { display: none; } // Hide project name to save space
   }
 }
 
-.preview-frame {
-  background: white;
+// 🛠️ WORKSPACE
+.workspace {
+  flex: 1;
+  display: flex;
+  position: relative;
+  overflow: hidden;
+}
+
+.tools-sidebar {
+  width: 400px;
+  background: rgba(13, 17, 23, 0.4);
+  backdrop-filter: blur(30px);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
   height: 100%;
-  width: 100%;
+  overflow-y: auto;
+  z-index: 500;
+  box-shadow: 20px 0 50px rgba(0,0,0,0.3);
+
+  @media (max-width: 1400px) {
+    width: 320px;
+  }
+}
+
+// 🎨 CANVAS AREA
+.canvas-area {
+  flex: 1;
+  background-color: #1a1f26;
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
+  background-size: 32px 32px; // GRID
+  overflow: auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 60px;
+  scroll-behavior: smooth;
+
+  @media (max-width: 1300px) {
+    padding: 30px;
+  }
+
+  &::-webkit-scrollbar { width: 6px; height: 6px; }
+  &::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+}
+
+.canvas-wrapper {
+  perspective: 1000px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100%;
+}
+
+.preview-frame {
+  background: #0f172a;
+  box-shadow: 0 50px 100px -20px rgba(0,0,0,0.7), 0 30px 60px -30px rgba(0,0,0,0.8);
   transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 40px 100px rgba(0,0,0,0.5);
   position: relative;
   overflow: hidden;
 
-  &.frame-mobile {
-    width: 375px;
-    height: 812px;
-    border-radius: 40px;
-    border: 12px solid #2d3748;
-    margin: auto;
+  &.frame-desktop {
+    width: 1280px;
+    height: auto;
+    min-height: 800px;
+    border-radius: 4px;
   }
 
   &.frame-tablet {
     width: 768px;
     height: 1024px;
-    border-radius: 30px;
+    border-radius: 40px;
     border: 12px solid #2d3748;
-    margin: auto;
   }
 
-  &.frame-desktop {
-    width: 100%;
-    height: 100%;
-    border-radius: 0;
-    border: none;
+  &.frame-mobile {
+    width: 375px;
+    height: 812px;
+    border-radius: 50px;
+    border: 14px solid #2d3748;
+  }
+
+  .frame-mockup-top {
+    height: 30px;
+    background: #2d3748;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    .camera { width: 6px; height: 6px; background: #1a202c; border-radius: 50%; }
   }
 
   .frame-content {
     width: 100%;
     height: 100%;
-    background: #0f172a;
     overflow-y: auto;
     overflow-x: hidden;
-    position: relative;
+    background: #0f172a;
+    &::-webkit-scrollbar { width: 0; } // Hide internal scroll for cleaner look
   }
 }
 
-.hud-float-btn {
-  width: 50px;
-  height: 50px;
-  background: #ff3c28;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  font-size: 1.2rem;
-  cursor: pointer;
-  box-shadow: 0 10px 25px rgba(255, 60, 40, 0.4);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    transform: scale(1.1) rotate(15deg);
-    background: #e12d1a;
+// 👁️ PREVIEW MODE OVERRIDES
+.preview-mode {
+  .tools-sidebar {
+    transform: translateX(-100%);
+    width: 0;
+    opacity: 0;
   }
-}
 
-// GENERAL LAYOUT OVERRIDES
-.preview-active {
-  .preview-area {
+  .canvas-area {
+    background-image: none;
     background: #0d1117;
+    padding: 0;
+  }
+
+  .preview-frame.frame-desktop {
+    width: 100vw;
+    height: calc(100vh - 64px);
+    border-radius: 0;
   }
 }
+

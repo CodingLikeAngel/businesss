@@ -46,7 +46,13 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
   }
 
   callNow() {
-    throw new Error('Method not implemented.');
+    console.log('Opening contact form or call action...');
+    this.scrollToSection('contacto');
+  }
+
+  onWorkspaceClick(event: MouseEvent) {
+    // This could be used to deselect current item in the future
+    console.log('Workspace clicked');
   }
 
   onTabSelected(sectionId: string) {

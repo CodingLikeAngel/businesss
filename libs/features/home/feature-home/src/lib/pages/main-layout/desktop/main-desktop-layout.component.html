@@ -1,110 +1,103 @@
-<div class="min-h-screen text-white flex flex-row bg-[#0f172a] builder-shell" [class.preview-active]="builderStep === 'preview'">
+<div class="builder-shell" [class.preview-mode]="builderStep === 'preview'" [class.editing-mode]="builderStep === 'editor'">
   
-  <!-- Visual Builder Sidebar -->
-  <aside 
-    *ngIf="builderStep !== 'preview'"
-    class="w-[450px] h-screen sticky top-0 border-r border-white/10 shadow-2xl z-40 bg-[#1e293b] overflow-y-auto shrink-0">
-    <lib-variant-selector></lib-variant-selector>
-  </aside>
-
-  <!-- Preview Area -->
-  <main class="flex-1 flex flex-col relative overflow-hidden preview-area">
-    
-    <!-- Responsive Preview HUD (Top Bar) -->
-    <div *ngIf="builderStep === 'preview'" class="preview-hud">
-      <div class="hud-left">
-        <button (click)="returnToEditor()" class="hud-back-btn">
-          <span>⬅️</span> Volver
-        </button>
-      </div>
-      
-      <div class="hud-center">
-        <div class="device-selector">
-          <button (click)="setPreviewSize('desktop')" [class.active]="previewSize === 'desktop'" title="Vista Desktop">
-            🖥️ <span>Desktop</span>
-          </button>
-          <button (click)="setPreviewSize('tablet')" [class.active]="previewSize === 'tablet'" title="Vista Tablet">
-            tablet <span>Tablet</span>
-          </button>
-          <button (click)="setPreviewSize('mobile')" [class.active]="previewSize === 'mobile'" title="Vista Móvil">
-            📱 <span>Móvil</span>
-          </button>
-        </div>
-      </div>
-      
-      <div class="hud-right">
-        <div class="hud-status">
-          <span class="status-dot green"></span>
-          Modo Previsualización
-        </div>
+  <!-- TOP GLOBAL HUB -->
+  <header class="builder-hub">
+    <div class="hub-left">
+      <div class="logo-mark">AS</div>
+      <div class="project-info">
+        <span class="project-name">Anto Studios Editor</span>
+        <span class="save-status">
+          <span class="dot"></span> Automático
+        </span>
       </div>
     </div>
 
-    <!-- The "Iframe" Container for Preview -->
-    <div class="preview-frame-container" [class.frame-active]="builderStep === 'preview'">
-      
-      <div class="preview-frame" 
-           [class.frame-mobile]="previewSize === 'mobile'" 
-           [class.frame-tablet]="previewSize === 'tablet'"
-           [class.frame-desktop]="previewSize === 'desktop'">
-        
-        <div class="frame-content">
-          <!-- Header -->
-          <div *ngIf="headerConfig.visible">
-            <lib-ui-components-header
-              [variant]="getVariant('navbar')"
-              [align]="headerConfig.align"
-              [dark]="headerConfig.dark"
-              [title]="headerConfig.title"
-              [subtitle]="headerConfig.subtitle"
-              [navItems]="headerConfig.navItems"
-              [customStyles]="headerConfig.customStyles"
-            ></lib-ui-components-header>
-          </div>
-
-          <!-- Navbar -->
-          <div *ngIf="navBarConfig.visible" class="sticky top-0 z-50 bg-black/50 backdrop-blur-md w-full">
-            <lib-ui-components-tabs
-              [tabs]="tabsConfig"
-              [variant]="getVariant('navbar')"
-              [showAs]="'tabs'"
-              [isMobile]="previewSize === 'mobile'"
-              (tabSelected)="onTabSelected($event)"
-            ></lib-ui-components-tabs>
-          </div>
-
-          <router-outlet></router-outlet>
-
-          <!-- Footer -->
-          <lib-ui-components-footer
-            *ngIf="footerConfig.visible"
-            [variant]="getVariant('footer')"
-            [dark]="footerConfig.dark"
-            [showParticles]="footerConfig.showParticles"
-            [title]="footerConfig.title"
-            [description]="footerConfig.description"
-            [exploreLinks]="footerConfig.exploreLinks"
-            [trendLinks]="footerConfig.trendLinks"
-            [socialIcons]="footerConfig.socialIcons"
-            [copyrightText]="footerConfig.copyrightText"
-            [customStyles]="footerConfig.customStyles"
-            (linkClicked)="onLinkClick($event)"
-            (socialClicked)="onSocialClick($event)"
-          ></lib-ui-components-footer>
-        </div>
-
+    <!-- Device Selector (Always Available) -->
+    <div class="hub-center">
+      <div class="device-dock">
+        <button (click)="setPreviewSize('desktop')" [class.active]="previewSize === 'desktop'" title="Desktop">🖥️</button>
+        <button (click)="setPreviewSize('tablet')" [class.active]="previewSize === 'tablet'" title="Tablet">📟</button>
+        <button (click)="setPreviewSize('mobile')" [class.active]="previewSize === 'mobile'" title="Móvil">📱</button>
       </div>
     </div>
 
-    <!-- Mini Floating Return Button (Fallback) -->
-    <button 
-      *ngIf="builderStep === 'preview'"
-      (click)="returnToEditor()"
-      class="fixed bottom-6 right-6 z-[100] hud-float-btn"
-      title="Volver al Editor"
-    >
-      ✏️
-    </button>
+    <div class="hub-right">
+      <button *ngIf="builderStep === 'editor'" (click)="variantService.setBuilderStep('preview')" class="btn-preview">
+        <span>👁️</span> Previsualizar
+      </button>
+      <button *ngIf="builderStep === 'preview'" (click)="returnToEditor()" class="btn-editor">
+        <span>✏️</span> Volver a Editar
+      </button>
+      <button (click)="callNow()" class="btn-publish">Publicar</button>
+    </div>
+  </header>
 
-  </main>
+  <div class="workspace">
+    <!-- Tools Sidebar (Semi-transparent floating) -->
+    <aside *ngIf="builderStep === 'editor'" class="tools-sidebar">
+      <lib-variant-selector></lib-variant-selector>
+    </aside>
+
+    <!-- THE CANVAS -->
+    <main class="canvas-area" (click)="onWorkspaceClick($event)">
+      <div class="canvas-wrapper">
+        <div class="preview-frame" 
+             [class.frame-mobile]="previewSize === 'mobile'" 
+             [class.frame-tablet]="previewSize === 'tablet'"
+             [class.frame-desktop]="previewSize === 'desktop'">
+          
+          <!-- Mockup Frame (Visual only) -->
+          <div class="frame-mockup-top" *ngIf="previewSize !== 'desktop'">
+             <div class="camera"></div>
+          </div>
+
+          <div class="frame-content">
+            <!-- Header -->
+            <div *ngIf="headerConfig.visible">
+              <lib-ui-components-header
+                [variant]="getVariant('navbar')"
+                [align]="headerConfig.align"
+                [dark]="headerConfig.dark"
+                [title]="headerConfig.title"
+                [subtitle]="headerConfig.subtitle"
+                [navItems]="headerConfig.navItems"
+                [customStyles]="headerConfig.customStyles"
+              ></lib-ui-components-header>
+            </div>
+
+            <!-- Navbar / Tabs -->
+            <div *ngIf="navBarConfig.visible" class="sticky top-0 z-50 bg-black/40 backdrop-blur-xl">
+              <lib-ui-components-tabs
+                [tabs]="tabsConfig"
+                [variant]="getVariant('navbar')"
+                [showAs]="'tabs'"
+                [isMobile]="previewSize === 'mobile'"
+                (tabSelected)="onTabSelected($event)"
+              ></lib-ui-components-tabs>
+            </div>
+
+            <router-outlet></router-outlet>
+
+            <!-- Footer -->
+            <lib-ui-components-footer
+              *ngIf="footerConfig.visible"
+              [variant]="getVariant('footer')"
+              [dark]="footerConfig.dark"
+              [showParticles]="footerConfig.showParticles"
+              [title]="footerConfig.title"
+              [description]="footerConfig.description"
+              [exploreLinks]="footerConfig.exploreLinks"
+              [trendLinks]="footerConfig.trendLinks"
+              [socialIcons]="footerConfig.socialIcons"
+              [copyrightText]="footerConfig.copyrightText"
+              [customStyles]="footerConfig.customStyles"
+              (linkClicked)="onLinkClick($event)"
+              (socialClicked)="onSocialClick($event)"
+            ></lib-ui-components-footer>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
 </div>
+
