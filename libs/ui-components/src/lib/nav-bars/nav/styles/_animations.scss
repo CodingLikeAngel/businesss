@@ -1,0 +1,310 @@
+
+
+/* Animaciones premium */
+@keyframes slide-in {
+    from {
+      transform: translateY(-100%) rotateX(-10deg);
+    }
+    to {
+      transform: translateY(0) rotateX(0deg);
+    }
+  }
+  
+  @keyframes slide-down {
+    from {
+      transform: translateY(-20px) rotateX(-10deg);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0) rotateX(0deg);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes lum-shine {
+    0%,
+    100% {
+      box-shadow: 0 0 15px #ffd700;
+    }
+    50% {
+      box-shadow: 0 0 25px #ffd700;
+    }
+  }
+  
+  @keyframes box-bump {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  @keyframes ghost-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-15px);
+    }
+  }
+  
+  @keyframes star-spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes flame-drift {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(15px);
+    }
+  }
+  
+  @keyframes bubble-rise {
+    0% {
+      transform: translateY(0);
+      opacity: 0.7;
+    }
+    100% {
+      transform: translateY(-30px);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes hex-pulse {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.1);
+    }
+  }
+  
+  @keyframes fog-drift {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    50% {
+      transform: translateX(-20px);
+    }
+  }
+  
+  @keyframes flame-glow {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+  
+  @keyframes wave-rayman {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+  
+  @keyframes twinkle {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+  
+  @keyframes hero-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.6);
+    }
+    50% {
+      box-shadow: 0 0 25px rgba(59, 130, 246, 0.8);
+    }
+  }
+  
+  @keyframes coin-spin {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(360deg);
+    }
+  }
+  
+  @keyframes leaf-twist {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-8px) rotate(3deg);
+    }
+  }
+  
+  @keyframes pulse-rayman {
+    0%,
+    100% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+  }
+  
+  @keyframes fruit-shift {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
+  
+  @keyframes holo-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(96, 165, 250, 0.7);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(96, 165, 250, 0.9);
+    }
+  }
+  
+  @keyframes amber-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 15px currentColor;
+    }
+    50% {
+      box-shadow: 0 0 25px currentColor;
+    }
+  }
+  
+  @keyframes platform-bump {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
+  
+  @keyframes portal-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.7);
+    }
+    50% {
+      box-shadow: 0 0 25px rgba(139, 92, 246, 0.9);
+    }
+  }
+  
+  @keyframes glitch-rayman {
+    0% {
+      transform: translate(0);
+      opacity: 1;
+    }
+    20% {
+      transform: translate(-3px, 3px);
+      opacity: 0.9;
+    }
+    40% {
+      transform: translate(-3px, -3px);
+      opacity: 0.85;
+    }
+    60% {
+      transform: translate(3px, 3px);
+      opacity: 0.9;
+    }
+    80% {
+      transform: translate(3px, -3px);
+      opacity: 0.85;
+    }
+    100% {
+      transform: translate(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes bounce {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  @keyframes bubble-float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  
+  @keyframes glass-shimmer {
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.7);
+    }
+    50% {
+      box-shadow: 0 0 30px rgba(16, 185, 129, 0.9);
+    }
+  }
+  
+  @keyframes phoenix-rise {
+    0%,
+    100% {
+      box-shadow: 0 0 20px rgba(220, 38, 38, 0.8);
+    }
+    50% {
+      box-shadow: 0 0 35px rgba(245, 158, 11, 0.9);
+    }
+  }
+  
+  @keyframes phoenix-flap {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-10px) rotate(5deg);
+    }
+  }
+  
+  @keyframes sparkle {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }

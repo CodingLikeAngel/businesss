@@ -1,0 +1,151 @@
+@use "sass:map";
+@use "./variables" as vars;
+@use "sass:color";
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+
+
+
+
+
+@layer base {
+    .input {
+      font-family: vars.$font-family-sans;
+      padding: 0.5rem 1rem;
+      border-radius: var(--input-radius, 0.375rem);
+      transition: all 200ms ease-in-out;
+      outline: none;
+      box-shadow: var(--input-shadow, 0 2px 10px rgba(0, 0, 0, 0.05));
+      width: 100%;
+      box-sizing: border-box;
+      background: var(--input-bg, vars.$color-white);
+      border: var(--input-border, 1px solid vars.$color-gray-300);
+      color: var(--input-color, vars.$color-dark-bg);
+  
+      /* Forzamos apariencia consistente y eliminamos estilos nativos */
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+  
+      &:focus {
+        box-shadow: var(--input-focus-shadow, 0 0 12px rgba(0, 0, 0, 0.15));
+        background: var(--input-focus-bg, inherit);
+        border: var(--input-focus-border, inherit);
+      }
+  
+      :where([data-theme="dark"]) & {
+        background: var(--input-bg, vars.$color-gray-900);
+        border: var(--input-border, 1px solid vars.$color-gray-500);
+        color: var(--input-color, vars.$color-white);
+        box-shadow: var(--input-shadow, 0 2px 12px rgba(0, 0, 0, 0.4));
+      }
+  
+      &.input-disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        box-shadow: none;
+      }
+  
+      &.input-sm {
+        padding: 0.25rem 0.75rem;
+        font-size: 0.875rem;
+      }
+  
+      &.input-md {
+        padding: 0.5rem 1rem;
+        font-size: 1rem;
+      }
+  
+      &.input-lg {
+        padding: 0.75rem 1.5rem;
+        font-size: 1.125rem;
+      }
+  
+      /* Estilos específicos para select */
+      &[tag="select"] {
+        background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" fill="currentColor" viewBox="0 0 16 16"><path d="M8 12L0 4h16z"/></svg>');
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        padding-right: 2rem;
+        cursor: pointer;
+  
+        &:hover {
+          outline: none;
+        }
+  
+        option {
+          background: vars.$color-gray-900;
+          color: vars.$color-white;
+        }
+      }
+  
+      /* Estilos específicos para checkbox */
+      &[type="checkbox"] {
+        width: 1.25rem;
+        height: 1.25rem;
+        padding: 0;
+        cursor: pointer;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 0.25rem;
+        background: vars.$color-dark-bg;
+        border: 2px solid vars.$color-gray-500;
+        position: relative;
+  
+        &:checked {
+          background: vars.$color-primary;
+          border-color: vars.$color-primary-dark;
+  
+          &::after {
+            content: '✔';
+            color: vars.$color-white;
+            font-size: 0.875rem;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+          }
+        }
+  
+        &:focus {
+          outline: 2px solid vars.$color-primary;
+          outline-offset: 2px;
+        }
+  
+        &.input-disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+  
+        &.input-sm {
+          width: 1rem;
+          height: 1rem;
+          &::after {
+            font-size: 0.75rem;
+          }
+        }
+  
+        &.input-md {
+          width: 1.25rem;
+          height: 1.25rem;
+          &::after {
+            font-size: 0.875rem;
+          }
+        }
+  
+        &.input-lg {
+          width: 1.5rem;
+          height: 1.5rem;
+          &::after {
+            font-size: 1rem;
+          }
+        }
+      }
+  
+      /* Ajustes para textarea */
+      &[tag="textarea"] {
+        resize: vertical;
+      }
+    }
+  }
+  

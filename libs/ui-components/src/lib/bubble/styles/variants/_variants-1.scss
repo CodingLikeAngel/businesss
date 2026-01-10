@@ -1,0 +1,100 @@
+@use "sass:color";
+@use "../variables" as var;
+/* Example Variants */
+.bubble--primary {
+  --bubble-bg: linear-gradient(135deg, #ed1c24, #8b0000);
+  --g1-bg: radial-gradient(circle at center, rgba(255, 99, 71, 0.8) 0, rgba(255, 99, 71, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(220, 20, 60, 0.8) 0, rgba(220, 20, 60, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(178, 34, 34, 0.8) 0, rgba(178, 34, 34, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(139, 0, 0, 0.8) 0, rgba(139, 0, 0, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(255, 69, 0, 0.8) 0, rgba(255, 69, 0, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(255, 20, 147, 0.8) 0, rgba(255, 20, 147, 0) 50%);
+  --bubble-blur: 50px;
+  animation: bounce 2s infinite;
+}
+
+.bubble--secondary {
+  --bubble-bg: linear-gradient(135deg, #0078d7, #003c78);
+  --g1-bg: radial-gradient(circle at center, rgba(0, 191, 255, 0.8) 0, rgba(0, 191, 255, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(30, 144, 255, 0.8) 0, rgba(30, 144, 255, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(0, 0, 255, 0.8) 0, rgba(0, 0, 255, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(0, 255, 255, 0.8) 0, rgba(0, 255, 255, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(135, 206, 235, 0.8) 0, rgba(135, 206, 235, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(0, 206, 209, 0.8) 0, rgba(0, 206, 209, 0) 50%);
+  --bubble-blur: 30px;
+  animation: glowPulse 2s infinite;
+}
+
+.bubble--outline {
+  --bubble-bg: transparent;
+  --g1-bg: radial-gradient(circle at center, rgba(209, 213, 219, 0.8) 0, rgba(209, 213, 219, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(156, 163, 175, 0.8) 0, rgba(156, 163, 175, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(107, 114, 128, 0.8) 0, rgba(107, 114, 128, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(55, 65, 81, 0.8) 0, rgba(55, 65, 81, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(229, 231, 235, 0.8) 0, rgba(229, 231, 235, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(255, 255, 255, 0.8) 0, rgba(255, 255, 255, 0) 50%);
+  --bubble-blur: 20px;
+  --bubble-opacity: 0.6;
+  animation: subtleShake 3s infinite;
+}
+
+.bubble--ghost {
+  --bubble-bg: rgba(255, 255, 255, 0.1);
+  --g1-bg: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0, rgba(255, 255, 255, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(255, 255, 255, 0.4) 0, rgba(255, 255, 255, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(255, 255, 255, 0.2) 0, rgba(255, 255, 255, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(255, 255, 255, 0.5) 0, rgba(255, 255, 255, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(255, 255, 255, 0.3) 0, rgba(255, 255, 255, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(255, 255, 255, 0.6) 0, rgba(255, 255, 255, 0) 50%);
+  --bubble-blur: 60px;
+  --bubble-opacity: 0.4;
+  animation: fadeFloat 2.5s infinite;
+}
+
+.bubble--link {
+  --bubble-bg: transparent;
+  --g1-bg: radial-gradient(circle at center, rgba(6, 182, 212, 0.8) 0, rgba(6, 182, 212, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(8, 145, 178, 0.8) 0, rgba(8, 145, 178, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(14, 116, 144, 0.8) 0, rgba(14, 116, 144, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(22, 78, 99, 0.8) 0, rgba(22, 78, 99, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(34, 211, 238, 0.8) 0, rgba(34, 211, 238, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(6, 182, 212, 0.8) 0, rgba(6, 182, 212, 0) 50%);
+  --bubble-blur: 25px;
+  animation: ripple 2s infinite;
+}
+
+.bubble--neon {
+  --bubble-bg: radial-gradient(ellipse at center, #0a0a14, #ec4899 50%, #00e5ff 100%);
+  --g1-bg: radial-gradient(circle at center, rgba(236, 72, 153, 0.8) 0, rgba(236, 72, 153, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(0, 229, 255, 0.8) 0, rgba(0, 229, 255, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(219, 39, 119, 0.8) 0, rgba(219, 39, 119, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(8, 145, 178, 0.8) 0, rgba(8, 145, 178, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(236, 72, 153, 0.8) 0, rgba(236, 72, 153, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(0, 229, 255, 0.8) 0, rgba(0, 229, 255, 0) 50%);
+  --bubble-blur: 45px;
+  animation: neonFlicker3D 1.8s infinite;
+}
+
+.bubble--cyberpunk {
+  --bubble-bg: linear-gradient(135deg, #eab308, #ec4899);
+  --g1-bg: radial-gradient(circle at center, rgba(234, 179, 8, 0.8) 0, rgba(234, 179, 8, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(236, 72, 153, 0.8) 0, rgba(236, 72, 153, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(6, 182, 212, 0.8) 0, rgba(6, 182, 212, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(139, 92, 246, 0.8) 0, rgba(139, 92, 246, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(34, 197, 94, 0.8) 0, rgba(34, 197, 94, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(236, 72, 153, 0.8) 0, rgba(236, 72, 153, 0) 50%);
+  --bubble-blur: 35px;
+  animation: glitchShift 1.5s infinite;
+}
+
+.bubble--gradient {
+  --bubble-bg: linear-gradient(90deg, #8b5cf6, #ec4899, #22c55e);
+  --g1-bg: radial-gradient(circle at center, rgba(139, 92, 246, 0.8) 0, rgba(139, 92, 246, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(236, 72, 153, 0.8) 0, rgba(236, 72, 153, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(34, 197, 94, 0.8) 0, rgba(34, 197, 94, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(236, 72, 153, 0.8) 0, rgba(236, 72, 153, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(139, 92, 246, 0.8) 0, rgba(139, 92, 246, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(34, 197, 94, 0.8) 0, rgba(34, 197, 94, 0) 50%);
+  --bubble-blur: 40px;
+  animation: colorWave 3s infinite;
+}

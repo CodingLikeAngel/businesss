@@ -1,0 +1,20 @@
+.min-h-screen {
+    min-height: 100vh;
+  }
+  
+  /* Estilos para las pestañas */
+  button {
+    background-color: #1f2937; /* bg-gray-800 */
+    color: white;
+    transition: background-color 0.2s, color 0.2s;
+  }
+  
+  button.bg-gray-800 {
+    background-color: #1f2937;
+  }
+  
+  button.text-rayman-yellow {
+    color: #facc15; /* Ajusta según el color definido */
+  }
+  
+  /* Ajusta los estilos según el diseño deseado */

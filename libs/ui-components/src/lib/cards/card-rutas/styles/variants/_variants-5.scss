@@ -1,0 +1,111 @@
+@use "sass:color";
+@use "../variables" as var;
+
+
+
+/* Variant: indigo-dots */
+.ui-card-rutas--indigo-dots {
+  --card-bg: linear-gradient(135deg, #2e1065 0%, #4c1d95 100%);
+  --card-border: 2px solid #6366f1;
+  --card-shadow: 0 0 20px rgba(99, 102, 241, 0.6);
+  --card-hover-border: 2px solid #818cf8;
+  --card-hover-shadow: 0 0 35px rgba(99, 102, 241, 0.9);
+  --card-text-color: #dbeafe;
+  --card-accent-color: #6366f1;
+  --card-accent-gradient: radial-gradient(circle, #6366f1 10%, transparent 70%);
+  background-image: radial-gradient(rgba(99, 102, 241, 0.5) 2px, transparent 2px);
+  background-size: 12px 12px;
+}
+
+/* Variant: bubble */
+.ui-card-rutas--bubble {
+  --card-bg: rgba(255, 255, 255, 0.3);
+  --card-border: 2px solid #ec4899;
+  --card-shadow: 0 0 20px rgba(236, 72, 153, 0.6);
+  --card-hover-border: 2px solid #f472b6;
+  --card-hover-shadow: 0 0 35px rgba(236, 72, 153, 0.9);
+  --card-text-color: #fce7f3;
+  --card-accent-color: #ec4899;
+  --card-accent-gradient: radial-gradient(circle, #ec4899 10%, transparent 70%);
+  border-radius: 2.5rem;
+}
+
+/* Variant: electoon */
+.ui-card-rutas--electoon {
+  --card-bg: radial-gradient(circle at center, #4c1d95 0%, #c084fc 100%);
+  --card-border: 2px solid #c084fc;
+  --card-shadow: 0 0 20px rgba(192, 132, 252, 0.6);
+  --card-hover-border: 2px solid #d8b4fe;
+  --card-hover-shadow: 0 0 35px rgba(192, 132, 252, 0.9);
+  --card-text-color: #f3e8ff;
+  --card-accent-color: #c084fc;
+  --card-accent-gradient: radial-gradient(circle, #c084fc 10%, transparent 70%);
+}
+
+/* Variant: jungle */
+.ui-card-rutas--jungle {
+  --card-bg: linear-gradient(to top, #14532d 0%, #10b981 100%);
+  --card-border: 2px solid #10b981;
+  --card-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+  --card-hover-border: 2px solid #34d399;
+  --card-hover-shadow: 0 0 35px rgba(16, 185, 129, 0.9);
+  --card-text-color: #ccfbf1;
+  --card-accent-color: #10b981;
+  --card-accent-gradient: radial-gradient(circle, #10b981 10%, transparent 70%);
+}
+
+/* Variant: joycon */
+.ui-card-rutas--joycon {
+  --card-bg: linear-gradient(to top, #fefcbf 0%, #ffffff 100%);
+  --card-border: 2px solid #ef4444;
+  --card-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+  --card-hover-border: 2px solid #f87171;
+  --card-hover-shadow: 0 0 35px rgba(239, 68, 68, 0.8);
+  --card-text-color: #1f2937;
+  --card-accent-color: #ef4444;
+  --card-accent-gradient: radial-gradient(circle, #ef4444 10%, transparent 70%);
+  border-radius: 1rem;
+}
+
+/* Variant: neomorph */
+.ui-card-rutas--neomorph {
+  --card-bg: rgba(229, 231, 235, 0.95);
+  --card-border: none;
+  --card-shadow: 8px 8px 20px rgba(0, 0, 0, 0.25), -8px -8px 20px rgba(255, 255, 255, 0.6);
+  --card-hover-border: none;
+  --card-hover-shadow: 4px 4px 15px rgba(0, 0, 0, 0.35), -4px -4px 15px rgba(255, 255, 255, 0.8);
+  --card-text-color: #1f2937;
+  --card-accent-color: #6b7280;
+  --card-accent-gradient: radial-gradient(circle, #6b7280 10%, transparent 70%);
+}
+
+/* Variant: glitch */
+.ui-card-rutas--glitch {
+  --card-bg: linear-gradient(135deg, #0f172a 0%, #000 100%);
+  --card-border: 2px solid #ef4444;
+  --card-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+  --card-hover-border: 2px solid #f87171;
+  --card-hover-shadow: 0 0 35px rgba(239, 68, 68, 0.9);
+  --card-text-color: #fee2e2;
+  --card-accent-color: #ef4444;
+  --card-accent-gradient: radial-gradient(circle, #ef4444 10%, transparent 70%);
+  position: relative;
+
+  &:hover::before {
+    background: rgba(0, 229, 255, 0.2);
+    animation: glitch 0.3s infinite;
+  }
+}
+
+/* Variant: portal */
+.ui-card-rutas--portal {
+  --card-bg: radial-gradient(circle at center, #0f172a 0%, #2563eb 100%);
+  --card-border: 2px solid #3b82f6;
+  --card-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+  --card-hover-border: 2px solid #60a5fa;
+  --card-hover-shadow: 0 0 35px rgba(59, 130, 246, 0.9);
+  --card-text-color: #dbeafe;
+  --card-accent-color: #3b82f6;
+  --card-accent-gradient: radial-gradient(circle, #3b82f6 10%, transparent 70%);
+  border-radius: 50% 50% 0 0;
+}

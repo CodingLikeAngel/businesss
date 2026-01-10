@@ -1,0 +1,81 @@
+
+@use "../variables" as var;
+
+
+
+
+
+.chip-indigo-dots {
+  background: radial-gradient(circle, #4F46E5, #0F172A);
+  color: #06B6D4;
+  border: 2px solid #4F46E5;
+  background-image: radial-gradient(#FFFFFF 1px, transparent 1px);
+  background-size: 10px 10px;
+  animation: dotDance 2s infinite;
+  &:hover { box-shadow: 0 0 20px #4F46E5; }
+}
+
+.chip-bubble {
+  background: radial-gradient(circle, #FFD700, #00D26A);
+  color: #2D1B58;
+  border: 2px solid #00D26A;
+  animation: bubbleFloat 2s infinite;
+  &:hover { box-shadow: 0 0 20px #00D26A; }
+}
+
+.chip-electoon {
+  background: linear-gradient(135deg, #B362FF, #FACC15);
+  color: #FFF5D6;
+  border: 2px solid #FF6B9D;
+  animation: electoonSpark 1.5s infinite;
+  &:hover { box-shadow: 0 0 20px #FF6B9D; }
+}
+
+.chip-jungle {
+  background: linear-gradient(90deg, #00D26A, #166534);
+  color: #FFFFFF;
+  border: 2px solid #FF7B00;
+  animation: jungleRustle 2s infinite;
+  &:hover { box-shadow: 0 0 20px #00D26A; }
+}
+
+.chip-joycon {
+  background: linear-gradient(45deg, #E60012, #60A5FA);
+  color: #FFFFFF;
+  border: 2px solid #111827;
+  animation: joyconWiggle 1.5s infinite;
+  &:hover { box-shadow: 0 0 20px #E60012; }
+}
+
+.chip-neomorph {
+  background: #D4A017;
+  color: #1E293B;
+  border: none;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3), -4px -4px 10px rgba(255, 255, 255, 0.5);
+  animation: neomorphShift 2s infinite;
+  &:hover { box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.4), -6px -6px 15px rgba(255, 255, 255, 0.7); }
+}
+
+.chip-glitch {
+  background: linear-gradient(135deg, #1E3A5F, #0F172A);
+  color: #FFD700;
+  border: 2px solid #00FF9D;
+  animation: glitchFlicker 1.5s infinite;
+  &:hover { box-shadow: 0 0 20px #00FF9D; }
+}
+
+.chip-portal {
+  background: radial-gradient(circle, #B362FF, #2D1B58);
+  color: #FFF5D6;
+  border: 3px dashed #FFD700;
+  animation: portalSwirl 3s infinite;
+  &:hover { box-shadow: 0 0 20px #B362FF; }
+}
+
+.chip-default {
+  background: radial-gradient(circle, #1E1B4B, #0A0A14);
+  color: #FFFFFF;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  animation: defaultPulse 2s infinite;
+  &:hover { box-shadow: 0 0 20px #1E1B4B; }
+}

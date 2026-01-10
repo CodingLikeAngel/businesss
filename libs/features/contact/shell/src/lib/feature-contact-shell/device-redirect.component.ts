@@ -1,0 +1,63 @@
+import { isPlatformBrowser } from '@angular/common';
+import { Component, Inject, OnInit, PLATFORM_ID } from '@angular/core';
+import { Router } from '@angular/router';
+import { UISpinnerComponent } from '@negocio/ui-components';
+
+@Component({
+  selector: 'lib-device-redirect',
+  standalone: true,
+  imports: [UISpinnerComponent],
+  template: `
+    <div class="flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-yellow-400 dark:from-purple-700 dark:via-pink-800 dark:to-yellow-700 transition-all duration-500">
+      <div class="relative flex flex-col items-center gap-6 p-6 bg-white/30 dark:bg-black/30 rounded-2xl shadow-lg backdrop-blur-sm">
+        <!-- Welcome message -->
+        <h1 class="text-4xl font-bold text-white drop-shadow-md animate-bounce-in">
+        Cargando...
+        </h1>
+        <!-- Spinner from your library -->
+        <lib-ui-components-spinner class="text-yellow-300"  aria-label="Loading"></lib-ui-components-spinner>
+        <!-- Fun loading text -->
+        <span class="text-lg font-semibold text-white drop-shadow-sm animate-pulse">
+          Contact...
+        </span>
+      </div>
+    </div>
+  `,
+  styles: [
+    `
+      @keyframes bounceIn {
+        0% { opacity: 0; transform: scale(0.7); }
+        50% { opacity: 0.5; transform: scale(1.1); }
+        100% { opacity: 1; transform: scale(1); }
+      }
+      .animate-bounce-in {
+        animation: bounceIn 0.8s ease-out forwards;
+      }
+    `,
+  ], // Inline CSS for custom bounce animation
+})
+
+
+export class DeviceRedirectComponent implements OnInit {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: object,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const isMobile = window.innerWidth <= 768;
+      const currentUrl = this.router.url;
+      const isContactRoute = currentUrl.includes('/contact');
+
+      // Use absolute paths
+      const targetPath = isContactRoute
+        ? `/${isMobile ? 'contact/mobile' : 'contact/desktop'}`
+        : `/${isMobile ? 'home/mobile' : 'home/desktop'}`;
+
+      setTimeout(() => {
+        this.router.navigateByUrl(targetPath);
+      }, 200);
+    }
+  }
+}

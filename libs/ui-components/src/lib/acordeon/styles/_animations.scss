@@ -1,0 +1,16 @@
+/* Animaciones */
+@keyframes bubble-float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+@keyframes glitch-shift {
+  0%, 100% { transform: skew(0deg); }
+  10% { transform: skew(1deg); }
+  20% { transform: skew(-1deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}

@@ -1,0 +1,135 @@
+
+@use "../variables" as var;
+
+.table-nano {
+    background-color: #14b8a6;
+    color: #ffffff;
+    border-color: #14b8a6;
+    &.dark {
+      background-color: #1e293b;
+      color: #14b8a6;
+    }
+    .table-header {
+      background-color: rgba(20, 184, 166, 0.4);
+    }
+  }
+  
+  .table-stellar {
+    background: linear-gradient(45deg, #1e293b, #06b6d4);
+    color: #ffffff;
+    border: none;
+    &.dark {
+      background: linear-gradient(45deg, #1e293b, #00A2FF);
+    }
+    .table-header {
+      background-color: rgba(0, 0, 0, 0.4);
+      animation: dream-pulse 2s infinite;
+    }
+  }
+  
+  .table-phoenix {
+    background: linear-gradient(45deg, #f97316, #f43f5e);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 0 10px rgba(249, 115, 22, 0.5);
+    &.dark {
+      background: linear-gradient(45deg, #1e293b, #f97316);
+    }
+    .table-header {
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+  }
+  
+  .table-galactic {
+    background: linear-gradient(135deg, #1e293b, #B362FF);
+    color: #ffffff;
+    border: none;
+    &.dark {
+      background: linear-gradient(135deg, #1e293b, #1E3A5F);
+    }
+    .table-header {
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+  }
+  
+  .table-orbitron {
+    background-color: #00A2FF;
+    color: #FFF5D6;
+    border-color: #2D1B58;
+    &.dark {
+      background-color: #2D1B58;
+      color: #00A2FF;
+    }
+    .table-header {
+      background-color: rgba(0, 162, 255, 0.4);
+      animation: bubble-float 1.8s infinite;
+    }
+  }
+  
+  .table-cartoon {
+    background-color: #FFD700;
+    color: #2D1B58;
+    border-color: #2D1B58;
+    &.dark {
+      background-color: #2D1B58;
+      color: #FFD700;
+    }
+    .table-header {
+      background-color: rgba(255, 215, 0, 0.4);
+      animation: lums-glow 1.5s infinite alternate;
+    }
+  }
+  
+  .table-luma {
+    background: radial-gradient(circle, #FFD700, #FF7B00);
+    color: #2D1B58;
+    border: none;
+    &.dark {
+      background: radial-gradient(circle, #2D1B58, #B362FF);
+      color: #FFF5D6;
+    }
+    .table-header {
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+  }
+  
+  .table-platform {
+    background-color: #00D26A;
+    color: #FFF5D6;
+    border-bottom: 4px solid #2D1B58;
+    &.dark {
+      background-color: #2D1B58;
+      color: #00D26A;
+    }
+    .table-header {
+      background-color: rgba(0, 210, 106, 0.4);
+    }
+  }
+  
+  .table-hero {
+    background-color: #E60012;
+    color: #ffffff;
+    border-color: #111827;
+    &.dark {
+      background-color: #1e293b;
+      color: #E60012;
+    }
+    .table-header {
+      background-color: rgba(230, 0, 18, 0.4);
+    }
+  }
+  
+  .table-coin {
+    background: radial-gradient(circle, #FFD700, #FF7B00);
+    color: #2D1B58;
+    border: none;
+    &.dark {
+      background: radial-gradient(circle, #1e293b, #FFD700);
+      color: #ffffff;
+    }
+    .table-header {
+      background-color: rgba(0, 0, 0, 0.4);
+      animation: spin 3s infinite linear;
+    }
+  }
+  

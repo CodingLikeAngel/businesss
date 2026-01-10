@@ -1,0 +1,334 @@
+// Variables para colores y configuraciones globales
+@use "tailwindcss";
+@use "sass:map";
+@use "sass:color";
+
+$variants: (
+  'enchanted': (from: rgba(34, 139, 34, 0.8), to: #154d27, mist: rgba(200, 255, 200, 0.3)),
+  'mystic': (from: rgba(106, 90, 205, 0.8), to: #2e1a47, mist: rgba(147, 112, 219, 0.35)),
+  'ancient': (from: rgba(139, 0, 0, 0.8), to: #3e2723, mist: rgba(139, 0, 0, 0.25)),
+  'twilight': (from: rgba(255, 140, 0, 0.8), to: #ff4500, mist: rgba(255, 140, 0, 0.3)),
+  'frosty': (from: rgba(173, 216, 230, 0.8), to: #b0e0e6, mist: rgba(173, 216, 230, 0.4)),
+  'jungle': (from: rgba(46, 139, 87, 0.8), to: #228b22, mist: rgba(46, 139, 87, 0.3)),
+  'desert': (from: rgba(210, 180, 140, 0.8), to: #f4a460, mist: rgba(210, 180, 140, 0.2)),
+  'candy': (from: rgba(255, 105, 180, 0.8), to: #ff69b4, mist: rgba(255, 105, 180, 0.3)),
+  'oceanic': (from: rgba(64, 224, 208, 0.8), to: #00ced1, mist: rgba(64, 224, 208, 0.35)),
+  'fiery': (from: rgba(255, 69, 0, 0.8), to: #ff4500, mist: rgba(255, 69, 0, 0.3))
+);
+
+$tree-colors: (
+  'enchanted': #228b22,
+  'mystic': #6a5acd,
+  'ancient': #8b0000,
+  'twilight': #ff8c00,
+  'frosty': #add8e6,
+  'jungle': #2e8b57,
+  'desert': #d2b48c,
+  'candy': #ff69b4,
+  'oceanic': #00b7eb,
+  'fiery': #ff4500
+);
+
+$mushroom-colors: (
+  'enchanted': #ff6f61,
+  'mystic': #dda0dd,
+  'ancient': #8b0000,
+  'twilight': #ffa500,
+  'frosty': #87ceeb,
+  'jungle': #ffd700,
+  'desert': #f4a460,
+  'candy': #ffb6c1,
+  'oceanic': #00bfff,
+  'fiery': #ff6347
+);
+
+$firefly-colors: (
+  'enchanted': (bg: #fef08a, shadow: rgba(255, 255, 0, 0.8)),
+  'mystic': (bg: #d8b4fe, shadow: rgba(147, 112, 219, 0.8)),
+  'ancient': (bg: #fca5a5, shadow: rgba(255, 0, 0, 0.8)),
+  'twilight': (bg: #fdba74, shadow: rgba(255, 140, 0, 0.8)),
+  'frosty': (bg: #bfdbfe, shadow: rgba(173, 216, 230, 0.8)),
+  'jungle': (bg: #bef264, shadow: rgba(50, 205, 50, 0.8)),
+  'desert': (bg: #facc15, shadow: rgba(255, 215, 0, 0.8)),
+  'candy': (bg: #f9a8d4, shadow: rgba(255, 105, 180, 0.8)),
+  'oceanic': (bg: #5eead4, shadow: rgba(64, 224, 208, 0.8)),
+  'fiery': (bg: #f87171, shadow: rgba(255, 69, 0, 0.8))
+);
+
+// Contenedor principal
+.forest-animation-container {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  will-change: filter;
+
+  // Fondo base aplicado desde el componente, combinado con gradientes
+  @each $name, $colors in $variants {
+    &.forest-#{$name} {
+      background: radial-gradient(circle at center, map.get($colors, 'from'), transparent),
+                  linear-gradient(to bottom, map.get($colors, 'from'), map.get($colors, 'to'));
+      box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5); // Sombra suave para profundidad
+    }
+  }
+}
+
+// Capa de fondo lejano (paralaje)
+.background-layer-far {
+  position: absolute;
+  inset: 0;
+  background-repeat: no-repeat;
+  background-position: bottom;
+  background-size: cover;
+  opacity: 0.3;
+  animation: parallaxFar 30s linear infinite;
+  z-index: 1;
+
+  .forest-jungle & { background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100' height='100' fill='%23228b22' opacity='0.3'/%3E%3C/svg%3E"); }
+  .forest-desert & { background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100' height='100' fill='%23d2b48c' opacity='0.3'/%3E%3C/svg%3E"); }
+}
+
+// Capa de animaciones
+.animation-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+}
+
+// Contenido proyectado
+.animated-content {
+  position: relative;
+  z-index: 10;
+}
+
+// Capa de niebla
+.mist-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  filter: blur(15px);
+  animation: mistFlow 20s ease-in-out infinite;
+  transform: translateZ(0);
+  z-index: 2;
+
+  @each $name, $colors in $variants {
+    .forest-#{$name} & {
+      background: linear-gradient(to bottom, map.get($colors, 'mist'), transparent);
+    }
+  }
+}
+
+// Árboles
+.tree-animation {
+  position: absolute;
+  width: 6rem;
+  height: 12rem;
+  z-index: 10;
+  animation: treeSway 8s ease-in-out infinite;
+  will-change: transform;
+
+  @each $name, $color in $tree-colors {
+    &.tree-#{$name} {
+      opacity: 0.9;
+      filter: drop-shadow(0 0 15px rgba($color, 0.6)) blur(1px);
+    }
+  }
+}
+
+// Hongos
+.mushroom {
+  position: absolute;
+  width: 3rem;
+  height: 3rem;
+  z-index: 20;
+  animation: mushroomPulse 4s ease-in-out infinite;
+  will-change: transform;
+
+  @each $name, $color in $mushroom-colors {
+    &.mushroom-#{$name} {
+      opacity: 1;
+      filter: drop-shadow(0 0 10px rgba($color, 0.7)) brightness(1.1);
+    }
+  }
+}
+
+// Esporas
+.spore-particle {
+  position: absolute;
+  font-size: 1.25rem;
+  opacity: 0.6;
+  animation: sporeDrift 6s ease-in-out infinite;
+  will-change: transform, opacity;
+}
+
+// Luciérnagas
+.firefly {
+  position: absolute;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  animation: fireflyGlow 2s ease-in-out infinite;
+  will-change: transform, opacity;
+
+  @each $name, $colors in $firefly-colors {
+    &.firefly-#{$name} {
+      background-color: map.get($colors, 'bg');
+      box-shadow: 0 0 10px map.get($colors, 'shadow'), 0 0 20px map.get($colors, 'shadow');
+    }
+  }
+}
+
+// Hojas que caen
+.leaf {
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  z-index: 30;
+  background-size: cover;
+  opacity: 0.8;
+  animation: leafFall 6s linear infinite;
+  will-change: transform, opacity;
+
+  @each $name, $color in $tree-colors {
+    &.leaf-#{$name} {
+      filter: drop-shadow(0 0 5px rgba($color, 0.6));
+      background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12 2C8 2 2 8 2 12s6 10 10 10 10-6 10-10S16 2 12 2z' fill='#{$color}'/%3E%3C/svg%3E");
+    }
+  }
+}
+
+// Mariposas
+.butterfly {
+  position: absolute;
+  font-size: 1.25rem;
+  opacity: 0.8;
+  animation: butterflyFlutter 4s ease-in-out infinite;
+  will-change: transform;
+
+  @each $name, $color in $tree-colors {
+    &.butterfly-#{$name} {
+      filter: drop-shadow(0 0 5px rgba($color, 0.5));
+    }
+  }
+}
+
+// Rayos de luz
+.light-beam {
+  position: absolute;
+  width: 1rem;
+  height: 100%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.6), transparent);
+  opacity: 0.4;
+  animation: lightBeam 15s ease-in-out infinite;
+  transform-origin: top;
+  will-change: transform, opacity;
+  filter: blur(5px);
+}
+
+// Lums
+.lum {
+  position: absolute;
+  width: 2rem;
+  height: 2rem;
+  color: #fef08a;
+  opacity: 0.9;
+  animation: lumFloat 5s ease-in-out infinite;
+  will-change: transform;
+  filter: drop-shadow(0 0 10px rgba(255, 235, 59, 0.8));
+}
+
+// Lianas
+.liana {
+  position: absolute;
+  width: 0.5rem;
+  height: 8rem;
+  background: linear-gradient(to bottom, #2e8b57, #1b4d2e);
+  opacity: 0.8;
+  animation: lianaSway 6s ease-in-out infinite;
+  transform-origin: top;
+  will-change: transform;
+  filter: drop-shadow(0 0 5px rgba(46, 139, 87, 0.5));
+}
+
+// Animaciones
+@keyframes parallaxFar {
+  0% { transform: translateX(-15%) translateZ(-100px); }
+  100% { transform: translateX(15%) translateZ(-100px); }
+}
+
+@keyframes mistFlow {
+  0% { transform: translateX(-15%) translateZ(0); opacity: 0.6; }
+  50% { transform: translateX(15%) translateZ(0); opacity: 0.9; }
+  100% { transform: translateX(-15%) translateZ(0); opacity: 0.6; }
+}
+
+@keyframes treeSway {
+  0% { transform: translateX(0) rotate(0deg) translateZ(0); }
+  50% { transform: translateX(8px) rotate(2deg) translateZ(0); }
+  100% { transform: translateX(0) rotate(0deg) translateZ(0); }
+}
+
+@keyframes mushroomPulse {
+  0% { transform: scale(1) translateZ(0); }
+  50% { transform: scale(1.1) translateZ(0); }
+  100% { transform: scale(1) translateZ(0); }
+}
+
+@keyframes sporeDrift {
+  0% { transform: translateY(100vh) rotate(0deg) translateZ(0); opacity: 0.7; }
+  50% { transform: translateY(50vh) rotate(20deg) translateZ(0); opacity: 1; }
+  100% { transform: translateY(0) rotate(40deg) translateZ(0); opacity: 0; }
+}
+
+@keyframes fireflyGlow {
+  0% { opacity: 0.4; transform: scale(0.7) translateZ(0); }
+  50% { opacity: 1; transform: scale(1.3) translateZ(0); }
+  100% { opacity: 0.4; transform: scale(0.7) translateZ(0); }
+}
+
+@keyframes leafFall {
+  0% { transform: translateY(0) rotate(0deg) translateZ(0); opacity: 1; }
+  100% { transform: translateY(100vh) translateX(10px) rotate(360deg) translateZ(0); opacity: 0.4; }
+}
+
+@keyframes butterflyFlutter {
+  0% { transform: translateY(0) translateX(0) rotate(0deg) translateZ(0); }
+  25% { transform: translateY(-15px) translateX(8px) rotate(8deg) translateZ(0); }
+  50% { transform: translateY(0) translateX(15px) rotate(0deg) translateZ(0); }
+  75% { transform: translateY(15px) translateX(8px) rotate(-8deg) translateZ(0); }
+  100% { transform: translateY(0) translateX(0) rotate(0deg) translateZ(0); }
+}
+
+@keyframes lightBeam {
+  0% { transform: rotate(-8deg) translateX(-15%) translateZ(0); opacity: 0.4; }
+  50% { transform: rotate(8deg) translateX(15%) translateZ(0); opacity: 0.6; }
+  100% { transform: rotate(-8deg) translateX(-15%) translateZ(0); opacity: 0.4; }
+}
+
+@keyframes lumFloat {
+  0% { transform: translateY(0) scale(1) translateZ(0); }
+  50% { transform: translateY(-25px) scale(1.2) translateZ(0); }
+  100% { transform: translateY(0) scale(1) translateZ(0); }
+}
+
+@keyframes lianaSway {
+  0% { transform: rotate(0deg) translateZ(0); }
+  50% { transform: rotate(3deg) translateZ(0); }
+  100% { transform: rotate(0deg) translateZ(0); }
+}
+
+// Optimización para móviles
+@media (max-width: 768px) {
+  .forest-animation-container { perspective: 500px; }
+  .tree-animation { width: 5rem; height: 10rem; }
+  .mushroom { width: 2.5rem; height: 2.5rem; }
+  .firefly { width: 0.25rem; height: 0.25rem; }
+  .leaf { width: 1rem; height: 1rem; }
+  .spore-particle, .butterfly { font-size: 1rem; }
+  .lum { width: 1.5rem; height: 1.5rem; }
+  .liana { height: 6rem; }
+  .mist-layer { filter: blur(10px); }
+  .light-beam { width: 0.75rem; }
+}

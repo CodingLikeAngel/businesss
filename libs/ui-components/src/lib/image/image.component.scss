@@ -1,0 +1,194 @@
+/* image.component.scss */
+.image-container {
+  display: inline-block;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: var(--image-border, none);
+  box-shadow: var(--image-shadow, none);
+  background: var(--image-bg, none);
+}
+
+.image-container:hover {
+  transform: scale(1.02);
+  box-shadow: var(--image-shadow, 0 6px 12px rgba(0, 0, 0, 0.15));
+}
+
+/* Tamaños */
+.image--size-small {
+  width: 150px;
+  height: 150px;
+}
+
+.image--size-medium {
+  width: 300px;
+  height: 200px;
+}
+
+.image--size-large {
+  width: 500px;
+  height: 300px;
+}
+
+.image--size-custom {
+  width: auto;
+  height: auto;
+}
+
+/* Formas */
+.image--shape-square {
+  border-radius: 0;
+}
+
+.image--shape-circle {
+  border-radius: 50%;
+}
+
+.image--shape-rounded {
+  border-radius: 1rem;
+}
+
+/* Variante específica: polaroid */
+.image--polaroid {
+  border: var(--image-border, none);
+  box-shadow: var(--image-shadow, 0 4px 12px rgba(0, 0, 0, 0.2));
+  background: var(--image-bg, #ffffff);
+  padding: 1rem 1rem 3rem 1rem;
+  transform: rotate(2deg);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  &:hover {
+    transform: rotate(0deg) scale(1.05);
+    box-shadow: var(--image-shadow, 0 6px 16px rgba(0, 0, 0, 0.25));
+  }
+  .image {
+    border: 1px solid #e5e7eb;
+  }
+  .image-caption {
+    color: #374151;
+    font-family: 'Courier New', monospace;
+    padding: 0.5rem 0;
+  }
+}
+
+/* Variantes predefinidas (ejemplo) */
+.image--default {
+  border: var(--image-border, 3px solid #1e1b4b);
+  box-shadow: var(--image-shadow, 0 0 5px #0a0a14);
+}
+
+.image--neon {
+  box-shadow: var(--image-shadow, 0 0 15px #00e5ff, 0 0 30px #ec4899);
+}
+
+/* Resto de las variantes (adaptadas con var()) */
+.image--primary {
+  border: var(--image-border, 3px solid #3b82f6);
+}
+
+.image--secondary {
+  border: var(--image-border, 3px solid #6b7280);
+}
+.image--outline {
+  border: var(--image-border, 2px solid #d1d5db);
+}
+  .image--ghost { filter: brightness(1.1); box-shadow: 0 0 10px rgba(255, 255, 255, 0.5); }
+  .image--link { border: 2px dashed #06b6d4; }
+  .image--neon { box-shadow: 0 0 15px #00e5ff, 0 0 30px #ec4899; }
+  .image--cyberpunk { box-shadow: 0 0 15px #eab308; animation: glitch 1.5s infinite; }
+  .image--gradient { border-image: linear-gradient(90deg, #8b5cf6, #ec4899) 1; border: 3px solid; }
+  .image--glass { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); padding: 0.5rem; }
+  .image--retro { border: 4px double #f472b6; box-shadow: 0 0 10px #60a5fa; }
+  .image--pulse-gradient { box-shadow: 0 0 15px #9333ea; animation: pulse 2s infinite; }
+  .image--holo { border: 3px solid #00d4ff; box-shadow: 0 0 10px rgba(0, 212, 255, 0.5); }
+  .image--matrix { border: 3px solid #00ff9d; animation: glitch 2s infinite; }
+  .image--quantum { border: 3px solid #ff00cc; box-shadow: 0 0 10px #00e5ff; }
+  .image--cybernetic { border: 3px solid #64748b; box-shadow: 0 0 5px #1e293b; }
+  .image--danger { border: 3px solid #dc2626; box-shadow: 0 0 10px #991b1b; }
+  .image--success { border: 3px solid #22c55e; box-shadow: 0 0 10px #15803d; }
+  .image--nano { border: 3px solid #475569; box-shadow: 0 0 5px #1e293b; }
+  .image--stellar { border: 3px solid #312e81; box-shadow: 0 0 8px #6b7280; }
+  .image--phoenix { border: 3px solid #f59e0b; box-shadow: 0 0 10px #ef4444; }
+  .image--galactic { border: 3px solid #5e2b97; box-shadow: 0 0 5px #2a0944; }
+  .image--orbitron { border: 3px solid #ffffff; }
+  .image--cartoon { border: 4px solid #facc15; box-shadow: 0 0 10px #f87171; }
+  .image--luma { border: 2px solid #e5e7eb; box-shadow: 0 0 5px #d1d5db; }
+  .image--platform { border: 3px solid #4b5563; box-shadow: 0 0 5px #1f2937; }
+  .image--hero { border: 3px solid #3b82f6; box-shadow: 0 0 10px #9333ea; }
+  .image--coin { border: 3px solid #f59e0b; box-shadow: 0 0 10px #d97706; }
+  .image--cloud { border: 2px solid #e2e8f0; box-shadow: 0 0 5px #94a3b8; }
+  .image--fire { border: 3px solid #f87171; box-shadow: 0 0 10px #dc2626; }
+  .image--water { border: 3px solid #06b6d4; box-shadow: 0 0 10px #0ea5e9; }
+  .image--leaf { border: 3px solid #10b981; box-shadow: 0 0 10px #4ade80; }
+  .image--amber-glow { border: 3px solid #d97706; box-shadow: 0 0 10px #b45309; }
+  .image--minimal-white { border: 1px solid #e5e7eb; }
+  .image--hex-teal { border: 3px solid #0d9488; box-shadow: 0 0 5px #0d9488; }
+  .image--purple-edge { border: 3px solid #6b21a8; box-shadow: 0 0 5px #6b21a8; }
+  .image--rose-radial { border: 3px solid #f43f5e; box-shadow: 0 0 10px #be123c; }
+  .image--yellow-pulse { border: 3px solid #eab308; animation: pulse 2s infinite; }
+  .image--green-inset { border: 3px solid #15803d; box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); }
+  .image--blue-skew { border: 3px solid #1d4ed8; transform: skewY(-2deg); }
+  .image--orange-dash { border: 3px dashed #ea580c; }
+  .image--indigo-dots { border: 3px solid #4f46e5; background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 10px 10px; }
+  .image--bubble { border: 3px solid #60a5fa; box-shadow: 0 0 10px #1e40af; }
+  .image--electoon { border: 3px solid #facc15; box-shadow: 0 0 10px #eab308; animation: pulse 1.5s infinite; }
+  .image--jungle { border: 3px solid #166534; box-shadow: 0 0 10px #4ade80; }
+  .image--joycon { border: 3px solid #f87171; box-shadow: 0 0 10px #60a5fa; }
+  .image--neomorph { box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.5); }
+  .image--glitch { border: 3px solid #ffffff; animation: glitch 1.5s infinite; }
+  .image--portal { border: 3px solid #8b5cf6; box-shadow: 0 0 10px #1e1b4b; }
+  .image--default { border: 3px solid #1e1b4b; box-shadow: 0 0 5px #0a0a14; }
+  
+  /* Imagen */
+  .image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* Leyenda */
+  .image--with-caption {
+    padding-bottom: 2rem;
+  }
+  
+  .image-caption {
+    text-align: center;
+    padding: 0.5rem;
+    font-size: 0.875rem;
+    color: inherit;
+    opacity: 0.8;
+  }
+  
+  /* Animaciones */
+  .image--animation-none { animation: none; }
+  .image--animation-fade { animation: fade 1s ease-in; }
+  .image--animation-zoom { animation: zoom 0.8s ease-in-out; }
+  .image--animation-slide { animation: slide 0.8s ease-out; }
+  
+  @keyframes fade {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes zoom {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  
+  @keyframes slide {
+    from { transform: translateX(-20px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  
+  @keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }

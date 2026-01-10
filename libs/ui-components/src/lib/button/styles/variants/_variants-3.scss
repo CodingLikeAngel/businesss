@@ -1,0 +1,216 @@
+@use "sass:color";
+@use "../variables" as var;
+
+.btn-danger {
+    background: linear-gradient(145deg, var.$rayman-red, color.adjust(var.$rayman-red, $lightness: -15%));
+    color: white;
+    border: none;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    
+    &:before {
+      background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0));
+    }
+  
+    &:hover {
+      background: linear-gradient(145deg, color.adjust(var.$rayman-red, $lightness: 5%), var.$rayman-red);
+      box-shadow: 0 0 30px rgba(255, 62, 65, 0.7);
+    }
+  
+    &.dark {
+      background: linear-gradient(145deg, var.$rayman-dark, var.$rayman-red);
+    }
+  }
+  
+  .btn-success {
+    background: linear-gradient(145deg, var.$rayman-green, color.adjust(var.$rayman-green, $lightness: -15%));
+    color: white;
+    border: none;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    
+    &:before {
+      background: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0));
+    }
+  
+    &:hover {
+      background: linear-gradient(145deg, color.adjust(var.$rayman-green, $lightness: 5%), var.$rayman-green);
+      box-shadow: 0 0 30px rgba(76, 175, 80, 0.7);
+    }
+  
+    &.dark {
+      background: linear-gradient(145deg, var.$rayman-dark, var.$rayman-green);
+    }
+  }
+  
+  .btn-nano {
+    background: linear-gradient(145deg, var.$rayman-dark, rgba(55, 65, 81, 0.4));
+    color: var.$rayman-cyan;
+    border: 2px solid var.$rayman-cyan;
+    box-shadow: inset 0 0 10px rgba(0, 240, 255, 0.3),
+                0 0 10px rgba(0, 240, 255, 0.3);
+    animation: pulse 3s infinite;
+    backdrop-filter: blur(3px);
+    
+    &:before {
+      background: linear-gradient(rgba(0, 240, 255, 0.2), transparent);
+    }
+  
+    &:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: inset 0 0 15px rgba(0, 240, 255, 0.5),
+                  0 0 20px rgba(0, 240, 255, 0.6);
+      animation: futuristic-hover 0.8s infinite alternate;
+    }
+  
+    &.dark {
+      background: linear-gradient(145deg, var.$rayman-dark, rgba(0, 240, 255, 0.2));
+      color: var.$rayman-yellow;
+      border-color: var.$rayman-yellow;
+    }
+  }
+  
+  .btn-stellar {
+    background: linear-gradient(90deg, var.$rayman-dark, var.$rayman-indigo, var.$rayman-dark);
+    color: var.$rayman-light;
+    border: 2px solid var.$rayman-cyan;
+    animation: stellar-pulse 2s infinite;
+    box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+    
+    &:before {
+      content: '';
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      right: -5px;
+      bottom: -5px;
+      border: 1px dashed var.$rayman-cyan;
+      border-radius: 14px;
+      animation: nintendo-sparkle 2s infinite;
+      opacity: 0.6;
+    }
+  
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(0, 240, 255, 0.8);
+      animation: stellar-pulse 1s infinite;
+    }
+  
+    &.dark {
+      background: linear-gradient(90deg, var.$rayman-dark, var.$rayman-purple, var.$rayman-dark);
+      color: var.$rayman-yellow;
+      border-color: var.$rayman-yellow;
+    }
+  }
+  
+  .btn-phoenix {
+    background: linear-gradient(145deg, var.$rayman-orange, var.$rayman-red);
+    color: var.$rayman-light;
+    border: none;
+    animation: phoenix-flame 3s infinite;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    
+    &:before {
+      background: linear-gradient(rgba(255, 123, 0, 0.3), transparent);
+    }
+  
+    &:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 0 30px rgba(255, 62, 65, 0.8);
+      animation: phoenix-flame 2s infinite;
+    }
+  
+    &.dark {
+      background: linear-gradient(145deg, var.$rayman-dark, var.$rayman-orange);
+      color: var.$rayman-yellow;
+    }
+  }
+  
+  .btn-galactic {
+    background: linear-gradient(135deg, var.$rayman-dark, var.$rayman-blue, var.$rayman-purple);
+    color: var.$rayman-light;
+    border: none;
+    animation: galactic-swirl 5s infinite;
+    box-shadow: 0 0 15px rgba(0, 162, 255, 0.4);
+    
+    &:before {
+      background: linear-gradient(rgba(255, 255, 255, 0.3), transparent);
+    }
+  
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(179, 98, 255, 0.7);
+    }
+  
+    &.dark {
+      background: linear-gradient(135deg, var.$rayman-dark, var.$rayman-purple, var.$rayman-cyan);
+    }
+  }
+  
+  .btn-amber-glow {
+    background: var.$rayman-yellow;
+    color: var.$rayman-dark;
+    border: 2px solid var.$rayman-orange;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5),
+                inset 0 0 5px rgba(255, 123, 0, 0.4);
+    animation: subtle-glow 2s infinite;
+    
+    &:before {
+      background: linear-gradient(rgba(255, 215, 0, 0.3), transparent);
+    }
+  
+    &:hover {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.8),
+                  inset 0 0 10px rgba(255, 123, 0, 0.6);
+    }
+  
+    &.dark {
+      background: linear-gradient(145deg, var.$rayman-dark, var.$rayman-yellow);
+      color: var.$rayman-light;
+      border-color: var.$rayman-pink;
+    }
+  }
+  
+  .btn-minimal-white {
+    background: var.$rayman-light;
+    color: var.$rayman-dark;
+    border: 2px solid var.$rayman-blue;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+    &:before {
+      background: linear-gradient(rgba(255, 255, 255, 0.5), transparent);
+    }
+  
+    &:hover {
+      background: color.adjust(var.$rayman-light, $lightness: 5%);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+  
+    &.dark {
+      background: var.$rayman-dark;
+      color: var.$rayman-light;
+      border-color: var.$rayman-purple;
+    }
+  }
+  
+  .btn-hex-teal {
+    background: var.$rayman-green;
+    color: var.$rayman-light;
+    border: 2px solid var.$rayman-dark;
+    clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    
+    &:before {
+      background: linear-gradient(rgba(255, 255, 255, 0.3), transparent);
+    }
+  
+    &:hover {
+      background: color.adjust(var.$rayman-green, $lightness: 5%);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+  
+    &.dark {
+      background: var.$rayman-dark;
+      color: var.$rayman-green;
+      border-color: var.$rayman-green;
+    }
+  }
+  

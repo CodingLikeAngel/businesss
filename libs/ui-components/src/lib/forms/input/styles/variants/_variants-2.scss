@@ -1,0 +1,220 @@
+
+@use "../variables" as vars;
+
+
+
+.input-ghost {
+    background: rgba(vars.$color-accent, 0.1);
+    border: 2px dashed vars.$color-accent;
+    color: vars.$color-accent;
+
+    &[tag="select"] {
+      &:hover {
+        box-shadow: 0 0 10px vars.$color-accent;
+      }
+
+      option {
+        background: vars.$color-accent;
+        color: vars.$color-white;
+      }
+    }
+
+    &[type="checkbox"] {
+      background: vars.$color-dark-bg;
+      border: 2px dashed vars.$color-accent;
+
+      &:checked {
+        background: vars.$color-accent;
+        border-color: vars.$color-pink;
+
+        &::after {
+          color: vars.$color-white;
+        }
+      }
+
+      &:focus {
+        outline: 2px solid vars.$color-accent;
+      }
+    }
+
+    &.dark,
+    :where([data-theme="dark"]) & {
+      background: rgba(vars.$color-pink, 0.2);
+      color: vars.$color-pink;
+      border-color: vars.$color-pink;
+
+      &[tag="select"] {
+        &:hover {
+          box-shadow: 0 0 10px vars.$color-pink;
+        }
+
+        option {
+          background: vars.$color-pink;
+          color: vars.$color-dark-bg;
+        }
+      }
+
+      &[type="checkbox"] {
+        background: vars.$color-gray-900;
+        border-color: vars.$color-pink;
+
+        &:checked {
+          background: vars.$color-pink;
+          border-color: vars.$color-accent;
+
+          &::after {
+            color: vars.$color-dark-bg;
+          }
+        }
+
+        &:focus {
+          outline: 2px solid vars.$color-pink;
+        }
+      }
+    }
+  }
+
+  .input-link {
+    background: rgba(vars.$color-primary, 0.1);
+    border: none;
+    color: vars.$color-primary;
+    text-decoration: underline;
+
+    &[tag="select"] {
+      &:hover {
+        box-shadow: 0 0 8px vars.$color-primary;
+      }
+
+      option {
+        background: vars.$color-primary;
+        color: vars.$color-white;
+      }
+    }
+
+    &[type="checkbox"] {
+      background: vars.$color-dark-bg;
+      border: 2px solid vars.$color-primary;
+
+      &:checked {
+        background: vars.$color-primary;
+        border-color: vars.$color-primary-dark;
+
+        &::after {
+          color: vars.$color-white;
+        }
+      }
+
+      &:focus {
+        outline: 2px solid vars.$color-primary;
+      }
+    }
+
+    &.dark,
+    :where([data-theme="dark"]) & {
+      background: rgba(vars.$color-primary-light, 0.1);
+      color: vars.$color-primary-light;
+
+      &[tag="select"] {
+        &:hover {
+          box-shadow: 0 0 8px vars.$color-primary-light;
+        }
+
+        option {
+          background: vars.$color-primary-light;
+          color: vars.$color-dark-bg;
+        }
+      }
+
+      &[type="checkbox"] {
+        background: vars.$color-gray-900;
+        border-color: vars.$color-primary-light;
+
+        &:checked {
+          background: vars.$color-primary-light;
+          border-color: vars.$color-primary;
+
+          &::after {
+            color: vars.$color-dark-bg;
+          }
+        }
+
+        &:focus {
+          outline: 2px solid vars.$color-primary-light;
+        }
+      }
+    }
+  }
+
+  .input-neon {
+    background: vars.$color-gray-900;
+    border: 2px solid vars.$color-rayman-blue;
+    color: vars.$color-rayman-blue;
+    box-shadow: 0 0 10px rgba(vars.$color-rayman-blue, 0.5);
+
+    &[tag="select"] {
+      &:hover {
+        box-shadow: 0 0 15px vars.$color-rayman-blue;
+      }
+
+      option {
+        background: vars.$color-rayman-blue;
+        color: vars.$color-white;
+      }
+    }
+
+    &[type="checkbox"] {
+      background: vars.$color-gray-900;
+      border: 2px solid vars.$color-rayman-blue;
+      box-shadow: 0 0 10px rgba(vars.$color-rayman-blue, 0.5);
+
+      &:checked {
+        background: vars.$color-rayman-blue;
+        border-color: vars.$color-rayman-blue;
+
+        &::after {
+          color: vars.$color-white;
+        }
+      }
+
+      &:focus {
+        outline: 2px solid vars.$color-rayman-blue;
+        box-shadow: 0 0 12px rgba(vars.$color-rayman-blue, 0.9);
+      }
+    }
+
+    &.dark,
+    :where([data-theme="dark"]) & {
+      background: vars.$color-gray-800;
+      color: vars.$color-teal;
+      border-color: vars.$color-teal;
+
+      &[tag="select"] {
+        &:hover {
+          box-shadow: 0 0 15px vars.$color-teal;
+        }
+
+        option {
+          background: vars.$color-teal;
+          color: vars.$color-dark-bg;
+        }
+      }
+
+      &[type="checkbox"] {
+        background: vars.$color-gray-800;
+        border-color: vars.$color-teal;
+
+        &:checked {
+          background: vars.$color-teal;
+          border-color: vars.$color-rayman-blue;
+
+          &::after {
+            color: vars.$color-dark-bg;
+          }
+        }
+
+        &:focus {
+          outline: 2px solid vars.$color-teal;
+        }
+      }
+    }
+  }

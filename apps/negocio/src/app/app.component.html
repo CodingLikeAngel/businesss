@@ -1,0 +1,79 @@
+<section class="header-grid">
+  <div class="header-wrapper">
+    <lib-ui-components-header
+      [variant]="currentVariant"
+      [align]="'center'"
+      [dark]="false"
+      [title]="'Reserva tu cita'"
+      [subtitle]="'Escoge el servicio, empleado y hora de tu preferencia'"
+      [navItems]="[
+        { label: 'Home', href: '/home', active: true },
+        { label: 'About', href: '/about' },
+        { label: 'Contact', href: '/contact' }
+      ]"
+    ></lib-ui-components-header>
+  </div>
+</section>
+
+
+
+
+
+<div class="absolute inset-0 bg-black/20 z-0"></div>
+
+
+
+
+
+<div class="">
+  <router-outlet></router-outlet>
+</div>
+
+
+
+
+<section class="header-grid">
+  <div class="header-wrapper">
+
+
+
+    <lib-ui-components-footer
+      [variant]="currentVariant"
+      [dark]="false"
+      [showParticles]="true"
+      [title]="'Reserva Online'"
+      [description]="'Tu salón de belleza a tu alcance'"
+      (linkClicked)="onLinkClick($event)"
+      (socialClicked)="onSocialClick($event)"
+    ></lib-ui-components-footer>
+
+    <lib-ui-components-videogames-footer
+      [variant]="videogamesFooterConfig.variant"
+      [title]="videogamesFooterConfig.title"
+      [description]="videogamesFooterConfig.description"
+      [exploreLinks]="videogamesFooterConfig.exploreLinks"
+      [trendLinks]="videogamesFooterConfig.trendLinks"
+      [socialIcons]="videogamesFooterConfig.socialIcons"
+      [copyrightText]="videogamesFooterConfig.copyrightText"
+      [showParticles]="videogamesFooterConfig.showParticles"
+      (linkClicked)="onLinkClick($event)"
+      (socialClicked)="onSocialClick($event)"
+    ></lib-ui-components-videogames-footer>
+
+    <lib-ui-components-deep-footer [theme]="deepFooterConfig.theme"></lib-ui-components-deep-footer>
+
+<!-- 
+    
+    <lib-forest-animation
+    variant="enchanted"
+    [backgroundColor]="'#1a3c1a'"
+    [treeCount]="5"
+    [mushroomCount]="3"
+    [fireflyCount]="10"
+    [leafCount]="6"
+    [mistEnabled]="true"
+    class="z-10"
+  >
+</lib-forest-animation> -->
+  </div>
+</section>

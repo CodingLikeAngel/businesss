@@ -1,0 +1,203 @@
+@use "sass:map";
+@use "./variables" as var;
+@use "sass:color";
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+
+/* Variables inspiradas en juegos */
+$color-mario: #ff0000;
+$color-zelda: #00cc00;
+$color-dk: #8b4513;
+$color-rayman: #ff00ff;
+$color-meat: #ff4040;
+$color-bioshock: #1e90ff;
+$color-gold: #ffd700;
+$color-dark: #1e1b4b;
+$color-light: #ffffff;
+
+:host {
+  font-family: 'Orbitron', sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1000;
+}
+
+@layer base {
+  .header {
+    background: var(--header-bg, rgba(255, 255, 255, 0.9));
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+    transition: background-color 300ms ease-in-out, box-shadow 300ms ease-in-out;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1010;
+    color: rgb(17, 24, 39);
+    border: none;
+
+    &[style][class*="header-"] {
+      background: var(--header-bg, rgba(255, 255, 255, 0.9)) !important;
+      color: var(--header-color, rgb(17, 24, 39)) !important;
+      border: var(--header-border, none) !important;
+      box-shadow: var(--header-shadow, 0 2px 10px rgba(0, 0, 0, 0.1)) !important;
+      &:hover {
+        background: var(--header-hover-bg, var(--header-bg, rgba(255, 255, 255, 0.9))) !important;
+        box-shadow: var(--header-hover-shadow, var(--header-shadow, 0 2px 10px rgba(0, 0, 0, 0.1))) !important;
+      }
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .title-wrapper {
+      flex-grow: 1;
+    }
+
+    h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    p {
+      font-size: 1rem;
+      margin: 0.5rem 0 0;
+      color: rgb(102, 102, 102);
+    }
+
+    &.align-left {
+      text-align: left;
+    }
+    &.align-center {
+      text-align: center;
+    }
+    &.align-right {
+      text-align: right;
+    }
+
+    &.dark,
+    :where([data-theme="dark"]) & {
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+      color: rgb(209, 213, 219);
+      background: var(--header-bg, rgba(30, 30, 30, 0.9));
+    }
+
+    .menu-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0.5rem;
+      z-index: 1101;
+
+      .hamburger-icon {
+        display: block;
+        width: 36px;
+        height: 28px;
+        position: relative;
+
+        .bar {
+          position: absolute;
+          width: 100%;
+          height: 5px;
+          background: var(--hamburger-color, rgb(0, 0, 0));
+          border-radius: 3px;
+          transition: all 300ms ease;
+
+          &.top {
+            top: 0;
+          }
+          &.middle {
+            top: 11px;
+          }
+          &.bottom {
+            top: 22px;
+          }
+        }
+
+        &.open {
+          .top {
+            transform: translateY(11px) rotate(45deg);
+          }
+          .middle {
+            opacity: 0;
+          }
+          .bottom {
+            transform: translateY(-11px) rotate(-45deg);
+          }
+        }
+      }
+    }
+
+    /* Dark mode support for hamburger icon */
+    :where([data-theme="dark"]) & .menu-toggle .hamburger-icon .bar {
+      background: rgb(255, 255, 255);
+    }
+
+    .nav {
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        gap: 1.5rem;
+      }
+
+      li.active a {
+        font-weight: 700;
+        border-bottom: 2px solid;
+      }
+
+      a {
+        text-decoration: none;
+        color: inherit;
+        font-size: 1rem;
+        transition: color 200ms ease;
+      }
+    }
+
+    /* Media query para pantallas móviles */
+    @media (max-width: 768px) {
+      .menu-toggle {
+        display: block !important;
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+      }
+
+      .nav {
+        display: none;
+        &.open {
+          display: block;
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: 0;
+          background: rgba(255, 255, 255, 0.95);
+          padding: 1rem;
+          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+          z-index: 1100;
+          ul {
+            flex-direction: column;
+            gap: 1rem;
+          }
+          a {
+            color: rgb(51, 51, 51) !important;
+          }
+        }
+      }
+
+      /* Dark mode support for mobile menu */
+      :where([data-theme="dark"]) & .nav.open {
+        background: rgba(30, 30, 30, 0.95);
+        a {
+          color: rgb(209, 213, 219) !important;
+        }
+      }
+    }
+  }
+}

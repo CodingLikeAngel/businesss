@@ -1,0 +1,359 @@
+@use "sass:color";
+@use "../variables" as v;
+
+.card {
+  position: relative;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: v.$font-family-sans;
+  color: v.$color-white;
+  backdrop-filter: blur(5px);
+
+  &--hero {
+    background: linear-gradient(90deg, v.$rayman-blue, v.$rayman-purple);
+    border: 2px solid v.$rayman-blue;
+    box-shadow: 0 4px 20px rgba(v.$rayman-blue, 0.5);
+    animation: heroFlux 2.5s ease-in-out infinite;
+
+    &:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 30px rgba(v.$rayman-purple, 0.7);
+      .card-overlay {
+        background: rgba(v.$rayman-dark, 0.2);
+      }
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      background: rgba(v.$rayman-dark, 0.3);
+      backdrop-filter: blur(6px);
+    }
+
+    .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      text-shadow: 0 0 10px v.$rayman-blue;
+    }
+
+    .card-action {
+      background: v.$rayman-blue;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      transition: background 0.3s ease;
+      &:hover {
+        background: v.$rayman-purple;
+      }
+    }
+  }
+
+  &--coin {
+    background: radial-gradient(circle, v.$rayman-yellow, v.$color-amber-dark);
+    border: 2px solid v.$rayman-yellow;
+    border-radius: 2rem;
+    box-shadow: 0 4px 20px rgba(v.$rayman-yellow, 0.5);
+    animation: coinSpin 3s linear infinite;
+
+    &:hover {
+      transform: translateY(-5px) scale(1.03);
+      box-shadow: 0 8px 30px rgba(v.$rayman-yellow, 0.7);
+      border-color: v.$color-amber-light;
+      .card-overlay {
+        background: rgba(v.$rayman-dark, 0.2);
+      }
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      background: rgba(v.$rayman-dark, 0.3);
+      backdrop-filter: blur(6px);
+    }
+
+    .card-title {
+      font-family: 'Press Start 2P', monospace;
+      text-shadow: 0 0 8px v.$rayman-yellow;
+    }
+
+    .card-action {
+      background: v.$rayman-yellow;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      color: v.$rayman-dark;
+      transition: background 0.3s ease;
+      &:hover {
+        background: v.$color-amber-light;
+      }
+    }
+  }
+
+  &--cloud {
+    background: linear-gradient(135deg, v.$color-gray-300, v.$color-gray-500);
+    border: 2px solid v.$color-gray-300;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(v.$color-gray-300, 0.4);
+    color: v.$rayman-dark;
+    animation: cloudDrift 3s ease-in-out infinite;
+
+    &:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 30px rgba(v.$color-gray-300, 0.6);
+      .card-overlay {
+        background: rgba(v.$rayman-dark, 0.2);
+      }
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      background: rgba(v.$color-white, 0.3);
+      backdrop-filter: blur(6px);
+    }
+
+    .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      text-shadow: 0 0 8px v.$color-gray-300;
+    }
+
+    .card-action {
+      background: v.$color-gray-300;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      color: v.$rayman-dark;
+      transition: background 0.3s ease;
+      &:hover {
+        background: v.$color-white;
+      }
+    }
+  }
+
+  &--fire {
+    background: linear-gradient(90deg, v.$rayman-red, v.$color-danger-dark);
+    border: 2px solid v.$rayman-red;
+    box-shadow: 0 4px 20px rgba(v.$rayman-red, 0.5);
+    animation: fireWave 2.5s ease-in-out infinite;
+
+    &:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 30px rgba(v.$rayman-red, 0.7);
+      .card-overlay {
+        background: rgba(v.$rayman-dark, 0.2);
+      }
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      background: rgba(v.$rayman-dark, 0.3);
+      backdrop-filter: blur(6px);
+    }
+
+    .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      text-shadow: 0 0 10px v.$rayman-red;
+    }
+
+    .card-action {
+      background: v.$rayman-red;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      transition: background 0.3s ease;
+      &:hover {
+        background: v.$color-red-light;
+      }
+    }
+  }
+
+  &--leaf {
+    background: linear-gradient(90deg, v.$rayman-green, v.$color-green-light);
+    border: 2px solid v.$color-emerald;
+    box-shadow: 0 4px 20px rgba(v.$rayman-green, 0.5);
+    animation: leafDrift 2.5s ease-in-out infinite;
+
+    &:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 30px rgba(v.$rayman-green, 0.7);
+      border-color: v.$color-green-light;
+      .card-overlay {
+        background: rgba(v.$rayman-dark, 0.2);
+      }
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      background: rgba(v.$rayman-dark, 0.3);
+      backdrop-filter: blur(6px);
+    }
+
+    .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      text-shadow: 0 0 10px v.$rayman-green;
+    }
+
+    .card-action {
+      background: v.$color-emerald;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      transition: background 0.3s ease;
+      &:hover {
+        background: v.$color-green-light;
+      }
+    }
+  }
+
+  &--amber-glow {
+    background: radial-gradient(circle, v.$rayman-orange, v.$color-amber-dark);
+    border: 2px solid v.$rayman-orange;
+    box-shadow: 0 4px 20px rgba(v.$rayman-orange, 0.5);
+    animation: amberFlux 2.5s ease-in-out infinite;
+
+    &:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 30px rgba(v.$rayman-orange, 0.7);
+      .card-overlay {
+        background: rgba(v.$rayman-dark, 0.2);
+      }
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      background: rgba(v.$rayman-dark, 0.3);
+      backdrop-filter: blur(6px);
+    }
+
+    .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      text-shadow: 0 0 10px v.$rayman-orange;
+    }
+
+    .card-action {
+      background: v.$rayman-orange;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      transition: background 0.3s ease;
+      &:hover {
+        background: v.$color-amber-light;
+      }
+    }
+  }
+
+  &--minimal-white {
+    background: v.$color-white;
+    border: 1px solid v.$color-gray-300;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(v.$color-gray-300, 0.4);
+    color: v.$rayman-dark;
+    animation: minimalGlow 2.5s ease-in-out infinite;
+
+    &:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 30px rgba(v.$color-gray-300, 0.6);
+      border-color: v.$color-gray-500;
+      .card-overlay {
+        background: rgba(v.$rayman-dark, 0.2);
+      }
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      background: rgba(v.$color-white, 0.3);
+      backdrop-filter: blur(6px);
+    }
+
+    .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      text-shadow: 0 0 8px v.$color-gray-300;
+    }
+
+    .card-action {
+      background: v.$color-gray-300;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      color: v.$rayman-dark;
+      transition: background 0.3s ease;
+      &:hover {
+        background: v.$color-white;
+      }
+    }
+  }
+
+  &--hex-teal {
+    background: linear-gradient(135deg, v.$color-teal, v.$color-teal-dark);
+    border: 2px solid v.$color-teal;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 20px rgba(v.$color-teal, 0.5);
+    animation: hexPulse 3s ease-in-out infinite;
+
+    &:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 8px 30px rgba(v.$color-teal, 0.7);
+      border-color: v.$color-teal-light;
+      .card-overlay {
+        background: rgba(v.$rayman-dark, 0.2);
+      }
+    }
+
+    .card-content {
+      padding: 1.5rem;
+      background: rgba(v.$rayman-dark, 0.3);
+      backdrop-filter: blur(6px);
+    }
+
+    .card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-weight: 700;
+      text-shadow: 0 0 10px v.$color-teal;
+    }
+
+    .card-action {
+      background: v.$color-teal;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1rem;
+      transition: background 0.3s ease;
+      &:hover {
+        background: v.$color-teal-light;
+      }
+    }
+  }
+
+  // Common styles for all cards
+  &--hovered {
+    .card-overlay {
+      opacity: var(--card-overlay-opacity, 0);
+      transition: opacity 0.3s ease;
+    }
+  }
+
+  .card-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+    &.card-image--parallax {
+      transform: translateZ(20px) scale(1.1);
+    }
+  }
+
+  .card-content {
+    transition: all 0.3s ease;
+  }
+
+  .card-action {
+    text-decoration: none;
+    color: v.$color-white;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+
+  .card-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+}

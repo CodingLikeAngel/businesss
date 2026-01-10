@@ -1,0 +1,57 @@
+@use "sass:color";
+@use "../variables" as var;
+
+
+
+
+
+/* Variant: yellow-pulse */
+.ui-card-rutas--yellow-pulse {
+  --card-bg: radial-gradient(circle at center, #713f12 0%, #eab308 100%);
+  --card-border: 2px solid #eab308;
+  --card-shadow: 0 0 20px rgba(234, 179, 8, 0.6);
+  --card-hover-border: 2px solid #facc15;
+  --card-hover-shadow: 0 0 35px rgba(234, 179, 8, 0.9);
+  --card-text-color: #fefcbf;
+  --card-accent-color: #eab308;
+  --card-accent-gradient: radial-gradient(circle, #eab308 10%, transparent 70%);
+  animation: pulse 2.5s infinite;
+}
+
+/* Variant: green-inset */
+.ui-card-rutas--green-inset {
+  --card-bg: linear-gradient(135deg, #14532d 0%, #052e16 100%);
+  --card-border: 2px solid #22c55e;
+  --card-shadow: inset 0 0 20px rgba(34, 197, 94, 0.5), 0 0 20px rgba(34, 197, 94, 0.6);
+  --card-hover-border: 2px solid #4ade80;
+  --card-hover-shadow: inset 0 0 25px rgba(34, 197, 94, 0.7), 0 0 35px rgba(34, 197, 94, 0.9);
+  --card-text-color: #dcfce7;
+  --card-accent-color: #22c55e;
+  --card-accent-gradient: radial-gradient(circle, #22c55e 10%, transparent 70%);
+}
+
+/* Variant: blue-skew */
+.ui-card-rutas--blue-skew {
+  --card-bg: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+  --card-border: 2px solid #3b82f6;
+  --card-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  --card-hover-border: 2px solid #60a5fa;
+  --card-hover-shadow: 0 0 35px rgba(59, 130, 246, 0.8);
+  --card-text-color: #dbeafe;
+  --card-accent-color: #3b82f6;
+  --card-accent-gradient: radial-gradient(circle, #3b82f6 10%, transparent 70%);
+  transform: skew(-4deg);
+}
+
+/* Variant: orange-dash */
+.ui-card-rutas--orange-dash {
+  --card-bg: linear-gradient(to bottom, #7c2d12 0%, #f97316 100%);
+  --card-border: 2px dashed #f97316;
+  --card-shadow: 0 0 20px rgba(249, 115, 22, 0.6);
+  --card-hover-border: 2px dashed #fb923c;
+  --card-hover-shadow: 0 0 35px rgba(249, 115, 22, 0.9);
+  --card-text-color: #ffedd5;
+  --card-accent-color: #f97316;
+  --card-accent-gradient: radial-gradient(circle, #f97316 10%, transparent 70%);
+}
+

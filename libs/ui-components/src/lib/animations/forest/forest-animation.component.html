@@ -1,0 +1,14 @@
+<div class="forest-animation-container animate-forest" 
+     [ngClass]="'forest-' + variant()" 
+     [style.background-color]="backgroundColor()">
+  <!-- Capa de fondo lejano (paralaje) -->
+  <div class="background-layer-far"></div>
+  <!-- Capa de niebla -->
+  <div *ngIf="mistEnabled()" class="mist-layer"></div>
+  <!-- Capa para elementos animados -->
+  <div class="animation-layer"></div>
+  <!-- Contenido proyectado (como el título) -->
+  <div class="animated-content">
+    <ng-content></ng-content>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+lib-ui-components-nav-bar {
+    position: relative;
+    z-index: 20;
+  }
+  
+  lib-bubble-animation {
+    position: relative;
+    z-index: -1;
+  }
+  
+  .min-h-screen {
+    position: relative;
+    background: none;
+  }
+  
+  .section-bg {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(4px);
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+    z-index: 10;
+  }
+  
+  #contacto {
+    position: relative;
+    z-index: 15;
+    lib-contact-form {
+      form {
+        background: rgba(255, 30, 86, 0.4) !important;
+        backdrop-filter: blur(8px);
+        color: #fff;
+        border: 2px solid rgba(255, 107, 157, 0.8);
+        box-shadow: 0 0 15px rgba(255, 107, 157, 0.7);
+      }
+      h2 {
+        text-shadow: 0 0 10px rgba(255, 204, 21, 0.8);
+      }
+      .ui-components-input,
+      .ui-components-button {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 107, 157, 0.8);
+        color: #fff;
+      }
+    }
+    .mist-layer {
+      opacity: 0.2 !important;
+    }
+  }
+  
+  .font-nintendo {
+    font-family: 'Press Start 2P', cursive;
+  }

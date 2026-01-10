@@ -1,0 +1,17 @@
+<div [ngClass]="cardClasses" [style]="hostStyles" (mouseenter)="onHover()" (mouseleave)="onLeave()">
+  <img *ngIf="image" [src]="image" alt="Card image" class="card-image" [ngClass]="imageClasses" />
+  <div class="card-content" [ngClass]="contentClasses">
+    <h3 class="card-title" [innerHTML]="title | highlightEffect"></h3>
+    <p class="card-description" [innerHTML]="description | glitchEffect"></p>
+    <div class="card-actions" *ngIf="actions?.length">
+      <a *ngFor="let action of actions; let i = index"
+         [href]="action.href || '#'"
+         (click)="handleAction(action)"
+         class="card-action"
+         [ngClass]="actionClasses(i)">
+        {{ action.label }}
+      </a>
+    </div>
+  </div>
+  <div class="card-overlay" *ngIf="isHovered"></div>
+</div>

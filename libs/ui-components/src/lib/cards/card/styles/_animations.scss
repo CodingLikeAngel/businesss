@@ -1,0 +1,89 @@
+
+/* Animaciones Futuristas */
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(30px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+@keyframes zoomIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes holoShine { 0% { opacity: 0; } 50% { opacity: 0.6; } 100% { opacity: 0; } }
+@keyframes plasmaFlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+@keyframes quantumGlow { 0%, 100% { box-shadow: inset 0 0 15px #93C5FD; } 50% { box-shadow: inset 0 0 25px #FBBF24; } }
+@keyframes holoPulse { 0%, 100% { border-color: #FBBF24; } 50% { border-color: #FFD700; } }
+@keyframes ghostFloat { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes portalFlux { 0%, 100% { box-shadow: 0 0 15px #22D3EE; } 50% { box-shadow: 0 0 25px #22D3EE; } }
+@keyframes portalRotate { 0% { transform: translate(-50%, -50%) rotate(0deg); } 100% { transform: translate(-50%, -50%) rotate(360deg); } }
+@keyframes neonFlux { 0%, 100% { box-shadow: 0 0 20px #22D3EE; } 50% { box-shadow: 0 0 30px #EC4899; } }
+@keyframes glitchWave { 0% { transform: translate(0); } 20% { transform: translate(-3px, 3px); } 40% { transform: translate(3px, -3px); } 100% { transform: translate(0); } }
+@keyframes prismShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+@keyframes holoGlass { 0%, 100% { box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); } 50% { box-shadow: 0 0 25px rgba(255, 255, 255, 0.8); } }
+@keyframes pixelWave { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes nanoPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+@keyframes holoShift { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+@keyframes dataStream { 0% { background-position: 0 0; } 100% { background-position: 0 20px; } }
+@keyframes quantumFlux { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); opacity: 0.9; } }
+@keyframes cyberPulse { 0%, 100% { border-color: #9333EA; } 50% { border-color: #F43F5E; } }
+@keyframes dangerGlow { 0%, 100% { box-shadow: 0 0 20px #DC2626; } 50% { box-shadow: 0 0 30px #991B1B; } }
+@keyframes bioPulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes nanoOrbit { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes starFlux { 0%, 100% { box-shadow: 0 0 15px #6B7280; } 50% { box-shadow: 0 0 25px #312E81; } }
+@keyframes phoenixRise { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes galaxySpin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes orbitGlow { 0%, 100% { box-shadow: 0 0 15px #06B6D4; } 50% { box-shadow: 0 0 25px #22D3EE; } }
+@keyframes cartoonPop { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes lumaPulse { 0%, 100% { box-shadow: 0 0 15px #E5E7EB; } 50% { box-shadow: 0 0 25px #D1D5DB; } }
+@keyframes platformDrift { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes heroFlux { 0%, 100% { box-shadow: 0 0 15px #3B82F6; } 50% { box-shadow: 0 0 25px #9333EA; } }
+@keyframes coinSpin { 0% { transform: rotateY(0deg); } 100% { transform: rotateY(360deg); } }
+@keyframes cloudDrift { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(5px); } }
+@keyframes fireWave { 0%, 100% { opacity: 1; } 50% { opacity: 0.9; } }
+@keyframes waterFlow { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+@keyframes leafDrift { 0%, 100% { transform: rotate(0deg); } 50% { transform: rotate(4deg); } }
+@keyframes amberFlux { 0%, 100% { box-shadow: 0 0 20px #D97706; } 50% { box-shadow: 0 0 30px #B45309; } }
+@keyframes minimalGlow { 0%, 100% { box-shadow: 0 0 10px #E5E7EB; } 50% { box-shadow: 0 0 20px #D1D5DB; } }
+@keyframes hexPulse { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes edgeFlux { 0%, 100% { border-color: #9333EA; } 50% { border-color: #F43F5E; } }
+@keyframes rosePulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
+@keyframes solarFlash { 0%, 100% { opacity: 1; } 50% { opacity: 0.9; } }
+@keyframes forestPulse { 0%, 100% { box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.7); } 50% { box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.9); } }
+@keyframes skewFlux { 0%, 100% { transform: skewY(-5deg) translateY(0); } 50% { transform: skewY(-5deg) translateY(-8px); } }
+@keyframes dashFlow { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes dotShift { 0%, 100% { background-position: 0 0; } 50% { background-position: 7px 7px; } }
+@keyframes bubbleRise { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes electoonGlow { 0%, 100% { box-shadow: 0 0 15px #FF6B9D; } 50% { box-shadow: 0 0 25px #FACC15; } }
+@keyframes junglePulse { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+@keyframes joyconShift { 0%, 100% { transform: rotate(0deg); } 25% { transform: rotate(4deg); } 75% { transform: rotate(-4deg); } }
+@keyframes neoFlux { 0%, 100% { box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.15), -8px -8px 20px rgba(255, 255, 255, 0.7); } 50% { box-shadow: 6px 6px 15px rgba(0, 0, 0, 0.2), -6px -6px 15px rgba(255, 255, 255, 0.9); } }
+@keyframes glitchShift { 0% { transform: translate(0); } 20% { transform: translate(-3px, 3px); } 40% { transform: translate(3px, -3px); } 100% { transform: translate(0); } }
+@keyframes portalFlux { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+@keyframes voidPulse { 0%, 100% { box-shadow: 0 0 15px #1E1B4B; } 50% { box-shadow: 0 0 25px #0A0A14; } }
+
+// Animaciones para variantes
+@keyframes neonGlow {
+    0% { box-shadow: 0 0 10px #EC4899; }
+    50% { box-shadow: 0 0 30px #EC4899, 0 0 60px #22D3EE; }
+    100% { box-shadow: 0 0 10px #EC4899; }
+  }
+  
+  @keyframes glitchWave {
+    0% { transform: translate(0); }
+    20% { transform: translate(-3px, 3px); }
+    40% { transform: translate(3px, -3px); }
+    60% { transform: translate(-3px, 3px); }
+    80% { transform: translate(3px, -3px); }
+    100% { transform: translate(0); }
+  }
+  
+  @keyframes holoShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  @keyframes dataStream {
+    0% { background-position: 0 0; }
+    100% { background-position: 0 -100px; }
+  }
+  
+  @keyframes quantumFlux {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }

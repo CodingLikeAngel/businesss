@@ -1,0 +1,171 @@
+
+@use "../variables" as var;
+
+.tabs--holo {
+    background: radial-gradient(ellipse at center, #00d4ff 0%, rgba(0, 212, 255, 0.2) 100%); /* Lums holográficos */
+    color: #ffffff;
+    animation: holo-glow 3s infinite;
+    &::before {
+      content: '🌟';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      left: 10px;
+      animation: spin 2s infinite linear;
+    }
+  }
+  
+  .tabs--matrix {
+    background: #0f172a; /* Fondo oscuro */
+    color: #00ff9d; /* Verde Electoon */
+    animation: glitch-rayman 2s infinite;
+    &::after {
+      content: '⚡️';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      right: 10px;
+      animation: pulse 1s infinite;
+    }
+  }
+  
+  .tabs--quantum {
+    background: linear-gradient(45deg, #ff00cc, #00e5ff, #1e1b4b); /* Galaxy Mario */
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.4);
+    &::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(#ffffff 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.4;
+      z-index: -1;
+      animation: twinkle 3s infinite;
+    }
+  }
+  
+  .tabs--cybernetic {
+    background: linear-gradient(135deg, #1e293b, #64748b); /* Armadura Samus */
+    color: #ffffff;
+    &::after {
+      content: '⚙️';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      right: 10px;
+      animation: spin 2s infinite linear;
+    }
+  }
+  
+  .tabs--danger {
+    background: linear-gradient(135deg, #dc2626, #991b1b); /* Bowser */
+    color: #ffffff;
+    &::before {
+      content: '💥';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      left: 10px;
+      animation: pulse 1s infinite;
+    }
+  }
+  
+  .tabs--success {
+    background: linear-gradient(135deg, #22c55e, #15803d); /* Luigi */
+    color: #ffffff;
+    animation: leaf-twist 3s infinite;
+    &::after {
+      content: '🍃';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      right: 10px;
+      animation: float 2s infinite;
+    }
+  }
+  
+  .tabs--nano {
+    background: radial-gradient(ellipse at center, #1e293b, #475569); /* Tecnología Metroid */
+    color: #ffffff;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+    &::before {
+      content: '🔍';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      left: 10px;
+      animation: pulse 1.5s infinite;
+    }
+  }
+  
+  .tabs--stellar {
+    background: radial-gradient(circle, #1e1b4b, #312e81, #6b7280); /* Mario Galaxy */
+    color: #ffffff;
+    animation: twinkle 3s infinite;
+    &::after {
+      content: '🌟';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      right: 10px;
+      animation: spin 2s infinite linear;
+    }
+  }
+  
+  .tabs--phoenix {
+    background: linear-gradient(90deg, #f59e0b, #ef4444); /* Fire Flower */
+    color: #ffffff;
+    animation: flame-glow 1.5s infinite;
+    &::before {
+      content: '🔥';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      left: 10px;
+      animation: pulse 1s infinite;
+    }
+  }
+  
+  .tabs--galactic {
+    background: radial-gradient(ellipse at center, #0d0221, #2a0944, #5e2b97); /* Espacio Zelda */
+    color: #ffffff;
+    &::after {
+      content: '✨';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      right: 10px;
+      animation: glow 1.5s infinite;
+    }
+  }
+  
+  .tabs--orbitron {
+    background: #111827;
+    color: #ffffff;
+    font-family: 'Orbitron', sans-serif;
+    text-shadow: 0 0 8px #ffd700;
+    &::before {
+      content: '⭐';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      left: 10px;
+      animation: spin 2s infinite linear;
+    }
+  }
+  
+  .tabs--cartoon {
+    background: linear-gradient(45deg, #facc15, #f87171); /* Toad */
+    color: #ffffff;
+    animation: bounce 1.5s infinite;
+    &::after {
+      content: '🍒';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      right: 10px;
+    }
+  }
+  

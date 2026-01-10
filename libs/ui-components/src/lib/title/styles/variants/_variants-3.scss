@@ -1,0 +1,70 @@
+
+@use "../variables" as var;
+@use "sass:color";
+
+
+
+
+.title--platform { 
+    color: #eab308; /* Ladrillo Mario */
+    text-shadow: 0 2px 6px rgba(234, 179, 8, 0.5);
+    border-bottom: 4px solid #4b5563;
+    padding-bottom: 0.2rem;
+    transition: transform 0.3s ease;
+    &:hover { transform: translateY(-2px); }
+  }
+  
+  .title--hero { 
+    color: #3b82f6; /* Link azul */
+    text-shadow: 0 0 8px rgba(59, 130, 246, 0.5), 0 0 15px rgba(16, 185, 129, 0.3);
+    -webkit-text-stroke: 1px #10b981;
+    transition: text-shadow 0.4s ease;
+    &:hover { text-shadow: 0 0 12px rgba(59, 130, 246, 0.7), 0 0 20px rgba(16, 185, 129, 0.5); }
+  }
+  
+  .title--coin { 
+    color: #f59e0b; /* Moneda Mario */
+    text-shadow: 0 0 8px rgba(245, 158, 11, 0.6);
+    -webkit-text-stroke: 1px #d97706;
+    transition: transform 0.3s ease;
+    &:hover { transform: rotateY(180deg); }
+  }
+  
+  .title--cloud { 
+    color: #94a3b8; /* Nubes Mario */
+    text-shadow: 0 0 6px rgba(148, 163, 184, 0.5);
+    transition: transform 0.3s ease;
+    &:hover { transform: translateY(-3px); }
+  }
+  
+  .title--fire { 
+    color: #f87171; /* Flor de fuego */
+    text-shadow: 0 0 8px rgba(248, 113, 113, 0.6);
+    -webkit-text-stroke: 1px #dc2626;
+    transition: text-shadow 0.4s ease;
+    &:hover { text-shadow: 0 0 12px rgba(248, 113, 113, 0.8); }
+  }
+  
+  .title--water { 
+    color: #22d3ee; /* One Piece agua */
+    text-shadow: 0 0 8px rgba(34, 211, 238, 0.5);
+    text-decoration: underline wavy #0ea5e9;
+    transition: text-shadow 0.4s ease;
+    &:hover { text-shadow: 0 0 12px rgba(34, 211, 238, 0.7); }
+  }
+  
+  .title--leaf { 
+    color: #10b981; /* Hoja Tanooki */
+    text-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
+    -webkit-text-stroke: 1px #4ade80;
+    transition: transform 0.3s ease;
+    &:hover { transform: translateY(-3px); }
+  }
+  
+  .title--amber-glow { 
+    color: #d97706; /* Lámpara Zelda */
+    text-shadow: 0 0 8px rgba(217, 119, 6, 0.6);
+    -webkit-text-stroke: 1px #b45309;
+    transition: text-shadow 0.4s ease;
+    &:hover { text-shadow: 0 0 12px rgba(217, 119, 6, 0.8); }
+  }

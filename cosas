@@ -1,0 +1,177 @@
+
+
+🛍️ Ejemplo de campañas que puedes preparar:
+🖤 Black Friday
+
+🎅 Navidad / Reyes
+
+❤️ San Valentín
+
+🐣 Semana Santa
+
+🏖️ Verano / Rebajas
+
+🎃 Halloween
+
+📚 Vuelta al cole
+
+
+
+💎 Pack Eventos + Diseño Estacional
+
+Qué incluye	Precio sugerido
+Diseño personalizado para campañas (Black Friday, Navidad, Halloween, etc.)	
+Adaptación del panel o plantilla a la estética del evento	
+Banner, colores, frases de campaña	
+Publicación automática o programada	
+Edición del cliente desde tu framework	
+1 o 2 campañas al mes (según fechas)	+20 €/mes o +150-200 €/año
+
+
+Plan mensual	Incluye	Precio recomendado
+Básico	Hosting, diseño responsive, SEO básico, panel de edición de contenido	60 €/mes
+Pro	Todo lo anterior + cambios puntuales al diseño hechos por ti (1 al mes)	80 €/mes
+Premium	Pro + soporte prioritario + diseño nuevo cada X meses	100 €/mes o más
+
+
+💼 Planes Web Personalizados con Panel Propio
+
+Plan	Precio/mes	Incluye
+Básico	60 €	Diseño responsive, SEO básico, panel editable, hosting + dominio 1 año
+Pro	80 €	Todo lo del Básico + 1 cambio puntual al diseño/estructura al mes
+Premium	100 €	Todo lo del Pro + soporte prioritario y asesoría mensual de mejora web
+🎉 Pack Eventos y Campañas Estacionales (Adicional al plan mensual)
+
+Pack	Precio	Incluye
+Diseño por campaña	50 € puntual	Adaptación visual completa para 1 evento (Black Friday, Halloween, etc.)
+Pack anual de campañas	150 €/año	Hasta 6 campañas/año (1 cada 2 meses aprox.) + publicación automática/programada
+Pack mensual eventos	+20 €/mes	1 campaña/evento al mes con diseño y contenido personalizado
+
+
+
+
+🛍️ Ejemplo de campañas que puedes preparar:
+🖤 Black Friday
+
+🎅 Navidad / Reyes
+
+❤️ San Valentín
+
+🐣 Semana Santa
+
+🏖️ Verano / Rebajas
+
+🎃 Halloween
+
+📚 Vuelta al cole
+
+
+
+💎 Pack Eventos + Diseño Estacional
+
+Qué incluye	Precio sugerido
+Diseño personalizado para campañas (Black Friday, Navidad, Halloween, etc.)	
+Adaptación del panel o plantilla a la estética del evento	
+Banner, colores, frases de campaña	
+Publicación automática o programada	
+Edición del cliente desde tu framework	
+1 o 2 campañas al mes (según fechas)	+20 €/mes o +150-200 €/año
+
+
+Plan mensual	Incluye	Precio recomendado
+Básico	Hosting, diseño responsive, SEO básico, panel de edición de contenido	60 €/mes
+Pro	Todo lo anterior + cambios puntuales al diseño hechos por ti (1 al mes)	80 €/mes
+Premium	Pro + soporte prioritario + diseño nuevo cada X meses	100 €/mes o más
+
+
+💼 Planes Web Personalizados con Panel Propio
+
+Plan	Precio/mes	Incluye
+Básico	60 €	Diseño responsive, SEO básico, panel editable, hosting + dominio 1 año
+Pro	80 €	Todo lo del Básico + 1 cambio puntual al diseño/estructura al mes
+Premium	100 €	Todo lo del Pro + soporte prioritario y asesoría mensual de mejora web
+🎉 Pack Eventos y Campañas Estacionales (Adicional al plan mensual)
+
+Pack	Precio	Incluye
+Diseño por campaña	50 € puntual	Adaptación visual completa para 1 evento (Black Friday, Halloween, etc.)
+Pack anual de campañas	150 €/año	Hasta 6 campañas/año (1 cada 2 meses aprox.) + publicación automática/programada
+Pack mensual eventos	+20 €/mes	1 campaña/evento al mes con diseño y contenido personalizado
+
+
+
+
+
+🧠 Visión general: LeónApp (ecosistema modular)
+Imaginamos que estás construyendo una gran plataforma de servicios y contenido local para la provincia de León, y la escalas como un producto profesional, con:
+
+Frontend modular (posibles microfrontends)
+
+Backend con microservicios
+
+Infraestructura preparada para crecer
+
+🧩 Mapa de Microfrontends + Microservicios
+🖥️ Frontend: Microfrontends Angular (Standalone o Module Federation)
+
+Área	Microfrontend (MF)	Ruta	Funciones
+🏠 Inicio	shell (host app)	/	Layout, login, navegación
+🐟 Pesca	mf-pesca	/pesca	Mapa tramos, normativa, especies, foro pesca
+🍄 Micología	mf-micologia	/micologia	Búsqueda de setas, fichas, mapas, foro micología
+🥾 Senderismo	mf-senderismo	/senderismo	Rutas, mapas, fichas, compartir experiencias
+🧵 Foro	mf-foro	/foro	Subforos, comentarios, usuarios
+🛒 Tienda	mf-tienda	/tienda	Productos locales, venta, comisión, pagos
+📍 Comercios	mf-comercios	/comercios	Escaparate negocios, mapas, valoraciones
+Cada uno puede estar en un repo independiente o en un monorepo Nx, y el shell (host) carga el resto con Module Federation.
+
+🔧 Backend: Microservicios (REST o GraphQL)
+
+Servicio	Ruta API	Funciones
+auth-service	/api/auth	Login, registro, JWT, roles, refresh
+user-service	/api/users	Datos usuarios, perfiles, claims
+foro-service	/api/foro	Posts, hilos, respuestas, categorías
+pesca-service	/api/pesca	Tramos, especies, normativa, rutas
+senderismo-service	/api/senderismo	Rutas, dificultad, mapas, fichas
+micologia-service	/api/micologia	Especies, búsqueda, consejos
+tienda-service	/api/tienda	Productos, pagos, pedidos
+comercios-service	/api/comercios	Info de negocios, reseñas, mapas
+notificaciones-service	/api/notif	Mails, push, newsletters
+Puedes tenerlos como apps independientes en Node (Express, NestJS), .NET, Java... según lo que más te guste.
+
+🏗️ Infraestructura (mínima pero escalable)
+API Gateway (Nginx, Kong, Express): Para enrutar los microservicios
+
+Auth centralizada (JWT + refresh + claims)
+
+MongoDB / Postgres por microservicio
+
+Redis para sesiones y cachés
+
+RabbitMQ / Kafka si usas eventos entre microservicios
+
+Storage (S3 o Cloudinary) para imágenes
+
+Nx (monorepo) o múltiples repos
+
+CI/CD con GitHub Actions o GitLab
+
+Docker para contenerizar
+
+Railway / Fly.io / Vercel para despliegues
+
+
+
+
+
+┌─────────────┐
+│  Shell App  │ ← MF host
+└────┬────────┘
+     ↓
+┌─────────────┐   ┌─────────────┐   ┌─────────────┐
+│ mf-pesca    │   │ mf-foro     │   │ mf-tienda   │ ← MF remotes
+└────┬────────┘   └────┬────────┘   └────┬────────┘
+     ↓                 ↓                ↓
+┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+│ pesca-service│ │ foro-service │ │ tienda-svc   │ ← Microservicios
+└──────────────┘ └──────────────┘ └──────────────┘
+         ↑               ↑                ↑
+      MongoDB         PostgreSQL       MongoDB

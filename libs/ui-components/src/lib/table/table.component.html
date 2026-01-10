@@ -1,0 +1,16 @@
+<table [class]="tableClasses()" role="table">
+  <thead>
+    <tr>
+      <th *ngFor="let column of columns()" [class]="headerClasses()" scope="col">
+        {{ column.label }}
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of rows()">
+      <td *ngFor="let column of columns()" [class]="cellClasses()">
+        {{ row[column.key] }}
+      </td>
+    </tr>
+  </tbody>
+</table>

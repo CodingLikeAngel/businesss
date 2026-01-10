@@ -1,0 +1,166 @@
+
+@use "../variables" as var;
+@use "sass:color";
+
+
+
+
+
+.title--minimal-white { 
+    color: #ffffff; 
+    text-shadow: 0 0 6px rgba(59, 130, 246, 0.4);
+    border-bottom: 2px solid #ef4444; /* Mario rojo */
+    padding-bottom: 0.2rem;
+    transition: text-shadow 0.3s ease;
+    &:hover { text-shadow: 0 0 10px rgba(59, 130, 246, 0.6); }
+  }
+  
+  .title--hex-teal { 
+    color: #14b8a6; /* Pokémon agua/planta */
+    text-shadow: 0 0 8px rgba(20, 184, 166, 0.5);
+    clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+    padding: 0.2rem 0.8rem;
+    transition: transform 0.3s ease;
+    &:hover { transform: scale(1.05); }
+  }
+  
+  .title--purple-edge { 
+    color: #6b21a8; /* Ganon púrpura */
+    text-shadow: 0 0 8px rgba(107, 33, 168, 0.5);
+    -webkit-text-stroke: 1px #9333ea;
+    transition: text-shadow 0.4s ease;
+    &:hover { text-shadow: 0 0 12px rgba(107, 33, 168, 0.7); }
+  }
+  
+  .title--rose-radial { 
+    color: #f43f5e; /* Peach rosa */
+    text-shadow: 0 0 8px rgba(244, 63, 94, 0.5);
+    transition: text-shadow 0.4s ease;
+    &:hover { text-shadow: 0 0 12px rgba(244, 63, 94, 0.7); }
+  }
+  
+  .title--yellow-pulse { 
+    color: #eab308; /* Pikachu */
+    text-shadow: 0 0 8px rgba(234, 179, 8, 0.5);
+    -webkit-text-stroke: 1px #eab308;
+    transition: transform 0.3s ease;
+    &:hover { transform: scale(1.05); }
+  }
+  
+  .title--green-inset { 
+    color: #15803d; /* Bosque Zelda */
+    text-shadow: 0 0 6px rgba(21, 128, 61, 0.5);
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.6);
+    padding: 0.3rem 0.6rem;
+    transition: text-shadow 0.3s ease;
+    &:hover { text-shadow: 0 0 10px rgba(21, 128, 61, 0.7); }
+  }
+  
+  .title--blue-skew { 
+    color: #1d4ed8; /* Mario azul */
+    text-shadow: 0 0 8px rgba(29, 78, 216, 0.5);
+    transform: skewY(-3deg);
+    -webkit-text-stroke: 1px #ffd700;
+    transition: transform 0.3s ease;
+    &:hover { transform: skewY(-5deg) translateY(-2px); }
+  }
+  
+  .title--orange-dash { 
+    color: #ea580c; /* Fuego Pokémon */
+    text-shadow: 0 0 6px rgba(234, 88, 12, 0.5);
+    border-bottom: 3px dashed #f97316;
+    padding-bottom: 0.2rem;
+    transition: text-shadow 0.3s ease;
+    &:hover { text-shadow: 0 0 10px rgba(234, 88, 12, 0.7); }
+  }
+  
+  .title--indigo-dots { 
+    color: #4f46e5; /* Galaxia Mario */
+    text-shadow: 0 0 8px rgba(79, 70, 229, 0.5);
+    background-image: radial-gradient(#ffffff 1px, transparent 1px);
+    background-size: 10px 10px;
+    padding: 0.2rem 0.6rem;
+    transition: text-shadow 0.4s ease;
+    &:hover { text-shadow: 0 0 12px rgba(79, 70, 229, 0.7); }
+  }
+  
+  .title--bubble { 
+    color: #60a5fa; /* Burbujas One Piece */
+    text-shadow: 0 0 6px rgba(96, 165, 250, 0.5);
+    transition: transform 0.3s ease;
+    &:hover { transform: translateY(-3px); }
+  }
+  
+  .title--electoon { 
+    color: #facc15; /* Electoon Rayman */
+    text-shadow: 0 0 8px rgba(234, 179, 8, 0.5);
+    -webkit-text-stroke: 1px #eab308;
+    transition: text-shadow 0.4s ease;
+    &:hover { text-shadow: 0 0 12px rgba(234, 179, 8, 0.7); }
+  }
+  
+  .title--jungle { 
+    color: #166534; /* Donkey Kong */
+    text-shadow: 0 0 8px rgba(74, 222, 128, 0.5);
+    -webkit-text-stroke: 1px #4ade80;
+    transition: transform 0.3s ease;
+    &:hover { transform: translateY(-3px); }
+  }
+  
+  .title--joycon { 
+    color: #f87171; /* Joy-Con rojo */
+    text-shadow: 0 0 8px rgba(248, 113, 113, 0.5);
+    -webkit-text-stroke: 1px #60a5fa;
+    transition: text-shadow 0.4s ease;
+    &:hover { text-shadow: 0 0 12px rgba(248, 113, 113, 0.7); }
+  }
+  
+  .title--neomorph { 
+    color: #1e293b; /* Limbo oscuro */
+    text-shadow: 0 0 6px rgba(30, 41, 59, 0.5);
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.2), -5px -5px 15px rgba(255, 255, 255, 0.5);
+    padding: 0.3rem 0.6rem;
+    transition: box-shadow 0.3s ease;
+    &:hover { box-shadow: 8px 8px 20px rgba(0, 0, 0, 0.3), -8px -8px 20px rgba(255, 255, 255, 0.6); }
+  }
+  
+  .title--glitch { 
+    color: #00ff9d; /* Limbo digital */
+    text-shadow: 0 0 8px rgba(0, 255, 157, 0.5);
+    transition: text-shadow 0.4s ease;
+    &:hover { text-shadow: 0 0 12px rgba(0, 255, 157, 0.7); }
+  }
+  
+  .title--portal { 
+    color: #8b5cf6; /* Portal Zelda */
+    text-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
+    -webkit-text-stroke: 1px #1e1b4b;
+    transition: text-shadow 0.4s ease;
+    &:hover { text-shadow: 0 0 12px rgba(139, 92, 246, 0.7); }
+  }
+  
+  .title--default { 
+    color: #ffffff; 
+    text-shadow: 0 0 6px rgba(255, 255, 255, 0.5);
+    border-bottom: 2px solid #3b82f6; /* Nintendo azul */
+    padding-bottom: 0.2rem;
+    transition: text-shadow 0.3s ease;
+    &:hover { text-shadow: 0 0 10px rgba(255, 255, 255, 0.7); }
+  }
+  
+  /* Con icono */
+  .title--with-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .title-icon {
+    font-size: 1.5rem;
+    text-shadow: inherit; /* Hereda el text-shadow del título */
+  }
+  
+  /* Alineación */
+  .title--align-left { text-align: left; }
+  .title--align-center { text-align: center; }
+  .title--align-right { text-align: right; }

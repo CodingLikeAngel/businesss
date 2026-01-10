@@ -1,0 +1,116 @@
+<!-- Desktop View -->
+<div *ngIf="!isMobile()" class="ui-card-rutas-container">
+  <div class="ui-card-rutas-wrapper grid grid-cols-3 gap-6">
+    <article *ngFor="let item of items(); let i = index" [class]="cardClasses()" [style]="cardStyles()">
+      <div class="ui-card-rutas__image-container">
+        <div class="ui-card-rutas__gradient"></div>
+        <img
+          [src]="item.imageUrl"
+          [alt]="item.routeName"
+          class="ui-card-rutas__image"
+          loading="lazy"
+        />
+        <div class="ui-card-rutas__title-container">
+          <h3 [class]="titleClasses()" itemprop="name">{{ item.routeName }}</h3>
+        </div>
+      </div>
+      <div class="ui-card-rutas__content">
+        <div class="ui-card-rutas__header">
+          <span class="ui-card-rutas__difficulty">{{ item.difficulty }}</span>
+          <span class="ui-card-rutas__rating">⭐ {{ item.rating }} ({{ item.reviews }})</span>
+        </div>
+        <!-- <div class="ui-card-rutas__stats">
+          <span>⏱ {{ item.duration }}h</span>
+          <span>📏 {{ item.distance }}km</span>
+          <span>↗ {{ item.ascent }}m</span>
+        </div> -->
+        <p class="ui-card-rutas__description" itemprop="description">{{ item.description }}</p>
+        <ul class="ui-card-rutas__features">
+          <li *ngFor="let feature of item.features">• {{ feature }}</li>
+        </ul>
+        <a
+          [href]="item.link"
+          [attr.aria-label]="'Detalles de ruta ' + item.routeName"
+          class="ui-card-rutas__link"
+        >
+          <span>Ver detalles</span>
+          <svg class="ui-card-rutas__arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+          </svg>
+        </a>
+      </div>
+    </article>
+  </div>
+</div>
+
+<!-- Mobile View -->
+<div *ngIf="isMobile()" class="ui-card-rutas-container">
+  <div class="ui-card-rutas-wrapper">
+    <article #postCard [class]="cardClasses()" [style]="cardStyles()">
+      <div class="ui-card-rutas__image-container">
+        <div class="ui-card-rutas__gradient"></div>
+        <img
+          [src]="currentItem.imageUrl"
+          [alt]="currentItem.routeName"
+          class="ui-card-rutas__image"
+          loading="lazy"
+        />
+        <div class="ui-card-rutas__title-container">
+          <h3 [class]="titleClasses()" itemprop="name">{{ currentItem.routeName }}</h3>
+        </div>
+      </div>
+      <div class="ui-card-rutas__content">
+        <div class="ui-card-rutas__header">
+          <span class="ui-card-rutas__difficulty">{{ currentItem.difficulty }}</span>
+          <span class="ui-card-rutas__rating">⭐ {{ currentItem.rating }} ({{ currentItem.reviews }})</span>
+        </div>
+        <div class="ui-card-rutas__stats">
+          <span>⏱ {{ currentItem.duration }}h</span>
+          <span>📏 {{ currentItem.distance }}km</span>
+          <span>↗ {{ currentItem.ascent }}m</span>
+        </div>
+        <p class="ui-card-rutas__description" itemprop="description">{{ currentItem.description }}</p>
+        <ul class="ui-card-rutas__features">
+          <li *ngFor="let feature of currentItem.features">• {{ feature }}</li>
+        </ul>
+        <div class="ui-card-rutas__actions">
+          <button
+            class="ui-card-rutas__nav ui-card-rutas__nav--prev"
+            (click)="changeItem(-1)"
+            [disabled]="currentRouteIndex === 0"
+          >
+            <svg class="ui-card-rutas__nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+            </svg>
+          </button>
+          <a
+            [href]="currentItem.link"
+            [attr.aria-label]="'Detalles de ruta ' + currentItem.routeName"
+            class="ui-card-rutas__link"
+          >
+            <span>Ver detalles</span>
+            <svg class="ui-card-rutas__arrow" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+            </svg>
+          </a>
+          <button
+            class="ui-card-rutas__nav ui-card-rutas__nav--next"
+            (click)="changeItem(1)"
+            [disabled]="currentRouteIndex === items().length - 1"
+          >
+            <svg class="ui-card-rutas__nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </article>
+    <div class="ui-card-rutas__dots">
+      <span
+        *ngFor="let item of items(); let i = index"
+        [class.ui-card-rutas__dot--active]="i === currentRouteIndex"
+        class="ui-card-rutas__dot"
+      ></span>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,220 @@
+@use "sass:color";
+@use "../variables" as var;
+
+
+.bubble--orbitron {
+  --bubble-bg: #111827;
+  --g1-bg: radial-gradient(circle at center, rgba(6, 182, 212, 0.8) 0, rgba(6, 182, 212, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(8, 145, 178, 0.8) 0, rgba(8, 145, 178, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(14, 116, 144, 0.8) 0, rgba(14, 116, 144, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(22, 78, 99, 0.8) 0, rgba(22, 78, 99, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(34, 211, 238, 0.8) 0, rgba(34, 211, 238, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(6, 182, 212, 0.8) 0, rgba(6, 182, 212, 0) 50%);
+  --bubble-blur: 30px;
+  animation: scanline 1.5s infinite;
+}
+
+.bubble--cartoon {
+  --bubble-bg: linear-gradient(45deg, #facc15, #f87171);
+  --g1-bg: radial-gradient(circle at center, rgba(250, 204, 21, 0.8) 0, rgba(250, 204, 21, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(248, 113, 113, 0.8) 0, rgba(248, 113, 113, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(251, 191, 36, 0.8) 0, rgba(251, 191, 36, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(239, 68, 68, 0.8) 0, rgba(239, 68, 68, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(250, 204, 21, 0.8) 0, rgba(250, 204, 21, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(248, 113, 113, 0.8) 0, rgba(248, 113, 113, 0) 50%);
+  --bubble-blur: 40px;
+  animation: cartoonBounce 1.5s infinite;
+}
+
+.bubble--luma {
+  --bubble-bg: radial-gradient(circle, #e5e7eb, #d1d5db);
+  --g1-bg: radial-gradient(circle at center, rgba(229, 231, 235, 0.8) 0, rgba(229, 231, 235, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(209, 213, 219, 0.8) 0, rgba(209, 213, 219, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(156, 163, 175, 0.8) 0, rgba(156, 163, 175, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(107, 114, 128, 0.8) 0, rgba(107, 114, 128, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(229, 231, 235, 0.8) 0, rgba(229, 231, 235, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(209, 213, 219, 0.8) 0, rgba(209, 213, 219, 0) 50%);
+  --bubble-blur: 50px;
+  animation: lumaGlow 2s infinite;
+}
+
+.bubble--platform {
+  --bubble-bg: linear-gradient(135deg, #4b5563, #1f2937);
+  --g1-bg: radial-gradient(circle at center, rgba(75, 85, 99, 0.8) 0, rgba(75, 85, 99, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(31, 41, 55, 0.8) 0, rgba(31, 41, 55, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(55, 65, 81, 0.8) 0, rgba(55, 65, 81, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(17, 24, 39, 0.8) 0, rgba(17, 24, 39, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(75, 85, 99, 0.8) 0, rgba(75, 85, 99, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(31, 41, 55, 0.8) 0, rgba(31, 41, 55, 0) 50%);
+  --bubble-blur: 35px;
+  animation: platformSway 2s infinite;
+}
+
+.bubble--hero {
+  --bubble-bg: linear-gradient(90deg, #3b82f6, #9333ea);
+  --g1-bg: radial-gradient(circle at center, rgba(59, 130, 246, 0.8) 0, rgba(59, 130, 246, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(147, 51, 234, 0.8) 0, rgba(147, 51, 234, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(37, 99, 235, 0.8) 0, rgba(37, 99, 235, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(124, 58, 237, 0.8) 0, rgba(124, 58, 237, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(59, 130, 246, 0.8) 0, rgba(59, 130, 246, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(147, 51, 234, 0.8) 0, rgba(147, 51, 234, 0) 50%);
+  --bubble-blur: 45px;
+  animation: heroPulse 1.8s infinite;
+}
+
+.bubble--coin {
+  --bubble-bg: radial-gradient(circle, #f59e0b, #d97706);
+  --g1-bg: radial-gradient(circle at center, rgba(245, 158, 11, 0.8) 0, rgba(245, 158, 11, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(217, 119, 6, 0.8) 0, rgba(217, 119, 6, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(251, 191, 36, 0.8) 0, rgba(251, 191, 36, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(180, 83, 9, 0.8) 0, rgba(180, 83, 9, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(245, 158, 11, 0.8) 0, rgba(245, 158, 11, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(217, 119, 6, 0.8) 0, rgba(217, 119, 6, 0) 50%);
+  --bubble-blur: 30px;
+  animation: coinSpin3D 2s infinite;
+}
+
+.bubble--cloud {
+  --bubble-bg: linear-gradient(135deg, #e2e8f0, #94a3b8);
+  --g1-bg: radial-gradient(circle at center, rgba(226, 232, 240, 0.8) 0, rgba(226, 232, 240, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(148, 163, 184, 0.8) 0, rgba(148, 163, 184, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(203, 213, 225, 0.8) 0, rgba(203, 213, 225, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(100, 116, 139, 0.8) 0, rgba(100, 116, 139, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(226, 232, 240, 0.8) 0, rgba(226, 232, 240, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(148, 163, 184, 0.8) 0, rgba(148, 163, 184, 0) 50%);
+  --bubble-blur: 60px;
+  animation: cloudDrift 3s infinite;
+}
+
+.bubble--fire {
+  --bubble-bg: linear-gradient(90deg, #f87171, #dc2626);
+  --g1-bg: radial-gradient(circle at center, rgba(248, 113, 113, 0.8) 0, rgba(248, 113, 113, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(220, 38, 38, 0.8) 0, rgba(220, 38, 38, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(239, 68, 68, 0.8) 0, rgba(239, 68, 68, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(153, 27, 27, 0.8) 0, rgba(153, 27, 27, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(248, 113, 113, 0.8) 0, rgba(248, 113, 113, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(220, 38, 38, 0.8) 0, rgba(220, 38, 38, 0) 50%);
+  --bubble-blur: 40px;
+  animation: fireFlicker 1s infinite;
+}
+
+.bubble--water {
+  --bubble-bg: linear-gradient(90deg, #06b6d4, #0ea5e9);
+  --g1-bg: radial-gradient(circle at center, rgba(6, 182, 212, 0.8) 0, rgba(6, 182, 212, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(14, 165, 233, 0.8) 0, rgba(14, 165, 233, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(56, 189, 248, 0.8) 0, rgba(56, 189, 248, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(2, 132, 199, 0.8) 0, rgba(2, 132, 199, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(6, 182, 212, 0.8) 0, rgba(6, 182, 212, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(14, 165, 233, 0.8) 0, rgba(14, 165, 233, 0) 50%);
+  --bubble-blur: 50px;
+  animation: waveFlow 2.5s infinite;
+}
+
+.bubble--leaf {
+  --bubble-bg: linear-gradient(90deg, #10b981, #4ade80);
+  --g1-bg: radial-gradient(circle at center, rgba(16, 185, 129, 0.8) 0, rgba(16, 185, 129, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(74, 222, 128, 0.8) 0, rgba(74, 222, 128, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(5, 150, 105, 0.8) 0, rgba(5, 150, 105, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(52, 211, 153, 0.8) 0, rgba(52, 211, 153, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(16, 185, 129, 0.8) 0, rgba(16, 185, 129, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(74, 222, 128, 0.8) 0, rgba(74, 222, 128, 0) 50%);
+  --bubble-blur: 40px;
+  animation: leafSway 2s infinite;
+}
+
+
+.bubble--amber-glow {
+  --bubble-bg: radial-gradient(ellipse at center, #d97706, #b45309);
+  --g1-bg: radial-gradient(circle at center, rgba(217, 119, 6, 0.8) 0, rgba(217, 119, 6, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(180, 83, 9, 0.8) 0, rgba(180, 83, 9, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(251, 191, 36, 0.8) 0, rgba(251, 191, 36, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(154, 52, 18, 0.8) 0, rgba(154, 52, 18, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(217, 119, 6, 0.8) 0, rgba(217, 119, 6, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(180, 83, 9, 0.8) 0, rgba(180, 83, 9, 0) 50%);
+  --bubble-blur: 45px;
+  animation: amberPulse 1.5s infinite;
+}
+
+.bubble--minimal-white {
+  --bubble-bg: #fff;
+  --g1-bg: radial-gradient(circle at center, rgba(229, 231, 235, 0.8) 0, rgba(229, 231, 235, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(209, 213, 219, 0.8) 0, rgba(209, 213, 219, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(156, 163, 175, 0.8) 0, rgba(156, 163, 175, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(107, 114, 128, 0.8) 0, rgba(107, 114, 128, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(229, 231, 235, 0.8) 0, rgba(229, 231, 235, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(209, 213, 219, 0.8) 0, rgba(209, 213, 219, 0) 50%);
+  --bubble-blur: 30px;
+  animation: minimalFade 2s infinite;
+}
+
+.bubble--hex-teal {
+  --bubble-bg: #0d9488;
+  --g1-bg: radial-gradient(circle at center, rgba(13, 148, 136, 0.8) 0, rgba(13, 148, 136, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(15, 118, 110, 0.8) 0, rgba(15, 118, 110, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(45, 212, 191, 0.8) 0, rgba(45, 212, 191, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(6, 78, 59, 0.8) 0, rgba(6, 78, 59, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(13, 148, 136, 0.8) 0, rgba(13, 148, 136, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(15, 118, 110, 0.8) 0, rgba(15, 118, 110, 0) 50%);
+  --bubble-blur: 40px;
+  animation: hexRotate 3s infinite;
+}
+
+.bubble--purple-edge {
+  --bubble-bg: #6b21a8;
+  --g1-bg: radial-gradient(circle at center, rgba(107, 33, 168, 0.8) 0, rgba(107, 33, 168, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(147, 51, 234, 0.8) 0, rgba(147, 51, 234, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(88, 28, 135, 0.8) 0, rgba(88, 28, 135, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(124, 58, 237, 0.8) 0, rgba(124, 58, 237, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(107, 33, 168, 0.8) 0, rgba(107, 33, 168, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(147, 51, 234, 0.8) 0, rgba(147, 51, 234, 0) 50%);
+  --bubble-blur: 35px;
+  animation: edgeGlow 2s infinite;
+}
+
+.bubble--rose-radial {
+  --bubble-bg: radial-gradient(circle, #f43f5e, #be123c);
+  --g1-bg: radial-gradient(circle at center, rgba(244, 63, 94, 0.8) 0, rgba(244, 63, 94, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(190, 18, 60, 0.8) 0, rgba(190, 18, 60, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(219, 39, 119, 0.8) 0, rgba(219, 39, 119, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(159, 18, 57, 0.8) 0, rgba(159, 18, 57, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(244, 63, 94, 0.8) 0, rgba(244, 63, 94, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(190, 18, 60, 0.8) 0, rgba(190, 18, 60, 0) 50%);
+  --bubble-blur: 50px;
+  animation: roseBloom 2s infinite;
+}
+
+.bubble--yellow-pulse {
+  --bubble-bg: #eab308;
+  --g1-bg: radial-gradient(circle at center, rgba(234, 179, 8, 0.8) 0, rgba(234, 179, 8, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(202, 138, 4, 0.8) 0, rgba(202, 138, 4, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(251, 191, 36, 0.8) 0, rgba(251, 191, 36, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(161, 98, 7, 0.8) 0, rgba(161, 98, 7, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(234, 179, 8, 0.8) 0, rgba(234, 179, 8, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(202, 138, 4, 0.8) 0, rgba(202, 138, 4, 0) 50%);
+  --bubble-blur: 40px;
+  animation: yellowFlash 1.2s infinite;
+}
+
+.bubble--green-inset {
+  --bubble-bg: #15803d;
+  --g1-bg: radial-gradient(circle at center, rgba(21, 128, 61, 0.8) 0, rgba(21, 128, 61, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(5, 150, 105, 0.8) 0, rgba(5, 150, 105, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(16, 185, 129, 0.8) 0, rgba(16, 185, 129, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(4, 120, 87, 0.8) 0, rgba(4, 120, 87, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(21, 128, 61, 0.8) 0, rgba(21, 128, 61, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(5, 150, 105, 0.8) 0, rgba(5, 150, 105, 0) 50%);
+  --bubble-blur: 35px;
+  animation: insetGrow 2s infinite;
+}
+
+.bubble--blue-skew {
+  --bubble-bg: #1d4ed8;
+  --g1-bg: radial-gradient(circle at center, rgba(29, 78, 216, 0.8) 0, rgba(29, 78, 216, 0) 50%);
+  --g2-bg: radial-gradient(circle at center, rgba(37, 99, 235, 0.8) 0, rgba(37, 99, 235, 0) 50%);
+  --g3-bg: radial-gradient(circle at center, rgba(59, 130, 246, 0.8) 0, rgba(59, 130, 246, 0) 50%);
+  --g4-bg: radial-gradient(circle at center, rgba(30, 64, 175, 0.8) 0, rgba(30, 64, 175, 0) 50%);
+  --g5-bg: radial-gradient(circle at center, rgba(29, 78, 216, 0.8) 0, rgba(29, 78, 216, 0) 50%);
+  --interactive-bg: radial-gradient(circle at center, rgba(37, 99, 235, 0.8) 0, rgba(37, 99, 235, 0) 50%);
+  --bubble-blur: 45px;
+  animation: skewBounce 1.5s infinite;
+}

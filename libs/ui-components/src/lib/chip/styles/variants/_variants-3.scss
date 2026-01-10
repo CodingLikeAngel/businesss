@@ -1,0 +1,103 @@
+
+@use "../variables" as var;
+
+
+
+.chip-cartoon {
+  background: linear-gradient(45deg, #FFD700, #F87171);
+  color: #2D1B58;
+  border: 3px solid #2D1B58;
+  box-shadow: 4px 4px 0 #2D1B58;
+  animation: cartoonPop 1.5s infinite;
+  &:hover { box-shadow: 0 0 15px #FFD700; }
+}
+
+.chip-luma {
+  background: radial-gradient(circle, #FFD700, #FF7B00);
+  color: #2D1B58;
+  border: none;
+  animation: lumaGlow 2s infinite;
+  &:hover { box-shadow: 0 0 20px #FFD700; }
+}
+
+.chip-platform {
+  background: linear-gradient(135deg, #00D26A, #1F2937);
+  color: #FFF5D6;
+  border-bottom: 4px solid #2D1B58;
+  animation: platformFloat 2s infinite;
+  &:hover { box-shadow: 0 0 20px #00D26A; }
+}
+
+.chip-hero {
+  background: linear-gradient(90deg, #E60012, #9333EA);
+  color: #FFFFFF;
+  border: 2px solid #111827;
+  animation: heroPulse 1.8s infinite;
+  &:hover { box-shadow: 0 0 20px #E60012; }
+}
+
+.chip-coin {
+  background: radial-gradient(circle, #FFD700, #D97706);
+  color: #2D1B58;
+  border: none;
+  border-radius: 50%;
+  animation: coinSpin 2s infinite;
+  &:hover { box-shadow: 0 0 20px #FFD700; }
+}
+
+.chip-cloud {
+  background: linear-gradient(135deg, #FFF5D6, #94A3B8);
+  color: #2D1B58;
+  border: 2px solid #D1D5DB;
+  animation: cloudDrift 3s infinite;
+  &:hover { box-shadow: 0 0 20px #94A3B8; }
+}
+
+.chip-fire {
+  background: linear-gradient(to bottom, #FF7B00, #DC2626);
+  color: #FFFFFF;
+  border: none;
+  animation: fireFlicker 1s infinite;
+  &:hover { box-shadow: 0 0 20px #DC2626; }
+}
+
+.chip-water {
+  background: linear-gradient(90deg, #00A2FF, #06B6D4);
+  color: #FFF5D6;
+  border: 2px solid #00A2FF;
+  animation: waterFlow 2.5s infinite;
+  &:hover { box-shadow: 0 0 20px #00A2FF; }
+}
+
+.chip-leaf {
+  background: linear-gradient(90deg, #00D26A, #4ADE80);
+  color: #FFFFFF;
+  border: 2px solid #00D26A;
+  animation: leafSway 2s infinite;
+  &:hover { box-shadow: 0 0 20px #4ADE80; }
+}
+
+.chip-amber-glow {
+  background: radial-gradient(circle, #F59E0B, #B45309);
+  color: #1E293B;
+  border: 2px solid #F59E0B;
+  animation: amberPulse 1.5s infinite;
+  &:hover { box-shadow: 0 0 20px #F59E0B; }
+}
+
+.chip-minimal-white {
+  background: #FFFFFF;
+  color: #111827;
+  border: 2px solid #D1D5DB;
+  animation: minimalFade 2s infinite;
+  &:hover { box-shadow: 0 0 15px #D1D5DB; }
+}
+
+.chip-hex-teal {
+  background: linear-gradient(45deg, #14B8A6, #0D9488);
+  color: #FFFFFF;
+  border: 2px solid #14B8A6;
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+  animation: hexRotate 3s infinite;
+  &:hover { box-shadow: 0 0 20px #14B8A6; }
+}

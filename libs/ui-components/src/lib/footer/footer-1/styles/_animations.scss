@@ -1,0 +1,11 @@
+
+
+  
+  /* Animaciones */
+  @keyframes pixel-bounce { 0% { transform: translateY(0); } 100% { transform: translateY(-6px); } }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+  @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
+  @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+  @keyframes drip { 0% { transform: translateY(-50px); opacity: 0; } 100% { transform: translateY(50px); opacity: 1; } }
+  @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+  

@@ -1,0 +1,179 @@
+@use "sass:map";
+@use "./variables" as var;
+@use "sass:color";
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+
+
+
+
+
+/* Base Styles */
+/* Base Styles */
+.footer {
+    font-family: 'Orbitron', sans-serif;
+    padding: 4rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 10;
+  
+    // Fondo base del footer
+    background: var(--footer-bg, linear-gradient(180deg, rgba(var.$color-dark, 0.5), rgba(var.$color-dark, 0.2)));
+    color: var(--footer-color, var.$color-dark);
+    border-top: var(--footer-border, none);
+  
+    // Añadimos el brillo exterior con box-shadow
+    box-shadow: 0 0 20px rgba(var.$color-gold, 0.7), 0 0 40px rgba(var.$color-gold, 0.5), 0 0 60px rgba(var.$color-gold, 0.3);
+  
+    // Pseudo-elemento para extender el brillo al contenedor
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -10%; // Extiende más allá del margen izquierdo
+      width: 120%; // Cubre más allá del ancho del footer
+      height: 100%;
+      background: radial-gradient(circle, rgba(var.$color-gold, 0.4) 0%, rgba(var.$color-gold, 0) 70%);
+      z-index: -1; // Detrás del contenido del footer
+      pointer-events: none; // No interfiere con interacciones
+    }
+  
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      position: relative;
+      z-index: 20;
+      @media (min-width: 768px) { grid-template-columns: repeat(4, 1fr); }
+      // Aseguramos que el contenedor no bloquee el brillo
+      // background: transparent;
+    }
+  
+    &.dark {
+      color: var(--footer-color, var.$color-light);
+      background: var(--footer-bg, linear-gradient(180deg, rgba(#0f0823, 0.8), rgba(#0f0823, 0.4)));
+      box-shadow: 0 0 20px rgba(var.$color-gold, 0.9), 0 0 40px rgba(var.$color-gold, 0.6), 0 0 60px rgba(var.$color-gold, 0.4);
+      &::before {
+        background: radial-gradient(circle, rgba(var.$color-gold, 0.5) 0%, rgba(var.$color-gold, 0) 70%);
+      }
+    }
+  
+    &:not(.dark) {
+      color: var(--footer-color, var.$color-dark);
+      background: var(--footer-bg, linear-gradient(180deg, rgba(var.$color-dark, 0.5), rgba(var.$color-dark, 0.2)));
+    }
+  }
+
+
+  
+
+.footer--custom {
+    background: var(--footer-bg, linear-gradient(180deg, rgba(var.$color-dark, 0.5), rgba(var.$color-dark, 0.2)));
+    color: var(--footer-color, var.$color-dark);
+    border-top: var(--footer-border, none);
+    box-shadow: var(--footer-shadow, none);
+    position: relative; // Para efectos de oscurecimiento si usamos pseudo-elementos
+  
+    .footer-title {
+      color: var(--footer-color, inherit);
+    }
+  
+    .footer-link {
+      color: var(--footer-color, var.$color-light);
+      transition: color 0.3s ease;
+    }
+  
+    .footer-social-icon {
+      &:hover {
+        background: var(--footer-hover-bg, rgba(255, 255, 255, 0.1));
+        box-shadow: var(--footer-hover-shadow, 0 0 15px rgba(255, 255, 255, 0.5));
+      }
+    }
+  
+    &.dark {
+      // No sobrescribir el fondo personalizado, sino oscurecerlo
+      background: var(--footer-bg, linear-gradient(180deg, rgba(#0f0823, 0.9), rgba(#0f0823, 0.7)));
+      color: var(--footer-color, var.$color-light);
+      
+      // Usar un pseudo-elemento para oscurecer el fondo personalizado
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); // Capa de oscurecimiento
+        z-index: 0;
+        pointer-events: none; // Para no interferir con interacciones
+      }
+  
+      // Asegurar que el contenido esté por encima del pseudo-elemento
+      > * {
+        position: relative;
+        z-index: 1;
+      }
+  
+      // Ajustar el título para mayor contraste
+      .footer-title {
+        color: var(--footer-color, #ffffff);
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+      }
+  
+      // Enlaces más claros para visibilidad
+      .footer-link {
+        color: var(--footer-color, #e0e0e0);
+        &:hover {
+          color: #ffffff;
+        }
+      }
+  
+      // Íconos sociales
+      .footer-social-icon {
+        color: var(--footer-color, #d1d5db);
+        &:hover {
+          background: var(--footer-hover-bg, rgba(255, 255, 255, 0.2));
+          box-shadow: var(--footer-hover-shadow, 0 0 20px rgba(255, 255, 255, 0.3));
+        }
+      }
+    }
+  
+    &.footer--with-particles {
+      background: var(--footer-bg, transparent);
+  
+      // Definir el contenedor de partículas
+      .particle-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: -1;
+      }
+  
+      // Estilos para las partículas
+      .particle {
+        width: 12px;
+        height: 12px;
+        position: absolute;
+        border-radius: 50%; // Forma circular por defecto
+        animation: float 4s infinite ease-in-out;
+  
+        // Color de las partículas basado en --footer-color o un valor por defecto
+        &.dark {
+          background: var(--footer-color, #ffffff); // Blanco en modo oscuro por defecto
+        }
+        &:not(.dark) {
+          background: var(--footer-color, var.$color-dark); // Morado galáctico en modo claro por defecto
+        }
+  
+        // Posiciones de las partículas
+        &:nth-child(1) { top: 20%; left: 30%; }
+        &:nth-child(2) { top: 60%; left: 70%; animation-delay: 0.5s; }
+        &:nth-child(3) { top: 80%; left: 40%; animation-delay: 1s; }
+      }
+    }
+  }

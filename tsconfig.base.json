@@ -1,0 +1,60 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2020", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@negocio/featured-components": ["libs/featured-components/src/index.ts"],
+      "@negocio/features/feature-about": [
+        "libs/features/about/feature-about/src/index.ts"
+      ],
+      "@negocio/features/feature-about-api": [
+        "libs/features/about/api/src/index.ts"
+      ],
+      "@negocio/features/feature-about-data-access": [
+        "libs/features/about/data-access/src/index.ts"
+      ],
+      "@negocio/features/feature-about-shell": [
+        "libs/features/about/shell/src/index.ts"
+      ],
+      "@negocio/features/feature-contact": [
+        "libs/features/contact/feature-contact/src/index.ts"
+      ],
+      "@negocio/features/feature-contact-api": [
+        "libs/features/contact/api/src/index.ts"
+      ],
+      "@negocio/features/feature-contact-data-access": [
+        "libs/features/contact/data-access/src/index.ts"
+      ],
+      "@negocio/features/feature-contact-shell": [
+        "libs/features/contact/shell/src/index.ts"
+      ],
+      "@negocio/features/feature-home": [
+        "libs/features/home/feature-home/src/index.ts"
+      ],
+      "@negocio/features/feature-home-api": [
+        "libs/features/home/api/src/index.ts"
+      ],
+      "@negocio/features/feature-home-data-access": [
+        "libs/features/home/data-access/src/index.ts"
+      ],
+      "@negocio/features/feature-home-shell": [
+        "libs/features/home/shell/src/index.ts"
+      ],
+      "@negocio/shared-components": ["libs/shared-components/src/index.ts"],
+      "@negocio/ui-components": ["libs/ui-components/src/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

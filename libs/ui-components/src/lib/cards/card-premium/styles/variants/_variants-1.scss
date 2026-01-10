@@ -1,0 +1,110 @@
+@use "sass:color";
+@use "../variables" as var;
+
+
+
+  /* Otras variantes inspiradas en tus estilos previos */
+  .card--primary {
+    border-radius: 20px;
+    background: linear-gradient(135deg, #ed1c24, #8b0000);
+    box-shadow: 0 15px 0 #640000;
+    animation: bounce 1.5s infinite;
+
+    .icon { background: #640000; }
+  }
+
+  .card--secondary {
+    border-radius: 20px;
+    background: linear-gradient(135deg, #0078d7, #003c78);
+    box-shadow: inset 0 0 10px rgba(0, 191, 255, 0.5);
+    animation: glowPulse 2s infinite;
+
+    .icon { background: #003c78; }
+  }
+
+  .card--outline {
+    border-radius: 10px;
+    background: #fff;
+    border: 2px solid #d1d5db;
+    color: #374151;
+    animation: subtleShake 3s infinite;
+
+    .icon { background: #d1d5db; }
+    .content { h2, p { color: #374151; } }
+  }
+
+  .card--ghost {
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: fadeFloat 2.5s infinite;
+
+    .icon { background: rgba(255, 255, 255, 0.3); }
+  }
+
+  .card--link {
+    border-radius: 10px;
+    background: transparent;
+    border: 2px solid #06b6d4;
+    color: #06b6d4;
+    animation: ripple 2s infinite;
+
+    .icon { background: #06b6d4; }
+    .content { h2, p { color: #06b6d4; } }
+  }
+
+  .card--neon {
+    border-radius: 15px;
+    background: radial-gradient(ellipse at center, #0a0a14, #ec4899 50%, #00e5ff 100%);
+    box-shadow: 0 0 15px rgba(0, 229, 255, 0.5);
+    animation: neonFlicker3D 1.8s infinite;
+    transform-style: preserve-3d;
+
+    .icon { background: #ec4899; }
+  }
+
+  .card--cyberpunk {
+    border-radius: 10px;
+    background: linear-gradient(135deg, #eab308, #ec4899);
+    border: 2px dashed #06b6d4;
+    animation: glitchShift 1.5s infinite;
+
+    .icon { background: #eab308; }
+  }
+
+  .card--gradient {
+    border-radius: 20px;
+    background: linear-gradient(90deg, #8b5cf6, #ec4899, #22c55e);
+    animation: colorWave 3s infinite;
+
+    .icon { background: #8b5cf6; }
+  }
+
+  .card--glass {
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    animation: shimmer 2s infinite;
+
+    .icon { background: rgba(255, 255, 255, 0.2); }
+  }
+
+  .card--retro {
+    border-radius: 8px;
+    background: linear-gradient(45deg, #f472b6, #60a5fa);
+    border: 3px solid #ffd700;
+    font-family: 'Press Start 2P', cursive;
+    animation: pixelJump 1.2s infinite;
+
+    .icon { background: #ffd700; }
+  }
+
+  .card--pulse-gradient {
+    border-radius: 20px;
+    background: linear-gradient(120deg, #9333ea, #f43f5e, #10b981);
+    animation: heartbeat 1.5s infinite;
+
+    .icon { background: #9333ea; }
+  }

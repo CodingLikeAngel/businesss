@@ -1,0 +1,98 @@
+<div class="z-30">
+  <router-outlet></router-outlet>
+</div>
+
+<div class="z-50">
+  <!-- Barra de Navegación Futurista -->
+  <lib-ui-components-nav-bar
+    [variant]="selectedVariant"
+    [logoText]="'Peluquería Estilo'"
+    [showMobileMenu]="true"
+    [isFixed]="true"
+    [navLinks]="navLinks"
+    (linkClicked)="scrollToSection($event)"
+  />
+</div>
+
+<lib-bubble-animation [variant]="selectedVariant"></lib-bubble-animation>
+
+<!-- Contenedor Principal -->
+<div class="relative min-h-screen overflow-hidden z-50">
+  <!-- Capa de partículas -->
+  <div class="particle-layer animate-pulse opacity-40"></div>
+
+  <!-- Contenido principal centrado -->
+  <div class="container mx-auto px-6 py-2 relative max-w-7xl z-30">
+    <!-- Sección 'Sobre Nosotros' -->
+    <section id="about" class="z-30">
+      <div class="">
+        <lib-ui-components-title
+          level="h2"
+          text="¡Bienvenidos al Reino del Estilo!"
+          [variant]="selectedVariant"
+          animation="slide"
+          align="center"
+          class="mb-8"
+        ></lib-ui-components-title>
+
+        <lib-ui-components-title
+          level="h3"
+          text="Transforma tu look, vive la leyenda"
+          [variant]="selectedVariant"
+          animation="glitch"
+          align="center"
+          class="mb-8"
+        ></lib-ui-components-title>
+        <div
+          class="text-white text-lg md:text-xl leading-relaxed mb-14 max-w-5xl mx-auto animate-fade-in opacity-0 animate-delay-200"
+        >
+          <p class="mb-6">
+            ¡Bienvenidos al
+            <strong class="text-[#FF6F61]">Reino del Estilo</strong>! Aquí,
+            nuestros estilistas, los <em>Héroes del Tijeretazo</em>, usan su
+            magia para transformar tu cabello en una obra maestra. Desde cortes
+            épicos hasta colores que desafían la gravedad, cada visita es una
+            aventura.
+          </p>
+          <p>
+            Nuestra misión para 2030: conquistar el universo con estilos
+            sostenibles y técnicas potenciadas por IA. En
+            <strong>Peluquería Estilo</strong>, no solo cambias tu look, ¡te
+            conviertes en leyenda!
+          </p>
+        </div>
+
+        <!-- Botón acción -->
+        <div class="text-center">
+          <lib-ui-components-button
+            [variant]="selectedVariant"
+            size="lg"
+            rounded="full"
+            leadingIcon="heroStar"
+            type="submit"
+          >
+            ¡Crea tu Estilo!
+          </lib-ui-components-button>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- Galería -->
+<lib-ui-components-title
+  level="h3"
+  text="Nuestros Héroes"
+  [variant]="selectedVariant"
+  animation="slide"
+  align="center"
+></lib-ui-components-title>
+
+<section id="galeria" class="relative z-20 mb-6">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <lib-gallery-section
+      [variant]="selectedVariant"
+      [images]="allGalleryConfigs[0].images"
+    ></lib-gallery-section>
+  </div>
+</section>

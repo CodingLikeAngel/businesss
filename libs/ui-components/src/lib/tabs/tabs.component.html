@@ -1,0 +1,44 @@
+<div [ngClass]="tabsClasses()" role="tablist" aria-label="Navegación por pestañas">
+  <!-- Pestañas (siempre en escritorio, o en móvil con showAs='tabs') -->
+  <ul class="tabs-list" [ngClass]="{
+    'tabs-list--mobile': showAs() === 'tabs' && isMobile(),
+    'tabs-list--menu': showAs() === 'menu' && !isMobile()
+  }">
+    <li
+      *ngFor="let tab of tabs()"
+      class="tabs-item"
+      [class.tabs-item--active]="tab.sectionId === activeTabId"
+    >
+      <button
+        [attr.aria-selected]="tab.sectionId === activeTabId"
+        [attr.aria-controls]="tab.sectionId"
+        (click)="selectTab(tab.sectionId)"
+        class="tabs-button"
+      >
+        <span *ngIf="tab.icon" class="tabs-icon">{{ tab.icon }}</span>
+        {{ tab.label }}
+      </button>
+    </li>
+  </ul>
+
+  <!-- Menú móvil (solo en móvil con showAs='menu') -->
+  <div *ngIf="showAs() === 'menu' && isMobile()" class="tabs-mobile-menu">
+    <ul class="tabs-mobile-list">
+      <li
+        *ngFor="let tab of tabs()"
+        class="tabs-mobile-item"
+        [class.tabs-mobile-item--active]="tab.sectionId === activeTabId"
+      >
+        <button
+          [attr.aria-selected]="tab.sectionId === activeTabId"
+          [attr.aria-controls]="tab.sectionId"
+          (click)="selectTab(tab.sectionId)"
+          class="tabs-mobile-button"
+        >
+          <span *ngIf="tab.icon" class="tabs-icon">{{ tab.icon }}</span>
+          {{ tab.label }}
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>

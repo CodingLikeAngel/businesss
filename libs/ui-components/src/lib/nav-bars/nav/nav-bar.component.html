@@ -1,0 +1,95 @@
+<nav [ngClass]="navBarClasses" role="navigation" aria-label="Navegación principal" [style]="customStyles">
+  <!-- Contenedor de partículas -->
+  <div class="nav-particle-container">
+    <div class="nav-particle nav-particle-1"></div>
+    <div class="nav-particle nav-particle-2"></div>
+  </div>
+
+  <!-- Logo -->
+  <div class="nav-logo">
+    <a href="#" (click)="onLinkClick('#')" class="nav-logo-link">
+      {{ logoText }}
+    </a>
+  </div>
+
+  <!-- Dark Mode Toggle -->
+  <div class="nav-dark-mode-toggle">
+    <input
+      type="checkbox"
+      id="darkModeToggle"
+      [(ngModel)]="isDarkMode"
+      (ngModelChange)="onDarkModeChange()"
+      aria-label="Activar o desactivar modo oscuro"
+    />
+    <label for="darkModeToggle" class="dark-mode-label">
+      <span class="dark-mode-icon">{{ isDarkMode ? '🌙' : '☀️' }}</span>
+    </label>
+  </div>
+
+  <!-- Enlaces de navegación (escritorio) -->
+  <ul class="nav-links" *ngIf="!isMobile">
+    <li *ngFor="let link of navLinks" class="nav-item">
+      <a [href]="link.href" (click)="onLinkClick(link.href)" class="nav-link">
+        <span *ngIf="link.icon" class="nav-link-icon">{{ link.icon }}</span>
+        {{ link.label }}
+      </a>
+    </li>
+  </ul>
+
+  <!-- Botón de menú móvil -->
+  <button
+    *ngIf="isMobile || showMobileMenu"
+    [ngClass]="isMobile ? 'nav-mobile-toggle-forced' : 'nav-mobile-toggle'"
+    (click)="toggleMobileMenu()"
+    aria-label="Toggle mobile menu"
+  >
+    <svg class="nav-mobile-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        [attr.d]="isMobileMenuOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16m-7 6h7'"
+      ></path>
+    </svg>
+  </button>
+
+  <!-- Menú móvil (lateral) -->
+  <div *ngIf="isMobile || showMobileMenu" class="nav-mobile-menu" [class.open]="isMobileMenuOpen">
+    <ul class="nav-mobile-links">
+      <li *ngIf="!navLinks || navLinks.length === 0" class="nav-mobile-item">
+        No hay enlaces disponibles
+      </li>
+      <li *ngFor="let link of navLinks" class="nav-mobile-item">
+        <a [href]="link.href" (click)="onLinkClick(link.href)" class="nav-mobile-link">
+          <span *ngIf="link.icon" class="nav-link-icon">{{ link.icon }}</span>
+          {{ link.label }}
+        </a>
+      </li>
+      <!-- Dark Mode Toggle en menú móvil -->
+      <li class="nav-mobile-item nav-dark-mode-mobile">
+        <label for="darkModeToggleMobile" class="nav-mobile-link dark-mode-label">
+          <input
+            type="checkbox"
+            id="darkModeToggleMobile"
+            [(ngModel)]="isDarkMode"
+            (ngModelChange)="onDarkModeChange()"
+            aria-label="Activar o desactivar modo oscuro"
+          />
+          <span class="dark-mode-icon">{{ isDarkMode ? '🌙' : '☀️' }}</span>
+          Modo Oscuro
+        </label>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Overlay para cerrar el menú móvil -->
+  <div
+    *ngIf="(isMobile || showMobileMenu) && isMobileMenuOpen"
+    class="nav-mobile-overlay"
+    tabindex="0"
+    (click)="toggleMobileMenu()"
+    (keydown)="onOverlayKeydown($event)"
+    role="button"
+    aria-label="Cerrar menú móvil"
+  ></div>
+</nav>

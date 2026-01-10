@@ -1,0 +1,27 @@
+<!-- title.component.html -->
+<ng-container [ngSwitch]="level()">
+  <h1 *ngSwitchCase="'h1'" [ngClass]="titleClasses()" [style]="titleStyles()">
+    <span *ngIf="icon()" class="title-icon">{{ icon() }}</span>
+    {{ text() }}
+  </h1>
+  <h2 *ngSwitchCase="'h2'" [ngClass]="titleClasses()" [style]="titleStyles()">
+    <span *ngIf="icon()" class="title-icon">{{ icon() }}</span>
+    {{ text() }}
+  </h2>
+  <h3 *ngSwitchCase="'h3'" [ngClass]="titleClasses()" [style]="titleStyles()">
+    <span *ngIf="icon()" class="title-icon">{{ icon() }}</span>
+    {{ text() }}
+  </h3>
+  <h4 *ngSwitchCase="'h4'" [ngClass]="titleClasses()" [style]="titleStyles()">
+    <span *ngIf="icon()" class="title-icon">{{ icon() }}</span>
+    {{ text() }}
+  </h4>
+  <h5 *ngSwitchCase="'h5'" [ngClass]="titleClasses()" [style]="titleStyles()">
+    <span *ngIf="icon()" class="title-icon">{{ icon() }}</span>
+    {{ text() }}
+  </h5>
+  <h6 *ngSwitchCase="'h6'" [ngClass]="titleClasses()" [style]="titleStyles()">
+    <span *ngIf="icon()" class="title-icon">{{ icon() }}</span>
+    {{ text() }}
+  </h6>
+</ng-container>

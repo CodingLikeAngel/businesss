@@ -1,0 +1,66 @@
+
+@use "../variables" as var;
+
+
+
+.list-matrix {
+    background-color: #1e293b;
+    color: #16a34a;
+    border-color: #16a34a;
+    &.dark {
+      background-color: #16a34a;
+      color: #1e293b;
+    }
+  }
+  
+  .list-quantum {
+    background-color: #4f46e5;
+    color: #06b6d4;
+    border-color: #4f46e5;
+    &.dark {
+      background-color: #1e293b;
+      color: #4f46e5;
+    }
+  }
+  
+  .list-cybernetic {
+    background-color: #1E3A5F;
+    color: #FFD700;
+    border-color: #FFD700;
+    &.dark {
+      background-color: #1e293b;
+      color: #D4A017;
+      border-color: #D4A017;
+    }
+  }
+  
+  .list-danger {
+    background-color: #dc2626;
+    color: #ffffff;
+    border-color: #dc2626;
+    &.dark {
+      background-color: #1e293b;
+      color: #dc2626;
+    }
+  }
+  
+  .list-success {
+    background-color: #16a34a;
+    color: #ffffff;
+    border-color: #16a34a;
+    &.dark {
+      background-color: #1e293b;
+      color: #16a34a;
+    }
+  }
+  
+  .list-nano {
+    background-color: #14b8a6;
+    color: #ffffff;
+    border-color: #14b8a6;
+    &.dark {
+      background-color: #1e293b;
+      color: #14b8a6;
+    }
+  }
+  

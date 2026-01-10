@@ -1,0 +1,66 @@
+@use "sass:map";
+@use "./variables" as var;
+
+@use 'sass:color';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.card {
+  position: relative;
+  width: 320px;
+  height: 450px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: var(--card-bg, linear-gradient(to bottom, #287bff, #1e40af));
+  color: var(--card-color, #fff);
+  border: var(--card-border, none);
+  box-shadow: var(--card-shadow, 0 10px 15px rgba(0, 0, 0, 0.1));
+
+  &:hover {
+    transform: translateY(-5px);
+    background: var(--card-hover-bg, var(--card-bg));
+    box-shadow: var(--card-hover-shadow, 0 20px 25px rgba(0, 0, 0, 0.2));
+  }
+
+  .icon {
+    position: relative;
+    width: 140px;
+    height: 120px;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin: 0 auto;
+
+    .icon-svg {
+      color: #fff;
+      width: 6em;
+      height: 6em;
+      z-index: 1000;
+    }
+  }
+
+  .content {
+    position: absolute;
+    width: 100%;
+    padding: 30px;
+    padding-top: 150px;
+    text-align: center;
+
+    h2 {
+      font-size: 1.8em;
+      color: #fff;
+      margin-bottom: 15px;
+    }
+
+    p {
+      color: #fff;
+      line-height: 1.5em;
+    }
+  }
+}

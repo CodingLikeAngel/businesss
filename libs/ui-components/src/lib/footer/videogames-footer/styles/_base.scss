@@ -1,0 +1,166 @@
+@use "sass:map";
+@use "./variables" as var;
+@use "sass:color";
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+
+/* Estilo base del footer */
+.footer {
+    position: relative;
+    color: #ffffff;
+    padding: 2rem 1rem;
+    overflow: hidden;
+    font-family: 'Orbitron', sans-serif;
+    min-height: 450px;
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 40px rgba(255, 255, 255, 0.4); /* Más brillo futurista */
+    }
+  }
+  
+  /* Mapa de juego - Diseño compacto */
+  .game-map {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    display: grid;
+    grid-template-areas: "explore core trends social ticker";
+    grid-template-columns: 1fr 1.5fr 1fr 1fr 1fr;
+    grid-template-rows: auto;
+    gap: 1rem;
+    padding: 1.5rem;
+    align-items: start;
+  }
+  
+  @media (max-width: 768px) {
+    .game-map {
+      grid-template-areas:
+        "core"
+        "explore"
+        "trends"
+        "social"
+        "ticker";
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto auto auto;
+    }
+  }
+  
+  /* Estilos base para elementos */
+  .core-hub {
+    grid-area: core;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 10;
+    overflow: hidden;
+    max-width: 100%;
+    min-height: 180px;
+    position: relative;
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 25px rgba(255, 255, 255, 0.6);
+    }
+  }
+  
+  .node-cluster {
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 10;
+    overflow: hidden;
+    max-width: 100%;
+    min-height: 180px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+  }
+  
+  .node-cluster--explore { grid-area: explore; }
+  .node-cluster--trends { 
+    grid-area: trends; 
+    max-height: 220px;
+    overflow-y: auto;
+  }
+  
+  .social-hud {
+    grid-area: social;
+    padding: 1.5rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 20;
+    overflow: hidden;
+    max-width: 100%;
+    min-height: 160px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+  }
+  
+  .game-ticker {
+    grid-area: ticker;
+    padding: 0.8rem 0;
+    text-align: center;
+    z-index: 10;
+    overflow: hidden;
+    max-width: 100%;
+    min-height: 50px;
+    position: relative;
+  }
+  
+  /* Fondo dinámico */
+  .footer-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.25;
+    transition: opacity 0.5s ease;
+  }
+  
+  .footer:hover .footer-background {
+    opacity: 0.45;
+  }
+  
+  /* Partículas futuristas */
+  .game-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 5;
+  }
+  
+  .particle {
+    position: absolute;
+    font-size: 1.4rem;
+    animation: float 6s infinite ease-in-out;
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+    opacity: 0.85;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  .footer:hover .particle {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+  

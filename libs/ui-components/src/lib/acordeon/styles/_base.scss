@@ -1,0 +1,61 @@
+@use "sass:map";
+@use "./variables" as var;
+
+/* Estilos base para el contenedor del acordeón */
+.accordion-container {
+  font-family: "Orbitron", sans-serif;
+  width: 100%;
+  border: 1px solid var(--accordion-border-color, #d1d5db);
+  background: var(--accordion-bg, #ffffff);
+  color: var(--accordion-color, #000000);
+  transition: all 0.2s ease-in-out;
+
+  &.accordion-rounded-none { border-radius: 0; }
+  &.accordion-rounded-md { border-radius: 0.375rem; overflow: hidden; }
+  &.accordion-rounded-full { border-radius: 9999px; overflow: hidden; }
+
+  &.accordion-sm { font-size: 14px; }
+  &.accordion-md { font-size: 16px; }
+  &.accordion-lg { font-size: 18px; }
+}
+
+/* Estilos para cada ítem */
+.accordion-item {
+  &:not(:last-child) { 
+    border-bottom: 1px solid var(--accordion-item-border, rgba(0, 0, 0, 0.1)); 
+  }
+}
+
+/* Estilos para el encabezado */
+.accordion-header {
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.75rem;
+  font-weight: 500;
+  background-color: var(--accordion-header-bg, rgba(0, 0, 0, 0.05));
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover { 
+    background-color: var(--accordion-header-hover-bg, rgba(0, 0, 0, 0.1)); 
+  }
+
+  &.header-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
+  &.header-md { padding: 0.5rem 0.75rem; font-size: 0.75rem; ; }
+  &.header-lg { padding: 0.75rem 1rem; font-size: 1rem; }
+}
+
+/* Estilos para el contenido */
+.accordion-content {
+  padding: 0.5rem 0.75rem;
+  background-color: var(--accordion-content-bg, rgba(255, 255, 255, 0.9));
+  color: var(--accordion-content-color, inherit);
+  transition: max-height 0.3s ease-in-out;
+
+  &[hidden] { display: none; }
+
+  &.content-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
+  &.content-md { padding: 0.5rem 0.75rem; font-size: 0.875rem; }
+  &.content-lg { padding: 0.75rem 1rem; font-size: 1rem; }
+}

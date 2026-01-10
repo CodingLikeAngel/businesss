@@ -1,0 +1,21 @@
+<!--< ui-card-products.component.html> -->
+<div class="product-card">
+    <div class="image-container">
+      <img [src]="product.image" [alt]="product.name" class="product-image" loading="lazy" />
+      <div class="image-overlay"></div>
+    </div>
+    <h3 class="product-title">{{ product.name }}</h3>
+    <p class="product-description">{{ product.description }}</p>
+    <p class="product-price">{{ product.price }}</p>
+    <lib-ui-components-button
+      [variant]="variant"
+      size="sm"
+      rounded="full"
+      leadingIcon="heroStar"
+      type="submit"
+    >
+      AÑADIR MÓDULO
+    </lib-ui-components-button>
+  </div>
+  
+ 

@@ -1,0 +1,12 @@
+
+/* Animaciones */
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  
+  @keyframes glitch-shift {
+    0%, 100% { transform: skew(0deg); }
+    10% { transform: skew(1deg); }
+    20% { transform: skew(-1deg); }
+  }

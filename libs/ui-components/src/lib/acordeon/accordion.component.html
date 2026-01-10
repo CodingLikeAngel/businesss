@@ -1,0 +1,19 @@
+<div [class]="accordionClasses()" [style]="customStyles()" role="region" aria-label="Accordion">
+  <div *ngFor="let item of items(); let i = index" class="accordion-item">
+    <button
+      [class]="headerClasses()"
+      (click)="toggleItem(i)"
+      [attr.aria-expanded]="singleExpand() ? expandedIndex() === i : item.expanded"
+      [attr.aria-controls]="'accordion-content-' + i"
+    >
+      {{ item.title }}
+    </button>
+    <div
+      [class]="contentClasses()"
+      [id]="'accordion-content-' + i"
+      [hidden]="singleExpand() ? expandedIndex() !== i : !item.expanded"
+    >
+      {{ item.content }}
+    </div>
+  </div>
+</div>

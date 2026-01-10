@@ -1,0 +1,160 @@
+@use "sass:color";
+@use "../variables" as var;
+
+
+
+.chart-danger {
+  background-color: #dc2626; /* Rojo peligro */
+  color: #ffffff;
+  border-color: #dc2626;
+  &.dark {
+    background-color: #1e293b;
+    color: #dc2626;
+  }
+}
+
+.chart-success {
+  background-color: #16a34a; /* Verde éxito */
+  color: #ffffff;
+  border-color: #16a34a;
+  &.dark {
+    background-color: #1e293b;
+    color: #16a34a;
+  }
+}
+
+.chart-nano {
+  background-color: #14b8a6; /* Teal */
+  color: #ffffff;
+  border-color: #14b8a6;
+  &.dark {
+    background-color: #1e293b;
+    color: #14b8a6;
+  }
+}
+
+.chart-stellar {
+  background: linear-gradient(45deg, #1e293b, #06b6d4); /* Oscuro a cian */
+  color: #ffffff;
+  border: none;
+  &.dark {
+    background: linear-gradient(45deg, #1e293b, #00A2FF); /* Oscuro a Rayman azul */
+  }
+}
+
+.chart-phoenix {
+  background: linear-gradient(45deg, #f97316, #f43f5e); /* Naranja a rosa */
+  color: #ffffff;
+  border: none;
+  &.dark {
+    background: linear-gradient(45deg, #1e293b, #f97316);
+  }
+}
+
+.chart-galactic {
+  background: linear-gradient(135deg, #1e293b, #B362FF); /* Oscuro a Rayman púrpura */
+  color: #ffffff;
+  border: none;
+  &.dark {
+    background: linear-gradient(135deg, #1e293b, #1E3A5F); /* Oscuro a BioShock azul */
+  }
+}
+
+.chart-orbitron {
+  background-color: #00A2FF; /* Rayman azul */
+  color: #FFF5D6; /* Rayman claro */
+  border-color: #2D1B58; /* Rayman oscuro */
+  &.dark {
+    background-color: #2D1B58;
+    color: #00A2FF;
+  }
+}
+
+.chart-cartoon {
+  background-color: #FFD700; /* Rayman amarillo */
+  color: #2D1B58; /* Rayman oscuro */
+  border-color: #2D1B58;
+  &.dark {
+    background-color: #2D1B58;
+    color: #FFD700;
+  }
+}
+
+.chart-luma {
+  background: radial-gradient(circle, #FFD700, #FF7B00); /* Amarillo a naranja */
+  color: #2D1B58;
+  border: none;
+  &.dark {
+    background: radial-gradient(circle, #2D1B58, #B362FF); /* Oscuro a púrpura */
+    color: #FFF5D6;
+  }
+}
+
+.chart-platform {
+  background-color: #00D26A; /* Rayman verde */
+  color: #FFF5D6;
+  border-bottom: 2px solid #2D1B58;
+  &.dark {
+    background-color: #2D1B58;
+    color: #00D26A;
+  }
+}
+
+.chart-hero {
+  background-color: #E60012; /* Nintendo rojo */
+  color: #ffffff;
+  border-color: #111827;
+  &.dark {
+    background-color: #1e293b;
+    color: #E60012;
+  }
+}
+
+.chart-coin {
+  background: radial-gradient(circle, #FFD700, #FF7B00);
+  color: #2D1B58;
+  border: none;
+  &.dark {
+    background: radial-gradient(circle, #1e293b, #FFD700);
+    color: #ffffff;
+  }
+}
+
+.chart-cloud {
+  background-color: #FFF5D6; /* Rayman claro */
+  color: #2D1B58;
+  border-color: #d1d5db;
+  &.dark {
+    background-color: #1e293b;
+    color: #FFF5D6;
+  }
+}
+
+.chart-fire {
+  background: linear-gradient(to bottom, #FF7B00, #dc2626); /* Naranja a rojo */
+  color: #ffffff;
+  border: none;
+  &.dark {
+    background: linear-gradient(to bottom, #1e293b, #FF7B00);
+  }
+}
+
+.chart-water {
+  background-color: #00A2FF; /* Rayman azul */
+  color: #FFF5D6;
+  border-color: #00A2FF;
+  &.dark {
+    background-color: #1e293b;
+    color: #00A2FF;
+  }
+}
+
+.chart-leaf {
+  background-color: #00D26A; /* Rayman verde */
+  color: #ffffff;
+  border-color: #00D26A;
+  &.dark {
+    background-color: #1e293b;
+    color: #00D26A;
+  }
+}

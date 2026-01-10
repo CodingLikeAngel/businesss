@@ -1,0 +1,117 @@
+
+@use "../variables" as var;
+
+@use "sass:color";
+.header-matrix {
+    background: #111827;
+    color: #00ff9d;
+    box-shadow: 0 0 25px rgba(0, 255, 157, 0.6), inset 0 0 15px rgba(0, 255, 157, 0.3);
+    border-bottom: 3px solid #00ff9d;
+    .menu-toggle .hamburger-icon .bar { background: #00ff9d !important; }
+    &.dark {
+      background: color.adjust(#111827, $lightness: -20%);
+      border-bottom-color: color.adjust(#00ff9d, $lightness: -20%);
+      .menu-toggle .hamburger-icon .bar { background: #00ff9d !important; }
+    }
+
+  }
+
+  .header-quantum {
+    background: linear-gradient(45deg, #8b5cf6, #22d3ee 60%, #1e1b4b);
+    color: #ffffff;
+    border-bottom: 4px solid #ffffff;
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.7), inset 0 0 12px rgba(34, 211, 238, 0.4);
+    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    &.dark {
+      background: linear-gradient(45deg, color.adjust(#8b5cf6, $lightness: -20%), color.adjust(#22d3ee, $lightness: -20%), color.adjust(#1e1b4b, $lightness: -20%));
+      border-bottom-color: color.adjust(#ffffff, $lightness: -20%);
+      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    }
+  }
+
+  .header-cybernetic {
+    background: linear-gradient(135deg, #1e293b, #94a3b8 60%, #f97316);
+    color: #f97316;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(249, 115, 22, 0.6);
+    border-radius: 8px;
+    .menu-toggle .hamburger-icon .bar { background: #f97316 !important; }
+    &.dark {
+      background: linear-gradient(135deg, color.adjust(#1e293b, $lightness: -20%), color.adjust(#94a3b8, $lightness: -20%), color.adjust(#f97316, $lightness: -20%));
+      .menu-toggle .hamburger-icon .bar { background: #f97316 !important; }
+    }
+  }
+
+  .header-danger {
+    background: linear-gradient(135deg, #dc2626, #450a0a 60%, #f97316);
+    color: #ffffff;
+    border-bottom: 4px solid #f97316;
+    box-shadow: 0 0 25px rgba(220, 38, 38, 0.7), inset 0 0 15px rgba(249, 115, 22, 0.4);
+    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    &.dark {
+      background: linear-gradient(135deg, color.adjust(#dc2626, $lightness: -20%), color.adjust(#450a0a, $lightness: -20%), color.adjust(#f97316, $lightness: -20%));
+      border-bottom-color: color.adjust(#f97316, $lightness: -20%);
+      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    }
+  }
+
+  .header-success {
+    background: linear-gradient(135deg, #22c55e, #166534 60%, #ffffff);
+    color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.7), inset 0 0 10px rgba(34, 197, 94, 0.4);
+    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    &.dark {
+      background: linear-gradient(135deg, color.adjust(#22c55e, $lightness: -20%), color.adjust(#166534, $lightness: -20%), color.adjust(#ffffff, $lightness: -20%));
+      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    }
+  }
+
+  .header-nano {
+    background: radial-gradient(ellipse at center, #1e293b, #6b7280 60%, #ffffff);
+    color: #ffffff;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(107, 114, 128, 0.7);
+    border-radius: 12px;
+    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    &.dark {
+      background: radial-gradient(ellipse at center, color.adjust(#1e293b, $lightness: -20%), color.adjust(#6b7280, $lightness: -20%), color.adjust(#ffffff, $lightness: -20%));
+      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    }
+  }
+
+  .header-stellar {
+    background: radial-gradient(circle, #0d0221, #312e81 50%, #60a5fa);
+    color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 0 25px rgba(96, 165, 250, 0.7), inset 0 0 12px rgba(96, 165, 250, 0.4);
+    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    &.dark {
+      background: radial-gradient(circle, color.adjust(#0d0221, $lightness: -20%), color.adjust(#312e81, $lightness: -20%), color.adjust(#60a5fa, $lightness: -20%));
+      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    }
+  }
+
+  .header-phoenix {
+    background: linear-gradient(90deg, #f59e0b, #dc2626 50%, #000);
+    color: #ffffff;
+    border-top: 5px double #ffd700;
+    border-bottom: 5px double #ffd700;
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.8), inset 0 0 20px rgba(245, 158, 11, 0.5);
+    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    &.dark {
+      background: linear-gradient(90deg, color.adjust(#f59e0b, $lightness: -20%), color.adjust(#dc2626, $lightness: -20%), color.adjust(#000, $lightness: -20%));
+      border-color: color.adjust(#ffd700, $lightness: -20%);
+      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    }
+  }
+
+  .header-galactic {
+    background: radial-gradient(ellipse at center, #0d0221, #4c1d95 50%, #8b5cf6);
+    color: #ffffff;
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.8), inset 0 0 15px rgba(139, 92, 246, 0.4);
+    border-radius: 10px;
+    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    &.dark {
+      background: radial-gradient(ellipse at center, color.adjust(#0d0221, $lightness: -20%), color.adjust(#4c1d95, $lightness: -20%), color.adjust(#8b5cf6, $lightness: -20%));
+      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+    }
+  }

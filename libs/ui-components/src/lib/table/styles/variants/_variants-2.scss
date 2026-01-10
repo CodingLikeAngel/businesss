@@ -1,0 +1,116 @@
+
+@use "../variables" as var;
+
+
+
+.table-retro {
+    background-color: #E60012;
+    color: #ffffff;
+    border-color: #111827;
+    border-radius: 0.5rem;
+    &.dark {
+      background-color: #1f2937;
+      color: #E60012;
+    }
+    .table-header {
+      background-color: rgba(230, 0, 18, 0.4);
+    }
+  }
+  
+  .table-pulse-gradient {
+    background: linear-gradient(45deg, #14b8a6, #4f46e5);
+    color: #ffffff;
+    border: none;
+    animation: pulse 1.5s infinite;
+    &.dark {
+      background: linear-gradient(45deg, #1e293b, #14b8a6);
+    }
+    .table-header {
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+  }
+  
+  .table-holo {
+    background: linear-gradient(90deg, #06b6d4, #00A2FF);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 0 10px rgba(6, 182, 212, 0.5);
+    &.dark {
+      background: linear-gradient(90deg, #1e293b, #B362FF);
+    }
+    .table-header {
+      background-color: rgba(0, 0, 0, 0.4);
+      animation: dream-pulse 2s infinite;
+    }
+  }
+  
+  .table-matrix {
+    background-color: #1e293b;
+    color: #16a34a;
+    border-color: #16a34a;
+    background-image: url('data:image/svg+xml,%3Csvg width="8" height="8" xmlns="http://www.w3.org/2000/svg"%3E%3Crect width="2" height="2" fill="rgba(22,163,74,0.3)" /%3E%3C/svg%3E');
+    &.dark {
+      background-color: #16a34a;
+      color: #1e293b;
+    }
+    .table-header {
+      background-color: rgba(22, 163, 74, 0.4);
+    }
+  }
+  
+  .table-quantum {
+    background-color: #4f46e5;
+    color: #FFF5D6;
+    border-color: #4f46e5;
+    animation: dream-pulse 2s infinite;
+    &.dark {
+      background-color: #1e293b;
+      color: #4f46e5;
+    }
+    .table-header {
+      background-color: rgba(79, 70, 229, 0.4);
+    }
+  }
+  
+  .table-cybernetic {
+    background-color: #1E3A5F;
+    color: #FFD700;
+    border-color: #FFD700;
+    &.dark {
+      background-color: #1e293b;
+      color: #D4A017;
+      border-color: #D4A017;
+    }
+    .table-header {
+      background-color: rgba(30, 58, 95, 0.4);
+    }
+  }
+  
+  .table-danger {
+    background-color: #dc2626;
+    color: #ffffff;
+    border-color: #dc2626;
+    box-shadow: 0 0 8px rgba(220, 38, 38, 0.5);
+    &.dark {
+      background-color: #1e293b;
+      color: #dc2626;
+    }
+    .table-header {
+      background-color: rgba(220, 38, 38, 0.4);
+    }
+  }
+  
+  .table-success {
+    background-color: #16a34a;
+    color: #ffffff;
+    border-color: #16a34a;
+    &.dark {
+      background-color: #1e293b;
+      color: #16a34a;
+    }
+    .table-header {
+      background-color: rgba(22, 163, 74, 0.4);
+      animation: bounce 2s infinite;
+    }
+  }
+  

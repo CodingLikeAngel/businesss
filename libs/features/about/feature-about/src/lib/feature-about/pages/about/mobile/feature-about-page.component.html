@@ -1,0 +1,254 @@
+<!-- Header -->
+<div>
+  <lib-ui-components-header
+  [title]="headerConfig.title"
+  [subtitle]="headerConfig.subtitle"
+  [variant]="headerConfig.variant"
+  [align]="headerConfig.align"
+  [dark]="headerConfig.dark"
+  [navItems]="headerConfig.navItems"
+></lib-ui-components-header>
+</div>
+<!-- Tabs -->
+<div class="sticky top-0 z-10 bg-black/50 backdrop-blur-md">
+  <lib-ui-components-tabs
+    [tabs]="tabsConfig"
+    [variant]="'pixel-adventure'"
+    [showAs]="isMobile ? 'tabs' : 'tabs'"
+    [isMobile]="isMobile"
+    (tabSelected)="onTabSelected($event)"
+  ></lib-ui-components-tabs>
+</div>
+
+<!-- Hero Section -->
+<section id="about-hero" class="about-hero bg-gradient-to-br from-cyan-600 to-green-500 text-white py-16">
+  <div class="container mx-auto px-4 text-center">
+    <h1 class="text-4xl font-extrabold mb-4 animate-in fade-in slide-in-from-bottom-10 duration-700">Sobre Nosotros</h1>
+    <p class="text-lg mb-6 max-w-xl mx-auto leading-relaxed drop-shadow-md">
+      Somos una startup apasionada por crear soluciones tecnológicas que transforman vidas y negocios.
+    </p>
+    <lib-ui-components-button
+      variant="primary"
+      size="md"
+      rounded="md"
+      [leadingIcon]="'heroArrowRight'"
+      class="hover:scale-105 transition-transform duration-300"
+      (buttonClick)="handleContactClick($event)"
+    >
+      Únete a la revolución
+    </lib-ui-components-button>
+  </div>
+</section>
+
+<!-- Bubble Animation Background -->
+<lib-bubble-animation [variant]="'success'"></lib-bubble-animation>
+
+<!-- Mission Section -->
+<section id="mission" class="mission py-16 bg-black/10 backdrop-blur-md">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12 text-white drop-shadow-md">Nuestra Misión</h2>
+    <div class="space-y-8">
+      @for (card of missionCards; track card.title) {
+        <lib-ui-components-card-animated
+          [icon]="card.icon"
+          [title]="card.title"
+          [description]="card.description"
+          [variant]="card.variant"
+          [animation]="card.animation"
+          [backgroundColor]="card.backgroundColor"
+          [borderColor]="card.borderColor"
+          class="bg-black/20 backdrop-blur-md text-white rounded-lg hover:shadow-xl hover:scale-102 transition-all duration-300 ease-in-out"
+          (viewDetails)="onViewDetails($event)"
+        ></lib-ui-components-card-animated>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Vision Section -->
+<section id="vision" class="vision py-16 bg-transparent">
+  <div class="container mx-auto px-14">
+    <h2 class="text-3xl font-bold text-center mb-12 text-white drop-shadow-md">Nuestra Visión</h2>
+    <div class="space-y-8">
+      <lib-ui-components-card-premium
+        [config]="premiumCardConfig1"
+        variant="glowing"
+        [customStyles]="{'--card-shadow': '0 8px 32px rgba(34, 211, 238, 0.3)', '--card-border': '2px solid #22d3ee'}"
+        class="bg-black/20 backdrop-blur-md text-white rounded-lg hover:scale-102 transition-all duration-300 ease-in-out"
+      ></lib-ui-components-card-premium>
+      <lib-ui-components-card-premium
+      [config]="premiumCardConfig2"
+      variant="glowing"
+      [customStyles]="{'--card-shadow': '0 8px 32px rgba(34, 211, 238, 0.3)', '--card-border': '2px solid #22d3ee'}"
+      class="bg-black/20 backdrop-blur-md text-white rounded-lg hover:scale-102 transition-all duration-300 ease-in-out"
+    ></lib-ui-components-card-premium>
+    <lib-ui-components-card-premium
+    [config]="premiumCardConfig3"
+    variant="glowing"
+    [customStyles]="{'--card-shadow': '0 8px 32px rgba(34, 211, 238, 0.3)', '--card-border': '2px solid #22d3ee'}"
+    class="bg-black/20 backdrop-blur-md text-white rounded-lg hover:scale-102 transition-all duration-300 ease-in-out"
+  ></lib-ui-components-card-premium>
+    </div>
+  </div>
+</section>
+
+<!-- Team Section -->
+<section id="team" class="team py-16 bg-black/10 backdrop-blur-md">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12 text-white drop-shadow-md">Nuestro Equipo</h2>
+    <div class="space-y-8">
+      @for (card of teamCardsMobile; track card.title) {
+        <lib-ui-components-card
+          [title]="card.title"
+          [description]="card.description"
+          [image]="card.image"
+          [variant]="card.variant"
+          [animation]="card.animation"
+          class="bg-black/20 backdrop-blur-md text-white rounded-lg hover:shadow-xl hover:scale-102 transition-all duration-300 ease-in-out"
+        ></lib-ui-components-card>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Values Section -->
+<section id="values" class="values py-16 bg-transparent text-center">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold mb-12 text-white drop-shadow-md">Nuestros Valores</h2>
+    <div class="flex flex-wrap justify-center gap-3">
+      @for (chip of valuesChips; track chip) {
+        <lib-ui-components-chip
+          [variant]="'magic-spark'"
+          [size]="'sm'"
+          [rounded]="'full'"
+          class="bg-cyan-500/20 text-cyan-100 hover:bg-cyan-500/40 transition-all duration-300 ease-in-out px-3 py-1 rounded-full"
+        >
+          {{ chip }}
+        </lib-ui-components-chip>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- Sales Dossier Section -->
+<section id="sales-dossier" class="sales-dossier py-16 bg-black/10 backdrop-blur-md">
+  <div class="container mx-auto px-4">
+    <h2 class="text-3xl font-bold text-center mb-12 text-white drop-shadow-md">Webs Profesionales para Negocios Serios</h2>
+
+    <!-- Why Not WordPress/Wix -->
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold mb-4 text-cyan-100">¿Por qué NO usar WordPress, Wix, GoDaddy…?</h3>
+      <p class="text-base text-gray-200 mb-4 max-w-xl mx-auto leading-relaxed">
+        Estas plataformas venden plantillas recicladas, son lentas, inseguras y difíciles de mantener. A los pocos meses, te piden renovaciones, extras o plugins que no funcionan. Sin soporte, se rompen; con soporte, no resuelven. ¿Quieres una web que parezca una copia barata?
+      </p>
+    </div>
+
+    <!-- Our Solution -->
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold mb-4 text-cyan-100">Nuestra Solución: Webs a Medida</h3>
+      <ul class="space-y-3 text-gray-200 max-w-xl mx-auto">
+        <li class="flex items-start">
+          <span class="text-cyan-400 mr-2">💎</span> Desarrollo real, sin plantillas prefabricadas.
+        </li>
+        <li class="flex items-start">
+          <span class="text-cyan-400 mr-2">⚡</span> Códigos limpios, rápidos y optimizados.
+        </li>
+        <li class="flex items-start">
+          <span class="text-cyan-400 mr-2">📈</span> Escalables: reservas, tiendas, estadísticas...
+        </li>
+        <li class="flex items-start">
+          <span class="text-cyan-400 mr-2">🎨</span> Diseño moderno y profesional adaptado a tu sector.
+        </li>
+        <li class="flex items-start">
+          <span class="text-cyan-400 mr-2">🔍</span> SEO técnico desde el principio.
+        </li>
+        <li class="flex items-start">
+          <span class="text-cyan-400 mr-2">💰</span> Ahorro a largo plazo, sin plugins basura.
+        </li>
+      </ul>
+    </div>
+
+    <!-- What's Included -->
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold mb-4 text-cyan-100">¿Qué Incluye la Web?</h3>
+      <ul class="list-disc list-inside text-gray-200 max-w-xl mx-auto space-y-2">
+        <li>Diseño personalizado (no plantilla)</li>
+        <li>Página de inicio, quiénes somos, contacto, mapa, redes sociales, galería, servicios</li>
+        <li>Optimización SEO básica</li>
+        <li>Botón de WhatsApp directo</li>
+        <li>Web responsive para móviles</li>
+        <li>Hosting y dominio incluidos el primer año</li>
+        <li>Panel de administración simple (si se necesita)</li>
+      </ul>
+      <p class="text-base font-semibold text-cyan-100 mt-4">Precio base: desde 600€</p>
+    </div>
+
+    <!-- Modules Table -->
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold mb-4 text-cyan-100">Módulos Disponibles</h3>
+      <lib-ui-components-table
+        [columns]="moduleColumns"
+        [rows]="moduleRows"
+        [variant]="'success'"
+        size="sm"
+        rounded="md"
+        class="bg-black/20 backdrop-blur-md text-white rounded-lg"
+      ></lib-ui-components-table>
+      @if (!moduleRows.length) {
+        <p class="text-center text-gray-400 py-4">No hay módulos disponibles.</p>
+      }
+    </div>
+
+    <!-- Testimonials -->
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold mb-4 text-cyan-100">Opiniones de Clientes</h3>
+      <div class="space-y-8">
+        @for (testimonial of testimonials; track testimonial.quote) {
+          <lib-ui-components-card
+            [title]="testimonial.author"
+            [description]="testimonial.quote"
+            class="bg-black/20 backdrop-blur-md text-white rounded-lg hover:shadow-lg hover:scale-102 transition-all duration-300 ease-in-out"
+          ></lib-ui-components-card>
+        }
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center">
+      <h3 class="text-xl font-semibold mb-4 text-cyan-100">¿Y Ahora Qué?</h3>
+      <p class="text-base text-gray-200 mb-6 max-w-xl mx-auto leading-relaxed">
+        Llámame o escríbeme por WhatsApp y te enseño una demo personalizada para tu negocio. Sin compromiso.
+      </p>
+      <lib-ui-components-button
+        variant="primary"
+        size="md"
+        rounded="md"
+        [leadingIcon]="'heroPhone'"
+        class="hover:scale-105 transition-transform duration-300"
+        (buttonClick)="handleContactClick($event)"
+      >
+        Contáctame
+      </lib-ui-components-button>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section id="cta" class="cta py-16 bg-gradient-to-br from-cyan-600 to-green-500 text-white">
+  <div class="container mx-auto px-4 text-center">
+    <h2 class="text-3xl font-bold mb-4 animate-in fade-in slide-in-from-bottom-10 duration-700">¿Listo para transformar tu futuro?</h2>
+    <p class="text-lg mb-6 max-w-xl mx-auto leading-relaxed drop-shadow-md">
+      Contáctanos hoy y descubre cómo podemos ayudarte.
+    </p>
+    <lib-ui-components-button
+      variant="primary"
+      size="md"
+      rounded="md"
+      [leadingIcon]="'heroRocketLaunch'"
+      class="hover:scale-105 transition-transform duration-300"
+      (buttonClick)="handleContactClick($event)"
+    >
+      Contáctanos
+    </lib-ui-components-button>
+  </div>
+</section>

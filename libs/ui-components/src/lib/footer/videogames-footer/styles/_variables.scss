@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+
+
+
+/* Theme Variables */
+$rayman-blue: #00A2FF;
+$rayman-yellow: #FFD700;
+$rayman-red: #FF3E41;
+$rayman-green: #4CAF50;
+$rayman-purple: #B362FF;
+$rayman-pink: #FF6B9D;
+$rayman-orange: #FF7B00;
+$rayman-dark: #1A1A2E;
+$rayman-light: #F8F8F8;
+$rayman-cyan: #00F0FF;
+$rayman-indigo: #B362FF;
+// Tipografías
+$font-family-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+// Colores base
+$color-primary: #3B82F6;            // Used in input-primary, blue-skew, etc.
+$color-primary-light: #93C5FD;      // Used in input-primary.dark, pulse-gradient
+$color-primary-dark: #1E3A8A;       // Used in input-primary, blue-skew
+$color-secondary: #64748B;          // Used in input-secondary
+$color-secondary-dark: #475569;     // Used in input-secondary.dark
+$color-accent: #EC4899;             // Used in input-ghost, gradient
+$color-pink: #F472B6;               // Used in input-ghost.dark, electoon
+$color-dark-bg: #1E293B;            // Used in input base, checkboxes
+$color-neon-cyan: #06B6D4;          // Used in input-neon (alias for rayman-blue)
+$color-teal: #14B8A6;               // Used in input-retro, kingfisher
+$color-indigo: #4F46E5;             // Used in input-cybernetic, indigo-dots
+$color-purple: #8B5CF6;             // Used in input-quantum, purple-edge
+$color-purple-light: #A78BFA;       // Used in input-quantum.dark, galactic
+$color-green: #22C55E;              // Used in input-jungle, matrix
+$color-yellow: #EAB308;             // Used in input-luma
+$color-amber: #F59E0B;              // Used in input-cartoon, bubble
+$color-orange: #F97316;             // Used in input-jungle, phoenix
+$color-rose: #F43F5E;               // Used in input-rose-radial
+$color-success: #16A34A;            // Used in input-secondary, success
+$color-danger: #DC2626;             // Used in input-danger
+$color-gray-300: #D1D5DB;           // Used in input-outline, minimal-white
+$color-gray-500: #6B7280;           // Used in input-outline.dark, galactic
+$color-gray-800: #1F2937;           // Used in input-neon.dark, glitch
+$color-gray-900: #111827;           // Used in input base.dark, matrix
+$color-white: #FFFFFF;              // Used in input-glass, checkmarks
+
+// Colores personalizados
+$color-rayman-yellow: #FACC15;      // Used in input-cyberpunk, jungle
+$color-rayman-red: #FF3E41;         // Used in input-joycon
+$color-rayman-blue: #06B6D4;        // Used in input-cyberpunk, stellar
+$color-rayman-green: #00D26A;       // Used in input-jungle
+$color-rayman-purple: #B362FF;      // Used in input-electoon
+$color-rayman-orange: #FF7B00;      // Used in input-luma
+$color-rayman-pink: #FF6B9D;        // Used in input-electoon
+$color-rayman-dark: #2D1B58;        // Used in input-cyberpunk
+$color-rayman-light: #FFF5D6;       // Used in input-portal.dark
+
+// Colores adicionales extraídos de valores literales
+$color-teal-dark: #0F766E;          // Used in input-retro.dark, hex-teal
+$color-danger-dark: #B91C1C;        // Used in input-danger
+$color-success-dark: #15803D;       // Used in input-success, leaf
+$color-amber-dark: #D97706;         // Used in input-amber-glow, coin
+$color-orange-dark: #EA580C;        // Used in input-orange-dash, phoenix
+$color-purple-dark: #6D28D9;        // Used in input-purple-edge, holo
+$color-rose-dark: #BE123C;          // Used in input-rose-radial, gradient
+$color-indigo-dark: #4338CA;        // Used in input-cybernetic, indigo-dots
+$color-green-dark: #14532D;         // Used in input-leaf, green-inset
+$color-red-dark: #991B1B;           // Used in input-joycon, hero
+$color-green-light: #4ADE80;        // Used in input-jungle.dark, nano
+$color-blue-light: #60A5FA;         // Used in input-water
+$color-blue-dark: #1E40AF;          // Used in input-water, blue-skew
+$color-red-light: #F87171;          // Used in input-danger.dark, cartoon
+$color-teal-light: #2DD4BF;         // Used in input-hex-teal.dark
+$color-indigo-light: #818CF8;       // Used in input-cybernetic, indigo-dots
+$color-emerald: #10B981;            // Used in input-nano
+$color-amber-light: #FBBF24;        // Used in input-bubble
+$color-red: #EF4444;                // Used in input-phoenix, fire
+/* Color Map for Forest Animation */
+$colors: (
+  'from': #2A0944,
+  'to': #0D0211,
+  'mist': rgba(255, 255, 255, 0.2),
+  'bg': #1A1A2E
+);

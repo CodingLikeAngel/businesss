@@ -1,0 +1,13 @@
+import { Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'lib-testimonials-card',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './testimonials-card.component.html',
+  styleUrls: ['./testimonials-card.component.scss']
+})
+export class UiTestimonialsCardComponent {
+  @Input() testimonial: { quote: string; author: string } = { quote: '', author: '' };
+}

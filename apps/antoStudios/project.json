@@ -1,0 +1,95 @@
+{
+  "name": "antoStudios",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/antoStudios/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/antoStudios",
+        "index": "apps/antoStudios/src/index.html",
+        "browser": "apps/antoStudios/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/antoStudios/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          {
+            "glob": "**/*",
+            "input": "apps/antoStudios/public"
+          }
+        ],
+        "styles": ["apps/antoStudios/src/styles.scss"],
+        "scripts": [],
+        "server": "apps/antoStudios/src/main.server.ts",
+        "ssr": {
+          "entry": "apps/antoStudios/src/server.ts"
+        },
+        "outputMode": "server"
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "1mb",
+              "maximumError": "2mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "154kb",
+              "maximumError": "158kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "antoStudios:build:production"
+        },
+        "development": {
+          "buildTarget": "antoStudios:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "antoStudios:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/antoStudios/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "antoStudios:build",
+        "port": 4200,
+        "staticFilePath": "dist/apps/antoStudios/browser",
+        "spa": true
+      }
+    }
+  }
+}

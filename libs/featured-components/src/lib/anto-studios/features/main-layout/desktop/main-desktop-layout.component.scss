@@ -1,0 +1,128 @@
+/* Reutiliza los estilos de app.component.scss si son específicos para la división de pantalla */
+.min-h-screen {
+    min-height: 100vh;
+  }
+  
+/* Estilos para el aside con scrollbar */
+aside.overflow-y-auto {
+  /* WebKit-based browsers (Chrome, Safari, Edge) */
+  &::-webkit-scrollbar {
+    width: 8px; /* Ancho del scrollbar */
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #2d3748; /* Color del fondo del track, acorde con bg-gray-800 */
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #f6e05e; /* Color del thumb, usando text-rayman-yellow */
+    border-radius: 4px;
+    transition: background 0.2s;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #f4d03f; /* Color más claro al hover */
+  }
+
+  /* Firefox */
+  scrollbar-width: thin; /* Hace el scrollbar más delgado */
+  scrollbar-color: #f6e05e #2d3748; /* thumb y track */
+}
+
+/* Opcional: Estilos globales para otros scrollbars */
+* {
+  /* WebKit */
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #2d3748;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #f6e05e;
+    border-radius: 4px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background: #f4d03f;
+  }
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: #f6e05e #2d3748;
+}
+
+
+
+aside {
+  width: 100%;
+  max-width: 900px;
+  min-width: 300px;
+  background: #1f2937;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: scroll;
+  padding: 1.5rem;
+  border-right: 1px solid #4b5563;
+}
+
+aside::-webkit-scrollbar {
+  width: 8px;
+}
+
+aside::-webkit-scrollbar-track {
+  background: #2d3748;
+  border-radius: 4px;
+}
+
+aside::-webkit-scrollbar-thumb {
+  background: #f6e05e;
+  border-radius: 4px;
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+  background: #f4d03f;
+}
+
+aside {
+  scrollbar-width: thin;
+  scrollbar-color: #f6e05e #2d3748;
+}
+
+main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+section {
+  width: 100%;
+  overflow-x: hidden;
+}
+
+lib-ui-components-header,
+lib-ui-components-nav-bar,
+lib-ui-components-footer {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+@media (max-width: 1024px) {
+  aside {
+    max-width: 400px;
+  }
+}
+
+@media (max-width: 768px) {
+  aside {
+    max-width: 250px;
+  }
+}

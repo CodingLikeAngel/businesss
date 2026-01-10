@@ -1,0 +1,265 @@
+@use 'sass:map';
+
+$variants: (
+  'river-shallow': (from: #FFD54F, to: #00E676, surface: rgba(255, 215, 79, 0.9)),
+  'river-deep': (from: #D81B60, to: #4A148C, surface: rgba(216, 27, 96, 0.9)),
+  'river-forest': (from: #FFCA28, to: #2ECC71, surface: rgba(255, 202, 40, 0.9)),
+  'river-calm': (from: #18FFFF, to: #00BCD4, surface: rgba(24, 255, 255, 0.9)),
+  'river-rapid': (from: #FF9800, to: #2196F3, surface: rgba(255, 152, 0, 0.9)),
+  'river-murky': (from: #5D4037, to: #3E2723, surface: rgba(93, 64, 55, 0.9)),
+  'river-clear': (from: #B3E5FC, to: #81C784, surface: rgba(179, 229, 252, 0.9)),
+  'river-polluted': (from: #616161, to: #263238, surface: rgba(97, 97, 97, 0.9)),
+  'river-artificial': (from: #E0E0E0, to: #757575, surface: rgba(224, 224, 224, 0.9)),
+  'river-estuary': (from: #64B5F6, to: #26A69A, surface: rgba(100, 181, 246, 0.9))
+);
+
+.water-container {
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+
+  @each $name, $colors in $variants {
+    &.#{$name} {
+      background: linear-gradient(180deg, map.get($colors, 'from'), map.get($colors, 'to'));
+    }
+  }
+
+  .water-background {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 70%, rgba(255, 255, 255, 0.3), transparent 70%);
+    filter: blur(20px);
+    animation: waterDepth 15s ease-in-out infinite;
+    z-index: 0;
+  }
+
+  .water-surface {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60%;
+    z-index: 1;
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.5), rgba(0, 188, 212, 0.7));
+    filter: blur(12px);
+    animation: riverFlow 10s ease-in-out infinite, glowPulse 4s ease-in-out infinite;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+  }
+
+  .animation-layer {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 5;
+    pointer-events: none;
+    background: rgba(255, 0, 0, 0.1); // Fondo rojo tenue para depuración
+  }
+
+  .mist-layer {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.2), transparent 80%);
+    opacity: 0.5;
+    z-index: 3;
+    animation: mistFlow 20s ease-in-out infinite;
+    filter: blur(15px);
+  }
+
+  .river-character {
+    &.trout {
+      width: 90px;
+      height: 40px;
+      background: radial-gradient(circle, #4682B4 30%, #87CEEB 80%);
+      border-radius: 50% 20% / 20% 50%;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      animation: fishSwim 5s ease-in-out infinite, fishWiggle 0.6s ease-in-out infinite;
+    }
+
+    &.small-fish {
+      width: 40px;
+      height: 20px;
+      background: radial-gradient(circle, #FF5722 30%, #FF9800 80%);
+      border-radius: 50% 20% / 20% 50%;
+      animation: fishSwim 3s ease-in-out infinite;
+    }
+
+    &.rock {
+      width: 60px;
+      height: 60px;
+      background: radial-gradient(circle, #8D6E63 40%, #5D4037 80%);
+      border-radius: 40%;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+      animation: subtleRock 8s ease-in-out infinite;
+    }
+
+    &.reed {
+      width: 12px;
+      height: 100px;
+      background: linear-gradient(to top, #4CAF50, #81C784);
+      border-radius: 5px 5px 0 0;
+      animation: reedSway 4s ease-in-out infinite;
+    }
+
+    &.lums {
+      width: 25px;
+      height: 25px;
+      background: radial-gradient(circle, #FFEB3B 30%, transparent 70%);
+      box-shadow: 0 0 20px #FFEB3B, 0 0 40px rgba(255, 235, 59, 0.8);
+      border-radius: 50%;
+      animation: lumsFloat 3s ease-in-out infinite, lumsGlow 1.2s ease-in-out infinite;
+    }
+
+    &.leaf {
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, #81C784 40%, #4CAF50 80%);
+      border-radius: 50% 20%;
+      animation: leafDrift 7s ease-in-out infinite;
+    }
+
+    &.insect {
+      width: 15px;
+      height: 15px;
+      background: radial-gradient(circle, #000 50%, transparent 80%);
+      animation: insectBuzz 2s ease-in-out infinite;
+    }
+
+    &.bubble {
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 20%, rgba(0, 191, 255, 0.6) 80%);
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    }
+  }
+
+  .particle {
+    &.bubble {
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.9) 20%, rgba(0, 191, 255, 0.6) 80%);
+      border-radius: 50%;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.7);
+    }
+
+    &.leaf {
+      width: 20px;
+      height: 20px;
+      background: radial-gradient(circle, #81C784 40%, #4CAF50 80%);
+      border-radius: 50% 20%;
+    }
+
+    &.lum-particle {
+      width: 15px;
+      height: 15px;
+      background: radial-gradient(circle, #FFEB3B 30%, transparent 70%);
+      box-shadow: 0 0 20px #FFEB3B;
+      border-radius: 50%;
+    }
+  }
+
+  .sparkle {
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, #FFFFFF 20%, transparent 80%);
+    box-shadow: 0 0 15px #FFFFFF;
+    border-radius: 50%;
+    animation: sparkleFade 1.5s ease-out forwards;
+  }
+}
+
+@keyframes waterDepth {
+  0% { transform: scale(1.05) translateY(0); opacity: 0.8; }
+  50% { transform: scale(1.1) translateY(-10px); opacity: 1; }
+  100% { transform: scale(1.05) translateY(0); opacity: 0.8; }
+}
+
+@keyframes riverFlow {
+  0% { transform: translateX(-10%) scale(1.05); opacity: 0.8; }
+  50% { transform: translateX(10%) scale(1.1); opacity: 1; }
+  100% { transform: translateX(-10%) scale(1.05); opacity: 0.8; }
+}
+
+@keyframes glowPulse {
+  0% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
+  50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.9); }
+  100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.5); }
+}
+
+@keyframes mistFlow {
+  0% { transform: translateX(-30%) scale(1.1); opacity: 0.4; }
+  50% { transform: translateX(30%) scale(1.15); opacity: 0.6; }
+  100% { transform: translateX(-30%) scale(1.1); opacity: 0.4; }
+}
+
+@keyframes fishSwim {
+  0% { transform: translateX(-30%) translateY(0); }
+  50% { transform: translateX(30%) translateY(-15px); }
+  100% { transform: translateX(-30%) translateY(0); }
+}
+
+@keyframes fishWiggle {
+  0% { transform: rotate(0deg); }
+  25% { transform: rotate(10deg); }
+  75% { transform: rotate(-10deg); }
+  100% { transform: rotate(0deg); }
+}
+
+@keyframes subtleRock {
+  0% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(3deg); }
+  100% { transform: translateY(0) rotate(0deg); }
+}
+
+@keyframes reedSway {
+  0% { transform: skewX(0deg); }
+  50% { transform: skewX(8deg); }
+  100% { transform: skewX(0deg); }
+}
+
+@keyframes lumsFloat {
+  0% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.2); }
+  100% { transform: translateY(0) scale(1); }
+}
+
+@keyframes lumsGlow {
+  0% { box-shadow: 0 0 15px #FFEB3B; }
+  50% { box-shadow: 0 0 30px #FFEB3B; }
+  100% { box-shadow: 0 0 15px #FFEB3B; }
+}
+
+@keyframes leafDrift {
+  0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 1; }
+  50% { transform: translateY(-50vh) translateX(var(--sway-amount)) rotate(60deg); opacity: 0.8; }
+  100% { transform: translateY(-100vh) translateX(calc(var(--sway-amount) * 1.5)) rotate(120deg); opacity: 0; }
+}
+
+@keyframes insectBuzz {
+  0% { transform: translate(0, 0) rotate(0deg); }
+  25% { transform: translate(8px, -8px) rotate(15deg); }
+  50% { transform: translate(0, 0) rotate(0deg); }
+  75% { transform: translate(-8px, 8px) rotate(-15deg); }
+  100% { transform: translate(0, 0) rotate(0deg); }
+}
+
+@keyframes bubbleRise {
+  0% { transform: translateY(0) translateX(0); opacity: 1; }
+  100% { transform: translateY(-90vh) translateX(var(--sway-amount)) scale(1.3); opacity: 0; }
+}
+
+@keyframes bubbleWobble {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes sparkleFade {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}

@@ -1,0 +1,367 @@
+<div class="z-30">
+  <router-outlet></router-outlet>
+</div>
+
+
+<lib-bubble-animation [variant]="selectedVariant"></lib-bubble-animation>
+
+<div class="min-h-screen bg-gradient-to-br from-gray-900 to-indigo-900 text-white">
+  <!-- Hero Section -->
+  <header class="relative py-16 px-4 sm:px-6 lg:px-8 text-center">
+    <div class="max-w-4xl mx-auto">
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight animate-fade-in-up">
+        Webs Profesionales para <span class="text-rayman-yellow">Negocios Serios</span>
+      </h1>
+      <p class="mt-6 text-lg sm:text-xl lg:text-2xl opacity-90 animate-fade-in-up animation-delay-200">
+        Olvídate de WordPress, Wix y plantillas cutres. Construyo tu web a medida, rápida, segura y optimizada para Google.
+      </p>
+      <div class="mt-8 flex justify-center gap-4 animate-fade-in-up animation-delay-400">
+        <a
+          href="https://wa.me/+34612345678"
+          target="_blank"
+          (click)="openWhatsApp()"
+          class="bg-rayman-yellow text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-yellow-400 transition-colors"
+        >
+          📞 Contacta por WhatsApp
+        </a>
+        <a
+          routerLink="/home"
+          (click)="navigateToHome()"
+          class="bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-gray-600 transition-colors"
+        >
+          Ver Producto
+        </a>
+      </div>
+    </div>
+    <div class="absolute inset-0 overflow-hidden opacity-20">
+      <div class="bubble-animation"></div>
+    </div>
+  </header>
+
+  <!-- Problems Section -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-800">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-center text-rayman-yellow">
+        🔥 ¿Por qué NO usar WordPress, Wix, GoDaddy…?
+      </h2>
+      <ul class="space-y-4 text-lg">
+        <li class="flex items-start">
+          <span class="text-rayman-yellow mr-2">•</span>
+          <span>Plantillas recicladas y cutres que usan miles de webs iguales.</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-rayman-yellow mr-2">•</span>
+          <span>Lentas, inseguras, difíciles de mantener.</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-rayman-yellow mr-2">•</span>
+          <span>A los 2 meses te piden renovar, pagar extras, plugins rotos.</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-rayman-yellow mr-2">•</span>
+          <span>Sin soporte real, se rompe sola o te ignoran.</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-rayman-yellow mr-2">•</span>
+          <span>No hay desarrollo real, solo copy/paste de otros.</span>
+        </li>
+      </ul>
+      <p class="mt-6 text-xl font-semibold text-center">
+        ¿Quieres parecer una copia barata? ¡Tu negocio merece más!
+      </p>
+    </div>
+  </section>
+
+  <!-- Solution Section -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-center text-rayman-yellow">
+        💎 Mi solución: Webs hechas a medida
+      </h2>
+      <div class="grid gap-6 sm:grid-cols-2">
+        <div class="p-6 bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+          <p class="text-lg"><strong>Única:</strong> Desarrollo real, sin plantillas prefabricadas.</p>
+        </div>
+        <div class="p-6 bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+          <p class="text-lg"><strong>Rápida:</strong> Códigos limpios, optimizados.</p>
+        </div>
+        <div class="p-6 bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+          <p class="text-lg"><strong>Escalable:</strong> Añade reservas, tienda, estadísticas...</p>
+        </div>
+        <div class="p-6 bg-gray-700 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+          <p class="text-lg"><strong>SEO:</strong> Optimizada para Google desde el principio.</p>
+        </div>
+      </div>
+      <p class="mt-6 text-xl font-semibold text-center">
+        Ahorra a largo plazo: sin problemas, sin plugins basura.
+      </p>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-800">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-center text-rayman-yellow">
+        ✅ ¿Qué incluye la web?
+      </h2>
+      <ul class="space-y-4 text-lg">
+        <li class="flex items-start">
+          <span class="text-rayman-yellow mr-2">•</span>
+          <span>Diseño personalizado (no plantilla)</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-rayman-yellow mr-2">•</span>
+          <span>Página de inicio, quiénes somos, contacto, mapa, redes sociales, galería, servicios</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-rayman-yellow mr-2">•</span>
+          <span>Optimización SEO básica</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-rayman-yellow mr-2">•</span>
+          <span>Botón de WhatsApp directo</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-rayman-yellow mr-2">•</span>
+          <span>Web responsive para móviles</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-rayman-yellow mr-2">•</span>
+          <span>Hosting y dominio incluidos el primer año</span>
+        </li>
+        <li class="flex items-start">
+          <span class="text-rayman-yellow mr-2">•</span>
+          <span>Panel de administración simple (si se necesita)</span>
+        </li>
+      </ul>
+      <p class="mt-6 text-xl font-semibold text-center">
+        Precio base: <span class="text-rayman-yellow">desde 600€</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- Modules Section -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-center text-rayman-yellow">
+        🧩 Módulos disponibles
+      </h2>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-lg">
+          <thead>
+            <tr class="bg-gray-700">
+              <th class="p-4">Módulo</th>
+              <th class="p-4">Descripción</th>
+              <th class="p-4">Precio</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-600">
+              <td class="p-4">📅 Reservas online</td>
+              <td class="p-4">Calendario con disponibilidad y notificaciones</td>
+              <td class="p-4">+200-300€</td>
+            </tr>
+            <tr class="border-b border-gray-600">
+              <td class="p-4">🛒 Tienda simple</td>
+              <td class="p-4">Muestra de productos, sin pago</td>
+              <td class="p-4">+150€</td>
+            </tr>
+            <tr class="border-b border-gray-600">
+              <td class="p-4">💳 Tienda con pago</td>
+              <td class="p-4">Carrito + Stripe o Redsys</td>
+              <td class="p-4">+500€</td>
+            </tr>
+            <tr class="border-b border-gray-600">
+              <td class="p-4">🧾 Facturación</td>
+              <td class="p-4">Generación de tickets y facturas PDF</td>
+              <td class="p-4">+300€</td>
+            </tr>
+            <tr class="border-b border-gray-600">
+              <td class="p-4">🌐 Multiidioma</td>
+              <td class="p-4">Español, inglés, etc.</td>
+              <td class="p-4">+150€</td>
+            </tr>
+            <tr class="border-b border-gray-600">
+              <td class="p-4">📊 Estadísticas</td>
+              <td class="p-4">Panel con visitas, clics, etc.</td>
+              <td class="p-4">+200€</td>
+            </tr>
+            <tr class="border-b border-gray-600">
+              <td class="p-4">👥 Usuarios</td>
+              <td class="p-4">Login y gestión de clientes</td>
+              <td class="p-4">+300€</td>
+            </tr>
+            <tr class="border-b border-gray-600">
+              <td class="p-4">✉️ Email Marketing</td>
+              <td class="p-4">Captura de correos y envíos</td>
+              <td class="p-4">+100€</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-gray-900 text-white py-16 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl font-bold text-rayman-yellow mb-6 text-center">🚫 Mi experiencia con grandes soluciones cerradas</h2>
+      <p class="text-lg mb-4">
+        Tras años desarrollando soluciones corporativas para empresas como Wolters Kluwer, he visto de primera mano cómo muchos negocios quedan atrapados en plataformas lentas, cerradas y difíciles de personalizar.
+      </p>
+      <p class="text-lg mb-4">
+        Por eso decidí montar mi propia startup: para ofrecer justo lo contrario. Soluciones flexibles, rápidas y adaptadas 100% al cliente, sin pagar licencias infladas ni usar plantillas genéricas.
+      </p>
+      <p class="text-lg font-semibold text-center mt-6">
+        Si tú también quieres una web hecha a medida de verdad, sin limitaciones, hablemos.
+      </p>
+    </div>
+  </section>
+
+  
+
+  <!-- Upcoming Projects Section -->
+<section class="py-16 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto">
+    <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-center text-rayman-yellow">
+      🚀 Próximas Funcionalidades (En desarrollo)
+    </h2>
+    <p class="text-xl text-center mb-6">Mi startup está desarrollando herramientas potentes y específicas para negocios reales, inspiradas en las necesidades del día a día.</p>
+    <ul class="space-y-4 text-lg">
+      <li class="flex items-start">
+        <span class="text-rayman-yellow mr-2">•</span>
+        <span><strong>Gestión documental avanzada:</strong> subida, organización y firma digital de documentos.</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-rayman-yellow mr-2">•</span>
+        <span><strong>Facturación inteligente:</strong> emisión automática, notificaciones, generación de remesas SEPA y control de vencimientos.</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-rayman-yellow mr-2">•</span>
+        <span><strong>Portal del cliente:</strong> área privada para compartir documentación, facturas y comunicarse con clientes.</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-rayman-yellow mr-2">•</span>
+        <span><strong>Control horario y partes de trabajo:</strong> fichajes, informes por proyecto o empleado, y alertas legales.</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-rayman-yellow mr-2">•</span>
+        <span><strong>Integración con Hacienda:</strong> automatización de modelos fiscales, presentación online y descarga de datos.</span>
+      </li>
+    </ul>
+    <p class="mt-6 text-xl font-semibold text-center">
+      Todo desarrollado 100% por mí, sin depender de terceros. He trabajado en esto, y ahora lo hago mejor.
+    </p>
+  </div>
+</section>
+
+
+  <!-- Testimonials Section -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-800">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-8 text-center text-rayman-yellow">
+        ⭐ Lo que dicen mis clientes
+      </h2>
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div class="p-6 bg-gray-700 rounded-lg shadow-lg">
+          <p class="text-lg italic">
+            "Tenía una web en Wix que parecía de juguete. Ahora tengo una web profesional que me trae clientes cada semana."
+          </p>
+          <p class="mt-4 font-semibold">— Carlos, centro de estética</p>
+        </div>
+        <div class="p-6 bg-gray-700 rounded-lg shadow-lg">
+          <p class="text-lg italic">
+            "Con WordPress todo eran problemas. Esta web es más rápida, más clara y mucho más bonita."
+          </p>
+          <p class="mt-4 font-semibold">— Lucía, casa rural en León</p>
+        </div>
+        <div class="p-6 bg-gray-700 rounded-lg shadow-lg">
+          <p class="text-lg italic">
+            "Es la primera vez que un informático me habla claro y cumple plazos. Profesional de 10."
+          </p>
+          <p class="mt-4 font-semibold">— Pedro, bar-restaurante</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 text-center">
+    <div class="max-w-4xl mx-auto">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-rayman-yellow">
+        🧭 ¿Listo para tener una web que venda?
+      </h2>
+      <p class="text-lg sm:text-xl mb-8">
+        Llámame o escríbeme por WhatsApp y te enseño una demo personalizada para tu negocio.
+        <strong>Sin compromiso.</strong>
+      </p>
+      <div class="flex justify-center gap-4">
+        <a
+          href="https://wa.me/+34612345678"
+          target="_blank"
+          (click)="openWhatsApp()"
+          class="bg-rayman-yellow text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-yellow-400 transition-colors"
+        >
+          📞 WhatsApp
+        </a>
+        <a
+          href="tel:+34612345678"
+          (click)="callNow()"
+          class="bg-rayman-yellow text-gray-900 font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-yellow-400 transition-colors"
+        >
+          📲 Llamar
+        </a>
+        <a
+          routerLink="/home"
+          (click)="navigateToHome()"
+          class="bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg shadow-lg hover:bg-gray-600 transition-colors"
+        >
+          Ver Producto
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section class="py-16 px-4 sm:px-6 lg:px-8 bg-gray-800">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-3xl sm:text-4xl font-bold mb-6 text-rayman-yellow">👨‍💻 Sobre mí</h2>
+      <p class="text-lg sm:text-xl">
+        Soy desarrollador full stack con más de 8 años de experiencia en empresas grandes. Ahora ayudo a negocios locales a
+        tener una web como Dios manda, sin engaños ni humo. Trabajo desde León, pero creo webs para cualquier lugar.
+      </p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 px-4 sm:px-6 lg:px-8 bg-gray-900 text-center">
+    <p class="text-lg">© 2025 Anto Studios. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- JSON-LD para SEO -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Anto Studios",
+      "description": "Desarrollo de webs profesionales a medida para negocios locales.",
+      "url": "https://www.antostudios.com",
+      "telephone": "+34612345678",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "León",
+        "addressCountry": "ES"
+      },
+      "sameAs": [
+        "https://www.antostudios.com",
+        "https://twitter.com/antostudios",
+        "https://www.linkedin.com/company/antostudios"
+      ],
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://www.antostudios.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  </script>
+</div>
+

@@ -1,0 +1,147 @@
+
+@use "../variables" as var;
+
+
+
+
+
+.table-blue-skew {
+    background-color: #00A2FF;
+    color: #FFF5D6;
+    border-color: #00A2FF;
+    transform: skew(-10deg);
+    &.dark {
+      background-color: #1e293b;
+      color: #00A2FF;
+    }
+    .table-header {
+      background-color: rgba(0, 162, 255, 0.4);
+    }
+  }
+  
+  .table-orange-dash {
+    background-color: #f97316;
+    color: #ffffff;
+    border: 2px dashed #f59e0b;
+    &.dark {
+      background-color: #1e293b;
+      color: #f97316;
+      border-color: #f97316;
+    }
+    .table-header {
+      background-color: rgba(249, 115, 22, 0.4);
+      animation: bounce 2s infinite;
+    }
+  }
+  
+  .table-indigo-dots {
+    background-color: #4f46e5;
+    color: #FFF5D6;
+    border-color: #4f46e5;
+    background-image: url('data:image/svg+xml,%3Csvg width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="4" cy="4" r="1" fill="rgba(6,182,212,0.5)" /%3E%3C/svg%3E');
+    &.dark {
+      background-color: #1e293b;
+      color: #4f46e5;
+    }
+    .table-header {
+      background-color: rgba(79, 70, 229, 0.4);
+    }
+  }
+  
+  .table-bubble {
+    background: radial-gradient(circle, #FFD700, #00D26A);
+    color: #2D1B58;
+    border-color: #00D26A;
+    animation: bubble-float 1.8s infinite;
+    &.dark {
+      background: radial-gradient(circle, #2D1B58, #00D26A);
+      color: #FFF5D6;
+    }
+    .table-header {
+      background-color: rgba(0, 0, 0, 0.4);
+    }
+  }
+  
+  .table-electoon {
+    background-color: #B362FF;
+    color: #FFF5D6;
+    border-color: #FF6B9D;
+    box-shadow: 0 0 12px rgba(255, 107, 157, 0.7);
+    &.dark {
+      background-color: #2D1B58;
+      color: #B362FF;
+    }
+    .table-header {
+      background-color: rgba(179, 98, 255, 0.4);
+    }
+  }
+  
+  .table-jungle {
+    background-color: #00D26A;
+    color: #ffffff;
+    border-color: #FF7B00;
+    background-image: url('data:image/svg+xml,%3Csvg width="10" height="10" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="5" cy="5" r="1" fill="rgba(255,123,0,0.3)" /%3E%3C/svg%3E');
+    &.dark {
+      background-color: #2D1B58;
+      color: #00D26A;
+    }
+    .table-header {
+      background-color: rgba(0, 210, 106, 0.4);
+    }
+  }
+  
+  .table-joycon {
+    background-color: #E60012;
+    color: #ffffff;
+    border-color: #111827;
+    border-radius: 0.5rem 0.5rem 1rem 1rem;
+    &.dark {
+      background-color: #1e293b;
+      color: #E60012;
+    }
+    .table-header {
+      background-color: rgba(230, 0, 18, 0.4);
+    }
+  }
+  
+  .table-neomorph {
+    background-color: #D4A017;
+    color: #1E3A5F;
+    border: none;
+    box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3), -3px -3px 6px rgba(255, 255, 255, 0.5);
+    &.dark {
+      background-color: #1e293b;
+      color: #D4A017;
+    }
+    .table-header {
+      background-color: rgba(212, 160, 23, 0.4);
+    }
+  }
+  
+  .table-glitch {
+    background-color: #1E3A5F;
+    color: #FFD700;
+    border-color: #1E3A5F;
+    animation: glitch-shift 2s infinite steps(5);
+    &.dark {
+      background-color: #1e293b;
+      color: #FFD700;
+    }
+    .table-header {
+      background-color: rgba(30, 58, 95, 0.4);
+    }
+  }
+  
+  .table-portal {
+    background: radial-gradient(circle, #B362FF, #2D1B58);
+    color: #FFF5D6;
+    border: 2px dashed #FFD700;
+    &.dark {
+      background: radial-gradient(circle, #1e293b, #B362FF);
+    }
+    .table-header {
+      background-color: rgba(0, 0, 0, 0.4);
+      animation: dream-pulse 2s infinite;
+    }
+  }
+  

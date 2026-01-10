@@ -1,0 +1,72 @@
+<!-- <div [ngClass]="hostClasses" [ngStyle]="customStyles">
+  <div class="ui-gallery__slider" #slider>
+    <div class="ui-gallery__slide" *ngFor="let image of images; trackBy: trackByFn">
+      <img [src]="image.src" [alt]="image.alt" class="ui-gallery__image" />
+      <figcaption *ngIf="image.caption" class="ui-gallery__caption">
+        {{ image.caption }}
+      </figcaption>
+    </div>
+  </div>
+  <button
+    class="ui-gallery__nav ui-gallery__nav--prev"
+    (click)="prevSlide()"
+    (keydown)="onKeyNav($event)"
+    tabindex="0"
+  >❮</button>
+  <button
+    class="ui-gallery__nav ui-gallery__nav--next"
+    (click)="nextSlide()"
+    (keydown)="onKeyNav($event)"
+    tabindex="0"
+  >❯</button>
+  <div class="ui-gallery__dots">
+    <span
+      *ngFor="let image of images; let i = index"
+      [class.ui-gallery__dot--active]="i === currentIndex"
+      class="ui-gallery__dot"
+      (click)="goToSlide(i)"
+      (keydown)="onKeyDot($event, i)"
+      tabindex="0"
+    ></span>
+  </div>
+</div> -->
+
+
+
+<div [ngClass]="hostClasses" [ngStyle]="customStyles">
+  <div class="ui-gallery__slider" #slider>
+    <div class="ui-gallery__slide" *ngFor="let image of images; trackBy: trackByFn">
+      <lib-ui-components-image
+        [src]="image.src"
+        [alt]="image.alt"
+        [caption]="image.caption"
+        [variant]="variant"
+        size="custom"
+        width="100%"
+        height="auto" 
+      ></lib-ui-components-image>
+    </div>
+  </div>
+  <button
+    class="ui-gallery__nav ui-gallery__nav--prev"
+    (click)="prevSlide()"
+    (keydown)="onKeyNav($event)"
+    tabindex="0"
+  >❮</button>
+  <button
+    class="ui-gallery__nav ui-gallery__nav--next"
+    (click)="nextSlide()"
+    (keydown)="onKeyNav($event)"
+    tabindex="0"
+  >❯</button>
+  <div class="ui-gallery__dots">
+    <span
+      *ngFor="let image of images; let i = index"
+      [class.ui-gallery__dot--active]="i === currentIndex"
+      class="ui-gallery__dot"
+      (click)="goToSlide(i)"
+      (keydown)="onKeyDot($event, i)"
+      tabindex="0"
+    ></span>
+  </div>
+</div>

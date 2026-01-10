@@ -1,0 +1,223 @@
+@use "sass:color";
+@use "../variables" as var;
+
+.btn-purple-edge {
+    background: var.$rayman-purple;
+    color: var.$rayman-light;
+    border-top: 4px solid var.$rayman-indigo;
+    border-bottom: 4px solid var.$rayman-indigo;
+    border-left: none;
+    border-right: none;
+    box-shadow: 0 0 15px rgba(179, 98, 255, 0.4);
+    
+    &:before {
+      background: linear-gradient(rgba(255, 255, 255, 0.3), transparent);
+    }
+  
+    &:hover {
+      box-shadow: 0 0 25px rgba(179, 98, 255, 0.6);
+    }
+  
+    &.dark {
+      background: linear-gradient(145deg, var.$rayman-dark, var.$rayman-purple);
+      color: var.$rayman-cyan;
+    }
+  }
+  
+  .btn-rose-radial {
+    background: radial-gradient(circle, var.$rayman-pink, color.adjust(var.$rayman-pink, $lightness: -15%));
+    color: var.$rayman-light;
+    border: none;
+    box-shadow: 0 0 15px rgba(255, 107, 157, 0.4);
+    
+    &:before {
+      background: linear-gradient(rgba(255, 255, 255, 0.3), transparent);
+    }
+  
+    &:hover {
+      background: radial-gradient(circle, color.adjust(var.$rayman-pink, $lightness: 5%), var.$rayman-pink);
+      box-shadow: 0 0 25px rgba(255, 107, 157, 0.6);
+    }
+  
+    &.dark {
+      background: radial-gradient(circle, var.$rayman-dark, var.$rayman-pink);
+    }
+  }
+  
+  .btn-yellow-pulse {
+    background: var.$rayman-dark;
+    color: var.$rayman-yellow;
+    border: 1px solid var.$rayman-yellow;
+    animation: subtle-glow 2s infinite;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.4);
+    
+    &:before {
+      background: linear-gradient(rgba(255, 215, 0, 0.2), transparent);
+    }
+  
+    &:hover {
+      box-shadow: 0 0 20px rgba(255, 215, 0, 0.7);
+    }
+  
+    &.dark {
+      background: linear-gradient(145deg, var.$rayman-dark, rgba(255, 215, 0, 0.3));
+      color: var.$rayman-orange;
+    }
+  }
+  
+  .btn-green-inset {
+    background: var.$rayman-green;
+    color: var.$rayman-light;
+    border: 2px solid var.$rayman-dark;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3),
+                0 4px 12px rgba(0, 0, 0, 0.2);
+    
+    &:before {
+      background: linear-gradient(rgba(255, 255, 255, 0.3), transparent);
+    }
+  
+    &:hover {
+      background: color.adjust(var.$rayman-green, $lightness: 5%);
+      box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.5),
+                  0 8px 16px rgba(0, 0, 0, 0.3);
+    }
+  
+    &.dark {
+      background: var.$rayman-dark;
+      color: var.$rayman-green;
+      border-color: var.$rayman-green;
+    }
+  }
+  
+  .btn-blue-skew {
+    background: linear-gradient(145deg, var.$rayman-blue, color.adjust(var.$rayman-blue, $lightness: -15%));
+    color: var.$rayman-light;
+    border: none;
+    transform: skew(-10deg);
+    box-shadow: 0 0 15px rgba(0, 162, 255, 0.4);
+    
+    &:before {
+      background: linear-gradient(rgba(255, 255, 255, 0.3), transparent);
+    }
+  
+    &:hover {
+      box-shadow: 0 0 25px rgba(0, 162, 255, 0.6);
+      transform: skew(-10deg) scale(1.05);
+    }
+  
+    &.dark {
+      background: linear-gradient(145deg, var.$rayman-dark, var.$rayman-blue);
+      color: var.$rayman-cyan;
+    }
+  }
+  
+  .btn-orange-dash {
+    background: var.$rayman-orange;
+    color: var.$rayman-light;
+    border: 2px dashed var.$rayman-yellow;
+    box-shadow: 0 0 10px rgba(255, 123, 0, 0.4);
+    
+    &:before {
+      background: linear-gradient(rgba(255, 255, 255, 0.3), transparent);
+    }
+  
+    &:hover {
+      box-shadow: 0 0 20px rgba(255, 123, 0, 0.6);
+    }
+  
+    &.dark {
+      background: var.$rayman-dark;
+      color: var.$rayman-orange;
+      border-color: var.$rayman-orange;
+    }
+  }
+  
+  .btn-indigo-dots {
+    background: linear-gradient(145deg, var.$rayman-indigo, var.$rayman-purple);
+    color: var.$rayman-cyan;
+    border: none;
+    background-image: url('data:image/svg+xml,%3Csvg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="6" cy="6" r="1.5" fill="rgba(0,240,255,0.5)" /%3E%3C/svg%3E');
+    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+    
+    &:before {
+      background: linear-gradient(rgba(255, 255, 255, 0.3), transparent);
+    }
+  
+    &:hover {
+      box-shadow: 0 8px 24px rgba(79, 70, 229, 0.6);
+    }
+  
+    &.dark {
+      background: linear-gradient(145deg, var.$rayman-dark, var.$rayman-indigo);
+      color: var.$rayman-light;
+      background-image: url('data:image/svg+xml,%3Csvg width="12" height="12" viewBox="0 0 12 12" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="6" cy="6" r="1.5" fill="rgba(179,98,255,0.7)" /%3E%3C/svg%3E');
+    }
+  }
+  
+  .btn-bubble {
+    background: radial-gradient(circle at 50% 50%, rgba(255, 245, 214, 0.9), var.$rayman-blue);
+    color: var.$rayman-dark;
+    border: 2px solid var.$rayman-blue;
+    box-shadow: 0 0 10px rgba(0, 162, 255, 0.6), inset 0 0 5px rgba(255, 255, 255, 0.5);
+    animation: bubble-float 2s ease-in-out infinite;
+    
+    &:before {
+      background: linear-gradient(rgba(255, 255, 255, 0.4), transparent);
+    }
+  
+    &:hover {
+      transform: scale(1.05) translateY(-3px);
+      box-shadow: 0 0 15px rgba(0, 162, 255, 0.8);
+    }
+  
+    &.dark {
+      background: radial-gradient(circle at 50% 50%, var.$rayman-purple, var.$rayman-dark);
+      border-color: var.$rayman-purple;
+      color: var.$rayman-light;
+    }
+  }
+  
+  .btn-electoon {
+    background: linear-gradient(135deg, var.$rayman-pink, var.$rayman-purple);
+    color: var.$rayman-light;
+    border: 3px solid var.$rayman-dark;
+    box-shadow: 0 0 12px rgba(255, 107, 157, 0.7);
+    animation: electoon-glow 1.8s infinite alternate;
+    
+    &:before {
+      background: linear-gradient(rgba(255, 255, 255, 0.3), transparent);
+    }
+  
+    &:hover {
+      transform: scale(1.03);
+      box-shadow: 0 0 20px rgba(255, 107, 157, 0.9);
+    }
+  
+    &.dark {
+      background: linear-gradient(135deg, var.$rayman-dark, var.$rayman-pink);
+      border-color: var.$rayman-light;
+    }
+  }
+  
+  .btn-jungle {
+    background: linear-gradient(to right, var.$rayman-green, var.$rayman-yellow);
+    color: var.$rayman-dark;
+    border: 3px solid var.$rayman-orange;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 2px 4px rgba(255, 215, 0, 0.3);
+    
+    &:before {
+      background: linear-gradient(rgba(255, 255, 255, 0.3), transparent);
+    }
+  
+    &:hover {
+      background: linear-gradient(to right, color.adjust(var.$rayman-green, $lightness: 5%), var.$rayman-orange);
+      transform: translateY(-2px);
+    }
+  
+    &.dark {
+      background: linear-gradient(to right, var.$rayman-dark, var.$rayman-green);
+      border-color: var.$rayman-purple;
+    }
+  }
+  

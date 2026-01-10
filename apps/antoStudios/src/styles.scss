@@ -1,0 +1,74 @@
+/* styles.scss */
+@use "tailwindcss";
+
+// Tipografías
+@theme {
+  --font-family-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+  // Colores base
+  --color-primary: #3B82F6;
+  --color-primary-light: #93C5FD;
+  --color-primary-dark: #1E3A8A;
+  --color-secondary: #64748B;
+  --color-secondary-dark: #475569;
+  --color-accent: #EC4899;
+  --color-pink: #F472B6;
+  --color-dark-bg: #1E293B;
+  --color-neon-cyan: #06B6D4;
+  --color-teal: #14B8A6;
+  --color-indigo: #4F46E5;
+  --color-purple: #8B5CF6;
+  --color-purple-light: #A78BFA;
+  --color-green: #22C55E;
+  --color-yellow: #EAB308;
+  --color-amber: #F59E0B;
+  --color-orange: #F97316;
+  --color-rose: #F43F5E;
+  --color-success: #16A34A;
+  --color-danger: #DC2626;
+  --color-gray-300: #D1D5DB;
+  --color-gray-500: #6B7280;
+  --color-gray-800: #1F2937;
+  --color-gray-900: #111827;
+  --color-white: #FFFFFF;
+
+  // Colores personalizados
+  --color-rayman-yellow: #FACC15;
+  --color-rayman-red: #FF3E41;
+  --color-rayman-blue: #06B6D4;
+  --color-rayman-green: #00D26A;
+  --color-rayman-purple: #B362FF;
+  --color-rayman-orange: #FF7B00;
+  --color-rayman-pink: #FF6B9D;
+  --color-rayman-dark: #2D1B58;
+  --color-rayman-light: #FFF5D6;
+
+  // Colores adicionales
+  --color-teal-dark: #0F766E;
+  --color-danger-dark: #B91C1C;
+  --color-success-dark: #15803D;
+  --color-amber-dark: #D97706;
+  --color-orange-dark: #EA580C;
+  --color-purple-dark: #6D28D9;
+  --color-rose-dark: #BE123C;
+  --color-indigo-dark: #4338CA;
+  --color-green-dark: #14532D;
+  --color-red-dark: #991B1B;
+  --color-green-light: #4ADE80;
+  --color-blue-light: #60A5FA;
+  --color-blue-dark: #1E40AF;
+  --color-red-light: #F87171;
+  --color-teal-light: #2DD4BF;
+  --color-indigo-light: #818CF8;
+  --color-emerald: #10B981;
+  --color-amber-light: #FBBF24;
+  --color-red: #EF4444;
+}
+
+/* Estilos globales (si necesitas alguno) */
+body {
+  font-family: var(--font-family-sans);
+  background-color: var(--color-gray-900);
+  color: var(--color-white);
+}

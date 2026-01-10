@@ -1,0 +1,188 @@
+@use "sass:map";
+@use "./variables" as var;
+@use "sass:color";
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+
+
+/* Base de pestañas con soporte para variables CSS */
+.tabs {
+    width: 100%;
+    padding: 1rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    background: var(--tabs-bg, transparent);
+    color: var(--tabs-color, #ffffff);
+    box-shadow: var(--tabs-shadow, 0 4px 20px rgba(0, 0, 0, 0.25));
+  }
+  
+  /* Lista de pestañas */
+  .tabs-list {
+    display: flex;
+    flex-wrap: nowrap; /* Evitar que las pestañas se envuelvan */
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0.5rem;
+    position: relative;
+    z-index: 1;
+  }
+  
+  /* Estilos para pestañas en móvil con showAs='tabs' */
+  .tabs-list--mobile {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 0.5rem;
+    -webkit-overflow-scrolling: touch; /* Mejora el scroll en iOS */
+    scrollbar-width: none; /* Oculta scrollbar en Firefox */
+    &::-webkit-scrollbar {
+      display: none; /* Oculta scrollbar en Chrome/Safari */
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .tabs-list--mobile .tabs-item {
+      flex: 0 0 auto; /* Evitar que las pestañas crezcan */
+      min-width: 80px; /* Tamaño mínimo más compacto */
+    }
+  
+    .tabs-list--mobile .tabs-button {
+      padding: 0.5rem 0.75rem; /* Botones más pequeños */
+      font-size: 0.875rem; /* Texto más pequeño */
+      border-radius: 6px;
+    }
+  }
+  
+  .tabs-item {
+    flex: 1;
+    min-width: 100px;
+    position: relative;
+  }
+  
+  .tabs-button {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--tabs-button-bg, rgba(255, 255, 255, 0.1));
+    border: var(--tabs-button-border, none);
+    color: inherit;
+    font-size: 1rem;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 8px;
+    box-shadow: var(--tabs-button-shadow, 0 2px 10px rgba(0, 0, 0, 0.2));
+  }
+  
+  .tabs-item--active .tabs-button {
+    background: var(--tabs-button-active-bg, rgba(255, 255, 255, 0.3));
+    font-weight: 700;
+    box-shadow: var(--tabs-button-active-shadow, 0 0 15px rgba(255, 215, 0, 0.6));
+    transform: scale(1.05);
+  }
+  
+  .tabs-button:hover {
+    background: var(--tabs-button-hover-bg, rgba(255, 255, 255, 0.2));
+    transform: translateY(-2px);
+    box-shadow: var(--tabs-button-hover-shadow, 0 4px 15px rgba(0, 0, 0, 0.3));
+  }
+  
+  .tabs-icon {
+    font-size: 1.25rem;
+    transition: transform 0.3s ease;
+  }
+  
+  .tabs-button:hover .tabs-icon {
+    transform: rotate(10deg);
+  }
+  
+  /* Menú móvil */
+  .tabs--mobile .tabs-list {
+    display: none; /* Ocultar pestañas en modo móvil con showAs='menu' */
+  }
+  
+  .tabs-mobile-menu {
+    display: none;
+  }
+  
+  .tabs--mobile .tabs-mobile-menu {
+    display: block;
+    animation: slide-down 0.3s ease-out;
+  }
+  
+  .tabs-mobile-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .tabs-mobile-item {
+    border-bottom: var(--tabs-mobile-item-border, 1px solid rgba(255, 255, 255, 0.1));
+  }
+  
+  .tabs-mobile-button {
+    width: 100%;
+    padding: 1rem;
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 1.125rem;
+    font-family: 'Orbitron', sans-serif;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .tabs-mobile-item--active .tabs-mobile-button {
+    background: var(--tabs-mobile-button-active-bg, rgba(255, 255, 255, 0.2));
+    font-weight: 700;
+    text-shadow: 0 0 8px #ffd700;
+  }
+  
+  .tabs-mobile-button:hover {
+    background: var(--tabs-mobile-button-hover-bg, rgba(255, 255, 255, 0.15));
+    transform: translateX(5px);
+  }
+  
+  /* Variante específica: pixel-adventure */
+  .tabs--pixel-adventure {
+    background: linear-gradient(45deg, #8b5cf6, #22c55e);
+    color: #ffffff;
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.6);
+    border: 2px solid #ffffff;
+    image-rendering: pixelated;
+    &::before {
+      content: '🎮';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      left: 10px;
+      animation: bounce 1.5s infinite;
+    }
+    .tabs-button {
+      background: rgba(34, 197, 94, 0.2);
+      border: 2px solid #ffffff;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+    }
+    .tabs-item--active .tabs-button {
+      background: rgba(139, 92, 246, 0.5);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    }
+    .tabs-button:hover {
+      background: rgba(139, 92, 246, 0.3);
+    }
+    .tabs-mobile-button {
+      font-family: 'Courier New', monospace;
+    }
+  }
+  

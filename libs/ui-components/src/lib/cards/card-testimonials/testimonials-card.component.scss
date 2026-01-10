@@ -1,0 +1,28 @@
+.testimonial-card {
+    position: relative;
+    background: rgba(20, 20, 30, 0.85);
+    border-radius: 16px;
+    padding: 24px;
+    border: 2px solid #a855f7;
+    transition: all 0.5s ease;
+  }
+  
+  .testimonial-card:hover {
+    transform: scale(1.05);
+    border-color: #facc15;
+    box-shadow: 0 0 30px rgba(113, 255, 219, 0.6);
+  }
+  
+  .testimonial-quote {
+    color: rgba(255, 255, 255, 0.9);
+    font-family: 'Comic Neue', cursive;
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+  
+  .testimonial-author {
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: #facc15;
+    text-shadow: 0 0 10px rgba(250, 204, 21, 0.8);
+  }

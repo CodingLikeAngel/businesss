@@ -1,0 +1,134 @@
+
+@use "../variables" as var;
+
+
+.tooltip-danger {
+    background-color: #dc2626;
+    &.dark {
+      background-color: #1e293b;
+      color: #dc2626;
+    }
+  }
+  
+  .tooltip-success {
+    background-color: #16a34a;
+    &.dark {
+      background-color: #1e293b;
+      color: #16a34a;
+    }
+  }
+  
+  .tooltip-nano {
+    background-color: #14b8a6;
+    &.dark {
+      background-color: #1e293b;
+      color: #14b8a6;
+    }
+  }
+  
+  .tooltip-stellar {
+    background: linear-gradient(45deg, #1e293b, #06b6d4);
+    &.dark {
+      background: linear-gradient(45deg, #1e293b, #00A2FF);
+    }
+  }
+  
+  .tooltip-phoenix {
+    background: linear-gradient(45deg, #f97316, #f43f5e);
+    &.dark {
+      background: linear-gradient(45deg, #1e293b, #f97316);
+    }
+  }
+  
+  .tooltip-galactic {
+    background: linear-gradient(135deg, #1e293b, #B362FF);
+    &.dark {
+      background: linear-gradient(135deg, #1e293b, #1E3A5F);
+    }
+  }
+  
+  .tooltip-orbitron {
+    background-color: #00A2FF;
+    color: #FFF5D6;
+    &.dark {
+      background-color: #2D1B58;
+      color: #00A2FF;
+    }
+  }
+  
+  .tooltip-cartoon {
+    background-color: #FFD700;
+    color: #2D1B58;
+    &.dark {
+      background-color: #2D1B58;
+      color: #FFD700;
+    }
+  }
+  
+  .tooltip-luma {
+    background: radial-gradient(circle, #FFD700, #FF7B00);
+    color: #2D1B58;
+    &.dark {
+      background: radial-gradient(circle, #2D1B58, #B362FF);
+      color: #FFF5D6;
+    }
+  }
+  
+  .tooltip-platform {
+    background-color: #00D26A;
+    color: #FFF5D6;
+    &.dark {
+      background-color: #2D1B58;
+      color: #00D26A;
+    }
+  }
+  
+  .tooltip-hero {
+    background-color: #E60012;
+    &.dark {
+      background-color: #1e293b;
+      color: #E60012;
+    }
+  }
+  
+  .tooltip-coin {
+    background: radial-gradient(circle, #FFD700, #FF7B00);
+    color: #2D1B58;
+    &.dark {
+      background: radial-gradient(circle, #1e293b, #FFD700);
+    }
+  }
+  
+  .tooltip-cloud {
+    background-color: #FFF5D6;
+    color: #2D1B58;
+    &.dark {
+      background-color: #1e293b;
+      color: #FFF5D6;
+    }
+  }
+  
+  .tooltip-fire {
+    background: linear-gradient(to bottom, #FF7B00, #dc2626);
+    &.dark {
+      background: linear-gradient(to bottom, #1e293b, #FF7B00);
+    }
+  }
+  
+  .tooltip-water {
+    background-color: #00A2FF;
+    color: #FFF5D6;
+    &.dark {
+      background-color: #1e293b;
+      color: #00A2FF;
+    }
+  }
+  
+  .tooltip-leaf {
+    background-color: #00D26A;
+    &.dark {
+      background-color: #1e293b;
+      color: #00D26A;
+    }
+  }
+  

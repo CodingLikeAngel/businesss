@@ -1,0 +1,9 @@
+<!-- image.component.html -->
+<div [ngClass]="imageClasses()" [style]="imageStyles()">
+  <img
+    [src]="src()"
+    [alt]="alt()"
+    class="image"
+  />
+  <figcaption *ngIf="caption()" class="image-caption">{{ caption() }}</figcaption>
+</div>

@@ -1,0 +1,109 @@
+
+@use "../variables" as var;
+
+
+/* Variantes mejoradas con inspiración de Rayman Origins y Nintendo */
+.tabs--primary {
+    background: linear-gradient(135deg, #3b82f6, #1e3a8a); /* Mario azul */
+    color: #ffffff;
+    &::after {
+      content: '⭐';
+      position: absolute;
+      font-size: 1.2rem;
+      color: #ffd700;
+      top: 5px;
+      right: 10px;
+      animation: star-spin 2s infinite linear;
+    }
+  }
+  
+  .tabs--secondary {
+    background: linear-gradient(135deg, #6b7280, #374151); /* Zelda gris */
+    color: #ffffff;
+    &::before {
+      content: '🍃';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      left: 10px;
+      animation: leaf-twist 3s infinite;
+    }
+  }
+  
+  .tabs--outline {
+    background: #ffffff;
+    border: 1px solid #d1d5db; /* Bloque ? de Mario */
+    color: #374151;
+    animation: block-bump 2s infinite;
+  }
+  
+  .tabs--ghost {
+    background: rgba(255, 255, 255, 0.1); /* Boo de Mario */
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    animation: ghost-float 3s infinite ease-in-out;
+    &::before {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+      animation: fade 2s infinite;
+    }
+  }
+  
+  .tabs--link {
+    background: transparent;
+    color: #06b6d4; /* Agua Pokémon */
+    &::after {
+      content: '💧';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      right: 10px;
+      animation: drip 2s infinite;
+    }
+  }
+  
+  .tabs--neon {
+    background: radial-gradient(ellipse at center, #0a0a14 0%, #ec4899 50%, #00e5ff 100%); /* Fuego Mario + Lums */
+    color: #ffffff;
+    box-shadow: 0 0 15px rgba(236, 72, 153, 0.6);
+    animation: neon-glow 2s infinite;
+    &::before {
+      content: '🔥';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      left: 10px;
+      animation: pulse 1s infinite;
+    }
+  }
+  
+  .tabs--cyberpunk {
+    background: linear-gradient(135deg, #eab308, #ec4899); /* Rayman futurista */
+    color: #ffffff;
+    animation: glitch-rayman 1.5s infinite;
+    &::after {
+      content: '⚙️';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      right: 10px;
+      animation: spin 2s infinite linear;
+    }
+  }
+  
+  .tabs--gradient {
+    background: linear-gradient(90deg, #8b5cf6, #ec4899, #22c55e); /* Mario, Peach, Luigi */
+    color: #ffffff;
+    &::before {
+      content: '🍊';
+      position: absolute;
+      font-size: 1.2rem;
+      top: 5px;
+      left: 10px;
+      animation: bounce 1.5s infinite;
+    }
+  }
+  

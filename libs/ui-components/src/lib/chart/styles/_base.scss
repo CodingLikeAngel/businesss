@@ -1,0 +1,115 @@
+@use "sass:map";
+@use "./variables" as var;
+
+.chart-container {
+  font-family: "Orbitron", sans-serif;
+  position: relative;
+  border: var(--chart-border, 1px solid #d1d5db);
+  background: var(--chart-bg, #ffffff);
+  color: var(--chart-color, #111827);
+  box-shadow: var(--chart-shadow, none);
+  transition: all 0.2s ease-in-out;
+  padding: 0.5rem;
+
+  &:hover {
+    background: var(--chart-hover-bg, var(--chart-bg));
+    box-shadow: var(--chart-hover-shadow, var(--chart-shadow));
+  }
+
+  &.chart-sm {
+    height: 200px;
+    padding: 0.25rem;
+  }
+
+  &.chart-md {
+    height: 300px;
+    padding: 0.5rem;
+  }
+
+  &.chart-lg {
+    height: 400px;
+    padding: 0.75rem;
+  }
+
+  &.chart-rounded-none {
+    border-radius: 0;
+  }
+
+  &.chart-rounded-md {
+    border-radius: 0.375rem;
+  }
+
+  &.chart-rounded-full {
+    border-radius: 9999px;
+  }
+
+  canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  &.chart-primary {
+    background: var(--chart-bg, #2563eb);
+    color: var(--chart-color, #ffffff);
+    border: var(--chart-border, 1px solid #1e40af);
+    &.dark {
+      background: var(--chart-bg, #1E3A5F);
+      color: var(--chart-color, #D4A017);
+      border: var(--chart-border, 1px solid #D4A017);
+    }
+  }
+
+  &.chart-secondary {
+    background: var(--chart-bg, #64748b);
+    color: var(--chart-color, #ffffff);
+    border: var(--chart-border, 1px solid #475569);
+    &.dark {
+      background: var(--chart-bg, #1e293b);
+      color: var(--chart-color, #FFF5D6);
+      border: var(--chart-border, 1px solid #475569);
+    }
+  }
+
+  &.chart-outline {
+    background: var(--chart-bg, transparent);
+    color: var(--chart-color, #111827);
+    border: var(--chart-border, 1px solid #d1d5db);
+    &.dark {
+      color: var(--chart-color, #d1d5db);
+      border: var(--chart-border, 1px solid #1f2937);
+    }
+  }
+
+  &.chart-ghost {
+    background: var(--chart-bg, rgba(255, 255, 255, 0.1));
+    color: var(--chart-color, #111827);
+    border: var(--chart-border, none);
+    &.dark {
+      background: var(--chart-bg, rgba(255, 255, 255, 0.05));
+      color: var(--chart-color, #ffffff);
+    }
+  }
+
+  &.chart-link {
+    background: var(--chart-bg, transparent);
+    color: var(--chart-color, #ec4899);
+    border: var(--chart-border, none);
+    &.dark {
+      color: var(--chart-color, #06b6d4);
+    }
+  }
+
+  &.chart-neon {
+    background: var(--chart-bg, #06b6d4);
+    color: var(--chart-color, #1e293b);
+    border: var(--chart-border, 1px solid #06b6d4);
+    box-shadow: var(--chart-shadow, 0 0 6px #06b6d4);
+    &.dark {
+      background: var(--chart-bg, #B362FF);
+      color: var(--chart-color, #ffffff);
+      border: var(--chart-border, 1px solid #B362FF);
+      box-shadow: var(--chart-shadow, 0 0 6px #B362FF);
+    }
+  }
+  // Aquí irían el resto de las variantes, ajustadas igual con var(--chart-*)
+}

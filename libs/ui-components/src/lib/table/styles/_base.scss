@@ -1,0 +1,108 @@
+@use "sass:map";
+@use "./variables" as var;
+@use "sass:color";
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+
+
+/* Base de la tabla con soporte para variables CSS */
+.table-container {
+    font-family: "Orbitron", sans-serif;
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--table-bg, #ffffff);
+    border: var(--table-border, 2px solid rgba(255, 255, 255, 0.3));
+    color: var(--table-color, #000000);
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+  
+    &.table-sm { font-size: 0.75rem; }
+    &.table-md { font-size: 0.875rem; }
+    &.table-lg { font-size: 1rem; }
+  
+    &.table-rounded-none { border-radius: 0; }
+    &.table-rounded-md { border-radius: 0.5rem; overflow: hidden; }
+    &.table-rounded-full { border-radius: 9999px; overflow: hidden; }
+  
+    &:hover {
+      box-shadow: var(--table-shadow-hover, 0 0 10px rgba(255, 255, 255, 0.5));
+      transform: scale(1.01);
+    }
+  }
+  
+  /* Estilos para las cabeceras */
+  .table-header {
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+    text-align: left;
+    background: var(--header-bg, rgba(0, 0, 0, 0.2));
+    border-bottom: var(--header-border-bottom, 3px solid #FFD700);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: background-color 0.2s ease;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    position: relative;
+    z-index: 1;
+  
+    &.header-sm { padding: 0.375rem 0.75rem; }
+    &.header-md { padding: 0.75rem 1rem; }
+    &.header-lg { padding: 1rem 1.5rem; }
+  
+    &:hover { background: var(--header-bg-hover, rgba(255, 215, 0, 0.3)); }
+  
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: -1;
+    }
+  }
+  
+  /* Estilos para las celdas */
+  .table-cell {
+    padding: 0.75rem 1rem;
+    border-bottom: var(--cell-border-bottom, 1px dashed rgba(255, 245, 214, 0.3));
+    transition: all 0.2s ease;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    position: relative;
+    z-index: 1;
+  
+    &.cell-sm { padding: 0.375rem 0.75rem; }
+    &.cell-md { padding: 0.75rem 1rem; }
+    &.cell-lg { padding: 1rem 1.5rem; }
+  
+    &:hover {
+      background: var(--cell-bg-hover, rgba(255, 245, 214, 0.2));
+      transform: translateY(-1px);
+    }
+  }
+  
+  /* Variante específica: data-grid */
+  .table-data-grid {
+    background: linear-gradient(135deg, #1e293b, #4f46e5);
+    color: #ffffff;
+    border: 2px solid #4f46e5;
+    box-shadow: 0 0 10px rgba(79, 70, 229, 0.5);
+    &.dark {
+      background: linear-gradient(135deg, #2D1B58, #B362FF);
+      color: #FFF5D6;
+      border-color: #B362FF;
+      box-shadow: 0 0 10px rgba(179, 98, 255, 0.5);
+    }
+    .table-header {
+      background: rgba(79, 70, 229, 0.4);
+      border-bottom: 2px dashed #ffffff;
+      animation: pulse 1.5s infinite;
+    }
+    .table-cell {
+      border-bottom: 1px dotted #4f46e5;
+      &:hover {
+        background: rgba(79, 70, 229, 0.3);
+      }
+    }
+  }
+  

@@ -1,0 +1,7 @@
+<!-- tooltip.component.html -->
+<div [class]="wrapperClasses()">
+  <ng-content></ng-content>
+  <div [class]="tooltipClasses()" [style]="tooltipStyles()" role="tooltip">
+    {{ content() }}
+  </div>
+</div>

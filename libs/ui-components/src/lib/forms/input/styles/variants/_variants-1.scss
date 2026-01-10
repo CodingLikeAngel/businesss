@@ -1,0 +1,217 @@
+
+@use "../variables" as vars;
+
+
+
+.input-primary {
+    background: linear-gradient(135deg, vars.$color-primary, vars.$color-primary-light);
+    border: 2px solid vars.$color-primary-dark;
+    color: vars.$color-white;
+
+    &[tag="select"] {
+      &:hover {
+        box-shadow: 0 0 10px vars.$color-primary-dark;
+      }
+
+      option {
+        background: vars.$color-primary;
+        color: vars.$color-white;
+      }
+    }
+
+    &[type="checkbox"] {
+      background: vars.$color-dark-bg;
+      border: 2px solid vars.$color-primary-dark;
+
+      &:checked {
+        background: vars.$color-primary;
+        border-color: vars.$color-primary-dark;
+
+        &::after {
+          color: vars.$color-white;
+        }
+      }
+
+      &:focus {
+        outline: 2px solid vars.$color-primary-dark;
+      }
+    }
+
+    &.dark,
+    :where([data-theme="dark"]) & {
+      background: linear-gradient(135deg, vars.$color-primary-dark, vars.$color-gray-900);
+      color: vars.$color-primary-light;
+      border-color: vars.$color-primary-light;
+
+      &[tag="select"] {
+        &:hover {
+          box-shadow: 0 0 10px vars.$color-primary-light;
+        }
+
+        option {
+          background: vars.$color-primary-dark;
+          color: vars.$color-primary-light;
+        }
+      }
+
+      &[type="checkbox"] {
+        background: vars.$color-gray-900;
+        border-color: vars.$color-primary-light;
+
+        &:checked {
+          background: vars.$color-primary-light;
+          border-color: vars.$color-primary-dark;
+
+          &::after {
+            color: vars.$color-dark-bg;
+          }
+        }
+
+        &:focus {
+          outline: 2px solid vars.$color-primary-light;
+        }
+      }
+    }
+  }
+
+  .input-secondary {
+    background: rgba(vars.$color-success, 0.2);
+    border: 2px solid vars.$color-success;
+    color: vars.$color-success;
+
+    &[tag="select"] {
+      &:hover {
+        box-shadow: 0 0 10px vars.$color-success;
+      }
+
+      option {
+        background: vars.$color-success;
+        color: vars.$color-white;
+      }
+    }
+
+    &[type="checkbox"] {
+      background: vars.$color-dark-bg;
+      border: 2px solid vars.$color-success;
+
+      &:checked {
+        background: vars.$color-success;
+        border-color: vars.$color-success-dark;
+
+        &::after {
+          color: vars.$color-white;
+        }
+      }
+
+      &:focus {
+        outline: 2px solid vars.$color-success;
+      }
+    }
+
+    &.dark,
+    :where([data-theme="dark"]) & {
+      background: rgba(vars.$color-green-light, 0.2);
+      color: vars.$color-green-light;
+      border-color: vars.$color-green-light;
+
+      &[tag="select"] {
+        &:hover {
+          box-shadow: 0 0 10px vars.$color-green-light;
+        }
+
+        option {
+          background: vars.$color-green-light;
+          color: vars.$color-dark-bg;
+        }
+      }
+
+      &[type="checkbox"] {
+        background: vars.$color-gray-900;
+        border-color: vars.$color-green-light;
+
+        &:checked {
+          background: vars.$color-green-light;
+          border-color: vars.$color-success-dark;
+
+          &::after {
+            color: vars.$color-dark-bg;
+          }
+        }
+
+        &:focus {
+          outline: 2px solid vars.$color-green-light;
+        }
+      }
+    }
+  }
+
+  .input-outline {
+    background: rgba(vars.$color-gray-300, 0.1);
+    border: 2px dashed vars.$color-gray-300;
+    color: vars.$color-gray-300;
+
+    &[tag="select"] {
+      &:hover {
+        box-shadow: 0 0 10px vars.$color-gray-300;
+      }
+
+      option {
+        background: vars.$color-gray-300;
+        color: vars.$color-dark-bg;
+      }
+    }
+
+    &[type="checkbox"] {
+      background: vars.$color-dark-bg;
+      border: 2px dashed vars.$color-gray-300;
+
+      &:checked {
+        background: vars.$color-gray-300;
+        border-color: vars.$color-gray-500;
+
+        &::after {
+          color: vars.$color-dark-bg;
+        }
+      }
+
+      &:focus {
+        outline: 2px solid vars.$color-gray-300;
+      }
+    }
+
+    &.dark,
+    :where([data-theme="dark"]) & {
+      background: rgba(vars.$color-gray-500, 0.1);
+      color: vars.$color-gray-500;
+      border-color: vars.$color-gray-500;
+
+      &[tag="select"] {
+        &:hover {
+          box-shadow: 0 0 10px vars.$color-gray-500;
+        }
+
+        option {
+          background: vars.$color-gray-500;
+          color: vars.$color-white;
+        }
+      }
+
+      &[type="checkbox"] {
+        background: vars.$color-gray-900;
+        border-color: vars.$color-gray-500;
+
+        &:checked {
+          background: vars.$color-gray-500;
+          border-color: vars.$color-gray-300;
+
+          &::after {
+            color: vars.$color-white;
+          }
+        }
+
+        &:focus {
+          outline: 2px solid vars.$color-gray-500;
+        }
+      }
+    }
+  }

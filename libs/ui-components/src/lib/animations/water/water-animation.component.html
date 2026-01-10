@@ -1,0 +1,23 @@
+<div class="water-container" [ngClass]="variant()">
+  <!-- Fondo de agua con reflejos -->
+  <div class="water-background"></div>
+  
+  <!-- Superficie del agua con ondas y brillo -->
+  <div class="water-surface"></div>
+  
+  <!-- Capa de animación para elementos flotantes -->
+  <div class="animation-layer"></div>
+  
+  <!-- Capa de niebla y destellos (efecto BioShock) -->
+  <div class="mist-layer"></div>
+  
+  <!-- Contenido adicional si se pasa (opcional) -->
+  <div class="animated-content">
+    <ng-content></ng-content>
+  </div>
+</div>
+  <!-- <audio #backgroundAudio loop preload="auto" style="display: none;">
+    <source [src]="audioSource" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio> -->
+<!-- </div> -->

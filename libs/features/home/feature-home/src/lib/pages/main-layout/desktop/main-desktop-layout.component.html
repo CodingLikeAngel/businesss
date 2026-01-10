@@ -1,0 +1,56 @@
+<div class="min-h-screen text-white flex flex-row">
+  <!-- Configurator Panel (Left) -->
+  <aside class="bg-gray-800 h-screen sticky top-0 overflow-y-scroll p-6 border-r border-gray-700">
+    <h2 class="text-2xl font-bold mb-4 text-rayman-yellow">Variant Configurator</h2>
+    <lib-variant-selector></lib-variant-selector>
+  </aside>
+
+  
+  <!-- Main Content (Right) -->
+  <main class="flex-1 flex flex-col">
+    <!-- Header -->
+    <div>
+      <lib-ui-components-header
+        [variant]="headerConfig.variant"
+        [align]="headerConfig.align"
+        [dark]="headerConfig.dark"
+        [title]="headerConfig.title"
+        [subtitle]="headerConfig.subtitle"
+        [navItems]="headerConfig.navItems"
+        [customStyles]="headerConfig.customStyles"
+      ></lib-ui-components-header>
+
+
+    </div>
+
+          <!-- Navbar -->
+          <div class="fixed  absolute top-0 z-50 bg-black/50 backdrop-blur-md w-[52vw]">
+            <lib-ui-components-tabs
+              [tabs]="tabsConfig"
+              [variant]="getVariant('hero')"
+              [showAs]="'tabs'"
+              [isMobile]="true"
+              (tabSelected)="onTabSelected($event)"
+            ></lib-ui-components-tabs>
+          </div>
+
+      <router-outlet></router-outlet>
+
+
+    <!-- Footer -->
+    <lib-ui-components-footer
+      [variant]="footerConfig.variant"
+      [dark]="footerConfig.dark"
+      [showParticles]="footerConfig.showParticles"
+      [title]="footerConfig.title"
+      [description]="footerConfig.description"
+      [exploreLinks]="footerConfig.exploreLinks"
+      [trendLinks]="footerConfig.trendLinks"
+      [socialIcons]="footerConfig.socialIcons"
+      [copyrightText]="footerConfig.copyrightText"
+      [customStyles]="footerConfig.customStyles"
+      (linkClicked)="onLinkClick($event)"
+      (socialClicked)="onSocialClick($event)"
+    ></lib-ui-components-footer>
+  </main>
+</div>

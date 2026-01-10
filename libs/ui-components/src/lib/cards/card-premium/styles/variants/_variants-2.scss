@@ -1,0 +1,85 @@
+@use "sass:color";
+@use "../variables" as var;
+
+
+
+
+.card--holo {
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, #00d4ff, rgba(0, 212, 255, 0.2));
+  box-shadow: 0 0 10px rgba(0, 212, 255, 0.4);
+  animation: holoSpin3D 4s infinite;
+  transform-style: preserve-3d;
+
+  .icon { background: #00d4ff; }
+}
+
+.card--matrix {
+  border-radius: 0;
+  background: #0f172a;
+  color: #00ff9d;
+  font-family: 'Courier New', monospace;
+  animation: codeRain 2s infinite;
+
+  .icon { background: #00ff9d; }
+  .content { h2, p { color: #00ff9d; } }
+}
+
+.card--quantum {
+  border-radius: 15px;
+  background: linear-gradient(45deg, #ff00cc, #00e5ff, #1e1b4b);
+  animation: quantumFlux 2.5s infinite;
+
+  .icon { background: #ff00cc; }
+}
+
+.card--cybernetic {
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1e293b, #64748b);
+  border: 2px solid #9333ea;
+  animation: circuitPulse 2s infinite;
+
+  .icon { background: #9333ea; }
+}
+
+.card--danger {
+  border-radius: 20px;
+  background: linear-gradient(135deg, #dc2626, #991b1b);
+  animation: warningFlash 1s infinite;
+
+  .icon { background: #991b1b; }
+}
+
+.card--success {
+  border-radius: 20px;
+  background: linear-gradient(135deg, #22c55e, #15803d);
+  border-bottom: 3px solid #10b981;
+  animation: grow 1.8s infinite;
+
+  .icon { background: #15803d; }
+}
+
+.card--nano {
+  border-radius: 9999px;
+  background: radial-gradient(ellipse at center, #1e293b, #475569);
+  animation: nanoSpin 3s infinite;
+
+  .icon { background: #475569; }
+}
+
+.card--stellar {
+  border-radius: 15px;
+  background: radial-gradient(circle, #1e1b4b, #312e81, #6b7280);
+  animation: starTwinkle 2s infinite;
+
+  .icon { background: #312e81; }
+}
+
+.card--phoenix {
+  border-radius: 20px;
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  animation: flameRise 2s infinite;
+
+  .icon { background: #f59e0b; }
+}
+

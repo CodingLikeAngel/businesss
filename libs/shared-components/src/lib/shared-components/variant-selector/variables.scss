@@ -1,0 +1,49 @@
+$font-family-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+$font-family-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+
+// Colores base
+$color-primary: #2563eb;
+$color-primary-dark: #1e40af;
+$color-secondary: #64748b;
+$color-secondary-dark: #475569;
+$color-accent: #ec4899;
+$color-dark-bg: #1e293b;
+$color-neon-cyan: #06b6d4;
+$color-teal: #14b8a6;
+$color-indigo: #4f46e5;
+$color-purple: #7c3aed;
+$color-yellow: #eab308;
+$color-amber: #f59e0b;
+$color-orange: #f97316;
+$color-rose: #f43f5e;
+$color-success: #16a34a;
+$color-danger: #dc2626;
+$color-gray-300: #d1d5db;
+$color-gray-800: #1f2937;
+$color-gray-900: #111827;
+$color-white: #ffffff;
+
+// Colores personalizados
+$color-rayman-yellow: #FFD700;
+$color-rayman-red: #FF3E41;
+$color-rayman-blue: #00A2FF;
+$color-rayman-green: #00D26A;
+$color-rayman-purple: #B362FF;
+$color-rayman-orange: #FF7B00;
+$color-rayman-pink: #FF6B9D;
+$color-rayman-dark: #2D1B58;
+$color-rayman-light: #FFF5D6;
+
+// Colores adicionales extraídos de valores literales
+$color-teal-dark: #0F766E;          // Usado en btn-retro:hover y btn-hex-teal:hover
+$color-danger-dark: #B91C1C;        // Usado en btn-danger:hover
+$color-success-dark: #15803D;       // Usado en btn-success:hover y otros
+$color-amber-dark: #D97706;         // Usado en btn-amber-glow:hover
+$color-orange-dark: #EA580C;        // Usado en btn-orange-dash:hover
+$color-purple-dark: #6D28D9;        // Usado en btn-purple-edge:hover
+$color-rose-dark: #BE123C;          // Usado en btn-rose-radial
+$color-indigo-dark: #4338CA;        // Usado en btn-indigo-dots:hover
+$color-gray-500: #6B7280;           // Usado en btn-platform.dark y otros
+$color-green-dark: #14532D;         // Usado en btn-leaf.dark
+$color-red-dark: #DC2626;           // Usado en btn-joycon:hover
+$color-green-light: #22C55E;        // Usado en btn-jungle:hover y btn-platform:hover

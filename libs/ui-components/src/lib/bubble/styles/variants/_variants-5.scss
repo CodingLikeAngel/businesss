@@ -1,0 +1,59 @@
+@use "sass:color";
+@use "../variables" as var;
+
+
+
+
+
+.accordion-neomorph {
+  background-color: #D4A017;
+  color: #1E3A5F;
+  border: none;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), -2px -2px 4px rgba(255, 255, 255, 0.5);
+  --accordion-content-bg: rgba(212, 160, 23, 0.9);
+  --accordion-content-color: #1E3A5F;
+  &.dark {
+    background-color: #1e293b;
+    color: #D4A017;
+    --accordion-content-bg: rgba(30, 41, 59, 0.9);
+    --accordion-content-color: #D4A017;
+  }
+  .accordion-header {
+    background-color: rgba(212, 160, 23, 0.2);
+  }
+}
+
+.accordion-glitch {
+  background-color: #1E3A5F;
+  color: #FFD700;
+  border-color: #1E3A5F;
+  animation: glitch-shift 2s infinite steps(5);
+  --accordion-content-bg: rgba(30, 58, 95, 0.9);
+  --accordion-content-color: #FFD700;
+  &.dark {
+    background-color: #1e293b;
+    color: #FFD700;
+    --accordion-content-bg: rgba(30, 41, 59, 0.9);
+    --accordion-content-color: #FFD700;
+  }
+  .accordion-header {
+    background-color: rgba(30, 58, 95, 0.2);
+  }
+}
+
+.accordion-portal {
+  background: radial-gradient(circle, #B362FF, #2D1B58);
+  color: #FFF5D6;
+  border: 1px dashed #FFD700;
+  --accordion-content-bg: rgba(179, 98, 255, 0.9);
+  --accordion-content-color: #FFF5D6;
+  &.dark {
+    background: radial-gradient(circle, #1e293b, #B362FF);
+    --accordion-content-bg: rgba(30, 41, 59, 0.9);
+    --accordion-content-color: #FFF5D6;
+  }
+  .accordion-header {
+    background-color: rgba(0, 0, 0, 0.2);
+  }
+}
+

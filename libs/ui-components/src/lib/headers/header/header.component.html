@@ -1,0 +1,29 @@
+<header [class]="headerClasses" [style]="customStyles">
+  <div class="header-content">
+    <div class="title-wrapper">
+      <h1>{{ title }}</h1>
+      <p *ngIf="subtitle">{{ subtitle }}</p>
+    </div>
+
+    <button
+      class="menu-toggle"
+      (click)="toggleMenu()"
+      [attr.aria-expanded]="isMenuOpen"
+      aria-label="Toggle navigation menu"
+    >
+      <span class="hamburger-icon" [class.open]="isMenuOpen">
+        <span class="bar top"></span>
+        <span class="bar middle"></span>
+        <span class="bar bottom"></span>
+      </span>
+    </button>
+
+    <nav class="nav" [class.open]="isMenuOpen">
+      <ul>
+        <li *ngFor="let item of navItems" [class.active]="item.active">
+          <a [href]="item.href">{{ item.label }}</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>

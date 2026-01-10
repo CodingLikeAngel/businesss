@@ -1,0 +1,515 @@
+@layer base {
+    .header {
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      transition: all 300ms ease-in-out;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 10;
+      background: transparent;
+      color: rgb(17, 24, 39);
+      border: none;
+  
+      /* Mayor especificidad para customStyles */
+      &[style][class*="header-"] {
+        background: var(--header-bg, transparent) !important;
+        color: var(--header-color, rgb(17, 24, 39)) !important;
+        border: var(--header-border, none) !important;
+        box-shadow: var(--header-shadow, 0 2px 10px rgba(0, 0, 0, 0.1)) !important;
+        &:hover {
+          background: var(--header-hover-bg, var(--header-bg, transparent)) !important;
+          box-shadow: var(--header-hover-shadow, var(--header-shadow, 0 2px 10px rgba(0, 0, 0, 0.1))) !important;
+        }
+      }
+  
+      .header-content {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+  
+      .title-wrapper {
+        flex-grow: 1;
+      }
+  
+      h1 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+      }
+  
+      p {
+        font-size: 1rem;
+        margin: 0.5rem 0 0;
+        color: rgb(102, 102, 102);
+      }
+  
+      &.align-left { text-align: left; }
+      &.align-center { text-align: center; }
+      &.align-right { text-align: right; }
+  
+      &.dark,
+      :where([data-theme="dark"]) & {
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        color: rgb(209, 213, 219);
+      }
+  
+      .menu-toggle {
+        display: none;
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        z-index: 15;
+  
+        .hamburger-icon {
+          display: block;
+          width: 36px;
+          height: 28px;
+          position: relative;
+  
+          .bar {
+            position: absolute;
+            width: 100%;
+            height: 5px;
+            background: rgb(0, 0, 0) !important;
+            border-radius: 3px;
+            transition: all 300ms ease;
+  
+            &.top { top: 0; }
+            &.middle { top: 11px; }
+            &.bottom { top: 22px; }
+          }
+  
+          &.open {
+            .top { transform: translateY(11px) rotate(45deg); }
+            .middle { opacity: 0; }
+            .bottom { transform: translateY(-11px) rotate(-45deg); }
+          }
+        }
+      }
+  
+      .nav {
+        ul {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          gap: 1.5rem;
+        }
+  
+        li.active a {
+          font-weight: 700;
+          border-bottom: 2px solid;
+        }
+  
+        a {
+          text-decoration: none;
+          color: inherit;
+          font-size: 1rem;
+          transition: color 200ms ease;
+        }
+  
+        @media (max-width: 768px) {
+          display: none;
+          &.open {
+            display: block;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: inherit;
+            padding: 1rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 20;
+            ul {
+              flex-direction: column;
+              gap: 1rem;
+            }
+            a {
+              color: inherit;
+            }
+          }
+        }
+      }
+  
+      @media (max-width: 768px) {
+        .menu-toggle {
+          display: block !important;
+          position: absolute;
+          top: 1rem;
+          right: 1rem;
+          z-index: 25;
+        }
+  
+        .nav.open {
+          background-color: rgb(255, 255, 255);
+          a {
+            color: rgb(51, 51, 51);
+          }
+        }
+      }
+    }
+  }
+  
+  @layer components {
+    .header-primary {
+      background: rgb(237, 28, 36);
+      color: rgb(255, 255, 255);
+      border-bottom: 4px solid rgb(173, 20, 26);
+      .menu-toggle .hamburger-icon .bar { background: rgb(255, 255, 255) !important; }
+      &.dark {
+        background: rgb(139, 0, 0);
+        border-bottom-color: rgb(100, 0, 0);
+      }
+    }
+  
+    .header-secondary {
+      background: linear-gradient(90deg, rgb(0, 120, 215), rgb(0, 191, 255));
+      color: rgb(255, 255, 255);
+      box-shadow: inset 0 0 10px rgba(0, 191, 255, 0.5);
+      .menu-toggle .hamburger-icon .bar { background: rgb(255, 255, 255) !important; }
+      &.dark {
+        background: linear-gradient(90deg, rgb(0, 60, 120), rgb(0, 120, 215));
+        box-shadow: inset 0 0 15px rgba(0, 120, 215, 0.7);
+      }
+    }
+  
+    .header-neon {
+      background: rgb(10, 25, 47);
+      border: 2px solid rgb(6, 182, 212);
+      color: rgb(6, 182, 212);
+      box-shadow: 0 0 15px rgba(6, 182, 212, 0.5), inset 0 0 5px rgba(6, 182, 212, 0.3);
+      font-family: 'Orbitron', sans-serif;
+      text-transform: uppercase;
+      .menu-toggle .hamburger-icon .bar { background: rgb(6, 182, 212) !important; }
+      &.dark {
+        background: rgb(0, 10, 20);
+        border-color: rgb(255, 77, 166);
+        color: rgb(255, 77, 166);
+        box-shadow: 0 0 20px rgba(255, 77, 166, 0.7);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 77, 166) !important; }
+      }
+    }
+  
+    // Resto de variantes sin cambios...
+  
+    .header-glass {
+      background: rgba(255, 255, 255, 0.15); /* Vidrio translúcido */
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: rgb(17, 24, 39);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      .menu-toggle .hamburger-icon .bar { background: rgb(17, 24, 39) !important; }
+      &.dark {
+        background: rgba(17, 24, 39, 0.3);
+        border-color: rgb(45, 212, 191);
+        color: rgb(255, 255, 255);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 255, 255) !important; }
+      }
+    }
+  
+    .header-retro {
+      background: rgb(0, 128, 128); /* Teal estilo consolas retro */
+      color: rgb(255, 255, 255);
+      font-family: "Press Start 2P", cursive;
+      border: 4px solid rgb(255, 215, 0); /* Borde amarillo pixelado */
+      box-shadow: inset 0 0 10px rgba(255, 215, 0, 0.3);
+      .menu-toggle .hamburger-icon .bar { background: rgb(255, 255, 255) !important; }
+      &.dark {
+        background: rgb(0, 64, 64);
+        color: rgb(255, 215, 0);
+        border-color: rgb(255, 107, 107);
+      }
+    }
+  
+    .header-cyberpunk {
+      background: linear-gradient(45deg, rgb(10, 25, 47), rgb(255, 215, 0)); /* Amarillo y oscuro */
+      border: 3px dashed rgb(6, 182, 212); /* Borde neón cian */
+      color: rgb(6, 182, 212);
+      text-transform: uppercase;
+      font-family: 'Orbitron', sans-serif;
+      .menu-toggle .hamburger-icon .bar { background: rgb(6, 182, 212) !important; }
+      &.dark {
+        background: linear-gradient(45deg, rgb(10, 25, 47), rgb(147, 51, 234));
+        color: rgb(255, 215, 0);
+        border-color: rgb(255, 77, 166);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 215, 0) !important; }
+      }
+    }
+  
+    .header-rayman {
+      background: linear-gradient(135deg, rgb(255, 215, 0), rgb(179, 98, 255)); /* Amarillo y morado Rayman */
+      color: rgb(34, 34, 68);
+      border: 2px solid rgb(255, 107, 107);
+      border-radius: 15px;
+      box-shadow: 0 0 10px rgba(255, 107, 107, 0.5);
+      .menu-toggle .hamburger-icon .bar { background: rgb(34, 34, 68) !important; }
+      &.dark {
+        background: linear-gradient(135deg, rgb(34, 34, 68), rgb(0, 162, 255));
+        color: rgb(255, 245, 230);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  
+    .header-minimal {
+      background: transparent;
+      border-bottom: 2px solid rgb(209, 213, 219);
+      color: rgb(17, 24, 39);
+      box-shadow: none;
+      .menu-toggle .hamburger-icon .bar { background: rgb(0, 0, 0) !important; }
+      &.dark {
+        border-color: rgb(31, 41, 55);
+        color: rgb(209, 213, 219);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 255, 255) !important; }
+      }
+    }
+  
+    .header-bubble {
+      background: radial-gradient(circle at 50% 50%, rgb(255, 245, 230), rgb(0, 162, 255)); /* Rayman burbujas */
+      color: rgb(34, 34, 68);
+      border: 2px solid rgb(0, 162, 255);
+      border-radius: 9999px;
+      box-shadow: 0 0 10px rgba(0, 162, 255, 0.6);
+      .menu-toggle .hamburger-icon .bar { background: rgb(34, 34, 68) !important; }
+      &.dark {
+        background: radial-gradient(circle at 50% 50%, rgb(179, 98, 255), rgb(34, 34, 68));
+        border-color: rgb(179, 98, 255);
+        color: rgb(255, 245, 230);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  
+    .header-electoon {
+      background: linear-gradient(135deg, rgb(255, 107, 157), rgb(179, 98, 255)); /* Rosa y morado Rayman */
+      color: rgb(255, 245, 230);
+      border: 3px solid rgb(34, 34, 68);
+      box-shadow: 0 0 12px rgba(255, 107, 157, 0.7);
+      border-radius: 20px;
+      .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      &.dark {
+        background: linear-gradient(135deg, rgb(34, 34, 68), rgb(255, 107, 157));
+        border-color: rgb(255, 245, 230);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 107, 157) !important; }
+      }
+    }
+  
+    .header-jungle {
+      background: linear-gradient(to right, rgb(0, 210, 106), rgb(255, 215, 0)); /* Verde y amarillo Rayman */
+      color: rgb(34, 34, 68);
+      border: 3px solid rgb(255, 107, 107);
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+      .menu-toggle .hamburger-icon .bar { background: rgb(34, 34, 68) !important; }
+      &.dark {
+        background: linear-gradient(to right, rgb(34, 34, 68), rgb(0, 210, 106));
+        border-color: rgb(179, 98, 255);
+        color: rgb(255, 245, 230);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  
+    .header-joycon {
+      background: rgb(255, 107, 107); /* Rojo Joy-Con */
+      color: rgb(255, 245, 230);
+      border: 2px solid rgb(209, 213, 219);
+      border-radius: 10px 10px 30px 30px; /* Forma de Joy-Con */
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      &.dark {
+        background: rgb(0, 162, 255); /* Azul Joy-Con */
+        border-color: rgb(31, 41, 55);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  
+    .header-neomorph {
+      background: rgb(255, 245, 230);
+      color: rgb(34, 34, 68);
+      border-radius: 12px;
+      box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.1), -4px -4px 8px rgba(255, 255, 255, 0.5);
+      border: none;
+      .menu-toggle .hamburger-icon .bar { background: rgb(34, 34, 68) !important; }
+      &.dark {
+        background: rgb(34, 34, 68);
+        color: rgb(255, 245, 230);
+        box-shadow: 4px 4px 8px rgba(0, 0, 0, 0.3), -4px -4px 8px rgba(179, 98, 255, 0.2);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  
+    .header-glitch {
+      background: rgb(34, 34, 68);
+      color: rgb(255, 107, 157);
+      border: 2px solid rgb(179, 98, 255);
+      font-family: "Orbitron", sans-serif;
+      text-transform: uppercase;
+      position: relative;
+      overflow: hidden;
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 107, 157, 0.2);
+        animation: glitch 2s infinite;
+      }
+      .menu-toggle .hamburger-icon .bar { background: rgb(255, 107, 157) !important; }
+      &.dark {
+        background: rgb(10, 25, 47);
+        color: rgb(0, 162, 255);
+        border-color: rgb(179, 98, 255);
+        .menu-toggle .hamburger-icon .bar { background: rgb(0, 162, 255) !important; }
+      }
+    }
+  
+    @keyframes glitch {
+      0% { left: -100%; }
+      10% { left: 20%; }
+      20% { left: -20%; }
+      30% { left: 50%; }
+      100% { left: 100%; }
+    }
+  
+    .header-portal {
+      background: radial-gradient(circle, rgb(179, 98, 255), rgb(34, 34, 68));
+      color: rgb(255, 245, 230);
+      border-radius: 9999px;
+      border: 3px dashed rgb(255, 215, 0);
+      box-shadow: 0 0 15px rgba(179, 98, 255, 0.6);
+      .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      &.dark {
+        background: radial-gradient(circle, rgb(34, 34, 68), rgb(0, 162, 255));
+        border-color: rgb(255, 107, 157);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 107, 157) !important; }
+      }
+    }
+  
+    .header-cartoon {
+      background: rgb(255, 215, 0);
+      color: rgb(34, 34, 68);
+      border: 4px solid rgb(34, 34, 68);
+      box-shadow: 4px 4px 0 rgb(34, 34, 68);
+      border-radius: 8px;
+      .menu-toggle .hamburger-icon .bar { background: rgb(34, 34, 68) !important; }
+      &.dark {
+        background: rgb(179, 98, 255);
+        color: rgb(255, 245, 230);
+        border-color: rgb(255, 245, 230);
+        box-shadow: 4px 4px 0 rgb(255, 245, 230);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  
+    .header-luma {
+      background: radial-gradient(circle at 30% 30%, rgb(255, 215, 0), rgb(255, 107, 107));
+      color: rgb(34, 34, 68);
+      border-radius: 9999px;
+      box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
+      .menu-toggle .hamburger-icon .bar { background: rgb(34, 34, 68) !important; }
+      &.dark {
+        background: radial-gradient(circle at 30% 30%, rgb(0, 162, 255), rgb(179, 98, 255));
+        color: rgb(255, 245, 230);
+        box-shadow: 0 0 15px rgba(0, 162, 255, 0.7);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  
+    .header-platform {
+      background: linear-gradient(to bottom, rgb(0, 210, 106), rgb(0, 162, 81));
+      color: rgb(255, 245, 230);
+      border: 3px solid rgb(34, 34, 68);
+      border-bottom-width: 6px; /* Plataforma más gruesa abajo */
+      .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      &.dark {
+        background: linear-gradient(to bottom, rgb(179, 98, 255), rgb(147, 51, 234));
+        border-color: rgb(255, 245, 230);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  
+    .header-hero {
+      background: rgb(255, 107, 107);
+      color: rgb(255, 245, 230);
+      border-radius: 20px 5px 20px 5px; /* Forma heroica */
+      box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+      .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      &.dark {
+        background: rgb(0, 162, 255);
+        box-shadow: 0 5px 15px rgba(0, 162, 255, 0.4);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  
+    .header-coin {
+      background: radial-gradient(circle at 30% 30%, rgb(255, 215, 0), rgb(255, 107, 107));
+      color: rgb(34, 34, 68);
+      border-radius: 9999px;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.8), inset 0 0 5px rgba(255, 215, 0, 0.5);
+      .menu-toggle .hamburger-icon .bar { background: rgb(34, 34, 68) !important; }
+      &.dark {
+        background: radial-gradient(circle at 30% 30%, rgb(0, 162, 255), rgb(179, 98, 255));
+        color: rgb(255, 245, 230);
+        box-shadow: 0 0 10px rgba(0, 162, 255, 0.8);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  
+    .header-cloud {
+      background: rgb(255, 245, 230);
+      color: rgb(34, 34, 68);
+      border: 3px solid rgb(255, 255, 255);
+      border-radius: 50px;
+      box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
+      .menu-toggle .hamburger-icon .bar { background: rgb(34, 34, 68) !important; }
+      &.dark {
+        background: rgb(34, 34, 68);
+        color: rgb(255, 245, 230);
+        border-color: rgb(179, 98, 255);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  
+    .header-fire {
+      background: linear-gradient(to bottom, rgb(255, 215, 0), rgb(255, 107, 107), rgb(237, 28, 36));
+      color: rgb(255, 245, 230);
+      border-radius: 5px 20px 5px 20px;
+      box-shadow: 0 0 15px rgba(255, 107, 107, 0.6);
+      .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      &.dark {
+        background: linear-gradient(to bottom, rgb(0, 162, 255), rgb(179, 98, 255), rgb(34, 34, 68));
+        box-shadow: 0 0 15px rgba(179, 98, 255, 0.6);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  
+    .header-water {
+      background: rgba(0, 162, 255, 0.3);
+      color: rgb(255, 245, 230);
+      border: 2px solid rgb(0, 162, 255);
+      backdrop-filter: blur(5px);
+      border-radius: 15px;
+      .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      &.dark {
+        background: rgba(179, 98, 255, 0.3);
+        border-color: rgb(179, 98, 255);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  
+    .header-leaf {
+      background: linear-gradient(135deg, rgb(0, 210, 106), rgb(0, 162, 81));
+      color: rgb(255, 245, 230);
+      border-radius: 20px 5px 20px 5px; /* Forma de hoja */
+      box-shadow: 0 5px 10px rgba(0, 210, 106, 0.3);
+      .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      &.dark {
+        background: linear-gradient(135deg, rgb(0, 162, 81), rgb(0, 210, 106));
+        box-shadow: 0 5px 10px rgba(0, 162, 81, 0.3);
+        .menu-toggle .hamburger-icon .bar { background: rgb(255, 245, 230) !important; }
+      }
+    }
+  }

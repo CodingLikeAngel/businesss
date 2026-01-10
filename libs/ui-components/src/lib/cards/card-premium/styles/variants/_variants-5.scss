@@ -1,0 +1,127 @@
+@use "sass:color";
+@use "../variables" as var;
+
+
+
+
+  /* Variantes inspiradas en juegos */
+  .card--nintendo {
+    border-radius: 20px;
+    border-bottom-left-radius: 160px;
+    border-bottom-right-radius: 160px;
+    background: linear-gradient(135deg, #ed1c24, #8b0000); /* Super Mario */
+    box-shadow: 0 15px 0 #ffd700, inset 0 -15px 0 rgba(255, 255, 255, 0.24);
+    animation: nintendoBounce 1.5s infinite;
+
+    .icon {
+      background: #ffd700; /* Dorado de monedas */
+      border-bottom-left-radius: 100px;
+      border-bottom-right-radius: 100px;
+      box-shadow: 0 15px 0 rgba(0, 0, 0, 0.1), inset 0 -8px 0 #fff;
+    }
+  }
+
+  .card--rayman {
+    border-radius: 30px 10px 30px 10px; /* Forma orgánica */
+    background: radial-gradient(circle, #fac815, #f87171); /* Rayman Origins */
+    border: 3px solid #ff6b9d; /* Rosa Electoon */
+    animation: raymanSpark 1.5s infinite;
+
+    .icon {
+      background: #34d399; /* Verde selva */
+      border-radius: 50%;
+      box-shadow: 0 0 10px rgba(255, 107, 157, 0.5);
+    }
+  }
+
+  .card--onepiece {
+    border-radius: 50% 50% 20px 20px; /* Forma de barco */
+    background: linear-gradient(90deg, #06b6d4, #1e40af); /* Océano */
+    border: 2px dashed #ffd700; /* Oro pirata */
+    animation: waveFlow 2.5s infinite;
+
+    .icon {
+      background: #f87171; /* Sombrero de Luffy */
+      border-radius: 50%;
+    }
+  }
+
+  .card--limbo {
+    border-radius: 0; /* Cuadrado sombrío */
+    background: linear-gradient(135deg, #1f2937, #111827); /* Limbo */
+    filter: grayscale(80%);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.8);
+    animation: limboFade 2s infinite;
+
+    .icon {
+      background: #374151;
+      opacity: 0.8;
+      border-radius: 0;
+    }
+  }
+
+  .card--bioshock {
+    border-radius: 15px; /* Gótico suave */
+    background: radial-gradient(circle, #1e3a8a, #0f172a); /* Rapture */
+    border: 2px solid #b91c1c; /* Rojo sangre */
+    box-shadow: 0 0 15px rgba(250, 204, 21, 0.5);
+    animation: bioshockGlow 2s infinite;
+
+    .icon {
+      background: #b91c1c;
+      border-radius: 10px;
+    }
+  }
+
+  .card--supermeatboy {
+    border-radius: 0; /* Cuadrado crudo */
+    background: linear-gradient(135deg, #b91c1c, #4a1a1a); /* Sangre */
+    border: 3px solid #ff6b6b;
+    animation: meatPulse 1s infinite;
+
+    .icon {
+      background: #ff6b6b;
+      border-radius: 0;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  .card--zelda {
+    clip-path: polygon(50% 0%, 100% 100%, 0% 100%); /* Triángulo */
+    background: linear-gradient(45deg, #10b981, #047857); /* Bosque Hyrule */
+    border: 2px solid #ffd700; /* Trifuerza */
+    animation: zeldaShine 2s infinite;
+
+    .icon {
+      background: #ffd700;
+      clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
+    }
+  }
+
+  .card--sonic {
+    border-radius: 50%; /* Circular como anillos */
+    background: radial-gradient(circle, #3b82f6, #1e3a8a); /* Azul Sonic */
+    border: 2px solid #facc15; /* Anillos dorados */
+    animation: sonicSpin 1s infinite;
+
+    .icon {
+      background: #facc15;
+      border-radius: 50%;
+    }
+  }
+
+  .card--default {
+    border-radius: 20px;
+    border-bottom-left-radius: 160px;
+    border-bottom-right-radius: 160px;
+    background: linear-gradient(to bottom, #287bff, #1e40af);
+    box-shadow: 0 15px 0 #fff, inset 0 -15px 0 rgba(255, 255, 255, 0.24);
+    animation: subtlePulse 2s infinite;
+
+    .icon {
+      background: #3c2846;
+      border-bottom-left-radius: 100px;
+      border-bottom-right-radius: 100px;
+      box-shadow: 0 15px 0 rgba(0, 0, 0, 0.1), inset 0 -8px 0 #fff;
+    }
+  }

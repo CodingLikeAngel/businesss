@@ -1,0 +1,128 @@
+@use "sass:color";
+@use "../variables" as var;
+
+
+
+/* Variant: glass */
+.ui-card-rutas--glass {
+  --card-bg: rgba(255, 255, 255, 0.2);
+  --card-border: 2px solid rgba(255, 255, 255, 0.4);
+  --card-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  --card-hover-border: 2px solid rgba(255, 255, 255, 0.8);
+  --card-hover-shadow: 0 0 35px rgba(255, 255, 255, 0.7);
+  --card-text-color: #f3f4f6;
+  --card-accent-color: #ffffff;
+  --card-accent-gradient: radial-gradient(circle, #ffffff 10%, transparent 70%);
+  backdrop-filter: blur(18px);
+}
+
+/* Variant: retro */
+.ui-card-rutas--retro {
+  --card-bg: linear-gradient(to bottom, #1e3a8a 0%, #facc15 100%);
+  --card-border: 3px solid #3b82f6;
+  --card-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+  --card-hover-border: 3px solid #60a5fa;
+  --card-hover-shadow: 0 0 35px rgba(59, 130, 246, 0.8);
+  --card-text-color: #fefcbf;
+  --card-accent-color: #3b82f6;
+  --card-accent-gradient: radial-gradient(circle, #facc15 10%, transparent 70%);
+}
+
+/* Variant: pulse-gradient */
+.ui-card-rutas--pulse-gradient {
+  --card-bg: linear-gradient(45deg, #ec4899 0%, #00e5ff 100%);
+  --card-border: 2px solid #ec4899;
+  --card-shadow: 0 0 20px rgba(236, 72, 153, 0.6);
+  --card-hover-border: 2px solid #f472b6;
+  --card-hover-shadow: 0 0 40px rgba(0, 229, 255, 0.9);
+  --card-text-color: #e0f7fa;
+  --card-accent-color: #ec4899;
+  --card-accent-gradient: radial-gradient(circle, #00e5ff 10%, transparent 70%);
+  animation: pulse-gradient 4s infinite;
+}
+
+/* Variant: holo */
+.ui-card-rutas--holo {
+  --card-bg: linear-gradient(135deg, #0f172a 0%, #0284c7 100%);
+  --card-border: 2px solid #0ea5e9;
+  --card-shadow: 0 0 20px rgba(14, 165, 233, 0.5), inset 0 0 8px rgba(14, 165, 233, 0.3);
+  --card-hover-border: 2px solid #38bdf8;
+  --card-hover-shadow: 0 0 35px rgba(14, 165, 233, 0.8);
+  --card-text-color: #e0f7fa;
+  --card-accent-color: #0ea5e9;
+  --card-accent-gradient: radial-gradient(circle, #0ea5e9 10%, transparent 70%);
+}
+
+/* Variant: matrix */
+.ui-card-rutas--matrix {
+  --card-bg: linear-gradient(to bottom, #052e16 0%, #000 100%);
+  --card-border: 2px solid #22c55e;
+  --card-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+  --card-hover-border: 2px solid #4ade80;
+  --card-hover-shadow: 0 0 35px rgba(34, 197, 94, 0.8);
+  --card-text-color: #d9f99d;
+  --card-accent-color: #22c55e;
+  --card-accent-gradient: radial-gradient(circle, #22c55e 10%, transparent 70%);
+  background-image: linear-gradient(to bottom, rgba(34, 197, 94, 0.15), transparent);
+}
+
+/* Variant: quantum */
+.ui-card-rutas--quantum {
+  --card-bg: radial-gradient(circle at center, #4c1d95 0%, #1e1b4b 100%);
+  --card-border: 2px solid #d946ef;
+  --card-shadow: 0 0 20px rgba(217, 70, 239, 0.6);
+  --card-hover-border: 2px solid #e879f9;
+  --card-hover-shadow: 0 0 35px rgba(217, 70, 239, 0.9);
+  --card-text-color: #f5d0fe;
+  --card-accent-color: #d946ef;
+  --card-accent-gradient: radial-gradient(circle, #d946ef 10%, transparent 70%);
+}
+
+/* Variant: cybernetic */
+.ui-card-rutas--cybernetic {
+  --card-bg: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  --card-border: 2px dashed #00e5ff;
+  --card-shadow: 0 0 20px rgba(0, 229, 255, 0.5);
+  --card-hover-border: 2px dashed #22d3ee;
+  --card-hover-shadow: 0 0 35px rgba(0, 229, 255, 0.8);
+  --card-text-color: #e0f7fa;
+  --card-accent-color: #00e5ff;
+  --card-accent-gradient: radial-gradient(circle, #00e5ff 10%, transparent 70%);
+}
+
+/* Variant: danger */
+.ui-card-rutas--danger {
+  --card-bg: linear-gradient(to bottom, #7f1d1d 0%, #b91c1c 100%);
+  --card-border: 2px solid #ef4444;
+  --card-shadow: 0 0 20px rgba(239, 68, 68, 0.6);
+  --card-hover-border: 2px solid #f87171;
+  --card-hover-shadow: 0 0 35px rgba(239, 68, 68, 0.9);
+  --card-text-color: #fee2e2;
+  --card-accent-color: #ef4444;
+  --card-accent-gradient: radial-gradient(circle, #ef4444 10%, transparent 70%);
+}
+
+/* Variant: success */
+.ui-card-rutas--success {
+  --card-bg: linear-gradient(to top, #14532d 0%, #22c55e 100%);
+  --card-border: 2px solid #22c55e;
+  --card-shadow: 0 0 20px rgba(34, 197, 94, 0.6);
+  --card-hover-border: 2px solid #4ade80;
+  --card-hover-shadow: 0 0 35px rgba(34, 197, 94, 0.9);
+  --card-text-color: #dcfce7;
+  --card-accent-color: #22c55e;
+  --card-accent-gradient: radial-gradient(circle, #22c55e 10%, transparent 70%);
+}
+
+/* Variant: nano */
+.ui-card-rutas--nano {
+  --card-bg: linear-gradient(135deg, #4c1d95 0%, #9333ea 100%);
+  --card-border: 2px solid #9333ea;
+  --card-shadow: 0 0 15px rgba(147, 51, 234, 0.5);
+  --card-hover-border: 2px solid #a855f7;
+  --card-hover-shadow: 0 0 30px rgba(147, 51, 234, 0.8);
+  --card-text-color: #f5d0fe;
+  --card-accent-color: #9333ea;
+  --card-accent-gradient: radial-gradient(circle, #9333ea 10%, transparent 70%);
+  border-radius: 0.75rem;
+}

@@ -1,0 +1,75 @@
+<div class="date-time-picker-container" 
+     [ngClass]="pickerClasses()"
+     [style]="pickerStyles()">
+  <input type="text"
+         class="date-time-picker-input"
+         [value]="formattedDateTime()"
+         (click)="toggleCalendar($event)"
+         (keydown)="handleInputKeydown($event)"
+         [disabled]="disabled()"
+         [attr.aria-label]="disabled() ? 'Date time picker disabled' : 'Date time picker'"
+         [attr.aria-disabled]="disabled() ? 'true' : 'false'"
+         readonly>
+
+  <button class="date-time-picker-icon"
+          type="button"
+          (click)="toggleCalendar($event)"
+          (keydown)="handleButtonKeydown($event)"
+          [disabled]="disabled()"
+          [attr.aria-label]="'Open calendar'">
+    📅
+  </button>
+
+  <div class="custom-calendar" 
+       #calendar
+       *ngIf="showCalendar()" 
+       (click)="$event.stopPropagation()"
+       tabindex="0" 
+       (keydown)="handleCalendarKeydown($event)">
+    <div class="calendar-header">
+      <button type="button" 
+              (click)="changeMonth(-1)" 
+              (keydown)="handleButtonKeydown($event)"
+              [disabled]="disabled()"
+              [attr.aria-label]="'Previous month'">
+        ◄
+      </button>
+      <span>{{ currentMonth() | date: 'MMMM yyyy' }}</span>
+      <button type="button" 
+              (click)="changeMonth(1)" 
+              (keydown)="handleButtonKeydown($event)"
+              [disabled]="disabled()"
+              [attr.aria-label]="'Next month'">
+        ►
+      </button>
+    </div>
+    <div class="calendar-body">
+      <div class="calendar-weekdays">
+        <span *ngFor="let day of weekdays">{{ day }}</span>
+      </div>
+      <div class="calendar-days">
+        <button *ngFor="let day of daysInMonth()"
+                type="button"
+                [ngClass]="{
+                  'calendar-day': true,
+                  'selected': isSelected(day),
+                  'today': isToday(day),
+                  'disabled': !isCurrentMonth(day)
+                }"
+                (click)="selectDate(day, $event)"
+                (keydown)="handleDayKeydown($event, day)"
+                [disabled]="disabled() || !isCurrentMonth(day)"
+                [attr.aria-label]="dayLabel(day)">
+          {{ day.getDate() }}
+        </button>
+      </div>
+    </div>
+    <div class="calendar-time" *ngIf="showTime">
+      <input type="time"
+             [ngModel]="selectedTime()"
+             (ngModelChange)="selectedTime.set($event); updateDateTime()"
+             [disabled]="disabled()"
+             [attr.aria-label]="'Select time'">
+    </div>
+  </div>
+</div>
