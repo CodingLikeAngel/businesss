@@ -1,0 +1,47 @@
+.table-glass {
+  background: rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 20px;
+  overflow: hidden;
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+
+  .table-header {
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    
+    th {
+      color: #94a3b8;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      padding: 20px;
+      text-align: left;
+    }
+  }
+
+  .table-row {
+     transition: background 0.3s ease;
+     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+
+     &:last-child {
+       border-bottom: none;
+     }
+
+     &:hover {
+       background: rgba(255, 255, 255, 0.03);
+     }
+  }
+
+  .table-cell {
+    padding: 20px;
+    color: #f8fafc;
+    font-weight: 500;
+  }
+}

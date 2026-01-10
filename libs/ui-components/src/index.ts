@@ -36,6 +36,7 @@ export * from './lib/chart/chart.component';
 
 // Misc UI
 export * from './lib/hero/hero.component';
+export * from './lib/features-section/features-section.component';
 export * from './lib/acordeon/accordion.component';
 
 // Animations

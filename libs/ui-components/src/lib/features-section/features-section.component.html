@@ -1,0 +1,25 @@
+<section [class]="containerClasses">
+  <div class="features-inner">
+    <div class="header-content">
+      <h2 class="title">{{ title }}</h2>
+      <p class="subtitle">{{ subtitle }}</p>
+    </div>
+
+    <div class="features-grid">
+      <div *ngFor="let feature of features; let i = index" 
+           class="feature-card" 
+           [style.--feature-color]="feature.color"
+           [style.animation-delay]="i * 0.1 + 's'">
+        <div class="icon-wrapper">
+          <span class="icon">{{ feature.icon }}</span>
+          <div class="icon-bg"></div>
+        </div>
+        <div class="card-content">
+          <h3 class="feature-title">{{ feature.title }}</h3>
+          <p class="feature-description">{{ feature.description }}</p>
+        </div>
+        <div class="card-glow"></div>
+      </div>
+    </div>
+  </div>
+</section>

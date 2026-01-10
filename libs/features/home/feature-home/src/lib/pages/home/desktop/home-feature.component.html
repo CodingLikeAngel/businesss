@@ -27,6 +27,12 @@
         ></lib-ui-components-hero>
       </section>
 
+      <!-- FEATURES -->
+      <lib-ui-components-features-section *ngSwitchCase="'features'"
+        [variant]="getVariant('features')"
+        [id]="section.id"
+      ></lib-ui-components-features-section>
+
       <!-- BUBBLE -->
       <lib-bubble-animation *ngSwitchCase="'bubble'"
         [variant]="getVariant('bubble')"

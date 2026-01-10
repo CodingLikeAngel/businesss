@@ -3,7 +3,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { UICardAnimatedComponent } from '../cards/card-animated/card-animated.component';
 
 export const heroVariants = [
-  'primary', 'secondary', 'cyberpunk', 'neon', 'matrix', 'stellar', 'retro', 'phoenix', 'default'
+  'primary', 'secondary', 'cyberpunk', 'neon', 'matrix', 'stellar', 'retro', 'phoenix', 'glass', 'default'
 ] as const;
 
 export type HeroVariant = typeof heroVariants[number];

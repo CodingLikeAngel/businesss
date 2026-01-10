@@ -6,7 +6,7 @@ import { variants as baseVariants } from '../../models/ui-components-data.model'
 export const animatedCardVariants = [
   ...baseVariants,
   'default', 'product-3d', 'product-hover', 'guide', 'normativa', 'feature', 
-  'reversible', 'minimal', 'ne-animated', 'river',
+  'reversible', 'minimal', 'ne-animated', 'river', 'glass',
   'mario', 'zelda', 'kirby', 'rayman', 'lum'
 ] as const;
 

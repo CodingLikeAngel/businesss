@@ -340,6 +340,31 @@
       </div>
     </div>
 
+    <!-- Glassmorphism: Frosted UI with Floating Abstract Shapes -->
+    <div *ngSwitchCase="'glass'" class="glass-container">
+      <div class="glass-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+      </div>
+      <div class="glass-grid">
+        <lib-ui-components-card-animated
+          *ngFor="let card of navigationCards; let i = index"
+          [icon]="card.icon"
+          [title]="card.title"
+          [description]="card.description"
+          variant="glass"
+          [animationDelay]="(i * 0.2) + 's'"
+          [customStyles]="{ 'card': 'glass-card' }"
+          (click)="scrollToSection(card.sectionId)"
+          (keydown)="onInteractiveKeydown($event, scrollToSection, card.sectionId)"
+          role="button"
+          tabindex="0"
+          [attr.aria-label]="card.title"
+        ></lib-ui-components-card-animated>
+      </div>
+    </div>
+
     <!-- Default: Holographic Card Gallery -->
     <div *ngSwitchDefault class="gallery-container holo-grid-bg">
       <div class="gallery-grid">

@@ -189,7 +189,7 @@ export interface ProductsConfig {
 
 export interface PageSection {
   id: string;
-  type: 'hero' | 'services' | 'products' | 'testimonials' | 'pricing' | 'promotions' | 'faq' | 'gallery' | 'contact' | 'bubble';
+  type: 'hero' | 'services' | 'products' | 'testimonials' | 'pricing' | 'promotions' | 'faq' | 'gallery' | 'contact' | 'bubble' | 'features';
   label: string; // User friendly name
   visible: boolean;
 }
@@ -511,6 +511,7 @@ export class VariantService {
 
   private sectionsSubject = new BehaviorSubject<PageSection[]>([
     { id: 'sec_hero', type: 'hero', label: 'Portada Hero', visible: true },
+    { id: 'sec_features', type: 'features', label: 'Características Premium', visible: true },
     { id: 'sec_bubble', type: 'bubble', label: 'Efecto Burbujas', visible: true },
     { id: 'sec_services', type: 'services', label: 'Servicios', visible: true },
     { id: 'sec_products', type: 'products', label: 'Módulos/Productos', visible: true },
