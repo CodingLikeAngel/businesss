@@ -29,37 +29,55 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
     <div class="builder-container">
       <!-- Sidebar Navigation -->
       <aside class="builder-sidebar">
-        <div class="nav-item" [class.active]="activeTab === 'general'" (click)="setActiveTab('general')">
-          <span>⚙️</span>
-          <div class="tooltip">General</div>
+        <div class="logo">AS</div>
+        <div class="nav-item" [class.active]="activeTab === 'general'" [attr.activeTab]="'general'" (click)="setActiveTab('general')">
+          <i class="icon-settings">⚙️</i>
+          <div class="tooltip">Configuración General</div>
         </div>
-        <div class="nav-item" [class.active]="activeTab === 'header'" (click)="setActiveTab('header')">
-          <span>🔝</span>
-          <div class="tooltip">Header & Navbar</div>
+        <div class="nav-item" [class.active]="activeTab === 'header'" [attr.activeTab]="'header'" (click)="setActiveTab('header')">
+          <i class="icon-header">🔝</i>
+          <div class="tooltip">Cabecera y Menú</div>
         </div>
-        <div class="nav-item" [class.active]="activeTab === 'hero'" (click)="setActiveTab('hero')">
-          <span>🚀</span>
-          <div class="tooltip">Hero Section</div>
+        <div class="nav-item" [class.active]="activeTab === 'hero'" [attr.activeTab]="'hero'" (click)="setActiveTab('hero')">
+          <i class="icon-hero">🚀</i>
+          <div class="tooltip">Sección Principal</div>
         </div>
-        <div class="nav-item" [class.active]="activeTab === 'content'" (click)="setActiveTab('content')">
-          <span>📝</span>
-          <div class="tooltip">Contenido</div>
+        <div class="nav-item" [class.active]="activeTab === 'content'" [attr.activeTab]="'content'" (click)="setActiveTab('content')">
+          <i class="icon-content">📝</i>
+          <div class="tooltip">Gestión de Contenido</div>
         </div>
-        <div class="nav-item" [class.active]="activeTab === 'layout'" (click)="setActiveTab('layout')">
-          <span>🎨</span>
-          <div class="tooltip">Estilos & Variantes</div>
+        <div class="nav-item" [class.active]="activeTab === 'layout'" [attr.activeTab]="'layout'" (click)="setActiveTab('layout')">
+          <i class="icon-style">🎨</i>
+          <div class="tooltip">Diseño y Variantes</div>
         </div>
-        <div class="nav-item" [class.active]="activeTab === 'footer'" (click)="setActiveTab('footer')">
-          <span>👣</span>
-          <div class="tooltip">Footer</div>
+        <div class="nav-item" [class.active]="activeTab === 'pricing'" [attr.activeTab]="'pricing'" (click)="setActiveTab('pricing')">
+          <i class="icon-pricing">💰</i>
+          <div class="tooltip">Precios y Tablas</div>
+        </div>
+        <div class="nav-item" [class.active]="activeTab === 'promotions'" [attr.activeTab]="'promotions'" (click)="setActiveTab('promotions')">
+          <i class="icon-promotions">🎁</i>
+          <div class="tooltip">Promociones</div>
+        </div>
+        <div class="nav-item" [class.active]="activeTab === 'gallery'" [attr.activeTab]="'gallery'" (click)="setActiveTab('gallery')">
+          <i class="icon-gallery">🖼️</i>
+          <div class="tooltip">Galería</div>
+        </div>
+        <div class="nav-item" [class.active]="activeTab === 'footer'" [attr.activeTab]="'footer'" (click)="setActiveTab('footer')">
+          <i class="icon-footer">👣</i>
+          <div class="tooltip">Pie de Página</div>
         </div>
       </aside>
 
-      <!-- Main Content Area -->
       <div class="builder-content">
-        <header>
-          <h2>Visual Builder</h2>
-          <p>Personaliza cada detalle de tu sitio web en tiempo real.</p>
+        <header class="builder-header">
+          <div class="header-top">
+            <h2>Anto Studios <span class="badge">PRO</span></h2>
+            <div class="save-status">
+              <span class="status-dot"></span>
+              Estado: Guardado
+            </div>
+          </div>
+          <p>Configurador visual activo. Los cambios se sincronizan en tiempo real.</p>
         </header>
 
         <!-- General Tab -->
@@ -73,12 +91,14 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
               (ngModelChange)="onGlobalVariantChange()"
               [options]="variantOptions"
             ></lib-ui-components-input>
+            <p class="helper-text">Esta variante se aplicará a todos los componentes que no tengan una variante específica seleccionada en la pestaña 'Diseño'.</p>
+            <button class="warning-btn mt-4" (click)="clearComponentVariants()">🧹 Limpiar Personalizaciones</button>
           </div>
 
           <div class="config-group">
             <h3>Gestión de Proyecto</h3>
             <div class="input-grid">
-              <button class="add-item-btn" (click)="exportProject()">📥 Exportar Configuración</button>
+              <button class="add-item-btn export-btn" (click)="exportProject()">📥 Exportar Configuración</button>
               <button class="reset-btn" (click)="resetConfiguration()">🔴 Restablecer Todo</button>
             </div>
           </div>
@@ -135,11 +155,28 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
                   <span class="item-sublabel">{{item.description | slice:0:40}}...</span>
                 </div>
                 <div class="item-actions">
-                  <button (click)="openEditModal('service', item, i)">✏️</button>
-                  <button class="delete-btn" (click)="removeItem('service', i)">🗑️</button>
+                  <button class="edit-btn" (click)="openEditModal('service', item, i)">✎</button>
+                  <button class="delete-btn" (click)="removeItem('service', i)">×</button>
                 </div>
               </div>
-              <button class="add-item-btn" (click)="openAddModal('service')">+ Añadir Servicio</button>
+              <button class="add-item-btn" (click)="openAddModal('service')">✚ Añadir Servicio</button>
+            </div>
+          </div>
+
+          <div class="config-group">
+            <h3>Productos / Módulos</h3>
+            <div class="item-list">
+              <div *ngFor="let p of productsConfig.items; let i = index" class="list-item">
+                <div class="item-info">
+                  <span class="item-label">{{p.name}}</span>
+                  <span class="item-sublabel">{{p.price}} - {{p.description | slice:0:30}}...</span>
+                </div>
+                <div class="item-actions">
+                  <button class="edit-btn" (click)="openEditModal('product', p, i)">✎</button>
+                  <button class="delete-btn" (click)="removeItem('product', i)">×</button>
+                </div>
+              </div>
+              <button class="add-item-btn" (click)="openAddModal('product')">✚ Añadir Producto</button>
             </div>
           </div>
 
@@ -149,12 +186,30 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
               <div *ngFor="let t of testimonialsConfig.items; let i = index" class="list-item">
                 <div class="item-info">
                   <span class="item-label">{{t.author}}</span>
+                  <span class="item-sublabel">"{{t.quote | slice:0:30}}..."</span>
                 </div>
                 <div class="item-actions">
-                  <button (click)="removeItem('testimonial', i)">🗑️</button>
+                  <button class="edit-btn" (click)="openEditModal('testimonial', t, i)">✎</button>
+                  <button class="delete-btn" (click)="removeItem('testimonial', i)">×</button>
                 </div>
               </div>
-              <button class="add-item-btn" (click)="openAddModal('testimonial')">+ Añadir Testimonio</button>
+              <button class="add-item-btn" (click)="openAddModal('testimonial')">✚ Añadir Testimonio</button>
+            </div>
+          </div>
+
+          <div class="config-group">
+            <h3>Preguntas Frecuentes (FAQ)</h3>
+            <div class="item-list">
+              <div *ngFor="let f of faqConfig.items; let i = index" class="list-item">
+                <div class="item-info">
+                  <span class="item-label">{{f.title}}</span>
+                </div>
+                <div class="item-actions">
+                  <button class="edit-btn" (click)="openEditModal('faq', f, i)">✎</button>
+                  <button class="delete-btn" (click)="removeItem('faq', i)">×</button>
+                </div>
+              </div>
+              <button class="add-item-btn" (click)="openAddModal('faq')">✚ Añadir Pregunta</button>
             </div>
           </div>
         </div>
@@ -163,14 +218,76 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
         <div *ngIf="activeTab === 'layout'" class="tab-content">
            <div class="config-group" *ngFor="let comp of components">
               <h3>{{comp.label}}</h3>
-              <lib-ui-components-input
-                type="select"
-                [placeholder]="'Variante para ' + comp.label"
-                [(ngModel)]="componentVariants[comp.id]"
-                (ngModelChange)="onComponentVariantChange(comp.id)"
-                [options]="componentVariantOptions"
-              ></lib-ui-components-input>
+              <div class="input-grid">
+                <lib-ui-components-input
+                  type="select"
+                  [placeholder]="'Variante para ' + comp.label"
+                  [(ngModel)]="componentVariants[comp.id]"
+                  (ngModelChange)="onComponentVariantChange(comp.id)"
+                  [options]="componentVariantOptions"
+                ></lib-ui-components-input>
+              </div>
            </div>
+        </div>
+
+        <!-- Pricing Tab -->
+        <div *ngIf="activeTab === 'pricing'" class="tab-content">
+          <div class="config-group">
+            <h3>Gestión de Precios</h3>
+            <p>Edita las filas de la tabla de precios aquí.</p>
+            <div class="item-list">
+              <div *ngFor="let row of pricingConfig.rows; let i = index" class="list-item">
+                <div class="item-info">
+                  <span class="item-label">{{row['service']}}</span>
+                  <span class="item-sublabel">{{row['price']}}</span>
+                </div>
+                <div class="item-actions">
+                  <button class="edit-btn" (click)="openEditModal('pricing', row, i)">✎</button>
+                  <button class="delete-btn" (click)="removeItem('pricing', i)">×</button>
+                </div>
+              </div>
+              <button class="add-item-btn" (click)="openAddModal('pricing')">✚ Añadir Fila de Precio</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Promotions Tab -->
+        <div *ngIf="activeTab === 'promotions'" class="tab-content">
+          <div class="config-group">
+            <h3>Tarjetas de Promoción</h3>
+            <div class="item-list">
+              <div *ngFor="let promo of promotionsConfig.premiumCards; let i = index" class="list-item">
+                <div class="item-info">
+                  <span class="item-label">{{promo.title}}</span>
+                </div>
+                <div class="item-actions">
+                  <button class="edit-btn" (click)="openEditModal('promotion', promo, i)">✎</button>
+                  <button class="delete-btn" (click)="removeItem('promotion', i)">×</button>
+                </div>
+              </div>
+              <button class="add-item-btn" (click)="openAddModal('promotion')">✚ Añadir Promoción</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Gallery Tab -->
+        <div *ngIf="activeTab === 'gallery'" class="tab-content">
+          <div class="config-group">
+            <h3>Imágenes de la Galería</h3>
+            <div class="item-list">
+              <div *ngFor="let img of galleryConfig.images; let i = index" class="list-item">
+                <div class="item-info">
+                  <span class="item-label">{{img.alt}}</span>
+                  <span class="item-sublabel">{{img.src}}</span>
+                </div>
+                <div class="item-actions">
+                  <button class="edit-btn" (click)="openEditModal('gallery', img, i)">✎</button>
+                  <button class="delete-btn" (click)="removeItem('gallery', i)">×</button>
+                </div>
+              </div>
+              <button class="add-item-btn" (click)="openAddModal('gallery')">✚ Añadir Imagen</button>
+            </div>
+          </div>
         </div>
 
         <!-- Footer Tab -->
@@ -191,23 +308,47 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
     <div *ngIf="showItemModal" class="modal-overlay">
       <div class="modal-card">
         <div class="modal-header">
-          <h3>Editar {{modalItemType}}</h3>
+          <h3>Personalizar {{modalItemType | uppercase}}</h3>
           <button (click)="closeItemModal()">×</button>
         </div>
         <div class="modal-body" *ngIf="editingItem">
-          <!-- Dinamyc Form based on item type -->
           <ng-container [ngSwitch]="modalItemType">
             <div *ngSwitchCase="'service'" class="input-grid">
-              <lib-ui-components-input type="text" placeholder="Nombre del servicio" [(ngModel)]="editingItem.routeName"></lib-ui-components-input>
-              <lib-ui-components-input type="textarea" placeholder="Descripción" [(ngModel)]="editingItem.description"></lib-ui-components-input>
-              <lib-ui-components-input type="text" placeholder="URL Imagen" [(ngModel)]="editingItem.imageUrl"></lib-ui-components-input>
-              <lib-ui-components-input type="text" placeholder="Dificultad/Tiempo" [(ngModel)]="editingItem.difficulty"></lib-ui-components-input>
+              <lib-ui-components-input label="Nombre" type="text" [(ngModel)]="editingItem.routeName"></lib-ui-components-input>
+              <lib-ui-components-input label="Descripción" type="textarea" [(ngModel)]="editingItem.description"></lib-ui-components-input>
+              <lib-ui-components-input label="URL Imagen" type="text" [(ngModel)]="editingItem.imageUrl"></lib-ui-components-input>
+              <lib-ui-components-input label="Dificultad" type="text" [(ngModel)]="editingItem.difficulty"></lib-ui-components-input>
+            </div>
+            <div *ngSwitchCase="'product'" class="input-grid">
+              <lib-ui-components-input label="Nombre" type="text" [(ngModel)]="editingItem.name"></lib-ui-components-input>
+              <lib-ui-components-input label="Descripción" type="textarea" [(ngModel)]="editingItem.description"></lib-ui-components-input>
+              <lib-ui-components-input label="Imagen (Nombre archivo)" type="text" [(ngModel)]="editingItem.image"></lib-ui-components-input>
+              <lib-ui-components-input label="Precio" type="text" [(ngModel)]="editingItem.price"></lib-ui-components-input>
             </div>
             <div *ngSwitchCase="'testimonial'" class="input-grid">
-              <lib-ui-components-input type="textarea" placeholder="Cita" [(ngModel)]="editingItem.quote"></lib-ui-components-input>
-              <lib-ui-components-input type="text" placeholder="Autor" [(ngModel)]="editingItem.author"></lib-ui-components-input>
+              <lib-ui-components-input label="Autor" type="text" [(ngModel)]="editingItem.author"></lib-ui-components-input>
+              <lib-ui-components-input label="Cita / Testimonio" type="textarea" [(ngModel)]="editingItem.quote"></lib-ui-components-input>
             </div>
-            <!-- Add other types here... -->
+            <div *ngSwitchCase="'faq'" class="input-grid">
+              <lib-ui-components-input label="Pregunta" type="text" [(ngModel)]="editingItem.title"></lib-ui-components-input>
+              <lib-ui-components-input label="Respuesta" type="textarea" [(ngModel)]="editingItem.content"></lib-ui-components-input>
+            </div>
+            <div *ngSwitchCase="'pricing'" class="input-grid">
+              <lib-ui-components-input label="Servicio" type="text" [(ngModel)]="editingItem.service"></lib-ui-components-input>
+              <lib-ui-components-input label="Descripción" type="text" [(ngModel)]="editingItem.description"></lib-ui-components-input>
+              <lib-ui-components-input label="Precio" type="text" [(ngModel)]="editingItem.price"></lib-ui-components-input>
+            </div>
+            <div *ngSwitchCase="'promotion'" class="input-grid">
+              <lib-ui-components-input label="Título" type="text" [(ngModel)]="editingItem.title"></lib-ui-components-input>
+              <lib-ui-components-input label="Descripción" type="textarea" [(ngModel)]="editingItem.description"></lib-ui-components-input>
+              <lib-ui-components-input label="Precio" type="text" [(ngModel)]="editingItem.price"></lib-ui-components-input>
+              <lib-ui-components-input label="Descuento/Badge" type="text" [(ngModel)]="editingItem.discount"></lib-ui-components-input>
+              <lib-ui-components-input label="Tooltip" type="text" [(ngModel)]="editingItem.tooltip"></lib-ui-components-input>
+            </div>
+            <div *ngSwitchCase="'gallery'" class="input-grid">
+              <lib-ui-components-input label="Alt Text" type="text" [(ngModel)]="editingItem.alt"></lib-ui-components-input>
+              <lib-ui-components-input label="URL Imagen" type="text" [(ngModel)]="editingItem.src"></lib-ui-components-input>
+            </div>
           </ng-container>
         </div>
         <div class="modal-footer">
@@ -216,16 +357,16 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
         </div>
       </div>
     </div>
-    </div>
   `,
   styleUrls: ['./variant-selector.component.scss'],
 })
 export class VariantSelectorComponent implements OnInit {
   variants = [
+    'default',
     ...new Set([...footerVariants, ...bubbleVariants, ...cardRutasVariants, ...titleVariants, ...variants]),
   ];
   globalVariant: string;
-  selectorVariant = 'cyberpunk';
+  selectorVariant = 'glass';
   headerConfig: HeaderConfig;
   footerConfig: FooterConfig;
   navBarConfig: NavBarConfig;
@@ -240,7 +381,7 @@ export class VariantSelectorComponent implements OnInit {
   galleryConfig: GalleryConfig;
   productsConfig: ProductsConfig;
   testimonialsConfig: TestimonialsConfig;
-  activeTab: 'general' | 'header' | 'hero' | 'layout' | 'content' | 'footer' = 'general';
+  activeTab: 'general' | 'header' | 'hero' | 'layout' | 'content' | 'footer' | 'pricing' | 'promotions' | 'gallery' = 'general';
   
   // Modal state for editing items
   showItemModal = false;
@@ -292,6 +433,8 @@ export class VariantSelectorComponent implements OnInit {
     { id: 'bubble', label: 'Bubble Animation' },
     { id: 'title', label: 'Title' },
     { id: 'products', label: 'Products Section' },
+    { id: 'footer', label: 'Footer' },
+    { id: 'testimonials', label: 'Testimonials Section' },
   ];
 
   variantOptions: InputOption[] = this.variants.map((variant) => ({
@@ -616,6 +759,10 @@ export class VariantSelectorComponent implements OnInit {
 
   onComponentVariantChange(componentId: string) {
     this.variantService.setComponentVariant(componentId, this.componentVariants[componentId] || null);
+  }
+
+  clearComponentVariants() {
+    this.variantService.clearAllComponentVariants();
   }
 
   toggleHeaderConfig() {

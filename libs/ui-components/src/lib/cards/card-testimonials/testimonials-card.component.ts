@@ -10,4 +10,5 @@ import { CommonModule } from '@angular/common';
 })
 export class UiTestimonialsCardComponent {
   @Input() testimonial: { quote: string; author: string } = { quote: '', author: '' };
+  @Input() variant: any = 'default';
 }

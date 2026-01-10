@@ -53,6 +53,7 @@ export class UIInputComponent implements ControlValueAccessor {
   @Input() customStyles: InputCustomStyles = {};
   @Input() options: InputOption[] = [];
   @Input() rows?: number;
+  @Input() label = '';
 
   private innerValue: any = '';
 

@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VariantService, FooterConfig, HeaderConfig, NavBarConfig } from '@negocio/shared-components';
-import { CardVariant } from '@negocio/ui-components';
+import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
 
 @Component({
   template: '' // Clase abstracta, no necesita template
@@ -62,20 +62,8 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
     window.open(href, '_blank');
   }
 
-  getVariant(componentId: string): CardVariant {
-    const variant = this.componentVariants[componentId] || this.globalVariant;
-    const validVariants = [
-      'default', 'cyberpunk', 'jungle', 'enchanted', 'mystic', 'ancient', 'twilight',
-      'frosty', 'desert', 'candy', 'oceanic', 'fiery', 'primary', 'secondary', 'neon',
-      'matrix', 'stellar', 'retro', 'phoenix', 'aqua', 'plasma', 'cosmic', 'vaporwave',
-      'aurora', 'trailblazer', 'arcade', 'outline', 'ghost', 'link', 'gradient', 'glass',
-      'pulse-gradient', 'holo', 'quantum', 'cybernetic', 'danger', 'success', 'nano',
-      'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud',
-      'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'hex-teal', 'purple-edge',
-      'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash',
-      'indigo-dots', 'bubble', 'electoon', 'joycon', 'neomorph', 'glitch', 'portal',
-    ];
-    return validVariants.includes(variant) ? (variant as CardVariant) : 'default';
+  getVariant(componentId: string): any {
+    return this.componentVariants[componentId] || this.globalVariant;
   }
 
 }

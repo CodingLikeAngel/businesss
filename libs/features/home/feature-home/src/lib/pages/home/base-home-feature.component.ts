@@ -19,7 +19,7 @@ import {
   TestimonialsConfig,
   Testimonial,
 } from '@negocio/shared-components';
-import { CardVariant } from '@negocio/ui-components';
+import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
 
 @Component({
   standalone: true,
@@ -151,15 +151,7 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
   }
 
   getVariant(componentId: string): any {
-    const variant = this.componentVariants[componentId] || this.globalVariant;
-    const validCardVariants: any[] = [ 'default', 'cyberpunk', 'jungle', 'enchanted', 'mystic', 'ancient', 'twilight', 'frosty', 'desert', 'candy',
-      'oceanic', 'fiery', 'primary', 'secondary', 'neon', 'matrix', 'stellar', 'retro', 'phoenix', 'aqua', 'plasma',
-      'cosmic', 'vaporwave', 'aurora', 'trailblazer', 'arcade', 'outline', 'ghost', 'link', 'gradient', 'glass',
-      'pulse-gradient', 'holo', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'galactic', 'orbitron', 'cartoon',
-      'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'hex-teal',
-      'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble',
-      'electoon', 'joycon', 'neomorph', 'glitch', 'portal',];
-    return validCardVariants.includes(variant as any) ? (variant as any) : 'default';
+    return this.componentVariants[componentId] || this.globalVariant;
   }
 
   

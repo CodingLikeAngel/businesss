@@ -9,7 +9,7 @@
     <!-- Header -->
     <div>
       <lib-ui-components-header
-        [variant]="headerConfig.variant"
+        [variant]="getVariant('navbar')"
         [align]="headerConfig.align"
         [dark]="headerConfig.dark"
         [title]="headerConfig.title"
@@ -25,7 +25,7 @@
           <div class="fixed  absolute top-0 z-50 bg-black/50 backdrop-blur-md w-[52vw]">
             <lib-ui-components-tabs
               [tabs]="tabsConfig"
-              [variant]="getVariant('hero')"
+              [variant]="getVariant('navbar')"
               [showAs]="'tabs'"
               [isMobile]="true"
               (tabSelected)="onTabSelected($event)"
@@ -37,7 +37,7 @@
 
     <!-- Footer -->
     <lib-ui-components-footer
-      [variant]="footerConfig.variant"
+      [variant]="getVariant('footer')"
       [dark]="footerConfig.dark"
       [showParticles]="footerConfig.showParticles"
       [title]="footerConfig.title"

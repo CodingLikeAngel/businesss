@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants, NavLink } from '@negocio/ui-components';
+import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants, NavLink, variants } from '@negocio/ui-components';
 
 // Existing interfaces (NavLink, HeaderConfig, FooterConfig, NavBarConfig, HeroConfig, BubbleConfig, CardConfig, TitleConfig) remain unchanged
 
@@ -192,7 +192,7 @@ export class VariantService {
   }
   // Existing BehaviorSubjects
   private headerConfigSubject = new BehaviorSubject<HeaderConfig>({
-    variant: 'cartoon',
+    variant: 'glass',
     title: 'Solicita tu web profesional',
     subtitle: 'Diseños únicos y personalizados para tu negocio',
     align: 'center',
@@ -207,7 +207,7 @@ export class VariantService {
 
   
   private footerConfigSubject = new BehaviorSubject<FooterConfig>({
-    variant: 'matrix',
+    variant: 'glass',
     title: 'Webs Profesionales',
     description: 'Tu negocio merece una web única y optimizada',
     exploreLinks: [
@@ -233,7 +233,7 @@ export class VariantService {
   });
 
   private navBarConfigSubject = new BehaviorSubject<NavBarConfig>({
-    variant: 'matrix',
+    variant: 'glass',
     logoText: 'Webs Profesionales',
     showMobileMenu: true,
     isFixed: true,
@@ -252,7 +252,7 @@ export class VariantService {
   });
 
   private heroConfigSubject = new BehaviorSubject<HeroConfig>({
-    variant: 'matrix',
+    variant: 'glass',
     title: 'Eleva tu Negocio',
     subtitle: 'Webs a medida, rápidas, seguras y optimizadas para SEO.',
     showCta: true,
@@ -301,18 +301,18 @@ export class VariantService {
   });
 
   private bubbleConfigSubject = new BehaviorSubject<BubbleConfig>({
-    variant: 'matrix',
+    variant: 'glass',
     speed: 0.8,
     blur: 30,
     opacity: 0.7,
   });
 
   private cardConfigSubject = new BehaviorSubject<CardConfig>({
-    variant: 'matrix',
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    textColor: '#FACC15',
-    accentColor: '#FF1E56',
-    animation: 'pulse',
+    variant: 'glass',
+    backgroundColor: 'rgba(255,255,255,0.05)',
+    textColor: '#ffffff',
+    accentColor: '#6366f1',
+    animation: 'fade',
     isMobile: false,
     customStyles: {
       '--card-border': '1px solid rgba(255, 30, 86, 0.3)',
@@ -320,7 +320,7 @@ export class VariantService {
   });
 
   private titleConfigSubject = new BehaviorSubject<TitleConfig>({
-    variant: 'matrix',
+    variant: 'glass',
     level: 'h2',
     text: 'Nuestros Servicios',
     animation: 'slide',
@@ -500,7 +500,22 @@ export class VariantService {
 
   testimonialsConfig$: Observable<TestimonialsConfig> = this.testimonialsConfigSubject.asObservable();
   private componentVariantsSubject = new BehaviorSubject<{ [component: string]: string }>({});
-  private globalVariantSubject = new BehaviorSubject<string>('matrix');
+  private globalVariantSubject = new BehaviorSubject<string>('glass');
+
+  private allValidVariants = [
+    'default',
+    'primary',
+    'secondary',
+    ...footerVariants,
+    ...bubbleVariants,
+    ...cardRutasVariants,
+    ...titleVariants,
+    ...variants
+  ];
+
+  private isValidVariant(variant: any): boolean {
+    return this.allValidVariants.includes(variant);
+  }
 
   // Existing Observables
   headerConfig$: Observable<HeaderConfig> = this.headerConfigSubject.asObservable();
@@ -525,7 +540,7 @@ export class VariantService {
   // Existing setters (setHeaderConfig, setFooterConfig, etc.) remain unchanged
   setHeaderConfig(config: Partial<HeaderConfig>) {
     const current = this.headerConfigSubject.getValue();
-    if (config.variant && !footerVariants.includes(config.variant as any)) {
+    if (config.variant && !this.isValidVariant(config.variant)) {
       config.variant = current.variant;
     }
     this.headerConfigSubject.next({ ...current, ...config });
@@ -534,7 +549,7 @@ export class VariantService {
 
   setFooterConfig(config: Partial<FooterConfig>) {
     const current = this.footerConfigSubject.getValue();
-    if (config.variant && !footerVariants.includes(config.variant as any)) {
+    if (config.variant && !this.isValidVariant(config.variant)) {
       config.variant = current.variant;
     }
     this.footerConfigSubject.next({ ...current, ...config });
@@ -543,7 +558,7 @@ export class VariantService {
 
   setNavBarConfig(config: Partial<NavBarConfig>) {
     const current = this.navBarConfigSubject.getValue();
-    if (config.variant && !footerVariants.includes(config.variant as any)) {
+    if (config.variant && !this.isValidVariant(config.variant)) {
       config.variant = current.variant;
     }
     this.navBarConfigSubject.next({ ...current, ...config });
@@ -564,7 +579,7 @@ export class VariantService {
 
   setHeroConfig(config: Partial<HeroConfig>) {
     const current = this.heroConfigSubject.getValue();
-    if (config.variant && !footerVariants.includes(config.variant as any)) {
+    if (config.variant && !this.isValidVariant(config.variant)) {
       config.variant = current.variant;
     }
     this.heroConfigSubject.next({ ...current, ...config });
@@ -573,7 +588,7 @@ export class VariantService {
 
   setBubbleConfig(config: Partial<BubbleConfig>) {
     const current = this.bubbleConfigSubject.getValue();
-    if (config.variant && !bubbleVariants.includes(config.variant as any)) {
+    if (config.variant && !this.isValidVariant(config.variant)) {
       config.variant = current.variant;
     }
     this.bubbleConfigSubject.next({ ...current, ...config });
@@ -582,7 +597,7 @@ export class VariantService {
 
   setCardConfig(config: Partial<CardConfig>) {
     const current = this.cardConfigSubject.getValue();
-    if (config.variant && !cardRutasVariants.includes(config.variant as any)) {
+    if (config.variant && !this.isValidVariant(config.variant)) {
       config.variant = current.variant;
     }
     this.cardConfigSubject.next({ ...current, ...config });
@@ -591,7 +606,7 @@ export class VariantService {
 
   setTitleConfig(config: Partial<TitleConfig>) {
     const current = this.titleConfigSubject.getValue();
-    if (config.variant && !titleVariants.includes(config.variant as any)) {
+    if (config.variant && !this.isValidVariant(config.variant)) {
       config.variant = current.variant;
     }
     this.titleConfigSubject.next({ ...current, ...config });
@@ -636,38 +651,36 @@ export class VariantService {
   }
 
   setGlobalVariant(variant: string) {
-    if (
-      footerVariants.includes(variant as any) ||
-      bubbleVariants.includes(variant as any) ||
-      cardRutasVariants.includes(variant as any) ||
-      titleVariants.includes(variant as any)
-    ) {
+    if (this.isValidVariant(variant)) {
       this.globalVariantSubject.next(variant);
-      this.setHeaderConfig({ variant });
-      this.setFooterConfig({ variant });
-      this.setNavBarConfig({ variant });
-      this.setHeroConfig({ variant });
-      this.setBubbleConfig({ variant });
-      this.setCardConfig({ variant });
-      this.setTitleConfig({ variant });
+      
+      // Aplicar forzosamente a todos los configs base para asegurar consistencia
+      const update = { variant };
+      this.setHeaderConfig(update);
+      this.setFooterConfig(update);
+      this.setNavBarConfig(update);
+      this.setHeroConfig(update);
+      this.setBubbleConfig(update);
+      this.setCardConfig(update);
+      this.setTitleConfig(update);
+      
       this.saveToLocalStorage();
     }
   }
 
   setComponentVariant(component: string, variant: string | null) {
     const current = this.componentVariantsSubject.getValue();
-    if (
-      variant &&
-      (footerVariants.includes(variant as any) ||
-        bubbleVariants.includes(variant as any) ||
-        cardRutasVariants.includes(variant as any) ||
-        titleVariants.includes(variant as any))
-    ) {
+    if (variant && this.isValidVariant(variant)) {
       this.componentVariantsSubject.next({ ...current, [component]: variant });
     } else {
       const { [component]: _, ...rest } = current;
       this.componentVariantsSubject.next(rest);
     }
+    this.saveToLocalStorage();
+  }
+
+  clearAllComponentVariants() {
+    this.componentVariantsSubject.next({});
     this.saveToLocalStorage();
   }
 

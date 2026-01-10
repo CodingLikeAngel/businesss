@@ -67,7 +67,7 @@
             [title]="product.name"
             [description]="product.description"
             [image]="product.image"
-            [variant]="getVariant('product-3d')"
+            [variant]="getVariant('products')"
             [animation]="'bounce'"
             [borderColor]="'#22d3ee'"
             [backgroundColor]="'rgba(47, 79, 79, 0.9)'"
@@ -79,7 +79,7 @@
           [title]="product.name"
           [image]="'1029.png'"
           [description]="product.description"
-          [variant]="getVariant('default')"
+          [variant]="getVariant('products')"
           [animation]="'fade'"
           [size]="'medium'"
        
@@ -87,7 +87,7 @@
           <lib-card-products
             *ngIf="i % 2 !== 0"
             [product]="product"
-            [variant]="getVariant('title')"
+            [variant]="getVariant('products')"
           ></lib-card-products>
         </ng-container>
         <ng-template *ngIf="!productsConfig.items?.length">
@@ -111,6 +111,7 @@
       <lib-testimonials-card
         *ngFor="let testimonial of testimonialsConfig.items; trackBy: trackByTestimonialId"
         [testimonial]="testimonial"
+        [variant]="getVariant('testimonials')"
       ></lib-testimonials-card>
     </div>
   </div>

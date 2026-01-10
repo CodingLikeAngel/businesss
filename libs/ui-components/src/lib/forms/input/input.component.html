@@ -1,100 +1,106 @@
-<ng-container [ngSwitch]="type">
-  <!-- Input normal -->
-  <input
-    *ngSwitchCase="'text'"
-    [type]="type"
-    [value]="value"
-    (input)="onInputChange($event)"
-    [placeholder]="placeholder"
-    [disabled]="disabled"
-    [class]="'input input-' + variant + ' input-' + size"
-    [class.input-disabled]="disabled"
-    [ngStyle]="customStyles"
-    tag="input"
-  />
+<div class="input-wrapper">
+  <label *ngIf="label && type !== 'checkbox'" class="input-label">{{label}}</label>
+  <div class="input-control-container" [class.checkbox-layout]="type === 'checkbox'">
+    <ng-container [ngSwitch]="type">
+      <!-- Input normal -->
+      <input
+        *ngSwitchCase="'text'"
+        [type]="type"
+        [value]="value"
+        (input)="onInputChange($event)"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        [class]="'input input-' + variant + ' input-' + size"
+        [class.input-disabled]="disabled"
+        [ngStyle]="customStyles"
+        tag="input"
+      />
 
-  <!-- Email input -->
-  <input
-    *ngSwitchCase="'email'"
-    [type]="type"
-    [value]="value"
-    (input)="onInputChange($event)"
-    [placeholder]="placeholder"
-    [disabled]="disabled"
-    [class]="'input input-' + variant + ' input-' + size"
-    [class.input-disabled]="disabled"
-    [ngStyle]="customStyles"
-    tag="input"
-  />
+      <!-- Email input -->
+      <input
+        *ngSwitchCase="'email'"
+        [type]="type"
+        [value]="value"
+        (input)="onInputChange($event)"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        [class]="'input input-' + variant + ' input-' + size"
+        [class.input-disabled]="disabled"
+        [ngStyle]="customStyles"
+        tag="input"
+      />
 
-  <!-- Datetime-local input -->
-  <input
-    *ngSwitchCase="'datetime-local'"
-    [type]="type"
-    [value]="value"
-    (input)="onInputChange($event)"
-    [disabled]="disabled"
-    [class]="'input input-' + variant + ' input-' + size"
-    [class.input-disabled]="disabled"
-    [ngStyle]="customStyles"
-    tag="input"
-  />
+      <!-- Datetime-local input -->
+      <input
+        *ngSwitchCase="'datetime-local'"
+        [type]="type"
+        [value]="value"
+        (input)="onInputChange($event)"
+        [disabled]="disabled"
+        [class]="'input input-' + variant + ' input-' + size"
+        [class.input-disabled]="disabled"
+        [ngStyle]="customStyles"
+        tag="input"
+      />
 
-  <!-- Checkbox input -->
-  <input
-    *ngSwitchCase="'checkbox'"
-    type="checkbox"
-    [checked]="value"
-    (change)="onInputChange($event)"
-    [disabled]="disabled"
-    [class]="'input input-' + variant + ' input-' + size"
-    [class.input-disabled]="disabled"
-    [ngStyle]="customStyles"
-    tag="input"
-  />
+      <!-- Checkbox input -->
+      <input
+        *ngSwitchCase="'checkbox'"
+        type="checkbox"
+        [checked]="value"
+        (change)="onInputChange($event)"
+        [disabled]="disabled"
+        [class]="'input input-' + variant + ' input-' + size"
+        [class.input-disabled]="disabled"
+        [ngStyle]="customStyles"
+        tag="input"
+      />
+      <span *ngIf="type === 'checkbox' && label" class="checkbox-label">{{label}}</span>
 
-  <!-- Select -->
-  <select
-    *ngSwitchCase="'select'"
-    [value]="value"
-    (change)="onInputChange($event)"
-    [disabled]="disabled"
-    [class]="'input input-' + variant + ' input-' + size"
-    [class.input-disabled]="disabled"
-    [ngStyle]="customStyles"
-    tag="select"
-  >
-    <option value="" disabled selected>{{ placeholder || 'Selecciona una opción' }}</option>
-    <option *ngFor="let option of options" [value]="option.value">
-      {{ option.label }}
-    </option>
-  </select>
+      <!-- Select -->
+      <select
+        *ngSwitchCase="'select'"
+        [value]="value"
+        (change)="onInputChange($event)"
+        [disabled]="disabled"
+        [class]="'input input-' + variant + ' input-' + size"
+        [class.input-disabled]="disabled"
+        [ngStyle]="customStyles"
+        tag="select"
+      >
+        <option value="" disabled selected>{{ placeholder || 'Selecciona una opción' }}</option>
+        <option *ngFor="let option of options" [value]="option.value">
+          {{ option.label }}
+        </option>
+      </select>
 
-  <!-- Textarea -->
-  <textarea
-    *ngSwitchCase="'textarea'"
-    [value]="value"
-    (input)="onInputChange($event)"
-    [placeholder]="placeholder"
-    [disabled]="disabled"
-    [rows]="rows || 4"
-    [class]="'input input-' + variant + ' input-' + size"
-    [class.input-disabled]="disabled"
-    [ngStyle]="customStyles"
-    tag="textarea"
-  ></textarea>
+      <!-- Textarea -->
+      <textarea
+        *ngSwitchCase="'textarea'"
+        [value]="value"
+        (input)="onInputChange($event)"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        [rows]="rows || 4"
+        [class]="'input input-' + variant + ' input-' + size"
+        [class.input-disabled]="disabled"
+        [ngStyle]="customStyles"
+        tag="textarea"
+      ></textarea>
 
-  <!-- Fallback -->
-  <input
-    *ngSwitchDefault
-    [type]="type"
-    [value]="value"
-    (input)="onInputChange($event)"
-    [placeholder]="placeholder"
-    [disabled]="disabled"
-    [class]="'input input-' + variant + ' input-' + size"
-    [class.input-disabled]="disabled"
-    [ngStyle]="customStyles"
-    tag="input"
-  />
-</ng-container>
+      <!-- Fallback -->
+      <input
+        *ngSwitchDefault
+        [type]="type"
+        [value]="value"
+        (input)="onInputChange($event)"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        [class]="'input input-' + variant + ' input-' + size"
+        [class.input-disabled]="disabled"
+        [ngStyle]="customStyles"
+        tag="input"
+      />
+    </ng-container>
+  </div>
+</div>
