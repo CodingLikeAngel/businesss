@@ -34,8 +34,11 @@
 
   <div class="workspace">
     <!-- Tools Sidebar (Semi-transparent floating) -->
-    <aside *ngIf="builderStep === 'editor'" class="tools-sidebar">
-      <lib-variant-selector></lib-variant-selector>
+    <aside *ngIf="builderStep === 'editor'" class="tools-sidebar" [class.is-collapsed]="isSidebarCollapsed">
+      <lib-variant-selector 
+        [isCollapsed]="isSidebarCollapsed" 
+        (toggleCollapse)="isSidebarCollapsed = !isSidebarCollapsed">
+      </lib-variant-selector>
     </aside>
 
     <!-- THE CANVAS -->

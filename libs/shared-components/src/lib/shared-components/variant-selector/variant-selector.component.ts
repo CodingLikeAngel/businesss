@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UIInputComponent, InputOption, variants } from '@negocio/ui-components';
@@ -58,6 +58,9 @@ export class VariantSelectorComponent implements OnInit {
   set currentStep(val: 'welcome' | 'editor' | 'preview') {
     this._currentStep = val;
   }
+
+  @Input() isCollapsed = false;
+  @Output() toggleCollapse = new EventEmitter<void>();
 
   activeTab: 'general' | 'header' | 'hero' | 'structure' | 'layout' | 'content' | 'footer' | 'pricing' | 'promotions' | 'gallery' = 'general';
   

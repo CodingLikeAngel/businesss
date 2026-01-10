@@ -1,10 +1,15 @@
-<div class="stepper-wrapper">
+<div class="stepper-wrapper" [class.collapsed]="isCollapsed">
   
   <!-- MAIN EDITOR CONTAINER -->
   <div class="builder-container">
   <!-- Sidebar Navigation -->
   <aside class="builder-sidebar">
-    <div class="logo">AS</div>
+    <div class="logo-area">
+      <div class="logo">AS</div>
+      <button class="collapse-btn" (click)="toggleCollapse.emit()">
+        {{ isCollapsed ? '▶' : '◀' }}
+      </button>
+    </div>
     
     <div class="sidebar-nav">
       <div class="nav-item" [class.active]="activeTab === 'general'" [attr.activeTab]="'general'" (click)="setActiveTab('general')">
