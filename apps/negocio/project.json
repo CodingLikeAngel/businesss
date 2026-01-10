@@ -29,7 +29,8 @@
         "ssr": {
           "entry": "apps/negocio/src/server.ts"
         },
-        "outputMode": "server"
+        "outputMode": "server",
+        "allowedCommonJsDependencies": ["hammerjs"]
       },
       "configurations": {
         "production": {

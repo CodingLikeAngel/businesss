@@ -1,7 +1,7 @@
 @use "sass:map";
 @use "./variables" as var;
 @use "sass:color";
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&display=swap');
+/* Removed external Google Fonts import to avoid network inlining during build */
 
 
 /* Estilo base */

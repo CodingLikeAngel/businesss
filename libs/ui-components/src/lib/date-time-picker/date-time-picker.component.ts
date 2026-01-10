@@ -170,15 +170,17 @@ export class UIDateTimePickerComponent implements ControlValueAccessor {
     const rect = input.getBoundingClientRect();
     const calendarEl = this.calendarRef.nativeElement as HTMLElement;
 
-    calendarEl.style.top = `${rect.bottom + window.scrollY}px`;
-    calendarEl.style.left = `${rect.left + window.scrollX}px`;
+    if (typeof window !== 'undefined') {
+      calendarEl.style.top = `${rect.bottom + window.scrollY}px`;
+      calendarEl.style.left = `${rect.left + window.scrollX}px`;
 
-    const calendarRect = calendarEl.getBoundingClientRect();
-    if (calendarRect.right > window.innerWidth) {
-      calendarEl.style.left = `${window.innerWidth - calendarRect.width}px`;
-    }
-    if (calendarRect.bottom > window.innerHeight) {
-      calendarEl.style.top = `${rect.top + window.scrollY - calendarRect.height}px`;
+      const calendarRect = calendarEl.getBoundingClientRect();
+      if (calendarRect.right > window.innerWidth) {
+        calendarEl.style.left = `${window.innerWidth - calendarRect.width}px`;
+      }
+      if (calendarRect.bottom > window.innerHeight) {
+        calendarEl.style.top = `${rect.top + window.scrollY - calendarRect.height}px`;
+      }
     }
   }
 

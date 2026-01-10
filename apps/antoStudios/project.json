@@ -28,7 +28,8 @@
         "ssr": {
           "entry": "apps/antoStudios/src/server.ts"
         },
-        "outputMode": "server"
+        "outputMode": "server",
+        "allowedCommonJsDependencies": ["hammerjs"]
       },
       "configurations": {
         "production": {

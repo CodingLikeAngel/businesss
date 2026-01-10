@@ -261,8 +261,10 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    canvas.height = window.innerHeight;
-    canvas.width = window.innerWidth;
+    if (typeof window !== 'undefined') {
+      canvas.height = window.innerHeight;
+      canvas.width = window.innerWidth;
+    }
 
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%^&*()';
     const fontSize = 14;
@@ -290,6 +292,8 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
       }
     };
 
-    this.matrixInterval = setInterval(draw, 33);
+    if (typeof window !== 'undefined') {
+      this.matrixInterval = setInterval(draw, 33);
+    }
   }
 }
