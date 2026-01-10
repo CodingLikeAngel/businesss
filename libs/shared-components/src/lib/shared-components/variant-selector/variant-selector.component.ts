@@ -28,21 +28,10 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
   imports: [CommonModule, FormsModule, UIInputComponent],
   template: `
     <div class="stepper-wrapper">
-      <!-- STEP 1: WELCOME SPLASH -->
-      <div *ngIf="isStep('welcome')" class="welcome-screen">
-        <div class="splash-card">
-          <div class="nintendo-logo-anim">
-            <div class="joy-con-left"></div>
-            <div class="joy-con-right"></div>
-          </div>
-          <h1>Anto Studios Builder <span>V3</span></h1>
-          <p>Bienvenido al editor táctil premium. Crea tu experiencia digital con precisión de milisegundos.</p>
-          <button class="start-btn" (click)="setStep('editor')">EMPEZAR A CREAR 🎮</button>
-        </div>
-      </div>
-
-      <!-- STEP 2: THE EDITOR & PREVIEW (Shared Container) -->
-      <div *ngIf="isStep('editor') || isStep('preview')" class="builder-container" [class.preview-mode]="isStep('preview')">
+      
+      <!-- MAIN EDITOR CONTAINER -->
+      <div class="builder-container">
+      <!-- Sidebar Navigation -->
       <!-- Sidebar Navigation -->
       <aside class="builder-sidebar">
         <div class="logo">AS</div>
@@ -138,6 +127,7 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
           <div class="config-group">
             <h3>Configuración del Header</h3>
             <div class="input-grid">
+              <lib-ui-components-input type="checkbox" [(ngModel)]="headerConfig.visible" (ngModelChange)="updateHeaderConfig()">Mostrar Header</lib-ui-components-input>
               <lib-ui-components-input type="text" label="Título" [(ngModel)]="headerConfig.title" (ngModelChange)="updateHeaderConfig()"></lib-ui-components-input>
               <lib-ui-components-input type="text" label="Subtítulo" [(ngModel)]="headerConfig.subtitle" (ngModelChange)="updateHeaderConfig()"></lib-ui-components-input>
               <lib-ui-components-input type="select" label="Alineación" [(ngModel)]="headerConfig.align" [options]="alignOptions" (ngModelChange)="updateHeaderConfig()"></lib-ui-components-input>
@@ -147,6 +137,7 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
           <div class="config-group">
             <h3>Navbar Settings</h3>
             <div class="input-grid">
+              <lib-ui-components-input type="checkbox" [(ngModel)]="navBarConfig.visible" (ngModelChange)="updateNavBarConfig()">Mostrar Navbar</lib-ui-components-input>
               <lib-ui-components-input type="text" label="Texto Logo" [(ngModel)]="navBarConfig.logoText" (ngModelChange)="updateNavBarConfig()"></lib-ui-components-input>
               <lib-ui-components-input type="checkbox" [(ngModel)]="navBarConfig.isFixed" (ngModelChange)="updateNavBarConfig()">Navbar Fijo</lib-ui-components-input>
             </div>
@@ -364,6 +355,7 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
           <div class="config-group">
             <h3>Configuración del Footer</h3>
             <div class="input-grid">
+              <lib-ui-components-input type="checkbox" [(ngModel)]="footerConfig.visible" (ngModelChange)="updateFooterConfig()">Mostrar Footer</lib-ui-components-input>
               <lib-ui-components-input type="text" label="Título" [(ngModel)]="footerConfig.title" (ngModelChange)="updateFooterConfig()"></lib-ui-components-input>
               <lib-ui-components-input type="textarea" label="Descripción" [(ngModel)]="footerConfig.description" (ngModelChange)="updateFooterConfig()"></lib-ui-components-input>
               <lib-ui-components-input type="checkbox" [(ngModel)]="footerConfig.showParticles" (ngModelChange)="updateFooterConfig()">Mostrar Partículas</lib-ui-components-input>
@@ -372,15 +364,6 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from
         </div>
       </div>
 
-      <!-- STEP 3: FULL SCREEN PREVIEW OVERLAY -->
-      <div *ngIf="isStep('preview')" class="full-preview-overlay">
-        <div class="preview-actions">
-           <button class="back-btn" (click)="setStep('editor')">↩ Volver al Editor</button>
-           <button class="save-final" (click)="exportProject()">📥 Descargar Resultado</button>
-        </div>
-        <div class="preview-disclaimer">
-          MODO PREVIEW: Así es como los usuarios verán tu web.
-        </div>
       </div>
     </div>
 
@@ -844,11 +827,10 @@ export class VariantSelectorComponent implements OnInit {
       this.productsJson = JSON.stringify(config.items, null, 2);
     });
 
-    // Enforce WELCOME state on init
-    this.currentStep = 'welcome';
-    // Async update to service to avoid NG0100 in parent layout
+    // Start directly in EDITOR mode
+    this.currentStep = 'editor';
     setTimeout(() => {
-      this.variantService.setBuilderStep('welcome');
+      this.variantService.setBuilderStep('editor');
     });
 
     this.variantService.sections$.subscribe(sections => {

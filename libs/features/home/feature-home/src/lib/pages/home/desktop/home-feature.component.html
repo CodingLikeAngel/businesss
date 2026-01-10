@@ -1,7 +1,11 @@
 <router-outlet></router-outlet>
-
-<router-outlet></router-outlet>
-<div class="sections-container min-h-screen">
+<div class="sections-container min-h-screen relative pb-32">
+  
+  <div *ngIf="(sections$ | async)?.length === 0" class="flex flex-col items-center justify-center p-20 text-white/50">
+    <div class="text-6xl mb-4">🏗️</div>
+    <h2 class="text-2xl font-bold">Página vacía</h2>
+    <p>Añade secciones desde la pestaña "Estructura Página" en el panel izquierdo.</p>
+  </div>
   <ng-container *ngFor="let section of sections$ | async; trackBy: trackBySectionId">
     <ng-container [ngSwitch]="section.type" *ngIf="section.visible">
       

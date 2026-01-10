@@ -22,6 +22,7 @@ export interface HeaderConfig {
   align: 'left' | 'center' | 'right';
   dark: boolean;
   navItems: { label: string; href: string; active?: boolean }[];
+  visible: boolean;
   customStyles: { [key: string]: string };
 }
 
@@ -35,6 +36,7 @@ export interface FooterConfig {
   copyrightText: string;
   showParticles: boolean;
   dark: boolean;
+  visible: boolean;
   customStyles: { [key: string]: string };
 }
 
@@ -43,6 +45,7 @@ export interface NavBarConfig {
   logoText: string;
   showMobileMenu: boolean;
   isFixed: boolean;
+  visible: boolean;
   navLinks: NavLink[];
   customStyles: { [key: string]: string };
 }
@@ -205,6 +208,7 @@ export class VariantService {
     subtitle: 'Diseños únicos y personalizados para tu negocio',
     align: 'center',
     dark: false,
+    visible: true,
     navItems: [
       { label: 'Home', href: '/home', active: true },
       { label: 'About', href: '/about' },
@@ -237,6 +241,7 @@ export class VariantService {
     copyrightText: '© {{currentYear}} Webs Profesionales - Tu negocio, tu web',
     showParticles: true,
     dark: false,
+    visible: true,
     customStyles: {},
   });
 
@@ -245,6 +250,7 @@ export class VariantService {
     logoText: 'Webs Profesionales',
     showMobileMenu: true,
     isFixed: true,
+    visible: true,
     navLinks: [
       { label: 'Inicio', href: '#hero', icon: '🏠' },
       { label: 'Servicios', href: '#servicios', icon: '🛠️' },
@@ -524,7 +530,7 @@ export class VariantService {
   private componentVariantsSubject = new BehaviorSubject<{ [component: string]: string }>({});
   private globalVariantSubject = new BehaviorSubject<string>('glass');
   // Replaced simple boolean with full step state
-  private builderStepSubject = new BehaviorSubject<'welcome' | 'editor' | 'preview'>('welcome');
+  private builderStepSubject = new BehaviorSubject<'welcome' | 'editor' | 'preview'>('editor');
   builderStep$ = this.builderStepSubject.asObservable();
   
   // Keep previewMode$ for backward campatibility if needed, mapping from step
