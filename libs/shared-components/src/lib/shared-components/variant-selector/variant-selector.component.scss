@@ -42,45 +42,21 @@
 
     &::-webkit-scrollbar { display: none; }
 
-    .logo-area {
+    .collapse-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.5);
+      font-size: 0.7rem;
+      width: 40px;
+      height: 28px;
+      border-radius: 8px;
+      cursor: pointer;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.5rem;
-      width: 100%;
-
-      .logo {
-        flex-shrink: 0;
-        font-size: 1.1rem;
-        font-weight: 900;
-        color: white;
-        background: #ff3c28;
-        width: 44px;
-        height: 44px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 14px;
-        position: relative;
-        box-shadow: 0 8px 20px rgba(255, 60, 40, 0.3);
-      }
-
-      .collapse-btn {
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: white;
-        font-size: 0.6rem;
-        width: 32px;
-        height: 24px;
-        border-radius: 6px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s ease;
-        &:hover { background: #ff3c28; border-color: #ff3c28; }
-      }
+      justify-content: center;
+      margin-bottom: 2rem;
+      transition: all 0.2s ease;
+      &:hover { background: #ff3c28; border-color: #ff3c28; color: white; }
     }
 
     .sidebar-nav {
@@ -196,72 +172,8 @@
       &:hover { background: rgba(255, 255, 255, 0.2); }
     }
 
-    .builder-header {
-      margin-bottom: 2rem;
-      padding: 1.5rem;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      animation: fadeInDown 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    // Redundant header styles removed
 
-      .header-top {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 1rem;
-
-        h2 {
-          font-size: 1.4rem;
-          font-weight: 900;
-          letter-spacing: -0.04em;
-          margin: 0;
-          display: flex;
-          align-items: center;
-          gap: 0.5rem;
-          color: white;
-
-          .badge {
-            background: #ff3c28;
-            font-size: 0.65rem;
-            padding: 5px 12px;
-            border-radius: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            box-shadow: 0 5px 15px rgba(255, 60, 40, 0.3);
-            font-weight: 900;
-          }
-        }
-
-        .save-status {
-          display: flex;
-          align-items: center;
-          gap: 0.75rem;
-          background: rgba(16, 185, 129, 0.1);
-          padding: 8px 18px;
-          border-radius: 14px;
-          font-weight: 800;
-          font-size: 0.85rem;
-          color: #10b981;
-          border: 1px solid rgba(16, 185, 129, 0.2);
-
-          .status-dot {
-            width: 8px;
-            height: 8px;
-            background: #10b981;
-            border-radius: 50%;
-            box-shadow: 0 0 10px #10b981;
-          }
-        }
-      }
-
-      p {
-        color: #94a3b8;
-        font-size: 0.95rem;
-        font-weight: 600;
-        margin: 0;
-        opacity: 0.8;
-      }
-    }
 
     .tab-content {
       animation: fadeIn 0.6s ease-out;

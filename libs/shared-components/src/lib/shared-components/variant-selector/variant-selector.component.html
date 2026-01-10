@@ -4,12 +4,9 @@
   <div class="builder-container">
   <!-- Sidebar Navigation -->
   <aside class="builder-sidebar">
-    <div class="logo-area">
-      <div class="logo">AS</div>
-      <button class="collapse-btn" (click)="toggleCollapse.emit()">
-        {{ isCollapsed ? '▶' : '◀' }}
-      </button>
-    </div>
+    <button class="collapse-btn" (click)="toggleCollapse.emit()">
+      {{ isCollapsed ? '▶' : '◀' }}
+    </button>
     
     <div class="sidebar-nav">
       <div class="nav-item" [class.active]="activeTab === 'general'" [attr.activeTab]="'general'" (click)="setActiveTab('general')">
@@ -54,23 +51,12 @@
       </div>
     </div>
 
-    <div class="nav-item preview-tab" (click)="setStep('preview')">
-      <i>👁️</i>
-      <div class="tooltip">Ver Resultado Final</div>
-    </div>
+    <!-- Preview tab removed - Available in global hub -->
   </aside>
 
   <div class="builder-content">
-    <header class="builder-header">
-      <div class="header-top">
-        <h2>Anto Studios <span class="badge">PRO</span></h2>
-        <div class="save-status">
-          <span class="status-dot"></span>
-          Estado: Guardado
-        </div>
-      </div>
-      <p>Configurador visual activo. Los cambios se sincronizan en tiempo real.</p>
-    </header>
+    <!-- Redundant header removed - Global info is now in the Top Hub -->
+
 
     <!-- General Tab -->
     <div *ngIf="activeTab === 'general'" class="tab-content">
