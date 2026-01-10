@@ -23,12 +23,12 @@
 
     <div class="hub-right">
       <button *ngIf="builderStep === 'editor'" (click)="variantService.setBuilderStep('preview')" class="btn-preview">
-        <span>👁️</span> Previsualizar
+        <span>👁️</span> <span>Previsualizar</span>
       </button>
       <button *ngIf="builderStep === 'preview'" (click)="returnToEditor()" class="btn-editor">
-        <span>✏️</span> Volver a Editar
+        <span>✏️</span> <span>Volver a Editar</span>
       </button>
-      <button (click)="callNow()" class="btn-publish">Publicar</button>
+      <button (click)="callNow()" class="btn-publish"><span>Publicar</span></button>
     </div>
   </header>
 

@@ -43,12 +43,14 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
   onMouseUp() {
     this.isResizing = false;
     document.body.style.cursor = 'default';
+    document.body.classList.remove('is-resizing-active');
   }
 
   startResizing(event: MouseEvent) {
     event.preventDefault();
     this.isResizing = true;
     document.body.style.cursor = 'col-resize';
+    document.body.classList.add('is-resizing-active');
   }
 
   tabsConfig: any[] = [
