@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { GlitchEffectPipe } from "./pipes/glitch-effect.pipe";
 import { HighlightEffectPipe } from "./pipes/highlight-effect.pipe";
+import { variants } from '../../models/ui-components-data.model';
 
 // Tipos y constantes
-export const cardVariants = ['default', 'neon', 'cyberpunk', 'holo', 'matrix', 'quantum'] as const;
+export const cardVariants = variants;
 export type CardVariant = typeof cardVariants[number];
 export type CardAnimation = 'none' | 'fade' | 'slide-up' | 'zoom' | 'glitch' | 'pulse';
 export type CardSize = 'small' | 'medium' | 'large';

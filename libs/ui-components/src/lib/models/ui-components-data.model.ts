@@ -1,5 +1,6 @@
 
 export const variants = [
+    'default',
     'primary',
     'secondary',
     'outline',

@@ -1,14 +1,8 @@
 import { Component, input, computed, output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { variants } from '../models/ui-components-data.model';
 
-export const modalVariants = [
-  'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro',
-  'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar',
-  'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire',
-  'water', 'leaf', 'amber-glow', 'minimal-white', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse',
-  'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon',
-  'neomorph', 'glitch', 'portal'
-] as const;
+export const modalVariants = variants;
 
 export type DefaultModalVariant = typeof modalVariants[number];
 export type ModalVariantType = DefaultModalVariant | (string & {});

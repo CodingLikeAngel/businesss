@@ -578,16 +578,7 @@ export class VariantService {
     map((step) => step === 'preview')
   );
 
-  private allValidVariants = [
-    'default',
-    'primary',
-    'secondary',
-    ...footerVariants,
-    ...bubbleVariants,
-    ...cardRutasVariants,
-    ...titleVariants,
-    ...variants
-  ];
+  private allValidVariants = variants;
 
   private isValidVariant(variant: any): boolean {
     return this.allValidVariants.includes(variant);

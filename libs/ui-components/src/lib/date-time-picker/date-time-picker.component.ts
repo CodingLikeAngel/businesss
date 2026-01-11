@@ -1,15 +1,9 @@
 import { Component, computed, input, output, signal, ElementRef, ViewChild, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
+import { variants } from '../models/ui-components-data.model';
 
-export const datePickerVariants = [
-  'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro',
-  'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar',
-  'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire',
-  'water', 'leaf', 'amber-glow', 'minimal-white', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse',
-  'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon',
-  'neomorph', 'glitch', 'portal', 'nintendo'
-] as const;
+export const datePickerVariants = variants;
 
 export type DateTimePickerVariantType = typeof datePickerVariants[number] | (string & {});
 
