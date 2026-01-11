@@ -204,33 +204,8 @@ export class VariantSelectorComponent implements OnInit {
     this.activeTab = tab;
   }
 
-  exportProject() {
-    const fullConfig = {
-      header: this.headerConfig,
-      footer: this.footerConfig,
-      navBar: this.navBarConfig,
-      hero: this.heroConfig,
-      bubble: this.bubbleConfig,
-      card: this.cardConfig,
-      titleConfig: this.titleConfig,
-      serviceCards: this.serviceCardsConfig,
-      faq: this.faqConfig,
-      pricing: this.pricingConfig,
-      promotions: this.promotionsConfig,
-      gallery: this.galleryConfig,
-      products: this.productsConfig,
-      testimonials: this.testimonialsConfig,
-      globalVariant: this.globalVariant,
-      componentVariants: this.componentVariants,
-      sections: this.sections
-    };
-    const blob = new Blob([JSON.stringify(fullConfig, null, 2)], { type: 'application/json' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `config-antostudios-${new Date().getTime()}.json`;
-    a.click();
-    window.URL.revokeObjectURL(url);
+  toggleHeaderConfig() {
+    this.showHeaderConfig = !this.showHeaderConfig;
   }
 
   resetConfiguration() {
@@ -495,6 +470,9 @@ export class VariantSelectorComponent implements OnInit {
 
   onGlobalVariantChange() {
     this.variantService.setGlobalVariant(this.globalVariant);
+    // When changing the global variant manually, we want it to apply everywhere,
+    // so we clear specific component overrides that might block it.
+    this.clearComponentVariants();
   }
 
   onComponentVariantChange(componentId: string) {
@@ -505,8 +483,15 @@ export class VariantSelectorComponent implements OnInit {
     this.variantService.clearAllComponentVariants();
   }
 
-  toggleHeaderConfig() {
-    this.showHeaderConfig = !this.showHeaderConfig;
+  exportProject() {
+    const fullConfig = this.variantService.getFullConfig();
+    const blob = new Blob([JSON.stringify(fullConfig, null, 2)], { type: 'application/json' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `config-antostudios-${new Date().getTime()}.json`;
+    a.click();
+    window.URL.revokeObjectURL(url);
   }
 
   toggleFooterConfig() {
