@@ -1,6 +1,4 @@
-@import '../../../../../../../../shared-components/src/lib/shared-components/variant-selector/variables.scss';
-
-// Global Resizing State
+/* Global Resizing State */
 :host-context(body.is-resizing-active) {
   user-select: none !important;
   cursor: col-resize !important;

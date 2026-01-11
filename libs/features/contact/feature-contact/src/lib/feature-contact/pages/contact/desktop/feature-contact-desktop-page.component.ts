@@ -5,8 +5,6 @@ import {
   BubbleAnimationComponent,
   ForestAnimationComponent,
   UIHeaderComponent,
-  UINavBarComponent,
-  UITabsComponent,
   UITitleComponent,
 } from '@negocio/ui-components';
 
@@ -22,11 +20,9 @@ import { FeatureContactBasePageComponent } from '../feature-contact-base-page';
     RouterModule,
     BubbleAnimationComponent,
     ForestAnimationComponent,
-    UINavBarComponent,
     UITitleComponent,
     ContactFormComponent,
-    UIHeaderComponent,
-    UITabsComponent
+    UIHeaderComponent
   ],
   templateUrl: './feature-contact-desktop-page.component.html',
   styleUrl: './feature-contact-desktop-page.component.scss',

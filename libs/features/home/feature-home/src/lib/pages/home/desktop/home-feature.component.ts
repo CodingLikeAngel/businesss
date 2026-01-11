@@ -10,11 +10,9 @@ import {
   BubbleAnimationComponent,
   UITitleComponent,
   UiCardProductsComponent,
-  UiTestimonialsCardComponent,
   UICardAnimatedComponent,
   UICardComponent,
   UINavBarComponent,
-  UITabsComponent,
   UIFeaturesSectionComponent,
   UIStatsSectionComponent,
   UITestimonialsSectionComponent,
@@ -23,9 +21,6 @@ import {
   UIPricingTableSectionComponent
 } from '@negocio/ui-components';
 import { Product, Testimonial, PageSection, VariantService } from '@negocio/shared-components';
-import { FaqSectionComponent } from '../../../components/faq-section/faq-section.component';
-import { GallerySectionComponent } from '../../../components/gallery-section/gallery-section.component';
-import { PricingSectionComponent } from '../../../components/pricing-section/pricing-section.component';
 import { PromotionsSectionComponent } from '../../../components/promotions-section/promotions-section.component';
 import { ReservationFormComponent } from '../../../components/reservation-form/reservation-form.component';
 
@@ -39,19 +34,14 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
     RouterModule,
     UIHeroSectionComponent,
     ReservationFormComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
     PromotionsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,
     UITitleComponent,
     UiCardProductsComponent,
-    UiTestimonialsCardComponent,
     UICardAnimatedComponent,
     UICardComponent,
-    UITabsComponent,
     UIFeaturesSectionComponent,
     UIStatsSectionComponent,
     UITestimonialsSectionComponent,

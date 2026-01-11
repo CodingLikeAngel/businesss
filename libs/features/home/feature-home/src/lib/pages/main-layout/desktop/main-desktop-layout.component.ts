@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 import {
   UIFooterComponent,
   UIHeaderComponent,
-  UINavBarComponent,
   UITabsComponent,
 } from '@negocio/ui-components';
 import { VariantSelectorComponent } from '@negocio/shared-components';
@@ -19,7 +18,6 @@ import { MainLayoutBaseComponent } from '../main-layout-base.component';
     UIHeaderComponent,
     VariantSelectorComponent,
     UIFooterComponent,
-    UINavBarComponent,
     UITabsComponent
   ],
   templateUrl: './main-desktop-layout.component.html',

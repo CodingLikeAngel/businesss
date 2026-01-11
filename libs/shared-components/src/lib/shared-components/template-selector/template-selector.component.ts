@@ -1,5 +1,5 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, OnInit, Output, EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { TemplateService, BusinessTemplate } from '../../../services/template.service';
 import { VariantService } from '../../../services/variant.service';
 
@@ -24,12 +24,16 @@ export class TemplateSelectorComponent implements OnInit {
 
   constructor(
     private templateService: TemplateService,
-    private variantService: VariantService
+    private variantService: VariantService,
+    @Inject(PLATFORM_ID) private platformId: object
   ) {}
 
   ngOnInit() {
     const defaultTemplates = this.templateService.getAllTemplates();
-    const customTemplates = JSON.parse(localStorage.getItem('custom_templates') || '[]');
+    let customTemplates: BusinessTemplate[] = [];
+    if (isPlatformBrowser(this.platformId)) {
+      customTemplates = JSON.parse(localStorage.getItem('custom_templates') || '[]');
+    }
     this.templates = [...defaultTemplates, ...customTemplates];
     this.categories = [...new Set(this.templates.map(t => t.category))];
   }

@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UICardAnimatedComponent, UICardPremiumComponent, UICardComponent, UIChipComponent, UIButtonComponent, UITableComponent, UIHeaderComponent, UINavBarComponent, BubbleAnimationComponent, UITabsComponent } from '@negocio/ui-components';
+import { UICardAnimatedComponent, UICardPremiumComponent, UICardComponent, UIChipComponent, UIButtonComponent, UITableComponent, UIHeaderComponent, BubbleAnimationComponent, UITabsComponent } from '@negocio/ui-components';
 import { BaseFeatureAboutPageComponent } from '../../base-feature-about-page.component';
 
 
@@ -8,17 +8,16 @@ import { BaseFeatureAboutPageComponent } from '../../base-feature-about-page.com
 selector: 'lib-desktop-feature-about-page',
 standalone: true,
 imports: [
-    CommonModule,
-    UICardAnimatedComponent,
-    UICardPremiumComponent,
-    UICardComponent,
-    UIChipComponent,
-    UIButtonComponent,
-    UITableComponent,
-    UIHeaderComponent,
-    UINavBarComponent,
-    BubbleAnimationComponent,
-    UITabsComponent
+  CommonModule,
+  UICardAnimatedComponent,
+  UICardPremiumComponent,
+  UICardComponent,
+  UIChipComponent,
+  UIButtonComponent,
+  UITableComponent,
+  UIHeaderComponent,
+  BubbleAnimationComponent,
+  UITabsComponent
 ],
 templateUrl: './feature-about-page.component.html',
 styleUrls: ['./feature-about-page.component.scss'],

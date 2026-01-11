@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UICardAnimatedComponent, UICardPremiumComponent, UICardComponent, UIChipComponent, UIButtonComponent, UITableComponent, UIHeaderComponent, UINavBarComponent, BubbleAnimationComponent, UITabsComponent } from '@negocio/ui-components';
+import { UICardAnimatedComponent, UICardPremiumComponent, UICardComponent, UIChipComponent, UIButtonComponent, UITableComponent, UIHeaderComponent, BubbleAnimationComponent } from '@negocio/ui-components';
 import { BaseFeatureAboutPageComponent } from '../../base-feature-about-page.component';
 
 
@@ -8,17 +8,15 @@ import { BaseFeatureAboutPageComponent } from '../../base-feature-about-page.com
 selector: 'lib-mobile-feature-about-page',
 standalone: true,
 imports: [
-    CommonModule,
-    UICardAnimatedComponent,
-    UICardPremiumComponent,
-    UICardComponent,
-    UIChipComponent,
-    UIButtonComponent,
-    UITableComponent,
-    UIHeaderComponent,
-    UINavBarComponent,
-    BubbleAnimationComponent,
-    UITabsComponent
+  CommonModule,
+  UICardAnimatedComponent,
+  UICardPremiumComponent,
+  UICardComponent,
+  UIChipComponent,
+  UIButtonComponent,
+  UITableComponent,
+  UIHeaderComponent,
+  BubbleAnimationComponent
 ],
 templateUrl: './feature-about-page.component.html',
 styleUrls: ['./feature-about-page.component.scss'],

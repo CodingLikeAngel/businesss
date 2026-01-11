@@ -1,6 +1,5 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UICardAnimatedComponent } from '../cards/card-animated/card-animated.component';
 
 export interface StatItem {
   icon: string;
@@ -12,7 +11,7 @@ export interface StatItem {
 @Component({
   selector: 'lib-ui-components-stats-section',
   standalone: true,
-  imports: [CommonModule, UICardAnimatedComponent],
+  imports: [CommonModule],
   templateUrl: './stats-section.component.html',
   styleUrls: ['./stats-section.component.scss']
 })

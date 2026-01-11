@@ -5,7 +5,6 @@ import {
   BubbleAnimationComponent,
   ForestAnimationComponent,
   UIHeaderComponent,
-  UITabsComponent,
   UITitleComponent,
 } from '@negocio/ui-components';
 
@@ -21,7 +20,6 @@ import { ContactFormComponent } from '../../../components/contact-form/contact-f
     RouterModule,
     BubbleAnimationComponent,
     ForestAnimationComponent,
-    UITabsComponent,
     UITitleComponent,
     ContactFormComponent,
     UIHeaderComponent

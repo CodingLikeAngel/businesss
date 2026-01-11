@@ -74,9 +74,9 @@
         loop
         class="carousel-video-bg"
         [ngClass]="videoClass"
-        [poster]="carouselItems[activeCarouselIndex]?.posterUrl"
+        [poster]="carouselItems[activeCarouselIndex].posterUrl"
       >
-        <source [src]="carouselItems[activeCarouselIndex]?.videoUrl" type="video/mp4" />
+        <source [src]="carouselItems[activeCarouselIndex].videoUrl" type="video/mp4" />
         Tu navegador no soporta videos.
       </video>
       <div class="carousel">
