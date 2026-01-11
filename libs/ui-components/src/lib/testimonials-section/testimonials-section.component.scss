@@ -6,14 +6,36 @@
 
 
 .testimonials-container {
-  @include shared.apply-all-variants('testimonials--');
-  @include shared.apply-variants-to-child('.testimonial-card', 'testimonials--');
   padding: 100px 20px;
   background-color: #030712;
   color: white;
   font-family: 'Outfit', sans-serif;
   overflow: hidden;
   position: relative;
+
+  @include shared.apply-all-variants('testimonials--');
+  @include shared.apply-variants-to-child('.testimonial-card', 'testimonials--');
+
+  .title {
+    color: var(--theme-color, white);
+    background: var(--theme-text-gradient, linear-gradient(to right, #fff, #94a3b8));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .title-underline {
+     background: var(--theme-accent, #6366f1);
+  }
+
+  .testimonial-card {
+     .quote-icon {
+        color: var(--theme-accent, rgba(255, 255, 255, 0.1));
+     }
+     &:hover .quote-icon {
+        color: var(--theme-accent, #6366f1);
+     }
+  }
 }
 
 .testimonials-inner {
@@ -26,24 +48,6 @@
 .header-content {
   text-align: center;
   margin-bottom: 70px;
-  
-  .title {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 800;
-    margin-bottom: 10px;
-    background: linear-gradient(to right, #fff, #94a3b8);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .title-underline {
-    width: 60px;
-    height: 4px;
-    background: #6366f1;
-    margin: 0 auto 20px;
-    border-radius: 2px;
-  }
 
   .subtitle {
     font-size: 1.2rem;

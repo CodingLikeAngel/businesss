@@ -1,3 +1,4 @@
+@use "../../styles/mixins" as shared;
 @use "sass:map";
 @use "./variables" as var;
 
@@ -17,6 +18,12 @@
   &.accordion-sm { font-size: 14px; }
   &.accordion-md { font-size: 16px; }
   &.accordion-lg { font-size: 18px; }
+
+  @include shared.apply-all-variants('accordion-');
+  
+  background: var(--theme-bg, var(--accordion-bg, #ffffff));
+  color: var(--theme-color, var(--accordion-color, #000000));
+  border-color: var(--theme-border-color, var(--accordion-border-color, #d1d5db));
 }
 
 /* Estilos para cada ítem */

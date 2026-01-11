@@ -1,0 +1,2 @@
+﻿C:\Users\a.nietosu_vitaly\Desktop\cosas\business-template-main\libs\ui-components\src\lib\footer\footer-1\styles\_base.scss: @use "../../../styles/mixins" as shared;
+C:\Users\a.nietosu_vitaly\Desktop\cosas\business-template-main\libs\ui-components\src\lib\nav-bars\nav\styles\_base.scss: @use "../../../styles/mixins" as shared;

@@ -15,10 +15,11 @@
     position: relative;
     overflow: hidden;
     transition: transform 0.3s ease, text-shadow 0.3s ease;
-    color: var(--title-color, inherit);
-    text-shadow: var(--title-shadow, none);
-    background: var(--title-bg, none);
-    border: var(--title-border, none);
+    color: var(--theme-color, var(--title-color, inherit));
+    text-shadow: var(--theme-shadow, var(--title-shadow, none));
+    background: var(--theme-bg, var(--title-bg, none));
+    border: var(--theme-border, var(--title-border, none));
+    font-family: var(--theme-font, 'Orbitron', sans-serif);
 
     @include shared.apply-all-variants('title--');
   }

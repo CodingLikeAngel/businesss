@@ -1,3 +1,4 @@
+@use "../../styles/mixins" as shared;
 @use "sass:map";
 @use "./variables" as var;
 @use "sass:color";
@@ -24,8 +25,15 @@
     &.table-rounded-md { border-radius: 0.5rem; overflow: hidden; }
     &.table-rounded-full { border-radius: 9999px; overflow: hidden; }
   
+    @include shared.apply-all-variants('table-');
+
+    background: var(--theme-bg, var(--table-bg, #ffffff));
+    color: var(--theme-color, var(--table-color, #000000));
+    border: var(--theme-border, var(--table-border, 2px solid rgba(255, 255, 255, 0.3)));
+    font-family: var(--theme-font, "Orbitron", sans-serif);
+
     &:hover {
-      box-shadow: var(--table-shadow-hover, 0 0 10px rgba(255, 255, 255, 0.5));
+      box-shadow: var(--theme-shadow, var(--table-shadow-hover, 0 0 10px rgba(255, 255, 255, 0.5)));
       transform: scale(1.01);
     }
   }

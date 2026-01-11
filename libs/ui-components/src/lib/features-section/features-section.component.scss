@@ -4,10 +4,8 @@
 
 
 .features-container {
-  @include shared.apply-all-variants('features--');
-  @include shared.apply-variants-to-child('.feature-card', 'features--');
   padding: 100px 20px;
-  background-color: #0d1117;
+  background-color: #0d1117; // Default
   color: white;
   font-family: 'Outfit', sans-serif;
   overflow: hidden;
@@ -36,6 +34,25 @@
     filter: blur(80px);
     pointer-events: none;
   }
+
+  // Moved to end to override defaults correctly
+  @include shared.apply-all-variants('features--');
+  @include shared.apply-variants-to-child('.feature-card', 'features--');
+  
+  // Apply theme variables to inner elements
+  .title {
+     color: var(--theme-color, white);
+     background: var(--theme-text-gradient, linear-gradient(135deg, #ffffff 0%, var(--theme-accent, #a5b4fc) 100%));
+     -webkit-background-clip: text;
+     background-clip: text;
+     -webkit-text-fill-color: transparent;
+  }
+
+  .feature-card {
+     .icon-bg {
+        background: var(--theme-accent, var(--feature-color));
+     }
+  }
 }
 
 .features-inner {
@@ -49,18 +66,6 @@
   text-align: center;
   margin-bottom: 80px;
   animation: fadeInUp 1s ease-out;
-
-  .title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 24px;
-    background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    letter-spacing: -0.04em;
-  }
 
   .subtitle {
     font-size: clamp(1.1rem, 2vw, 1.4rem);

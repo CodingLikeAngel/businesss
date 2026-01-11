@@ -2,12 +2,22 @@
 @import 'libs/shared-components/src/lib/shared-components/variant-selector/variables.scss';
 
 .faq-container {
-  @include shared.apply-all-variants('faq--');
   padding: 100px 20px;
   background-color: #0b1121;
   color: white;
   font-family: 'Outfit', sans-serif;
   position: relative;
+
+  @include shared.apply-all-variants('faq--');
+  @include shared.apply-variants-to-child('lib-ui-components-accordion', 'faq--');
+
+  .title {
+    color: var(--theme-color, white);
+    background: var(--theme-text-gradient, linear-gradient(135deg, #a5b4fc 0%, #ffffff 100%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 .faq-inner {
@@ -20,16 +30,6 @@
 .header-content {
   text-align: center;
   margin-bottom: 60px;
-
-  .title {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
-    margin-bottom: 16px;
-    background: linear-gradient(135deg, #a5b4fc 0%, #ffffff 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
 
   .subtitle {
     font-size: 1.1rem;

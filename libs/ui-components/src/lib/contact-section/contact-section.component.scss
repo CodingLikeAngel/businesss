@@ -1,13 +1,16 @@
-
 @use '../styles/mixins' as shared;
 
 .contact-section {
-  @include shared.apply-all-variants('variant-');
-  
   padding: 4rem 1.5rem;
   background-color: var(--bg-primary, #ffffff);
   color: var(--text-primary, #1a1a1a);
   transition: all 0.3s ease;
+
+  @include shared.apply-all-variants('variant-');
+  
+  .title {
+     color: var(--theme-color, inherit);
+  }
 
   .container {
     max-width: 800px;

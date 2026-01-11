@@ -4,14 +4,32 @@
 
 
 .stats-container {
-  @include shared.apply-all-variants('stats--');
-  @include shared.apply-variants-to-child('.stat-card', 'stats--');
   padding: 80px 20px;
   background-color: #0d1117;
   color: white;
   font-family: 'Outfit', sans-serif;
   overflow: hidden;
   position: relative;
+
+  @include shared.apply-all-variants('stats--');
+  @include shared.apply-variants-to-child('.stat-card', 'stats--');
+
+  .title {
+    color: var(--theme-color, white);
+    background: var(--theme-text-gradient, linear-gradient(135deg, #ffffff 0%, var(--theme-accent, #a5b4fc) 100%));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .stat-card {
+    .value {
+       color: var(--theme-accent, white);
+    }
+    .icon-wrapper {
+       filter: drop-shadow(0 0 15px var(--theme-accent, rgba(255, 255, 255, 0.2)));
+    }
+  }
 }
 
 .stats-inner {
@@ -24,16 +42,6 @@
 .header-content {
   text-align: center;
   margin-bottom: 60px;
-
-  .title {
-    font-size: clamp(2rem, 4vw, 3rem);
-    font-weight: 800;
-    margin-bottom: 16px;
-    background: linear-gradient(135deg, #ffffff 0%, #a5b4fc 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
 
   .subtitle {
     font-size: 1.1rem;

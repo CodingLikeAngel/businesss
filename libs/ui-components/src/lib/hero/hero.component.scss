@@ -143,7 +143,22 @@
     }
   }
 
+  /* Apply global variants at the end of the base definition */
   @include shared.apply-all-variants('hero-section--');
+
+  // Apply theme variables to inner elements
+  .hero-title {
+     color: var(--theme-color, white);
+     background: var(--theme-text-gradient, linear-gradient(to right, #00b4ff, #ff4500));
+     -webkit-background-clip: text;
+     background-clip: text;
+     -webkit-text-fill-color: transparent;
+  }
+
+  .hero-subtitle {
+     color: var(--theme-color, #e5e7eb);
+     opacity: 0.9;
+  }
 }
 
 /* Asegurar que el contenido esté por encima del pseudo-elemento */
