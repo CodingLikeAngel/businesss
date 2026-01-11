@@ -48,5 +48,7 @@ export const variants = [
     'neomorph',
     'glitch',
     'portal',
+    'bioshock',
+    'super-meat-boy',
   ] as const;
   

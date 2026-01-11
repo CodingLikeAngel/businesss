@@ -94,17 +94,17 @@ export class VariantSelectorComponent implements OnInit {
   componentVariants: { [key: string]: string } = {};
 
   availableSectionVariants = [
-    { type: 'hero', label: 'Portada Hero', icon: '🚀', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'minimal', 'corporate'] },
-    { type: 'features', label: 'Características', icon: '✨', variants: ['glass', 'neon', 'grid', 'list', 'modern'] },
-    { type: 'services', label: 'Servicios', icon: '🛠️', variants: ['glass', 'neon', 'cards', 'hover-special'] },
-    { type: 'products', label: 'Productos', icon: '🧩', variants: ['glass', 'neon', 'ecommerce', 'minimal'] },
-    { type: 'testimonials', label: 'Testimonios', icon: '⭐', variants: ['glass', 'bubble', 'slider', 'grid'] },
-    { type: 'pricing', label: 'Precios', icon: '💰', variants: ['glass', 'neon', 'table', 'columns'] },
-    { type: 'promotions', label: 'Ofertas', icon: '🎁', variants: ['glass', 'neon', 'flash', 'banners'] },
-    { type: 'faq', label: 'Preguntas', icon: '❓', variants: ['glass', 'neon', 'accordion', 'simple'] },
-    { type: 'gallery', label: 'Galería', icon: '🖼️', variants: ['glass', 'masonry', 'slideshow', 'grid'] },
-    { type: 'stats', label: 'Estadísticas', icon: '📈', variants: ['glass', 'neon', 'counters', 'minimal'] },
-    { type: 'contact', label: 'Contacto', icon: '📞', variants: ['glass', 'neon', 'form', 'simple', 'minimal'] },
+    { type: 'hero', label: 'Portada Hero', icon: '🚀', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'minimal', 'corporate'] },
+    { type: 'features', label: 'Características', icon: '✨', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'grid', 'list', 'modern'] },
+    { type: 'services', label: 'Servicios', icon: '🛠️', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'cards', 'hover-special'] },
+    { type: 'products', label: 'Productos', icon: '🧩', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'ecommerce', 'minimal'] },
+    { type: 'testimonials', label: 'Testimonios', icon: '⭐', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'bubble', 'slider', 'grid'] },
+    { type: 'pricing', label: 'Precios', icon: '💰', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'table', 'columns'] },
+    { type: 'promotions', label: 'Ofertas', icon: '🎁', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'flash', 'banners'] },
+    { type: 'faq', label: 'Preguntas', icon: '❓', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'accordion', 'simple'] },
+    { type: 'gallery', label: 'Galería', icon: '🖼️', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'masonry', 'slideshow', 'grid'] },
+    { type: 'stats', label: 'Estadísticas', icon: '📈', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'counters', 'minimal'] },
+    { type: 'contact', label: 'Contacto', icon: '📞', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'form', 'simple', 'minimal'] },
   ];
 
   selectedExplorerComponent: any = null;
