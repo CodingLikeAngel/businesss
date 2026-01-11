@@ -18,7 +18,7 @@
 // STEP 2: BUILDER (Extended)
 .builder-container {
   display: flex;
-  height: 100vh;
+  height: 100%;
   background: #0d1117;
   color: #ffffff;
   font-family: 'Outfit', 'Inter', system-ui, sans-serif;
@@ -28,7 +28,7 @@
 
   .builder-sidebar {
     width: 90px;
-    height: 100vh;
+    height: 100%;
     background: rgba(10, 10, 10, 0.4);
     backdrop-filter: blur(25px);
     display: flex;

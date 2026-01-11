@@ -19,6 +19,9 @@ export class TemplateSelectorComponent implements OnInit {
   selectedCategory: string | null = null;
   selectedTemplate: BusinessTemplate | null = null;
 
+  previousConfig: any = null;
+  confirmed = false;
+
   constructor(
     private templateService: TemplateService,
     private variantService: VariantService
@@ -30,13 +33,20 @@ export class TemplateSelectorComponent implements OnInit {
   }
 
   openModal() {
+    this.previousConfig = this.variantService.getFullConfig();
+    this.confirmed = false;
     this.showModal = true;
   }
 
   closeModal() {
+    if (!this.confirmed && this.previousConfig) {
+      this.variantService.applyTemplate(this.previousConfig);
+    }
+    
     this.showModal = false;
     this.selectedTemplate = null;
     this.selectedCategory = null;
+    this.previousConfig = null;
   }
 
   getTemplatesByCategory(): BusinessTemplate[] {
@@ -52,22 +62,26 @@ export class TemplateSelectorComponent implements OnInit {
 
   selectTemplate(template: BusinessTemplate) {
     this.selectedTemplate = template;
+    // Immediate preview
+    this.variantService.applyTemplate(template);
   }
 
   applyTemplate() {
     if (!this.selectedTemplate) return;
 
-    // Aplicar todas las configuraciones del template
-    this.variantService.applyTemplate(this.selectedTemplate);
+    this.confirmed = true;
     
-    // Cerrar modal y notificar
+    // Cerrar modal y notificar (la configuración ya está aplicada por el preview)
     this.closeModal();
     this.templateApplied.emit();
-    
-    // Feedback visual opcional - podrías agregar una notificación aquí
   }
 
   cancelSelection() {
     this.selectedTemplate = null;
+    // If we cancel selection, should we revert to previousConfig immediately?
+    // Probably yes, to remove the preview.
+    if (this.previousConfig) {
+        this.variantService.applyTemplate(this.previousConfig);
+    }
   }
 }

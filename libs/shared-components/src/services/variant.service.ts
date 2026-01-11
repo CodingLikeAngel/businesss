@@ -830,6 +830,29 @@ export class VariantService {
     return this.productsConfigSubject.getValue();
   }
 
+  // Get full configuration state (useful for snapshots/backups)
+  getFullConfig() {
+    return {
+      header: this.headerConfigSubject.getValue(),
+      footer: this.footerConfigSubject.getValue(),
+      navBar: this.navBarConfigSubject.getValue(),
+      hero: this.heroConfigSubject.getValue(),
+      bubble: this.bubbleConfigSubject.getValue(),
+      card: this.cardConfigSubject.getValue(),
+      title: this.titleConfigSubject.getValue(),
+      serviceCards: this.serviceCardsConfigSubject.getValue(),
+      faq: this.faqConfigSubject.getValue(),
+      pricing: this.pricingConfigSubject.getValue(),
+      promotions: this.promotionsConfigSubject.getValue(),
+      gallery: this.galleryConfigSubject.getValue(),
+      products: this.productsConfigSubject.getValue(),
+      testimonials: this.testimonialsConfigSubject.getValue(),
+      globalVariant: this.globalVariantSubject.getValue(),
+      componentVariants: this.componentVariantsSubject.getValue(),
+      sections: this.sectionsSubject.getValue(),
+    };
+  }
+
   // Persistence
   private saveToLocalStorage() {
     if (typeof window !== 'undefined' && window.localStorage) {
