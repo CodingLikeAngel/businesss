@@ -77,6 +77,17 @@
 
       <div class="config-group">
         <div class="group-header">
+          <h3>Plantillas de Negocio</h3>
+          <p class="helper-text">Comienza con un template predefinido para diferentes tipos de negocios.</p>
+        </div>
+        <lib-template-selector
+          [isCollapsed]="false"
+          (templateApplied)="onTemplateApplied()">
+        </lib-template-selector>
+      </div>
+
+      <div class="config-group">
+        <div class="group-header">
           <h3>Gestión de Proyecto</h3>
           <p class="helper-text">Exporta tu configuración para guardarla o restablece todo el proyecto.</p>
         </div>

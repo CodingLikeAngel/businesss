@@ -1,0 +1,61 @@
+<div class="template-selector-wrapper" [class.collapsed]="isCollapsed">
+  <div class="template-selector-container">
+    
+    <!-- Header -->
+    <div class="template-header">
+      <button class="collapse-btn" (click)="toggleCollapse.emit()" *ngIf="!isCollapsed">
+        {{ isCollapsed ? '▶' : '◀' }}
+      </button>
+      <h2 *ngIf="!isCollapsed">🎨 Templates</h2>
+      <p *ngIf="!isCollapsed" class="helper-text">Selecciona un template para comenzar</p>
+    </div>
+
+    <div *ngIf="!isCollapsed" class="template-content">
+      <!-- Category Filter -->
+      <div class="category-filter">
+        <button 
+          class="category-btn" 
+          [class.active]="selectedCategory === null"
+          (click)="selectCategory(null)">
+          Todos
+        </button>
+        <button 
+          *ngFor="let category of categories"
+          class="category-btn"
+          [class.active]="selectedCategory === category"
+          (click)="selectCategory(category)">
+          {{ category }}
+        </button>
+      </div>
+
+      <!-- Templates Grid -->
+      <div class="templates-grid">
+        <div 
+          *ngFor="let template of getTemplatesByCategory()"
+          class="template-card"
+          (click)="selectTemplate(template)">
+          <div class="template-icon">{{ template.icon }}</div>
+          <div class="template-info">
+            <h3>{{ template.name }}</h3>
+            <p class="template-description">{{ template.description }}</p>
+            <span class="template-category">{{ template.category }}</span>
+          </div>
+          <div class="template-arrow">→</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div *ngIf="showConfirmation && selectedTemplate" class="confirmation-modal-overlay" (click)="cancelSelection()">
+      <div class="confirmation-modal" (click)="$event.stopPropagation()">
+        <h3>¿Aplicar este template?</h3>
+        <p>Se aplicará el template <strong>{{ selectedTemplate.name }}</strong>. Esto reemplazará tu configuración actual.</p>
+        <div class="modal-actions">
+          <button class="btn-cancel" (click)="cancelSelection()">Cancelar</button>
+          <button class="btn-apply" (click)="applyTemplate()">Aplicar Template</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

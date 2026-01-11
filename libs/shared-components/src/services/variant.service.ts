@@ -890,4 +890,28 @@ export class VariantService {
       window.location.reload();
     }
   }
+
+  // Apply template configuration
+  applyTemplate(template: any) {
+    // Apply all configurations from the template
+    if (template.header) this.headerConfigSubject.next(template.header);
+    if (template.footer) this.footerConfigSubject.next(template.footer);
+    if (template.navBar) this.navBarConfigSubject.next(template.navBar);
+    if (template.hero) this.heroConfigSubject.next(template.hero);
+    if (template.bubble) this.bubbleConfigSubject.next(template.bubble);
+    if (template.card) this.cardConfigSubject.next(template.card);
+    if (template.title) this.titleConfigSubject.next(template.title);
+    if (template.serviceCards) this.serviceCardsConfigSubject.next(template.serviceCards);
+    if (template.faq) this.faqConfigSubject.next(template.faq);
+    if (template.pricing) this.pricingConfigSubject.next(template.pricing);
+    if (template.promotions) this.promotionsConfigSubject.next(template.promotions);
+    if (template.gallery) this.galleryConfigSubject.next(template.gallery);
+    if (template.products) this.productsConfigSubject.next(template.products);
+    if (template.testimonials) this.testimonialsConfigSubject.next(template.testimonials);
+    if (template.sections) this.sectionsSubject.next(template.sections);
+    if (template.globalVariant) this.globalVariantSubject.next(template.globalVariant);
+    if (template.componentVariants) this.componentVariantsSubject.next(template.componentVariants);
+    
+    this.saveToLocalStorage();
+  }
 }

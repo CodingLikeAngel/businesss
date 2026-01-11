@@ -20,12 +20,13 @@ import {
   TestimonialsConfig,
   PageSection
 } from '../../../services/variant.service';
+import { TemplateSelectorComponent } from '../template-selector/template-selector.component';
 import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from '@negocio/ui-components';
 
 @Component({
   selector: 'lib-variant-selector',
   standalone: true,
-  imports: [CommonModule, FormsModule, UIInputComponent],
+  imports: [CommonModule, FormsModule, UIInputComponent, TemplateSelectorComponent],
   templateUrl: './variant-selector.component.html',
   styleUrl: './variant-selector.component.scss',
 })
@@ -236,6 +237,11 @@ export class VariantSelectorComponent implements OnInit {
     if (confirm('¿Estás seguro de que quieres restablecer toda la configuración? Se perderán todos los cambios.')) {
       this.variantService.resetConfig();
     }
+  }
+
+  onTemplateApplied() {
+    // Template has been applied, configurations will update automatically via subscriptions
+    // No action needed as all configs are subscribed in ngOnInit
   }
 
   // --- List Management ---
