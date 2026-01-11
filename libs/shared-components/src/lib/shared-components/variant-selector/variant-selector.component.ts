@@ -70,7 +70,7 @@ export class VariantSelectorComponent implements OnInit {
   
   // Modal state for editing items
   showItemModal = false;
-  modalItemType: 'service' | 'product' | 'testimonial' | 'faq' | 'gallery' | 'pricing' | 'promotion' | null = null;
+  modalItemType: 'service' | 'product' | 'testimonial' | 'faq' | 'gallery' | 'pricing' | 'promotion' | 'navItem' | 'navLink' | 'footerLink' | 'socialIcon' | null = null;
   editingItem: any = null;
   editingIndex: number = -1;
 
@@ -86,24 +86,7 @@ export class VariantSelectorComponent implements OnInit {
   showPromotionsConfig = false;
   showGalleryConfig = false;
   showProductsConfig = false;
-  navItemsJson: string;
-  exploreLinksJson: string;
-  trendLinksJson: string;
-  socialIconsJson: string;
-  navLinksJson: string;
-  navCustomStylesJson: string;
-  navigationCardsJson: string;
-  carouselItemsJson: string;
-  heroCustomStylesJson: string;
-  cardCustomStylesJson: string;
-  titleCustomStylesJson: string;
-  serviceCardsJson: string;
-  faqItemsJson: string;
-  priceColumnsJson: string;
-  priceRowsJson: string;
-  premiumCardsJson: string;
-  galleryImagesJson: string;
-  productsJson: string;
+  // Removed duplicate showProductsConfig
   componentVariants: { [key: string]: string } = {};
 
   components = [
@@ -180,24 +163,6 @@ export class VariantSelectorComponent implements OnInit {
     this.galleryConfig = this.variantService.getCurrentGalleryConfig();
     this.productsConfig = this.variantService.getCurrentProductsConfig();
     this.testimonialsConfig = this.variantService.getCurrentTestimonialsConfig();
-    this.navItemsJson = JSON.stringify(this.headerConfig.navItems, null, 2);
-    this.exploreLinksJson = JSON.stringify(this.footerConfig.exploreLinks, null, 2);
-    this.trendLinksJson = JSON.stringify(this.footerConfig.trendLinks, null, 2);
-    this.socialIconsJson = JSON.stringify(this.footerConfig.socialIcons, null, 2);
-    this.navLinksJson = JSON.stringify(this.navBarConfig.navLinks, null, 2);
-    this.navCustomStylesJson = JSON.stringify(this.navBarConfig.customStyles, null, 2);
-    this.navigationCardsJson = JSON.stringify(this.heroConfig.navigationCards, null, 2);
-    this.carouselItemsJson = JSON.stringify(this.heroConfig.carouselItems, null, 2);
-    this.heroCustomStylesJson = JSON.stringify(this.heroConfig.customStyles, null, 2);
-    this.cardCustomStylesJson = JSON.stringify(this.cardConfig.customStyles, null, 2);
-    this.titleCustomStylesJson = JSON.stringify(this.titleConfig.customStyles, null, 2);
-    this.serviceCardsJson = JSON.stringify(this.serviceCardsConfig.items, null, 2);
-    this.faqItemsJson = JSON.stringify(this.faqConfig.items, null, 2);
-    this.priceColumnsJson = JSON.stringify(this.pricingConfig.columns, null, 2);
-    this.priceRowsJson = JSON.stringify(this.pricingConfig.rows, null, 2);
-    this.premiumCardsJson = JSON.stringify(this.promotionsConfig.premiumCards, null, 2);
-    this.galleryImagesJson = JSON.stringify(this.galleryConfig.images, null, 2);
-    this.productsJson = JSON.stringify(this.productsConfig.items, null, 2);
   }
 
   setActiveTab(tab: any) {
@@ -287,6 +252,41 @@ export class VariantSelectorComponent implements OnInit {
         else { promotions.push(this.editingItem); }
         this.variantService.setPromotionsConfig({ premiumCards: promotions });
         break;
+      case 'navItem':
+        const navItems = [...this.headerConfig.navItems];
+        if (this.editingIndex >= 0) { navItems[this.editingIndex] = this.editingItem; }
+        else { navItems.push(this.editingItem); }
+        this.variantService.setHeaderConfig({ navItems });
+        break;
+      case 'navLink':
+        const navLinks = [...this.navBarConfig.navLinks];
+        if (this.editingIndex >= 0) { navLinks[this.editingIndex] = this.editingItem; }
+        else { navLinks.push(this.editingItem); }
+        this.variantService.setNavBarConfig({ navLinks });
+        break;
+      case 'footerLink':
+        // We need a sub-type to distinguish explore vs trend links in the editor...
+        // For simplicity, let's assume 'footerLink' is for generic and we'll handle context passed
+        // Actually, we need to know WHICH list we are editing.
+        // Let's rely on 'editingItem.type' if we add it, or separate modal types.
+        if (this.editingItem._listType === 'explore') {
+          const links = [...this.footerConfig.exploreLinks];
+          if (this.editingIndex >= 0) { links[this.editingIndex] = this.editingItem; }
+          else { links.push(this.editingItem); }
+          this.variantService.setFooterConfig({ exploreLinks: links });
+        } else {
+          const links = [...this.footerConfig.trendLinks];
+          if (this.editingIndex >= 0) { links[this.editingIndex] = this.editingItem; }
+          else { links.push(this.editingItem); }
+          this.variantService.setFooterConfig({ trendLinks: links });
+        }
+        break;
+      case 'socialIcon':
+        const socialIcons = [...this.footerConfig.socialIcons];
+        if (this.editingIndex >= 0) { socialIcons[this.editingIndex] = this.editingItem; }
+        else { socialIcons.push(this.editingItem); }
+        this.variantService.setFooterConfig({ socialIcons });
+        break;
     }
     this.closeItemModal();
   }
@@ -324,13 +324,54 @@ export class VariantSelectorComponent implements OnInit {
           rows.splice(index, 1);
           this.variantService.setPricingConfig({ rows });
           break;
-        case 'promotion':
+      case 'promotion':
           const promotions = [...this.promotionsConfig.premiumCards];
           promotions.splice(index, 1);
           this.variantService.setPromotionsConfig({ premiumCards: promotions });
           break;
+      case 'navItem':
+          const navItems = [...this.headerConfig.navItems];
+          navItems.splice(index, 1);
+          this.variantService.setHeaderConfig({ navItems });
+          break;
+      case 'navLink':
+          const navLinks = [...this.navBarConfig.navLinks];
+          navLinks.splice(index, 1);
+          this.variantService.setNavBarConfig({ navLinks });
+          break;
+      case 'footerLink': 
+           // Need to know which list
+           // We can pass a special "context" to removeItem or just try both?
+           // The simple way: check the item content on the list wrapper in HTML.
+           // However, removeItem receives type and index.
+           // We'll overload 'type' in the HTML call: 'footerLink:explore'
+           // This requires modifying the switch to parse it.
+           // Let's assume removeItem is called with 'footerLink:explore' or similar.
+           break; 
+        case 'socialIcon':
+           const socialIcons = [...this.footerConfig.socialIcons];
+           socialIcons.splice(index, 1);
+           this.variantService.setFooterConfig({ socialIcons });
+           break;
       }
     }
+  }
+
+  // Helper method for overloading removeItem types
+  removeItemWithContext(type: string, listType: string, index: number) {
+     if (confirm('¿Eliminar este elemento?')) {
+        if (type === 'footerLink') {
+           if (listType === 'explore') {
+              const links = [...this.footerConfig.exploreLinks];
+              links.splice(index, 1);
+              this.variantService.setFooterConfig({ exploreLinks: links });
+           } else {
+              const links = [...this.footerConfig.trendLinks];
+              links.splice(index, 1);
+              this.variantService.setFooterConfig({ trendLinks: links });
+           }
+        }
+     }
   }
 
   private getEmptyItem(type: any): any {
@@ -342,6 +383,10 @@ export class VariantSelectorComponent implements OnInit {
       case 'gallery': return { src: '', alt: 'Descripción de imagen' };
       case 'pricing': return { service: 'Servicio', description: 'Detalles', price: '0€' };
       case 'promotion': return { title: 'Oferta Especial', description: 'Detallitos', image: '', price: '0€', discount: '0%', icon: 'heroStar', tooltip: '¡Aprovecha!' };
+      case 'navItem': return { label: 'Nuevo Link', href: '#', active: false };
+      case 'navLink': return { label: 'Sección', href: '#section', icon: '🔹' };
+      case 'footerLink': return { label: 'Enlace', href: '#', icon: '🔗', _listType: 'explore' }; // Default to explore
+      case 'socialIcon': return { name: 'instagram', href: '#' };
       default: return {};
     }
   }
@@ -357,27 +402,18 @@ export class VariantSelectorComponent implements OnInit {
 
     this.variantService.headerConfig$.subscribe((config) => {
       this.headerConfig = config;
-      this.navItemsJson = JSON.stringify(config.navItems, null, 2);
     });
 
     this.variantService.footerConfig$.subscribe((config) => {
       this.footerConfig = config;
-      this.exploreLinksJson = JSON.stringify(config.exploreLinks, null, 2);
-      this.trendLinksJson = JSON.stringify(config.trendLinks, null, 2);
-      this.socialIconsJson = JSON.stringify(config.socialIcons, null, 2);
     });
 
     this.variantService.navBarConfig$.subscribe((config) => {
       this.navBarConfig = config;
-      this.navLinksJson = JSON.stringify(config.navLinks, null, 2);
-      this.navCustomStylesJson = JSON.stringify(config.customStyles, null, 2);
     });
 
     this.variantService.heroConfig$.subscribe((config) => {
       this.heroConfig = config;
-      this.navigationCardsJson = JSON.stringify(config.navigationCards, null, 2);
-      this.carouselItemsJson = JSON.stringify(config.carouselItems, null, 2);
-      this.heroCustomStylesJson = JSON.stringify(config.customStyles, null, 2);
     });
 
     this.variantService.bubbleConfig$.subscribe((config) => {
@@ -386,43 +422,34 @@ export class VariantSelectorComponent implements OnInit {
 
     this.variantService.cardConfig$.subscribe((config) => {
       this.cardConfig = config;
-      this.cardCustomStylesJson = JSON.stringify(config.customStyles, null, 2);
     });
 
     this.variantService.titleConfig$.subscribe((config) => {
       this.titleConfig = config;
-      this.titleCustomStylesJson = JSON.stringify(config.customStyles, null, 2);
     });
 
     this.variantService.serviceCardsConfig$.subscribe((config) => {
       this.serviceCardsConfig = config;
-      this.serviceCardsJson = JSON.stringify(config.items, null, 2);
     });
 
     this.variantService.faqConfig$.subscribe((config) => {
       this.faqConfig = config;
-      this.faqItemsJson = JSON.stringify(config.items, null, 2);
     });
 
     this.variantService.pricingConfig$.subscribe((config) => {
       this.pricingConfig = config;
-      this.priceColumnsJson = JSON.stringify(config.columns, null, 2);
-      this.priceRowsJson = JSON.stringify(config.rows, null, 2);
     });
 
     this.variantService.promotionsConfig$.subscribe((config) => {
       this.promotionsConfig = config;
-      this.premiumCardsJson = JSON.stringify(config.premiumCards, null, 2);
     });
 
     this.variantService.galleryConfig$.subscribe((config) => {
       this.galleryConfig = config;
-      this.galleryImagesJson = JSON.stringify(config.images, null, 2);
     });
 
     this.variantService.productsConfig$.subscribe((config) => {
       this.productsConfig = config;
-      this.productsJson = JSON.stringify(config.items, null, 2);
     });
 
     this.variantService.builderStep$.subscribe((step) => {
@@ -570,167 +597,5 @@ export class VariantSelectorComponent implements OnInit {
 
   updateTitleConfig() {
     this.variantService.setTitleConfig(this.titleConfig);
-  }
-
-  updateNavItems() {
-    try {
-      const navItems = JSON.parse(this.navItemsJson);
-      this.variantService.setHeaderConfig({ navItems });
-    } catch (e) {
-      console.error('Invalid JSON for navItems', e);
-    }
-  }
-
-  updateExploreLinks() {
-    try {
-      const exploreLinks = JSON.parse(this.exploreLinksJson);
-      this.variantService.setFooterConfig({ exploreLinks });
-    } catch (e) {
-      console.error('Invalid JSON for exploreLinks', e);
-    }
-  }
-
-  updateTrendLinks() {
-    try {
-      const trendLinks = JSON.parse(this.trendLinksJson);
-      this.variantService.setFooterConfig({ trendLinks });
-    } catch (e) {
-      console.error('Invalid JSON for trendLinks', e);
-    }
-  }
-
-  updateSocialIcons() {
-    try {
-      const socialIcons = JSON.parse(this.socialIconsJson);
-      this.variantService.setFooterConfig({ socialIcons });
-    } catch (e) {
-      console.error('Invalid JSON for socialIcons', e);
-    }
-  }
-
-  updateNavLinks() {
-    try {
-      const navLinks = JSON.parse(this.navLinksJson);
-      this.variantService.setNavBarConfig({ navLinks });
-    } catch (e) {
-      console.error('Invalid JSON for navLinks', e);
-    }
-  }
-
-  updateNavCustomStyles() {
-    try {
-      const customStyles = JSON.parse(this.navCustomStylesJson);
-      this.variantService.setNavBarConfig({ customStyles });
-    } catch (e) {
-      console.error('Invalid JSON for navCustomStyles', e);
-    }
-  }
-
-  updateNavigationCards() {
-    try {
-      const navigationCards = JSON.parse(this.navigationCardsJson);
-      this.variantService.setHeroConfig({ navigationCards });
-    } catch (e) {
-      console.error('Invalid JSON for navigationCards', e);
-    }
-  }
-
-  updateCarouselItems() {
-    try {
-      const carouselItems = JSON.parse(this.carouselItemsJson);
-      this.variantService.setHeroConfig({ carouselItems });
-    } catch (e) {
-      console.error('Invalid JSON for carouselItems', e);
-    }
-  }
-
-  updateHeroCustomStyles() {
-    try {
-      const customStyles = JSON.parse(this.heroCustomStylesJson);
-      this.variantService.setHeroConfig({ customStyles });
-    } catch (e) {
-      console.error('Invalid JSON for heroCustomStyles', e);
-    }
-  }
-
-  updateCardCustomStyles() {
-    try {
-      const customStyles = JSON.parse(this.cardCustomStylesJson);
-      this.variantService.setCardConfig({ customStyles });
-    } catch (e) {
-      console.error('Invalid JSON for cardCustomStyles', e);
-    }
-  }
-
-  updateTitleCustomStyles() {
-    try {
-      const customStyles = JSON.parse(this.titleCustomStylesJson);
-      this.variantService.setTitleConfig({ customStyles });
-    } catch (e) {
-      console.error('Invalid JSON for titleCustomStyles', e);
-    }
-  }
-
-  updateServiceCards() {
-    try {
-      const items = JSON.parse(this.serviceCardsJson);
-      this.variantService.setServiceCardsConfig({ items });
-    } catch (e) {
-      console.error('Invalid JSON for serviceCards', e);
-    }
-  }
-
-  updateFaqItems() {
-    try {
-      const items = JSON.parse(this.faqItemsJson);
-      this.variantService.setFaqConfig({ items });
-    } catch (e) {
-      console.error('Invalid JSON for faqItems', e);
-    }
-  }
-
-  updatePriceColumns() {
-    try {
-      const columns = JSON.parse(this.priceColumnsJson);
-      this.variantService.setPricingConfig({ columns });
-    } catch (e) {
-      console.error('Invalid JSON for priceColumns', e);
-    }
-  }
-
-  updatePriceRows() {
-    try {
-      const rows = JSON.parse(this.priceRowsJson);
-      this.variantService.setPricingConfig({ rows });
-    } catch (e) {
-      console.error('Invalid JSON for priceRows', e);
-    }
-  }
-
-  updatePremiumCards() {
-    try {
-      const premiumCards = JSON.parse(this.premiumCardsJson);
-      this.variantService.setPromotionsConfig({ premiumCards });
-    } catch (e) {
-      console.error('Invalid JSON for premiumCards', e);
-    }
-  }
-
-  updateGalleryImages() {
-    try {
-      const images = JSON.parse(this.galleryImagesJson);
-      this.variantService.setGalleryConfig({ images });
-    } catch (e) {
-      console.error('Invalid JSON for galleryImages', e);
-    }
-  }
-
-  updateProducts() {
-    try {
-      const items = JSON.parse(this.productsJson);
-      this.variantService.setProductsConfig({ items });
-    } catch (e) {
-      console.error('Invalid JSON for products', e);
-    }
   }
 }

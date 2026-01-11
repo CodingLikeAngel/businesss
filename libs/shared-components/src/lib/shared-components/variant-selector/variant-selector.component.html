@@ -107,6 +107,26 @@
           <lib-ui-components-input type="text" label="Subtítulo" [(ngModel)]="headerConfig.subtitle" (ngModelChange)="updateHeaderConfig()"></lib-ui-components-input>
           <lib-ui-components-input type="select" label="Alineación" [(ngModel)]="headerConfig.align" [options]="alignOptions" (ngModelChange)="updateHeaderConfig()"></lib-ui-components-input>
         </div>
+        
+        <div class="config-group mt-4">
+          <div class="group-header">
+            <h3>Elementos del Menú</h3>
+            <p class="helper-text">Gestiona los enlaces de navegación del encabezado.</p>
+          </div>
+          <div class="item-list">
+            <div *ngFor="let item of headerConfig.navItems; let i = index" class="list-item">
+              <div class="item-info">
+                <span class="item-label">{{item.label}}</span>
+                <span class="item-sublabel">{{item.href}}</span>
+              </div>
+              <div class="item-actions">
+                <button class="edit-btn" (click)="openEditModal('navItem', item, i)">✎</button>
+                <button class="delete-btn" (click)="removeItem('navItem', i)">×</button>
+              </div>
+            </div>
+            <button class="add-item-btn" (click)="openAddModal('navItem')">✚ Añadir Enlace</button>
+          </div>
+        </div>
       </div>
 
       <div class="config-group">
@@ -117,6 +137,25 @@
           <lib-ui-components-input type="checkbox" [(ngModel)]="navBarConfig.visible" (ngModelChange)="updateNavBarConfig()">Mostrar Navbar</lib-ui-components-input>
           <lib-ui-components-input type="text" label="Texto Logo" [(ngModel)]="navBarConfig.logoText" (ngModelChange)="updateNavBarConfig()"></lib-ui-components-input>
           <lib-ui-components-input type="checkbox" [(ngModel)]="navBarConfig.isFixed" (ngModelChange)="updateNavBarConfig()">Navbar Fijo</lib-ui-components-input>
+        </div>
+
+        <div class="config-group mt-4">
+          <div class="group-header">
+            <h3>Enlaces del Navbar</h3>
+          </div>
+          <div class="item-list">
+            <div *ngFor="let link of navBarConfig.navLinks; let i = index" class="list-item">
+              <div class="item-info">
+                <span class="item-label">{{link.label}}</span>
+                <span class="item-sublabel">{{link.href}}</span>
+              </div>
+              <div class="item-actions">
+                <button class="edit-btn" (click)="openEditModal('navLink', link, i)">✎</button>
+                <button class="delete-btn" (click)="removeItem('navLink', i)">×</button>
+              </div>
+            </div>
+            <button class="add-item-btn" (click)="openAddModal('navLink')">✚ Añadir Enlace Navbar</button>
+          </div>
         </div>
       </div>
     </div>
@@ -369,6 +408,70 @@
           <lib-ui-components-input type="textarea" label="Descripción" [(ngModel)]="footerConfig.description" (ngModelChange)="updateFooterConfig()"></lib-ui-components-input>
           <lib-ui-components-input type="checkbox" [(ngModel)]="footerConfig.showParticles" (ngModelChange)="updateFooterConfig()">Mostrar Partículas</lib-ui-components-input>
         </div>
+
+        <div class="config-group mt-4">
+          <div class="group-header">
+            <h3>Enlaces "Explorar"</h3>
+          </div>
+          <div class="item-list">
+            <div *ngFor="let link of footerConfig.exploreLinks; let i = index" class="list-item">
+              <div class="item-info">
+                <span class="item-label">{{link.label}}</span>
+                <span class="item-sublabel">{{link.href}}</span>
+              </div>
+              <div class="item-actions">
+                <button class="edit-btn" (click)="openEditModal('footerLink', {label: link.label, href: link.href, icon: link.icon, _listType: 'explore'}, i)">✎</button>
+                <button class="delete-btn" (click)="removeItemWithContext('footerLink', 'explore', i)">×</button>
+              </div>
+            </div>
+            <button class="add-item-btn" (click)="openAddModal('footerLink'); editingItem._listType = 'explore'">✚ Añadir Link Explorar</button>
+          </div>
+        </div>
+
+        <div class="config-group mt-4">
+          <div class="group-header">
+            <h3>Enlaces "Tendencias"</h3>
+          </div>
+          <div class="item-list">
+            <div *ngFor="let link of footerConfig.trendLinks; let i = index" class="list-item">
+              <div class="item-info">
+                <span class="item-label">{{link.label}}</span>
+                <span class="item-sublabel">{{link.href}}</span>
+              </div>
+              <div class="item-actions">
+                <button class="edit-btn" (click)="openEditModal('footerLink', {label: link.label, href: link.href, icon: link.icon, _listType: 'trend'}, i)">✎</button>
+                <button class="delete-btn" (click)="removeItemWithContext('footerLink', 'trend', i)">×</button>
+              </div>
+            </div>
+            <button class="add-item-btn" (click)="openAddModal('footerLink'); editingItem._listType = 'trend'">✚ Añadir Link Tendencia</button>
+          </div>
+        </div>
+
+        <div class="config-group mt-4">
+          <div class="group-header">
+            <h3>Redes Sociales</h3>
+          </div>
+          <div class="item-list">
+            <div *ngFor="let social of footerConfig.socialIcons; let i = index" class="list-item">
+              <div class="item-info">
+                <span class="item-label">{{social.name}}</span>
+                <span class="item-sublabel">{{social.href}}</span>
+              </div>
+              <div class="item-actions">
+                <button class="edit-btn" (click)="openEditModal('socialIcon', social, i)">✎</button>
+                <button class="delete-btn" (click)="removeItem('socialIcon', i)">×</button>
+              </div>
+            </div>
+            <button class="add-item-btn" (click)="openAddModal('socialIcon')">✚ Añadir Red Social</button>
+          </div>
+        </div>
+        
+        <div class="config-group mt-4">
+           <div class="group-header">
+             <h3>Copyright</h3>
+           </div>
+           <lib-ui-components-input type="text" label="Texto Copyright" [(ngModel)]="footerConfig.copyrightText" (ngModelChange)="updateFooterConfig()"></lib-ui-components-input>
+        </div>
       </div>
     </div>
   </div>
@@ -420,6 +523,25 @@
         <div *ngSwitchCase="'gallery'" class="input-grid">
           <lib-ui-components-input label="Alt Text" type="text" [(ngModel)]="editingItem.alt"></lib-ui-components-input>
           <lib-ui-components-input label="URL Imagen" type="text" [(ngModel)]="editingItem.src"></lib-ui-components-input>
+        </div>
+        <div *ngSwitchCase="'navItem'" class="input-grid">
+          <lib-ui-components-input label="Etiqueta" type="text" [(ngModel)]="editingItem.label"></lib-ui-components-input>
+          <lib-ui-components-input label="Enlace (href)" type="text" [(ngModel)]="editingItem.href"></lib-ui-components-input>
+          <lib-ui-components-input label="Activo" type="checkbox" [(ngModel)]="editingItem.active"></lib-ui-components-input>
+        </div>
+        <div *ngSwitchCase="'navLink'" class="input-grid">
+          <lib-ui-components-input label="Etiqueta" type="text" [(ngModel)]="editingItem.label"></lib-ui-components-input>
+          <lib-ui-components-input label="Enlace (#id)" type="text" [(ngModel)]="editingItem.href"></lib-ui-components-input>
+          <lib-ui-components-input label="Icono" type="text" [(ngModel)]="editingItem.icon"></lib-ui-components-input>
+        </div>
+        <div *ngSwitchCase="'footerLink'" class="input-grid">
+          <lib-ui-components-input label="Etiqueta" type="text" [(ngModel)]="editingItem.label"></lib-ui-components-input>
+          <lib-ui-components-input label="Enlace" type="text" [(ngModel)]="editingItem.href"></lib-ui-components-input>
+          <lib-ui-components-input label="Icono (opcional)" type="text" [(ngModel)]="editingItem.icon"></lib-ui-components-input>
+        </div>
+        <div *ngSwitchCase="'socialIcon'" class="input-grid">
+          <lib-ui-components-input label="Red Social (twitter, facebook, instagram)" type="text" [(ngModel)]="editingItem.name"></lib-ui-components-input>
+          <lib-ui-components-input label="URL Perfil" type="text" [(ngModel)]="editingItem.href"></lib-ui-components-input>
         </div>
       </ng-container>
     </div>
