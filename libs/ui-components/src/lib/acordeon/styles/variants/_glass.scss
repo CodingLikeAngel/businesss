@@ -1,0 +1,81 @@
+.accordion-glass {
+  background: transparent;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  .accordion-item {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .accordion-header {
+    width: 100%;
+    padding: 20px 24px;
+    background: transparent;
+    border: none;
+    color: white;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.3s ease;
+
+    &[aria-expanded="true"] {
+      color: #a5b4fc;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    &:hover {
+      color: #c7d2fe;
+    }
+    
+    // Icon (optional, if component supports it via pseudo-element or inner toggle)
+    &::after {
+      content: '+';
+      font-size: 1.5rem;
+      font-weight: 300;
+      transition: transform 0.3s ease;
+    }
+
+    &[aria-expanded="true"]::after {
+      transform: rotate(45deg);
+    }
+  }
+
+  .accordion-content {
+    background: rgba(0, 0, 0, 0.1);
+    color: #94a3b8;
+    line-height: 1.7;
+    padding: 0 24px 24px 24px;
+    font-size: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: block; // Override hidden helper if animation needed
+    
+    // Animation handling usually done via height/display toggling in Angular
+    // Simple fade for content
+    animation: fadeIn 0.4s ease;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
