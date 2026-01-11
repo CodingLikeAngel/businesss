@@ -1,117 +1,134 @@
-
 @use "../variables" as var;
-
 @use "sass:color";
+
+// --- Premium Variants Batch 2 ---
+
+// 9. Matrix: Digital rain aesthetic
 .header-matrix {
-    background: #111827;
-    color: #00ff9d;
-    box-shadow: 0 0 25px rgba(0, 255, 157, 0.6), inset 0 0 15px rgba(0, 255, 157, 0.3);
-    border-bottom: 3px solid #00ff9d;
-    .menu-toggle .hamburger-icon .bar { background: #00ff9d !important; }
-    &.dark {
-      background: color.adjust(#111827, $lightness: -20%);
-      border-bottom-color: color.adjust(#00ff9d, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #00ff9d !important; }
-    }
+  background: #0d0d0d;
+  color: #00ff41;
+  border-bottom: 2px solid #008f11;
+  box-shadow: 0 0 15px rgba(0, 255, 65, 0.2), inset 0 0 10px rgba(0, 255, 65, 0.1);
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+  
+  .menu-toggle .hamburger-icon .bar { background: #00ff41 !important; }
+  
+  &.dark {
+    background: #000000;
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.4);
+  }
+}
 
+// 10. Quantum: Sci-fi, clean, futuristic
+.header-quantum {
+  background: linear-gradient(135deg, #0f172a, #312e81);
+  color: #e0e7ff;
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 8px 32px rgba(49, 46, 129, 0.2);
+  font-family: system-ui, -apple-system, sans-serif;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, #818cf8, transparent);
   }
 
-  .header-quantum {
-    background: linear-gradient(45deg, #8b5cf6, #22d3ee 60%, #1e1b4b);
-    color: #ffffff;
-    border-bottom: 4px solid #ffffff;
-    box-shadow: 0 0 25px rgba(139, 92, 246, 0.7), inset 0 0 12px rgba(34, 211, 238, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(45deg, color.adjust(#8b5cf6, $lightness: -20%), color.adjust(#22d3ee, $lightness: -20%), color.adjust(#1e1b4b, $lightness: -20%));
-      border-bottom-color: color.adjust(#ffffff, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+  .menu-toggle .hamburger-icon .bar { background: #e0e7ff !important; }
+}
 
-  .header-cybernetic {
-    background: linear-gradient(135deg, #1e293b, #94a3b8 60%, #f97316);
-    color: #f97316;
-    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(249, 115, 22, 0.6);
-    border-radius: 8px;
-    .menu-toggle .hamburger-icon .bar { background: #f97316 !important; }
-    &.dark {
-      background: linear-gradient(135deg, color.adjust(#1e293b, $lightness: -20%), color.adjust(#94a3b8, $lightness: -20%), color.adjust(#f97316, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #f97316 !important; }
-    }
+// 11. Cybernetic: High-tech, orange/slate
+.header-cybernetic {
+  background: #1e293b;
+  color: #f97316;
+  border-left: 4px solid #f97316;
+  box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
+  .menu-toggle .hamburger-icon .bar { background: #f97316 !important; }
+  
+  &.dark {
+    background: #0f172a;
+    border-left: 4px solid #ea580c;
   }
+}
 
-  .header-danger {
-    background: linear-gradient(135deg, #dc2626, #450a0a 60%, #f97316);
-    color: #ffffff;
-    border-bottom: 4px solid #f97316;
-    box-shadow: 0 0 25px rgba(220, 38, 38, 0.7), inset 0 0 15px rgba(249, 115, 22, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(135deg, color.adjust(#dc2626, $lightness: -20%), color.adjust(#450a0a, $lightness: -20%), color.adjust(#f97316, $lightness: -20%));
-      border-bottom-color: color.adjust(#f97316, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 12. Danger: Alert, critical, bold
+.header-danger {
+  background: linear-gradient(to right, #7f1d1d, #991b1b);
+  color: #fef2f2;
+  border-bottom: 2px solid #ef4444;
+  box-shadow: 0 4px 15px rgba(239, 68, 68, 0.4);
+   font-family: system-ui, -apple-system, sans-serif;
+  
+  .menu-toggle .hamburger-icon .bar { background: #fef2f2 !important; }
+}
 
-  .header-success {
-    background: linear-gradient(135deg, #22c55e, #166534 60%, #ffffff);
-    color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 0 20px rgba(34, 197, 94, 0.7), inset 0 0 10px rgba(34, 197, 94, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(135deg, color.adjust(#22c55e, $lightness: -20%), color.adjust(#166534, $lightness: -20%), color.adjust(#ffffff, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 13. Success: Fresh, natural, positive
+.header-success {
+  background: linear-gradient(to right, #065f46, #047857);
+  color: #ecfdf5;
+  border-radius: 0 0 20px 20px;
+  box-shadow: 0 10px 25px rgba(5, 150, 105, 0.3);
+   font-family: system-ui, -apple-system, sans-serif;
+  
+  .menu-toggle .hamburger-icon .bar { background: #ecfdf5 !important; }
+}
 
-  .header-nano {
-    background: radial-gradient(ellipse at center, #1e293b, #6b7280 60%, #ffffff);
-    color: #ffffff;
-    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.8), 0 0 20px rgba(107, 114, 128, 0.7);
-    border-radius: 12px;
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: radial-gradient(ellipse at center, color.adjust(#1e293b, $lightness: -20%), color.adjust(#6b7280, $lightness: -20%), color.adjust(#ffffff, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
+// 14. Nano: sleek, metallic, minimal
+.header-nano {
+  background: #e5e5e5;
+  color: #404040;
+  border-top: 1px solid #d4d4d4;
+  border-bottom: 1px solid #a3a3a3;
+   font-family: 'Roboto Mono', monospace;
+  
+  .menu-toggle .hamburger-icon .bar { background: #404040 !important; }
+  
+  &.dark {
+    background: #262626;
+    color: #e5e5e5;
+    border-top: 1px solid #404040;
+    border-bottom: 1px solid #171717;
+    .menu-toggle .hamburger-icon .bar { background: #e5e5e5 !important; }
   }
+}
 
-  .header-stellar {
-    background: radial-gradient(circle, #0d0221, #312e81 50%, #60a5fa);
-    color: #ffffff;
-    border-radius: 15px;
-    box-shadow: 0 0 25px rgba(96, 165, 250, 0.7), inset 0 0 12px rgba(96, 165, 250, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: radial-gradient(circle, color.adjust(#0d0221, $lightness: -20%), color.adjust(#312e81, $lightness: -20%), color.adjust(#60a5fa, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 15. Stellar: Deep space, stars
+.header-stellar {
+  background: radial-gradient(circle at 50% 120%, #4338ca, #0f172a);
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 0 30px rgba(67, 56, 202, 0.4);
+   font-family: system-ui, -apple-system, sans-serif;
+  
+  .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+}
 
-  .header-phoenix {
-    background: linear-gradient(90deg, #f59e0b, #dc2626 50%, #000);
-    color: #ffffff;
-    border-top: 5px double #ffd700;
-    border-bottom: 5px double #ffd700;
-    box-shadow: 0 0 30px rgba(220, 38, 38, 0.8), inset 0 0 20px rgba(245, 158, 11, 0.5);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(90deg, color.adjust(#f59e0b, $lightness: -20%), color.adjust(#dc2626, $lightness: -20%), color.adjust(#000, $lightness: -20%));
-      border-color: color.adjust(#ffd700, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 16. Phoenix: Fiery, rebirth
+.header-phoenix {
+  background: linear-gradient(to bottom, #7c2d12, #431407);
+  color: #fb923c;
+  border-top: 2px solid #fb923c;
+  box-shadow: 0 -5px 20px rgba(251, 146, 60, 0.3) inset;
+   font-family: system-ui, -apple-system, sans-serif;
+  
+  .menu-toggle .hamburger-icon .bar { background: #fb923c !important; }
+}
 
-  .header-galactic {
-    background: radial-gradient(ellipse at center, #0d0221, #4c1d95 50%, #8b5cf6);
-    color: #ffffff;
-    box-shadow: 0 0 25px rgba(139, 92, 246, 0.8), inset 0 0 15px rgba(139, 92, 246, 0.4);
-    border-radius: 10px;
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: radial-gradient(ellipse at center, color.adjust(#0d0221, $lightness: -20%), color.adjust(#4c1d95, $lightness: -20%), color.adjust(#8b5cf6, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
+// 17. Galactic: Purple, nebula
+.header-galactic {
+  background: linear-gradient(135deg, #2e1065, #4c1d95, #000000);
+  color: #e9d5ff;
+  border: 1px solid rgba(168, 85, 247, 0.2);
+   font-family: system-ui, -apple-system, sans-serif;
+  
+  .menu-toggle .hamburger-icon .bar { background: #e9d5ff !important; }
+  
+  &.dark {
+    box-shadow: 0 0 25px rgba(126, 34, 206, 0.5);
   }
+}

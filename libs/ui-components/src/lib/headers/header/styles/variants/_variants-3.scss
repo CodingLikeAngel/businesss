@@ -1,280 +1,172 @@
-
 @use "../variables" as var;
 @use "sass:color";
 
+// --- Premium Variants Batch 3 ---
+
+// 18. Orbitron: Sci-fi gold/dark
 .header-orbitron {
-    background: #111827;
-    color: #ffd700;
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.7), inset 0 0 15px rgba(255, 215, 0, 0.3);
-    border-bottom: 4px solid #ffd700;
-    .menu-toggle .hamburger-icon .bar { background: #ffd700 !important; }
-    &.dark {
-      background: color.adjust(#111827, $lightness: -20%);
-      border-bottom-color: color.adjust(#ffd700, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffd700 !important; }
-    }
-  }
+  background: #0f172a;
+  color: #fbbf24;
+  border-bottom: 2px solid #fbbf24;
+  box-shadow: 0 0 15px rgba(251, 191, 36, 0.3), inset 0 0 20px rgba(0,0,0,0.5);
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  
+  .menu-toggle .hamburger-icon .bar { background: #fbbf24 !important; }
+}
 
-  .header-cartoon {
-    background: linear-gradient(45deg, #facc15, #ef4444 60%, #000);
-    color: #ffffff;
-    border: 5px solid #000000;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.7), inset 0 0 10px rgba(250, 204, 21, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(45deg, color.adjust(#facc15, $lightness: -20%), color.adjust(#ef4444, $lightness: -20%), color.adjust(#000, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 19. Cartoon: Bold, outlined, playful
+.header-cartoon {
+  background: #fbbf24;
+  color: #000;
+  border: 4px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  border-radius: 8px;
+  font-family: 'Comic Sans MS', 'Chalkboard SE', sans-serif;
+  
+  .menu-toggle .hamburger-icon .bar { background: #000 !important; }
+}
 
-  .header-luma {
-    background: radial-gradient(circle, #e5e7eb, #bfdbfe 60%, #1e40af);
-    color: #1e40af;
-    border-radius: 30px;
-    box-shadow: 0 0 25px rgba(191, 219, 254, 0.8), inset 0 0 15px rgba(191, 219, 254, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #1e40af !important; }
-    &.dark {
-      background: radial-gradient(circle, color.adjust(#e5e7eb, $lightness: -20%), color.adjust(#bfdbfe, $lightness: -20%), color.adjust(#1e40af, $lightness: -20%));
-      color: #ffffff;
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 20. Luma: Soft, airy, light
+.header-luma {
+  background: radial-gradient(circle at top right, #fff, #f3f4f6);
+  color: #374151;
+  border-radius: 9999px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  border: 1px solid white;
+  margin: 1rem;
+  width: calc(100% - 2rem);
+  font-family: system-ui, sans-serif;
+  
+  .menu-toggle .hamburger-icon .bar { background: #374151 !important; }
 
-  .header-platform {
-    background: linear-gradient(135deg, #4b5563, #1e293b 60%, #eab308);
-    color: #ffffff;
-    border-bottom: 4px solid #eab308;
-    box-shadow: 0 0 20px rgba(234, 179, 8, 0.7), inset 0 0 10px rgba(234, 179, 8, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(135deg, color.adjust(#4b5563, $lightness: -20%), color.adjust(#1e293b, $lightness: -20%), color.adjust(#eab308, $lightness: -20%));
-      border-bottom-color: color.adjust(#eab308, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
+  &.dark {
+    background: #1f2937;
+    color: #e5e7eb;
+    border: 1px solid #374151;
+    .menu-toggle .hamburger-icon .bar { background: #e5e7eb !important; }
   }
+}
 
-  .header-hero {
-    background: linear-gradient(90deg, #3b82f6, #10b981 60%, #ffffff);
-    color: #ffffff;
-    box-shadow: 0 0 25px rgba(59, 130, 246, 0.8), inset 0 0 15px rgba(16, 185, 129, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(90deg, color.adjust(#3b82f6, $lightness: -20%), color.adjust(#10b981, $lightness: -20%), color.adjust(#ffffff, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 21. Platform: Gaming inspired
+.header-platform {
+  background: #3b82f6;
+  color: white;
+  border-bottom: 6px solid #1d4ed8;
+  border-radius: 4px;
+   font-family: system-ui, sans-serif;
+  .menu-toggle .hamburger-icon .bar { background: white !important; }
+}
 
-  .header-coin {
-    background: radial-gradient(circle, #f59e0b, #b45309 60%, #ffd700);
-    color: #ffffff;
-    border-radius: 25px;
-    box-shadow: 0 0 25px rgba(245, 158, 11, 0.8), inset 0 0 15px rgba(255, 215, 0, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: radial-gradient(circle, color.adjust(#f59e0b, $lightness: -20%), color.adjust(#b45309, $lightness: -20%), color.adjust(#ffd700, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 22. Hero: Comic book superhero
+.header-hero {
+  background: #ef4444;
+  color: #fff;
+  clip-path: polygon(0 0, 100% 0, 98% 100%, 2% 100%);
+  border-bottom: 4px solid #b91c1c;
+   font-family: sans-serif;
+   font-weight: 900;
+   text-transform: uppercase;
+   
+   .menu-toggle .hamburger-icon .bar { background: white !important; }
+}
 
-  .header-cloud {
-    background: linear-gradient(135deg, #e2e8f0, #dbeafe 60%, #1e40af);
-    color: #1e40af;
-    border-radius: 15px;
-    box-shadow: 0 0 20px rgba(219, 234, 254, 0.7), inset 0 0 10px rgba(219, 234, 254, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #1e40af !important; }
-    &.dark {
-      background: linear-gradient(135deg, color.adjust(#e2e8f0, $lightness: -20%), color.adjust(#dbeafe, $lightness: -20%), color.adjust(#1e40af, $lightness: -20%));
-      color: #ffffff;
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 23. Coin: Gold/Value
+.header-coin {
+  background: linear-gradient(to bottom, #fcd34d, #f59e0b);
+  color: #78350f;
+  border: 2px solid #d97706;
+  border-radius: 12px;
+  box-shadow: 0 4px 0 #d97706;
+   font-family: system-ui, sans-serif;
+  .menu-toggle .hamburger-icon .bar { background: #78350f !important; }
+}
 
-  .header-fire {
-    background: linear-gradient(90deg, #f97316, #dc2626 60%, #000);
-    color: #ffffff;
-    border-bottom: 4px solid #f97316;
-    box-shadow: 0 0 25px rgba(249, 115, 22, 0.7), inset 0 0 15px rgba(220, 38, 38, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(90deg, color.adjust(#f97316, $lightness: -20%), color.adjust(#dc2626, $lightness: -20%), color.adjust(#000, $lightness: -20%));
-      border-bottom-color: color.adjust(#f97316, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 24. Cloud: Soft, airy
+.header-cloud {
+  background: white;
+  color: #0ea5e9;
+  border-radius: 20px;
+  box-shadow: 0 8px 20px rgba(14, 165, 233, 0.1);
+  border: 2px solid #e0f2fe;
+   font-family: system-ui, sans-serif;
+  .menu-toggle .hamburger-icon .bar { background: #0ea5e9 !important; }
+}
 
-  .header-water {
-    background: linear-gradient(90deg, #22d3ee, #0ea5e9 60%, #ffffff);
-    color: #ffffff;
-    box-shadow: 0 0 25px rgba(34, 211, 238, 0.7), inset 0 0 15px rgba(34, 211, 238, 0.4);
-    border-radius: 10px;
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(90deg, color.adjust(#22d3ee, $lightness: -20%), color.adjust(#0ea5e9, $lightness: -20%), color.adjust(#ffffff, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 25. Fire: Intense gradient
+.header-fire {
+  background: linear-gradient(to right, #f59e0b, #ef4444);
+  color: white;
+  border-bottom: 3px solid #b91c1c;
+   font-family: system-ui, sans-serif;
+  .menu-toggle .hamburger-icon .bar { background: white !important; }
+}
 
-  .header-leaf {
-    background: linear-gradient(90deg, #10b981, #4ade80 60%, #166534);
-    color: #ffffff;
-    border-bottom: 3px dashed #166534;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.7), inset 0 0 10px rgba(16, 185, 129, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(90deg, color.adjust(#10b981, $lightness: -20%), color.adjust(#4ade80, $lightness: -20%), color.adjust(#166534, $lightness: -20%));
-      border-bottom-color: color.adjust(#166534, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 26. Water: Blue liquid
+.header-water {
+  background: linear-gradient(180deg, #0ea5e9, #2563eb);
+  color: white;
+  border-bottom: 3px solid #1e40af;
+  border-radius: 0 0 15px 15px;
+   font-family: system-ui, sans-serif;
+  .menu-toggle .hamburger-icon .bar { background: white !important; }
+}
 
-  .header-amber-glow {
-    background: radial-gradient(ellipse at center, #f59e0b, #b45309 60%, #ffd700);
-    color: #ffffff;
-    box-shadow: 0 0 25px #f59e0b, inset 0 0 15px rgba(245, 158, 11, 0.4);
-    border-radius: 12px;
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: radial-gradient(ellipse at center, color.adjust(#f59e0b, $lightness: -20%), color.adjust(#b45309, $lightness: -20%), color.adjust(#ffd700, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 27. Leaf: Nature
+.header-leaf {
+  background: #10b981;
+  color: white;
+  border-radius: 20px 0 20px 0;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+   font-family: system-ui, sans-serif;
+  .menu-toggle .hamburger-icon .bar { background: white !important; }
+}
 
-  .header-minimal-white {
-    background: #ffffff;
-    color: #1e40af;
-    border: 3px solid #ef4444;
-    box-shadow: 0 0 25px rgba(239, 68, 68, 0.6), inset 0 0 15px rgba(239, 68, 68, 0.3);
-    .menu-toggle .hamburger-icon .bar { background: #1e40af !important; }
-    &.dark {
-      background: #1e40af;
-      color: #ffffff;
-      border-color: color.adjust(#ef4444, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 28. Amber Glow
+.header-amber-glow {
+  background: #27272a;
+  color: #fbbf24;
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+  border: 1px solid rgba(251, 191, 36, 0.2);
+   font-family: system-ui, sans-serif;
+  .menu-toggle .hamburger-icon .bar { background: #fbbf24 !important; }
+}
 
-  .header-hex-teal {
-    background: #14b8a6;
-    color: #ffffff;
-    box-shadow: 0 0 25px rgba(20, 184, 166, 0.7), inset 0 0 15px rgba(20, 184, 166, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: color.adjust(#14b8a6, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 29-38 Patterns & Shapes
+.header-minimal-white { background: white; color: #333; border-bottom: 1px solid #eee; font-family: system-ui, sans-serif; }
+.header-hex-teal { background: #115e59; color: #ccfbf1; clip-path: polygon(2% 0, 98% 0, 100% 100%, 0% 100%);  font-family: system-ui, sans-serif;}
+.header-purple-edge { background: #fff; color: #7e22ce; border-left: 5px solid #7e22ce;  font-family: system-ui, sans-serif;}
+.header-rose-radial { background: radial-gradient(#be123c, #881337); color: white;  font-family: system-ui, sans-serif;}
+.header-yellow-pulse { background: #fef08a; color: #854d0e; animation: pulse 2s infinite;  font-family: system-ui, sans-serif;}
+.header-green-inset { background: #064e3b; color: #a7f3d0; box-shadow: inset 0 0 20px #022c22;  font-family: system-ui, sans-serif;}
+.header-blue-skew { background: #1d4ed8; color: white; transform: skewY(-1deg); margin: 1rem 0;  font-family: system-ui, sans-serif;}
+.header-orange-dash { background: #fff7ed; color: #c2410c; border: 2px dashed #f97316;  font-family: system-ui, sans-serif;}
+.header-indigo-dots { 
+  background-color: #e0e7ff; 
+  background-image: radial-gradient(#4338ca 1px, transparent 1px); 
+  background-size: 10px 10px; 
+  color: #312e81; 
+   font-family: system-ui, sans-serif;
+}
+.header-bubble { 
+   background: white; 
+   color: #333; 
+   border-radius: 50px; 
+   margin: 10px; 
+   box-shadow: 0 10px 25px rgba(0,0,0,0.1); 
+    font-family: system-ui, sans-serif;
+}
+.header-electoon {
+   background: #db2777;
+   color: #fce7f3;
+   border-radius: 30px 30px 0 0;
+   border: 4px solid #831843;
+    font-family: system-ui, sans-serif;
+}
 
-  .header-purple-edge {
-    background: #6b21a8;
-    color: #ffffff;
-    border-left: 6px solid #facc15;
-    box-shadow: 0 0 25px rgba(107, 33, 168, 0.7), inset 0 0 15px rgba(250, 204, 21, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: color.adjust(#6b21a8, $lightness: -20%);
-      border-left-color: color.adjust(#facc15, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-rose-radial {
-    background: radial-gradient(circle, #f43f5e, #be123c 60%, #ffffff);
-    color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 0 25px rgba(244, 63, 94, 0.7), inset 0 0 15px rgba(244, 63, 94, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: radial-gradient(circle, color.adjust(#f43f5e, $lightness: -20%), color.adjust(#be123c, $lightness: -20%), color.adjust(#ffffff, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-yellow-pulse {
-    background: #eab308;
-    color: #ffffff;
-    box-shadow: 0 0 25px rgba(234, 179, 8, 0.8), inset 0 0 15px rgba(234, 179, 8, 0.4);
-    border-radius: 10px;
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: color.adjust(#eab308, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-green-inset {
-    background: #15803d;
-    color: #ffffff;
-    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.9), 0 0 25px rgba(21, 128, 61, 0.7);
-    border-radius: 12px;
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: color.adjust(#15803d, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-blue-skew {
-    background: #1d4ed8;
-    color: #ffffff;
-    transform: skewY(-2deg);
-    border-bottom: 4px solid #ffd700;
-    box-shadow: 0 0 25px rgba(29, 78, 216, 0.7), inset 0 0 15px rgba(29, 78, 216, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: color.adjust(#1d4ed8, $lightness: -20%);
-      border-bottom-color: color.adjust(#ffd700, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-orange-dash {
-    background: #ea580c;
-    color: #ffffff;
-    border-bottom: 4px dashed #f97316;
-    box-shadow: 0 0 25px rgba(234, 88, 12, 0.7), inset 0 0 15px rgba(249, 115, 22, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: color.adjust(#ea580c, $lightness: -20%);
-      border-bottom-color: color.adjust(#f97316, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-indigo-dots {
-    background: #4f46e5;
-    color: #ffffff;
-    background-image: radial-gradient(#ffffff 2px, transparent 2px);
-    background-size: 12px 12px;
-    box-shadow: 0 0 25px rgba(79, 70, 229, 0.7), inset 0 0 15px rgba(79, 70, 229, 0.4);
-    border-radius: 10px;
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: color.adjust(#4f46e5, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-bubble {
-    background: radial-gradient(circle, #60a5fa, #1e40af 60%, #ffffff);
-    color: #ffffff;
-    border-radius: 18px;
-    box-shadow: 0 0 25px rgba(96, 165, 250, 0.7), inset 0 0 15px rgba(96, 165, 250, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: radial-gradient(circle, color.adjust(#60a5fa, $lightness: -20%), color.adjust(#1e40af, $lightness: -20%), color.adjust(#ffffff, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-electoon {
-    background: linear-gradient(135deg, #facc15, #eab308 60%, #ffd700);
-    color: #ffffff;
-    box-shadow: 0 0 25px rgba(250, 204, 21, 0.8), inset 0 0 15px rgba(234, 179, 8, 0.4);
-    border-radius: 12px;
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(135deg, color.adjust(#facc15, $lightness: -20%), color.adjust(#eab308, $lightness: -20%), color.adjust(#ffd700, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(234, 179, 8, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(234, 179, 8, 0); }
+}
