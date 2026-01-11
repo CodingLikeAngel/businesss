@@ -18,7 +18,7 @@ export interface FeatureItem {
 export class UIFeaturesSectionComponent {
   @Input() title = 'Nuestros Servicios Premium';
   @Input() subtitle = 'Descubre cómo podemos ayudarte a llevar tu negocio al siguiente nivel con nuestras soluciones innovadoras.';
-  @Input() variant: 'default' | 'glass' | 'modern' | 'minimal' = 'default';
+  @Input() variant: string = 'default';
   @Input() features: FeatureItem[] = [
     {
       icon: '🚀',

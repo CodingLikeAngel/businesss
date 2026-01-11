@@ -38,8 +38,8 @@
     </div>
   </div>
 
-  <!-- Dynamic Layouts -->
-  <ng-container [ngSwitch]="variant">
+  <!-- Dynamic Layouts based on layout getter -->
+  <ng-container [ngSwitch]="layout">
     <!-- Primary: Staggered Card Grid with Dynamic Gradient Waves -->
     <div *ngSwitchCase="'primary'" class="navigation-container gradient-wave-bg" role="navigation" aria-label="Navegación principal">
       <div class="navigation-grid">

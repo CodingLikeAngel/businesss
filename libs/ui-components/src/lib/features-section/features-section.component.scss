@@ -5,6 +5,7 @@
 
 .features-container {
   @include shared.apply-all-variants('features--');
+  @include shared.apply-variants-to-child('.feature-card', 'features--');
   padding: 100px 20px;
   background-color: #0d1117;
   color: white;

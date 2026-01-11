@@ -7,7 +7,7 @@ import { UIButtonComponent } from '../button/button.component';
 import { UIInputComponent } from '../forms/input/input.component';
 import { variants } from '../models/ui-components-data.model';
 
-export type ContactVariant = typeof variants[number];
+
 
 @Component({
   selector: 'lib-ui-components-contact-section',
@@ -17,7 +17,7 @@ export type ContactVariant = typeof variants[number];
   styleUrls: ['./contact-section.component.scss']
 })
 export class UIContactSectionComponent {
-  @Input() variant: ContactVariant = 'primary';
+  @Input() variant: string = 'primary';
   @Input() title = 'Contáctanos';
   @Input() subtitle = 'Estamos aquí para ayudarte. Envíanos un mensaje.';
   @Input() emailLabel = 'Email';

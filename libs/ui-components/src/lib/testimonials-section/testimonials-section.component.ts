@@ -18,7 +18,7 @@ export interface TestimonialItem {
 export class UITestimonialsSectionComponent {
   @Input() title = 'Lo que dicen nuestros clientes';
   @Input() subtitle = 'Historias reales de éxito.';
-  @Input() variant: 'default' | 'glass' = 'default';
+  @Input() variant: string = 'default';
   @Input() testimonials: TestimonialItem[] = [
     { 
       quote: "Increíble atención al detalle y un diseño que supera todas las expectativas.", 

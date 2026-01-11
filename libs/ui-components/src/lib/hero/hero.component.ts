@@ -51,7 +51,7 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
   @Input() businessName = 'Peluquería Estilo';
   @Input() title = 'Transforma tu Estilo';
   @Input() subtitle = 'Cortes, colores y tratamientos personalizados en un ambiente único.';
-  @Input() variant = 'default';
+  @Input() variant: string = 'default';
   @Input() showDevelopmentMessage = false;
   @Input() showScrollIcon = true;
   @Input() videoBackground = true;
@@ -112,6 +112,29 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
 }
   get heroClasses(): string[] {
     return ['hero-section', `hero-section--${this.variant}`];
+  }
+
+  get layout(): string {
+    const matrixLayout = ['matrix', 'bioshock', 'quantum', 'holo', 'neomorph'];
+    const retroLayout = ['retro', 'super-meat-boy', 'portal', 'glitch', 'joycon', 'arcade', 'pixel'];
+    const stellarLayout = ['stellar', 'cosmic', 'galactic'];
+    const phoenixLayout = ['phoenix', 'fire', 'jungle', 'electoon'];
+    const secondaryLayout = ['secondary', 'video', 'carousel'];
+    const primaryLayout = ['primary', 'default', 'standard'];
+    const glassLayout = ['glass', 'frosted'];
+    const cyberpunkLayout = ['cyberpunk', 'neon-pulse'];
+    const neonLayout = ['neon', 'sparkle'];
+
+    if (matrixLayout.includes(this.variant)) return 'matrix';
+    if (retroLayout.includes(this.variant)) return 'retro';
+    if (stellarLayout.includes(this.variant)) return 'stellar';
+    if (phoenixLayout.includes(this.variant)) return 'phoenix';
+    if (secondaryLayout.includes(this.variant)) return 'secondary';
+    if (glassLayout.includes(this.variant)) return 'glass';
+    if (cyberpunkLayout.includes(this.variant)) return 'cyberpunk';
+    if (neonLayout.includes(this.variant)) return 'neon';
+    
+    return 'primary';
   }
 
   get showParticles(): boolean {

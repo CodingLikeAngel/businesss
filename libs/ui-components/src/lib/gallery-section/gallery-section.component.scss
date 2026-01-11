@@ -3,6 +3,7 @@
 
 .gallery-container {
   @include shared.apply-all-variants('gallery--');
+  @include shared.apply-variants-to-child('.gallery-item', 'gallery--');
   padding: 100px 20px;
   background-color: #0f172a;
   color: white;

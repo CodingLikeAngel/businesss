@@ -11,11 +11,11 @@
             [type]="'email'" 
             [placeholder]="placeholder" 
             [(ngModel)]="email" 
-            [variant]="'glass'">
+            [variant]="variant">
          </lib-ui-components-input>
       </div>
       <lib-ui-components-button 
-        [variant]="'primary'" 
+        [variant]="variant === 'default' ? 'primary' : variant" 
         [disabled]="isSubmitting"
         (buttonClick)="onSubmit()">
         {{ isSubmitting ? '...' : buttonText }}

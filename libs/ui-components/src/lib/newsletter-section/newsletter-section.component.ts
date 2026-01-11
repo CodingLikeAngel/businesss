@@ -17,7 +17,7 @@ export class UINewsletterSectionComponent {
   @Input() description = 'Recibe las últimas noticias y ofertas especiales directamente en tu bandeja de entrada.';
   @Input() placeholder = 'Tu correo electrónico';
   @Input() buttonText = 'Suscribirse';
-  @Input() variant: 'primary' | 'glass' | 'dark' = 'primary';
+  @Input() variant: string = 'primary';
   
   @Output() subscribe = new EventEmitter<string>();
 

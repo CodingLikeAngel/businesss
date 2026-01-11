@@ -19,7 +19,7 @@ export interface StatItem {
 export class UIStatsSectionComponent {
   @Input() title = 'Nuestros Métricas';
   @Input() subtitle = 'Indicadores clave de rendimiento.';
-  @Input() variant: 'default' | 'glass' = 'default';
+  @Input() variant: string = 'default';
   @Input() stats: StatItem[] = [
     { icon: '🚀', label: 'Velocidad', value: '0.8s', description: 'Tiempo de carga' },
     { icon: '🔒', label: 'Seguridad', value: '99.9%', description: 'Uptime' },

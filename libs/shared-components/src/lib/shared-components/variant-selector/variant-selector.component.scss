@@ -117,16 +117,18 @@
       border: 1px solid rgba(255, 255, 255, 0.05);
       
       h3 {
-        font-size: 1.25rem;
+        font-size: 0.9rem;
         font-weight: 800;
+        color: #f8fafc; // Brighter white/slate
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
         margin-bottom: 0.5rem;
-        color: white;
       }
-
       .helper-text {
-        font-size: 0.85rem;
-        color: #cbd5e1;
-        margin-bottom: 1.5rem;
+        font-size: 0.8rem;
+        color: #94a3b8; // Slightly dimmed but legible
+        margin-bottom: 1rem;
+        line-height: 1.4;
       }
     }
   }

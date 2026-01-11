@@ -18,7 +18,7 @@ export interface FaqItem {
 export class UIFaqSectionComponent {
   @Input() title = 'Preguntas Frecuentes';
   @Input() subtitle = 'Resolvemos tus dudas principales.';
-  @Input() variant: 'default' | 'glass' = 'default';
+  @Input() variant: string = 'default';
   @Input() items: FaqItem[] = [
     { title: "¿Cuánto tardan en desarrollar mi web?", content: "Dependiendo de la complejidad, entre 2 y 4 semanas." },
     { title: "¿Incluye mantenimiento?", content: "Sí, ofrecemos planes de mantenimiento mensual adaptados a tus necesidades." },

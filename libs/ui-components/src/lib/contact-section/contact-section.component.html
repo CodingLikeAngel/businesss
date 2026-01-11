@@ -11,7 +11,7 @@
         <div class="form-group">
             <lib-ui-components-input
                 [label]="'Nombre'"
-                [variant]="'glass'" 
+                [variant]="variant" 
                 [(ngModel)]="formData.name" 
                 name="name" 
                 required>
@@ -22,7 +22,7 @@
             <lib-ui-components-input
                 [label]="emailLabel"
                 [type]="'email'"
-                [variant]="'glass'" 
+                [variant]="variant" 
                 [(ngModel)]="formData.email" 
                 name="email" 
                 required>
@@ -34,7 +34,7 @@
                 [label]="messageLabel"
                 [type]="'textarea'"
                 [rows]="5"
-                [variant]="'glass'" 
+                [variant]="variant" 
                 [(ngModel)]="formData.message" 
                 name="message" 
                 required>
@@ -43,7 +43,7 @@
 
         <div class="actions">
             <lib-ui-components-button 
-                [variant]="'primary'" 
+                [variant]="variant === 'default' ? 'primary' : variant" 
                 [size]="'lg'" 
                 [disabled]="isSubmitting"
                 (buttonClick)="onSubmit()">

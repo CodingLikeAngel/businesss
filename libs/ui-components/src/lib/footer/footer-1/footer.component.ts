@@ -73,7 +73,7 @@ export class UIFooterComponent implements OnInit {
     this.showParticlesChange.emit(this._showParticles);
   }
 
-  @Input() variant: FooterVariant = 'primary';
+  @Input() variant: string = 'primary';
   @Input() title = 'Outdoor Haven';
   @Input() description = 'Todo lo que necesitas para tus aventuras al aire libre';
   @Input() exploreLinks: Link[] = [

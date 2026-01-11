@@ -12,7 +12,7 @@ import { UITableComponent, TableColumn, TableRow } from '../table/table.componen
 export class UIPricingTableSectionComponent {
   @Input() title = 'Planes y Precios';
   @Input() subtitle = 'Elige el plan perfecto para ti.';
-  @Input() variant: 'default' | 'glass' = 'default';
+  @Input() variant: string = 'default';
   
   @Input() columns: TableColumn[] = [
       { key: 'plan', label: 'Plan' },

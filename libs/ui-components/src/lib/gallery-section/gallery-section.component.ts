@@ -17,7 +17,7 @@ export interface GallerySectionImage {
 export class UIGallerySectionComponent {
   @Input() title = 'Galería de Proyectos';
   @Input() subtitle = 'Explora nuestro trabajo reciente.';
-  @Input() variant: 'default' | 'glass' = 'default';
+  @Input() variant: string = 'default';
   @Input() images: GallerySectionImage[] = [
     { src: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0', alt: 'Proyecto 1' },
     { src: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4', alt: 'Proyecto 2' },
