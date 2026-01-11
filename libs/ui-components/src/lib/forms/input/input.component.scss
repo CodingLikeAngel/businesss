@@ -11,12 +11,13 @@
   width: 100%;
 
   .input-label {
-    font-size: 0.85rem;
-    font-weight: 700;
-    color: #cbd5e1;
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #e2e8f0; // Brighter slate-200
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-left: 0.25rem;
+    margin-bottom: 0.25rem;
+    opacity: 0.9;
   }
 
   .input-control-container {

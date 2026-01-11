@@ -45,14 +45,21 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-color: #fff;
   --theme-border: 1px solid #{$glass-border};
   --theme-accent: #6366f1;
-  --theme-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  --theme-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
   --theme-backdrop: blur(12px);
+  
   background: var(--theme-bg);
   backdrop-filter: var(--theme-backdrop);
   -webkit-backdrop-filter: var(--theme-backdrop);
   border: var(--theme-border);
   color: var(--theme-color);
   box-shadow: var(--theme-shadow);
+  
+  // Specific for interactive elements like selects or buttons
+  &.input, &.btn {
+    --theme-bg: rgba(0, 0, 0, 0.4);
+    --theme-border: 1px solid rgba(255, 255, 255, 0.15);
+  }
 }
 
 @mixin variant-neon {
