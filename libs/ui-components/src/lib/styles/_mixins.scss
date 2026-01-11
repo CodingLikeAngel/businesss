@@ -519,6 +519,17 @@ $glass-border: rgba(255, 255, 255, 0.2);
   border: var(--theme-border);
 }
 
+@mixin variant-plasma {
+  --theme-bg: #0f0f23;
+  --theme-color: #00ffff;
+  --theme-border: 1px solid #00ffff;
+  --theme-shadow: 0 0 20px #00ffff;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
 @mixin apply-all-variants($prefix: 'variant-') {
     &.#{$prefix}primary { @include variant-primary; }
     &.#{$prefix}secondary { @include variant-secondary; }
@@ -567,6 +578,7 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}platform { @include variant-platform; }
     &.#{$prefix}hero { @include variant-hero; }
     &.#{$prefix}cloud { @include variant-cloud; }
+    &.#{$prefix}plasma { @include variant-plasma; }
 
     // Alias
     &.#{$prefix}supermeatboy { @include variant-super-meat-boy; }
@@ -620,6 +632,7 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}platform #{$child} { @include variant-platform; }
     &.#{$prefix}hero #{$child} { @include variant-hero; }
     &.#{$prefix}cloud #{$child} { @include variant-cloud; }
+    &.#{$prefix}plasma #{$child} { @include variant-plasma; }
 
     // Alias
     &.#{$prefix}supermeatboy #{$child} { @include variant-super-meat-boy; }

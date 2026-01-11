@@ -1,6 +1,7 @@
 @use "sass:map";
 @use "./variables" as var;
 @use "sass:color";
+@use "../../../styles/mixins" as shared;
 /* removed external Google Fonts import to avoid build-time inlining/network issues */
 
 /* Variables inspiradas en juegos */
@@ -24,19 +25,21 @@ $color-light: #ffffff;
 
 @layer base {
   .header {
-    background: var(--header-bg, rgba(255, 255, 255, 0.9));
+    background: var(--theme-bg, rgba(255, 255, 255, 0.9));
     padding: 1.5rem;
     border-radius: 0.5rem;
     transition: background-color 300ms ease-in-out, box-shadow 300ms ease-in-out;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--theme-shadow, 0 2px 10px rgba(0, 0, 0, 0.1));
     position: relative;
     z-index: 1010;
-    color: rgb(17, 24, 39);
-    border: none;
+    color: var(--theme-color, rgb(17, 24, 39));
+    border: var(--theme-border, none);
 
-    /* 
+    @include shared.apply-all-variants('header-');
+
+    /*
     &[style][class*="header-"] {
-      // Logic removed to allow variants to apply. 
+      // Logic removed to allow variants to apply.
       // If custom variables are needed, they should be applied via specific class overrides or handled differently.
     }
     */

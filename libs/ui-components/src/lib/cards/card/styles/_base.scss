@@ -1,9 +1,5 @@
 @use "sass:map";
 @use "./variables" as var;
-@use "./variants/variants-2" as *;
-@use "./variants/variants-3" as *;
-@use "./variants/variants-4" as *;
-@use "./variants/variants-5" as *;
 
 .card {
   width: 100%;
