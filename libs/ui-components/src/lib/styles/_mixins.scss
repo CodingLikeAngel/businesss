@@ -419,6 +419,106 @@ $glass-border: rgba(255, 255, 255, 0.2);
   box-shadow: var(--theme-shadow);
 }
 
+@mixin variant-link {
+  --theme-bg: transparent;
+  --theme-color: #ec4899;
+  --theme-border: none;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-gradient {
+  --theme-bg: linear-gradient(45deg, #00D26A, #B362FF);
+  --theme-color: #ffffff;
+  --theme-border: none;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-pulse-gradient {
+  --theme-bg: linear-gradient(45deg, #14b8a6, #4f46e5);
+  --theme-color: #ffffff;
+  --theme-border: none;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  animation: pulse 2s infinite;
+}
+
+@mixin variant-cybernetic {
+  --theme-bg: #1E3A5F;
+  --theme-color: #FFD700;
+  --theme-border: 1px solid #FFD700;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-danger {
+  --theme-bg: #dc2626;
+  --theme-color: #ffffff;
+  --theme-border: 1px solid #dc2626;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-success {
+  --theme-bg: #16a34a;
+  --theme-color: #ffffff;
+  --theme-border: 1px solid #16a34a;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-nano {
+  --theme-bg: #14b8a6;
+  --theme-color: #ffffff;
+  --theme-border: 1px solid #14b8a6;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-stellar {
+  --theme-bg: linear-gradient(45deg, #1e293b, #06b6d4);
+  --theme-color: #ffffff;
+  --theme-border: none;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-platform {
+  --theme-bg: #00D26A;
+  --theme-color: #FFF5D6;
+  --theme-border: 2px solid #2D1B58;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-hero {
+  --theme-bg: #E60012;
+  --theme-color: #ffffff;
+  --theme-border: 1px solid #111827;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-cloud {
+  --theme-bg: #FFF5D6;
+  --theme-color: #2D1B58;
+  --theme-border: 1px solid #d1d5db;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
 @mixin apply-all-variants($prefix: 'variant-') {
     &.#{$prefix}primary { @include variant-primary; }
     &.#{$prefix}secondary { @include variant-secondary; }
@@ -456,6 +556,17 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}fire { @include variant-fire; }
     &.#{$prefix}water { @include variant-water; }
     &.#{$prefix}leaf { @include variant-leaf; }
+    &.#{$prefix}link { @include variant-link; }
+    &.#{$prefix}gradient { @include variant-gradient; }
+    &.#{$prefix}pulse-gradient { @include variant-pulse-gradient; }
+    &.#{$prefix}cybernetic { @include variant-cybernetic; }
+    &.#{$prefix}danger { @include variant-danger; }
+    &.#{$prefix}success { @include variant-success; }
+    &.#{$prefix}nano { @include variant-nano; }
+    &.#{$prefix}stellar { @include variant-stellar; }
+    &.#{$prefix}platform { @include variant-platform; }
+    &.#{$prefix}hero { @include variant-hero; }
+    &.#{$prefix}cloud { @include variant-cloud; }
 
     // Alias
     &.#{$prefix}supermeatboy { @include variant-super-meat-boy; }
@@ -498,6 +609,17 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}fire #{$child} { @include variant-fire; }
     &.#{$prefix}water #{$child} { @include variant-water; }
     &.#{$prefix}leaf #{$child} { @include variant-leaf; }
+    &.#{$prefix}link #{$child} { @include variant-link; }
+    &.#{$prefix}gradient #{$child} { @include variant-gradient; }
+    &.#{$prefix}pulse-gradient #{$child} { @include variant-pulse-gradient; }
+    &.#{$prefix}cybernetic #{$child} { @include variant-cybernetic; }
+    &.#{$prefix}danger #{$child} { @include variant-danger; }
+    &.#{$prefix}success #{$child} { @include variant-success; }
+    &.#{$prefix}nano #{$child} { @include variant-nano; }
+    &.#{$prefix}stellar #{$child} { @include variant-stellar; }
+    &.#{$prefix}platform #{$child} { @include variant-platform; }
+    &.#{$prefix}hero #{$child} { @include variant-hero; }
+    &.#{$prefix}cloud #{$child} { @include variant-cloud; }
 
     // Alias
     &.#{$prefix}supermeatboy #{$child} { @include variant-super-meat-boy; }

@@ -1,5 +1,6 @@
 @use "sass:map";
 @use "./variables" as var;
+@use "../../styles/mixins" as shared;
 
 /* Base Styles */
 .font-orbitron {
@@ -57,9 +58,9 @@ form {
   letter-spacing: 0.1em;
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
-  background: var.$rayman-light;
-  color: var.$rayman-dark;
-  border: 2px solid var.$rayman-blue;
+  background: var(--theme-bg, var.$rayman-light);
+  color: var(--theme-color, var.$rayman-dark);
+  border: var(--theme-border, 2px solid var.$rayman-blue);
   cursor: pointer;
   z-index: 1;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -96,10 +97,10 @@ form {
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
-    background: var.$rayman-dark;
-    color: var.$rayman-light;
+    background: var(--theme-bg-disabled, var.$rayman-dark);
+    color: var(--theme-color-disabled, var.$rayman-light);
     animation: none;
-    
+
     &:before {
       display: none;
     }
@@ -140,8 +141,10 @@ form {
     &:before { border-radius: 10px; }
   }
   
-  &.btn-rounded-full { 
+  &.btn-rounded-full {
     border-radius: 9999px;
     &:before { border-radius: 9999px; }
   }
+
+  @include shared.apply-all-variants('btn-');
 }

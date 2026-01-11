@@ -1,6 +1,7 @@
 @use "sass:map";
 @use "./variables" as var;
 @use "sass:color";
+@use "../../styles/mixins" as shared;
 /* Removed external Google Fonts import to avoid network inlining during build */
 
 
@@ -11,10 +12,10 @@
     list-style: none;
     padding: 0.5rem;
     margin: 0;
-    border: var(--list-border, 1px solid #d1d5db);
-    background: var(--list-bg, #ffffff);
-    box-shadow: var(--list-shadow, none);
-    color: var(--list-color, inherit);
+    border: var(--theme-border, var(--list-border, 1px solid #d1d5db));
+    background: var(--theme-bg, var(--list-bg, #ffffff));
+    box-shadow: var(--theme-shadow, var(--list-shadow, none));
+    color: var(--theme-color, var(--list-color, inherit));
     border-radius: var(--list-radius, 0.375rem);
     transition: all 0.2s ease-in-out;
   
@@ -25,6 +26,8 @@
     &.list-rounded-none { border-radius: 0; }
     &.list-rounded-md { border-radius: 0.375rem; }
     &.list-rounded-full { border-radius: 9999px; }
+
+    @include shared.apply-all-variants('list-');
   }
   
   .list-item {
