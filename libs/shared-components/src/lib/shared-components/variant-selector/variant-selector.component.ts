@@ -63,7 +63,11 @@ export class VariantSelectorComponent implements OnInit {
   @Input() isCollapsed = false;
   @Output() toggleCollapse = new EventEmitter<void>();
 
-  activeTab: 'general' | 'header' | 'hero' | 'structure' | 'layout' | 'content' | 'footer' | 'pricing' | 'promotions' | 'gallery' = 'general';
+  activeTab: 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer' = 'general';
+  
+  // Drag and Drop state
+  draggedSectionIndex: number | null = null;
+  overSectionIndex: number | null = null;
   
   // Sections state
   sections: PageSection[] = [];
@@ -89,27 +93,49 @@ export class VariantSelectorComponent implements OnInit {
   // Removed duplicate showProductsConfig
   componentVariants: { [key: string]: string } = {};
 
-  components = [
-    { id: 'navbar', label: 'Navbar' },
-    { id: 'hero', label: 'Hero Section' },
-    { id: 'card', label: 'Card' },
-    { id: 'faq', label: 'FAQ Section' },
-    { id: 'pricing', label: 'Pricing Section' },
-    { id: 'promotions', label: 'Promotions Section' },
-    { id: 'gallery', label: 'Gallery Section' },
-    { id: 'form', label: 'Reservation Form' },
-    { id: 'bubble', label: 'Bubble Animation' },
-    { id: 'title', label: 'Title' },
-    { id: 'products', label: 'Products Section' },
-    { id: 'footer', label: 'Footer' },
-    { id: 'testimonials', label: 'Testimonials Section' },
-    { id: 'contact', label: 'Contact Section' },
-    { id: 'newsletter', label: 'Newsletter Section' },
-    { id: 'breadcrumbs', label: 'Breadcrumbs' },
-    { id: 'steps', label: 'Steps Section' },
-    { id: 'features', label: 'Features Section' },
-    { id: 'stats', label: 'Stats Section' },
+  availableSectionVariants = [
+    { type: 'hero', label: 'Portada Hero', icon: '🚀', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'minimal', 'corporate'] },
+    { type: 'features', label: 'Características', icon: '✨', variants: ['glass', 'neon', 'grid', 'list', 'modern'] },
+    { type: 'services', label: 'Servicios', icon: '🛠️', variants: ['glass', 'neon', 'cards', 'hover-special'] },
+    { type: 'products', label: 'Productos', icon: '🧩', variants: ['glass', 'neon', 'ecommerce', 'minimal'] },
+    { type: 'testimonials', label: 'Testimonios', icon: '⭐', variants: ['glass', 'bubble', 'slider', 'grid'] },
+    { type: 'pricing', label: 'Precios', icon: '💰', variants: ['glass', 'neon', 'table', 'columns'] },
+    { type: 'promotions', label: 'Ofertas', icon: '🎁', variants: ['glass', 'neon', 'flash', 'banners'] },
+    { type: 'faq', label: 'Preguntas', icon: '❓', variants: ['glass', 'neon', 'accordion', 'simple'] },
+    { type: 'gallery', label: 'Galería', icon: '🖼️', variants: ['glass', 'masonry', 'slideshow', 'grid'] },
+    { type: 'stats', label: 'Estadísticas', icon: '📈', variants: ['glass', 'neon', 'counters', 'minimal'] },
+    { type: 'contact', label: 'Contacto', icon: '📞', variants: ['glass', 'neon', 'form', 'simple', 'minimal'] },
   ];
+
+  selectedExplorerComponent: any = null;
+  selectedExplorerVariant: string = 'glass';
+
+  selectExplorerComponent(comp: any) {
+    this.selectedExplorerComponent = comp;
+    this.selectedExplorerVariant = comp.variants[0];
+  }
+
+  addSectionToPage() {
+    if (!this.selectedExplorerComponent) return;
+    
+    const newSection: PageSection = {
+      id: `sec_${new Date().getTime()}`,
+      type: this.selectedExplorerComponent.type,
+      label: `${this.selectedExplorerComponent.label} (${this.selectedExplorerVariant})`,
+      visible: true
+    };
+    
+    // Set its specific variant
+    this.variantService.setComponentVariant(newSection.id, this.selectedExplorerVariant);
+    
+    const currentSections = [...this.sections];
+    currentSections.push(newSection);
+    this.variantService.setSections(currentSections);
+    
+    this.activeTab = 'structure';
+    this.selectedExplorerComponent = null;
+    alert('Sección añadida a la estructura. ¡Organízala arrastrando!');
+  }
 
   variantOptions: InputOption[] = this.variants.map((variant) => ({
     value: variant,
@@ -359,6 +385,11 @@ export class VariantSelectorComponent implements OnInit {
            socialIcons.splice(index, 1);
            this.variantService.setFooterConfig({ socialIcons });
            break;
+        case 'section':
+           const sectionList = [...this.sections];
+           sectionList.splice(index, 1);
+           this.variantService.setSections(sectionList);
+           break;
       }
     }
   }
@@ -485,6 +516,48 @@ export class VariantSelectorComponent implements OnInit {
     [newSections[index], newSections[targetIndex]] = [newSections[targetIndex], newSections[index]];
     
     this.variantService.setSections(newSections);
+  }
+
+  // --- Native Drag and Drop Implementation ---
+
+  onDragStart(index: number) {
+    this.draggedSectionIndex = index;
+    // Set transparency or effect if needed
+  }
+
+  onDragOver(event: DragEvent, index: number) {
+    event.preventDefault(); // Required for drop
+    this.overSectionIndex = index;
+  }
+
+  onDragEnd() {
+    if (this.draggedSectionIndex !== null && this.overSectionIndex !== null && this.draggedSectionIndex !== this.overSectionIndex) {
+      const newSections = [...this.sections];
+      const movedItem = newSections.splice(this.draggedSectionIndex, 1)[0];
+      newSections.splice(this.overSectionIndex, 0, movedItem);
+      this.variantService.setSections(newSections);
+    }
+    this.draggedSectionIndex = null;
+    this.overSectionIndex = null;
+  }
+
+  // --- Custom Templates ---
+
+  saveAsCustomTemplate() {
+    const name = prompt('Nombre para tu plantilla personalizada:', 'Nueva Plantilla');
+    if (name) {
+      const config = this.variantService.getFullConfig();
+      const templates = JSON.parse(localStorage.getItem('custom_templates') || '[]');
+      templates.push({
+        ...config,
+        id: `custom_${new Date().getTime()}`,
+        name,
+        category: 'Personalizado',
+        icon: '💎'
+      });
+      localStorage.setItem('custom_templates', JSON.stringify(templates));
+      alert('Plantilla guardada correctamente en el navegador.');
+    }
   }
 
   setStep(step: 'welcome' | 'editor' | 'preview') {

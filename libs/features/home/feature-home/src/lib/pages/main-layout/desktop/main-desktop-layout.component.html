@@ -1,70 +1,109 @@
-<div class="builder-shell" [class.preview-mode]="builderStep === 'preview'" [class.editing-mode]="builderStep === 'editor'">
-  
+<div
+  class="builder-shell"
+  [class.preview-mode]="builderStep === 'preview'"
+  [class.editing-mode]="builderStep === 'editor'"
+>
   <!-- TOP GLOBAL HUB -->
   <header class="builder-hub">
     <div class="hub-left">
       <div class="logo-mark">AS</div>
       <div class="project-info">
         <span class="project-name">Anto Studios Editor</span>
-        <span class="save-status">
-          <span class="dot"></span> Automático
-        </span>
+        <span class="save-status"> <span class="dot"></span> Automático </span>
       </div>
     </div>
 
     <!-- Device Selector (Always Available) -->
     <div class="hub-center">
       <div class="device-dock">
-        <button (click)="setPreviewSize('desktop')" [class.active]="previewSize === 'desktop'" title="Desktop">🖥️</button>
-        <button (click)="setPreviewSize('tablet')" [class.active]="previewSize === 'tablet'" title="Tablet">📟</button>
-        <button (click)="setPreviewSize('mobile')" [class.active]="previewSize === 'mobile'" title="Móvil">📱</button>
+        <button
+          (click)="setPreviewSize('desktop')"
+          [class.active]="previewSize === 'desktop'"
+          title="Desktop"
+        >
+          🖥️
+        </button>
+        <button
+          (click)="setPreviewSize('tablet')"
+          [class.active]="previewSize === 'tablet'"
+          title="Tablet"
+        >
+          📟
+        </button>
+        <button
+          (click)="setPreviewSize('mobile')"
+          [class.active]="previewSize === 'mobile'"
+          title="Móvil"
+        >
+          📱
+        </button>
       </div>
     </div>
 
     <div class="hub-right">
-      <button *ngIf="builderStep === 'editor'" (click)="variantService.setBuilderStep('preview')" class="btn-preview">
+      <button
+        *ngIf="builderStep === 'editor'"
+        (click)="variantService.setBuilderStep('preview')"
+        class="btn-preview"
+      >
         <span>👁️</span> <span>Previsualizar</span>
       </button>
-      <button *ngIf="builderStep === 'preview'" (click)="returnToEditor()" class="btn-editor">
+      <button
+        *ngIf="builderStep === 'preview'"
+        (click)="returnToEditor()"
+        class="btn-editor"
+      >
         <span>✏️</span> <span>Volver a Editar</span>
       </button>
-      <button (click)="callNow()" class="btn-publish"><span>Publicar</span></button>
+      <button (click)="callNow()" class="btn-publish">
+        <span>Publicar</span>
+      </button>
     </div>
   </header>
 
   <div class="workspace">
     <!-- Tools Sidebar (Semi-transparent floating) -->
-    <aside *ngIf="builderStep === 'editor'" 
-           class="tools-sidebar" 
-           [class.is-collapsed]="isSidebarCollapsed"
-           [class.is-resizing]="isResizing"
-           [style.width.px]="isSidebarCollapsed ? 90 : sidebarWidth">
-      
-      <lib-variant-selector 
-        style="width: 100%; height: 100%; display: block;"
-        [isCollapsed]="isSidebarCollapsed" 
-        (toggleCollapse)="isSidebarCollapsed = !isSidebarCollapsed">
+    <aside
+      *ngIf="builderStep === 'editor'"
+      class="tools-sidebar"
+      [class.is-collapsed]="isSidebarCollapsed"
+      [class.is-resizing]="isResizing"
+      [style.width.px]="isSidebarCollapsed ? 90 : sidebarWidth"
+    >
+      <lib-variant-selector
+        style="width: 100%; height: 100%; display: block"
+        [isCollapsed]="isSidebarCollapsed"
+        (toggleCollapse)="isSidebarCollapsed = !isSidebarCollapsed"
+      >
       </lib-variant-selector>
 
       <!-- Drag Handle -->
-      <div *ngIf="!isSidebarCollapsed" 
-           class="sidebar-resizer" 
-           (mousedown)="startResizing($event)">
-        <div class="resizer-knob"></div>
+      <div
+        *ngIf="!isSidebarCollapsed"
+        class="sidebar-resizer"
+        (mousedown)="startResizing($event)"
+      >
+        <div class="resizer-knob">
+          <div class="resizer-arrows">
+            <span>‹</span>
+            <span>›</span>
+          </div>
+        </div>
       </div>
     </aside>
 
     <!-- THE CANVAS -->
     <main class="canvas-area" (click)="onWorkspaceClick($event)">
       <div class="canvas-wrapper">
-        <div class="preview-frame" 
-             [class.frame-mobile]="previewSize === 'mobile'" 
-             [class.frame-tablet]="previewSize === 'tablet'"
-             [class.frame-desktop]="previewSize === 'desktop'">
-          
+        <div
+          class="preview-frame"
+          [class.frame-mobile]="previewSize === 'mobile'"
+          [class.frame-tablet]="previewSize === 'tablet'"
+          [class.frame-desktop]="previewSize === 'desktop'"
+        >
           <!-- Mockup Frame (Visual only) -->
           <div class="frame-mockup-top" *ngIf="previewSize !== 'desktop'">
-             <div class="camera"></div>
+            <div class="camera"></div>
           </div>
 
           <div class="frame-content">
@@ -82,7 +121,10 @@
             </div>
 
             <!-- Navbar / Tabs -->
-            <div *ngIf="navBarConfig.visible" class="sticky top-0 z-50 bg-black/40 backdrop-blur-xl">
+            <div
+              *ngIf="navBarConfig.visible"
+              class="sticky top-0 z-50 bg-black/40 backdrop-blur-xl"
+            >
               <lib-ui-components-tabs
                 [tabs]="tabsConfig"
                 [variant]="getVariant('navbar')"
@@ -116,4 +158,3 @@
     </main>
   </div>
 </div>
-

@@ -28,7 +28,9 @@ export class TemplateSelectorComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.templates = this.templateService.getAllTemplates();
+    const defaultTemplates = this.templateService.getAllTemplates();
+    const customTemplates = JSON.parse(localStorage.getItem('custom_templates') || '[]');
+    this.templates = [...defaultTemplates, ...customTemplates];
     this.categories = [...new Set(this.templates.map(t => t.category))];
   }
 
