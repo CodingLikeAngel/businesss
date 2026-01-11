@@ -22,7 +22,7 @@ export interface HeaderCustomStyles {
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class UIHeaderComponent  {
+export class UIHeaderComponent implements OnChanges {
   @Input() title = 'Header Title';
   @Input() subtitle = '';
   @Input() variant: HeaderVariantType = 'primary';
@@ -33,9 +33,9 @@ export class UIHeaderComponent  {
 
   isMenuOpen = false;
 
-  // ngOnChanges() {
-  //  // console.log('Custom Styles recibidos:', this.customStyles); // Depuración
-  // }
+  ngOnChanges() {
+    console.log('Header variant changed to:', this.variant);
+  }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
@@ -44,7 +44,7 @@ export class UIHeaderComponent  {
   get headerClasses(): string[] {
     return [
       'header',
-      `header-${this.variant}`,
+      `variant-${this.variant}`,
       `align-${this.align}`,
       this.dark ? 'dark' : '',
     ].filter(Boolean);

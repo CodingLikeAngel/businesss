@@ -31,7 +31,7 @@
     <div *ngIf="activeTab === 'content'" >
       <!-- Header -->
       <lib-ui-components-header
-        [variant]="headerConfig.variant"
+        [variant]="getVariant('header')"
         [align]="headerConfig.align"
         [dark]="headerConfig.dark"
         [title]="headerConfig.title"

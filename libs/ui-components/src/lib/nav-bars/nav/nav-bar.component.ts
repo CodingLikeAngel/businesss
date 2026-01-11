@@ -92,7 +92,7 @@ export class UINavBarComponent implements OnInit, OnChanges {
   get navBarClasses(): string[] {
     const classes = [
       'nav-bar',
-      `nav-bar--${this.variant}`,
+      `variant-${this.variant}`,
       this.isMobileMenuOpen ? 'nav-bar--mobile-open' : '',
       this.isFixed ? 'nav-bar--fixed' : '',
       this.isDarkMode ? 'nav-bar--dark' : '',

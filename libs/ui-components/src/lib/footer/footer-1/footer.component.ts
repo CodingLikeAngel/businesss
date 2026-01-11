@@ -121,7 +121,7 @@ export class UIFooterComponent implements OnInit {
     const isCustomVariant = this.variant.startsWith('custom-footer');
     return [
       'footer',
-      isCustomVariant ? 'footer--custom' : `footer--${this.variant}`,
+      isCustomVariant ? 'footer--custom' : `variant-${this.variant}`,
       this.dark ? 'dark' : '',
       this.showParticles ? 'footer--with-particles' : 'footer--no-particles',
     ].filter(Boolean);
