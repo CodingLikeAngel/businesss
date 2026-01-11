@@ -11,6 +11,7 @@ export interface Testimonial {
 }
 
 export interface TestimonialsConfig {
+  variant: string;
   items: Testimonial[];
 }
 
@@ -126,6 +127,7 @@ export interface CardItem {
 }
 
 export interface ServiceCardsConfig {
+  variant: string;
   items: CardItem[];
 }
 
@@ -136,6 +138,7 @@ export interface AccordionItem {
 }
 
 export interface FaqConfig {
+  variant: string;
   items: AccordionItem[];
 }
 
@@ -149,6 +152,7 @@ export interface TableRow {
 }
 
 export interface PricingConfig {
+  variant: string;
   columns: TableColumn[];
   rows: TableRow[];
 }
@@ -164,6 +168,7 @@ export interface CardPremiumConfig {
 }
 
 export interface PromotionsConfig {
+  variant: string;
   premiumCards: CardPremiumConfig[];
 }
 
@@ -173,6 +178,7 @@ export interface GalleryImage {
 }
 
 export interface GalleryConfig {
+  variant: string;
   images: GalleryImage[];
 }
 
@@ -192,10 +198,12 @@ export interface StatItem {
 }
 
 export interface StatsConfig {
+  variant: string;
   items: StatItem[];
 }
 
 export interface ProductsConfig {
+  variant: string;
   items: Product[];
 }
 
@@ -359,6 +367,7 @@ export class VariantService {
 
   // New BehaviorSubjects for component data
   private serviceCardsConfigSubject = new BehaviorSubject<ServiceCardsConfig>({
+    variant: 'glass',
     items: [
       {
         routeName: 'Web Básica',
@@ -413,6 +422,7 @@ export class VariantService {
   });
 
   private faqConfigSubject = new BehaviorSubject<FaqConfig>({
+    variant: 'glass',
     items: [
       {
         title: '¿Cuánto tiempo tarda en estar lista mi web?',
@@ -428,6 +438,7 @@ export class VariantService {
   });
 
   private pricingConfigSubject = new BehaviorSubject<PricingConfig>({
+    variant: 'glass',
     columns: [
       { key: 'service', label: 'Servicio' },
       { key: 'description', label: 'Descripción' },
@@ -441,6 +452,7 @@ export class VariantService {
   });
 
   private promotionsConfigSubject = new BehaviorSubject<PromotionsConfig>({
+    variant: 'glass',
     premiumCards: [
       {
         title: 'Web + SEO Avanzado',
@@ -473,6 +485,7 @@ export class VariantService {
   });
 
   private galleryConfigSubject = new BehaviorSubject<GalleryConfig>({
+    variant: 'glass',
     images: [
       { src: '/1029.png', alt: 'Web 1' },
       { src: '/1090.png', alt: 'Web 2' },
@@ -481,6 +494,7 @@ export class VariantService {
   });
 
   private productsConfigSubject = new BehaviorSubject<ProductsConfig>({
+    variant: 'glass',
     items: [
       {
         name: 'Módulo Reservas',
@@ -505,6 +519,7 @@ export class VariantService {
 
 
   private testimonialsConfigSubject = new BehaviorSubject<TestimonialsConfig>({
+    variant: 'glass',
     items: [
       {
         quote: 'Tenía una web en Wix que parecía de juguete. Ahora tengo una web profesional que me trae clientes cada semana.',
@@ -522,6 +537,7 @@ export class VariantService {
   });
 
   private statsConfigSubject = new BehaviorSubject<StatsConfig>({
+    variant: 'glass',
     items: [
       { icon: '🚀', label: 'Velocidad', value: '0.8s', description: 'Tiempo de carga' },
       { icon: '🔒', label: 'Seguridad', value: '99.9%', description: 'Uptime' },
@@ -733,6 +749,16 @@ export class VariantService {
       this.setBubbleConfig(update);
       this.setCardConfig(update);
       this.setTitleConfig(update);
+      
+      // Aplicar también a las secciones específicas
+      this.setServiceCardsConfig(update);
+      this.setFaqConfig(update);
+      this.setPricingConfig(update);
+      this.setPromotionsConfig(update);
+      this.setGalleryConfig(update);
+      this.setProductsConfig(update);
+      this.setTestimonialsConfig(update);
+      this.setStatsConfig(update);
       
       this.saveToLocalStorage();
     }

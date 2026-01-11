@@ -2,8 +2,9 @@
 
 .contact-section {
   padding: 4rem 1.5rem;
-  background-color: var(--bg-primary, #ffffff);
-  color: var(--text-primary, #1a1a1a);
+  background-color: var(--theme-bg, var(--bg-primary, #ffffff));
+  color: var(--theme-color, var(--text-primary, #1a1a1a));
+  font-family: var(--theme-font, inherit);
   transition: all 0.3s ease;
 
   @include shared.apply-all-variants('variant-');

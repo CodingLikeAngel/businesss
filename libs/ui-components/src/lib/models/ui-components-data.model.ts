@@ -33,6 +33,15 @@ export const variants = [
     'leaf',
     'amber-glow',
     'minimal-white',
+    // Gaming Themes
+    'mario',
+    'zelda',
+    'kirby',
+    'rayman',
+    'lum',
+    'river',
+    'minimal',
+    // ...
     'hex-teal',
     'purple-edge',
     'rose-radial',

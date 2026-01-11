@@ -5,9 +5,9 @@
 
 .stats-container {
   padding: 80px 20px;
-  background-color: #0d1117;
-  color: white;
-  font-family: 'Outfit', sans-serif;
+  background-color: var(--theme-bg, #0d1117);
+  color: var(--theme-color, white);
+  font-family: var(--theme-font, 'Outfit', sans-serif);
   overflow: hidden;
   position: relative;
 

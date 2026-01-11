@@ -188,6 +188,7 @@ export class TemplateService {
         },
       },
       serviceCards: {
+        variant: 'glass',
         items: [
           {
             routeName: 'Corte Hombre',
@@ -231,6 +232,7 @@ export class TemplateService {
         ],
       },
       faq: {
+        variant: 'glass',
         items: [
           {
             title: '¿Necesito reservar con antelación?',
@@ -245,6 +247,7 @@ export class TemplateService {
         ],
       },
       pricing: {
+        variant: 'glass',
         columns: [
           { key: 'service', label: 'Servicio' },
           { key: 'description', label: 'Descripción' },
@@ -257,6 +260,7 @@ export class TemplateService {
         ],
       },
       promotions: {
+        variant: 'glass',
         premiumCards: [
           {
             title: 'Paquete Completo',
@@ -270,6 +274,7 @@ export class TemplateService {
         ],
       },
       gallery: {
+        variant: 'glass',
         images: [
           { src: '/retro-stars.png', alt: 'Trabajo 1' },
           { src: '/1029.png', alt: 'Trabajo 2' },
@@ -277,6 +282,7 @@ export class TemplateService {
         ],
       },
       products: {
+        variant: 'glass',
         items: [
           {
             name: 'Tratamiento Capilar',
@@ -287,6 +293,7 @@ export class TemplateService {
         ],
       },
       testimonials: {
+        variant: 'glass',
         items: [
           {
             quote: 'Excelente servicio, muy profesionales',
@@ -423,6 +430,7 @@ export class TemplateService {
         },
       },
       serviceCards: {
+        variant: 'glass',
         items: [
           {
             routeName: 'Tatuaje Tradicional',
@@ -453,6 +461,7 @@ export class TemplateService {
         ],
       },
       faq: {
+        variant: 'glass',
         items: [
           {
             title: '¿Duele hacerse un tatuaje?',
@@ -467,6 +476,7 @@ export class TemplateService {
         ],
       },
       pricing: {
+        variant: 'glass',
         columns: [
           { key: 'service', label: 'Servicio' },
           { key: 'description', label: 'Descripción' },
@@ -479,6 +489,7 @@ export class TemplateService {
         ],
       },
       promotions: {
+        variant: 'glass',
         premiumCards: [
           {
             title: 'Tatuaje + Retoque',
@@ -492,6 +503,7 @@ export class TemplateService {
         ],
       },
       gallery: {
+        variant: 'glass',
         images: [
           { src: '/retro-stars.png', alt: 'Tatuaje 1' },
           { src: '/1029.png', alt: 'Tatuaje 2' },
@@ -499,9 +511,11 @@ export class TemplateService {
         ],
       },
       products: {
+        variant: 'glass',
         items: [],
       },
       testimonials: {
+        variant: 'glass',
         items: [
           {
             quote: 'Increíble trabajo, superó mis expectativas',
@@ -645,6 +659,7 @@ export class TemplateService {
         },
       },
       serviceCards: {
+        variant: 'glass',
         items: [
           {
             routeName: 'Entrantes',
@@ -688,6 +703,7 @@ export class TemplateService {
         ],
       },
       faq: {
+        variant: 'glass',
         items: [
           {
             title: '¿Necesito reservar?',
@@ -702,6 +718,7 @@ export class TemplateService {
         ],
       },
       pricing: {
+        variant: 'glass',
         columns: [
           { key: 'service', label: 'Plato' },
           { key: 'description', label: 'Descripción' },
@@ -714,6 +731,7 @@ export class TemplateService {
         ],
       },
       promotions: {
+        variant: 'glass',
         premiumCards: [
           {
             title: 'Menú Especial',
@@ -727,6 +745,7 @@ export class TemplateService {
         ],
       },
       gallery: {
+        variant: 'glass',
         images: [
           { src: '/retro-stars.png', alt: 'Plato 1' },
           { src: '/1029.png', alt: 'Plato 2' },
@@ -734,9 +753,11 @@ export class TemplateService {
         ],
       },
       products: {
+        variant: 'glass',
         items: [],
       },
       testimonials: {
+        variant: 'glass',
         items: [
           {
             quote: 'Excelente comida y servicio impecable',
@@ -880,6 +901,7 @@ export class TemplateService {
         },
       },
       serviceCards: {
+        variant: 'glass',
         items: [
           {
             routeName: 'Clases Grupales',
@@ -923,6 +945,7 @@ export class TemplateService {
         ],
       },
       faq: {
+        variant: 'glass',
         items: [
           {
             title: '¿Necesito experiencia previa?',
@@ -937,6 +960,7 @@ export class TemplateService {
         ],
       },
       pricing: {
+        variant: 'glass',
         columns: [
           { key: 'service', label: 'Plan' },
           { key: 'description', label: 'Incluye' },
@@ -949,6 +973,7 @@ export class TemplateService {
         ],
       },
       promotions: {
+        variant: 'glass',
         premiumCards: [
           {
             title: 'Primer Mes Gratis',
@@ -962,6 +987,7 @@ export class TemplateService {
         ],
       },
       gallery: {
+        variant: 'glass',
         images: [
           { src: '/retro-stars.png', alt: 'Instalación 1' },
           { src: '/1029.png', alt: 'Instalación 2' },
@@ -969,9 +995,11 @@ export class TemplateService {
         ],
       },
       products: {
+        variant: 'glass',
         items: [],
       },
       testimonials: {
+        variant: 'glass',
         items: [
           {
             quote: 'He logrado mis objetivos gracias a este gimnasio',

@@ -1,14 +1,8 @@
+@use "../../../styles/mixins" as shared;
 @use "sass:map";
 @use "./variables" as var;
 
 @use 'sass:color';
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
 
 .card {
   position: relative;
@@ -16,10 +10,13 @@
   height: 450px;
   overflow: hidden;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
-  background: var(--card-bg, linear-gradient(to bottom, #287bff, #1e40af));
-  color: var(--card-color, #fff);
-  border: var(--card-border, none);
-  box-shadow: var(--card-shadow, 0 10px 15px rgba(0, 0, 0, 0.1));
+  background: var(--theme-bg, var(--card-bg, linear-gradient(to bottom, #287bff, #1e40af)));
+  color: var(--theme-color, var(--card-color, #fff));
+  border: var(--theme-border, var(--card-border, none));
+  box-shadow: var(--theme-shadow, var(--card-shadow, 0 10px 15px rgba(0, 0, 0, 0.1)));
+  font-family: var(--theme-font, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif);
+
+  @include shared.apply-all-variants('card--');
 
   &:hover {
     transform: translateY(-5px);

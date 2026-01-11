@@ -7,9 +7,9 @@
 
 .testimonials-container {
   padding: 100px 20px;
-  background-color: #030712;
-  color: white;
-  font-family: 'Outfit', sans-serif;
+  background-color: var(--theme-bg, #030712);
+  color: var(--theme-color, white);
+  font-family: var(--theme-font, 'Outfit', sans-serif);
   overflow: hidden;
   position: relative;
 

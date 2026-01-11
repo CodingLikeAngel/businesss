@@ -5,6 +5,41 @@ $neon-pink: #ec4899;
 $dark-bg: #111827;
 $glass-border: rgba(255, 255, 255, 0.2);
 
+@mixin variant-primary {
+  --theme-bg: #2563eb;
+  --theme-color: white;
+  --theme-accent: #60a5fa;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+}
+
+@mixin variant-secondary {
+  --theme-bg: #4b5563;
+  --theme-color: white;
+  --theme-accent: #9ca3af;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+}
+
+@mixin variant-outline {
+  --theme-bg: transparent;
+  --theme-color: currentColor;
+  --theme-border: 1px solid currentColor;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-ghost {
+  --theme-bg: transparent;
+  --theme-color: currentColor;
+  --theme-border: none;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  &:hover { background: rgba(0,0,0,0.05); }
+}
+
 @mixin variant-glass {
   --theme-bg: rgba(255, 255, 255, 0.1);
   --theme-color: #fff;
@@ -12,7 +47,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-accent: #6366f1;
   --theme-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
   --theme-backdrop: blur(12px);
-
   background: var(--theme-bg);
   backdrop-filter: var(--theme-backdrop);
   -webkit-backdrop-filter: var(--theme-backdrop);
@@ -27,7 +61,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-border: 1px solid #00ff9d;
   --theme-accent: #00ff9d;
   --theme-shadow: 0 0 15px rgba(0, 255, 157, 0.5);
-
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
@@ -41,7 +74,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-accent: #fceea7;
   --theme-shadow: 4px 4px 0px #000;
   --theme-clip: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
-
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
@@ -56,7 +88,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-accent: #d33682;
   --theme-shadow: 3px 3px 0px #b58900;
   --theme-font: 'Courier New', monospace;
-
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
@@ -69,28 +100,9 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-color: #f3f4f6;
   --theme-border: 1px solid #374151;
   --theme-accent: #3b82f6;
-
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
-}
-
-@mixin variant-primary {
-  --theme-bg: #2563eb;
-  --theme-color: white;
-  --theme-accent: #60a5fa;
-
-  background: var(--theme-bg);
-  color: var(--theme-color);
-}
-
-@mixin variant-secondary {
-  --theme-bg: #4b5563;
-  --theme-color: white;
-  --theme-accent: #9ca3af;
-
-  background: var(--theme-bg);
-  color: var(--theme-color);
 }
 
 @mixin variant-matrix {
@@ -100,7 +112,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-accent: #00ff41;
   --theme-font: 'Courier New', monospace;
   --theme-shadow: 0 0 15px #00ff41;
-
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
@@ -114,7 +125,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-color: #fff;
   --theme-border: 1px solid #fff;
   --theme-accent: #ff0000;
-
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
@@ -134,7 +144,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-color: #fff;
   --theme-border: 2px solid #ff9d00;
   --theme-accent: #ff9d00;
-
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
@@ -147,7 +156,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-border: 4px solid #7f1d1d;
   --theme-accent: #7f1d1d;
   --theme-shadow: 5px 5px 0px #7f1d1d;
-
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
@@ -160,7 +168,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-border: 2px solid #f59e0b;
   --theme-accent: #f59e0b;
   --theme-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
-
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
@@ -172,7 +179,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-color: white;
   --theme-border: none;
   --theme-accent: #ef4444;
-
   background: var(--theme-bg);
   border-left: 10px solid #ef4444;
   border-right: 10px solid #3b82f6;
@@ -184,7 +190,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-color: #d1fae5;
   --theme-border: 1px solid #10b981;
   --theme-accent: #10b981;
-
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
@@ -195,7 +200,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-color: #31344b;
   --theme-border: none;
   --theme-shadow: 9px 9px 16px rgb(163,177,198,0.6), -9px -9px 16px rgba(255,255,255, 0.5);
-
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
@@ -207,7 +211,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-color: #a855f7;
   --theme-border: 2px solid #d8b4fe;
   --theme-accent: #e879f9;
-
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
@@ -219,7 +222,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-border: 1px solid rgba(255,255,255,0.18);
   --theme-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
   --theme-backdrop: blur(10px);
-
   background: var(--theme-bg);
   backdrop-filter: var(--theme-backdrop);
   border: var(--theme-border);
@@ -233,10 +235,180 @@ $glass-border: rgba(255, 255, 255, 0.2);
   --theme-border: 1px solid #6366f1;
   --theme-accent: #6366f1;
   --theme-shadow: 0 0 25px rgba(99, 102, 241, 0.7);
-
   background: var(--theme-bg);
   border: var(--theme-border);
   color: var(--theme-color);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-mario {
+  --theme-bg: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(0, 0, 255, 0.2));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(255, 0, 0, 0.5);
+  --theme-accent: #ffcc00;
+  --theme-shadow: 0 0 15px #ff0000;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-zelda {
+  --theme-bg: rgba(218, 165, 32, 0.1);
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(34, 139, 34, 0.5);
+  --theme-accent: #ffd700;
+  --theme-shadow: 0 0 15px #228b22;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-kirby {
+  --theme-bg: rgba(255, 182, 193, 0.2);
+  --theme-color: #ff1493;
+  --theme-border: 2px solid rgba(255, 105, 180, 0.5);
+  --theme-accent: #ffffff;
+  --theme-shadow: 0 0 15px #ff69b4;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-rayman {
+  --theme-bg: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(148, 0, 211, 0.2));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(255, 215, 0, 0.5);
+  --theme-accent: #ff4500;
+  --theme-shadow: 0 0 15px #ffd700;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-lum {
+  --theme-bg: rgba(255, 255, 224, 0.3);
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(255, 255, 0, 0.5);
+  --theme-accent: #ff00ff;
+  --theme-shadow: 0 0 20px #ffff00;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-phoenix {
+  --theme-bg: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(234, 179, 8, 0.2));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(249, 115, 22, 0.5);
+  --theme-accent: #f97316;
+  --theme-shadow: 0 0 15px #f97316;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-galactic {
+  --theme-bg: linear-gradient(135deg, rgba(76, 29, 149, 0.9), rgba(17, 24, 39, 0.9));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(76, 29, 149, 0.5);
+  --theme-accent: #a5b4fc;
+  --theme-shadow: 0 0 15px #4c1d95;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-orbitron {
+  --theme-bg: rgba(0, 0, 0, 0.9);
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(255, 255, 255, 0.5);
+  --theme-accent: #ffffff;
+  --theme-shadow: 0 0 15px #ffffff;
+  --theme-font: 'Orbitron', sans-serif;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  font-family: var(--theme-font);
+}
+
+@mixin variant-cartoon {
+  --theme-bg: rgba(255, 245, 157, 0.5);
+  --theme-color: #374151;
+  --theme-border: 2px solid rgba(255, 215, 0, 0.5);
+  --theme-accent: #ff4500;
+  --theme-shadow: 0 0 15px #ffd700;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  border-radius: 20px;
+}
+
+@mixin variant-luma {
+  --theme-bg: rgba(255, 255, 255, 0.2);
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(255, 255, 255, 0.5);
+  --theme-accent: #d1d5db;
+  --theme-shadow: 0 0 15px #ffffff;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-coin {
+  --theme-bg: rgba(255, 215, 0, 0.2);
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(255, 215, 0, 0.5);
+  --theme-accent: #ffd700;
+  --theme-shadow: 0 0 15px #ffd700;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-fire {
+  --theme-bg: rgba(249, 115, 22, 0.2);
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(249, 115, 22, 0.5);
+  --theme-accent: #f97316;
+  --theme-shadow: 0 0 15px #f97316;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-water {
+  --theme-bg: rgba(59, 130, 246, 0.2);
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(59, 130, 246, 0.5);
+  --theme-accent: #3b82f6;
+  --theme-shadow: 0 0 15px #3b82f6;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-leaf {
+  --theme-bg: rgba(34, 197, 94, 0.2);
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(34, 197, 94, 0.5);
+  --theme-accent: #22c55e;
+  --theme-shadow: 0 0 15px #22c55e;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
   box-shadow: var(--theme-shadow);
 }
 
@@ -262,7 +434,23 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}holo { @include variant-holo; }
     &.#{$prefix}quantum { @include variant-quantum; }
     
-    // Alias for variants with variations in name
+    // Premium Gaming Themes
+    &.#{$prefix}mario { @include variant-mario; }
+    &.#{$prefix}zelda { @include variant-zelda; }
+    &.#{$prefix}kirby { @include variant-kirby; }
+    &.#{$prefix}rayman { @include variant-rayman; }
+    &.#{$prefix}lum { @include variant-lum; }
+    &.#{$prefix}phoenix { @include variant-phoenix; }
+    &.#{$prefix}galactic { @include variant-galactic; }
+    &.#{$prefix}orbitron { @include variant-orbitron; }
+    &.#{$prefix}cartoon { @include variant-cartoon; }
+    &.#{$prefix}luma { @include variant-luma; }
+    &.#{$prefix}coin { @include variant-coin; }
+    &.#{$prefix}fire { @include variant-fire; }
+    &.#{$prefix}water { @include variant-water; }
+    &.#{$prefix}leaf { @include variant-leaf; }
+
+    // Alias
     &.#{$prefix}supermeatboy { @include variant-super-meat-boy; }
 }
 
@@ -288,25 +476,22 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}holo #{$child} { @include variant-holo; }
     &.#{$prefix}quantum #{$child} { @include variant-quantum; }
     
+    // Premium Gaming Themes
+    &.#{$prefix}mario #{$child} { @include variant-mario; }
+    &.#{$prefix}zelda #{$child} { @include variant-zelda; }
+    &.#{$prefix}kirby #{$child} { @include variant-kirby; }
+    &.#{$prefix}rayman #{$child} { @include variant-rayman; }
+    &.#{$prefix}lum #{$child} { @include variant-lum; }
+    &.#{$prefix}phoenix #{$child} { @include variant-phoenix; }
+    &.#{$prefix}galactic #{$child} { @include variant-galactic; }
+    &.#{$prefix}orbitron #{$child} { @include variant-orbitron; }
+    &.#{$prefix}cartoon #{$child} { @include variant-cartoon; }
+    &.#{$prefix}luma #{$child} { @include variant-luma; }
+    &.#{$prefix}coin #{$child} { @include variant-coin; }
+    &.#{$prefix}fire #{$child} { @include variant-fire; }
+    &.#{$prefix}water #{$child} { @include variant-water; }
+    &.#{$prefix}leaf #{$child} { @include variant-leaf; }
+
     // Alias
     &.#{$prefix}supermeatboy #{$child} { @include variant-super-meat-boy; }
-}
-
-@mixin variant-outline {
-  --theme-bg: transparent;
-  --theme-color: currentColor;
-  --theme-border: 1px solid currentColor;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-}
-
-@mixin variant-ghost {
-  --theme-bg: transparent;
-  --theme-color: currentColor;
-  --theme-border: none;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  &:hover { background: rgba(0,0,0,0.05); }
 }

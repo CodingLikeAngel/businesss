@@ -5,9 +5,9 @@
 
 .pricing-container {
   padding: 100px 20px;
-  background-color: #111827;
-  color: white;
-  font-family: 'Outfit', sans-serif;
+  background-color: var(--theme-bg, #111827);
+  color: var(--theme-color, white);
+  font-family: var(--theme-font, 'Outfit', sans-serif);
   position: relative;
 
   @include shared.apply-all-variants('pricing--');

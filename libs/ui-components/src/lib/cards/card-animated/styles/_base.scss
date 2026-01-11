@@ -1,11 +1,15 @@
+@use "../../../styles/mixins" as shared;
 @use "sass:map";
 @use "./variables" as var;
+
 /* Variables para propiedades dinámicas con fallback */
 .card-animated {
-  --border-color: #22d3ee;
-  --text-color: #f8fafc;
-  --background-color: rgba(47, 79, 79, 0.9);
-  --hover-color: #ffd700;
+  // Theme Variables
+  background: var(--theme-bg, rgba(47, 79, 79, 0.9));
+  color: var(--theme-color, #f8fafc);
+  border: var(--theme-border, 2px solid #22d3ee);
+  box-shadow: var(--theme-shadow, none);
+  font-family: var(--theme-font, 'Orbitron', sans-serif);
 
   /* Tamaño mínimo */
   min-height: 200px;
@@ -15,11 +19,19 @@
   position: relative;
   border-radius: 12px;
   transition: all 0.3s ease;
-  backdrop-filter: blur(4px);
+  backdrop-filter: var(--theme-backdrop, blur(4px));
   overflow: hidden;
-  background: var(--background-color);
-  border: 2px solid var(--border-color);
-  font-family: 'Orbitron', sans-serif;
+
+  @include shared.apply-all-variants('card-animated--');
+
+  // Override internal colors with theme specific ones
+  .card-icon {
+    color: var(--theme-accent, inherit);
+  }
+
+  .card-title, .card-description {
+     color: var(--theme-color, inherit);
+  }
 
   &:hover,
   &:focus {
