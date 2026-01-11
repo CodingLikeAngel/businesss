@@ -13,7 +13,7 @@
   .input-label {
     font-size: 0.85rem;
     font-weight: 700;
-    color: #94a3b8;
+    color: #cbd5e1;
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin-left: 0.25rem;
@@ -61,6 +61,11 @@
       background-position: right 1rem center;
       background-size: 1.25rem;
       padding-right: 2.5rem;
+      
+      option {
+        background: #1e293b;
+        color: white;
+      }
     }
 
     textarea.input {

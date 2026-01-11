@@ -1,5 +1,3 @@
-
-// Basic Colors (You can import variables here if available)
 $neon-cyan: #22d3ee;
 $neon-pink: #ec4899;
 $dark-bg: #111827;
@@ -26,12 +24,14 @@ $glass-border: rgba(255, 255, 255, 0.2);
   color: #000;
   border: 2px solid #000;
   box-shadow: 4px 4px 0px #000;
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
 }
 
 @mixin variant-retro {
   background: #fdf6e3;
   color: #657b83;
   border: 2px solid #b58900;
+  box-shadow: 3px 3px 0px #b58900;
   font-family: 'Courier New', monospace;
 }
 
@@ -84,7 +84,7 @@ $glass-border: rgba(255, 255, 255, 0.2);
     top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(255, 0, 0, 0.2);
     z-index: -1;
-    animation: glitch 1s infinite;
+    animation: glitch-anim 1s infinite;
   }
 }
 
@@ -152,47 +152,47 @@ $glass-border: rgba(255, 255, 255, 0.2);
 }
 
 @mixin apply-all-variants($prefix: 'variant-') {
-    &.#{$prefix}primary { @include variant-primary; }
-    &.#{$prefix}secondary { @include variant-secondary; }
-    &.#{$prefix}outline { @include variant-outline; }
-    &.#{$prefix}ghost { @include variant-ghost; }
-    &.#{$prefix}glass { @include variant-glass; }
-    &.#{$prefix}neon { @include variant-neon; }
-    &.#{$prefix}cyberpunk { @include variant-cyberpunk; }
-    &.#{$prefix}retro { @include variant-retro; }
-    &.#{$prefix}dark { @include variant-dark; }
-    &.#{$prefix}matrix { @include variant-matrix; }
-    &.#{$prefix}glitch { @include variant-glitch; }
-    &.#{$prefix}portal { @include variant-portal; }
-    &.#{$prefix}super-meat-boy { @include variant-super-meat-boy; }
-    &.#{$prefix}bioshock { @include variant-bioshock; }
-    &.#{$prefix}joycon { @include variant-joycon; }
-    &.#{$prefix}jungle { @include variant-jungle; }
-    &.#{$prefix}neomorph { @include variant-neomorph; }
-    &.#{$prefix}electoon { @include variant-electoon; }
-    &.#{$prefix}holo { @include variant-holo; }
-    &.#{$prefix}quantum { @include variant-quantum; }
+  &.#{$prefix}primary { @include variant-primary; }
+  &.#{$prefix}secondary { @include variant-secondary; }
+  &.#{$prefix}outline { @include variant-outline; }
+  &.#{$prefix}ghost { @include variant-ghost; }
+  &.#{$prefix}glass { @include variant-glass; }
+  &.#{$prefix}neon { @include variant-neon; }
+  &.#{$prefix}cyberpunk { @include variant-cyberpunk; }
+  &.#{$prefix}retro { @include variant-retro; }
+  &.#{$prefix}dark { @include variant-dark; }
+  &.#{$prefix}matrix { @include variant-matrix; }
+  &.#{$prefix}glitch { @include variant-glitch; }
+  &.#{$prefix}portal { @include variant-portal; }
+  &.#{$prefix}super-meat-boy { @include variant-super-meat-boy; }
+  &.#{$prefix}bioshock { @include variant-bioshock; }
+  &.#{$prefix}joycon { @include variant-joycon; }
+  &.#{$prefix}jungle { @include variant-jungle; }
+  &.#{$prefix}neomorph { @include variant-neomorph; }
+  &.#{$prefix}electoon { @include variant-electoon; }
+  &.#{$prefix}holo { @include variant-holo; }
+  &.#{$prefix}quantum { @include variant-quantum; }
 }
 
 @mixin apply-variants-to-child($child, $prefix: 'variant-') {
-    &.#{$prefix}primary #{$child} { @include variant-primary; }
-    &.#{$prefix}secondary #{$child} { @include variant-secondary; }
-    &.#{$prefix}outline #{$child} { @include variant-outline; }
-    &.#{$prefix}ghost #{$child} { @include variant-ghost; }
-    &.#{$prefix}glass #{$child} { @include variant-glass; }
-    &.#{$prefix}neon #{$child} { @include variant-neon; }
-    &.#{$prefix}cyberpunk #{$child} { @include variant-cyberpunk; }
-    &.#{$prefix}retro #{$child} { @include variant-retro; }
-    &.#{$prefix}dark #{$child} { @include variant-dark; }
-    &.#{$prefix}matrix #{$child} { @include variant-matrix; }
-    &.#{$prefix}glitch #{$child} { @include variant-glitch; }
-    &.#{$prefix}portal #{$child} { @include variant-portal; }
-    &.#{$prefix}super-meat-boy #{$child} { @include variant-super-meat-boy; }
-    &.#{$prefix}bioshock #{$child} { @include variant-bioshock; }
-    &.#{$prefix}joycon #{$child} { @include variant-joycon; }
-    &.#{$prefix}jungle #{$child} { @include variant-jungle; }
-    &.#{$prefix}neomorph #{$child} { @include variant-neomorph; }
-    &.#{$prefix}electoon #{$child} { @include variant-electoon; }
-    &.#{$prefix}holo #{$child} { @include variant-holo; }
-    &.#{$prefix}quantum #{$child} { @include variant-quantum; }
+  &.#{$prefix}primary #{$child} { @include variant-primary; }
+  &.#{$prefix}secondary #{$child} { @include variant-secondary; }
+  &.#{$prefix}outline #{$child} { @include variant-outline; }
+  &.#{$prefix}ghost #{$child} { @include variant-ghost; }
+  &.#{$prefix}glass #{$child} { @include variant-glass; }
+  &.#{$prefix}neon #{$child} { @include variant-neon; }
+  &.#{$prefix}cyberpunk #{$child} { @include variant-cyberpunk; }
+  &.#{$prefix}retro #{$child} { @include variant-retro; }
+  &.#{$prefix}dark #{$child} { @include variant-dark; }
+  &.#{$prefix}matrix #{$child} { @include variant-matrix; }
+  &.#{$prefix}glitch #{$child} { @include variant-glitch; }
+  &.#{$prefix}portal #{$child} { @include variant-portal; }
+  &.#{$prefix}super-meat-boy #{$child} { @include variant-super-meat-boy; }
+  &.#{$prefix}bioshock #{$child} { @include variant-bioshock; }
+  &.#{$prefix}joycon #{$child} { @include variant-joycon; }
+  &.#{$prefix}jungle #{$child} { @include variant-jungle; }
+  &.#{$prefix}neomorph #{$child} { @include variant-neomorph; }
+  &.#{$prefix}electoon #{$child} { @include variant-electoon; }
+  &.#{$prefix}holo #{$child} { @include variant-holo; }
+  &.#{$prefix}quantum #{$child} { @include variant-quantum; }
 }
