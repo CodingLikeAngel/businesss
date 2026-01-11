@@ -62,6 +62,14 @@
     <div *ngIf="activeTab === 'general'" class="tab-content">
       <div class="config-group">
         <div class="group-header">
+          <h3>Plantillas de Negocio</h3>
+          <p class="helper-text">Selecciona un template predefinido para comenzar rápidamente.</p>
+        </div>
+        <lib-template-selector (templateApplied)="onTemplateApplied()"></lib-template-selector>
+      </div>
+
+      <div class="config-group">
+        <div class="group-header">
           <h3>Variante Global</h3>
           <p class="helper-text">Esta variante se aplicará a todos los componentes que no tengan una variante específica seleccionada.</p>
         </div>
@@ -73,17 +81,6 @@
           [options]="variantOptions"
         ></lib-ui-components-input>
         <button class="warning-btn mt-4" (click)="clearComponentVariants()">🧹 Limpiar Personalizaciones</button>
-      </div>
-
-      <div class="config-group">
-        <div class="group-header">
-          <h3>Plantillas de Negocio</h3>
-          <p class="helper-text">Comienza con un template predefinido para diferentes tipos de negocios.</p>
-        </div>
-        <lib-template-selector
-          [isCollapsed]="false"
-          (templateApplied)="onTemplateApplied()">
-        </lib-template-selector>
       </div>
 
       <div class="config-group">

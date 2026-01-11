@@ -1,61 +1,60 @@
-<div class="template-selector-wrapper" [class.collapsed]="isCollapsed">
-  <div class="template-selector-container">
-    
+<!-- Botón compacto para abrir el modal -->
+<button class="template-trigger-btn" (click)="openModal()" title="Seleccionar Template">
+  <span class="template-icon-btn">🎨</span>
+  <span class="template-text">Templates</span>
+</button>
+
+<!-- Modal -->
+<div *ngIf="showModal" class="template-modal-overlay" (click)="closeModal()">
+  <div class="template-modal" (click)="$event.stopPropagation()">
     <!-- Header -->
-    <div class="template-header">
-      <button class="collapse-btn" (click)="toggleCollapse.emit()" *ngIf="!isCollapsed">
-        {{ isCollapsed ? '▶' : '◀' }}
+    <div class="modal-header">
+      <h2>Seleccionar Template</h2>
+      <button class="close-btn" (click)="closeModal()">×</button>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="category-filter">
+      <button 
+        class="category-chip" 
+        [class.active]="selectedCategory === null"
+        (click)="selectCategory(null)">
+        Todos
       </button>
-      <h2 *ngIf="!isCollapsed">🎨 Templates</h2>
-      <p *ngIf="!isCollapsed" class="helper-text">Selecciona un template para comenzar</p>
+      <button 
+        *ngFor="let category of categories"
+        class="category-chip"
+        [class.active]="selectedCategory === category"
+        (click)="selectCategory(category)">
+        {{ category }}
+      </button>
     </div>
 
-    <div *ngIf="!isCollapsed" class="template-content">
-      <!-- Category Filter -->
-      <div class="category-filter">
-        <button 
-          class="category-btn" 
-          [class.active]="selectedCategory === null"
-          (click)="selectCategory(null)">
-          Todos
-        </button>
-        <button 
-          *ngFor="let category of categories"
-          class="category-btn"
-          [class.active]="selectedCategory === category"
-          (click)="selectCategory(category)">
-          {{ category }}
-        </button>
-      </div>
-
-      <!-- Templates Grid -->
-      <div class="templates-grid">
-        <div 
-          *ngFor="let template of getTemplatesByCategory()"
-          class="template-card"
-          (click)="selectTemplate(template)">
-          <div class="template-icon">{{ template.icon }}</div>
-          <div class="template-info">
-            <h3>{{ template.name }}</h3>
-            <p class="template-description">{{ template.description }}</p>
-            <span class="template-category">{{ template.category }}</span>
-          </div>
-          <div class="template-arrow">→</div>
+    <!-- Templates Grid -->
+    <div class="templates-grid">
+      <div 
+        *ngFor="let template of getTemplatesByCategory()"
+        class="template-card"
+        [class.selected]="selectedTemplate?.id === template.id"
+        (click)="selectTemplate(template)">
+        <div class="template-icon">{{ template.icon }}</div>
+        <div class="template-info">
+          <h3>{{ template.name }}</h3>
+          <p>{{ template.description }}</p>
+          <span class="template-badge">{{ template.category }}</span>
         </div>
       </div>
     </div>
 
-    <!-- Confirmation Modal -->
-    <div *ngIf="showConfirmation && selectedTemplate" class="confirmation-modal-overlay" (click)="cancelSelection()">
-      <div class="confirmation-modal" (click)="$event.stopPropagation()">
-        <h3>¿Aplicar este template?</h3>
-        <p>Se aplicará el template <strong>{{ selectedTemplate.name }}</strong>. Esto reemplazará tu configuración actual.</p>
-        <div class="modal-actions">
-          <button class="btn-cancel" (click)="cancelSelection()">Cancelar</button>
-          <button class="btn-apply" (click)="applyTemplate()">Aplicar Template</button>
-        </div>
-      </div>
+    <!-- Footer Actions -->
+    <div class="modal-footer">
+      <button class="btn-cancel" (click)="closeModal()">Cancelar</button>
+      <button 
+        class="btn-apply" 
+        [disabled]="!selectedTemplate"
+        (click)="applyTemplate()">
+        Aplicar Template
+      </button>
     </div>
   </div>
 </div>
-

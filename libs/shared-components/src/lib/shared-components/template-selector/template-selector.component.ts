@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TemplateService, BusinessTemplate } from '../../../services/template.service';
 import { VariantService } from '../../../services/variant.service';
@@ -11,15 +11,13 @@ import { VariantService } from '../../../services/variant.service';
   styleUrl: './template-selector.component.scss',
 })
 export class TemplateSelectorComponent implements OnInit {
-  @Input() isCollapsed = false;
-  @Output() toggleCollapse = new EventEmitter<void>();
   @Output() templateApplied = new EventEmitter<void>();
 
+  showModal = false;
   templates: BusinessTemplate[] = [];
   categories: string[] = [];
   selectedCategory: string | null = null;
   selectedTemplate: BusinessTemplate | null = null;
-  showConfirmation = false;
 
   constructor(
     private templateService: TemplateService,
@@ -29,6 +27,16 @@ export class TemplateSelectorComponent implements OnInit {
   ngOnInit() {
     this.templates = this.templateService.getAllTemplates();
     this.categories = [...new Set(this.templates.map(t => t.category))];
+  }
+
+  openModal() {
+    this.showModal = true;
+  }
+
+  closeModal() {
+    this.showModal = false;
+    this.selectedTemplate = null;
+    this.selectedCategory = null;
   }
 
   getTemplatesByCategory(): BusinessTemplate[] {
@@ -44,7 +52,6 @@ export class TemplateSelectorComponent implements OnInit {
 
   selectTemplate(template: BusinessTemplate) {
     this.selectedTemplate = template;
-    this.showConfirmation = true;
   }
 
   applyTemplate() {
@@ -53,14 +60,14 @@ export class TemplateSelectorComponent implements OnInit {
     // Aplicar todas las configuraciones del template
     this.variantService.applyTemplate(this.selectedTemplate);
     
-    this.showConfirmation = false;
-    this.selectedTemplate = null;
+    // Cerrar modal y notificar
+    this.closeModal();
     this.templateApplied.emit();
+    
+    // Feedback visual opcional - podrías agregar una notificación aquí
   }
 
   cancelSelection() {
-    this.showConfirmation = false;
     this.selectedTemplate = null;
   }
 }
-

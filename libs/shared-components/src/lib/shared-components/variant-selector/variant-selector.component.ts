@@ -20,8 +20,8 @@ import {
   TestimonialsConfig,
   PageSection
 } from '../../../services/variant.service';
-import { TemplateSelectorComponent } from '../template-selector/template-selector.component';
 import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from '@negocio/ui-components';
+import { TemplateSelectorComponent } from '../template-selector/template-selector.component';
 
 @Component({
   selector: 'lib-variant-selector',
