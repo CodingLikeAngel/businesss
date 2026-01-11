@@ -1,2 +1,7 @@
+@use '../../styles/mixins' as shared;
   
 @use './styles/index' as *;
+
+.table-container {
+    @include shared.apply-all-variants('table-');
+}

@@ -1,6 +1,11 @@
+@use '../styles/mixins' as shared;
+
 @import 'libs/shared-components/src/lib/shared-components/variant-selector/variables.scss';
 
+
 .stats-container {
+  @include shared.apply-all-variants('stats--');
+  @include shared.apply-variants-to-child('.stat-card', 'stats--');
   padding: 80px 20px;
   background-color: #0d1117;
   color: white;

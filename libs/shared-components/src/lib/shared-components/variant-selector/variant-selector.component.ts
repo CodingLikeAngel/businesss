@@ -107,6 +107,8 @@ export class VariantSelectorComponent implements OnInit {
     { id: 'newsletter', label: 'Newsletter Section' },
     { id: 'breadcrumbs', label: 'Breadcrumbs' },
     { id: 'steps', label: 'Steps Section' },
+    { id: 'features', label: 'Features Section' },
+    { id: 'stats', label: 'Stats Section' },
   ];
 
   variantOptions: InputOption[] = this.variants.map((variant) => ({

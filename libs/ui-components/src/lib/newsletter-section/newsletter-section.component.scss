@@ -1,5 +1,9 @@
 
+@use '../styles/mixins' as shared;
+
 .newsletter-section {
+  @include shared.apply-all-variants('');
+
   padding: 4rem 1.5rem;
   background: linear-gradient(135deg, var(--primary-color, #3b82f6) 0%, var(--secondary-color, #8b5cf6) 100%);
   color: white;
@@ -8,17 +12,6 @@
   max-width: 1200px;
   position: relative;
   overflow: hidden;
-
-  &.glass {
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255,255,255,0.2);
-  }
-
-  &.dark {
-      background: #1f2937;
-      border: 1px solid #374151;
-  }
 
   // Background decoration (optional)
   &::before {

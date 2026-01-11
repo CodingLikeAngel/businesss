@@ -1,1 +1,7 @@
+@use '../../styles/mixins' as shared;
+
 @use './styles/index' as *;
+
+.btn {
+  @include shared.apply-all-variants('btn-');
+}

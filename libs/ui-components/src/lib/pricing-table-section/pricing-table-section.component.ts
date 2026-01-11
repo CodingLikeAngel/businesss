@@ -31,6 +31,6 @@ export class UIPricingTableSectionComponent {
   }
 
   get tableVariant(): any {
-      return this.variant === 'glass' ? 'glass' : 'secondary';
+      return this.variant;
   }
 }

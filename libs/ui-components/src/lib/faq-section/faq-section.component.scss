@@ -1,6 +1,8 @@
 @import 'libs/shared-components/src/lib/shared-components/variant-selector/variables.scss';
+@use '../styles/mixins' as shared;
 
 .faq-container {
+  @include shared.apply-all-variants('faq--');
   padding: 100px 20px;
   background-color: #0b1121;
   color: white;

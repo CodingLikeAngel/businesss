@@ -1,6 +1,10 @@
+
+@use '../styles/mixins' as shared;
+
 @import 'libs/shared-components/src/lib/shared-components/variant-selector/variables.scss';
 
 .pricing-container {
+  @include shared.apply-all-variants('pricing--');
   padding: 100px 20px;
   background-color: #111827;
   color: white;

@@ -1,34 +1,13 @@
 
+@use '../styles/mixins' as shared;
+
 .contact-section {
+  @include shared.apply-all-variants('variant-');
+  
   padding: 4rem 1.5rem;
   background-color: var(--bg-primary, #ffffff);
   color: var(--text-primary, #1a1a1a);
   transition: all 0.3s ease;
-
-  &.variant-glass {
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 1rem;
-    color: white;
-  }
-
-  &.variant-dark {
-    background-color: #1a1a1a;
-    color: #ffffff;
-  }
-
-  // Add more variants here based on your 'variants' model (e.g. retro, neon, etc.)
-  &.variant-neon {
-      background: #0f172a;
-      color: #00ff9d;
-      border: 1px solid #00ff9d;
-      box-shadow: 0 0 15px rgba(0, 255, 157, 0.2);
-
-      .title {
-          text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
-      }
-  }
 
   .container {
     max-width: 800px;

@@ -29,13 +29,13 @@
 
       <!-- FEATURES -->
       <lib-ui-components-features-section *ngSwitchCase="'features'"
-        [variant]="'glass'"
+        [variant]="getVariant('features')"
         [id]="section.id"
       ></lib-ui-components-features-section>
 
       <!-- STATS -->
       <lib-ui-components-stats-section *ngSwitchCase="'stats'"
-        [variant]="'glass'"
+        [variant]="getVariant('stats')"
         [id]="section.id"
         [stats]="statsConfig.items"
       ></lib-ui-components-stats-section>
@@ -122,14 +122,14 @@
 
       <!-- TESTIMONIALS -->
       <lib-ui-components-testimonials-section *ngSwitchCase="'testimonials'"
-        [variant]="'glass'"
+        [variant]="getVariant('testimonials')"
         [id]="section.id"
         [testimonials]="testimonialsConfig.items"
       ></lib-ui-components-testimonials-section>
 
       <!-- PRICING -->
       <lib-ui-components-pricing-table-section *ngSwitchCase="'pricing'"
-        [variant]="'glass'"
+        [variant]="getVariant('pricing')"
         [id]="section.id"
         [columns]="pricingConfig.columns"
         [rows]="pricingConfig.rows"
@@ -149,7 +149,7 @@
       <!-- FAQ -->
       <!-- FAQ -->
       <lib-ui-components-faq-section *ngSwitchCase="'faq'"
-        [variant]="'glass'"
+        [variant]="getVariant('faq')"
         [id]="section.id"
         [items]="faqConfig.items"
       ></lib-ui-components-faq-section>
@@ -157,7 +157,7 @@
       <!-- GALLERY -->
       <!-- GALLERY -->
       <lib-ui-components-gallery-section *ngSwitchCase="'gallery'"
-        [variant]="'glass'"
+        [variant]="getVariant('gallery')"
         [id]="section.id"
         [images]="galleryConfig.images"
       ></lib-ui-components-gallery-section>

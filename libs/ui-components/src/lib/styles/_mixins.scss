@@ -1,0 +1,105 @@
+
+// Basic Colors (You can import variables here if available)
+$neon-cyan: #22d3ee;
+$neon-pink: #ec4899;
+$dark-bg: #111827;
+$glass-border: rgba(255, 255, 255, 0.2);
+
+@mixin variant-glass {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid $glass-border;
+  color: #fff;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+}
+
+@mixin variant-neon {
+  background: #0f172a; // Dark slate
+  color: #00ff9d;
+  border: 1px solid #00ff9d;
+  box-shadow: 0 0 10px rgba(0, 255, 157, 0.3), inset 0 0 5px rgba(0, 255, 157, 0.1);
+  text-shadow: 0 0 5px rgba(0, 255, 157, 0.5);
+  
+  &:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 157, 0.5), inset 0 0 10px rgba(0, 255, 157, 0.2);
+  }
+}
+
+@mixin variant-cyberpunk {
+  background: #fceea7; // Yellowish
+  color: #000;
+  border: 2px solid #000;
+  box-shadow: 4px 4px 0px #000;
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
+  
+  &:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #000;
+  }
+}
+
+@mixin variant-retro {
+  background: #fdf6e3; // Solarized light
+  color: #657b83;
+  border: 2px solid #b58900;
+  box-shadow: 3px 3px 0px #b58900;
+  font-family: 'Courier New', Courier, monospace;
+}
+
+@mixin variant-dark {
+  background: #1f2937;
+  color: #f3f4f6;
+  border: 1px solid #374151;
+}
+
+@mixin variant-primary {
+  background: #2563eb;
+  color: white;
+  border: 1px solid transparent;
+  &:hover { background: #1d4ed8; }
+}
+
+@mixin variant-secondary {
+  background: #4b5563;
+  color: white;
+  border: 1px solid transparent;
+  &:hover { background: #374151; }
+}
+
+@mixin variant-outline {
+  background: transparent;
+  color: currentColor;
+  border: 1px solid currentColor;
+}
+
+@mixin variant-ghost {
+  background: transparent;
+  color: currentColor;
+  border: 1px solid transparent;
+  &:hover { background: rgba(0,0,0,0.05); }
+}
+
+@mixin apply-all-variants($prefix: 'variant-') {
+    &.#{$prefix}primary { @include variant-primary; }
+    &.#{$prefix}secondary { @include variant-secondary; }
+    &.#{$prefix}outline { @include variant-outline; }
+    &.#{$prefix}ghost { @include variant-ghost; }
+    &.#{$prefix}glass { @include variant-glass; }
+    &.#{$prefix}neon { @include variant-neon; }
+    &.#{$prefix}cyberpunk { @include variant-cyberpunk; }
+    &.#{$prefix}retro { @include variant-retro; }
+    &.#{$prefix}dark { @include variant-dark; }
+}
+
+@mixin apply-variants-to-child($child, $prefix: 'variant-') {
+    &.#{$prefix}primary #{$child} { @include variant-primary; }
+    &.#{$prefix}secondary #{$child} { @include variant-secondary; }
+    &.#{$prefix}outline #{$child} { @include variant-outline; }
+    &.#{$prefix}ghost #{$child} { @include variant-ghost; }
+    &.#{$prefix}glass #{$child} { @include variant-glass; }
+    &.#{$prefix}neon #{$child} { @include variant-neon; }
+    &.#{$prefix}cyberpunk #{$child} { @include variant-cyberpunk; }
+    &.#{$prefix}retro #{$child} { @include variant-retro; }
+    &.#{$prefix}dark #{$child} { @include variant-dark; }
+}
