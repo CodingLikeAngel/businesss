@@ -1,0 +1,19 @@
+<section [class]="containerClasses">
+  <div class="pricing-inner">
+    <div class="header-content">
+      <h2 class="title">{{ title }}</h2>
+      <p class="subtitle">{{ subtitle }}</p>
+    </div>
+
+    <div class="table-wrapper">
+      <lib-ui-components-table
+        [variant]="tableVariant"
+        [columns]="columns"
+        [rows]="rows"
+        [dark]="true"
+        [size]="'lg'"
+        [rounded]="'md'"
+      ></lib-ui-components-table>
+    </div>
+  </div>
+</section>

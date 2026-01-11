@@ -29,9 +29,16 @@
 
       <!-- FEATURES -->
       <lib-ui-components-features-section *ngSwitchCase="'features'"
-        [variant]="getVariant('features')"
+        [variant]="'glass'"
         [id]="section.id"
       ></lib-ui-components-features-section>
+
+      <!-- STATS -->
+      <lib-ui-components-stats-section *ngSwitchCase="'stats'"
+        [variant]="'glass'"
+        [id]="section.id"
+        [stats]="statsConfig.items"
+      ></lib-ui-components-stats-section>
 
       <!-- BUBBLE -->
       <lib-bubble-animation *ngSwitchCase="'bubble'"
@@ -114,35 +121,19 @@
       </section>
 
       <!-- TESTIMONIALS -->
-      <section *ngSwitchCase="'testimonials'" [id]="section.id" class="relative z-20 py-12">
-        <div class="container mx-auto px-6 max-w-7xl">
-          <lib-ui-components-title
-            [level]="titleConfig.level"
-            [text]="'Lo que Dicen Nuestros Clientes'"
-            [variant]="getVariant('title')"
-            [align]="titleConfig.align"
-            class="mb-8"
-          ></lib-ui-components-title>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <lib-testimonials-card
-              *ngFor="let testimonial of testimonialsConfig.items; trackBy: trackByTestimonialId"
-              [testimonial]="testimonial"
-              [variant]="getVariant('testimonials')"
-            ></lib-testimonials-card>
-          </div>
-        </div>
-      </section>
+      <lib-ui-components-testimonials-section *ngSwitchCase="'testimonials'"
+        [variant]="'glass'"
+        [id]="section.id"
+        [testimonials]="testimonialsConfig.items"
+      ></lib-ui-components-testimonials-section>
 
       <!-- PRICING -->
-      <section *ngSwitchCase="'pricing'" [id]="section.id" class="relative z-20 py-12">
-        <div class="container mx-auto px-6 max-w-7xl">
-          <lib-pricing-section
-            [variant]="getVariant('pricing')"
-            [priceColumns]="pricingConfig.columns"
-            [priceRows]="pricingConfig.rows"
-          ></lib-pricing-section>
-        </div>
-      </section>
+      <lib-ui-components-pricing-table-section *ngSwitchCase="'pricing'"
+        [variant]="'glass'"
+        [id]="section.id"
+        [columns]="pricingConfig.columns"
+        [rows]="pricingConfig.rows"
+      ></lib-ui-components-pricing-table-section>
 
       <!-- PROMOTIONS -->
       <section *ngSwitchCase="'promotions'" [id]="section.id" class="relative z-20 py-12">
@@ -156,24 +147,20 @@
       </section>
 
       <!-- FAQ -->
-      <section *ngSwitchCase="'faq'" [id]="section.id" class="relative z-20 py-12">
-        <div class="container mx-auto px-6 max-w-7xl">
-          <lib-faq-section
-            [variant]="getVariant('faq')"
-            [faqItems]="faqConfig.items"
-          ></lib-faq-section>
-        </div>
-      </section>
+      <!-- FAQ -->
+      <lib-ui-components-faq-section *ngSwitchCase="'faq'"
+        [variant]="'glass'"
+        [id]="section.id"
+        [items]="faqConfig.items"
+      ></lib-ui-components-faq-section>
 
       <!-- GALLERY -->
-      <section *ngSwitchCase="'gallery'" [id]="section.id" class="relative z-20 py-12">
-        <div class="container mx-auto px-6 max-w-7xl">
-          <lib-gallery-section
-            [variant]="getVariant('gallery')"
-            [images]="galleryConfig.images"
-          ></lib-gallery-section>
-        </div>
-      </section>
+      <!-- GALLERY -->
+      <lib-ui-components-gallery-section *ngSwitchCase="'gallery'"
+        [variant]="'glass'"
+        [id]="section.id"
+        [images]="galleryConfig.images"
+      ></lib-ui-components-gallery-section>
 
       <!-- CONTACT -->
       <section *ngSwitchCase="'contact'" [id]="section.id" class="relative z-20 py-16 mb-16">

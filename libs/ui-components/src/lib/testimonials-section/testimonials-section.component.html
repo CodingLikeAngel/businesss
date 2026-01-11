@@ -1,0 +1,26 @@
+<section [class]="containerClasses">
+  <div class="testimonials-inner">
+    <div class="header-content">
+      <h2 class="title">{{ title }}</h2>
+      <div class="title-underline"></div>
+      <p class="subtitle">{{ subtitle }}</p>
+    </div>
+
+    <div class="testimonials-grid">
+      <div *ngFor="let item of testimonials; let i = index" class="testimonial-card" [style.animation-delay]="i * 0.15 + 's'">
+        <div class="quote-icon">“</div>
+        <p class="quote-text">{{ item.quote }}</p>
+        
+        <div class="author-info">
+          <div class="avatar-wrapper" *ngIf="item.avatar">
+            <img [src]="item.avatar" [alt]="item.author" class="avatar">
+          </div>
+          <div class="author-details">
+            <h4 class="author-name">{{ item.author }}</h4>
+            <span class="author-role" *ngIf="item.role">{{ item.role }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

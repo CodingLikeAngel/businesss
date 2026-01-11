@@ -15,7 +15,12 @@ import {
   UICardComponent,
   UINavBarComponent,
   UITabsComponent,
-  UIFeaturesSectionComponent
+  UIFeaturesSectionComponent,
+  UIStatsSectionComponent,
+  UITestimonialsSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent
 } from '@negocio/ui-components';
 import { Product, Testimonial, PageSection, VariantService } from '@negocio/shared-components';
 import { FaqSectionComponent } from '../../../components/faq-section/faq-section.component';
@@ -47,7 +52,12 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
     UICardAnimatedComponent,
     UICardComponent,
     UITabsComponent,
-    UIFeaturesSectionComponent
+    UIFeaturesSectionComponent,
+    UIStatsSectionComponent,
+    UITestimonialsSectionComponent,
+    UIFaqSectionComponent,
+    UIGallerySectionComponent,
+    UIPricingTableSectionComponent
   ],
 })
 export class HomeDesktopFeatureComponent extends BaseHomeFeatureComponent implements OnInit {

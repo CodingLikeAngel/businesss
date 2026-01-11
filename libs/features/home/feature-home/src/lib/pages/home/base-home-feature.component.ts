@@ -18,6 +18,7 @@ import {
   ProductsConfig,
   TestimonialsConfig,
   Testimonial,
+  StatsConfig,
 } from '@negocio/shared-components';
 import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
 
@@ -48,6 +49,7 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
   galleryConfig: GalleryConfig;
   productsConfig: ProductsConfig;
   testimonialsConfig: TestimonialsConfig;
+  statsConfig: StatsConfig;
 
   tabsConfig: any[] = [
     { label: 'Servicios', sectionId: 'servicios', icon: '🛠️' },
@@ -82,6 +84,7 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
     this.galleryConfig = this.variantService.getCurrentGalleryConfig();
     this.productsConfig = this.variantService.getCurrentProductsConfig();
     this.testimonialsConfig = this.variantService.getCurrentTestimonialsConfig();
+    this.statsConfig = this.variantService.getCurrentStatsConfig();
 
     this.variantSub = this.variantService.componentVariants$.subscribe((variants) => {
       this.componentVariants = { ...variants };
@@ -102,7 +105,8 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
       this.variantService.promotionsConfig$.subscribe((config) => (this.promotionsConfig = config)),
       this.variantService.galleryConfig$.subscribe((config) => (this.galleryConfig = config)),
       this.variantService.productsConfig$.subscribe((config) => (this.productsConfig = config)),
-      this.variantService.testimonialsConfig$.subscribe((config) => (this.testimonialsConfig = config))
+      this.variantService.testimonialsConfig$.subscribe((config) => (this.testimonialsConfig = config)),
+      this.variantService.statsConfig$.subscribe((config) => (this.statsConfig = config))
     );
   }
 

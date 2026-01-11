@@ -44,6 +44,12 @@ export * from './lib/animations/forest/forest-animation.component';
 export * from './lib/animations/water/water-animation.component';
 export * from './lib/bubble/bubble-animation.component';
 
+export * from './lib/stats-section/stats-section.component';
+export * from './lib/testimonials-section/testimonials-section.component';
+export * from './lib/pricing-table-section/pricing-table-section.component';
+export * from './lib/faq-section/faq-section.component';
+export * from './lib/gallery-section/gallery-section.component';
+
 // Models
 export * from './lib/models/ui-components-data.model';
 

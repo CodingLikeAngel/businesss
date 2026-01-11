@@ -183,13 +183,25 @@ export interface Product {
   price: string;
 }
 
+
+export interface StatItem {
+  icon: string;
+  label: string;
+  value: string | number;
+  description?: string;
+}
+
+export interface StatsConfig {
+  items: StatItem[];
+}
+
 export interface ProductsConfig {
   items: Product[];
 }
 
 export interface PageSection {
   id: string;
-  type: 'hero' | 'services' | 'products' | 'testimonials' | 'pricing' | 'promotions' | 'faq' | 'gallery' | 'contact' | 'bubble' | 'features';
+  type: 'hero' | 'services' | 'products' | 'testimonials' | 'pricing' | 'promotions' | 'faq' | 'gallery' | 'contact' | 'bubble' | 'features' | 'stats';
   label: string; // User friendly name
   visible: boolean;
 }
@@ -509,9 +521,19 @@ export class VariantService {
     ],
   });
 
+  private statsConfigSubject = new BehaviorSubject<StatsConfig>({
+    items: [
+      { icon: '🚀', label: 'Velocidad', value: '0.8s', description: 'Tiempo de carga' },
+      { icon: '🔒', label: 'Seguridad', value: '99.9%', description: 'Uptime' },
+      { icon: '📈', label: 'Conversiones', value: '12%', description: 'Tasa de conversión' },
+      { icon: '👥', label: 'Usuarios', value: '5k+', description: 'Visitantes mensuales' }
+    ]
+  });
+
   private sectionsSubject = new BehaviorSubject<PageSection[]>([
     { id: 'sec_hero', type: 'hero', label: 'Portada Hero', visible: true },
     { id: 'sec_features', type: 'features', label: 'Características Premium', visible: true },
+    { id: 'sec_stats', type: 'stats', label: 'Métricas (Stats)', visible: true },
     { id: 'sec_bubble', type: 'bubble', label: 'Efecto Burbujas', visible: true },
     { id: 'sec_services', type: 'services', label: 'Servicios', visible: true },
     { id: 'sec_products', type: 'products', label: 'Módulos/Productos', visible: true },
@@ -523,6 +545,7 @@ export class VariantService {
     { id: 'sec_contact', type: 'contact', label: 'Contacto y Formulario', visible: true },
   ]);
   sections$ = this.sectionsSubject.asObservable();
+  statsConfig$ = this.statsConfigSubject.asObservable();
 
 
   
@@ -613,6 +636,16 @@ export class VariantService {
   }
 
   
+
+  setStatsConfig(config: Partial<StatsConfig>) {
+    const current = this.statsConfigSubject.getValue();
+    this.statsConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
+  }
+
+  getCurrentStatsConfig(): StatsConfig {
+    return this.statsConfigSubject.getValue();
+  }
 
   setHeroConfig(config: Partial<HeroConfig>) {
     const current = this.heroConfigSubject.getValue();
