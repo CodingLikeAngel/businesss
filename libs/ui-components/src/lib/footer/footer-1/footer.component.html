@@ -1,4 +1,4 @@
-<footer [ngStyle]="customStyles" [class]="footerClasses" role="contentinfo">
+<footer [ngStyle]="customStyles" [ngClass]="footerClasses" role="contentinfo">
   <!-- Partículas de fondo -->
   <div *ngIf="showParticles" class="particle-container">
     <div class="particle" [ngClass]="dark ? 'dark' : ''"></div>

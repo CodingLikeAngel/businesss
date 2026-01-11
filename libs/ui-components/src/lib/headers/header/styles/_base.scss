@@ -34,16 +34,12 @@ $color-light: #ffffff;
     color: rgb(17, 24, 39);
     border: none;
 
+    /* 
     &[style][class*="header-"] {
-      background: var(--header-bg, rgba(255, 255, 255, 0.9)) !important;
-      color: var(--header-color, rgb(17, 24, 39)) !important;
-      border: var(--header-border, none) !important;
-      box-shadow: var(--header-shadow, 0 2px 10px rgba(0, 0, 0, 0.1)) !important;
-      &:hover {
-        background: var(--header-hover-bg, var(--header-bg, rgba(255, 255, 255, 0.9))) !important;
-        box-shadow: var(--header-hover-shadow, var(--header-shadow, 0 2px 10px rgba(0, 0, 0, 0.1))) !important;
-      }
+      // Logic removed to allow variants to apply. 
+      // If custom variables are needed, they should be applied via specific class overrides or handled differently.
     }
+    */
 
     .header-content {
       display: flex;

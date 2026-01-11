@@ -1,29 +1,9 @@
 @use './styles/index' as *;
 
-/* Base header styles */
-.header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1rem 2rem;
-  background: var(--header-bg, #1f2937);
-  color: var(--header-color, #f9fafb);
-  border-bottom: 1px solid var(--header-border, transparent);
-  box-shadow: var(--header-shadow, none);
-  transition: all 0.3s ease;
-}
-
-.header--glass {
-  background: rgba(255, 255, 255, 0.04) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
-}
-
-.align-left { justify-content: flex-start; }
-.align-center { justify-content: center; }
-.align-right { justify-content: flex-end; }
+/* 
+  Styles are imported from ./styles/index. 
+  Specific component-only styles should go here if not covered by the system.
+*/
 
 .menu-dropdown {
   position: absolute;

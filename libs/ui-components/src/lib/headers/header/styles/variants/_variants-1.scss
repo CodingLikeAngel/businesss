@@ -1,159 +1,171 @@
-
 @use "../variables" as var;
-
 @use "sass:color";
+
+// --- Premium Variants ---
+
+// 1. Primary: Bold, professional, corporate yet modern
 .header-primary {
-    background: linear-gradient(135deg, #ff304f, #1e90ff 50%, #ffd700);
-    color: #ffffff;
-    border-bottom: 5px solid #ffd700;
-    box-shadow: 0 0 25px rgba(255, 215, 0, 0.7), inset 0 0 15px rgba(255, 48, 79, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(135deg, color.adjust(#ff304f, $lightness: -20%), color.adjust(#1e90ff, $lightness: -20%), color.adjust(#ffd700, $lightness: -20%));
-      border-bottom-color: color.adjust(#ffd700, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
+  background: linear-gradient(135deg, #2563eb, #1e40af);
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.25);
+  font-family: system-ui, -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif; 
+  
+  .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+  
+  &.dark {
+    background: linear-gradient(135deg, #1e3a8a, #172554);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+  }
+}
+
+// 2. Secondary: Clean, neutral, high contrast
+.header-secondary {
+  background: #ffffff;
+  color: #1f2937;
+  border-bottom: 2px solid #e5e7eb;
+  font-family: system-ui, -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif;
+  
+  .menu-toggle .hamburger-icon .bar { background: #1f2937 !important; }
+
+  &.dark {
+    background: #1f2937;
+    color: #f3f4f6;
+    border-bottom: 2px solid #374151;
+    .menu-toggle .hamburger-icon .bar { background: #f3f4f6 !important; }
+  }
+}
+
+// 3. Glass: The star of the show. Frosted, premium.
+.header-glass {
+  background: rgba(255, 255, 255, 0.7); // More opaque for visibility
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
+  color: #111827;
+  font-family: system-ui, -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif;
+  
+  // Floating effect if desired, or stick to top
+  // border-radius: 0 0 1rem 1rem; 
+
+  .menu-toggle .hamburger-icon .bar { background: #111827 !important; }
+
+  &.dark {
+    background: rgba(17, 24, 39, 0.7);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f9fafb;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    .menu-toggle .hamburger-icon .bar { background: #f9fafb !important; }
+  }
+}
+
+// 4. Neon/Cyberpunk: Glowy, dark, tech
+.header-neon {
+  background: #09090b;
+  border-bottom: 2px solid #06b6d4;
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.4), inset 0 -1px 0 rgba(6, 182, 212, 0.2);
+  color: #22d3ee;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 1px;
+  
+  .menu-toggle .hamburger-icon .bar { 
+    background: #22d3ee !important; 
+    box-shadow: 0 0 5px #22d3ee;
+  }
+}
+
+.header-cyberpunk {
+  background: linear-gradient(90deg, #1a1a2e, #16213e);
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 98% 100%, 0 100%);
+  border-bottom: 2px solid #facc15;
+  color: #facc15;
+  text-transform: uppercase;
+  
+  .menu-toggle .hamburger-icon .bar { background: #facc15 !important; }
+}
+
+// 5. Minimal/Ghost: Extremely clean
+.header-minimal-white, .header-outline {
+  background: transparent;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  color: #1f2937;
+  
+  &.dark {
+    background: transparent;
+    color: #f3f4f6;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    .menu-toggle .hamburger-icon .bar { background: #f3f4f6 !important; }
+  }
+}
+
+.header-ghost {
+  background: transparent;
+  color: #1f2937;
+  box-shadow: none;
+  
+  &:hover {
+    background: rgba(255,255,255,0.9);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
   }
 
-  .header-secondary {
-    background: linear-gradient(135deg, #4b5563, #111827 60%, #10b981);
-    color: #ffffff;
-    border-bottom: 4px solid #10b981;
-    box-shadow: 0 0 20px rgba(16, 185, 129, 0.7), inset 0 0 10px rgba(16, 185, 129, 0.3);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(135deg, color.adjust(#4b5563, $lightness: -20%), color.adjust(#111827, $lightness: -20%), color.adjust(#10b981, $lightness: -20%));
-      border-bottom-color: color.adjust(#10b981, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
+  &.dark {
+    color: #f3f4f6;
+    .menu-toggle .hamburger-icon .bar { background: #f3f4f6 !important; }
+    &:hover {
+      background: rgba(0,0,0,0.8);
     }
   }
+}
 
-  .header-outline {
-    background: #ffffff;
-    border: 4px double #3b82f6;
-    color: #1f2937;
-    box-shadow: inset 0 0 12px rgba(59, 130, 246, 0.8), 0 0 25px rgba(59, 130, 246, 0.6);
-    .menu-toggle .hamburger-icon .bar { background: #1f2937 !important; }
-    &.dark {
-      background: #1f2937;
-      border-color: #3b82f6;
-      color: #ffffff;
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
+// 6. Retro: Fun, pixelated or 80s
+.header-retro {
+  background: #2a2a2a;
+  border-bottom: 4px solid #ef4444;
+  color: #ef4444;
+  font-family: 'Courier New', monospace;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #3b82f6;
   }
+  
+  &.dark {
+     background: #111;
+     border-bottom-color: #ff00ff;
+     color: #ff00ff;
+     &::after {
+        background: #00ffff;
+     }
+  }
+}
 
-  .header-ghost {
-    background: rgba(75, 85, 99, 0.3);
-    backdrop-filter: blur(15px) saturate(200%);
-    color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(75, 85, 99, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.2);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: rgba(75, 85, 99, 0.5);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+// 7. Gradient: Smooth aesthetic
+.header-gradient {
+  background: linear-gradient(to right, #ec4899, #8b5cf6);
+  color: white;
+  border: none;
+  .menu-toggle .hamburger-icon .bar { background: white !important; }
+}
 
-  .header-link {
-    background: linear-gradient(90deg, #22d3ee, #0ea5e9 50%, #ffffff);
-    color: #ffffff;
-    border-radius: 18px;
-    box-shadow: 0 0 25px rgba(34, 211, 238, 0.8), inset 0 0 15px rgba(34, 211, 238, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(90deg, color.adjust(#22d3ee, $lightness: -20%), color.adjust(#0ea5e9, $lightness: -20%), color.adjust(#ffffff, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
+// 8. Floating/Bubble
+.header-bubble {
+  margin-top: 1rem;
+  margin-left: 1rem;
+  margin-right: 1rem;
+  border-radius: 9999px;
+  background: white;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+  width: calc(100% - 2rem);
+  
+  &.dark {
+    background: #1f2937;
+    color: white;
+    .menu-toggle .hamburger-icon .bar { background: white !important; }
   }
-
-  .header-neon {
-    background: radial-gradient(ellipse at center, #f97316, #dc2626 60%, #000);
-    color: #ffffff;
-    box-shadow: 0 0 30px rgba(217, 119, 6, 0.9), inset 0 0 15px rgba(217, 119, 6, 0.5);
-    border-bottom: 4px solid #f97316;
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: radial-gradient(ellipse at center, color.adjust(#f97316, $lightness: -20%), color.adjust(#dc2626, $lightness: -20%), color.adjust(#000, $lightness: -20%));
-      border-bottom-color: color.adjust(#f97316, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-cyberpunk {
-    background: linear-gradient(135deg, #eab308, #9333ea 60%, #1e1b4b);
-    color: #ffffff;
-    border: 3px dashed #eab308;
-    box-shadow: 0 0 25px rgba(234, 179, 8, 0.7), inset 0 0 12px rgba(147, 51, 234, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(135deg, color.adjust(#eab308, $lightness: -20%), color.adjust(#9333ea, $lightness: -20%), color.adjust(#1e1b4b, $lightness: -20%));
-      border-color: color.adjust(#eab308, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-gradient {
-    background: linear-gradient(90deg, #f87171, #facc15 40%, #22c55e);
-    color: #ffffff;
-    border: 3px dotted #ffffff;
-    box-shadow: 0 0 20px rgba(255, 255, 255, 0.6), inset 0 0 10px rgba(250, 204, 21, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(90deg, color.adjust(#f87171, $lightness: -20%), color.adjust(#facc15, $lightness: -20%), color.adjust(#22c55e, $lightness: -20%));
-      border-color: color.adjust(#ffffff, $lightness: -20%);
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-glass {
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(18px) saturate(200%);
-    color: #10b981;
-    border: 3px solid rgba(16, 185, 129, 0.8);
-    box-shadow: 0 0 25px rgba(16, 185, 129, 0.7), inset 0 0 12px rgba(16, 185, 129, 0.3);
-    border-radius: 15px;
-    .menu-toggle .hamburger-icon .bar { background: #10b981 !important; }
-    &.dark {
-      background: rgba(16, 185, 129, 0.3);
-      border-color: rgba(16, 185, 129, 0.8);
-      color: #ffffff;
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-retro {
-    background: linear-gradient(45deg, #ef4444, #3b82f6 60%, #000);
-    color: #ffffff;
-    border: 4px solid #000000;
-    box-shadow: 0 0 20px rgba(59, 130, 246, 0.6), inset 0 0 10px rgba(239, 68, 68, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(45deg, color.adjust(#ef4444, $lightness: -20%), color.adjust(#3b82f6, $lightness: -20%), color.adjust(#000, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-pulse-gradient {
-    background: linear-gradient(120deg, #f43f5e, #10b981 50%, #eab308);
-    color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 0 25px rgba(234, 179, 8, 0.7), inset 0 0 15px rgba(244, 63, 94, 0.4);
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: linear-gradient(120deg, color.adjust(#f43f5e, $lightness: -20%), color.adjust(#10b981, $lightness: -20%), color.adjust(#eab308, $lightness: -20%));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
-
-  .header-holo {
-    background: radial-gradient(ellipse at center, #60a5fa, rgba(96, 165, 250, 0.5));
-    color: #ffffff;
-    box-shadow: 0 0 30px rgba(96, 165, 250, 0.8), inset 0 0 12px rgba(96, 165, 250, 0.4);
-    border-radius: 10px;
-    .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    &.dark {
-      background: radial-gradient(ellipse at center, color.adjust(#60a5fa, $lightness: -20%), rgba(96, 165, 250, 0.3));
-      .menu-toggle .hamburger-icon .bar { background: #ffffff !important; }
-    }
-  }
+}
