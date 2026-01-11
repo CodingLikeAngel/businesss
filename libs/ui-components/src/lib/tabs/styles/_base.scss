@@ -1,22 +1,26 @@
 @use "sass:map";
 @use "./variables" as var;
 @use "sass:color";
+@use "../../styles/mixins" as shared;
 /* Removed external Google Fonts import to avoid network inlining during build */
 
 
 /* Base de pestañas con soporte para variables CSS */
 .tabs {
-    width: 100%;
-    padding: 1rem;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    transform-style: preserve-3d;
-    perspective: 1000px;
-    background: var(--tabs-bg, transparent);
-    color: var(--tabs-color, #ffffff);
-    box-shadow: var(--tabs-shadow, 0 4px 20px rgba(0, 0, 0, 0.25));
-  }
+  width: 100%;
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  background: var(--theme-bg, var(--tabs-bg, transparent));
+  color: var(--theme-color, var(--tabs-color, #ffffff));
+  box-shadow: var(--theme-shadow, var(--tabs-shadow, 0 4px 20px rgba(0, 0, 0, 0.25)));
+  border: var(--theme-border, none);
+
+  @include shared.apply-all-variants('variant-');
+}
   
   /* Lista de pestañas */
   .tabs-list {

@@ -35,7 +35,7 @@ $color-light: #ffffff;
     color: var(--theme-color, rgb(17, 24, 39));
     border: var(--theme-border, none);
 
-    @include shared.apply-all-variants('header-');
+    @include shared.apply-all-variants('variant-');
 
     /*
     &[style][class*="header-"] {
@@ -80,9 +80,10 @@ $color-light: #ffffff;
 
     &.dark,
     :where([data-theme="dark"]) & {
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-      color: rgb(209, 213, 219);
-      background: var(--header-bg, rgba(30, 30, 30, 0.9));
+      box-shadow: var(--theme-shadow, 0 2px 10px rgba(0, 0, 0, 0.3));
+      color: var(--theme-color, rgb(209, 213, 219));
+      background: var(--theme-bg, var(--header-bg, rgba(30, 30, 30, 0.9)));
+      border: var(--theme-border, none);
     }
 
     .menu-toggle {

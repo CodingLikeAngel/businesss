@@ -27,7 +27,7 @@
     &.list-rounded-md { border-radius: 0.375rem; }
     &.list-rounded-full { border-radius: 9999px; }
 
-    @include shared.apply-all-variants('list-');
+    @include shared.apply-all-variants('variant-');
   }
   
   .list-item {

@@ -530,6 +530,168 @@ $glass-border: rgba(255, 255, 255, 0.2);
   box-shadow: var(--theme-shadow);
 }
 
+@mixin variant-amber-glow {
+  --theme-bg: #f59e0b;
+  --theme-color: #1e293b;
+  --theme-border: 1px solid #f59e0b;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-minimal-white {
+  --theme-bg: #ffffff;
+  --theme-color: #111827;
+  --theme-border: 1px solid #d1d5db;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-hex-teal {
+  --theme-bg: #14b8a6;
+  --theme-color: #ffffff;
+  --theme-border: 1px solid #14b8a6;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+@mixin variant-purple-edge {
+  --theme-bg: #7c3aed;
+  --theme-color: #ffffff;
+  --theme-border: 1px solid #7c3aed;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  border-top: 2px solid #4f46e5;
+}
+
+@mixin variant-rose-radial {
+  --theme-bg: radial-gradient(circle, #f43f5e, #dc2626);
+  --theme-color: #ffffff;
+  --theme-border: none;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-yellow-pulse {
+  --theme-bg: #eab308;
+  --theme-color: #1e293b;
+  --theme-border: 1px solid #eab308;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-green-inset {
+  --theme-bg: #16a34a;
+  --theme-color: #ffffff;
+  --theme-border: 1px solid #16a34a;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+@mixin variant-blue-skew {
+  --theme-bg: #00A2FF;
+  --theme-color: #ffffff;
+  --theme-border: 1px solid #00A2FF;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  transform: skew(-10deg);
+}
+
+@mixin variant-orange-dash {
+  --theme-bg: #f97316;
+  --theme-color: #ffffff;
+  --theme-border: 1px dashed #f59e0b;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-indigo-dots {
+  --theme-bg: #4f46e5;
+  --theme-color: #06b6d4;
+  --theme-border: 1px solid #4f46e5;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  background-image: url('data:image/svg+xml,%3Csvg width="8" height="8" viewBox="0 0 8 8" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="4" cy="4" r="1" fill="rgba(6,182,212,0.5)" /%3E%3C/svg%3E');
+}
+
+@mixin variant-bubble {
+  --theme-bg: radial-gradient(circle, #FFD700, #00D26A);
+  --theme-color: #2D1B58;
+  --theme-border: 1px solid #00D26A;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  animation: bubble-float 2s ease-in-out infinite;
+}
+
+@mixin variant-electoon {
+  --theme-bg: #B362FF;
+  --theme-color: #FFF5D6;
+  --theme-border: 1px solid #FF6B9D;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-jungle {
+  --theme-bg: #00D26A;
+  --theme-color: #ffffff;
+  --theme-border: 1px solid #FF7B00;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-joycon {
+  --theme-bg: #E60012;
+  --theme-color: #ffffff;
+  --theme-border: 1px solid #111827;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  border-radius: 0.375rem 0.375rem 1rem 1rem;
+}
+
+@mixin variant-neomorph {
+  --theme-bg: #D4A017;
+  --theme-color: #1E3A5F;
+  --theme-border: none;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2), -2px -2px 4px rgba(255, 255, 255, 0.5);
+}
+
+@mixin variant-glitch {
+  --theme-bg: #1E3A5F;
+  --theme-color: #FFD700;
+  --theme-border: 1px solid #1E3A5F;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  animation: glitch-shift 2s infinite steps(5);
+}
+
+@mixin variant-portal {
+  --theme-bg: radial-gradient(circle, #B362FF, #2D1B58);
+  --theme-color: #FFF5D6;
+  --theme-border: 1px dashed #FFD700;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
 @mixin apply-all-variants($prefix: 'variant-') {
     &.#{$prefix}primary { @include variant-primary; }
     &.#{$prefix}secondary { @include variant-secondary; }
@@ -579,6 +741,23 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}hero { @include variant-hero; }
     &.#{$prefix}cloud { @include variant-cloud; }
     &.#{$prefix}plasma { @include variant-plasma; }
+    &.#{$prefix}amber-glow { @include variant-amber-glow; }
+    &.#{$prefix}minimal-white { @include variant-minimal-white; }
+    &.#{$prefix}hex-teal { @include variant-hex-teal; }
+    &.#{$prefix}purple-edge { @include variant-purple-edge; }
+    &.#{$prefix}rose-radial { @include variant-rose-radial; }
+    &.#{$prefix}yellow-pulse { @include variant-yellow-pulse; }
+    &.#{$prefix}green-inset { @include variant-green-inset; }
+    &.#{$prefix}blue-skew { @include variant-blue-skew; }
+    &.#{$prefix}orange-dash { @include variant-orange-dash; }
+    &.#{$prefix}indigo-dots { @include variant-indigo-dots; }
+    &.#{$prefix}bubble { @include variant-bubble; }
+    &.#{$prefix}electoon { @include variant-electoon; }
+    &.#{$prefix}jungle { @include variant-jungle; }
+    &.#{$prefix}joycon { @include variant-joycon; }
+    &.#{$prefix}neomorph { @include variant-neomorph; }
+    &.#{$prefix}glitch { @include variant-glitch; }
+    &.#{$prefix}portal { @include variant-portal; }
 
     // Alias
     &.#{$prefix}supermeatboy { @include variant-super-meat-boy; }
@@ -633,6 +812,23 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}hero #{$child} { @include variant-hero; }
     &.#{$prefix}cloud #{$child} { @include variant-cloud; }
     &.#{$prefix}plasma #{$child} { @include variant-plasma; }
+    &.#{$prefix}amber-glow #{$child} { @include variant-amber-glow; }
+    &.#{$prefix}minimal-white #{$child} { @include variant-minimal-white; }
+    &.#{$prefix}hex-teal #{$child} { @include variant-hex-teal; }
+    &.#{$prefix}purple-edge #{$child} { @include variant-purple-edge; }
+    &.#{$prefix}rose-radial #{$child} { @include variant-rose-radial; }
+    &.#{$prefix}yellow-pulse #{$child} { @include variant-yellow-pulse; }
+    &.#{$prefix}green-inset #{$child} { @include variant-green-inset; }
+    &.#{$prefix}blue-skew #{$child} { @include variant-blue-skew; }
+    &.#{$prefix}orange-dash #{$child} { @include variant-orange-dash; }
+    &.#{$prefix}indigo-dots #{$child} { @include variant-indigo-dots; }
+    &.#{$prefix}bubble #{$child} { @include variant-bubble; }
+    &.#{$prefix}electoon #{$child} { @include variant-electoon; }
+    &.#{$prefix}jungle #{$child} { @include variant-jungle; }
+    &.#{$prefix}joycon #{$child} { @include variant-joycon; }
+    &.#{$prefix}neomorph #{$child} { @include variant-neomorph; }
+    &.#{$prefix}glitch #{$child} { @include variant-glitch; }
+    &.#{$prefix}portal #{$child} { @include variant-portal; }
 
     // Alias
     &.#{$prefix}supermeatboy #{$child} { @include variant-super-meat-boy; }

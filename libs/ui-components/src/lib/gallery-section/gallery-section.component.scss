@@ -101,14 +101,7 @@
   }
 }
 
-// GLASS VARIANT
-.gallery--glass {
-  background: transparent;
-
-  .gallery-item {
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-}
+// Custom styles if needed
 
 @keyframes scaleIn {
   from { opacity: 0; transform: scale(0.9); }

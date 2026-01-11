@@ -19,7 +19,7 @@
   &.accordion-md { font-size: 16px; }
   &.accordion-lg { font-size: 18px; }
 
-  @include shared.apply-all-variants('accordion-');
+  @include shared.apply-all-variants('variant-');
   
   background: var(--theme-bg, var(--accordion-bg, #ffffff));
   color: var(--theme-color, var(--accordion-color, #000000));

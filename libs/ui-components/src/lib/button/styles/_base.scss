@@ -146,5 +146,5 @@ form {
     &:before { border-radius: 9999px; }
   }
 
-  @include shared.apply-all-variants('btn-');
+  @include shared.apply-all-variants('variant-');
 }

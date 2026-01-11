@@ -24,7 +24,7 @@
     box-shadow: var(--theme-shadow, 0 0 20px rgba(var.$color-gold, 0.7));
     backdrop-filter: var(--theme-backdrop, none);
 
-    @include shared.apply-all-variants('footer--');
+    @include shared.apply-all-variants('variant-');
 
     // Theme variable overrides for inner content
     .footer-title {
@@ -85,8 +85,10 @@
   
     &.dark {
       // No sobrescribir el fondo personalizado, sino oscurecerlo
-      background: var(--footer-bg, linear-gradient(180deg, rgba(#0f0823, 0.9), rgba(#0f0823, 0.7)));
-      color: var(--footer-color, var.$color-light);
+      background: var(--theme-bg, var(--footer-bg, linear-gradient(180deg, rgba(#0f0823, 0.9), rgba(#0f0823, 0.7))));
+      color: var(--theme-color, var(--footer-color, var.$color-light));
+      border-top: var(--theme-border, none);
+      box-shadow: var(--theme-shadow, none);
       
       // Usar un pseudo-elemento para oscurecer el fondo personalizado
       &::before {
