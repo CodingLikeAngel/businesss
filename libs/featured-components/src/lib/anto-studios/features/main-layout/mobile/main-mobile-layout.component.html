@@ -31,7 +31,7 @@
     <div *ngIf="activeTab === 'content'" >
       <!-- Header -->
       <lib-ui-components-header
-        [variant]="getVariant('header')"
+        [variant]="globalVariant"
         [align]="headerConfig.align"
         [dark]="headerConfig.dark"
         [title]="headerConfig.title"
@@ -43,7 +43,7 @@
       <!-- Navbar -->
       <div class="z-30">
         <lib-ui-components-nav-bar
-          [variant]="getVariant('navbar')"
+          [variant]="globalVariant"
           [logoText]="navBarConfig.logoText"
           [showMobileMenu]="navBarConfig.showMobileMenu"
           [isFixed]="navBarConfig.isFixed"
@@ -60,7 +60,7 @@
 
       <!-- Footer -->
       <lib-ui-components-footer
-        [variant]="footerConfig.variant"
+        [variant]="globalVariant"
         [dark]="footerConfig.dark"
         [showParticles]="footerConfig.showParticles"
         [title]="footerConfig.title"

@@ -5,7 +5,7 @@ import { variants } from '../../models/ui-components-data.model';
 
 export { variants as navBarVariants };
 export type DefaultNavBarVariant = typeof variants[number];
-export type NavBarVariant = DefaultNavBarVariant | 'default';
+export type NavBarVariant = string;
 
 export interface NavBarCustomStyles {
   '--nav-bg'?: string;
@@ -31,7 +31,7 @@ export interface NavLink {
 
 })
 export class UINavBarComponent implements OnInit, OnChanges {
-  @Input() variant: NavBarVariant = 'default';
+  @Input() variant: NavBarVariant = 'success';
   @Input() logoText = 'Foro León';
   @Input() navLinks: NavLink[] = [
     { label: 'Inicio', href: '#home', icon: '🏠' },

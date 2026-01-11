@@ -19,7 +19,7 @@
     transition: all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     transform-style: preserve-3d;
     perspective: 1000px;
-    background: var(--theme-bg, radial-gradient(circle at center, rgba(0, 0, 0, 0.85), rgba(20, 20, 20, 0.75)));
+    background: var(--theme-bg);
     backdrop-filter: blur(6px);
   
     // Variant application moved here and to the end for better override control

@@ -761,6 +761,7 @@ $glass-border: rgba(255, 255, 255, 0.2);
 
     // Alias
     &.#{$prefix}supermeatboy { @include variant-super-meat-boy; }
+    &.#{$prefix}default { @include variant-glass; }
 }
 
 @mixin apply-variants-to-child($child, $prefix: 'variant-') {
