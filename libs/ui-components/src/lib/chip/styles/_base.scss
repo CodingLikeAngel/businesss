@@ -8,8 +8,10 @@
 @use "sass:color";
 /* removed external Google Fonts import to avoid build-time inlining/network issues */
 
+@use "../../styles/mixins" as shared;
+
 .chip {
-  font-family: "Orbitron", sans-serif;
+  font-family: var(--theme-font, "Orbitron", sans-serif);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -23,14 +25,16 @@
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
   line-height: 1.2;
-  border: var(-chip-border, 2px solid rgba(255, 255, 255, 0.4));
-  background: var(-chip-bg, #0A0A14);
-  box-shadow: var(-chip-shadow, 0 4px 8px rgba(0, 0, 0, 0.3));
-  color: var(-chip-color, #E2E8F0);
+  border: var(--theme-border, var(-chip-border, 2px solid rgba(255, 255, 255, 0.4)));
+  background: var(--theme-bg, var(-chip-bg, #0A0A14));
+  box-shadow: var(--theme-shadow, var(-chip-shadow, 0 4px 8px rgba(0, 0, 0, 0.3)));
+  color: var(--theme-color, var(-chip-color, #E2E8F0));
   position: relative;
   overflow: hidden;
   transform: perspective(1000px) translateZ(0);
   transform-style: preserve-3d;
+
+  @include shared.apply-all-variants('chip-');
 
   &:hover:not(.chip-disabled) {
     transform: perspective(1000px) translateZ(10px) scale(1.05);
