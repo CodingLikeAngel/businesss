@@ -1,3 +1,5 @@
+@use "../../../../../../../../ui-components/src/lib/styles/mixins" as shared;
+
 /* Reutiliza los estilos de app.component.scss si son específicos para la división de pantalla */
 .min-h-screen {
     min-height: 100vh;
@@ -11,23 +13,23 @@ aside.overflow-y-auto {
   }
 
   &::-webkit-scrollbar-track {
-    background: #2d3748; /* Color del fondo del track, acorde con bg-gray-800 */
+    background: var(--theme-bg, #2d3748); /* Color del fondo del track */
     border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #f6e05e; /* Color del thumb, usando text-rayman-yellow */
+    background: var(--theme-accent, #f6e05e); /* Color del thumb */
     border-radius: 4px;
     transition: background 0.2s;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: #f4d03f; /* Color más claro al hover */
+    background: var(--theme-accent, #f4d03f); /* Color más claro al hover */
   }
 
   /* Firefox */
   scrollbar-width: thin; /* Hace el scrollbar más delgado */
-  scrollbar-color: #f6e05e #2d3748; /* thumb y track */
+  scrollbar-color: var(--theme-accent, #f6e05e) var(--theme-bg, #2d3748); /* thumb y track */
 }
 
 /* Opcional: Estilos globales para otros scrollbars */
@@ -39,21 +41,21 @@ aside.overflow-y-auto {
   }
 
   &::-webkit-scrollbar-track {
-    background: #2d3748;
+    background: var(--theme-bg, #2d3748);
   }
 
   &::-webkit-scrollbar-thumb {
-    background: #f6e05e;
+    background: var(--theme-accent, #f6e05e);
     border-radius: 4px;
   }
 
   &::-webkit-scrollbar-thumb:hover {
-    background: #f4d03f;
+    background: var(--theme-accent, #f4d03f);
   }
 
   /* Firefox */
   scrollbar-width: thin;
-  scrollbar-color: #f6e05e #2d3748;
+  scrollbar-color: var(--theme-accent, #f6e05e) var(--theme-bg, #2d3748);
 }
 
 
@@ -62,13 +64,16 @@ aside {
   width: 100%;
   max-width: 900px;
   min-width: 300px;
-  background: #1f2937;
+  background: var(--theme-bg, #1f2937);
   height: 100vh;
   position: sticky;
   top: 0;
   overflow-y: scroll;
   padding: 1.5rem;
-  border-right: 1px solid #4b5563;
+  border-right: var(--theme-border, 1px solid #4b5563);
+  color: var(--theme-color, #f3f4f6);
+
+  @include shared.apply-all-variants('variant-');
 }
 
 aside::-webkit-scrollbar {
@@ -76,22 +81,22 @@ aside::-webkit-scrollbar {
 }
 
 aside::-webkit-scrollbar-track {
-  background: #2d3748;
+  background: var(--theme-bg, #2d3748);
   border-radius: 4px;
 }
 
 aside::-webkit-scrollbar-thumb {
-  background: #f6e05e;
+  background: var(--theme-accent, #f6e05e);
   border-radius: 4px;
 }
 
 aside::-webkit-scrollbar-thumb:hover {
-  background: #f4d03f;
+  background: var(--theme-accent, #f4d03f);
 }
 
 aside {
   scrollbar-width: thin;
-  scrollbar-color: #f6e05e #2d3748;
+  scrollbar-color: var(--theme-accent, #f6e05e) var(--theme-bg, #2d3748);
 }
 
 main {

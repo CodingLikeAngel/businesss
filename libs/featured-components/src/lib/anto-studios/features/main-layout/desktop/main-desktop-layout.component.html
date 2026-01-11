@@ -1,6 +1,6 @@
-<div class="min-h-screen text-white flex flex-row">
+<div class="min-h-screen flex flex-row" [style.color]="globalVariant === 'default' ? '#fff' : 'var(--theme-color)'">
   <!-- Configurator Panel (Left) -->
-  <aside class="bg-gray-800 h-screen sticky top-0 overflow-y-scroll p-6 border-r border-gray-700">
+  <aside [ngClass]="['h-screen', 'sticky', 'top-0', 'overflow-y-scroll', 'p-6', 'border-r', 'variant-' + globalVariant]">
     <h2 class="text-2xl font-bold mb-4 text-rayman-yellow">Variant Configurator</h2>
     <lib-variant-selector></lib-variant-selector>
   </aside>
