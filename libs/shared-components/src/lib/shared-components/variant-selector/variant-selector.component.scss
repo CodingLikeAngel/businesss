@@ -101,7 +101,7 @@
     flex: 1;
     overflow-y: auto;
     padding: 2rem;
-    background: linear-gradient(135deg, rgba(20,20,20,0.4) 0%, rgba(13,17,23,0) 100%);
+    background: #0f172a; // Solid dark background for the editor content area
 
     .tab-content {
       animation: fadeIn 0.4s ease-out;
@@ -111,24 +111,25 @@
     }
 
     .config-group {
-      background: rgba(255, 255, 255, 0.02);
-      padding: 2rem;
-      border-radius: 24px;
-      border: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(15, 23, 42, 0.4); // Darker, more solid background
+      padding: 1.5rem;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
       
       h3 {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         font-weight: 800;
-        color: #f8fafc; // Brighter white/slate
+        color: #ffffff;
         text-transform: uppercase;
         letter-spacing: 0.05em;
         margin-bottom: 0.5rem;
       }
       .helper-text {
-        font-size: 0.8rem;
-        color: #94a3b8; // Slightly dimmed but legible
-        margin-bottom: 1rem;
-        line-height: 1.4;
+        font-size: 0.75rem;
+        color: #94a3b8;
+        margin-bottom: 1.25rem;
+        line-height: 1.5;
       }
     }
   }

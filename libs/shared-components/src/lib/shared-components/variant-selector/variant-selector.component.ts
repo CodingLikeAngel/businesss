@@ -36,7 +36,7 @@ export class VariantSelectorComponent implements OnInit {
     ...new Set([...footerVariants, ...bubbleVariants, ...cardRutasVariants, ...titleVariants, ...variants]),
   ];
   globalVariant: string;
-  selectorVariant = 'glass';
+  selectorVariant = 'primary';
   headerConfig: HeaderConfig;
   footerConfig: FooterConfig;
   navBarConfig: NavBarConfig;
