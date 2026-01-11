@@ -1,0 +1,158 @@
+
+.steps-section {
+  padding: 4rem 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .header {
+    text-align: center;
+    margin-bottom: 3rem;
+    
+    h2 {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    p { opacity: 0.8; }
+  }
+
+  .steps-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+    position: relative;
+  }
+
+  .step-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+  }
+
+  .step-marker {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    position: relative;
+  }
+
+  .step-number {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary-color, #3b82f6);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    z-index: 2;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  }
+
+  .step-line {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background: #e5e7eb;
+    z-index: 1;
+  }
+
+  // Linear Variant
+  &.linear {
+      .steps-container { flex-direction: row; }
+  }
+
+  // Cards Variant
+  &.cards {
+      .steps-container { 
+          gap: 1.5rem; 
+      }
+      .step-item {
+          background: white;
+          padding: 2rem;
+          border-radius: 1rem;
+          box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+          border: 1px solid #f3f4f6;
+          transition: transform 0.2s;
+
+          &:hover { transform: translateY(-5px); }
+      }
+      .step-marker { display: none; } // Or style differently
+  }
+
+  // Zigzag Variant
+  &.zigzag {
+      .steps-container {
+          flex-direction: column;
+          gap: 3rem;
+      }
+      
+      .step-item {
+          flex-direction: row;
+          align-items: center;
+          text-align: left;
+          gap: 2rem;
+          
+          &:nth-child(even) {
+              flex-direction: row-reverse;
+              text-align: right;
+          }
+      }
+
+      .step-marker {
+          width: 60px;
+          margin-bottom: 0;
+          flex-shrink: 0;
+      }
+      
+      .step-line {
+          left: 50%;
+          top: 100%;
+          height: 100%;
+          width: 2px;
+          transform: translateX(-50%);
+      }
+      
+      .step-content { flex: 1; }
+  }
+
+  // Timeline (Vertical)
+  &.timeline {
+      .steps-container {
+          flex-direction: column;
+          align-items: flex-start;
+          max-width: 600px;
+          margin: 0 auto;
+      }
+      
+      .step-item {
+          flex-direction: row;
+          text-align: left;
+          width: 100%;
+      }
+
+      .step-marker {
+          width: auto;
+          margin-right: 1.5rem;
+          margin-bottom: 0;
+          align-items: center;
+      }
+
+      .step-line {
+          width: 2px;
+          height: 100%;
+          top: 40px;
+          left: 50%;
+          transform: translateX(-50%);
+      }
+  }
+}

@@ -53,3 +53,8 @@ export * from './lib/gallery-section/gallery-section.component';
 // Models
 export * from './lib/models/ui-components-data.model';
 
+// New Components
+export * from './lib/breadcrumbs/breadcrumbs.component';
+export * from './lib/contact-section/contact-section.component';
+export * from './lib/newsletter-section/newsletter-section.component';
+export * from './lib/steps-section/steps-section.component';

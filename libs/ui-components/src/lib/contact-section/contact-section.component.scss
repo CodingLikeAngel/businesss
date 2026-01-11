@@ -1,0 +1,77 @@
+
+.contact-section {
+  padding: 4rem 1.5rem;
+  background-color: var(--bg-primary, #ffffff);
+  color: var(--text-primary, #1a1a1a);
+  transition: all 0.3s ease;
+
+  &.variant-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    color: white;
+  }
+
+  &.variant-dark {
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+
+  // Add more variants here based on your 'variants' model (e.g. retro, neon, etc.)
+  &.variant-neon {
+      background: #0f172a;
+      color: #00ff9d;
+      border: 1px solid #00ff9d;
+      box-shadow: 0 0 15px rgba(0, 255, 157, 0.2);
+
+      .title {
+          text-shadow: 0 0 10px rgba(0, 255, 157, 0.5);
+      }
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 3rem;
+
+    .title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      opacity: 0.8;
+    }
+  }
+
+  .form-container {
+    background: transparent;
+    
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .actions {
+        display: flex;
+        justify-content: center;
+        margin-top: 2rem;
+    }
+
+    .success-message {
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: rgba(74, 222, 128, 0.2);
+        color: #22c55e;
+        border-radius: 0.5rem;
+        text-align: center;
+        font-weight: 500;
+    }
+  }
+}

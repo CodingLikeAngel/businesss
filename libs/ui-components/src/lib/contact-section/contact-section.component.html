@@ -1,0 +1,60 @@
+
+<section class="contact-section" [ngClass]="['variant-' + variant]">
+  <div class="container">
+    <div class="header">
+      <h2 class="title">{{ title }}</h2>
+      <p class="subtitle">{{ subtitle }}</p>
+    </div>
+
+    <div class="form-container">
+      <form (ngSubmit)="onSubmit()">
+        <div class="form-group">
+            <lib-ui-components-input
+                [label]="'Nombre'"
+                [variant]="'glass'" 
+                [(ngModel)]="formData.name" 
+                name="name" 
+                required>
+            </lib-ui-components-input>
+        </div>
+        
+        <div class="form-group">
+            <lib-ui-components-input
+                [label]="emailLabel"
+                [type]="'email'"
+                [variant]="'glass'" 
+                [(ngModel)]="formData.email" 
+                name="email" 
+                required>
+            </lib-ui-components-input>
+        </div>
+
+        <div class="form-group">
+             <lib-ui-components-input
+                [label]="messageLabel"
+                [type]="'textarea'"
+                [rows]="5"
+                [variant]="'glass'" 
+                [(ngModel)]="formData.message" 
+                name="message" 
+                required>
+            </lib-ui-components-input>
+        </div>
+
+        <div class="actions">
+            <lib-ui-components-button 
+                [variant]="'primary'" 
+                [size]="'lg'" 
+                [disabled]="isSubmitting"
+                (buttonClick)="onSubmit()">
+                {{ isSubmitting ? 'Enviando...' : buttonText }}
+            </lib-ui-components-button>
+        </div>
+        
+        <div *ngIf="successMessage" class="success-message">
+            {{ successMessage }}
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

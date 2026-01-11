@@ -1,0 +1,10 @@
+
+<nav class="breadcrumbs" [ngClass]="variant" aria-label="Breadcrumb">
+  <ol>
+    <li *ngFor="let item of items; let last = last">
+      <a *ngIf="item.url && !last" [href]="item.url" class="breadcrumb-link">{{ item.label }}</a>
+      <span *ngIf="last || !item.url" class="breadcrumb-current" [attr.aria-current]="last ? 'page' : null">{{ item.label }}</span>
+      <span *ngIf="!last" class="separator">{{ separator }}</span>
+    </li>
+  </ol>
+</nav>

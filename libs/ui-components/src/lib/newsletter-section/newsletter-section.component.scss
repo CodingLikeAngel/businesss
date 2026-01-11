@@ -1,0 +1,102 @@
+
+.newsletter-section {
+  padding: 4rem 1.5rem;
+  background: linear-gradient(135deg, var(--primary-color, #3b82f6) 0%, var(--secondary-color, #8b5cf6) 100%);
+  color: white;
+  border-radius: 1.5rem;
+  margin: 2rem auto;
+  max-width: 1200px;
+  position: relative;
+  overflow: hidden;
+
+  &.glass {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+  }
+
+  &.dark {
+      background: #1f2937;
+      border: 1px solid #374151;
+  }
+
+  // Background decoration (optional)
+  &::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle at top right, rgba(255,255,255,0.1), transparent);
+      pointer-events: none;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 2rem;
+    position: relative;
+    z-index: 1;
+
+    @media (min-width: 768px) {
+        flex-direction: row;
+        text-align: left;
+        justify-content: space-between;
+    }
+  }
+
+  .text-content {
+      flex: 1;
+      
+      h2 {
+          font-size: 2rem;
+          font-weight: 700;
+          margin-bottom: 0.5rem;
+          color: white;
+      }
+      
+      p {
+          font-size: 1.1rem;
+          opacity: 0.9;
+          color: rgba(255,255,255,0.9);
+      }
+  }
+
+  .form-container {
+      display: flex;
+      gap: 1rem;
+      flex-direction: column;
+      width: 100%;
+      max-width: 400px;
+
+      @media (min-width: 480px) {
+          flex-direction: row;
+      }
+
+      .input-wrapper {
+          flex: 1;
+          // Override input generic styles for dark bg if needed
+          ::ng-deep .input {
+              background: rgba(255,255,255,0.1);
+              border: 1px solid rgba(255,255,255,0.2);
+              color: white;
+              &::placeholder { color: rgba(255,255,255,0.6); }
+          }
+      }
+  }
+
+  .success-msg {
+      position: absolute;
+      bottom: 1rem;
+      background: rgba(255,255,255,0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.9rem;
+      animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+  }
+}
