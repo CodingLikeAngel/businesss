@@ -60,10 +60,23 @@ const enhancedComponents = [
   }
 ];
 
-// Gaming variants to validate
-const gamingVariants = [
-  'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs',
-  'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite'
+// All variants to validate (including gaming and other themes)
+const allVariants = [
+  'default', 'primary', 'secondary', 'outline', 'ghost', 'link',
+  'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient',
+  'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success',
+  'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon',
+  'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water',
+  'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby',
+  'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge',
+  'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew',
+  'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle',
+  'joycon', 'neomorph', 'glitch', 'portal', 'bioshock',
+  'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed',
+  'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch',
+  'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic',
+  'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong',
+  'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer'
 ];
 
 let allValid = true;
@@ -134,7 +147,7 @@ const mixinsFilePath = path.join(__dirname, 'libs/ui-components/src/lib/styles/_
 try {
   const mixinsContent = fs.readFileSync(mixinsFilePath, 'utf8');
   
-  gamingVariants.forEach(variant => {
+  allVariants.forEach(variant => {
     if (mixinsContent.includes(`@mixin variant-${variant}`)) {
       console.log(`  ✅ ${variant}`);
     } else {
@@ -154,7 +167,7 @@ const modelFilePath = path.join(__dirname, 'libs/ui-components/src/lib/models/ui
 try {
   const modelContent = fs.readFileSync(modelFilePath, 'utf8');
   
-  gamingVariants.forEach(variant => {
+  allVariants.forEach(variant => {
     if (modelContent.includes(`'${variant}'`)) {
       console.log(`  ✅ ${variant}`);
     } else {
@@ -175,7 +188,7 @@ try {
   const showcaseContent = fs.readFileSync(showcaseFilePath, 'utf8');
   console.log('  ✅ Showcase component exists');
   
-  gamingVariants.forEach(variant => {
+  allVariants.forEach(variant => {
     if (showcaseContent.includes(variant)) {
       console.log(`  ✅ ${variant} in showcase`);
     } else {
@@ -195,7 +208,7 @@ try {
   const docsContent = fs.readFileSync(docsFilePath, 'utf8');
   console.log('  ✅ Documentation exists');
   
-  gamingVariants.forEach(variant => {
+  allVariants.forEach(variant => {
     if (docsContent.includes(variant)) {
       console.log(`  ✅ ${variant} documented`);
     } else {

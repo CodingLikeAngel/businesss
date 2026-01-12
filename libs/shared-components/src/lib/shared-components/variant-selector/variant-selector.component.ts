@@ -34,6 +34,9 @@ export class VariantSelectorComponent implements OnInit {
   variants = [
     'default',
     ...new Set([...footerVariants, ...bubbleVariants, ...cardRutasVariants, ...titleVariants, ...variants]),
+    // Ensure all variants from the task are included
+    'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone',
+    'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer'
   ];
   globalVariant: string;
   selectorVariant = 'primary';
