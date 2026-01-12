@@ -59,7 +59,7 @@ export class UITabsComponent implements OnInit {
   tabsClasses = computed(() => {
     return [
       'tabs',
-      `tabs--${this.variant()}`,
+      `variant-${this.variant()}`,
       this.showAs() === 'menu' && this.isMobile() ? 'tabs--mobile' : '',
     ].filter(Boolean);
   });
