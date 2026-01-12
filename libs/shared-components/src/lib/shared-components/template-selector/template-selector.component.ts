@@ -39,6 +39,11 @@ export class TemplateSelectorComponent implements OnInit {
 
   previousConfig: any = null;
   confirmed = false;
+  isDragging = false;
+  dragStartX = 0;
+  dragStartY = 0;
+  dropdownPosition = { top: '50%', left: '50%' };
+  isFullScreen = false;
 
   constructor(
     private templateService: TemplateService,
@@ -60,6 +65,110 @@ export class TemplateSelectorComponent implements OnInit {
     console.log('Template Selector initialized with templates:', this.templates.length);
     console.log('Categories:', this.categories);
     console.log('Templates:', this.templates.map(t => ({ name: t.name, category: t.category })));
+
+    // Initialize drag functionality
+    this.initDragFunctionality();
+  }
+
+  initDragFunctionality() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    // Wait for next tick to ensure DOM is ready
+    setTimeout(() => {
+      const dropdownElement = document.querySelector('.template-dropdown') as HTMLElement;
+      if (!dropdownElement) return;
+
+      const headerElement = dropdownElement.querySelector('.dropdown-header') as HTMLElement;
+      if (!headerElement) return;
+
+      let isDragging = false;
+      let startX = 0;
+      let startY = 0;
+      let currentX = 0;
+      let currentY = 0;
+
+      const onMouseDown = (e: MouseEvent) => {
+        // Don't drag if clicking on buttons
+        const target = e.target as HTMLElement;
+        if (target.closest('.close-btn') || target.closest('.fullscreen-btn')) return;
+
+        isDragging = true;
+        startX = e.clientX;
+        startY = e.clientY;
+
+        // Get current transform values
+        const style = window.getComputedStyle(dropdownElement);
+        const matrix = new DOMMatrix(style.transform);
+        currentX = matrix.m41; // translateX
+        currentY = matrix.m42; // translateY
+
+        headerElement.style.cursor = 'grabbing';
+        e.preventDefault();
+      };
+
+      const onMouseMove = (e: MouseEvent) => {
+        if (!isDragging || this.isFullScreen) return;
+
+        const dx = e.clientX - startX;
+        const dy = e.clientY - startY;
+
+        const newX = currentX + dx;
+        const newY = currentY + dy;
+
+        // Update position using transform for better performance
+        dropdownElement.style.transform = `translate(calc(-50% + ${newX}px), calc(-50% + ${newY}px))`;
+      };
+
+      const onMouseUp = () => {
+        if (isDragging) {
+          isDragging = false;
+          headerElement.style.cursor = 'move';
+          
+          // Update current position for next drag
+          const style = window.getComputedStyle(dropdownElement);
+          const matrix = new DOMMatrix(style.transform);
+          currentX = matrix.m41;
+          currentY = matrix.m42;
+        }
+      };
+
+      headerElement.addEventListener('mousedown', onMouseDown);
+      document.addEventListener('mousemove', onMouseMove);
+      document.addEventListener('mouseup', onMouseUp);
+
+      // Cleanup on component destroy
+      this.cleanupDragListeners = () => {
+        headerElement.removeEventListener('mousedown', onMouseDown);
+        document.removeEventListener('mousemove', onMouseMove);
+        document.removeEventListener('mouseup', onMouseUp);
+      };
+    }, 100);
+  }
+
+  private cleanupDragListeners?: () => void;
+  private modalElement?: HTMLElement;
+  private originalParent?: HTMLElement;
+
+  ngOnDestroy() {
+    if (this.cleanupDragListeners) {
+      this.cleanupDragListeners();
+    }
+    // Move modal back to original parent if needed
+    if (this.modalElement && this.originalParent && this.modalElement.parentNode === document.body) {
+      this.originalParent.appendChild(this.modalElement);
+    }
+  }
+
+  toggleFullScreen() {
+    this.isFullScreen = !this.isFullScreen;
+    const dropdownElement = document.querySelector('.template-dropdown') as HTMLElement;
+    if (dropdownElement) {
+      if (this.isFullScreen) {
+        dropdownElement.style.transform = 'none';
+      } else {
+        dropdownElement.style.transform = 'translate(-50%, -50%)';
+      }
+    }
   }
 
   toggleDropdown() {
@@ -74,6 +183,22 @@ export class TemplateSelectorComponent implements OnInit {
     this.previousConfig = this.variantService.getFullConfig();
     this.confirmed = false;
     this.showDropdown = true;
+    
+    // Initialize drag and move modal to body after render
+    setTimeout(() => {
+      this.initDragFunctionality();
+      
+      // Move modal to body to escape parent overflow
+      if (isPlatformBrowser(this.platformId)) {
+        const modal = document.querySelector('.template-dropdown') as HTMLElement;
+        if (modal && modal.parentElement) {
+          this.modalElement = modal;
+          this.originalParent = modal.parentElement as HTMLElement;
+          // Move to body
+          document.body.appendChild(modal);
+        }
+      }
+    }, 50);
   }
 
   closeDropdown() {
@@ -81,11 +206,22 @@ export class TemplateSelectorComponent implements OnInit {
       this.variantService.applyTemplate(this.previousConfig);
     }
 
+    // Move modal back before hiding
+    if (this.modalElement && this.originalParent && this.modalElement.parentNode === document.body) {
+      this.originalParent.appendChild(this.modalElement);
+    }
+
     this.showDropdown = false;
     this.selectedTemplate = null;
     this.selectedCategory = null;
     this.previewingTemplate = null;
     this.previousConfig = null;
+    
+    // Cleanup drag listeners
+    if (this.cleanupDragListeners) {
+      this.cleanupDragListeners();
+      this.cleanupDragListeners = undefined;
+    }
   }
 
   getTemplatesByCategory(): BusinessTemplate[] {

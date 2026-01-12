@@ -1,7 +1,8 @@
 // Template Selector Container
 .template-selector-container {
-  position: relative;
+  position: static; // Allow modal to escape
   width: 100%;
+  overflow: visible !important; // Ensure modal isn't clipped
 }
 
 // Trigger Button
@@ -74,30 +75,59 @@
   }
 }
 
-// Modal Overlay
-// Dropdown Panel
+// Modal Overlay - Ensure it breaks out of parent containers
 .template-dropdown {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
   background: linear-gradient(135deg, #1a1f2e 0%, #16213e 50%, #0f1419 100%);
-  border: 1px solid rgba(113, 255, 219, 0.2);
-  border-radius: 16px;
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    0 0 0 1px rgba(113, 255, 219, 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px);
-  z-index: 10000;
-  max-height: 90vh;
+  border: 2px solid rgba(113, 255, 219, 0.3);
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7),
+    0 0 0 1px rgba(113, 255, 219, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 0 60px rgba(113, 255, 219, 0.15);
+  backdrop-filter: blur(30px);
+  z-index: 999999 !important;
+  max-height: 85vh;
   min-height: 600px;
-  width: 95vw;
-  max-width: 800px;
+  width: 90vw;
+  max-width: 1000px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0;
+  box-sizing: border-box;
+
+  // Ensure it's always on top
+  pointer-events: auto;
+
+  &.fullscreen {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: none !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+    transform: none !important;
+    border: none;
+  }
+
+  // Add backdrop overlay
+  &::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: -1;
+    pointer-events: none;
+  }
 }
 
 // Dropdown Header
@@ -105,65 +135,145 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.25rem 1.5rem;
+  padding: 1.75rem 2rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: linear-gradient(135deg, rgba(113, 255, 219, 0.08), rgba(0, 255, 255, 0.04));
+  background: linear-gradient(
+    135deg,
+    rgba(113, 255, 219, 0.12),
+    rgba(0, 255, 255, 0.06)
+  );
+  cursor: move;
+  flex-shrink: 0;
+  user-select: none;
 
   .header-content {
     display: flex;
     align-items: center;
-    gap: 0.875rem;
+    gap: 1rem;
     flex: 1;
 
     .header-icon {
-      font-size: 1.5rem;
+      font-size: 2rem;
       color: #71ffdb;
-      filter: drop-shadow(0 2px 8px rgba(113, 255, 219, 0.3));
+      filter: drop-shadow(0 2px 12px rgba(113, 255, 219, 0.4));
+      animation: pulse-glow 2s ease-in-out infinite;
     }
 
     .header-text {
       h3 {
-        font-size: 1.125rem;
+        font-size: 1.4rem;
         font-weight: 700;
-        margin: 0 0 0.125rem 0;
+        margin: 0 0 0.25rem 0;
         color: #ffffff;
         background: linear-gradient(135deg, #71ffdb, #00ffff);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
+        letter-spacing: -0.02em;
       }
 
       p {
-        font-size: 0.8rem;
-        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.7);
         margin: 0;
-        line-height: 1.4;
+        line-height: 1.5;
       }
     }
   }
 
-  .close-btn {
-    background: rgba(255, 255, 255, 0.05);
+  .drag-handle {
+    cursor: move;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.625rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: rgba(255, 255, 255, 0.6);
     font-size: 1.25rem;
     line-height: 1;
-    cursor: pointer;
-    padding: 0.5rem;
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
+    width: 40px;
+    height: 40px;
     transition: all 0.2s ease;
 
     &:hover {
-      background: rgba(255, 255, 255, 0.15);
-      border-color: rgba(255, 255, 255, 0.2);
-      color: #ffffff;
+      background: rgba(113, 255, 219, 0.15);
+      border-color: rgba(113, 255, 219, 0.3);
+      color: #71ffdb;
       transform: scale(1.05);
     }
+
+    &:active {
+      cursor: grabbing;
+      transform: scale(0.98);
+    }
+  }
+
+  .fullscreen-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.625rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+    margin-right: 0.5rem;
+
+    &:hover {
+      background: rgba(113, 255, 219, 0.15);
+      border-color: rgba(113, 255, 219, 0.3);
+      color: #71ffdb;
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+
+  .close-btn {
+    background: rgba(255, 68, 68, 0.1);
+    border: 1px solid rgba(255, 68, 68, 0.2);
+    color: rgba(255, 68, 68, 0.8);
+    font-size: 1.25rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0.625rem;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: rgba(255, 68, 68, 0.2);
+      border-color: rgba(255, 68, 68, 0.4);
+      color: #ff4444;
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    filter: drop-shadow(0 2px 12px rgba(113, 255, 219, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0 2px 20px rgba(113, 255, 219, 0.6));
   }
 }
 
@@ -290,9 +400,9 @@
 // Templates Grid
 .templates-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 1rem;
-  padding: 1rem 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 1.5rem;
   overflow-y: auto;
   flex: 1;
   min-height: 0;
@@ -324,6 +434,7 @@
   position: relative;
   backdrop-filter: blur(10px);
   overflow: hidden;
+  min-height: 100px;
 
   &:hover {
     background: rgba(255, 255, 255, 0.06);
@@ -333,13 +444,21 @@
   }
 
   &.selected {
-    background: linear-gradient(135deg, rgba(113, 255, 219, 0.1), rgba(0, 255, 255, 0.05));
+    background: linear-gradient(
+      135deg,
+      rgba(113, 255, 219, 0.1),
+      rgba(0, 255, 255, 0.05)
+    );
     border-color: #71ffdb;
     box-shadow: 0 0 0 2px rgba(113, 255, 219, 0.3);
   }
 
   &.previewing {
-    background: linear-gradient(135deg, rgba(113, 255, 219, 0.08), rgba(0, 255, 255, 0.04));
+    background: linear-gradient(
+      135deg,
+      rgba(113, 255, 219, 0.08),
+      rgba(0, 255, 255, 0.04)
+    );
     border-color: rgba(113, 255, 219, 0.4);
     box-shadow: 0 0 0 2px rgba(113, 255, 219, 0.2);
   }
@@ -351,10 +470,11 @@
   flex-shrink: 0;
 
   .template-icon {
-    font-size: 2.5rem;
+    font-size: 3rem;
     line-height: 1;
     filter: drop-shadow(0 2px 8px rgba(0, 0, 0, 0.2));
     transition: all 0.2s ease;
+    color: #ffffff;
   }
 
   .template-preview-indicator {
@@ -437,6 +557,7 @@
     line-height: 1.4;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -490,6 +611,7 @@
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   background: rgba(0, 0, 0, 0.1);
   backdrop-filter: blur(10px);
+  padding: 1rem 0;
 
   .selected-template-info {
     display: flex;
@@ -525,6 +647,7 @@
         line-height: 1.3;
         display: -webkit-box;
         -webkit-line-clamp: 2;
+        line-clamp: 2;
         -webkit-box-orient: vertical;
         overflow: hidden;
       }
@@ -534,7 +657,7 @@
   .footer-actions {
     display: flex;
     gap: 0.75rem;
-    padding: 1rem 1.5rem;
+    padding: 1.5rem;
   }
 }
 
@@ -674,4 +797,3 @@
   outline: 2px solid #71ffdb;
   outline-offset: 2px;
 }
-
