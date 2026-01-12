@@ -98,9 +98,8 @@ export class TemplateSelectorComponent implements OnInit {
   selectTemplate(template: BusinessTemplate) {
     console.log('Template selected:', template.name);
     this.selectedTemplate = template;
-    // Immediate preview
-    this.variantService.applyTemplate(template);
-    console.log('Template applied for preview');
+    // No longer apply immediately - just set for preview
+    console.log('Template selected for preview');
   }
 
   applyTemplate() {
@@ -126,5 +125,12 @@ export class TemplateSelectorComponent implements OnInit {
     if (this.previousConfig) {
         this.variantService.applyTemplate(this.previousConfig);
     }
+  }
+
+  getHeroBackground(hero: any): string {
+    if (hero.videoBackground && hero.videoPoster) {
+      return `url(${hero.videoPoster})`;
+    }
+    return 'linear-gradient(135deg, rgba(113, 255, 219, 0.1), rgba(0, 255, 255, 0.05))';
   }
 }

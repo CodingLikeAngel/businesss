@@ -56,38 +56,104 @@
       </button>
     </div>
 
-    <!-- Templates Grid -->
-    <div class="templates-grid">
-      <div
-        *ngFor="let template of getTemplatesByCategory()"
-        class="template-card"
-        [class.selected]="selectedTemplate?.id === template.id"
-        (click)="selectTemplate(template)">
-        <div class="template-header">
-          <div class="template-icon">{{ template.icon }}</div>
-          <div class="template-actions">
-            <button
-              class="preview-btn"
-              (click)="selectTemplate(template); $event.stopPropagation()"
-              title="Vista previa">
-              👁️
-            </button>
-          </div>
-        </div>
-        <div class="template-info">
-          <h3>{{ template.name }}</h3>
-          <p>{{ template.description }}</p>
-          <div class="template-meta">
-            <span class="template-badge">{{ template.category }}</span>
-            <div class="template-stats">
-              <span class="stat-item" title="Secciones disponibles">
-                📄 {{ template.sections?.length || 0 }}
-              </span>
+    <!-- Main Content: Selection and Preview -->
+    <div class="modal-content">
+      <!-- Left Column: Template Selection -->
+      <div class="selection-column">
+        <!-- Templates Grid -->
+        <div class="templates-grid">
+          <div
+            *ngFor="let template of getTemplatesByCategory()"
+            class="template-card"
+            [class.selected]="selectedTemplate?.id === template.id"
+            (click)="selectTemplate(template)">
+            <div class="template-header">
+              <div class="template-icon">{{ template.icon }}</div>
+              <div class="template-actions">
+                <button
+                  class="preview-btn"
+                  (click)="selectTemplate(template); $event.stopPropagation()"
+                  title="Vista previa">
+                  👁️
+                </button>
+              </div>
+            </div>
+            <div class="template-info">
+              <h3>{{ template.name }}</h3>
+              <p>{{ template.description }}</p>
+              <div class="template-meta">
+                <span class="template-badge">{{ template.category }}</span>
+                <div class="template-stats">
+                  <span class="stat-item" title="Secciones disponibles">
+                    📄 {{ template.sections?.length || 0 }}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        <div class="template-preview" *ngIf="selectedTemplate?.id === template.id">
-          <div class="preview-indicator">Vista previa activa</div>
+      </div>
+
+      <!-- Right Column: Preview Pane -->
+      <div class="preview-column">
+        <div class="preview-header">
+          <h3>Vista Previa</h3>
+          <p *ngIf="!selectedTemplate">Selecciona un template para ver la vista previa</p>
+        </div>
+
+        <div class="preview-content" *ngIf="selectedTemplate">
+          <!-- Hero Preview -->
+          <div class="preview-section" *ngIf="selectedTemplate.hero">
+            <div class="section-label">Hero</div>
+            <div class="hero-preview" [style.background]="getHeroBackground(selectedTemplate.hero)">
+              <div class="hero-content">
+                <h4>{{ selectedTemplate.hero.title }}</h4>
+                <p>{{ selectedTemplate.hero.subtitle }}</p>
+                <div class="hero-cta" *ngIf="selectedTemplate.hero.showCta">
+                  {{ selectedTemplate.hero.ctaLabel }}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Services Preview -->
+          <div class="preview-section" *ngIf="selectedTemplate.serviceCards?.items?.length">
+            <div class="section-label">Servicios</div>
+            <div class="services-preview">
+              <div
+                *ngFor="let service of selectedTemplate.serviceCards.items.slice(0, 3)"
+                class="service-preview-item">
+                <div class="service-icon">{{ service.routeName.charAt(0) }}</div>
+                <div class="service-info">
+                  <h5>{{ service.routeName }}</h5>
+                  <p>{{ service.description | slice:0:50 }}...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pricing Preview -->
+          <div class="preview-section" *ngIf="selectedTemplate.pricing?.rows?.length">
+            <div class="section-label">Precios</div>
+            <div class="pricing-preview">
+              <div *ngFor="let row of selectedTemplate.pricing.rows.slice(0, 2)" class="pricing-item">
+                <span class="service-name">{{ row['service'] }}</span>
+                <span class="price">{{ row['price'] }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gallery Preview -->
+          <div class="preview-section" *ngIf="selectedTemplate.gallery?.images?.length">
+            <div class="section-label">Galería</div>
+            <div class="gallery-preview">
+              <div
+                *ngFor="let image of selectedTemplate.gallery.images.slice(0, 4)"
+                class="gallery-thumb"
+                [style.background-image]="'url(' + image.src + ')'">
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
