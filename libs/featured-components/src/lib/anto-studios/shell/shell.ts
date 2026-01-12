@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { ContactFeatureComponent } from '../features/contacto/pages/desktop/contact-feature.component';
 import { AboutFeatureComponent } from '../features/about/about-feature.component';
-import { TattooHomeFeatureComponent } from '../features/tattoo/tattoo-home-feature.component';
+import { TattooHomeFeatureComponent } from '../../tattoo/tattoo-home-feature.component';
 import { HomeDesktopFeatureComponent } from '../features/home/pages/desktop/home-feature.component';
 import { HomeMobileFeatureComponent } from '../features/home/pages/mobile/home-feature.component';
 import { MainDesktopLayoutComponent } from '../features/main-layout/desktop/main-desktop-layout.component';
