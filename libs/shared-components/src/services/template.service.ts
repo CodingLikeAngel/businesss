@@ -49,7 +49,9 @@ export class TemplateService {
   private templates: BusinessTemplate[] = [];
 
   constructor() {
+    console.log('TemplateService: Initializing templates...');
     this.initializeTemplates();
+    console.log('TemplateService: Templates initialized, total:', this.templates.length);
   }
 
   getAllTemplates(): BusinessTemplate[] {
@@ -1010,6 +1012,1389 @@ export class TemplateService {
       sections: [
         { id: 'hero', type: 'hero', label: 'Hero', visible: true },
         { id: 'servicios', type: 'services', label: 'Servicios', visible: true },
+        { id: 'precios', type: 'pricing', label: 'Precios', visible: true },
+        { id: 'galeria', type: 'gallery', label: 'Galería', visible: true },
+        { id: 'faq', type: 'faq', label: 'FAQ', visible: true },
+      ],
+      globalVariant: 'default',
+      componentVariants: {
+        hero: 'glass',
+        navbar: 'glass',
+        footer: 'glass',
+      },
+    });
+
+    // Template 5: Spa
+    this.templates.push({
+      id: 'spa',
+      name: 'Spa & Bienestar',
+      description: 'Template para spas, centros de masajes y bienestar',
+      icon: '🧘',
+      category: 'Bienestar',
+      header: {
+        variant: 'glass',
+        title: 'Spa & Bienestar',
+        subtitle: 'Relájate y renueva tu energía vital',
+        align: 'center',
+        dark: false,
+        visible: true,
+        navItems: [
+          { label: 'Inicio', href: '/home', active: true },
+          { label: 'Tratamientos', href: '/home#servicios' },
+          { label: 'Precios', href: '/home#precios' },
+          { label: 'Contacto', href: '/contact' },
+        ],
+        customStyles: {},
+      },
+      footer: {
+        variant: 'glass',
+        title: 'Spa & Bienestar',
+        description: 'Tu oasis de paz y rejuvenecimiento',
+        exploreLinks: [
+          { label: 'Masajes', href: '#servicios', icon: '💆' },
+          { label: 'Tratamientos', href: '#servicios', icon: '✨' },
+          { label: 'Reservas', href: '#reservas', icon: '📅' },
+          { label: 'Horarios', href: '#faq', icon: '🕐' },
+        ],
+        trendLinks: [
+          { label: 'Contacto', href: '/contact', icon: '📞' },
+          { label: 'Ubicación', href: '#faq', icon: '📍' },
+        ],
+        socialIcons: [
+          { name: 'instagram', href: '#' },
+          { name: 'facebook', href: '#' },
+        ],
+        copyrightText: '© 2025 Spa & Bienestar. Todos los derechos reservados.',
+        showParticles: true,
+        dark: true,
+        visible: true,
+        customStyles: {},
+      },
+      navBar: {
+        variant: 'glass',
+        logoText: 'Spa',
+        showMobileMenu: true,
+        isFixed: true,
+        visible: true,
+        navLinks: [
+          { label: 'Inicio', href: '/home', icon: '🏠' },
+          { label: 'Tratamientos', href: '/home#servicios', icon: '💆' },
+          { label: 'Precios', href: '/home#precios', icon: '💰' },
+          { label: 'Galería', href: '/home#galeria', icon: '🖼️' },
+        ],
+        customStyles: {},
+      },
+      hero: {
+        variant: 'glass',
+        title: 'Encuentra tu Paz Interior',
+        subtitle: 'Tratamientos personalizados para cuerpo y mente',
+        showCta: true,
+        ctaLabel: 'Reservar Tratamiento',
+        showScrollIcon: true,
+        videoBackground: false,
+        videoUrl: '',
+        videoPoster: '',
+        navigationCards: [
+          {
+            icon: '💆',
+            title: 'Masajes',
+            description: 'Relajación profunda',
+            sectionId: 'servicios',
+          },
+          {
+            icon: '✨',
+            title: 'Tratamientos',
+            description: 'Faciales y corporales',
+            sectionId: 'servicios',
+          },
+          {
+            icon: '🧘',
+            title: 'Bienestar',
+            description: 'Yoga y meditación',
+            sectionId: 'servicios',
+          },
+        ],
+        carouselItems: [],
+        customStyles: {},
+      },
+      bubble: {
+        variant: 'oceanic',
+        speed: 0.6,
+        blur: 40,
+        opacity: 0.5,
+      },
+      card: {
+        variant: 'glass',
+        backgroundColor: 'rgba(0,255,255,0.1)',
+        textColor: '#ffffff',
+        accentColor: '#00FFFF',
+        animation: 'fade',
+        isMobile: false,
+        customStyles: {
+          '--card-border': '1px solid rgba(0, 255, 255, 0.3)',
+        },
+      },
+      title: {
+        variant: 'glass',
+        level: 'h2',
+        text: 'Nuestros Tratamientos',
+        animation: 'slide',
+        align: 'center',
+        customStyles: {
+          '--title-color': '#00FFFF',
+        },
+      },
+      serviceCards: {
+        variant: 'glass',
+        items: [
+          {
+            routeName: 'Masaje Relajante',
+            imageUrl: '/retro-stars.png',
+            difficulty: '60 min',
+            rating: 4.9,
+            reviews: 120,
+            duration: 0,
+            distance: 0,
+            ascent: 0,
+            description: 'Masaje completo para eliminar tensiones',
+            features: ['Técnicas suecas', 'Aceites esenciales', 'Ambiente relajante'],
+            link: '#reservas',
+          },
+          {
+            routeName: 'Tratamiento Facial',
+            imageUrl: '/1029.png',
+            difficulty: '90 min',
+            rating: 4.8,
+            reviews: 95,
+            duration: 0,
+            distance: 0,
+            ascent: 0,
+            description: 'Rejuvenecimiento y limpieza profunda',
+            features: ['Productos naturales', 'Consulta personalizada', 'Resultados visibles'],
+            link: '#reservas',
+          },
+        ],
+      },
+      faq: {
+        variant: 'glass',
+        items: [
+          {
+            title: '¿Necesito reservar con antelación?',
+            content: 'Recomendamos reservar al menos 24 horas antes para garantizar disponibilidad.',
+            expanded: false,
+          },
+          {
+            title: '¿Qué debo llevar?',
+            content: 'Solo necesitas venir cómodo. Te proporcionamos todo lo necesario.',
+            expanded: false,
+          },
+        ],
+      },
+      pricing: {
+        variant: 'glass',
+        columns: [
+          { key: 'service', label: 'Tratamiento' },
+          { key: 'description', label: 'Duración' },
+          { key: 'price', label: 'Precio' },
+        ],
+        rows: [
+          { service: 'Masaje Relajante', description: '60 min', price: '50€' },
+          { service: 'Tratamiento Facial', description: '90 min', price: '80€' },
+          { service: 'Paquete Completo', description: '150 min', price: '120€' },
+        ],
+      },
+      promotions: {
+        variant: 'glass',
+        premiumCards: [
+          {
+            title: 'Día de Spa',
+            description: 'Masaje + facial + sauna',
+            image: '/retro-stars.png',
+            price: '150€',
+            discount: '-20%',
+            icon: 'heroStar',
+            tooltip: '¡Experiencia completa de bienestar!',
+          },
+        ],
+      },
+      gallery: {
+        variant: 'glass',
+        images: [
+          { src: '/retro-stars.png', alt: 'Tratamiento 1' },
+          { src: '/1029.png', alt: 'Tratamiento 2' },
+          { src: '/images.png', alt: 'Tratamiento 3' },
+        ],
+      },
+      products: {
+        variant: 'glass',
+        items: [],
+      },
+      testimonials: {
+        variant: 'glass',
+        items: [
+          {
+            quote: 'Una experiencia increíble, me siento renovada',
+            author: 'María S.',
+          },
+        ],
+      },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Hero', visible: true },
+        { id: 'servicios', type: 'services', label: 'Tratamientos', visible: true },
+        { id: 'precios', type: 'pricing', label: 'Precios', visible: true },
+        { id: 'galeria', type: 'gallery', label: 'Galería', visible: true },
+        { id: 'faq', type: 'faq', label: 'FAQ', visible: true },
+      ],
+      globalVariant: 'default',
+      componentVariants: {
+        hero: 'glass',
+        navbar: 'glass',
+        footer: 'glass',
+      },
+    });
+
+    // Template 6: Clínica
+    this.templates.push({
+      id: 'clinic',
+      name: 'Clínica Médica',
+      description: 'Template para clínicas y consultorios médicos',
+      icon: '🏥',
+      category: 'Salud',
+      header: {
+        variant: 'glass',
+        title: 'Clínica Médica',
+        subtitle: 'Cuidamos de tu salud con profesionalidad',
+        align: 'center',
+        dark: false,
+        visible: true,
+        navItems: [
+          { label: 'Inicio', href: '/home', active: true },
+          { label: 'Especialidades', href: '/home#servicios' },
+          { label: 'Equipo', href: '/home#equipo' },
+          { label: 'Contacto', href: '/contact' },
+        ],
+        customStyles: {},
+      },
+      footer: {
+        variant: 'glass',
+        title: 'Clínica Médica',
+        description: 'Atención médica de calidad con tecnología avanzada',
+        exploreLinks: [
+          { label: 'Medicina General', href: '#servicios', icon: '👨‍⚕️' },
+          { label: 'Especialidades', href: '#servicios', icon: '🩺' },
+          { label: 'Citas', href: '#reservas', icon: '📅' },
+          { label: 'Urgencias', href: '#faq', icon: '🚑' },
+        ],
+        trendLinks: [
+          { label: 'Contacto', href: '/contact', icon: '📞' },
+          { label: 'Ubicación', href: '#faq', icon: '📍' },
+        ],
+        socialIcons: [
+          { name: 'instagram', href: '#' },
+          { name: 'facebook', href: '#' },
+        ],
+        copyrightText: '© 2025 Clínica Médica. Todos los derechos reservados.',
+        showParticles: true,
+        dark: true,
+        visible: true,
+        customStyles: {},
+      },
+      navBar: {
+        variant: 'glass',
+        logoText: 'Clínica',
+        showMobileMenu: true,
+        isFixed: true,
+        visible: true,
+        navLinks: [
+          { label: 'Inicio', href: '/home', icon: '🏠' },
+          { label: 'Servicios', href: '/home#servicios', icon: '🩺' },
+          { label: 'Equipo', href: '/home#equipo', icon: '👨‍⚕️' },
+          { label: 'Contacto', href: '/contact', icon: '📞' },
+        ],
+        customStyles: {},
+      },
+      hero: {
+        variant: 'glass',
+        title: 'Tu Salud es Nuestra Prioridad',
+        subtitle: 'Atención médica integral con los mejores profesionales',
+        showCta: true,
+        ctaLabel: 'Pedir Cita',
+        showScrollIcon: true,
+        videoBackground: false,
+        videoUrl: '',
+        videoPoster: '',
+        navigationCards: [
+          {
+            icon: '👨‍⚕️',
+            title: 'Medicina General',
+            description: 'Atención primaria',
+            sectionId: 'servicios',
+          },
+          {
+            icon: '🩺',
+            title: 'Especialistas',
+            description: 'Consultas especializadas',
+            sectionId: 'servicios',
+          },
+          {
+            icon: '📅',
+            title: 'Citas Online',
+            description: 'Reserva tu turno',
+            sectionId: 'reservas',
+          },
+        ],
+        carouselItems: [],
+        customStyles: {},
+      },
+      bubble: {
+        variant: 'medical',
+        speed: 0.7,
+        blur: 32,
+        opacity: 0.6,
+      },
+      card: {
+        variant: 'glass',
+        backgroundColor: 'rgba(34,197,94,0.1)',
+        textColor: '#ffffff',
+        accentColor: '#22C55E',
+        animation: 'fade',
+        isMobile: false,
+        customStyles: {
+          '--card-border': '1px solid rgba(34, 197, 94, 0.3)',
+        },
+      },
+      title: {
+        variant: 'glass',
+        level: 'h2',
+        text: 'Nuestras Especialidades',
+        animation: 'slide',
+        align: 'center',
+        customStyles: {
+          '--title-color': '#22C55E',
+        },
+      },
+      serviceCards: {
+        variant: 'glass',
+        items: [
+          {
+            routeName: 'Medicina General',
+            imageUrl: '/retro-stars.png',
+            difficulty: 'Consulta',
+            rating: 4.8,
+            reviews: 200,
+            duration: 0,
+            distance: 0,
+            ascent: 0,
+            description: 'Atención médica integral para toda la familia',
+            features: ['Médicos certificados', 'Equipos modernos', 'Atención personalizada'],
+            link: '#reservas',
+          },
+          {
+            routeName: 'Pediatría',
+            imageUrl: '/1029.png',
+            difficulty: 'Consulta',
+            rating: 4.9,
+            reviews: 150,
+            duration: 0,
+            distance: 0,
+            ascent: 0,
+            description: 'Cuidado especializado para los más pequeños',
+            features: ['Ambiente infantil', 'Profesionales especializados', 'Vacunación'],
+            link: '#reservas',
+          },
+        ],
+      },
+      faq: {
+        variant: 'glass',
+        items: [
+          {
+            title: '¿Cómo puedo pedir cita?',
+            content: 'Puedes llamar por teléfono o utilizar nuestro sistema de citas online.',
+            expanded: false,
+          },
+          {
+            title: '¿Aceptan seguros médicos?',
+            content: 'Trabajamos con las principales compañías de seguros médicos.',
+            expanded: false,
+          },
+        ],
+      },
+      pricing: {
+        variant: 'glass',
+        columns: [
+          { key: 'service', label: 'Servicio' },
+          { key: 'description', label: 'Descripción' },
+          { key: 'price', label: 'Precio' },
+        ],
+        rows: [
+          { service: 'Consulta General', description: 'Primera visita', price: '60€' },
+          { service: 'Consulta Especialista', description: 'Visita especializada', price: '80€' },
+          { service: 'Revisión Anual', description: 'Chequeo completo', price: '100€' },
+        ],
+      },
+      promotions: {
+        variant: 'glass',
+        premiumCards: [
+          {
+            title: 'Chequeo Completo',
+            description: 'Análisis + consulta + electrocardiograma',
+            image: '/retro-stars.png',
+            price: '150€',
+            discount: '-25%',
+            icon: 'heroStar',
+            tooltip: '¡Cuida tu salud preventiva!',
+          },
+        ],
+      },
+      gallery: {
+        variant: 'glass',
+        images: [
+          { src: '/retro-stars.png', alt: 'Instalación 1' },
+          { src: '/1029.png', alt: 'Instalación 2' },
+          { src: '/images.png', alt: 'Instalación 3' },
+        ],
+      },
+      products: {
+        variant: 'glass',
+        items: [],
+      },
+      testimonials: {
+        variant: 'glass',
+        items: [
+          {
+            quote: 'Excelente atención y profesionales muy preparados',
+            author: 'Carlos M.',
+          },
+        ],
+      },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Hero', visible: true },
+        { id: 'servicios', type: 'services', label: 'Especialidades', visible: true },
+        { id: 'precios', type: 'pricing', label: 'Precios', visible: true },
+        { id: 'galeria', type: 'gallery', label: 'Instalaciones', visible: true },
+        { id: 'faq', type: 'faq', label: 'FAQ', visible: true },
+      ],
+      globalVariant: 'default',
+      componentVariants: {
+        hero: 'glass',
+        navbar: 'glass',
+        footer: 'glass',
+      },
+    });
+
+    // Template 7: Farmacia
+    this.templates.push({
+      id: 'pharmacy',
+      name: 'Farmacia',
+      description: 'Template para farmacias y parafarmacias',
+      icon: '💊',
+      category: 'Salud',
+      header: {
+        variant: 'glass',
+        title: 'Farmacia',
+        subtitle: 'Tu salud y bienestar en buenas manos',
+        align: 'center',
+        dark: false,
+        visible: true,
+        navItems: [
+          { label: 'Inicio', href: '/home', active: true },
+          { label: 'Productos', href: '/home#productos' },
+          { label: 'Servicios', href: '/home#servicios' },
+          { label: 'Contacto', href: '/contact' },
+        ],
+        customStyles: {},
+      },
+      footer: {
+        variant: 'glass',
+        title: 'Farmacia',
+        description: 'Productos farmacéuticos y consejos profesionales',
+        exploreLinks: [
+          { label: 'Medicamentos', href: '#productos', icon: '💊' },
+          { label: 'Parafarmacia', href: '#productos', icon: '🧴' },
+          { label: 'Servicios', href: '#servicios', icon: '🩺' },
+          { label: 'Consejos', href: '#faq', icon: '💡' },
+        ],
+        trendLinks: [
+          { label: 'Contacto', href: '/contact', icon: '📞' },
+          { label: 'Horarios', href: '#faq', icon: '🕐' },
+        ],
+        socialIcons: [
+          { name: 'instagram', href: '#' },
+          { name: 'facebook', href: '#' },
+        ],
+        copyrightText: '© 2025 Farmacia. Todos los derechos reservados.',
+        showParticles: true,
+        dark: true,
+        visible: true,
+        customStyles: {},
+      },
+      navBar: {
+        variant: 'glass',
+        logoText: 'Farmacia',
+        showMobileMenu: true,
+        isFixed: true,
+        visible: true,
+        navLinks: [
+          { label: 'Inicio', href: '/home', icon: '🏠' },
+          { label: 'Productos', href: '/home#productos', icon: '💊' },
+          { label: 'Servicios', href: '/home#servicios', icon: '🩺' },
+          { label: 'Contacto', href: '/contact', icon: '📞' },
+        ],
+        customStyles: {},
+      },
+      hero: {
+        variant: 'glass',
+        title: 'Cuidamos de tu Salud',
+        subtitle: 'Productos farmacéuticos y atención profesional',
+        showCta: true,
+        ctaLabel: 'Ver Productos',
+        showScrollIcon: true,
+        videoBackground: false,
+        videoUrl: '',
+        videoPoster: '',
+        navigationCards: [
+          {
+            icon: '💊',
+            title: 'Medicamentos',
+            description: 'Con y sin receta',
+            sectionId: 'productos',
+          },
+          {
+            icon: '🧴',
+            title: 'Parafarmacia',
+            description: 'Cuidado personal',
+            sectionId: 'productos',
+          },
+          {
+            icon: '🩺',
+            title: 'Servicios',
+            description: 'Asesoramiento profesional',
+            sectionId: 'servicios',
+          },
+        ],
+        carouselItems: [],
+        customStyles: {},
+      },
+      bubble: {
+        variant: 'medical',
+        speed: 0.8,
+        blur: 30,
+        opacity: 0.7,
+      },
+      card: {
+        variant: 'glass',
+        backgroundColor: 'rgba(34,197,94,0.1)',
+        textColor: '#ffffff',
+        accentColor: '#22C55E',
+        animation: 'fade',
+        isMobile: false,
+        customStyles: {
+          '--card-border': '1px solid rgba(34, 197, 94, 0.3)',
+        },
+      },
+      title: {
+        variant: 'glass',
+        level: 'h2',
+        text: 'Nuestros Productos',
+        animation: 'slide',
+        align: 'center',
+        customStyles: {
+          '--title-color': '#22C55E',
+        },
+      },
+      serviceCards: {
+        variant: 'glass',
+        items: [
+          {
+            routeName: 'Asesoramiento Farmacéutico',
+            imageUrl: '/retro-stars.png',
+            difficulty: 'Consulta gratuita',
+            rating: 4.8,
+            reviews: 180,
+            duration: 0,
+            distance: 0,
+            ascent: 0,
+            description: 'Consejos profesionales sobre medicamentos y salud',
+            features: ['Farmacéuticos titulados', 'Información fiable', 'Confidencialidad'],
+            link: '#servicios',
+          },
+          {
+            routeName: 'Toma de Tensión',
+            imageUrl: '/1029.png',
+            difficulty: 'Servicio gratuito',
+            rating: 4.7,
+            reviews: 120,
+            duration: 0,
+            distance: 0,
+            ascent: 0,
+            description: 'Control de presión arterial',
+            features: ['Equipos certificados', 'Resultados inmediatos', 'Consejos preventivos'],
+            link: '#servicios',
+          },
+        ],
+      },
+      faq: {
+        variant: 'glass',
+        items: [
+          {
+            title: '¿Necesito receta para medicamentos?',
+            content: 'Algunos medicamentos requieren receta médica. Nuestros farmacéuticos te informarán.',
+            expanded: false,
+          },
+          {
+            title: '¿Hacen entregas a domicilio?',
+            content: 'Sí, ofrecemos servicio de entrega a domicilio para mayor comodidad.',
+            expanded: false,
+          },
+        ],
+      },
+      pricing: {
+        variant: 'glass',
+        columns: [
+          { key: 'service', label: 'Producto' },
+          { key: 'description', label: 'Descripción' },
+          { key: 'price', label: 'Precio' },
+        ],
+        rows: [
+          { service: 'Paracetamol 1g', description: '20 comprimidos', price: '3.50€' },
+          { service: 'Vitamina C', description: '60 cápsulas', price: '8.90€' },
+          { service: 'Crema Hidratante', description: '200ml', price: '12.50€' },
+        ],
+      },
+      promotions: {
+        variant: 'glass',
+        premiumCards: [
+          {
+            title: 'Kit Bienestar',
+            description: 'Suplementos + cremas + consejos personalizados',
+            image: '/retro-stars.png',
+            price: '45€',
+            discount: '-15%',
+            icon: 'heroStar',
+            tooltip: '¡Cuida tu salud integral!',
+          },
+        ],
+      },
+      gallery: {
+        variant: 'glass',
+        images: [
+          { src: '/retro-stars.png', alt: 'Producto 1' },
+          { src: '/1029.png', alt: 'Producto 2' },
+          { src: '/images.png', alt: 'Producto 3' },
+        ],
+      },
+      products: {
+        variant: 'glass',
+        items: [
+          {
+            name: 'Paracetamol',
+            image: '/retro-stars.png',
+            description: 'Alivio del dolor y fiebre',
+            price: '3.50€',
+          },
+          {
+            name: 'Vitamina C',
+            image: '/1029.png',
+            description: 'Refuerzo del sistema inmunológico',
+            price: '8.90€',
+          },
+        ],
+      },
+      testimonials: {
+        variant: 'glass',
+        items: [
+          {
+            quote: 'Siempre encuentro lo que necesito y el mejor consejo',
+            author: 'Ana G.',
+          },
+        ],
+      },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Hero', visible: true },
+        { id: 'productos', type: 'products', label: 'Productos', visible: true },
+        { id: 'servicios', type: 'services', label: 'Servicios', visible: true },
+        { id: 'precios', type: 'pricing', label: 'Precios', visible: true },
+        { id: 'galeria', type: 'gallery', label: 'Galería', visible: true },
+        { id: 'faq', type: 'faq', label: 'FAQ', visible: true },
+      ],
+      globalVariant: 'default',
+      componentVariants: {
+        hero: 'glass',
+        navbar: 'glass',
+        footer: 'glass',
+      },
+    });
+
+    // Template 8: Escuela
+    this.templates.push({
+      id: 'school',
+      name: 'Escuela',
+      description: 'Template para escuelas e instituciones educativas',
+      icon: '🎓',
+      category: 'Educación',
+      header: {
+        variant: 'glass',
+        title: 'Escuela',
+        subtitle: 'Formando el futuro con excelencia académica',
+        align: 'center',
+        dark: false,
+        visible: true,
+        navItems: [
+          { label: 'Inicio', href: '/home', active: true },
+          { label: 'Programas', href: '/home#servicios' },
+          { label: 'Admisiones', href: '/home#admisiones' },
+          { label: 'Contacto', href: '/contact' },
+        ],
+        customStyles: {},
+      },
+      footer: {
+        variant: 'glass',
+        title: 'Escuela',
+        description: 'Educación de calidad para el desarrollo integral',
+        exploreLinks: [
+          { label: 'Primaria', href: '#servicios', icon: '📚' },
+          { label: 'Secundaria', href: '#servicios', icon: '🎓' },
+          { label: 'Admisiones', href: '#admisiones', icon: '📝' },
+          { label: 'Calendario', href: '#faq', icon: '📅' },
+        ],
+        trendLinks: [
+          { label: 'Contacto', href: '/contact', icon: '📞' },
+          { label: 'Ubicación', href: '#faq', icon: '📍' },
+        ],
+        socialIcons: [
+          { name: 'instagram', href: '#' },
+          { name: 'facebook', href: '#' },
+        ],
+        copyrightText: '© 2025 Escuela. Todos los derechos reservados.',
+        showParticles: true,
+        dark: true,
+        visible: true,
+        customStyles: {},
+      },
+      navBar: {
+        variant: 'glass',
+        logoText: 'Escuela',
+        showMobileMenu: true,
+        isFixed: true,
+        visible: true,
+        navLinks: [
+          { label: 'Inicio', href: '/home', icon: '🏠' },
+          { label: 'Programas', href: '/home#servicios', icon: '📚' },
+          { label: 'Admisiones', href: '/home#admisiones', icon: '📝' },
+          { label: 'Contacto', href: '/contact', icon: '📞' },
+        ],
+        customStyles: {},
+      },
+      hero: {
+        variant: 'glass',
+        title: 'Educando para el Futuro',
+        subtitle: 'Aprendizaje integral con metodologías innovadoras',
+        showCta: true,
+        ctaLabel: 'Solicitar Información',
+        showScrollIcon: true,
+        videoBackground: false,
+        videoUrl: '',
+        videoPoster: '',
+        navigationCards: [
+          {
+            icon: '📚',
+            title: 'Programas',
+            description: 'Educación completa',
+            sectionId: 'servicios',
+          },
+          {
+            icon: '🎓',
+            title: 'Admisiones',
+            description: 'Proceso de ingreso',
+            sectionId: 'admisiones',
+          },
+          {
+            icon: '👨‍🏫',
+            title: 'Profesores',
+            description: 'Equipo docente',
+            sectionId: 'equipo',
+          },
+        ],
+        carouselItems: [],
+        customStyles: {},
+      },
+      bubble: {
+        variant: 'educational',
+        speed: 0.9,
+        blur: 28,
+        opacity: 0.6,
+      },
+      card: {
+        variant: 'glass',
+        backgroundColor: 'rgba(59,130,246,0.1)',
+        textColor: '#ffffff',
+        accentColor: '#3B82F6',
+        animation: 'fade',
+        isMobile: false,
+        customStyles: {
+          '--card-border': '1px solid rgba(59, 130, 246, 0.3)',
+        },
+      },
+      title: {
+        variant: 'glass',
+        level: 'h2',
+        text: 'Nuestros Programas',
+        animation: 'slide',
+        align: 'center',
+        customStyles: {
+          '--title-color': '#3B82F6',
+        },
+      },
+      serviceCards: {
+        variant: 'glass',
+        items: [
+          {
+            routeName: 'Educación Primaria',
+            imageUrl: '/retro-stars.png',
+            difficulty: '6-12 años',
+            rating: 4.8,
+            reviews: 150,
+            duration: 0,
+            distance: 0,
+            ascent: 0,
+            description: 'Formación integral para niños',
+            features: ['Metodología activa', 'Actividades extracurriculares', 'Seguimiento personalizado'],
+            link: '#admisiones',
+          },
+          {
+            routeName: 'Educación Secundaria',
+            imageUrl: '/1029.png',
+            difficulty: '12-18 años',
+            rating: 4.9,
+            reviews: 120,
+            duration: 0,
+            distance: 0,
+            ascent: 0,
+            description: 'Preparación para la universidad',
+            features: ['Bachillerato completo', 'Tecnología avanzada', 'Orientación vocacional'],
+            link: '#admisiones',
+          },
+        ],
+      },
+      faq: {
+        variant: 'glass',
+        items: [
+          {
+            title: '¿Cuáles son los requisitos de admisión?',
+            content: 'Documentación básica, entrevista familiar y evaluación del alumno.',
+            expanded: false,
+          },
+          {
+            title: '¿Ofrecen becas?',
+            content: 'Sí, tenemos programas de becas basados en mérito y necesidad.',
+            expanded: false,
+          },
+        ],
+      },
+      pricing: {
+        variant: 'glass',
+        columns: [
+          { key: 'service', label: 'Programa' },
+          { key: 'description', label: 'Duración' },
+          { key: 'price', label: 'Matrícula' },
+        ],
+        rows: [
+          { service: 'Primaria', description: 'Anual', price: '4.500€' },
+          { service: 'Secundaria', description: 'Anual', price: '5.200€' },
+          { service: 'Bachillerato', description: 'Anual', price: '5.800€' },
+        ],
+      },
+      promotions: {
+        variant: 'glass',
+        premiumCards: [
+          {
+            title: 'Matrícula Anticipada',
+            description: 'Descuento especial por matrícula antes del 31 de marzo',
+            image: '/retro-stars.png',
+            price: 'Descuento 10%',
+            discount: '10%',
+            icon: 'heroStar',
+            tooltip: '¡Aprovecha esta oportunidad!',
+          },
+        ],
+      },
+      gallery: {
+        variant: 'glass',
+        images: [
+          { src: '/retro-stars.png', alt: 'Instalación 1' },
+          { src: '/1029.png', alt: 'Instalación 2' },
+          { src: '/images.png', alt: 'Instalación 3' },
+        ],
+      },
+      products: {
+        variant: 'glass',
+        items: [],
+      },
+      testimonials: {
+        variant: 'glass',
+        items: [
+          {
+            quote: 'Mi hijo ha crecido académica y personalmente en esta escuela',
+            author: 'María L.',
+          },
+        ],
+      },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Hero', visible: true },
+        { id: 'servicios', type: 'services', label: 'Programas', visible: true },
+        { id: 'precios', type: 'pricing', label: 'Precios', visible: true },
+        { id: 'galeria', type: 'gallery', label: 'Instalaciones', visible: true },
+        { id: 'faq', type: 'faq', label: 'FAQ', visible: true },
+      ],
+      globalVariant: 'default',
+      componentVariants: {
+        hero: 'glass',
+        navbar: 'glass',
+        footer: 'glass',
+      },
+    });
+
+    // Additional templates can be added here...
+    // Template 9: Barber Shop
+    this.templates.push({
+      id: 'barber-shop',
+      name: 'Barbería',
+      description: 'Template para barberías modernas',
+      icon: '✂️',
+      category: 'Belleza',
+      header: {
+        variant: 'glass',
+        title: 'Barbería Moderna',
+        subtitle: 'Estilo y elegancia para hombres',
+        align: 'center',
+        dark: false,
+        visible: true,
+        navItems: [
+          { label: 'Inicio', href: '/home', active: true },
+          { label: 'Servicios', href: '/home#servicios' },
+          { label: 'Precios', href: '/home#precios' },
+          { label: 'Contacto', href: '/contact' },
+        ],
+        customStyles: {},
+      },
+      footer: {
+        variant: 'glass',
+        title: 'Barbería Moderna',
+        description: 'Cortes profesionales con estilo contemporáneo',
+        exploreLinks: [
+          { label: 'Cortes', href: '#servicios', icon: '✂️' },
+          { label: 'Barba', href: '#servicios', icon: '🧔' },
+          { label: 'Reservas', href: '#reservas', icon: '📅' },
+          { label: 'Productos', href: '#productos', icon: '🧴' },
+        ],
+        trendLinks: [
+          { label: 'Contacto', href: '/contact', icon: '📞' },
+          { label: 'Horarios', href: '#faq', icon: '🕐' },
+        ],
+        socialIcons: [
+          { name: 'instagram', href: '#' },
+          { name: 'facebook', href: '#' },
+        ],
+        copyrightText: '© 2025 Barbería Moderna. Todos los derechos reservados.',
+        showParticles: true,
+        dark: true,
+        visible: true,
+        customStyles: {},
+      },
+      navBar: {
+        variant: 'glass',
+        logoText: 'Barber',
+        showMobileMenu: true,
+        isFixed: true,
+        visible: true,
+        navLinks: [
+          { label: 'Inicio', href: '/home', icon: '🏠' },
+          { label: 'Servicios', href: '/home#servicios', icon: '✂️' },
+          { label: 'Precios', href: '/home#precios', icon: '💰' },
+          { label: 'Contacto', href: '/contact', icon: '📞' },
+        ],
+        customStyles: {},
+      },
+      hero: {
+        variant: 'glass',
+        title: 'Estilo que Marca la Diferencia',
+        subtitle: 'Cortes profesionales y cuidado personal masculino',
+        showCta: true,
+        ctaLabel: 'Reservar Cita',
+        showScrollIcon: true,
+        videoBackground: false,
+        videoUrl: '',
+        videoPoster: '',
+        navigationCards: [
+          {
+            icon: '✂️',
+            title: 'Cortes',
+            description: 'Tendencias actuales',
+            sectionId: 'servicios',
+          },
+          {
+            icon: '🧔',
+            title: 'Barba',
+            description: 'Afeitado profesional',
+            sectionId: 'servicios',
+          },
+          {
+            icon: '📅',
+            title: 'Reservar',
+            description: 'Agenda tu cita',
+            sectionId: 'reservas',
+          },
+        ],
+        carouselItems: [],
+        customStyles: {},
+      },
+      bubble: {
+        variant: 'neon',
+        speed: 1,
+        blur: 30,
+        opacity: 0.7,
+      },
+      card: {
+        variant: 'glass',
+        backgroundColor: 'rgba(255,193,7,0.1)',
+        textColor: '#ffffff',
+        accentColor: '#FFC107',
+        animation: 'fade',
+        isMobile: false,
+        customStyles: {
+          '--card-border': '1px solid rgba(255, 193, 7, 0.3)',
+        },
+      },
+      title: {
+        variant: 'glass',
+        level: 'h2',
+        text: 'Nuestros Servicios',
+        animation: 'slide',
+        align: 'center',
+        customStyles: {
+          '--title-color': '#FFC107',
+        },
+      },
+      serviceCards: {
+        variant: 'glass',
+        items: [
+          {
+            routeName: 'Corte Clásico',
+            imageUrl: '/retro-stars.png',
+            difficulty: '30 min',
+            rating: 4.8,
+            reviews: 200,
+            duration: 0,
+            distance: 0,
+            ascent: 0,
+            description: 'Corte tradicional con navaja',
+            features: ['Técnicas clásicas', 'Productos premium', 'Acabado perfecto'],
+            link: '#reservas',
+          },
+          {
+            routeName: 'Corte Moderno',
+            imageUrl: '/1029.png',
+            difficulty: '45 min',
+            rating: 4.9,
+            reviews: 180,
+            duration: 0,
+            distance: 0,
+            ascent: 0,
+            description: 'Estilos contemporáneos y tendencias',
+            features: ['Estilo personalizado', 'Consulta previa', 'Productos de calidad'],
+            link: '#reservas',
+          },
+        ],
+      },
+      faq: {
+        variant: 'glass',
+        items: [
+          {
+            title: '¿Necesito reservar cita?',
+            content: 'Recomendamos reservar para evitar esperas, especialmente los fines de semana.',
+            expanded: false,
+          },
+          {
+            title: '¿Qué productos utilizan?',
+            content: 'Utilizamos productos profesionales de marcas reconocidas.',
+            expanded: false,
+          },
+        ],
+      },
+      pricing: {
+        variant: 'glass',
+        columns: [
+          { key: 'service', label: 'Servicio' },
+          { key: 'description', label: 'Descripción' },
+          { key: 'price', label: 'Precio' },
+        ],
+        rows: [
+          { service: 'Corte + Lavado', description: 'Servicio completo', price: '18€' },
+          { service: 'Barba Completa', description: 'Afeitado + perfilado', price: '15€' },
+          { service: 'Corte + Barba', description: 'Pack completo', price: '30€' },
+        ],
+      },
+      promotions: {
+        variant: 'glass',
+        premiumCards: [
+          {
+            title: 'Primera Visita',
+            description: 'Descuento especial para nuevos clientes',
+            image: '/retro-stars.png',
+            price: '15€',
+            discount: '-20%',
+            icon: 'heroStar',
+            tooltip: '¡Tu primera experiencia con nosotros!',
+          },
+        ],
+      },
+      gallery: {
+        variant: 'glass',
+        images: [
+          { src: '/retro-stars.png', alt: 'Trabajo 1' },
+          { src: '/1029.png', alt: 'Trabajo 2' },
+          { src: '/images.png', alt: 'Trabajo 3' },
+        ],
+      },
+      products: {
+        variant: 'glass',
+        items: [
+          {
+            name: 'Crema para Barba',
+            image: '/retro-stars.png',
+            description: 'Hidrata y suaviza la barba',
+            price: '12€',
+          },
+        ],
+      },
+      testimonials: {
+        variant: 'glass',
+        items: [
+          {
+            quote: 'Siempre salgo satisfecho con mi look',
+            author: 'David R.',
+          },
+        ],
+      },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Hero', visible: true },
+        { id: 'servicios', type: 'services', label: 'Servicios', visible: true },
+        { id: 'precios', type: 'pricing', label: 'Precios', visible: true },
+        { id: 'galeria', type: 'gallery', label: 'Galería', visible: true },
+        { id: 'faq', type: 'faq', label: 'FAQ', visible: true },
+      ],
+      globalVariant: 'default',
+      componentVariants: {
+        hero: 'glass',
+        navbar: 'glass',
+        footer: 'glass',
+      },
+    });
+
+    // Continue adding more templates...
+    // Template 10: Boutique
+    this.templates.push({
+      id: 'boutique',
+      name: 'Boutique',
+      description: 'Template para boutiques y tiendas de moda',
+      icon: '👗',
+      category: 'Moda',
+      header: {
+        variant: 'glass',
+        title: 'Boutique',
+        subtitle: 'Moda exclusiva y tendencias únicas',
+        align: 'center',
+        dark: false,
+        visible: true,
+        navItems: [
+          { label: 'Inicio', href: '/home', active: true },
+          { label: 'Colección', href: '/home#productos' },
+          { label: 'Novedades', href: '/home#novedades' },
+          { label: 'Contacto', href: '/contact' },
+        ],
+        customStyles: {},
+      },
+      footer: {
+        variant: 'glass',
+        title: 'Boutique',
+        description: 'Descubre piezas únicas que definen tu estilo',
+        exploreLinks: [
+          { label: 'Mujer', href: '#productos', icon: '👗' },
+          { label: 'Hombre', href: '#productos', icon: '👔' },
+          { label: 'Accesorios', href: '#productos', icon: '👜' },
+          { label: 'Sale', href: '#promociones', icon: '🏷️' },
+        ],
+        trendLinks: [
+          { label: 'Contacto', href: '/contact', icon: '📞' },
+          { label: 'Horarios', href: '#faq', icon: '🕐' },
+        ],
+        socialIcons: [
+          { name: 'instagram', href: '#' },
+          { name: 'facebook', href: '#' },
+        ],
+        copyrightText: '© 2025 Boutique. Todos los derechos reservados.',
+        showParticles: true,
+        dark: true,
+        visible: true,
+        customStyles: {},
+      },
+      navBar: {
+        variant: 'glass',
+        logoText: 'Boutique',
+        showMobileMenu: true,
+        isFixed: true,
+        visible: true,
+        navLinks: [
+          { label: 'Inicio', href: '/home', icon: '🏠' },
+          { label: 'Colección', href: '/home#productos', icon: '👗' },
+          { label: 'Novedades', href: '/home#novedades', icon: '✨' },
+          { label: 'Contacto', href: '/contact', icon: '📞' },
+        ],
+        customStyles: {},
+      },
+      hero: {
+        variant: 'glass',
+        title: 'Moda que Inspira',
+        subtitle: 'Descubre piezas únicas seleccionadas con cuidado',
+        showCta: true,
+        ctaLabel: 'Ver Colección',
+        showScrollIcon: true,
+        videoBackground: false,
+        videoUrl: '',
+        videoPoster: '',
+        navigationCards: [
+          {
+            icon: '👗',
+            title: 'Colección',
+            description: 'Piezas exclusivas',
+            sectionId: 'productos',
+          },
+          {
+            icon: '✨',
+            title: 'Novedades',
+            description: 'Últimas tendencias',
+            sectionId: 'novedades',
+          },
+          {
+            icon: '🏷️',
+            title: 'Ofertas',
+            description: 'Descuentos especiales',
+            sectionId: 'promociones',
+          },
+        ],
+        carouselItems: [],
+        customStyles: {},
+      },
+      bubble: {
+        variant: 'elegant',
+        speed: 0.6,
+        blur: 35,
+        opacity: 0.5,
+      },
+      card: {
+        variant: 'glass',
+        backgroundColor: 'rgba(236,72,153,0.1)',
+        textColor: '#ffffff',
+        accentColor: '#EC4899',
+        animation: 'fade',
+        isMobile: false,
+        customStyles: {
+          '--card-border': '1px solid rgba(236, 72, 153, 0.3)',
+        },
+      },
+      title: {
+        variant: 'glass',
+        level: 'h2',
+        text: 'Colección Exclusiva',
+        animation: 'slide',
+        align: 'center',
+        customStyles: {
+          '--title-color': '#EC4899',
+        },
+      },
+      serviceCards: {
+        variant: 'glass',
+        items: [],
+      },
+      faq: {
+        variant: 'glass',
+        items: [
+          {
+            title: '¿Hacen envíos?',
+            content: 'Sí, realizamos envíos a toda España con entrega en 24-48 horas.',
+            expanded: false,
+          },
+          {
+            title: '¿Tienen cambios y devoluciones?',
+            content: 'Aceptamos cambios y devoluciones en un plazo de 30 días.',
+            expanded: false,
+          },
+        ],
+      },
+      pricing: {
+        variant: 'glass',
+        columns: [
+          { key: 'service', label: 'Producto' },
+          { key: 'description', label: 'Descripción' },
+          { key: 'price', label: 'Precio' },
+        ],
+        rows: [
+          { service: 'Vestido Elegante', description: 'Talla única', price: '89€' },
+          { service: 'Blusa de Seda', description: 'Disponible en varios colores', price: '45€' },
+          { service: 'Accesorios', description: 'Complementos exclusivos', price: '25€' },
+        ],
+      },
+      promotions: {
+        variant: 'glass',
+        premiumCards: [
+          {
+            title: 'Sale de Temporada',
+            description: 'Hasta 50% descuento en colección anterior',
+            image: '/retro-stars.png',
+            price: '50% OFF',
+            discount: '50%',
+            icon: 'heroStar',
+            tooltip: '¡Oportunidad única!',
+          },
+        ],
+      },
+      gallery: {
+        variant: 'glass',
+        images: [
+          { src: '/retro-stars.png', alt: 'Producto 1' },
+          { src: '/1029.png', alt: 'Producto 2' },
+          { src: '/images.png', alt: 'Producto 3' },
+        ],
+      },
+      products: {
+        variant: 'glass',
+        items: [
+          {
+            name: 'Vestido Elegante',
+            image: '/retro-stars.png',
+            description: 'Diseño exclusivo para ocasiones especiales',
+            price: '89€',
+          },
+          {
+            name: 'Blusa de Seda',
+            image: '/1029.png',
+            description: 'Comodidad y elegancia en un solo look',
+            price: '45€',
+          },
+        ],
+      },
+      testimonials: {
+        variant: 'glass',
+        items: [
+          {
+            quote: 'Siempre encuentro piezas únicas que me encantan',
+            author: 'Sofia M.',
+          },
+        ],
+      },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Hero', visible: true },
+        { id: 'productos', type: 'products', label: 'Colección', visible: true },
         { id: 'precios', type: 'pricing', label: 'Precios', visible: true },
         { id: 'galeria', type: 'gallery', label: 'Galería', visible: true },
         { id: 'faq', type: 'faq', label: 'FAQ', visible: true },

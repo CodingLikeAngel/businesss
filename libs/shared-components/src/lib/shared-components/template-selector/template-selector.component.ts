@@ -1,12 +1,13 @@
 import { Component, OnInit, Output, EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { TemplateService, BusinessTemplate } from '../../../services/template.service';
 import { VariantService } from '../../../services/variant.service';
 
 @Component({
   selector: 'lib-template-selector',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './template-selector.component.html',
   styleUrl: './template-selector.component.scss',
 })
@@ -15,9 +16,11 @@ export class TemplateSelectorComponent implements OnInit {
 
   showModal = false;
   templates: BusinessTemplate[] = [];
+  filteredTemplates: BusinessTemplate[] = [];
   categories: string[] = [];
   selectedCategory: string | null = null;
   selectedTemplate: BusinessTemplate | null = null;
+  searchQuery = '';
 
   previousConfig: any = null;
   confirmed = false;
@@ -35,7 +38,11 @@ export class TemplateSelectorComponent implements OnInit {
       customTemplates = JSON.parse(localStorage.getItem('custom_templates') || '[]');
     }
     this.templates = [...defaultTemplates, ...customTemplates];
+    this.filteredTemplates = [...this.templates];
     this.categories = [...new Set(this.templates.map(t => t.category))];
+
+    console.log('Template Selector initialized with templates:', this.templates.length);
+    console.log('Categories:', this.categories);
   }
 
   openModal() {
@@ -56,10 +63,32 @@ export class TemplateSelectorComponent implements OnInit {
   }
 
   getTemplatesByCategory(): BusinessTemplate[] {
-    if (!this.selectedCategory) {
-      return this.templates;
+    let filtered = this.templates;
+
+    // Filter by category
+    if (this.selectedCategory) {
+      filtered = filtered.filter(t => t.category === this.selectedCategory);
     }
-    return this.templates.filter(t => t.category === this.selectedCategory);
+
+    // Filter by search query
+    if (this.searchQuery.trim()) {
+      const query = this.searchQuery.toLowerCase();
+      filtered = filtered.filter(t =>
+        t.name.toLowerCase().includes(query) ||
+        t.description.toLowerCase().includes(query) ||
+        t.category.toLowerCase().includes(query)
+      );
+    }
+
+    return filtered;
+  }
+
+  onSearchInput(event: any) {
+    this.searchQuery = event.target.value;
+  }
+
+  clearSearch() {
+    this.searchQuery = '';
   }
 
   selectCategory(category: string | null) {
@@ -67,19 +96,27 @@ export class TemplateSelectorComponent implements OnInit {
   }
 
   selectTemplate(template: BusinessTemplate) {
+    console.log('Template selected:', template.name);
     this.selectedTemplate = template;
     // Immediate preview
     this.variantService.applyTemplate(template);
+    console.log('Template applied for preview');
   }
 
   applyTemplate() {
-    if (!this.selectedTemplate) return;
+    console.log('Apply template clicked');
+    if (!this.selectedTemplate) {
+      console.log('No template selected');
+      return;
+    }
 
+    console.log('Applying template:', this.selectedTemplate.name);
     this.confirmed = true;
-    
+
     // Cerrar modal y notificar (la configuración ya está aplicada por el preview)
     this.closeModal();
     this.templateApplied.emit();
+    console.log('Template applied successfully');
   }
 
   cancelSelection() {

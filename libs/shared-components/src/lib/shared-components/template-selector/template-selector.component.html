@@ -19,15 +19,35 @@
       <button class="close-btn" (click)="closeModal()">×</button>
     </div>
 
+    <!-- Search Bar -->
+    <div class="search-container">
+      <div class="search-input-wrapper">
+        <input
+          type="text"
+          placeholder="Buscar templates..."
+          class="search-input"
+          [(ngModel)]="searchQuery"
+          (input)="onSearchInput($event)"
+        />
+        <button
+          *ngIf="searchQuery"
+          class="clear-search-btn"
+          (click)="clearSearch()"
+          title="Limpiar búsqueda">
+          ×
+        </button>
+      </div>
+    </div>
+
     <!-- Category Filter -->
     <div class="category-filter">
-      <button 
-        class="category-chip" 
+      <button
+        class="category-chip"
         [class.active]="selectedCategory === null"
         (click)="selectCategory(null)">
         Todos
       </button>
-      <button 
+      <button
         *ngFor="let category of categories"
         class="category-chip"
         [class.active]="selectedCategory === category"
@@ -38,29 +58,61 @@
 
     <!-- Templates Grid -->
     <div class="templates-grid">
-      <div 
+      <div
         *ngFor="let template of getTemplatesByCategory()"
         class="template-card"
         [class.selected]="selectedTemplate?.id === template.id"
         (click)="selectTemplate(template)">
-        <div class="template-icon">{{ template.icon }}</div>
+        <div class="template-header">
+          <div class="template-icon">{{ template.icon }}</div>
+          <div class="template-actions">
+            <button
+              class="preview-btn"
+              (click)="selectTemplate(template); $event.stopPropagation()"
+              title="Vista previa">
+              👁️
+            </button>
+          </div>
+        </div>
         <div class="template-info">
           <h3>{{ template.name }}</h3>
           <p>{{ template.description }}</p>
-          <span class="template-badge">{{ template.category }}</span>
+          <div class="template-meta">
+            <span class="template-badge">{{ template.category }}</span>
+            <div class="template-stats">
+              <span class="stat-item" title="Secciones disponibles">
+                📄 {{ template.sections?.length || 0 }}
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="template-preview" *ngIf="selectedTemplate?.id === template.id">
+          <div class="preview-indicator">Vista previa activa</div>
         </div>
       </div>
     </div>
 
     <!-- Footer Actions -->
     <div class="modal-footer">
-      <button class="btn-cancel" (click)="closeModal()">Cancelar</button>
-      <button 
-        class="btn-apply" 
-        [disabled]="!selectedTemplate"
-        (click)="applyTemplate()">
-        Aplicar Template
-      </button>
+      <div class="footer-info" *ngIf="selectedTemplate">
+        <div class="selected-template-info">
+          <span class="selected-icon">{{ selectedTemplate.icon }}</span>
+          <div class="selected-details">
+            <h4>{{ selectedTemplate.name }}</h4>
+            <p>{{ selectedTemplate.description }}</p>
+          </div>
+        </div>
+      </div>
+      <div class="footer-actions">
+        <button class="btn-cancel" (click)="closeModal()">Cancelar</button>
+        <button
+          class="btn-apply"
+          [disabled]="!selectedTemplate"
+          (click)="applyTemplate()">
+          <span class="btn-icon">✓</span>
+          Aplicar Template
+        </button>
+      </div>
     </div>
   </div>
 </div>

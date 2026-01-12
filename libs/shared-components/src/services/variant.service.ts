@@ -957,25 +957,79 @@ export class VariantService {
 
   // Apply template configuration
   applyTemplate(template: any) {
+    console.log('VariantService: Applying template:', template?.name || 'Unknown template');
+
     // Apply all configurations from the template
-    if (template.header) this.headerConfigSubject.next(template.header);
-    if (template.footer) this.footerConfigSubject.next(template.footer);
-    if (template.navBar) this.navBarConfigSubject.next(template.navBar);
-    if (template.hero) this.heroConfigSubject.next(template.hero);
-    if (template.bubble) this.bubbleConfigSubject.next(template.bubble);
-    if (template.card) this.cardConfigSubject.next(template.card);
-    if (template.title) this.titleConfigSubject.next(template.title);
-    if (template.serviceCards) this.serviceCardsConfigSubject.next(template.serviceCards);
-    if (template.faq) this.faqConfigSubject.next(template.faq);
-    if (template.pricing) this.pricingConfigSubject.next(template.pricing);
-    if (template.promotions) this.promotionsConfigSubject.next(template.promotions);
-    if (template.gallery) this.galleryConfigSubject.next(template.gallery);
-    if (template.products) this.productsConfigSubject.next(template.products);
-    if (template.testimonials) this.testimonialsConfigSubject.next(template.testimonials);
-    if (template.sections) this.sectionsSubject.next(template.sections);
-    if (template.globalVariant) this.globalVariantSubject.next(template.globalVariant);
-    if (template.componentVariants) this.componentVariantsSubject.next(template.componentVariants);
-    
+    if (template.header) {
+      console.log('Applying header config');
+      this.headerConfigSubject.next(template.header);
+    }
+    if (template.footer) {
+      console.log('Applying footer config');
+      this.footerConfigSubject.next(template.footer);
+    }
+    if (template.navBar) {
+      console.log('Applying navbar config');
+      this.navBarConfigSubject.next(template.navBar);
+    }
+    if (template.hero) {
+      console.log('Applying hero config');
+      this.heroConfigSubject.next(template.hero);
+    }
+    if (template.bubble) {
+      console.log('Applying bubble config');
+      this.bubbleConfigSubject.next(template.bubble);
+    }
+    if (template.card) {
+      console.log('Applying card config');
+      this.cardConfigSubject.next(template.card);
+    }
+    if (template.title) {
+      console.log('Applying title config');
+      this.titleConfigSubject.next(template.title);
+    }
+    if (template.serviceCards) {
+      console.log('Applying serviceCards config');
+      this.serviceCardsConfigSubject.next(template.serviceCards);
+    }
+    if (template.faq) {
+      console.log('Applying faq config');
+      this.faqConfigSubject.next(template.faq);
+    }
+    if (template.pricing) {
+      console.log('Applying pricing config');
+      this.pricingConfigSubject.next(template.pricing);
+    }
+    if (template.promotions) {
+      console.log('Applying promotions config');
+      this.promotionsConfigSubject.next(template.promotions);
+    }
+    if (template.gallery) {
+      console.log('Applying gallery config');
+      this.galleryConfigSubject.next(template.gallery);
+    }
+    if (template.products) {
+      console.log('Applying products config');
+      this.productsConfigSubject.next(template.products);
+    }
+    if (template.testimonials) {
+      console.log('Applying testimonials config');
+      this.testimonialsConfigSubject.next(template.testimonials);
+    }
+    if (template.sections) {
+      console.log('Applying sections config');
+      this.sectionsSubject.next(template.sections);
+    }
+    if (template.globalVariant) {
+      console.log('Applying globalVariant:', template.globalVariant);
+      this.globalVariantSubject.next(template.globalVariant);
+    }
+    if (template.componentVariants) {
+      console.log('Applying componentVariants');
+      this.componentVariantsSubject.next(template.componentVariants);
+    }
+
     this.saveToLocalStorage();
+    console.log('Template application completed');
   }
 }
