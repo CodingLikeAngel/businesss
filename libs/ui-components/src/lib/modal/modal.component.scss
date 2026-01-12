@@ -1,5 +1,7 @@
 /* Removed external Google Fonts import to avoid network inlining during build */
 
+@use "../styles/mixins" as shared;
+
 /* Estilos base para el wrapper del modal */
 .modal-wrapper {
   position: fixed;
@@ -34,6 +36,9 @@
   border: 1px solid #d1d5db; /* Gris claro */
   transition: all 0.2s ease-in-out;
   z-index: 1001;
+  
+  // Apply global variants
+  @include shared.apply-all-variants('modal-');
 
   &.modal-sm {
     width: 300px;
