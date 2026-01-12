@@ -1,0 +1,20 @@
+@use "tailwindcss";
+
+:root {
+    --neon-pink: #ff1e56;
+    --neon-yellow: #facc15;
+    --neon-blue: #00b7eb;
+    --neon-green: #71ffd3;
+  }
+  .neon-text {
+    text-shadow: 0 0 8px rgba(255, 30, 150, 0.5);
+    font-family: 'Luckiest Guy', cursive;
+  }
+  .neon-button {
+    font-family: 'Luckiest Guy', cursive;
+    box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2), inset 0 0 10px rgba(255, 255, 255, 0.3);
+  }
+  button:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+  }

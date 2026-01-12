@@ -267,19 +267,43 @@ export class VariantService {
 
   private navBarConfigSubject = new BehaviorSubject<NavBarConfig>({
     variant: 'glass',
-    logoText: 'Webs Profesionales',
+    logoText: 'Business Templates',
     showMobileMenu: true,
     isFixed: true,
     visible: true,
     navLinks: [
       { label: 'Inicio', href: '#hero', icon: '🏠' },
+      { label: 'Belleza', href: '#belleza', icon: '💄', children: [
+        { label: 'Peluquería', href: '/peluqueria' },
+        { label: 'Spa', href: '/spa' },
+        { label: 'Barbería', href: '/barber-shop' },
+        { label: 'Maquillaje', href: '/makeup-artist' }
+      ]},
+      { label: 'Salud', href: '#salud', icon: '🏥', children: [
+        { label: 'Clínica', href: '/clinic' },
+        { label: 'Farmacia', href: '/pharmacy' },
+        { label: 'Centro Wellness', href: '/wellness-center' }
+      ]},
+      { label: 'Educación', href: '#educacion', icon: '🎓', children: [
+        { label: 'Escuela', href: '/school' },
+        { label: 'Centro de Tutoring', href: '/tutoring-center' },
+        { label: 'Instituto de Formación', href: '/training-institute' }
+      ]},
+      { label: 'Retail', href: '#retail', icon: '🛍️', children: [
+        { label: 'Tienda de Ropa', href: '/clothing-store' },
+        { label: 'Electrónica', href: '/electronics-shop' },
+        { label: 'Boutique', href: '/boutique' }
+      ]},
+      { label: 'Arte', href: '#arte', icon: '🎨', children: [
+        { label: 'Tatuajes', href: '/tattoo' }
+      ]},
+      { label: 'Gastronomía', href: '#gastronomia', icon: '🍽️', children: [
+        { label: 'Restaurante', href: '/restaurant' },
+        { label: 'Gimnasio', href: '/gym' }
+      ]},
       { label: 'Servicios', href: '#servicios', icon: '🛠️' },
       { label: 'Productos', href: '#productos', icon: '🧩' },
-      { label: 'Testimonios', href: '#testimonios', icon: '⭐' },
       { label: 'Precios', href: '#precios', icon: '💰' },
-      { label: 'Promociones', href: '#promociones', icon: '🎁' },
-      { label: 'FAQ', href: '#faq', icon: '❓' },
-      { label: 'Galería', href: '#galeria', icon: '🖼️' },
       { label: 'Contacto', href: '#contacto', icon: '📞' },
     ],
     customStyles: {},
