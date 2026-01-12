@@ -1,0 +1,17 @@
+.sections-container {
+  min-height: 100vh;
+  padding-bottom: 2rem;
+}
+
+section {
+  margin-bottom: 4rem;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  section {
+    margin-bottom: 2rem;
+  }
+}

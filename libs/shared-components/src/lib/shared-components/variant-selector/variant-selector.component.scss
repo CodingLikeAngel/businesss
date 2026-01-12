@@ -284,3 +284,20 @@
 
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 768px) {
+  .builder-sidebar {
+    width: 120px;
+  }
+  .builder-content {
+    padding: 1rem;
+  }
+  .nav-item {
+    width: 60px;
+    height: 60px;
+    &:focus {
+      outline: 2px solid #6366f1;
+      outline-offset: 2px;
+    }
+  }
+}

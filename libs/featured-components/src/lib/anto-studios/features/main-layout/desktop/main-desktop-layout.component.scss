@@ -131,3 +131,9 @@ lib-ui-components-footer {
     max-width: 250px;
   }
 }
+
+@media (max-width: 480px) {
+  aside {
+    max-width: 200px;
+  }
+}
