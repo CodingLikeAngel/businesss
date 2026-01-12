@@ -1,1 +1,161 @@
-rq
+<!-- Template Selector Trigger Button -->
+<button
+  class="template-trigger-btn"
+  (click)="openModal()"
+  aria-label="Open template selector"
+  type="button">
+  <div class="template-icon-btn">
+    <i class="fas fa-palette"></i>
+  </div>
+  <div class="template-text">
+    <span>Seleccionar Plantilla</span>
+  </div>
+</button>
+
+<!-- Modal Overlay -->
+<div
+  class="template-modal-overlay"
+  *ngIf="showModal"
+  (click)="closeModal()"
+  aria-hidden="true">
+</div>
+
+<!-- Modal -->
+<div
+  class="template-modal"
+  *ngIf="showModal"
+  role="dialog"
+  aria-labelledby="modal-title"
+  aria-modal="true">
+
+  <!-- Header -->
+  <div class="modal-header">
+    <div class="header-content">
+      <div class="header-icon">
+        <i class="fas fa-magic"></i>
+      </div>
+      <div class="header-text">
+        <h2 id="modal-title">Seleccionar Plantilla</h2>
+        <p>Elige una plantilla para personalizar tu sitio</p>
+      </div>
+    </div>
+    <button
+      class="close-btn"
+      (click)="closeModal()"
+      aria-label="Close modal"
+      type="button">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+
+  <!-- Search Container -->
+  <div class="search-container">
+    <div class="search-input-wrapper">
+      <input
+        type="text"
+        class="search-input"
+        placeholder="Buscar plantillas..."
+        [(ngModel)]="searchQuery"
+        (input)="onSearchInput($event)"
+        aria-label="Search templates">
+      <button
+        class="clear-search-btn"
+        *ngIf="searchQuery"
+        (click)="clearSearch()"
+        aria-label="Clear search"
+        type="button">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Category Filter -->
+  <div class="category-filter">
+    <button
+      class="category-chip"
+      [class.active]="!selectedCategory"
+      (click)="selectCategory(null)"
+      type="button">
+      Todas
+    </button>
+    <button
+      class="category-chip"
+      *ngFor="let category of categories"
+      [class.active]="selectedCategory === category"
+      (click)="selectCategory(category)"
+      type="button">
+      {{ category }}
+    </button>
+  </div>
+
+  <!-- Templates Grid -->
+  <div class="templates-grid">
+    <div
+      class="template-card"
+      *ngFor="let template of filteredTemplates; trackBy: trackByTemplate"
+      [class.selected]="selectedTemplate?.id === template.id"
+      (click)="selectTemplate(template)"
+      tabindex="0"
+      (keydown.enter)="selectTemplate(template)"
+      (keydown.space)="selectTemplate(template)"
+      role="button"
+      [attr.aria-label]="'Select template ' + template.name">
+
+      <div class="template-header">
+        <div class="template-actions">
+          <button
+            class="preview-btn"
+            (click)="selectTemplate(template); $event.stopPropagation()"
+            aria-label="Preview template"
+            type="button">
+            <i class="fas fa-eye"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="template-info">
+        <div class="template-icon">
+          {{ template.icon || '📄' }}
+        </div>
+        <h3>{{ template.name }}</h3>
+        <p>{{ template.description }}</p>
+        <div class="template-badge" *ngIf="template.category">
+          {{ template.category }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="modal-footer">
+    <div class="footer-info">
+      <div class="selected-template-info" *ngIf="selectedTemplate">
+        <div class="selected-icon">
+          {{ selectedTemplate.icon || '📄' }}
+        </div>
+        <div class="selected-details">
+          <h4>{{ selectedTemplate.name }}</h4>
+          <p>{{ selectedTemplate.description }}</p>
+        </div>
+      </div>
+    </div>
+    <div class="footer-actions">
+      <button
+        class="btn-cancel"
+        (click)="cancelSelection()"
+        type="button">
+        Cancelar
+      </button>
+      <button
+        class="btn-apply"
+        [disabled]="!selectedTemplate"
+        (click)="applyTemplate()"
+        type="button">
+        <span class="btn-icon">
+          <i class="fas fa-check"></i>
+        </span>
+        Aplicar
+      </button>
+    </div>
+  </div>
+</div>

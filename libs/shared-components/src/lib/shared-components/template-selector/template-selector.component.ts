@@ -16,7 +16,6 @@ export class TemplateSelectorComponent implements OnInit {
 
   showModal = false;
   templates: BusinessTemplate[] = [];
-  filteredTemplates: BusinessTemplate[] = [];
   categories: string[] = [];
   selectedCategory: string | null = null;
   selectedTemplate: BusinessTemplate | null = null;
@@ -38,7 +37,6 @@ export class TemplateSelectorComponent implements OnInit {
       customTemplates = JSON.parse(localStorage.getItem('custom_templates') || '[]');
     }
     this.templates = [...defaultTemplates, ...customTemplates];
-    this.filteredTemplates = [...this.templates];
     this.categories = [...new Set(this.templates.map(t => t.category))];
 
     console.log('Template Selector initialized with templates:', this.templates.length);
@@ -128,10 +126,18 @@ export class TemplateSelectorComponent implements OnInit {
     }
   }
 
+  get filteredTemplates(): BusinessTemplate[] {
+    return this.getTemplatesByCategory();
+  }
+
   getHeroBackground(hero: any): string {
     if (hero.videoBackground && hero.videoPoster) {
       return `url(${hero.videoPoster})`;
     }
     return 'linear-gradient(135deg, rgba(113, 255, 219, 0.1), rgba(0, 255, 255, 0.05))';
+  }
+
+  trackByTemplate(index: number, template: BusinessTemplate): string {
+    return template.id;
   }
 }
