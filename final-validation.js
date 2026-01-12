@@ -246,10 +246,13 @@ if (allValid) {
   console.log('  <lib-ui-components-modal variant="fortnite">Modal</lib-ui-components-modal>');
   console.log('  <lib-ui-components-chip variant="lol">Chip</lib-ui-components-chip>');
   console.log('  <lib-ui-components-input variant="animal-crossing" />');
+  console.log('  <lib-ui-components-title variant="neon">Title</lib-ui-components-title>');
+  console.log('  <lib-ui-components-footer variant="cyberpunk">Footer</lib-ui-components-footer>');
   
   console.log('\n✨ The UI components library has been successfully enhanced with');
-  console.log('   gaming-inspired variants from Nintendo, Ubisoft, Bioshock,');
-  console.log('   League of Legends, and other popular gaming franchises!');
+  console.log('   a comprehensive set of variants including gaming-inspired themes');
+  console.log('   from Nintendo, Ubisoft, Bioshock, League of Legends, and other');
+  console.log('   popular franchises, plus additional design themes!');
   
   process.exit(0);
 } else {
