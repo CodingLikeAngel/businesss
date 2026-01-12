@@ -225,7 +225,7 @@ try {
 console.log('\n📊 Final Validation Summary');
 console.log('============================');
 console.log(`Components Enhanced: ${enhancedComponents.length}`);
-console.log(`Gaming Variants: ${gamingVariants.length}`);
+console.log(`All Variants: ${allVariants.length}`);
 console.log(`Overall Status: ${allValid ? '✅ ALL VALIDATIONS PASSED' : '❌ SOME VALIDATIONS FAILED'}`);
 
 if (allValid) {
@@ -235,8 +235,8 @@ if (allValid) {
     console.log(`  • ${component.name}`);
   });
   
-  console.log('\n🎮 Gaming Variants Available:');
-  gamingVariants.forEach(variant => {
+  console.log('\n🎮 All Variants Available:');
+  allVariants.forEach(variant => {
     console.log(`  • ${variant}`);
   });
   
