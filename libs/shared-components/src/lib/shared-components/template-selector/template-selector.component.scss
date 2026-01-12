@@ -684,6 +684,10 @@
 
 // Mobile Responsiveness
 @media (max-width: 768px) {
+  .template-modal-overlay {
+    padding: 1rem;
+  }
+
   .template-modal {
     margin: 1rem;
     max-height: 95vh;
