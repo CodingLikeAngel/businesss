@@ -60,5 +60,16 @@ export const variants = [
     'portal',
     'bioshock',
     'super-meat-boy',
+    // New Gaming-Inspired Variants
+    'pokemon',
+    'animal-crossing',
+    'assassins-creed',
+    'far-cry',
+    'watch-dogs',
+    'bioshock-enhanced',
+    'lol',
+    'overwatch',
+    'minecraft',
+    'fortnite',
   ] as const;
   

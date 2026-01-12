@@ -1,0 +1,49 @@
+<div class="gaming-variants-showcase">
+  <h1 class="showcase-title">🎮 Gaming-Inspired UI Variants</h1>
+  <p class="showcase-subtitle">Explore our collection of gaming-themed UI components</p>
+
+  <div class="showcase-grid">
+    @for (variant of gamingVariants; track variant.id) {
+      <div class="variant-card">
+        <div class="variant-header">
+          <h3 class="variant-title">{{ variant.displayName }}</h3>
+          <div class="variant-meta">
+            <span class="variant-franchise">{{ variant.franchise }}</span>
+            <span class="variant-year">Since {{ variant.year }}</span>
+          </div>
+        </div>
+
+        <div class="variant-description">{{ variant.description }}</div>
+
+        <div class="component-demo">
+          <!-- Button Demo -->
+          <lib-ui-components-button 
+            [variant]="variant.id"
+            size="md"
+            (buttonClick)="onButtonClick(variant.id)"
+          >
+            {{ variant.displayName }} Button
+          </lib-ui-components-button>
+
+          <!-- Input Demo -->
+          <lib-ui-components-input
+            [variant]="variant.id"
+            [placeholder]="getInputPlaceholder(variant.id)"
+            class="variant-input"
+          ></lib-ui-components-input>
+        </div>
+
+        <div class="usage-example">
+          <pre><code><lib-ui-components-button variant="{{ variant.id }}">
+  {{ variant.displayName }} Button
+</lib-ui-components-button></code></pre>
+        </div>
+      </div>
+    }
+  </div>
+
+  <div class="showcase-footer">
+    <p>💡 Tip: These gaming variants work with all UI components including buttons, inputs, cards, and more!</p>
+    <p>🎨 Customize further by combining variants with size options (sm, md, lg) and custom styles.</p>
+  </div>
+</div>

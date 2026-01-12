@@ -692,6 +692,209 @@ $glass-border: rgba(255, 255, 255, 0.2);
   border: var(--theme-border);
 }
 
+/* New Gaming-Inspired Variants */
+
+@mixin variant-pokemon {
+  --theme-bg: linear-gradient(135deg, #ff0000 0%, #ffffff 50%);
+  --theme-color: #1e293b;
+  --theme-border: 3px solid #1e293b;
+  --theme-accent: #ffcc00;
+  --theme-shadow: 0 4px 0 #1e293b;
+  --theme-pattern: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="10" cy="10" r="8" fill="%23ffffff" stroke="%231e293b" stroke-width="2"/%3E%3Cpath d="M10 2v16M2 10h16" stroke="%231e293b" stroke-width="2"/%3E%3C/svg%3E');
+  
+  background: var(--theme-bg);
+  background-image: var(--theme-pattern);
+  background-size: 20px 20px;
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  border-radius: 50%;
+  
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 0 #1e293b;
+  }
+}
+
+@mixin variant-animal-crossing {
+  --theme-bg: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
+  --theme-color: #5a3d2b;
+  --theme-border: 2px solid #5a3d2b;
+  --theme-accent: #8b4513;
+  --theme-shadow: 0 2px 8px rgba(90, 61, 43, 0.3);
+  --theme-pattern: url('data:image/svg+xml,%3Csvg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M0 5h10M5 0v10" stroke="%238b4513" stroke-width="1"/%3E%3C/svg%3E');
+  
+  background: var(--theme-bg);
+  background-image: var(--theme-pattern);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  border-radius: 8px;
+  
+  &:hover {
+    background: linear-gradient(135deg, #f0dbb3 0%, #e1c9a8 100%);
+  }
+}
+
+@mixin variant-assassins-creed {
+  --theme-bg: #ffffff;
+  --theme-color: #c0392b;
+  --theme-border: 2px solid #c0392b;
+  --theme-accent: #c0392b;
+  --theme-shadow: 0 0 10px rgba(192, 57, 43, 0.5);
+  --theme-pattern: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M10 2L18 10L10 18L2 10Z" stroke="%23c0392b" stroke-width="1" fill="none"/%3E%3C/svg%3E');
+  
+  background: var(--theme-bg);
+  background-image: var(--theme-pattern);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  
+  &:hover {
+    background: #f8f9fa;
+    box-shadow: 0 0 15px rgba(192, 57, 43, 0.7);
+  }
+}
+
+@mixin variant-far-cry {
+  --theme-bg: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  --theme-color: #ffffff;
+  --theme-border: 1px solid #229954;
+  --theme-accent: #f1c40f;
+  --theme-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --theme-pattern: url('data:image/svg+xml,%3Csvg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"%3E%3Crect width="2" height="2" fill="%23229954"/%3E%3Crect x="4" width="2" height="2" fill="%23229954"/%3E%3Crect x="8" width="2" height="2" fill="%23229954"/%3E%3Crect y="4" width="2" height="2" fill="%23229954"/%3E%3Crect x="6" y="4" width="2" height="2" fill="%23229954"/%3E%3C/svg%3E');
+  
+  background: var(--theme-bg);
+  background-image: var(--theme-pattern);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  
+  &:hover {
+    background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  }
+}
+
+@mixin variant-watch-dogs {
+  --theme-bg: #000000;
+  --theme-color: #00ff00;
+  --theme-border: 1px solid #00ff00;
+  --theme-accent: #00ff00;
+  --theme-shadow: 0 0 10px #00ff00;
+  --theme-pattern: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Crect width="1" height="1" fill="%2300ff00" opacity="0.3"/%3E%3Crect x="2" width="1" height="1" fill="%2300ff00" opacity="0.3"/%3E%3Crect x="4" width="1" height="1" fill="%2300ff00" opacity="0.3"/%3E%3Crect x="6" width="1" height="1" fill="%2300ff00" opacity="0.3"/%3E%3Crect x="8" width="1" height="1" fill="%2300ff00" opacity="0.3"/%3E%3Crect x="10" width="1" height="1" fill="%2300ff00" opacity="0.3"/%3E%3Crect x="12" width="1" height="1" fill="%2300ff00" opacity="0.3"/%3E%3Crect x="14" width="1" height="1" fill="%2300ff00" opacity="0.3"/%3E%3Crect x="16" width="1" height="1" fill="%2300ff00" opacity="0.3"/%3E%3Crect x="18" width="1" height="1" fill="%2300ff00" opacity="0.3"/%3E%3C/svg%3E');
+  
+  background: var(--theme-bg);
+  background-image: var(--theme-pattern);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  font-family: 'Courier New', monospace;
+  
+  &:hover {
+    box-shadow: 0 0 15px #00ff00, 0 0 20px #00ff00;
+  }
+}
+
+@mixin variant-bioshock-enhanced {
+  --theme-bg: linear-gradient(135deg, #1e293b 0%, #06b6d4 100%);
+  --theme-color: #f59e0b;
+  --theme-border: 2px solid #f59e0b;
+  --theme-accent: #f59e0b;
+  --theme-shadow: 0 0 20px rgba(245, 158, 11, 0.5);
+  --theme-pattern: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M10 2L18 10L10 18L2 10Z" stroke="%23f59e0b" stroke-width="1" fill="none"/%3E%3Cpath d="M5 5L15 5L15 15L5 15Z" stroke="%23f59e0b" stroke-width="0.5" fill="none"/%3E%3C/svg%3E');
+  
+  background: var(--theme-bg);
+  background-image: var(--theme-pattern);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  
+  &:hover {
+    background: linear-gradient(135deg, #06b6d4 0%, #1e293b 100%);
+    box-shadow: 0 0 25px rgba(245, 158, 11, 0.7);
+  }
+}
+
+@mixin variant-lol {
+  --theme-bg: linear-gradient(135deg, #1e40af 0%, #dc2626 100%);
+  --theme-color: #ffffff;
+  --theme-border: 2px solid #fbbf24;
+  --theme-accent: #fbbf24;
+  --theme-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+  --theme-pattern: url('data:image/svg+xml,%3Csvg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="5" cy="5" r="2" fill="%23fbbf24" opacity="0.7"/%3E%3C/svg%3E');
+  
+  background: var(--theme-bg);
+  background-image: var(--theme-pattern);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(251, 191, 36, 0.7);
+  }
+}
+
+@mixin variant-overwatch {
+  --theme-bg: linear-gradient(135deg, #3b82f6 0%, #ef4444 100%);
+  --theme-color: #ffffff;
+  --theme-border: 2px solid #f59e0b;
+  --theme-accent: #f59e0b;
+  --theme-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+  --theme-pattern: url('data:image/svg+xml,%3Csvg width="15" height="15" viewBox="0 0 15 15" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M7.5 0L15 7.5L7.5 15L0 7.5Z" stroke="%23f59e0b" stroke-width="1" fill="none"/%3E%3C/svg%3E');
+  
+  background: var(--theme-bg);
+  background-image: var(--theme-pattern);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  
+  &:hover {
+    animation: pulse 0.5s ease-in-out;
+  }
+}
+
+@mixin variant-minecraft {
+  --theme-bg: #7b5e38;
+  --theme-color: #ffffff;
+  --theme-border: 3px solid #4a3a22;
+  --theme-accent: #4a3a22;
+  --theme-shadow: 2px 2px 0 #4a3a22, 4px 4px 0 rgba(0, 0, 0, 0.2);
+  --theme-pattern: url('data:image/svg+xml,%3Csvg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"%3E%3Crect width="2" height="2" fill="%238b7355"/%3E%3Crect x="4" width="2" height="2" fill="%238b7355"/%3E%3Crect x="8" width="2" height="2" fill="%238b7355"/%3E%3Crect y="4" width="2" height="2" fill="%238b7355"/%3E%3Crect x="6" y="4" width="2" height="2" fill="%238b7355"/%3E%3Crect y="8" width="2" height="2" fill="%238b7355"/%3E%3C/svg%3E');
+  
+  background: var(--theme-bg);
+  background-image: var(--theme-pattern);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  font-family: 'Minecraft', sans-serif;
+  
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 1px 1px 0 #4a3a22;
+  }
+}
+
+@mixin variant-fortnite {
+  --theme-bg: linear-gradient(135deg, #00d4ff 0%, #0077ff 100%);
+  --theme-color: #ffffff;
+  --theme-border: 2px solid #ffffff;
+  --theme-accent: #ffffff;
+  --theme-shadow: 0 0 15px rgba(0, 119, 255, 0.5);
+  --theme-pattern: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M10 0L20 10L10 20L0 10Z" stroke="%23ffffff" stroke-width="1" fill="none" opacity="0.3"/%3E%3Cpath d="M5 5L15 5L15 15L5 15Z" stroke="%23ffffff" stroke-width="0.5" fill="none" opacity="0.3"/%3E%3C/svg%3E');
+  
+  background: var(--theme-bg);
+  background-image: var(--theme-pattern);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  
+  &:hover {
+    background: linear-gradient(135deg, #0077ff 0%, #00d4ff 100%);
+    box-shadow: 0 0 20px rgba(0, 119, 255, 0.7);
+  }
+}
+
 @mixin apply-all-variants($prefix: 'variant-') {
     &.#{$prefix}primary { @include variant-primary; }
     &.#{$prefix}secondary { @include variant-secondary; }
@@ -713,7 +916,7 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}electoon { @include variant-electoon; }
     &.#{$prefix}holo { @include variant-holo; }
     &.#{$prefix}quantum { @include variant-quantum; }
-    
+     
     // Premium Gaming Themes
     &.#{$prefix}mario { @include variant-mario; }
     &.#{$prefix}zelda { @include variant-zelda; }
@@ -758,7 +961,19 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}neomorph { @include variant-neomorph; }
     &.#{$prefix}glitch { @include variant-glitch; }
     &.#{$prefix}portal { @include variant-portal; }
-
+   
+    // New Gaming-Inspired Variants
+    &.#{$prefix}pokemon { @include variant-pokemon; }
+    &.#{$prefix}animal-crossing { @include variant-animal-crossing; }
+    &.#{$prefix}assassins-creed { @include variant-assassins-creed; }
+    &.#{$prefix}far-cry { @include variant-far-cry; }
+    &.#{$prefix}watch-dogs { @include variant-watch-dogs; }
+    &.#{$prefix}bioshock-enhanced { @include variant-bioshock-enhanced; }
+    &.#{$prefix}lol { @include variant-lol; }
+    &.#{$prefix}overwatch { @include variant-overwatch; }
+    &.#{$prefix}minecraft { @include variant-minecraft; }
+    &.#{$prefix}fortnite { @include variant-fortnite; }
+   
     // Alias
     &.#{$prefix}supermeatboy { @include variant-super-meat-boy; }
     &.#{$prefix}default { @include variant-glass; }
@@ -785,7 +1000,7 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}electoon #{$child} { @include variant-electoon; }
     &.#{$prefix}holo #{$child} { @include variant-holo; }
     &.#{$prefix}quantum #{$child} { @include variant-quantum; }
-    
+     
     // Premium Gaming Themes
     &.#{$prefix}mario #{$child} { @include variant-mario; }
     &.#{$prefix}zelda #{$child} { @include variant-zelda; }
@@ -830,7 +1045,19 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}neomorph #{$child} { @include variant-neomorph; }
     &.#{$prefix}glitch #{$child} { @include variant-glitch; }
     &.#{$prefix}portal #{$child} { @include variant-portal; }
-
+   
+    // New Gaming-Inspired Variants
+    &.#{$prefix}pokemon #{$child} { @include variant-pokemon; }
+    &.#{$prefix}animal-crossing #{$child} { @include variant-animal-crossing; }
+    &.#{$prefix}assassins-creed #{$child} { @include variant-assassins-creed; }
+    &.#{$prefix}far-cry #{$child} { @include variant-far-cry; }
+    &.#{$prefix}watch-dogs #{$child} { @include variant-watch-dogs; }
+    &.#{$prefix}bioshock-enhanced #{$child} { @include variant-bioshock-enhanced; }
+    &.#{$prefix}lol #{$child} { @include variant-lol; }
+    &.#{$prefix}overwatch #{$child} { @include variant-overwatch; }
+    &.#{$prefix}minecraft #{$child} { @include variant-minecraft; }
+    &.#{$prefix}fortnite #{$child} { @include variant-fortnite; }
+   
     // Alias
     &.#{$prefix}supermeatboy #{$child} { @include variant-super-meat-boy; }
 }

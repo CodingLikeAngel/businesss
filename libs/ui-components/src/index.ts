@@ -58,3 +58,6 @@ export * from './lib/breadcrumbs/breadcrumbs.component';
 export * from './lib/contact-section/contact-section.component';
 export * from './lib/newsletter-section/newsletter-section.component';
 export * from './lib/steps-section/steps-section.component';
+
+// Showcase Components
+export * from './lib/showcase/gaming-variants-showcase.component';
