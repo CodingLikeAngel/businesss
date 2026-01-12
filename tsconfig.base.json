@@ -40,17 +40,17 @@
       "@negocio/features/feature-contact-shell": [
         "libs/features/contact/shell/src/index.ts"
       ],
-      "@negocio/features/feature-home": [
-        "libs/features/home/feature-home/src/index.ts"
+      "@negocio/features/feature-editor": [
+        "libs/features/editor/feature-editor/src/index.ts"
       ],
-      "@negocio/features/feature-home-api": [
-        "libs/features/home/api/src/index.ts"
+      "@negocio/features/feature-editor-api": [
+        "libs/features/editor/feature-editor-api/src/index.ts"
       ],
-      "@negocio/features/feature-home-data-access": [
-        "libs/features/home/data-access/src/index.ts"
+      "@negocio/features/feature-editor-data-access": [
+        "libs/features/editor/feature-editor-data-access/src/index.ts"
       ],
-      "@negocio/features/feature-home-shell": [
-        "libs/features/home/shell/src/index.ts"
+      "@negocio/features/feature-editor-shell": [
+        "libs/features/editor/feature-editor-shell/src/index.ts"
       ],
       "@negocio/shared-components": ["libs/shared-components/src/index.ts"],
       "@negocio/ui-components": ["libs/ui-components/src/index.ts"]

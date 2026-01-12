@@ -9,12 +9,12 @@ export const appRoutes: Route[] = [
     {
       path: 'mobile',
       loadChildren: () =>
-        import('@negocio/features/feature-home-shell').then((m) => m.AntoShellRoutingMobileModule),
+        import('@negocio/features/feature-editor-shell').then((m) => m.AntoShellRoutingMobileModule),
     },
     {
       path: 'desktop',
       loadChildren: () =>
-        import('@negocio/features/feature-home-shell').then((m) => m.AntoShellRoutingDesktopModule),
+        import('@negocio/features/feature-editor-shell').then((m) => m.AntoShellRoutingDesktopModule),
     },
     {
         path: 'about',
