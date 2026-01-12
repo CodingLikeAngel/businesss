@@ -1,4 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit, Inject, PLATFORM_ID, TrackByFunction, inject } from '@angular/core';
+import { HomeService, CartService, ModalService } from '../../../index';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -21,7 +22,6 @@ import {
   StatsConfig,
 } from '@negocio/shared-components';
 import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
-import { HomeService, CartService, ModalService } from '../../services';
 import { HomeState, ModalState } from '../../models/home.model';
 
 @Component({
@@ -143,7 +143,7 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
   onResize() {
     if (isPlatformBrowser(this.platformId)) {
       const isMobile = window.innerWidth < 768;
-      this.homeService.updateHomeState({ isMobile });
+      inject(HomeService).updateHomeState({ isMobile });
     }
   }
 
@@ -162,11 +162,11 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
   }
 
   openServiceModal(service: any) {
-    this.modalService.openModal(service);
+    inject(ModalService).openModal(service);
   }
 
   closeModal() {
-    this.modalService.closeModal();
+    inject(ModalService).closeModal();
   }
 
   handleKeyUp(event: KeyboardEvent, service: any) {
@@ -176,7 +176,7 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
   }
 
   addToCart(product: { name: string; image: string; description: string; price: string }) {
-    this.cartService.addToCart(product);
+    inject(CartService).addToCart(product);
   }
 
   getVariant(componentId: string): any {

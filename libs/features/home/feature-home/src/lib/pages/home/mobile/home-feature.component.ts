@@ -1,4 +1,5 @@
 import { Component, OnInit, TrackByFunction, inject } from '@angular/core';
+import { HomeService } from '../../../../index';
 import { BaseHomeFeatureComponent } from '../base-home-feature.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
@@ -21,7 +22,6 @@ import { GallerySectionComponent } from '../../../components/gallery-section/gal
 import { PricingSectionComponent } from '../../../components/pricing-section/pricing-section.component';
 import { PromotionsSectionComponent } from '../../../components/promotions-section/promotions-section.component';
 import { ReservationFormComponent } from '../../../components/reservation-form/reservation-form.component';
-import { HomeService } from '../../../services';
 
 @Component({
   selector: 'lib-home-mobile-feature',
