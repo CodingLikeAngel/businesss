@@ -20,8 +20,16 @@ export class AppComponent implements OnInit {
   private platformId = inject(PLATFORM_ID);
 
   loading = computed(() => this.loadingService.loading());
+  currentTheme: 'dark' | 'light' = 'dark';
 
   ngOnInit() {
+    // Initialize theme
+    if (isPlatformBrowser(this.platformId)) {
+      const savedTheme = localStorage.getItem('theme') as 'dark' | 'light' | null;
+      this.currentTheme = savedTheme || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      this.applyTheme();
+    }
+
     // Metadatos por defecto
     this.titleService.setTitle('Anto Studios - Webs Profesionales a Medida');
     this.metaService.updateTag({
@@ -44,6 +52,20 @@ export class AppComponent implements OnInit {
       property: 'og:image',
       content: 'https://antostudios.com/assets/og-image.jpg',
     });
-    
+
+  }
+
+  toggleTheme() {
+    this.currentTheme = this.currentTheme === 'dark' ? 'light' : 'dark';
+    this.applyTheme();
+    if (isPlatformBrowser(this.platformId)) {
+      localStorage.setItem('theme', this.currentTheme);
+    }
+  }
+
+  private applyTheme() {
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.className = this.currentTheme;
+    }
   }
 }
