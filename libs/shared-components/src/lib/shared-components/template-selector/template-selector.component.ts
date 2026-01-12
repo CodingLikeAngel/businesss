@@ -98,8 +98,9 @@ export class TemplateSelectorComponent implements OnInit {
   selectTemplate(template: BusinessTemplate) {
     console.log('Template selected:', template.name);
     this.selectedTemplate = template;
-    // No longer apply immediately - just set for preview
-    console.log('Template selected for preview');
+    // Apply template for live preview
+    this.variantService.applyTemplate(template);
+    console.log('Template applied for preview');
   }
 
   applyTemplate() {
