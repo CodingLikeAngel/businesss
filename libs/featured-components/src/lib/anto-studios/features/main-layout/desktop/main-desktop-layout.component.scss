@@ -68,7 +68,7 @@ aside {
   height: 100vh;
   position: sticky;
   top: 0;
-  overflow-y: scroll;
+  overflow: visible;
   padding: 1.5rem;
   border-right: var(--theme-border, 1px solid #4b5563);
   color: var(--theme-color, #f3f4f6);
