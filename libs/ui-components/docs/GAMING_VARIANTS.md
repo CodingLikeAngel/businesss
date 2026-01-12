@@ -224,6 +224,25 @@ We've added 10 new gaming-themed variants that draw inspiration from popular vid
 - Classic arcade aesthetic
 - Nostalgic 80s gaming feel
 
+### 13. Supermeatboy Variant
+**Theme**: Alternative name for Super Meat Boy variant
+**Best for**: Challenging platformer games and retro gaming applications
+
+```html
+<lib-ui-components-button variant="supermeatboy">
+  Jump & Die
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="supermeatboy" placeholder="Enter level code"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Red background with dark red borders
+- Bloody, meaty aesthetic
+- Retro platformer feel
+- Simple but challenging appearance
+- Alias for super-meat-boy variant
+
 ## Usage Guidelines
 
 ### Best Practices

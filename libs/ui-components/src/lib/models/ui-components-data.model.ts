@@ -72,6 +72,11 @@ export const variants = [
     'minecraft',
     'fortnite',
     // Additional variants
+    'ice',
+    'metal',
+    'energy',
+    'void',
+    'cosmic',
     'plasma',
     'arcade',
     'pixel',
