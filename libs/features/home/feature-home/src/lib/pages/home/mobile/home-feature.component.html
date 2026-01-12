@@ -5,7 +5,7 @@
           [tabs]="tabsConfig"
           [variant]="getVariant('hero')"
           [showAs]="'tabs'"
-          [isMobile]="isMobile"
+          [isMobile]="homeState.isMobile"
           (tabSelected)="onTabSelected($event)"
         ></lib-ui-components-tabs>
       </div>
@@ -47,7 +47,7 @@
       [variant]="getVariant('card')"
       [backgroundColor]="cardConfig.backgroundColor"
       [animation]="cardConfig.animation"
-      [isMobile]="isMobile"
+      [isMobile]="homeState.isMobile"
     ></lib-ui-components-ui-card-rutas>
   </div>
 </section>
@@ -180,11 +180,11 @@
 </section>
 
 <lib-ui-components-modal
-  [isOpen]="modalOpen"
-  [variant]="'glass'"
-  [rounded]="'md'"
-  [size]="'lg'"
-  [title]="selectedService?.name || 'Detalles del Servicio'"
-  [content]="selectedService?.description || 'Selecciona un servicio para ver más detalles.'"
-  (modalOnClose)="closeModal()"
-></lib-ui-components-modal>
+   [isOpen]="modalState.isOpen"
+   [variant]="'glass'"
+   [rounded]="'md'"
+   [size]="'lg'"
+   [title]="getModalTitle()"
+   [content]="modalState.selectedItem?.description || 'Selecciona un item para ver más detalles.'"
+   (modalOnClose)="closeModal()"
+ ></lib-ui-components-modal>

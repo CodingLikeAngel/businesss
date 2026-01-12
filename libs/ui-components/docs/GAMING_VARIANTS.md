@@ -243,6 +243,215 @@ We've added 10 new gaming-themed variants that draw inspiration from popular vid
 - Simple but challenging appearance
 - Alias for super-meat-boy variant
 
+### 14. Ice Variant
+**Theme**: Frozen, icy aesthetic with cool blue tones
+**Best for**: Winter-themed applications, cold environments, and frosty interfaces
+
+```html
+<lib-ui-components-button variant="ice">
+  Freeze Attack
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="ice" placeholder="Enter ice spell"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Light blue gradient background
+- Icy texture pattern
+- Cool blue accent borders
+- Frosty glow effects
+- Perfect for winter or ice-themed applications
+
+### 15. Metal Variant
+**Theme**: Metallic, industrial aesthetic
+**Best for**: Mechanical, engineering, or industrial applications
+
+```html
+<lib-ui-components-button variant="metal">
+  Forge Metal
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="metal" placeholder="Enter alloy composition"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Silver metallic gradient background
+- Brushed metal texture pattern
+- Dark gray accent borders
+- Industrial, mechanical feel
+- Ideal for engineering or manufacturing applications
+
+### 16. Energy Variant
+**Theme**: Electric, high-voltage aesthetic
+**Best for**: Power, energy, or technology-related applications
+
+```html
+<lib-ui-components-button variant="energy">
+  Power Up
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="energy" placeholder="Enter voltage level"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Blue and yellow gradient background
+- Electric spark pattern
+- Glowing yellow accent borders
+- High-energy visual effects
+- Perfect for power or energy-themed applications
+
+### 17. Void Variant
+**Theme**: Dark, cosmic void aesthetic
+**Best for**: Space, mystery, or cosmic-themed applications
+
+```html
+<lib-ui-components-button variant="void">
+  Enter the Void
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="void" placeholder="Enter cosmic coordinates"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Deep purple and black gradient background
+- Cosmic star pattern
+- Dark purple accent borders
+- Mysterious, cosmic feel
+- Ideal for space or cosmic-themed applications
+
+### 18. Cosmic Variant
+**Theme**: Galactic, starry aesthetic
+**Best for**: Space exploration, astronomy, or futuristic applications
+
+```html
+<lib-ui-components-button variant="cosmic">
+  Explore Galaxy
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="cosmic" placeholder="Enter star system"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Dark blue and purple gradient background
+- Starfield pattern
+- Glowing blue accent borders
+- Galactic, cosmic feel
+- Perfect for space or astronomy-themed applications
+
+### 19. Plasma Variant
+**Theme**: Hot, glowing plasma aesthetic
+**Best for**: High-tech, futuristic, or energy applications
+
+```html
+<lib-ui-components-button variant="plasma">
+  Activate Plasma
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="plasma" placeholder="Enter plasma temperature"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Purple and pink gradient background
+- Plasma glow pattern
+- Bright pink accent borders
+- Hot, glowing effects
+- Ideal for futuristic or high-energy applications
+
+### 20. Arcade Variant
+**Theme**: Retro arcade game aesthetic
+**Best for**: Gaming, entertainment, or retro-themed applications
+
+```html
+<lib-ui-components-button variant="arcade">
+  Play Game
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="arcade" placeholder="Enter high score"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Bright blue and pink gradient background
+- Pixelated arcade pattern
+- Neon accent borders
+- Retro gaming feel
+- Perfect for arcade or retro gaming applications
+
+### 21. Pixel Variant
+**Theme**: Pixel art aesthetic
+**Best for**: Retro gaming, pixel art, or nostalgic applications
+
+```html
+<lib-ui-components-button variant="pixel">
+  Pixel Power
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="pixel" placeholder="Enter pixel coordinates"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Pixelated background pattern
+- 8-bit color palette
+- Blocky, pixel-perfect design
+- Retro gaming aesthetic
+- Ideal for pixel art or retro gaming applications
+
+### 22. Chaos Variant
+**Theme**: Chaotic, unpredictable aesthetic
+**Best for**: Random, dynamic, or unpredictable applications
+
+```html
+<lib-ui-components-button variant="chaos">
+  Embrace Chaos
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="chaos" placeholder="Enter chaos factor"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Random color patterns
+- Chaotic, unpredictable design
+- Dynamic visual effects
+- Unconventional aesthetic
+- Perfect for random or dynamic applications
+
+### 23. Vortex Variant
+**Theme**: Swirling, spinning aesthetic
+**Best for**: Motion, energy, or dynamic applications
+
+```html
+<lib-ui-components-button variant="vortex">
+  Enter Vortex
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="vortex" placeholder="Enter vortex speed"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Swirling spiral pattern
+- Dynamic, spinning effects
+- Circular motion aesthetic
+- Energetic visual style
+- Ideal for motion or energy-themed applications
+
+### 24. Stone Variant
+**Theme**: Natural stone aesthetic
+**Best for**: Nature, outdoor, or rustic applications
+
+```html
+<lib-ui-components-button variant="stone">
+  Carve Stone
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="stone" placeholder="Enter stone type"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Gray stone texture background
+- Natural, earthy colors
+- Rough, textured aesthetic
+- Outdoor, natural feel
+- Perfect for nature or outdoor-themed applications
+
 ## Usage Guidelines
 
 ### Best Practices

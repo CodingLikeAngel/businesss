@@ -1,10 +1,13 @@
 <div class="sections-container min-h-screen relative pb-32">
-  
-  <div *ngIf="(sections$ | async)?.length === 0" class="flex flex-col items-center justify-center p-20 text-white/50">
-    <div class="text-6xl mb-4">🏗️</div>
-    <h2 class="text-2xl font-bold">Página vacía</h2>
-    <p>Añade secciones desde la pestaña "Estructura Página" en el panel izquierdo.</p>
-  </div>
+   <div *ngIf="loading$ | async" class="flex items-center justify-center p-20">
+     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+   </div>
+
+   <div *ngIf="(sections$ | async)?.length === 0 && !(loading$ | async)" class="flex flex-col items-center justify-center p-20 text-white/50">
+     <div class="text-6xl mb-4">🏗️</div>
+     <h2 class="text-2xl font-bold">Página vacía</h2>
+     <p>Añade secciones desde la pestaña "Estructura Página" en el panel izquierdo.</p>
+   </div>
   <ng-container *ngFor="let section of sections$ | async; trackBy: trackBySectionId">
     <ng-container [ngSwitch]="section.type" *ngIf="section.visible">
       
@@ -182,13 +185,13 @@
   </ng-container>
 </div>
 <lib-ui-components-modal
-  [isOpen]="modalOpen"
-  [variant]="'glass'"
-  [rounded]="'md'"
-  [size]="'lg'"
-  [title]="selectedService?.serviceName || 'Detalles del Servicio'"
-  [content]="selectedService?.description || 'Selecciona un servicio para ver más detalles.'"
-  (modalOnClose)="closeModal()"
-></lib-ui-components-modal>
+   [isOpen]="modalState.isOpen"
+   [variant]="'glass'"
+   [rounded]="'md'"
+   [size]="'lg'"
+   [title]="getModalTitle()"
+   [content]="modalState.selectedItem?.description || 'Selecciona un item para ver más detalles.'"
+   (modalOnClose)="closeModal()"
+ ></lib-ui-components-modal>
 
 <!-- <lib-chat-component></lib-chat-component> -->

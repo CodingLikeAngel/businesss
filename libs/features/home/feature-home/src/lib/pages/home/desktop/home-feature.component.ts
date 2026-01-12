@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, inject } from '@angular/core';
 import { BaseHomeFeatureComponent } from '../base-home-feature.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
@@ -23,6 +23,7 @@ import {
 import { Product, Testimonial, PageSection, VariantService } from '@negocio/shared-components';
 import { PromotionsSectionComponent } from '../../../components/promotions-section/promotions-section.component';
 import { ReservationFormComponent } from '../../../components/reservation-form/reservation-form.component';
+import { HomeService, CartService, ModalService } from '../../../services';
 
 @Component({
   selector: 'lib-home-desktop-feature',
@@ -54,9 +55,9 @@ export class HomeDesktopFeatureComponent extends BaseHomeFeatureComponent implem
   sections$: Observable<PageSection[]>;
 
   constructor(
-    @Inject(PLATFORM_ID) protected override platformId: object, 
-    protected override variantService: VariantService, 
-    protected override router: Router, 
+    @Inject(PLATFORM_ID) protected override platformId: object,
+    protected override variantService: VariantService,
+    protected override router: Router,
     protected override route: ActivatedRoute
   ) {
     super(platformId, variantService, router, route);
@@ -65,7 +66,7 @@ export class HomeDesktopFeatureComponent extends BaseHomeFeatureComponent implem
 
   override ngOnInit() {
     super.ngOnInit();
-    this.isMobile = false;
+    this.homeService.updateHomeState({ isMobile: false });
   }
 
   onTabSelected(sectionId: string) {

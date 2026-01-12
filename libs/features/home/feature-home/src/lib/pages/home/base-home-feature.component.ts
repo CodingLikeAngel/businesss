@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, Inject, PLATFORM_ID, TrackByFunction } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, Inject, PLATFORM_ID, TrackByFunction, inject } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -21,6 +21,8 @@ import {
   StatsConfig,
 } from '@negocio/shared-components';
 import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
+import { HomeService, CartService, ModalService } from '../../services';
+import { HomeState, ModalState } from '../../models/home.model';
 
 @Component({
   standalone: true,
@@ -28,11 +30,10 @@ import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVa
   template: '',
 })
 export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
-  isMobile: boolean;
-  modalOpen = false;
-  selectedService: any | null = null;
   private variantSub?: Subscription;
   private configSubs: Subscription[] = [];
+  private homeStateSub?: Subscription;
+  private modalStateSub?: Subscription;
 
   componentVariants: { [key: string]: string } = {};
   globalVariant = 'default';
@@ -51,6 +52,10 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
   testimonialsConfig: TestimonialsConfig;
   statsConfig: StatsConfig;
 
+  homeState: HomeState;
+  modalState: ModalState;
+  loading$ = inject(HomeService).loading$;
+
   tabsConfig: any[] = [
     { label: 'Servicios', sectionId: 'servicios', icon: '🛠️' },
     { label: 'Productos', sectionId: 'productos', icon: '🧩' },
@@ -60,7 +65,7 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
     { label: 'Galería', sectionId: 'galeria', icon: '🖼️' },
     // { label: 'Contacto', sectionId: 'contacto', icon: '📞' },
   ];
-  
+
 
   trackByTestimonialId: TrackByFunction<Testimonial> = (
     index: number,
@@ -69,8 +74,16 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
 
   trackByProductName: TrackByFunction<any> = (index: number, product: any) => product.name;
 
-  constructor(@Inject(PLATFORM_ID) protected platformId: object, protected variantService: VariantService, protected router: Router, protected route: ActivatedRoute) {
-    this.isMobile = false;
+  constructor(
+    @Inject(PLATFORM_ID) protected platformId: object,
+    protected variantService: VariantService,
+    protected router: Router,
+    protected route: ActivatedRoute
+  ) {
+    const homeService = inject(HomeService);
+    const cartService = inject(CartService);
+    const modalService = inject(ModalService);
+
     this.navBarConfig = this.variantService.getCurrentNavBarConfig();
     this.heroConfig = this.variantService.getCurrentHeroConfig();
     this.footerConfig = this.variantService.getCurrentFooterConfig();
@@ -85,6 +98,9 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
     this.productsConfig = this.variantService.getCurrentProductsConfig();
     this.testimonialsConfig = this.variantService.getCurrentTestimonialsConfig();
     this.statsConfig = this.variantService.getCurrentStatsConfig();
+
+    this.homeState = homeService.getCurrentHomeState();
+    this.modalState = modalService.getCurrentModalState();
 
     this.variantSub = this.variantService.componentVariants$.subscribe((variants) => {
       this.componentVariants = { ...variants };
@@ -108,9 +124,17 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
       this.variantService.testimonialsConfig$.subscribe((config) => (this.testimonialsConfig = config)),
       this.variantService.statsConfig$.subscribe((config) => (this.statsConfig = config))
     );
+
+    this.homeStateSub = homeService.homeState$.subscribe((state) => {
+      this.homeState = state;
+    });
+
+    this.modalStateSub = modalService.modalState$.subscribe((state) => {
+      this.modalState = state;
+    });
   }
 
-  
+
   ngOnInit() {
     this.onResize();
   }
@@ -118,30 +142,31 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
   @HostListener('window:resize')
   onResize() {
     if (isPlatformBrowser(this.platformId)) {
-      this.isMobile = window.innerWidth < 768;
+      const isMobile = window.innerWidth < 768;
+      this.homeService.updateHomeState({ isMobile });
     }
   }
 
   ngOnDestroy() {
     this.variantSub?.unsubscribe();
     this.configSubs.forEach((sub) => sub.unsubscribe());
+    this.homeStateSub?.unsubscribe();
+    this.modalStateSub?.unsubscribe();
   }
 
 
-  
+
   onSocialClick(href: string) {
     console.log(`Social media clicked: ${href}`);
     window.open(href, '_blank');
   }
 
   openServiceModal(service: any) {
-    this.selectedService = service;
-    this.modalOpen = true;
+    this.modalService.openModal(service);
   }
 
   closeModal() {
-    this.modalOpen = false;
-    this.selectedService = null;
+    this.modalService.closeModal();
   }
 
   handleKeyUp(event: KeyboardEvent, service: any) {
@@ -151,12 +176,24 @@ export abstract class BaseHomeFeatureComponent implements OnInit, OnDestroy {
   }
 
   addToCart(product: { name: string; image: string; description: string; price: string }) {
-    console.log(`Producto añadido al carrito: ${product.name}`);
+    this.cartService.addToCart(product);
   }
 
   getVariant(componentId: string): any {
     return this.componentVariants[componentId] || this.globalVariant;
   }
 
-  
+  getModalTitle(): string {
+    const item = this.modalState.selectedItem;
+    if (!item) return 'Detalles';
+    if ('serviceName' in item) {
+      return item.serviceName;
+    }
+    if ('name' in item) {
+      return item.name;
+    }
+    return 'Detalles';
+  }
+
+
 }
