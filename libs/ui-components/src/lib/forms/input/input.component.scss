@@ -65,9 +65,19 @@
       padding-right: 2.5rem;
       
       option {
-        background-color: #0f172a;
-        color: #f8fafc;
+        background-color: #1e293b;
+        color: #f1f5f9;
         padding: 0.5rem;
+        
+        &:hover, &:focus {
+          background-color: #334155;
+          color: #ffffff;
+        }
+        
+        &:checked {
+          background-color: #6366f1;
+          color: #ffffff;
+        }
       }
     }
 
