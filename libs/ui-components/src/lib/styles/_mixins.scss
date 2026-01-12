@@ -530,6 +530,220 @@ $glass-border: rgba(255, 255, 255, 0.2);
   box-shadow: var(--theme-shadow);
 }
 
+@mixin variant-default {
+  --theme-bg: #1f2937;
+  --theme-color: #f3f4f6;
+  --theme-border: 1px solid #374151;
+  --theme-accent: #3b82f6;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+}
+
+@mixin variant-river {
+  --theme-bg: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.2));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(59, 130, 246, 0.5);
+  --theme-accent: #10b981;
+  --theme-shadow: 0 0 15px #3b82f6;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-ice {
+  --theme-bg: linear-gradient(135deg, rgba(147, 197, 253, 0.2), rgba(255, 255, 255, 0.3));
+  --theme-color: #1e293b;
+  --theme-border: 2px solid rgba(147, 197, 253, 0.5);
+  --theme-accent: #93c5fd;
+  --theme-shadow: 0 0 15px #93c5fd;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-metal {
+  --theme-bg: linear-gradient(135deg, rgba(107, 114, 128, 0.3), rgba(156, 163, 175, 0.3));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(107, 114, 128, 0.5);
+  --theme-accent: #6b7280;
+  --theme-shadow: 0 0 10px #6b7280;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-energy {
+  --theme-bg: linear-gradient(135deg, rgba(234, 179, 8, 0.2), rgba(249, 115, 22, 0.2));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(234, 179, 8, 0.5);
+  --theme-accent: #fbbf24;
+  --theme-shadow: 0 0 15px #fbbf24;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-void {
+  --theme-bg: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(17, 24, 39, 0.9));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(76, 29, 149, 0.5);
+  --theme-accent: #6d28d9;
+  --theme-shadow: 0 0 15px #6d28d9;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-cosmic {
+  --theme-bg: linear-gradient(135deg, rgba(76, 29, 149, 0.8), rgba(17, 24, 39, 0.8));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(76, 29, 149, 0.5);
+  --theme-accent: #a5b4fc;
+  --theme-shadow: 0 0 15px #4c1d95;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-arcade {
+  --theme-bg: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(0, 0, 255, 0.2));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(255, 0, 0, 0.5);
+  --theme-accent: #ffcc00;
+  --theme-shadow: 0 0 15px #ff0000;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-pixel {
+  --theme-bg: linear-gradient(135deg, rgba(0, 0, 0, 0.2), rgba(255, 255, 255, 0.2));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(0, 0, 0, 0.5);
+  --theme-accent: #ffffff;
+  --theme-shadow: 0 0 10px #ffffff;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-chaos {
+  --theme-bg: linear-gradient(135deg, rgba(255, 0, 0, 0.3), rgba(0, 255, 0, 0.3));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(255, 0, 0, 0.5);
+  --theme-accent: #00ff00;
+  --theme-shadow: 0 0 15px #00ff00;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-vortex {
+  --theme-bg: linear-gradient(135deg, rgba(76, 29, 149, 0.3), rgba(17, 24, 39, 0.3));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(76, 29, 149, 0.5);
+  --theme-accent: #a5b4fc;
+  --theme-shadow: 0 0 15px #a5b4fc;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-stone {
+  --theme-bg: linear-gradient(135deg, rgba(120, 119, 116, 0.3), rgba(161, 161, 170, 0.3));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(120, 119, 116, 0.5);
+  --theme-accent: #787774;
+  --theme-shadow: 0 0 10px #787774;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-donkeykong {
+  --theme-bg: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(0, 0, 255, 0.2));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(255, 0, 0, 0.5);
+  --theme-accent: #ffcc00;
+  --theme-shadow: 0 0 15px #ff0000;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-supermeatboy {
+  --theme-bg: #dc2626;
+  --theme-color: #ffffff;
+  --theme-border: 4px solid #7f1d1d;
+  --theme-accent: #7f1d1d;
+  --theme-shadow: 5px 5px 0px #7f1d1d;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-aqua {
+  --theme-bg: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(14, 165, 233, 0.2));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(56, 189, 248, 0.5);
+  --theme-accent: #0ea5e9;
+  --theme-shadow: 0 0 15px #0ea5e9;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-vaporwave {
+  --theme-bg: linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(0, 255, 255, 0.2));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(255, 0, 255, 0.5);
+  --theme-accent: #00ffff;
+  --theme-shadow: 0 0 15px #00ffff;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-aurora {
+  --theme-bg: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(16, 185, 129, 0.2));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(56, 189, 248, 0.5);
+  --theme-accent: #10b981;
+  --theme-shadow: 0 0 15px #10b981;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-trailblazer {
+  --theme-bg: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(255, 215, 0, 0.2));
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(255, 0, 0, 0.5);
+  --theme-accent: #ffd700;
+  --theme-shadow: 0 0 15px #ffd700;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
 @mixin variant-amber-glow {
   --theme-bg: #f59e0b;
   --theme-color: #1e293b;
@@ -896,6 +1110,7 @@ $glass-border: rgba(255, 255, 255, 0.2);
 }
 
 @mixin apply-all-variants($prefix: 'variant-') {
+    &.#{$prefix}default { @include variant-default; }
     &.#{$prefix}primary { @include variant-primary; }
     &.#{$prefix}secondary { @include variant-secondary; }
     &.#{$prefix}outline { @include variant-outline; }
@@ -916,7 +1131,24 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}electoon { @include variant-electoon; }
     &.#{$prefix}holo { @include variant-holo; }
     &.#{$prefix}quantum { @include variant-quantum; }
-     
+    &.#{$prefix}river { @include variant-river; }
+    &.#{$prefix}ice { @include variant-ice; }
+    &.#{$prefix}metal { @include variant-metal; }
+    &.#{$prefix}energy { @include variant-energy; }
+    &.#{$prefix}void { @include variant-void; }
+    &.#{$prefix}cosmic { @include variant-cosmic; }
+    &.#{$prefix}arcade { @include variant-arcade; }
+    &.#{$prefix}pixel { @include variant-pixel; }
+    &.#{$prefix}chaos { @include variant-chaos; }
+    &.#{$prefix}vortex { @include variant-vortex; }
+    &.#{$prefix}stone { @include variant-stone; }
+    &.#{$prefix}donkeykong { @include variant-donkeykong; }
+    &.#{$prefix}supermeatboy { @include variant-supermeatboy; }
+    &.#{$prefix}aqua { @include variant-aqua; }
+    &.#{$prefix}vaporwave { @include variant-vaporwave; }
+    &.#{$prefix}aurora { @include variant-aurora; }
+    &.#{$prefix}trailblazer { @include variant-trailblazer; }
+      
     // Premium Gaming Themes
     &.#{$prefix}mario { @include variant-mario; }
     &.#{$prefix}zelda { @include variant-zelda; }
@@ -961,7 +1193,7 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}neomorph { @include variant-neomorph; }
     &.#{$prefix}glitch { @include variant-glitch; }
     &.#{$prefix}portal { @include variant-portal; }
-   
+    
     // New Gaming-Inspired Variants
     &.#{$prefix}pokemon { @include variant-pokemon; }
     &.#{$prefix}animal-crossing { @include variant-animal-crossing; }
@@ -973,13 +1205,10 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}overwatch { @include variant-overwatch; }
     &.#{$prefix}minecraft { @include variant-minecraft; }
     &.#{$prefix}fortnite { @include variant-fortnite; }
-   
-    // Alias
-    &.#{$prefix}supermeatboy { @include variant-super-meat-boy; }
-    &.#{$prefix}default { @include variant-glass; }
 }
 
 @mixin apply-variants-to-child($child, $prefix: 'variant-') {
+    &.#{$prefix}default #{$child} { @include variant-default; }
     &.#{$prefix}primary #{$child} { @include variant-primary; }
     &.#{$prefix}secondary #{$child} { @include variant-secondary; }
     &.#{$prefix}outline #{$child} { @include variant-outline; }
@@ -1000,7 +1229,24 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}electoon #{$child} { @include variant-electoon; }
     &.#{$prefix}holo #{$child} { @include variant-holo; }
     &.#{$prefix}quantum #{$child} { @include variant-quantum; }
-     
+    &.#{$prefix}river #{$child} { @include variant-river; }
+    &.#{$prefix}ice #{$child} { @include variant-ice; }
+    &.#{$prefix}metal #{$child} { @include variant-metal; }
+    &.#{$prefix}energy #{$child} { @include variant-energy; }
+    &.#{$prefix}void #{$child} { @include variant-void; }
+    &.#{$prefix}cosmic #{$child} { @include variant-cosmic; }
+    &.#{$prefix}arcade #{$child} { @include variant-arcade; }
+    &.#{$prefix}pixel #{$child} { @include variant-pixel; }
+    &.#{$prefix}chaos #{$child} { @include variant-chaos; }
+    &.#{$prefix}vortex #{$child} { @include variant-vortex; }
+    &.#{$prefix}stone #{$child} { @include variant-stone; }
+    &.#{$prefix}donkeykong #{$child} { @include variant-donkeykong; }
+    &.#{$prefix}supermeatboy #{$child} { @include variant-supermeatboy; }
+    &.#{$prefix}aqua #{$child} { @include variant-aqua; }
+    &.#{$prefix}vaporwave #{$child} { @include variant-vaporwave; }
+    &.#{$prefix}aurora #{$child} { @include variant-aurora; }
+    &.#{$prefix}trailblazer #{$child} { @include variant-trailblazer; }
+      
     // Premium Gaming Themes
     &.#{$prefix}mario #{$child} { @include variant-mario; }
     &.#{$prefix}zelda #{$child} { @include variant-zelda; }
@@ -1045,7 +1291,7 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}neomorph #{$child} { @include variant-neomorph; }
     &.#{$prefix}glitch #{$child} { @include variant-glitch; }
     &.#{$prefix}portal #{$child} { @include variant-portal; }
-   
+    
     // New Gaming-Inspired Variants
     &.#{$prefix}pokemon #{$child} { @include variant-pokemon; }
     &.#{$prefix}animal-crossing #{$child} { @include variant-animal-crossing; }
@@ -1057,7 +1303,4 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}overwatch #{$child} { @include variant-overwatch; }
     &.#{$prefix}minecraft #{$child} { @include variant-minecraft; }
     &.#{$prefix}fortnite #{$child} { @include variant-fortnite; }
-   
-    // Alias
-    &.#{$prefix}supermeatboy #{$child} { @include variant-super-meat-boy; }
 }

@@ -188,6 +188,42 @@ We've added 10 new gaming-themed variants that draw inspiration from popular vid
 - Battle pass patterns
 - Vibrant, energetic feel
 
+### 11. Super Meat Boy Variant
+**Theme**: Retro platformer aesthetic with red and bloody theme
+**Best for**: Challenging platformer games and retro gaming applications
+
+```html
+<lib-ui-components-button variant="super-meat-boy">
+  Jump & Die
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="super-meat-boy" placeholder="Enter level code"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Red background with dark red borders
+- Bloody, meaty aesthetic
+- Retro platformer feel
+- Simple but challenging appearance
+
+### 12. Donkey Kong Variant
+**Theme**: Classic arcade aesthetic with barrel and jungle theme
+**Best for**: Retro arcade games and classic gaming applications
+
+```html
+<lib-ui-components-button variant="donkeykong">
+  Jump Over Barrels
+</lib-ui-components-button>
+
+<lib-ui-components-input variant="donkeykong" placeholder="Enter high score"></lib-ui-components-input>
+```
+
+**Visual Characteristics**:
+- Red and blue gradient background
+- Jungle and barrel patterns
+- Classic arcade aesthetic
+- Nostalgic 80s gaming feel
+
 ## Usage Guidelines
 
 ### Best Practices

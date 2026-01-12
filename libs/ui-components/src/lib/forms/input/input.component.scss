@@ -1,6 +1,7 @@
 @use '../../styles/mixins' as shared;
 
 :host {
+    @include shared.apply-all-variants('input-');
     @include shared.apply-variants-to-child('.input', 'input-');
 }
 

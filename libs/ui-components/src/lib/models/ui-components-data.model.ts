@@ -71,5 +71,18 @@ export const variants = [
     'overwatch',
     'minecraft',
     'fortnite',
+    // Additional variants
+    'plasma',
+    'arcade',
+    'pixel',
+    'chaos',
+    'vortex',
+    'stone',
+    'donkeykong',
+    'supermeatboy',
+    'aqua',
+    'vaporwave',
+    'aurora',
+    'trailblazer',
   ] as const;
   

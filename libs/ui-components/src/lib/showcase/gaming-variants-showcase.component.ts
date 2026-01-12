@@ -82,6 +82,27 @@ export class UIGamingVariantsShowcaseComponent {
       description: 'Battle Royale aesthetic with vibrant colors',
       franchise: 'Epic Games',
       year: '2017'
+    },
+    {
+      id: 'super-meat-boy',
+      displayName: 'Super Meat Boy',
+      description: 'Retro platformer aesthetic with red and bloody theme',
+      franchise: 'Team Meat',
+      year: '2010'
+    },
+    {
+      id: 'donkeykong',
+      displayName: 'Donkey Kong',
+      description: 'Classic arcade aesthetic with barrel and jungle theme',
+      franchise: 'Nintendo',
+      year: '1981'
+    },
+    {
+      id: 'supermeatboy',
+      displayName: 'Supermeatboy',
+      description: 'Alternative name for Super Meat Boy variant',
+      franchise: 'Team Meat',
+      year: '2010'
     }
   ];
 
@@ -96,7 +117,10 @@ export class UIGamingVariantsShowcaseComponent {
     lol: 'Summoner Name',
     overwatch: 'Battle Tag',
     minecraft: 'Diamond Pickaxe',
-    fortnite: 'Epic Username'
+    fortnite: 'Epic Username',
+    'super-meat-boy': 'Meat Boy',
+    donkeykong: 'Jumpman',
+    supermeatboy: 'Meat Boy'
   };
 
   // Handle button click events
