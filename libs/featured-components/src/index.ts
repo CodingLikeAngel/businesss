@@ -37,3 +37,8 @@ export * from './lib/training-institute/shell/shell';
 export * from './lib/clothing-store/shell/shell';
 export * from './lib/electronics-shop/shell/shell';
 export * from './lib/boutique/shell/shell';
+export * from './lib/restaurant/shell/shell';
+export * from './lib/gym/shell/shell';
+export * from './lib/auto-repair/shell/shell';
+export * from './lib/pet-grooming/shell/shell';
+export * from './lib/real-estate/shell/shell';
