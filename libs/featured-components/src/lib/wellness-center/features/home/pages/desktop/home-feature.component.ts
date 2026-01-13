@@ -37,7 +37,7 @@ import { ServiceSectionComponent } from '../../components/service-section/servic
     UIHeroSectionComponent,
     UITabsComponent,
     ReservationFormComponent,
-    ServiceSectionComponent,
+   // ServiceSectionComponent,
     FaqSectionComponent,
     PricingSectionComponent,
     GallerySectionComponent,
@@ -227,12 +227,16 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   }
 
   ngOnInit() {
-    this.isMobile = window.innerWidth < 768;
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobile = window.innerWidth < 768;
+    }
   }
 
   @HostListener('window:resize')
   onResize() {
-    this.isMobile = window.innerWidth < 768;
+    if (isPlatformBrowser(this.platformId)) {
+      this.isMobile = window.innerWidth < 768;
+    }
   }
 
   ngOnDestroy() {
@@ -247,12 +251,16 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
     if (sectionId.startsWith('/')) {
       return;
     }
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    if (isPlatformBrowser(this.platformId)) {
+      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   onSocialClick(href: string) {
     console.log(`Social media clicked: ${href}`);
-    window.open(href, '_blank');
+    if (isPlatformBrowser(this.platformId)) {
+      window.open(href, '_blank');
+    }
   }
 
   openServiceModal(service: any) {
