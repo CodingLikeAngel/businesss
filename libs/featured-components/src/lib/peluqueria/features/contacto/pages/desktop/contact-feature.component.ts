@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { VariantRotationService } from '@negocio/shared-components';
 import {
   UINavBarComponent,
-  UITabsComponent,
   CardVariant,
   BubbleAnimationComponent,
   ForestAnimationComponent,
@@ -36,7 +35,6 @@ type VariantType = typeof VARIANTS[number];
     CommonModule,
     RouterModule,
     UINavBarComponent,
-    UITabsComponent,
     ContactFormComponent,
     BubbleAnimationComponent,
     ForestAnimationComponent,

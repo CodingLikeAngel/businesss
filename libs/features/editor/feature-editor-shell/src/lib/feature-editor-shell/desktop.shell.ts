@@ -24,12 +24,12 @@ const routes: Routes = [
   {
     path: 'desktop/about',
     loadChildren: () =>
-      import('@negocio/features/feature-about-shell').then((m) => m.AboutShellRoutingDesktopModule),
+      import('@negocio/featured-components').then((m) => m.AboutShellRoutingDesktopModule),
   },
   {
     path: 'desktop/contact',
     loadChildren: () =>
-      import('@negocio/features/feature-contact-shell').then((m) => m.ContactShellRoutingDesktopModule),
+      import('@negocio/featured-components').then((m) => m.ContactShellRoutingDesktopModule),
   },
   {
     path: '**',

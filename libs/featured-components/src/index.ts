@@ -1,3 +1,28 @@
+export * from './lib/shared/features/about/feature-about/src/lib/feature-about/pages/about/desktop/feature-about-page.component';
+export * from './lib/shared/features/about/feature-about/src/lib/feature-about/pages/about/mobile/feature-about-page.component';
+export * from './lib/shared/features/contact/feature-contact/src/lib/feature-contact/pages/contact/desktop/feature-contact-desktop-page.component';
+export * from './lib/shared/features/contact/feature-contact/src/lib/feature-contact/pages/contact/mobile/feature-contact-mobile-page.component';
+
+// Shell modules
+export * from './lib/shared/features/about/shell/src/lib/feature-about-shell/desktop.shell';
+export * from './lib/shared/features/about/shell/src/lib/feature-about-shell/mobile.shell';
+export * from './lib/shared/features/contact/shell/src/lib/feature-contact-shell/desktop.shell';
+export * from './lib/shared/features/contact/shell/src/lib/feature-contact-shell/mobile.shell';
+
+// Home components
+export * from './lib/training-institute/features/home/components/faq-section/faq-section.component';
+export * from './lib/training-institute/features/home/components/gallery-section/gallery-section.component';
+export * from './lib/training-institute/features/home/components/pricing-section/pricing-section.component';
+export * from './lib/training-institute/features/home/components/promotions-section/promotions-section.component';
+export * from './lib/training-institute/features/home/components/reservation-form/reservation-form.component';
+export * from './lib/training-institute/features/home/components/service-section/service-section.component';
+
+// Features
+export * from './lib/spa/features/about/about-feature.component';
+export * from './lib/spa/features/contacto/pages/desktop/contact-feature.component';
+export * from './lib/spa/features/tattoo/tattoo-home-feature.component';
+
+// Business shells
 export * from './lib/peluqueria/shell/shell';
 export * from './lib/anto-studios/shell/shell';
 export * from './lib/spa/shell/shell';

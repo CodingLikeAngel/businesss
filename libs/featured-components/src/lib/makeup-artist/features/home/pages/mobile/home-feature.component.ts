@@ -20,12 +20,7 @@ import {
   BubbleConfig,
   UIButtonComponent,
 } from '@negocio/ui-components';
-import { FaqSectionComponent } from '../../components/faq-section/faq-section.component';
-import { GallerySectionComponent } from '../../components/gallery-section/gallery-section.component';
-import { PricingSectionComponent } from '../../components/pricing-section/pricing-section.component';
-import { PromotionsSectionComponent } from '../../components/promotions-section/promotions-section.component';
-import { ReservationFormComponent } from '../../components/reservation-form/reservation-form.component';
-import { ServiceSectionComponent } from '../../components/service-section/service-section.component';
+import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent } from '@negocio/featured-components';
 
 const VARIANTS = [
   'jungle',
@@ -52,7 +47,6 @@ type VariantType = typeof VARIANTS[number];
     UIHeroSectionComponent,
     UITabsComponent,
     ReservationFormComponent,
-    ServiceSectionComponent,
     FaqSectionComponent,
     PricingSectionComponent,
     GallerySectionComponent,

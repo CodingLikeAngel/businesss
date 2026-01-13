@@ -5,9 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DeviceResolver, DeviceGuard } from '@negocio/shared-components';
 import { HomeDesktopFeatureComponent } from '../features/home/pages/desktop/home-feature.component';
 import { HomeMobileFeatureComponent } from '../features/home/pages/mobile/home-feature.component';
-import { AboutFeatureComponent } from '../../peluqueria/features/about/about-feature.component';
-import { ContactFeatureComponent } from '../../peluqueria/features/contacto/pages/desktop/contact-feature.component';
-import { TattooHomeFeatureComponent } from '../../tattoo/tattoo-home-feature.component';
+import { AboutFeatureComponent, ContactFeatureComponent, TattooHomeFeatureComponent } from '@negocio/featured-components';
 
 
 const routes: Routes = [

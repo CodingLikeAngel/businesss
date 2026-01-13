@@ -27,12 +27,12 @@ const routes: Routes = [
   {
     path: 'about',
     loadChildren: () =>
-      import('@negocio/features/feature-about-shell').then((m) => m.AboutShellRoutingMobileModule),
+      import('@negocio/featured-components').then((m) => m.AboutShellRoutingMobileModule),
   },
   {
     path: 'contact',
     loadChildren: () =>
-      import('@negocio/features/feature-contact-shell').then((m) => m.ContactShellRoutingMobileModule),
+      import('@negocio/featured-components').then((m) => m.ContactShellRoutingMobileModule),
   },
   {
     path: '**',

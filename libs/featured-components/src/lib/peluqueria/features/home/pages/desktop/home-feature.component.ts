@@ -6,7 +6,6 @@ import { VariantService, NavBarConfig, HeroConfig, FooterConfig, BubbleConfig } 
 import {
   UINavBarComponent,
   UIHeroSectionComponent,
-  UITabsComponent,
   CardVariant,
   AccordionItem,
   TableColumn,
@@ -25,7 +24,6 @@ import { GallerySectionComponent } from '../../components/gallery-section/galler
 import { PricingSectionComponent } from '../../components/pricing-section/pricing-section.component';
 import { PromotionsSectionComponent } from '../../components/promotions-section/promotions-section.component';
 import { ReservationFormComponent } from '../../components/reservation-form/reservation-form.component';
-import { ServiceSectionComponent } from '../../components/service-section/service-section.component';
 
 @Component({
   selector: 'lib-home-feature',
@@ -35,9 +33,7 @@ import { ServiceSectionComponent } from '../../components/service-section/servic
     RouterModule,
     UINavBarComponent,
     UIHeroSectionComponent,
-    UITabsComponent,
     ReservationFormComponent,
-    ServiceSectionComponent,
     FaqSectionComponent,
     PricingSectionComponent,
     GallerySectionComponent,

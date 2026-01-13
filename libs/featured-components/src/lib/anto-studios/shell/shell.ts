@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ContactFeatureComponent } from '../features/contacto/pages/desktop/contact-feature.component';
-import { AboutFeatureComponent } from '../features/about/about-feature.component';
-import { TattooHomeFeatureComponent } from '../../tattoo/tattoo-home-feature.component';
-import { HomeDesktopFeatureComponent } from '../features/home/pages/desktop/home-feature.component';
-import { HomeMobileFeatureComponent } from '../features/home/pages/mobile/home-feature.component';
-import { MainDesktopLayoutComponent } from '../features/main-layout/desktop/main-desktop-layout.component';
-import { MainMobileLayoutComponent } from '../features/main-layout/mobile/main-mobile-layout.component';
+import { ContactFeatureComponent, AboutFeatureComponent, TattooHomeFeatureComponent } from '@negocio/featured-components';
+import { HomeDesktopFeatureComponent } from '../feature/home/pages/desktop/home-feature.component';
+import { HomeMobileFeatureComponent } from '../feature/home/pages/mobile/home-feature.component';
+import { MainDesktopLayoutComponent } from '../feature/main-layout/desktop/main-desktop-layout.component';
+import { MainMobileLayoutComponent } from '../feature/main-layout/mobile/main-mobile-layout.component';
 import { DeviceRedirectComponent } from './device-redirect.component';
 
 const routes: Routes = [

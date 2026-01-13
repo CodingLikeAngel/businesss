@@ -1,9 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { ContactFeatureComponent } from '../features/contacto/pages/desktop/contact-feature.component';
-import { AboutFeatureComponent } from '../features/about/about-feature.component';
-import { TattooHomeFeatureComponent } from '../features/tattoo/tattoo-home-feature.component';
+import { ContactFeatureComponent, AboutFeatureComponent, TattooHomeFeatureComponent } from '@negocio/featured-components';
 import { DeviceResolver, DeviceGuard } from '@negocio/shared-components';
 import { HomeDesktopFeatureComponent } from '../features/home/pages/desktop/home-feature.component';
 import { HomeMobileFeatureComponent } from '../features/home/pages/mobile/home-feature.component';

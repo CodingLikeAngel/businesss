@@ -18,12 +18,7 @@ import {
   BubbleAnimationComponent,
   BubbleConfig,
 } from '@negocio/ui-components';
-import { FaqSectionComponent } from '../anto-studios/features/home/components/faq-section/faq-section.component';
-import { GallerySectionComponent } from '../anto-studios/features/home/components/gallery-section/gallery-section.component';
-import { PricingSectionComponent } from '../anto-studios/features/home/components/pricing-section/pricing-section.component';
-import { PromotionsSectionComponent } from '../anto-studios/features/home/components/promotions-section/promotions-section.component';
-import { ReservationFormComponent } from '../anto-studios/features/home/components/reservation-form/reservation-form.component';
-import { ServiceSectionComponent } from '../anto-studios/features/home/components/service-section/service-section.component';
+import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
 
 
 const VARIANTS = [
