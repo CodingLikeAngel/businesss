@@ -6,7 +6,6 @@ import { VariantService, NavBarConfig, HeroConfig, FooterConfig, BubbleConfig } 
 import {
   UINavBarComponent,
   UIHeroSectionComponent,
-  UITabsComponent,
   CardVariant,
   AccordionItem,
   TableColumn,
@@ -35,7 +34,6 @@ import { ServiceSectionComponent } from '../../components/service-section/servic
     RouterModule,
     UINavBarComponent,
     UIHeroSectionComponent,
-    UITabsComponent,
     ReservationFormComponent,
    // ServiceSectionComponent,
     FaqSectionComponent,

@@ -37,10 +37,10 @@ type VariantType = typeof VARIANTS[number];
     CommonModule,
     RouterModule,
     UINavBarComponent,
-    UITabsComponent,
+    // UITabsComponent,
     GallerySectionComponent,
     BubbleAnimationComponent,
-    ForestAnimationComponent,
+    // ForestAnimationComponent,
     UITitleComponent,
     UIButtonComponent
   ],

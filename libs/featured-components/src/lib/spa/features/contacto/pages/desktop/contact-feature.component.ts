@@ -36,7 +36,7 @@ type VariantType = typeof VARIANTS[number];
     CommonModule,
     RouterModule,
     UINavBarComponent,
-    UITabsComponent,
+    // UITabsComponent,
     ContactFormComponent,
     BubbleAnimationComponent,
     ForestAnimationComponent,
