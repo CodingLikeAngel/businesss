@@ -13,7 +13,7 @@
   </div>
 
 <section id="hero" class="relative z-20">
-  <lib-ui-hero-section
+  <lib-ui-components-hero
     [variant]="getVariant('hero')"
     [title]="heroConfig.title"
     [subtitle]="heroConfig.subtitle"
@@ -27,7 +27,7 @@
     [carouselItems]="heroConfig.carouselItems"
     [customStyles]="heroConfig.customStyles"
     (sectionSelected)="scrollToSection($event)"
-  ></lib-ui-hero-section>
+  ></lib-ui-components-hero>
 </section>
 
 <lib-bubble-animation

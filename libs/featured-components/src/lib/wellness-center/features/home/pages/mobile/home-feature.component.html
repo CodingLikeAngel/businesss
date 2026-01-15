@@ -2,7 +2,7 @@
 
 <!-- Barra de Navegación -->
   <div class="relative z-40">
- <lib-ui-nav-bar
+ <lib-ui-components-nav-bar
    [variant]="selectedVariant"
    [logoText]="'Peluquería Estilo'"
    [showMobileMenu]="true"
@@ -10,7 +10,7 @@
    [navLinks]="navLinks"
    (linkClicked)="scrollToSection($event)"
 
- ></lib-ui-nav-bar>
+ ></lib-ui-components-nav-bar>
  </div>
 <!-- Tabs para móviles -->
 <lib-ui-components-tabs
@@ -23,7 +23,7 @@
 
 <!-- Hero -->
 <section id="hero" class="relative z-20">
-  <lib-ui-hero-section
+  <lib-ui-components-hero
     [title]="'Peluquería Estilo'"
     [subtitle]="'Transforma tu look con cortes, colores y más.'"
     [variant]="selectedVariant"
@@ -33,7 +33,7 @@
     }"
     [navigationCards]="navigationCards"
     (sectionSelected)="scrollToSection($event)"
-  ></lib-ui-hero-section>
+  ></lib-ui-components-hero>
 </section>
 
 <!-- Contenedor Principal con Bubble Animation -->

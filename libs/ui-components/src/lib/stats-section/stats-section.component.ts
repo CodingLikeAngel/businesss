@@ -9,14 +9,14 @@ export interface StatItem {
 }
 
 @Component({
-  selector: 'lib-ui-stats-section',
+  selector: 'lib-ui-components-stats-section',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './stats-section.component.html',
-  styleUrls: ['./stats-section.component.scss']
+  styleUrl: './stats-section.component.scss'
 })
-export class UIStatsSectionComponent {
-  @Input() title = 'Nuestros Métricas';
+export class UIStatsLibSectionComponent {
+  @Input() title = 'Nuestras Métricas';
   @Input() subtitle = 'Indicadores clave de rendimiento.';
   @Input() variant: string = 'default';
   @Input() stats: StatItem[] = [
