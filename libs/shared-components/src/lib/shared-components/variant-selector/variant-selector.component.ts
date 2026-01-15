@@ -43,6 +43,10 @@ import { TemplateSelectorComponent } from '../template-selector/template-selecto
 import { PreviewDataService } from './preview-data.service';
 import { ItemManagementService } from './item-management.service';
 import { DragDropService } from './drag-drop.service';
+import { ConfigurationService } from './configuration.service';
+import { UiStateService } from './ui-state.service';
+import { TemplateService } from './template.service';
+import { ExportService } from './export.service';
 
 @Component({
   selector: 'lib-variant-selector',
@@ -101,7 +105,78 @@ export class VariantSelectorComponent implements OnInit {
   @Input() isCollapsed = false;
   @Output() toggleCollapse = new EventEmitter<void>();
 
-  activeTab: 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer' = 'general';
+  // UI State getters/setters
+  get activeTab(): 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer' {
+    return this.uiStateService.activeTab;
+  }
+
+  set activeTab(value: 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer') {
+    this.uiStateService.activeTab = value;
+  }
+
+  get showItemModal(): boolean {
+    return this.uiStateService.showItemModal;
+  }
+
+  get modalItemType(): 'service' | 'product' | 'testimonial' | 'faq' | 'gallery' | 'pricing' | 'promotion' | 'navItem' | 'navLink' | 'footerLink' | 'socialIcon' | null {
+    return this.uiStateService.modalItemType;
+  }
+
+  get editingItem(): any {
+    return this.uiStateService.editingItem;
+  }
+
+  get editingIndex(): number {
+    return this.uiStateService.editingIndex;
+  }
+
+  get showHeaderConfig(): boolean {
+    return this.uiStateService.showHeaderConfig;
+  }
+
+  get showFooterConfig(): boolean {
+    return this.uiStateService.showFooterConfig;
+  }
+
+  get showNavBarConfig(): boolean {
+    return this.uiStateService.showNavBarConfig;
+  }
+
+  get showHeroConfig(): boolean {
+    return this.uiStateService.showHeroConfig;
+  }
+
+  get showBubbleConfig(): boolean {
+    return this.uiStateService.showBubbleConfig;
+  }
+
+  get showCardConfig(): boolean {
+    return this.uiStateService.showCardConfig;
+  }
+
+  get showTitleConfig(): boolean {
+    return this.uiStateService.showTitleConfig;
+  }
+
+  get showFaqConfig(): boolean {
+    return this.uiStateService.showFaqConfig;
+  }
+
+  get showPricingConfig(): boolean {
+    return this.uiStateService.showPricingConfig;
+  }
+
+  get showPromotionsConfig(): boolean {
+    return this.uiStateService.showPromotionsConfig;
+  }
+
+  get showGalleryConfig(): boolean {
+    return this.uiStateService.showGalleryConfig;
+  }
+
+  get showProductsConfig(): boolean {
+    return this.uiStateService.showProductsConfig;
+  }
 
   // Drag and Drop state getters
   get draggedSectionIndex(): number | null {
@@ -114,26 +189,7 @@ export class VariantSelectorComponent implements OnInit {
   
   // Sections state
   sections: PageSection[] = [];
-  
-  // Modal state for editing items
-  showItemModal = false;
-  modalItemType: 'service' | 'product' | 'testimonial' | 'faq' | 'gallery' | 'pricing' | 'promotion' | 'navItem' | 'navLink' | 'footerLink' | 'socialIcon' | null = null;
-  editingItem: any = null;
-  editingIndex: number = -1;
 
-  showHeaderConfig = false;
-  showFooterConfig = false;
-  showNavBarConfig = false;
-  showHeroConfig = false;
-  showBubbleConfig = false;
-  showCardConfig = false;
-  showTitleConfig = false;
-  showFaqConfig = false;
-  showPricingConfig = false;
-  showPromotionsConfig = false;
-  showGalleryConfig = false;
-  showProductsConfig = false;
-  // Removed duplicate showProductsConfig
   componentVariants: { [key: string]: string } = {};
 
   availableSectionVariants = [
@@ -238,7 +294,11 @@ export class VariantSelectorComponent implements OnInit {
     private variantService: VariantService,
     private previewDataService: PreviewDataService,
     private itemManagementService: ItemManagementService,
-    private dragDropService: DragDropService
+    private dragDropService: DragDropService,
+    private configurationService: ConfigurationService,
+    private uiStateService: UiStateService,
+    private templateService: TemplateService,
+    private exportService: ExportService
   ) {
     this.globalVariant = this.variantService.getVariantForComponent('global');
     this.headerConfig = this.variantService.getCurrentHeaderConfig();
@@ -257,45 +317,34 @@ export class VariantSelectorComponent implements OnInit {
     this.testimonialsConfig = this.variantService.getCurrentTestimonialsConfig();
   }
 
-  setActiveTab(tab: any) {
-    this.activeTab = tab;
+  setActiveTab(tab: 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer') {
+    this.uiStateService.setActiveTab(tab);
   }
 
   toggleHeaderConfig() {
-    this.showHeaderConfig = !this.showHeaderConfig;
+    this.uiStateService.toggleHeaderConfig();
   }
 
   resetConfiguration() {
-    if (confirm('¿Estás seguro de que quieres restablecer toda la configuración? Se perderán todos los cambios.')) {
-      this.variantService.resetConfig();
-    }
+    this.configurationService.resetConfiguration();
   }
 
   onTemplateApplied() {
-    // Template has been applied, configurations will update automatically via subscriptions
-    // No action needed as all configs are subscribed in ngOnInit
+    this.templateService.onTemplateApplied();
   }
 
   // --- List Management ---
 
-  openAddModal(type: any) {
-    this.modalItemType = type;
-    this.editingItem = this.getEmptyItem(type);
-    this.editingIndex = -1;
-    this.showItemModal = true;
+  openAddModal(type: 'service' | 'product' | 'testimonial' | 'faq' | 'gallery' | 'pricing' | 'promotion' | 'navItem' | 'navLink' | 'footerLink' | 'socialIcon') {
+    this.uiStateService.openAddModal(type, this.getEmptyItem.bind(this));
   }
 
-  openEditModal(type: any, item: any, index: number) {
-    this.modalItemType = type;
-    this.editingItem = { ...item };
-    this.editingIndex = index;
-    this.showItemModal = true;
+  openEditModal(type: 'service' | 'product' | 'testimonial' | 'faq' | 'gallery' | 'pricing' | 'promotion' | 'navItem' | 'navLink' | 'footerLink' | 'socialIcon', item: any, index: number) {
+    this.uiStateService.openEditModal(type, item, index);
   }
 
   closeItemModal() {
-    this.showItemModal = false;
-    this.editingItem = null;
-    this.modalItemType = null;
+    this.uiStateService.closeItemModal();
   }
 
   saveItem() {
@@ -487,20 +536,7 @@ export class VariantSelectorComponent implements OnInit {
   // --- Custom Templates ---
 
   saveAsCustomTemplate() {
-    const name = prompt('Nombre para tu plantilla personalizada:', 'Nueva Plantilla');
-    if (name) {
-      const config = this.variantService.getFullConfig();
-      const templates = JSON.parse(localStorage.getItem('custom_templates') || '[]');
-      templates.push({
-        ...config,
-        id: `custom_${new Date().getTime()}`,
-        name,
-        category: 'Personalizado',
-        icon: '💎'
-      });
-      localStorage.setItem('custom_templates', JSON.stringify(templates));
-      alert('Plantilla guardada correctamente en el navegador.');
-    }
+    this.templateService.saveAsCustomTemplate();
   }
 
   setStep(step: 'welcome' | 'editor' | 'preview') {
@@ -518,106 +554,97 @@ export class VariantSelectorComponent implements OnInit {
   }
 
   onGlobalVariantChange() {
-    this.variantService.setGlobalVariant(this.globalVariant);
+    this.configurationService.setGlobalVariant(this.globalVariant);
     // When changing the global variant manually, we want it to apply everywhere,
     // so we clear specific component overrides that might block it.
-    this.clearComponentVariants();
+    this.configurationService.clearAllComponentVariants();
   }
 
   onComponentVariantChange(componentId: string) {
-    this.variantService.setComponentVariant(componentId, this.componentVariants[componentId] || null);
+    this.configurationService.setComponentVariant(componentId, this.componentVariants[componentId] || null);
   }
 
   clearComponentVariants() {
-    this.variantService.clearAllComponentVariants();
+    this.configurationService.clearAllComponentVariants();
   }
 
   exportProject() {
-    const fullConfig = this.variantService.getFullConfig();
-    const blob = new Blob([JSON.stringify(fullConfig, null, 2)], { type: 'application/json' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `config-antostudios-${new Date().getTime()}.json`;
-    a.click();
-    window.URL.revokeObjectURL(url);
+    this.exportService.exportProject();
   }
 
   toggleFooterConfig() {
-    this.showFooterConfig = !this.showFooterConfig;
+    this.uiStateService.toggleFooterConfig();
   }
 
   toggleNavBarConfig() {
-    this.showNavBarConfig = !this.showNavBarConfig;
+    this.uiStateService.toggleNavBarConfig();
   }
 
   toggleHeroConfig() {
-    this.showHeroConfig = !this.showHeroConfig;
+    this.uiStateService.toggleHeroConfig();
   }
 
   toggleBubbleConfig() {
-    this.showBubbleConfig = !this.showBubbleConfig;
+    this.uiStateService.toggleBubbleConfig();
   }
 
   toggleCardConfig() {
-    this.showCardConfig = !this.showCardConfig;
+    this.uiStateService.toggleCardConfig();
   }
 
   toggleTitleConfig() {
-    this.showTitleConfig = !this.showTitleConfig;
+    this.uiStateService.toggleTitleConfig();
   }
 
   toggleFaqConfig() {
-    this.showFaqConfig = !this.showFaqConfig;
+    this.uiStateService.toggleFaqConfig();
   }
 
   togglePricingConfig() {
-    this.showPricingConfig = !this.showPricingConfig;
+    this.uiStateService.togglePricingConfig();
   }
 
   togglePromotionsConfig() {
-    this.showPromotionsConfig = !this.showPromotionsConfig;
+    this.uiStateService.togglePromotionsConfig();
   }
 
   toggleGalleryConfig() {
-    this.showGalleryConfig = !this.showGalleryConfig;
+    this.uiStateService.toggleGalleryConfig();
   }
 
   toggleProductsConfig() {
-    this.showProductsConfig = !this.showProductsConfig;
+    this.uiStateService.toggleProductsConfig();
   }
 
   onKeyUpToggle(event: KeyboardEvent, toggleFn: () => void) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      toggleFn.call(this);
-    }
+    this.uiStateService.onKeyUpToggle(event, toggleFn);
   }
 
   updateHeaderConfig() {
-    this.variantService.setHeaderConfig(this.headerConfig);
+    this.configurationService.updateHeaderConfig(this.headerConfig);
   }
 
   updateFooterConfig() {
-    this.variantService.setFooterConfig(this.footerConfig);
+    this.configurationService.updateFooterConfig(this.footerConfig);
   }
 
   updateNavBarConfig() {
-    this.variantService.setNavBarConfig(this.navBarConfig);
+    this.configurationService.updateNavBarConfig(this.navBarConfig);
   }
 
   updateHeroConfig() {
-    this.variantService.setHeroConfig(this.heroConfig);
+    this.configurationService.updateHeroConfig(this.heroConfig);
   }
 
   updateBubbleConfig() {
-    this.variantService.setBubbleConfig(this.bubbleConfig);
+    this.configurationService.updateBubbleConfig(this.bubbleConfig);
   }
 
   updateCardConfig() {
-    this.variantService.setCardConfig(this.cardConfig);
+    this.configurationService.updateCardConfig(this.cardConfig);
   }
 
   updateTitleConfig() {
-    this.variantService.setTitleConfig(this.titleConfig);
+    this.configurationService.updateTitleConfig(this.titleConfig);
   }
 }
