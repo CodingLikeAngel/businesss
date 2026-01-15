@@ -145,6 +145,125 @@ form {
     border-radius: 9999px;
     &:before { border-radius: 9999px; }
   }
+@include shared.apply-all-variants('variant-');
 
-  @include shared.apply-all-variants('variant-');
+@media (max-width: 768px) {
+
+  .card {
+
+    margin: 0.5rem auto;
+
+    max-width: 100%;
+
+    padding: 1rem;
+
+    border-radius: 12px;
+
+  }
+
+  .card:hover {
+
+    transform: translateY(-2px);
+
+  }
+
+}
+
+@media (min-width: 769px) {
+
+  .card {
+
+    margin: 1rem;
+
+    padding: 1.5rem;
+
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+  }
+
+  .card:hover {
+
+    transform: translateY(-5px) scale(1.02);
+
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+
+  }
+
+}
+
+
+  @keyframes futuristic-hover {
+    0% {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15), inset 0 -4px 8px rgba(255, 255, 255, 0.3);
+    }
+    100% {
+      transform: translateY(-6px) scale(1.03);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25), inset 0 -8px 16px rgba(255, 255, 255, 0.5);
+    }
+  }
+
+  @keyframes bubble-float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+  }
+
+  @keyframes glitch-shift {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+  }
+
+  @keyframes kirby-bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-10px); }
+    60% { transform: translateY(-5px); }
+  }
+
+  @keyframes rayman-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  @media (max-width: 768px) {
+    .btn {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), inset 0 -2px 4px rgba(255, 255, 255, 0.2);
+    }
+
+    .btn-sm {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.7rem;
+    }
+
+    .btn-md {
+      padding: 0.5rem 1rem;
+      font-size: 0.8rem;
+    }
+
+    .btn-lg {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+    }
+
+    .btn:hover:not(.btn-disabled) {
+      transform: translateY(-2px) scale(1.01);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  @media (min-width: 769px) {
+    .btn {
+      transition: all 400ms cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    }
+
+    .btn:hover:not(.btn-disabled) {
+      animation: futuristic-hover 0.8s infinite alternate;
+    }
+  }
 }
