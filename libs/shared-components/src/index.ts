@@ -8,6 +8,6 @@ export * from './lib/shared-components/variant-selector/variant-selector.compone
 export * from './lib/shared-components/template-selector/template-selector.component';
 export * from './services/loading-service.service';
 export * from './services/ai.service';
-export * from './lib/modulo-reservas/chat-component/chat-component.component';
+export * from './lib/shared-components/chat-component/chat-component.component';
 
 
