@@ -8,7 +8,7 @@ export interface GallerySectionImage {
 }
 
 @Component({
-  selector: 'lib-ui-gallery-section',
+  selector: 'lib-ui-components-gallery-section',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './gallery-section.component.html',

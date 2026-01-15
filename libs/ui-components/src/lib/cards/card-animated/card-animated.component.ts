@@ -20,7 +20,7 @@ export interface AnimatedCardCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-card-animated',
+  selector: 'lib-ui-components-card-animated',
   standalone: true,
   imports: [CommonModule, UIButtonComponent],
   templateUrl: './card-animated.component.html',

@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, Inject, PLATFORM_ID, TrackByFunction } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, Inject, PLATFORM_ID, TrackByFunction, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -46,6 +46,7 @@ import { ServiceSectionComponent } from '../../components/service-section/servic
     UITitleComponent,
     UIFooterComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home-feature.component.html',
   styles: [/* Existing styles unchanged */],
 })
@@ -245,12 +246,13 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
     this.bubbleConfigSub?.unsubscribe();
   }
 
-  scrollToSection(sectionId: string) {
-    if (sectionId.startsWith('/')) {
+  scrollToSection(sectionId: string | Event) {
+    const id = typeof sectionId === 'string' ? sectionId : (sectionId as any).target?.value || sectionId;
+    if (typeof id === 'string' && id.startsWith('/')) {
       return;
     }
-    if (isPlatformBrowser(this.platformId)) {
-      document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    if (typeof id === 'string' && isPlatformBrowser(this.platformId)) {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
     }
   }
 

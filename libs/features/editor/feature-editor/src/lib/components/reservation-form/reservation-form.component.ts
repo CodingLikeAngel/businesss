@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVariant, UITitleComponent } from '@negocio/ui-components';
@@ -7,15 +7,16 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
   selector: 'lib-reservation-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, UIInputComponent, UIButtonComponent, UIDateTimePickerComponent , UITitleComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   template: `
 <div id="reservas">
-<lib-ui-title
+<lib-ui-components-title
       level="h2"
       text="Reservar Cita"
       [variant]="variant"
       animation="fade"
       align="center"
-    ></lib-ui-title>
+    ></lib-ui-components-title>
   <form
     [formGroup]="reservationForm"
     (ngSubmit)="onSubmit()"

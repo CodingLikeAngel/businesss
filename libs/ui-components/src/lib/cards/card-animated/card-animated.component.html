@@ -87,9 +87,9 @@
     </div>
     <div class="card-actions">
       <a [href]="link" class="card-link" [style]="customStyles['link']">Descargar PDF</a>
-      <lib-ui-button variant="neon" size="md" (clicked)="onViewDetails()" aria-label="Ver detalles de la normativa">
+      <lib-ui-components-button variant="neon" size="md" (buttonClick)="onViewDetails()" aria-label="Ver detalles de la normativa">
         Ver detalles
-      </lib-ui-button>
+      </lib-ui-components-button>
     </div>
   </div>
 
@@ -119,7 +119,7 @@
       <p class="card-description" [style]="customStyles['description']">{{ description }}</p>
       <div class="card-actions">
         <span class="card-price" [style]="customStyles['price']">{{ price | currency:'EUR' }}/día</span>
-        <lib-ui-button variant="neon" size="md" (clicked)="onAddToCart()">Ver perfil</lib-ui-button>
+        <lib-ui-components-button variant="neon" size="md" (buttonClick)="onAddToCart()">Ver perfil</lib-ui-components-button>
       </div>
     </div>
   </div>
@@ -131,7 +131,7 @@
       <h3 class="card-title" [style]="customStyles['title']">{{ title }}</h3>
       <div class="card-actions">
         <span class="card-price" [style]="customStyles['price']">{{ price | currency:'EUR' }}</span>
-        <lib-ui-button variant="neon" size="md" (clicked)="onAddToCart()">Añadir</lib-ui-button>
+        <lib-ui-components-button variant="neon" size="md" (buttonClick)="onAddToCart()">Añadir</lib-ui-components-button>
       </div>
     </div>
     <div class="card-back">
@@ -157,14 +157,14 @@
       <ng-content select="lib-gallery"></ng-content>
     </div>
     <div class="card-actions">
-      <lib-ui-button
+      <lib-ui-components-button
         variant="neon"
         size="sm"
-        (clicked)="onViewDetails()"
+        (buttonClick)="onViewDetails()"
         aria-label="Ver detalles del río"
       >
         Ver Detalles
-      </lib-ui-button>
+      </lib-ui-components-button>
     </div>
   </div>
 
@@ -193,7 +193,7 @@
     >
     <div *ngIf="variant === 'product-hover'" class="card-actions">
       <span class="card-price" [style]="customStyles['price']">{{ price | currency:'EUR' }}</span>
-      <lib-ui-button variant="neon" size="md" (clicked)="onAddToCart()">Añadir</lib-ui-button>
+      <lib-ui-components-button variant="neon" size="md" (buttonClick)="onAddToCart()">Añadir</lib-ui-components-button>
     </div>
   </div>
 </article>

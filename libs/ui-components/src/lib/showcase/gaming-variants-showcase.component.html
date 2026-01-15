@@ -17,26 +17,26 @@
 
         <div class="component-demo">
           <!-- Button Demo -->
-          <lib-ui-button 
+          <lib-ui-components-button
             [variant]="variant.id"
             size="md"
             (buttonClick)="onButtonClick(variant.id)"
           >
             {{ variant.displayName }} Button
-          </lib-ui-button>
+          </lib-ui-components-button>
 
           <!-- Input Demo -->
-          <lib-ui-input
+          <lib-ui-components-input
             [variant]="variant.id"
             [placeholder]="getInputPlaceholder(variant.id)"
             class="variant-input"
-          ></lib-ui-input>
+          ></lib-ui-components-input>
         </div>
 
         <div class="usage-example">
-          <pre><code><lib-ui-button variant="{{ variant.id }}">
+          <pre><code><lib-ui-components-button variant="{{ variant.id }}">
   {{ variant.displayName }} Button
-</lib-ui-button></code></pre>
+</lib-ui-components-button></code></pre>
         </div>
       </div>
     }

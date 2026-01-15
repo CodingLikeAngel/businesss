@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject, PLATFORM_ID, inject } from '@angular/core';
+import { Component, OnInit, Inject, PLATFORM_ID, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { EditorService } from '../../../../index';
 import { BaseEditorFeatureComponent } from '../base-editor-feature.component';
 import { CommonModule } from '@angular/common';
@@ -19,7 +19,8 @@ import {
   UITestimonialsSectionComponent,
   UIFaqSectionComponent,
   UIGallerySectionComponent,
-  UIPricingTableSectionComponent
+  UIPricingTableSectionComponent,
+  UITabsComponent
 } from '@negocio/ui-components';
 import { Product, Testimonial, PageSection, VariantService } from '@negocio/shared-components';
 import { PromotionsSectionComponent } from '../../../components/promotions-section/promotions-section.component';
@@ -48,8 +49,10 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
     UITestimonialsSectionComponent,
     UIFaqSectionComponent,
     UIGallerySectionComponent,
-    UIPricingTableSectionComponent
+    UIPricingTableSectionComponent,
+    UITabsComponent
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent implements OnInit {
   sections$: Observable<PageSection[]>;

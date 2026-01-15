@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {
   UIFooterComponent,
@@ -20,6 +20,7 @@ import { MainLayoutBaseComponent } from '../main-layout-base.component';
     UIFooterComponent,
     UITabsComponent
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './main-desktop-layout.component.html',
   styleUrl: './main-desktop-layout.component.scss',
 })
@@ -79,8 +80,11 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
     console.log('Workspace clicked');
   }
 
-  onTabSelected(sectionId: string) {
-    this.scrollToSection(sectionId);
+  onTabSelected(sectionId: string | Event) {
+    const id = typeof sectionId === 'string' ? sectionId : (sectionId as any).target?.value || sectionId;
+    if (typeof id === 'string') {
+      this.scrollToSection(id);
+    }
   }
 
   onNavItemClick(sectionId: string) {

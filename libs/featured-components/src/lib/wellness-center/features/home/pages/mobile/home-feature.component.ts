@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, signal, OnInit, Inject, PLATFORM_ID, TrackByFunction } from '@angular/core';
+import { Component, HostListener, OnDestroy, signal, OnInit, Inject, PLATFORM_ID, TrackByFunction, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -63,6 +63,7 @@ type VariantType = typeof VARIANTS[number];
     UITitleComponent,
     UIButtonComponent
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home-feature.component.html',
   styles: [
     `
@@ -408,11 +409,14 @@ throw new Error('Method not implemented.');
     variant: ''
   };
 
-  scrollToSection(sectionId: string) {
-    if (sectionId.startsWith('/')) {
+  scrollToSection(sectionId: string | Event) {
+    const id = typeof sectionId === 'string' ? sectionId : (sectionId as any).target?.value || sectionId;
+    if (typeof id === 'string' && id.startsWith('/')) {
       return;
     }
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    if (typeof id === 'string') {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   openServiceModal(service: any) {

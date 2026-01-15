@@ -2,23 +2,23 @@
 
 <div class="z-50">
 <!-- Barra de Navegación -->
-<lib-ui-nav-bar
+<lib-ui-components-nav-bar
   [variant]="selectedVariant"
   [logoText]="'Peluquería Estilo'"
   [showMobileMenu]="true"
   [isFixed]="true"
   [navLinks]="navLinks"
   (linkClicked)="scrollToSection($event)"
-></lib-ui-nav-bar>
+></lib-ui-components-nav-bar>
 </div>
 <!-- Tabs para móviles -->
-<!-- <lib-ui-tabs
+<!-- <lib-ui-components-tabs
   [variant]="selectedVariant"
   [tabs]="navLinkstabs"
   [showAs]="'tabs'"
   [isMobile]="true"
   (tabSelected)="scrollToSection($event)"
-></lib-ui-tabs> -->
+></lib-ui-components-tabs> -->
 <lib-bubble-animation [variant]="selectedVariant"></lib-bubble-animation>
 <!-- Contenedor Principal con Bubble Animation -->
 
@@ -43,14 +43,14 @@
     <!-- Sección de Contacto -->
     <section id="contacto" class="mb-12 relative z-10">
       <div class="bg-[rgba(255,255,255,0.1)] backdrop-blur-md p-6 rounded-lg">
-        <lib-ui-title
+        <lib-ui-components-title
         level="h2"
         text="Contáctanos"
         [variant]="selectedVariant"
         animation="bounce"
         align="center"
 
-      ></lib-ui-title>
+      ></lib-ui-components-title>
         <div class="z-50 px-4 py-12">
           <lib-contact-form [variant]="selectedVariant"></lib-contact-form>
         </div>

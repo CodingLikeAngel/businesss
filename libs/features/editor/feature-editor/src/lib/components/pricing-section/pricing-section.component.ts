@@ -10,24 +10,24 @@ import { UITableComponent, CardVariant, TableColumn, TableRow, UITitleComponent 
     <section id="precios" class="mb-12">
 
     <div class="">
-    <lib-ui-title
+    <lib-ui-components-title
       level="h2"
       text="Nuestros Precios"
       [variant]="variant"
       animation="pulse"
       align="center"
-    ></lib-ui-title>
+    ></lib-ui-components-title>
     </div>
 
 
-      <lib-ui-table
+      <lib-ui-components-table
         [variant]="variant"
         [size]="'md'"
         [rounded]="'md'"
         [dark]="true"
         [columns]="priceColumns"
         [rows]="priceRows"
-      ></lib-ui-table>
+      ></lib-ui-components-table>
     </section>
   `,
 })

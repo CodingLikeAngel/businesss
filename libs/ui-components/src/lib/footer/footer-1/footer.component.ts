@@ -45,7 +45,7 @@ export interface FooterCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-footer',
+  selector: 'lib-ui-components-footer',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './footer.component.html',

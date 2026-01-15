@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UICardComponent, UIChipComponent, UITooltipComponent, CardVariant } from '@negocio/ui-components';
 
@@ -6,6 +6,7 @@ import { UICardComponent, UIChipComponent, UITooltipComponent, CardVariant } fro
   selector: 'lib-service-section',
   standalone: true,
   imports: [CommonModule, UICardComponent, UIChipComponent, UITooltipComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   template: `
     <section id="servicios" class="mb-12">
       <h2 class="text-4xl font-bold text-[#FACC15] text-center mb-8 font-nintendo drop-shadow-[0_4px_8px_rgba(255,204,21,0.8)] animate-bounce">

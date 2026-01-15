@@ -235,16 +235,22 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
     this.bubbleConfigSub?.unsubscribe();
   }
 
-  scrollToSection(sectionId: string) {
-    if (sectionId.startsWith('/')) {
+  scrollToSection(sectionId: string | Event) {
+    const id = typeof sectionId === 'string' ? sectionId : (sectionId as any).target?.value || sectionId;
+    if (typeof id === 'string' && id.startsWith('/')) {
       return;
     }
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    if (typeof id === 'string') {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
-  onSocialClick(href: string) {
-    console.log(`Social media clicked: ${href}`);
-    window.open(href, '_blank');
+  onSocialClick(href: string | Event) {
+    const url = typeof href === 'string' ? href : (href as any).target?.value || href;
+    if (typeof url === 'string') {
+      console.log(`Social media clicked: ${url}`);
+      window.open(url, '_blank');
+    }
   }
 
   openServiceModal(service: any) {

@@ -24,7 +24,7 @@ export interface NavLink {
 }
 
 @Component({
-  selector: 'lib-ui-nav-bar',
+  selector: 'lib-ui-components-nav-bar',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './nav-bar.component.html',

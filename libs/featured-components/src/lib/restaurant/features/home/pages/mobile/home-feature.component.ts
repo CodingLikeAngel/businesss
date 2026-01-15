@@ -4,8 +4,7 @@ import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VariantRotationService } from '@negocio/shared-components';
 import {
-  UINavBarComponent,
-  UIHeroSectionComponent,
+
   UITabsComponent,
   CardVariant,
   AccordionItem,
@@ -20,7 +19,12 @@ import {
   BubbleConfig,
   UIButtonComponent,
 } from '@negocio/ui-components';
+import { UINavBarComponent as LibUINavBarComponent } from '@negocio/ui-components';
+import { UIHeroSectionComponent as LibUIHeroSectionComponent } from '@negocio/ui-components';
+import { UIHeroSectionComponent } from '@negocio/ui-components';
+import { UINavBarComponent } from '@negocio/ui-components';
 import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 const VARIANTS = [
   'jungle',
@@ -43,6 +47,8 @@ type VariantType = typeof VARIANTS[number];
   imports: [
     CommonModule,
     RouterModule,
+    LibUINavBarComponent,
+    LibUIHeroSectionComponent,
     UINavBarComponent,
     UIHeroSectionComponent,
     UITabsComponent,
@@ -399,11 +405,14 @@ export class HomeMobileFeatureComponent implements OnDestroy, OnInit {
     variant: ''
   };
 
-  scrollToSection(sectionId: string) {
-    if (sectionId.startsWith('/')) {
+  scrollToSection(sectionId: string | Event) {
+    const id = typeof sectionId === 'string' ? sectionId : (sectionId as any).target?.value || sectionId;
+    if (typeof id === 'string' && id.startsWith('/')) {
       return;
     }
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    if (typeof id === 'string') {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   openServiceModal(service: any) {

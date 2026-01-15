@@ -4,8 +4,7 @@ import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VariantService, NavBarConfig, HeroConfig, FooterConfig, BubbleConfig } from '@negocio/shared-components';
 import {
-  UINavBarComponent,
-  UIHeroSectionComponent,
+
   CardVariant,
   AccordionItem,
   TableColumn,
@@ -19,7 +18,12 @@ import {
   BubbleConfig as BubbleAnimationConfig,
   UIFooterComponent,
 } from '@negocio/ui-components';
+import { UINavBarComponent as LibUINavBarComponent } from '@negocio/ui-components';
+import { UIHeroSectionComponent as LibUIHeroSectionComponent } from '@negocio/ui-components';
+import { UIHeroSectionComponent } from '@negocio/ui-components';
+import { UINavBarComponent } from '@negocio/ui-components';
 import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
   selector: 'lib-home-feature-mobile',
@@ -27,6 +31,8 @@ import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, 
   imports: [
     CommonModule,
     RouterModule,
+    LibUINavBarComponent,
+    LibUIHeroSectionComponent,
     UINavBarComponent,
     UIHeroSectionComponent,
     ReservationFormComponent,
@@ -40,6 +46,7 @@ import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, 
     UITitleComponent,
     UIFooterComponent,
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home-feature.component.html',
   styles: [/* Existing styles unchanged */],
 })
@@ -235,11 +242,14 @@ export class HomeMobileFeatureComponent implements OnDestroy, OnInit {
     this.bubbleConfigSub?.unsubscribe();
   }
 
-  scrollToSection(sectionId: string) {
-    if (sectionId.startsWith('/')) {
+  scrollToSection(sectionId: string | Event) {
+    const id = typeof sectionId === 'string' ? sectionId : (sectionId as any).target?.value || sectionId;
+    if (typeof id === 'string' && id.startsWith('/')) {
       return;
     }
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    if (typeof id === 'string') {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   onSocialClick(href: string) {

@@ -15,7 +15,7 @@ import { UISpinnerComponent } from '@negocio/ui-components';
           Cargando...
         </h1>
         <!-- Spinner from your library -->
-        <lib-ui-components-spinner class="text-yellow-300"  aria-label="Loading"></lib-ui-components-spinner>
+        <lib-ui-spinner class="text-yellow-300"  aria-label="Loading"></lib-ui-spinner>
         <!-- Fun loading text -->
         <span class="text-lg font-semibold text-white drop-shadow-sm animate-pulse">
           About...

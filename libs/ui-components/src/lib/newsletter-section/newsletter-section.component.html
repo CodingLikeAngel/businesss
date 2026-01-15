@@ -6,20 +6,20 @@
       <p>{{ description }}</p>
     </div>
     <div class="form-container">
-      <div class="input-wrapper">
-         <lib-ui-input 
-            [type]="'email'" 
-            [placeholder]="placeholder" 
-            [(ngModel)]="email" 
+      <div class="input-wrapper"> 
+         <lib-ui-components-input
+            [type]="'email'"
+            [placeholder]="placeholder"
+            [(ngModel)]="email"
             [variant]="variant">
-         </lib-ui-input>
+         </lib-ui-components-input>
       </div>
-      <lib-ui-button 
-        [variant]="variant === 'default' ? 'primary' : variant" 
+      <lib-ui-components-button
+        [variant]="variant === 'default' ? 'primary' : variant"
         [disabled]="isSubmitting"
         (buttonClick)="onSubmit()">
         {{ isSubmitting ? '...' : buttonText }}
-      </lib-ui-button>
+      </lib-ui-components-button>
     </div>
     <div class="success-msg" *ngIf="successMessage">
         {{ successMessage }}

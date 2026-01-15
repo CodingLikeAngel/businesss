@@ -1,32 +1,32 @@
 <router-outlet></router-outlet>
       <!-- Navbar -->
       <div class="sticky top-0 z-50 bg-black/50 backdrop-blur-md">
-        <lib-ui-tabs
+        <lib-ui-components-tabs
           [tabs]="tabsConfig"
           [variant]="getVariant('hero')"
           [showAs]="'tabs'"
           [isMobile]="editorState.isMobile"
           (tabSelected)="onTabSelected($event)"
-        ></lib-ui-tabs>
+        ></lib-ui-components-tabs>
       </div>
       
 <section id="hero" class="relative z-20">
-  <lib-ui-hero-section
-    [variant]="getVariant('hero')"
-    [title]="heroConfig.title"
-    [subtitle]="heroConfig.subtitle"
-    [showCta]="heroConfig.showCta"
-    [ctaLabel]="heroConfig.ctaLabel"
-    [showScrollIcon]="heroConfig.showScrollIcon"
-    [videoBackground]="heroConfig.videoBackground"
-    [videoUrl]="heroConfig.videoUrl"
-    [videoPoster]="heroConfig.videoPoster"
-    [navigationCards]="heroConfig.navigationCards"
-    [carouselItems]="heroConfig.carouselItems"
-    [customStyles]="heroConfig.customStyles"
-    (sectionSelected)="scrollToSection($event)"
-  ></lib-ui-hero-section>
-</section>
+   <lib-ui-components-hero
+     [variant]="getVariant('hero')"
+     [title]="heroConfig.title"
+     [subtitle]="heroConfig.subtitle"
+     [showCta]="heroConfig.showCta"
+     [ctaLabel]="heroConfig.ctaLabel"
+     [showScrollIcon]="heroConfig.showScrollIcon"
+     [videoBackground]="heroConfig.videoBackground"
+     [videoUrl]="heroConfig.videoUrl"
+     [videoPoster]="heroConfig.videoPoster"
+     [navigationCards]="heroConfig.navigationCards"
+     [carouselItems]="heroConfig.carouselItems"
+     [customStyles]="heroConfig.customStyles"
+     (sectionSelected)="scrollToSection($event)"
+   ></lib-ui-components-hero>
+ </section>
 
 <lib-bubble-animation
   [variant]="getVariant('bubble')"
@@ -35,43 +35,43 @@
 
 <section id="servicios" class="relative z-20 py-12">
   <div class="container">
-    <lib-ui-title
+    <lib-ui-components-title
       [level]="titleConfig.level"
       [text]="titleConfig.text"
       [variant]="getVariant('title')"
       [align]="titleConfig.align"
       class="mb-8"
-    ></lib-ui-title>
-    <lib-ui-card-rutas
+    ></lib-ui-components-title>
+    <lib-ui-components-card-rutas
       [items]="serviceCardsConfig.items"
       [variant]="getVariant('card')"
       [backgroundColor]="cardConfig.backgroundColor"
       [animation]="cardConfig.animation"
       [isMobile]="editorState.isMobile"
-    ></lib-ui-card-rutas>
+    ></lib-ui-components-card-rutas>
   </div>
 </section>
 
 <section id="productos" class="relative z-20 py-12">
   <div class="container mx-auto px-6 max-w-7xl">
     <div class="backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(113,255,219,0.5)] border-2 border-neon-blue">
-      <lib-ui-title
+      <lib-ui-components-title
         [level]="titleConfig.level"
         [text]="'Nuestros Módulos'"
         [variant]="getVariant('title')"
         [align]="titleConfig.align"
         class="mb-4"
-      ></lib-ui-title>
-      <lib-ui-title
+      ></lib-ui-components-title>
+      <lib-ui-components-title
         [level]="'h5'"
         [text]="'Descubre nuestra selección premium de módulos para tu web, diseñados para escalar tu negocio con eficiencia'"
         [variant]="getVariant('title')"
         [align]="titleConfig.align"
         class="mb-6"
-      ></lib-ui-title>
+      ></lib-ui-components-title>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <ng-container *ngFor="let product of productsConfig.items; let i = index; trackBy: trackByProductId">
-          <lib-ui-card-animated
+          <lib-ui-components-card-animated
             *ngIf="i % 2 === 0 && i !== 2"
             [title]="product.name"
             [description]="product.description"
@@ -82,8 +82,8 @@
             [backgroundColor]="'rgba(47, 79, 79, 0.9)'"
             (addToCart)="addToCart(product)"
             (viewDetails)="openServiceModal(product)"
-          ></lib-ui-card-animated>
-          <lib-ui-card
+          ></lib-ui-components-card-animated>
+          <lib-ui-components-card
             *ngIf="i % 2 === 0 && i !== 0"
             [title]="product.name"
             [image]="'1029.png'"
@@ -91,7 +91,7 @@
             [variant]="getVariant('default')"
             [animation]="'fade'"
             [size]="'medium'"
-          ></lib-ui-card>
+          ></lib-ui-components-card>
           <lib-card-products
             *ngIf="i % 2 !== 0"
             [product]="product"
@@ -108,13 +108,13 @@
 
 <section id="testimonios" class="relative z-20 py-12">
   <div class="container mx-auto px-6 max-w-7xl">
-    <lib-ui-title
+    <lib-ui-components-title
       [level]="titleConfig.level"
       [text]="'Lo que Dicen Nuestros Clientes'"
       [variant]="getVariant('title')"
       [align]="titleConfig.align"
       class="mb-8"
-    ></lib-ui-title>
+    ></lib-ui-components-title>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       <lib-testimonials-card
         *ngFor="let testimonial of testimonials; trackBy: trackByTestimonialId"
@@ -166,20 +166,20 @@
 
 <section id="contacto" class="relative z-20 py-12">
   <div class="container mx-auto px-6 max-w-7xl">
-    <lib-ui-title
+    <lib-ui-components-title
       [level]="titleConfig.level"
       [text]="'Solicita tu Demo Personalizada'"
       [variant]="getVariant('title')"
       [align]="titleConfig.align"
       class="mb-8"
-    ></lib-ui-title>
+    ></lib-ui-components-title>
     <lib-reservation-form
       [variant]="getVariant('form')"
     ></lib-reservation-form>
   </div>
 </section>
 
-<lib-ui-modal
+<lib-ui-components-modal
    [isOpen]="modalState.isOpen"
    [variant]="'glass'"
    [rounded]="'md'"
@@ -187,6 +187,6 @@
    [title]="getModalTitle()"
    [content]="modalState.selectedItem?.description || 'Selecciona un item para ver más detalles.'"
    (modalOnClose)="closeModal()"
- ></lib-ui-modal>
+ ></lib-ui-components-modal>
 
 

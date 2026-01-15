@@ -1,28 +1,19 @@
-<lib-ui-nav-bar [config]="navBarConfig" [variant]="getVariant('navBar')"></lib-ui-nav-bar>
+<lib-ui-nav-bar [variant]="getVariant('navBar')" [navLinks]="navBarConfig.navLinks" [customStyles]="navBarConfig.customStyles" (linkClicked)="scrollToSection($event)"></lib-ui-nav-bar>
 
-<lib-ui-hero-section [config]="heroConfig" [variant]="getVariant('hero')"></lib-ui-hero-section>
+<lib-ui-hero-section [variant]="getVariant('hero')" [title]="heroConfig.title" [subtitle]="heroConfig.subtitle" [customStyles]="heroConfig.customStyles" (sectionSelected)="scrollToSection($event)"></lib-ui-hero-section>
 
-<lib-ui-title [variant]="getVariant('title')">Nuestros Servicios</lib-ui-title>
+<lib-ui-components-title [variant]="getVariant('title')">Nuestros Servicios</lib-ui-components-title>
 
 <div class="services-grid">
-  <lib-ui-card-rutas
+  <lib-ui-components-card-rutas
     *ngFor="let service of serviceCards"
-    [routeName]="service.routeName"
-    [imageUrl]="service.imageUrl"
-    [difficulty]="service.difficulty"
-    [rating]="service.rating"
-    [reviews]="service.reviews"
-    [duration]="service.duration"
-    [distance]="service.distance"
-    [ascent]="service.ascent"
-    [description]="service.description"
-    [features]="service.features"
-    [link]="service.link"
+    [items]="[service]"
     [variant]="getVariant('card')"
-  ></lib-ui-card-rutas>
+    [isMobile]="true"
+  ></lib-ui-components-card-rutas>
 </div>
 
-<lib-ui-title [variant]="getVariant('title')">Productos Destacados</lib-ui-title>
+<lib-ui-components-title [variant]="getVariant('title')">Productos Destacados</lib-ui-components-title>
 
 <div class="products-grid">
   <div class="product-card" *ngFor="let product of products; trackBy: trackByProductId">

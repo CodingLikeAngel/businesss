@@ -3,26 +3,23 @@
 <!-- Barra de Navegación -->
 <lib-ui-nav-bar
   [variant]="selectedVariant"
-  [logoText]="'Tattoo Art Studio'"
-  [showMobileMenu]="true"
-  [isFixed]="true"
   [navLinks]="navLinks"
   (linkClicked)="scrollToSection($event)"
   class="backdrop-blur-lg bg-[rgba(13,2,17,0.7)] shadow-[0_0_20px_rgba(255,30,86,0.5)]"
 ></lib-ui-nav-bar>
 
 <!-- Tabs para móviles -->
-<lib-ui-tabs
+<lib-ui-components-tabs
   [variant]="selectedVariant"
   [tabs]="navLinkstabs"
   [showAs]="'tabs'"
   [isMobile]="true"
   (tabSelected)="scrollToSection($event)"
-></lib-ui-tabs>
+></lib-ui-components-tabs>
 
 <!-- Hero -->
 <section id="hero" class="relative z-20">
-  <lib-ui-hero
+  <lib-ui-hero-section
     [title]="'Tattoo Art Studio'"
     [subtitle]="'Tu visión, nuestra tinta. Arte eterno en tu piel.'"
     [variant]="selectedVariant"
@@ -32,7 +29,7 @@
     }"
     [navigationCards]="navigationCards"
     (sectionSelected)="scrollToSection($event)"
-  ></lib-ui-hero>
+  ></lib-ui-hero-section>
 </section>
 
 <!-- Contenedor Principal con Bubble Animation -->
@@ -44,7 +41,7 @@
       <div class="bg-[rgba(255,255,255,0.05)] backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(255,30,86,0.3)]">
         <h2 class="text-4xl font-bold text-[#FACC15] mb-6 text-center font-nintendo animate-neon">Nuestros Servicios</h2>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <lib-ui-card-rutas
+          <lib-ui-components-card-rutas
             [items]="serviceCards"
             [variant]="selectedVariant"
             [backgroundColor]="'rgba(255,255,255,0.1)'"
@@ -52,8 +49,8 @@
             [accentColor]="'#FF1E56'"
             [isMobile]="true"
             class="transform hover:scale-105 transition-transform duration-300"
-          ></lib-ui-card-rutas>
-          <lib-ui-card-rutas
+          ></lib-ui-components-card-rutas>
+          <lib-ui-components-card-rutas
             [items]="serviceCards"
             [variant]="selectedVariant"
             [backgroundColor]="'rgba(255,255,255,0.1)'"
@@ -61,8 +58,8 @@
             [accentColor]="'#FF1E56'"
             [isMobile]="true"
             class="transform hover:scale-105 transition-transform duration-300"
-          ></lib-ui-card-rutas>
-          <lib-ui-card-rutas
+          ></lib-ui-components-card-rutas>
+          <lib-ui-components-card-rutas
             [items]="serviceCards"
             [variant]="selectedVariant"
             [backgroundColor]="'rgba(255,255,255,0.1)'"
@@ -70,7 +67,7 @@
             [accentColor]="'#FF1E56'"
             [isMobile]="true"
             class="transform hover:scale-105 transition-transform duration-300"
-          ></lib-ui-card-rutas>
+          ></lib-ui-components-card-rutas>
         </div>
       </div>
     </section>
@@ -173,7 +170,7 @@
 </div>
 
 <!-- Modal para detalles del servicio -->
-<lib-ui-modal
+<lib-ui-components-modal
   [isOpen]="modalOpen"
   [variant]="'glass'"
   [rounded]="'md'"
@@ -182,6 +179,6 @@
   [title]="selectedService?.serviceName || 'Detalles del Servicio'"
   [content]="selectedService?.description || 'Selecciona un servicio para ver más detalles.'"
   (modalOnClose)="closeModal()"
-></lib-ui-modal>
+></lib-ui-components-modal>
 
 

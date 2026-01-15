@@ -9,46 +9,46 @@
     <div class="form-container">
       <form (ngSubmit)="onSubmit()">
         <div class="form-group">
-            <lib-ui-input
-                [label]="'Nombre'"
-                [variant]="variant" 
-                [(ngModel)]="formData.name" 
-                name="name" 
-                required>
-            </lib-ui-input>
-        </div>
-        
-        <div class="form-group">
-            <lib-ui-input
-                [label]="emailLabel"
-                [type]="'email'"
-                [variant]="variant" 
-                [(ngModel)]="formData.email" 
-                name="email" 
-                required>
-            </lib-ui-input>
+            <lib-ui-components-input
+                 [label]="'Nombre'"
+                 [variant]="variant"
+                 [(ngModel)]="formData.name"
+                 name="name"
+                 required>
+             </lib-ui-components-input>
         </div>
 
         <div class="form-group">
-             <lib-ui-input
-                [label]="messageLabel"
-                [type]="'textarea'"
-                [rows]="5"
-                [variant]="variant" 
-                [(ngModel)]="formData.message" 
-                name="message" 
-                required>
-            </lib-ui-input>
+            <lib-ui-components-input
+                 [label]="emailLabel"
+                 [type]="'email'"
+                 [variant]="variant"
+                 [(ngModel)]="formData.email"
+                 name="email"
+                 required>
+             </lib-ui-components-input>
+        </div>
+
+        <div class="form-group">
+             <lib-ui-components-input
+                 [label]="messageLabel"
+                 [type]="'textarea'"
+                 [rows]="5"
+                 [variant]="variant"
+                 [(ngModel)]="formData.message"
+                 name="message"
+                 required>
+             </lib-ui-components-input>
         </div>
 
         <div class="actions">
-            <lib-ui-button 
-                [variant]="variant === 'default' ? 'primary' : variant" 
-                [size]="'lg'" 
+            <lib-ui-components-button
+                [variant]="variant === 'default' ? 'primary' : variant"
+                [size]="'lg'"
                 [disabled]="isSubmitting"
                 (buttonClick)="onSubmit()">
                 {{ isSubmitting ? 'Enviando...' : buttonText }}
-            </lib-ui-button>
+            </lib-ui-components-button>
         </div>
         
         <div *ngIf="successMessage" class="success-message">

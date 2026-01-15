@@ -419,11 +419,14 @@ export class TattooHomeFeatureComponent implements OnDestroy, OnInit {
     variant: 'default'
   };
 
-  scrollToSection(sectionId: string) {
-    if (sectionId.startsWith('/')) {
+  scrollToSection(sectionId: string | Event) {
+    const id = typeof sectionId === 'string' ? sectionId : (sectionId as any).target?.value || sectionId;
+    if (typeof id === 'string' && id.startsWith('/')) {
       return;
     }
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    if (typeof id === 'string') {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   openServiceModal(service: any) {

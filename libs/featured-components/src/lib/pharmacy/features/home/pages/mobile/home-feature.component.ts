@@ -21,6 +21,7 @@ import {
   UIButtonComponent,
 } from '@negocio/ui-components';
 import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 const VARIANTS = [
   'jungle',
@@ -58,6 +59,7 @@ type VariantType = typeof VARIANTS[number];
     UITitleComponent,
     UIButtonComponent
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home-feature.component.html',
   styles: [
     `
@@ -403,11 +405,14 @@ throw new Error('Method not implemented.');
     variant: ''
   };
 
-  scrollToSection(sectionId: string) {
-    if (sectionId.startsWith('/')) {
+  scrollToSection(sectionId: string | Event) {
+    const id = typeof sectionId === 'string' ? sectionId : (sectionId as any).target?.value || sectionId;
+    if (typeof id === 'string' && id.startsWith('/')) {
       return;
     }
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    if (typeof id === 'string') {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   openServiceModal(service: any) {

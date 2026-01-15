@@ -33,7 +33,7 @@ interface CardCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-card-rutas',
+  selector: 'lib-ui-components-card-rutas',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './card-rutas.component.html',

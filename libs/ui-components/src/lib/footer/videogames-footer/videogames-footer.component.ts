@@ -32,7 +32,7 @@ export interface videoGamesFooterCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-videogames-footer',
+  selector: 'lib-ui-components-footer',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './videogames-footer.component.html',

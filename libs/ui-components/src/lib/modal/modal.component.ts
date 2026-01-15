@@ -8,7 +8,7 @@ export type DefaultModalVariant = typeof modalVariants[number];
 export type ModalVariantType = DefaultModalVariant | (string & {});
 
 @Component({
-  selector: 'lib-ui-modal',
+  selector: 'lib-ui-components-modal',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './modal.component.html',

@@ -7,7 +7,7 @@ import { UISpinnerComponent } from '@negocio/ui-components';
     imports : [UISpinnerComponent],
   selector: 'lib-device-redirect',
   standalone: true,
-  template: `<lib-ui-components-spinner></lib-ui-components-spinner>`,
+  template: `<lib-ui-spinner></lib-ui-spinner>`,
 })
 export class DeviceRedirectComponent implements OnInit {
   private router = inject(Router);

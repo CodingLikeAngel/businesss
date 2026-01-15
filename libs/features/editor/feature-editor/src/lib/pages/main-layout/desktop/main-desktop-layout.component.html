@@ -137,7 +137,7 @@
             <router-outlet></router-outlet>
 
             <!-- Footer -->
-            <lib-ui-footer
+            <lib-ui-components-footer
               *ngIf="footerConfig.visible"
               [variant]="getVariant('footer')"
               [dark]="footerConfig.dark"
@@ -151,7 +151,7 @@
               [customStyles]="footerConfig.customStyles"
               (linkClicked)="onLinkClick($event)"
               (socialClicked)="onSocialClick($event)"
-            ></lib-ui-footer>
+            ></lib-ui-components-footer>
           </div>
         </div>
       </div>

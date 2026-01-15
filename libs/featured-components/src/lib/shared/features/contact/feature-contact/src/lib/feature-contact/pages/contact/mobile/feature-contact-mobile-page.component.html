@@ -15,18 +15,18 @@
 <!-- Navbar para desktop -->
 
 
-<!-- <lib-ui-nav-bar
+<!-- <lib-ui-components-nav-bar
   [variant]="selectedVariant"
   [navLinks]="navLinks"
-></lib-ui-nav-bar> -->
+></lib-ui-components-nav-bar> -->
 
-<!-- <lib-ui-tabs
+<!-- <lib-ui-components-tabs
   [variant]="selectedVariant"
   [tabs]="navLinkstabs"
   [showAs]="'tabs'"
   [isMobile]="false"
   (tabSelected)="scrollToSection($event)"
-></lib-ui-tabs> -->
+></lib-ui-components-tabs> -->
 
 
 
@@ -52,13 +52,13 @@
     <div class="container mx-auto px-4 py-12 relative z-30">
       <section id="contacto" class="mb-12 relative z-10">
         <div class="bg-[rgba(255,255,255,0.1)] backdrop-blur-md p-6 rounded-lg">
-          <lib-ui-title
+          <lib-ui-components-title
             level="h2"
             text="Contáctanos"
             [variant]="selectedVariant"
             animation="bounce"
             align="center"
-          ></lib-ui-title>
+          ></lib-ui-components-title>
           <div class="z-50 px-4 py-12">
             <lib-contact-form [variant]="selectedVariant"></lib-contact-form>
           </div>

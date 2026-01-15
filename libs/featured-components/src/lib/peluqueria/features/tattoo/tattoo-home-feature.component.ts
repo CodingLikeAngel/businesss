@@ -24,6 +24,7 @@ import { PricingSectionComponent } from '../home/components/pricing-section/pric
 import { PromotionsSectionComponent } from '../home/components/promotions-section/promotions-section.component';
 import { ReservationFormComponent } from '../home/components/reservation-form/reservation-form.component';
 import { ServiceSectionComponent } from '../home/components/service-section/service-section.component';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 
 const VARIANTS = [
@@ -60,6 +61,7 @@ type VariantType = typeof VARIANTS[number];
     UICardRutasComponent,
     BubbleAnimationComponent
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './tattoo-home-feature.component.html',
   styles: [
     `
@@ -419,11 +421,14 @@ export class TattooHomeFeatureComponent implements OnDestroy, OnInit {
     variant: 'default'
   };
 
-  scrollToSection(sectionId: string) {
-    if (sectionId.startsWith('/')) {
+  scrollToSection(sectionId: string | Event) {
+    const id = typeof sectionId === 'string' ? sectionId : (sectionId as any).target?.value || sectionId;
+    if (typeof id === 'string' && id.startsWith('/')) {
       return;
     }
-    document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' });
+    if (typeof id === 'string') {
+      document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    }
   }
 
   openServiceModal(service: any) {

@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UITableComponent, CardVariant, TableColumn, TableRow, UITitleComponent } from '@negocio/ui-components';
 
@@ -6,6 +6,7 @@ import { UITableComponent, CardVariant, TableColumn, TableRow, UITitleComponent 
   selector: 'lib-pricing-section',
   standalone: true,
   imports: [CommonModule, UITableComponent, UITitleComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   template: `
     <section id="precios" class="mb-12">
 

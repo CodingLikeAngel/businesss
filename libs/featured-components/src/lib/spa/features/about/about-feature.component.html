@@ -4,7 +4,7 @@
 
 <div class="z-50">
   <!-- Barra de Navegación Futurista -->
-  <lib-ui-nav-bar
+  <lib-ui-components-nav-bar
     [variant]="selectedVariant"
     [logoText]="'Peluquería Estilo'"
     [showMobileMenu]="true"
@@ -26,23 +26,23 @@
     <!-- Sección 'Sobre Nosotros' -->
     <section id="about" class="z-30">
       <div class="">
-        <lib-ui-title
+        <lib-ui-components-title
           level="h2"
           text="¡Bienvenidos al Reino del Estilo!"
           [variant]="selectedVariant"
           animation="slide"
           align="center"
           class="mb-8"
-        ></lib-ui-title>
+        ></lib-ui-components-title>
 
-        <lib-ui-title
+        <lib-ui-components-title
           level="h3"
           text="Transforma tu look, vive la leyenda"
           [variant]="selectedVariant"
           animation="glitch"
           align="center"
           class="mb-8"
-        ></lib-ui-title>
+        ></lib-ui-components-title>
         <div
           class="text-white text-lg md:text-xl leading-relaxed mb-14 max-w-5xl mx-auto animate-fade-in opacity-0 animate-delay-200"
         >
@@ -64,7 +64,7 @@
 
         <!-- Botón acción -->
         <div class="text-center">
-          <lib-ui-button
+          <lib-ui-components-button
             [variant]="selectedVariant"
             size="lg"
             rounded="full"
@@ -72,7 +72,7 @@
             type="submit"
           >
             ¡Crea tu Estilo!
-          </lib-ui-button>
+          </lib-ui-components-button>
         </div>
       </div>
     </section>
@@ -80,13 +80,13 @@
 </div>
 
 <!-- Galería -->
-<lib-ui-title
+<lib-ui-components-title
   level="h3"
   text="Nuestros Héroes"
   [variant]="selectedVariant"
   animation="slide"
   align="center"
-></lib-ui-title>
+></lib-ui-components-title>
 
 <section id="galeria" class="relative z-20 mb-6">
   <div class="container mx-auto px-6 max-w-7xl">

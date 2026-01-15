@@ -20,7 +20,7 @@ export interface TableRow {
 }
 
 @Component({
-  selector: 'lib-ui-table',
+  selector: 'lib-ui-components-table',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './table.component.html',

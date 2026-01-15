@@ -42,7 +42,7 @@
 
       <!-- Navbar -->
       <div class="z-30">
-        <lib-ui-nav-bar
+        <lib-ui-components-nav-bar
           [variant]="globalVariant"
           [logoText]="navBarConfig.logoText"
           [showMobileMenu]="navBarConfig.showMobileMenu"
@@ -50,7 +50,7 @@
           [navLinks]="navBarConfig.navLinks"
           [customStyles]="navBarConfig.customStyles"
           (linkClicked)="scrollToSection($event)"
-        ></lib-ui-nav-bar>
+        ></lib-ui-components-nav-bar>
       </div>
 
       <!-- Main Content -->
@@ -59,7 +59,7 @@
       </section>
 
       <!-- Footer -->
-      <lib-ui-footer
+      <lib-ui-components-footer
         [variant]="globalVariant"
         [dark]="footerConfig.dark"
         [showParticles]="footerConfig.showParticles"
@@ -72,7 +72,7 @@
         [customStyles]="footerConfig.customStyles"
         (linkClicked)="onLinkClick($event)"
         (socialClicked)="onSocialClick($event)"
-      ></lib-ui-footer>
+      ></lib-ui-components-footer>
     </div>
   </div>
 </div>

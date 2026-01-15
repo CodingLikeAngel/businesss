@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UICardPremiumComponent, UIChipComponent, UITooltipComponent, CardVariant, CardPremiumConfig } from '@negocio/ui-components';
 
@@ -6,6 +6,7 @@ import { UICardPremiumComponent, UIChipComponent, UITooltipComponent, CardVarian
   selector: 'lib-promotions-section',
   standalone: true,
   imports: [CommonModule, UICardPremiumComponent, UIChipComponent, UITooltipComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   template: `
     <!-- Sección de Promociones -->
     <section id="promociones" class=" ">

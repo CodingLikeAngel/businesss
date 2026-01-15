@@ -17,7 +17,7 @@ interface Tab {
 }
 
 @Component({
-  selector: 'lib-ui-tabs',
+  selector: 'lib-ui-components-tabs',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './tabs.component.html',
