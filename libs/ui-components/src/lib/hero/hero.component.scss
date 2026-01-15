@@ -288,113 +288,45 @@
 .hero-section--noticias { --hero-bg: radial-gradient(ellipse at top, #1a3d3d 0%, #3d6d6d 100%); }
 .hero-section--default { --hero-bg: radial-gradient(ellipse at top, #1e1b4b 0%, #0a0a14 100%); }
 
-/* Elegant Variant */
+/* Global Variant Mapping for Hero */
+.hero-section[class*="hero-section--"] {
+    --hero-bg: var(--theme-bg, transparent); 
+    // This mapping ensures that if the mixin sets --theme-bg, Hero picks it up.
+    
+    .hero-title {
+        font-family: var(--theme-font, 'Orbitron', sans-serif);
+    }
+}
+
+/* Specific overrides for complex variants not fully covered by generic tokens */
 .hero-section--elegant {
-  --hero-bg: radial-gradient(circle at center, #2c3e50, #1a1a1a);
-  
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    color: #d4af37;
-    background: none;
-    -webkit-text-fill-color: initial;
-    text-shadow: 0 4px 10px rgba(0,0,0,0.5);
-  }
-  
-  .hero-subtitle {
-     font-family: 'Lato', sans-serif;
-     color: #f5f5f0;
-     font-weight: 300;
-  }
-  
-  .cta-button {
-    background: linear-gradient(135deg, #d4af37, #996515);
-    color: #1a1a1a;
-    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+    // Keep particle overrides as they are specific to Hero's particle system
+    .particle-1 { background: rgba(212, 175, 55, 0.15); }
+    .particle-2 { background: rgba(255, 255, 255, 0.05); }
     
-    &:hover {
-       background: linear-gradient(135deg, #ffd700, #b8860b);
+    .hero-title {
+        text-shadow: 0 4px 10px rgba(0,0,0,0.5);
     }
-  }
-
-  .particle-1 { background: rgba(212, 175, 55, 0.15); }
-  .particle-2 { background: rgba(255, 255, 255, 0.05); }
 }
 
-/* Luxury Variant */
 .hero-section--luxury {
-  --hero-bg: #0f172a; // Dark slate
-  
-  .hero-title {
-    font-family: 'Cinzel', serif;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    color: #fff;
-    background: none;
-    -webkit-text-fill-color: initial;
-    border-bottom: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: 1rem;
-    margin-bottom: 1rem;
-  }
-  
-  .hero-subtitle {
-     font-family: 'Montserrat', sans-serif;
-     text-transform: uppercase;
-     font-size: 0.9rem;
-     letter-spacing: 0.2em;
-     color: #94a3b8;
-  }
-  
-  .cta-button {
-    background: transparent;
-    border: 1px solid rgba(255,255,255,0.3);
-    color: #fff;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    
-    &:hover {
-        background: #fff;
-        color: #000;
-        border-color: #fff;
+    .hero-title {
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        padding-bottom: 1rem;
+        margin-bottom: 1rem;
     }
-  }
 }
 
-/* Vintage Variant */
 .hero-section--vintage {
-  --hero-bg: #4e342e; // Brown
-  background-image: radial-gradient(#5d4037 20%, transparent 20%),
-      radial-gradient(#5d4037 20%, transparent 20%);
-  background-size: 50px 50px;
-  background-position: 0 0, 25px 25px;
-  
-  .hero-title {
-    font-family: 'Courier New', monospace;
-    font-weight: 900;
-    color: #deb887;
-    background: none;
-    -webkit-text-fill-color: initial;
-    text-shadow: 4px 4px 0px #3e2723;
-  }
-  
-  .hero-subtitle {
-     font-family: 'Georgia', serif;
-     font-style: italic;
-     color: #d7ccc8;
-  }
-  
-  .cta-button {
-    background: #d84315;
-    box-shadow: 4px 4px 0px #3e2723;
-    color: #fff;
-    border: 2px solid #3e2723;
-    font-family: 'Courier New', monospace;
-    font-weight: bold;
+    // Keep pattern override as mixin might be generic
+    background-image: radial-gradient(#5d4037 20%, transparent 20%),
+                      radial-gradient(#5d4037 20%, transparent 20%);
+    background-size: 50px 50px;
+    background-position: 0 0, 25px 25px;
     
-    &:hover {
-         transform: translate(2px, 2px);
-         box-shadow: 2px 2px 0px #3e2723;
+    .hero-title {
+        text-shadow: 4px 4px 0px #3e2723;
     }
-  }
 }
 
 /* Partículas */
