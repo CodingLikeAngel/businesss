@@ -249,15 +249,46 @@ $glass-border: rgba(255, 255, 255, 0.2);
 }
 
 @mixin variant-mario {
-  --theme-bg: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(0, 0, 255, 0.2));
+  --theme-bg: linear-gradient(135deg, #e53e3e, #3182ce);
   --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(255, 0, 0, 0.5);
+  --theme-border: 3px solid #ff0000;
   --theme-accent: #ffcc00;
-  --theme-shadow: 0 0 15px #ff0000;
+  --theme-shadow: 0 4px 0 #9b2c2c, 0 8px 20px rgba(255, 0, 0, 0.4);
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
   box-shadow: var(--theme-shadow);
+  font-family: 'Press Start 2P', monospace;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+  }
+
+  &:hover::before {
+    left: 100%;
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #9b2c2c, 0 12px 30px rgba(255, 0, 0, 0.6);
+  }
+
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 0 #9b2c2c;
+  }
 }
 
 @mixin variant-zelda {
