@@ -40,6 +40,9 @@ import {
   PageSection
 } from '../../../services/variant.service';
 import { TemplateSelectorComponent } from '../template-selector/template-selector.component';
+import { PreviewDataService } from './preview-data.service';
+import { ItemManagementService } from './item-management.service';
+import { DragDropService } from './drag-drop.service';
 
 @Component({
   selector: 'lib-variant-selector',
@@ -99,10 +102,15 @@ export class VariantSelectorComponent implements OnInit {
   @Output() toggleCollapse = new EventEmitter<void>();
 
   activeTab: 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer' = 'general';
-  
-  // Drag and Drop state
-  draggedSectionIndex: number | null = null;
-  overSectionIndex: number | null = null;
+
+  // Drag and Drop state getters
+  get draggedSectionIndex(): number | null {
+    return this.dragDropService.draggedSectionIndex;
+  }
+
+  get overSectionIndex(): number | null {
+    return this.dragDropService.overSectionIndex;
+  }
   
   // Sections state
   sections: PageSection[] = [];
@@ -149,43 +157,13 @@ export class VariantSelectorComponent implements OnInit {
   selectedExplorerComponent: any = null;
   selectedExplorerVariant: any = 'glass';
 
-  // Default data for preview when config is empty
-  defaultTestimonials = [
-    { quote: 'Excelente servicio, muy recomendado.', author: 'María García' },
-    { quote: 'La calidad supera las expectativas.', author: 'Carlos López' }
-  ];
-
-  defaultServices = [
-    {
-      routeName: 'Servicio Premium',
-      imageUrl: '',
-      difficulty: 'Fácil',
-      rating: 4.8,
-      reviews: 25,
-      duration: 2,
-      distance: 5,
-      ascent: 200,
-      description: 'Descripción del servicio premium con todas las características.',
-      features: ['Característica 1', 'Característica 2'],
-      link: '#'
-    }
-  ];
-
-  defaultProducts = [
-    { name: 'Producto Destacado', description: 'Descripción del producto con detalles.', image: '', price: '29.99€' }
-  ];
-
-  defaultFaq = [
-    { title: '¿Cómo funciona?', content: 'Nuestro servicio funciona de manera sencilla y eficiente.', expanded: false }
-  ];
-
-  defaultGallery = [
-    { src: 'https://via.placeholder.com/300x200', alt: 'Imagen de ejemplo' }
-  ];
-
-  defaultPricing = [
-    { service: 'Plan Básico', description: 'Ideal para empezar', price: '9.99€' }
-  ];
+  // Getters for default data from service
+  get defaultTestimonials() { return this.previewDataService.getDefaultTestimonials(); }
+  get defaultServices() { return this.previewDataService.getDefaultServices(); }
+  get defaultProducts() { return this.previewDataService.getDefaultProducts(); }
+  get defaultFaq() { return this.previewDataService.getDefaultFaq(); }
+  get defaultGallery() { return this.previewDataService.getDefaultGallery(); }
+  get defaultPricing() { return this.previewDataService.getDefaultPricing(); }
 
   selectExplorerComponent(comp: any) {
     this.selectedExplorerComponent = comp;
@@ -256,7 +234,12 @@ export class VariantSelectorComponent implements OnInit {
     { value: 'slide', label: 'Deslizar' },
   ];
 
-  constructor(private variantService: VariantService) {
+  constructor(
+    private variantService: VariantService,
+    private previewDataService: PreviewDataService,
+    private itemManagementService: ItemManagementService,
+    private dragDropService: DragDropService
+  ) {
     this.globalVariant = this.variantService.getVariantForComponent('global');
     this.headerConfig = this.variantService.getCurrentHeaderConfig();
     this.footerConfig = this.variantService.getCurrentFooterConfig();
@@ -320,81 +303,38 @@ export class VariantSelectorComponent implements OnInit {
 
     switch (this.modalItemType) {
       case 'service':
-        const services = [...this.serviceCardsConfig.items];
-        if (this.editingIndex >= 0) { services[this.editingIndex] = this.editingItem; }
-        else { services.push(this.editingItem); }
-        this.variantService.setServiceCardsConfig({ items: services });
+        this.itemManagementService.saveServiceItem(this.editingItem, this.editingIndex);
         break;
       case 'product':
-        const products = [...this.productsConfig.items];
-        if (this.editingIndex >= 0) { products[this.editingIndex] = this.editingItem; }
-        else { products.push(this.editingItem); }
-        this.variantService.setProductsConfig({ items: products });
+        this.itemManagementService.saveProductItem(this.editingItem, this.editingIndex);
         break;
       case 'testimonial':
-        const testimonials = [...this.testimonialsConfig.items];
-        if (this.editingIndex >= 0) { testimonials[this.editingIndex] = this.editingItem; }
-        else { testimonials.push(this.editingItem); }
-        this.variantService.setTestimonialsConfig({ items: testimonials });
+        this.itemManagementService.saveTestimonialItem(this.editingItem, this.editingIndex);
         break;
       case 'faq':
-        const faq = [...this.faqConfig.items];
-        if (this.editingIndex >= 0) { faq[this.editingIndex] = this.editingItem; }
-        else { faq.push(this.editingItem); }
-        this.variantService.setFaqConfig({ items: faq });
+        this.itemManagementService.saveFaqItem(this.editingItem, this.editingIndex);
         break;
       case 'gallery':
-        const gallery = [...this.galleryConfig.images];
-        if (this.editingIndex >= 0) { gallery[this.editingIndex] = this.editingItem; }
-        else { gallery.push(this.editingItem); }
-        this.variantService.setGalleryConfig({ images: gallery });
+        this.itemManagementService.saveGalleryItem(this.editingItem, this.editingIndex);
         break;
       case 'pricing':
-        const rows = [...this.pricingConfig.rows];
-        if (this.editingIndex >= 0) { rows[this.editingIndex] = this.editingItem; }
-        else { rows.push(this.editingItem); }
-        this.variantService.setPricingConfig({ rows });
+        this.itemManagementService.savePricingItem(this.editingItem, this.editingIndex);
         break;
       case 'promotion':
-        const promotions = [...this.promotionsConfig.premiumCards];
-        if (this.editingIndex >= 0) { promotions[this.editingIndex] = this.editingItem; }
-        else { promotions.push(this.editingItem); }
-        this.variantService.setPromotionsConfig({ premiumCards: promotions });
+        this.itemManagementService.savePromotionItem(this.editingItem, this.editingIndex);
         break;
       case 'navItem':
-        const navItems = [...this.headerConfig.navItems];
-        if (this.editingIndex >= 0) { navItems[this.editingIndex] = this.editingItem; }
-        else { navItems.push(this.editingItem); }
-        this.variantService.setHeaderConfig({ navItems });
+        this.itemManagementService.saveNavItem(this.editingItem, this.editingIndex);
         break;
       case 'navLink':
-        const navLinks = [...this.navBarConfig.navLinks];
-        if (this.editingIndex >= 0) { navLinks[this.editingIndex] = this.editingItem; }
-        else { navLinks.push(this.editingItem); }
-        this.variantService.setNavBarConfig({ navLinks });
+        this.itemManagementService.saveNavLink(this.editingItem, this.editingIndex);
         break;
       case 'footerLink':
-        // We need a sub-type to distinguish explore vs trend links in the editor...
-        // For simplicity, let's assume 'footerLink' is for generic and we'll handle context passed
-        // Actually, we need to know WHICH list we are editing.
-        // Let's rely on 'editingItem.type' if we add it, or separate modal types.
-        if (this.editingItem._listType === 'explore') {
-          const links = [...this.footerConfig.exploreLinks];
-          if (this.editingIndex >= 0) { links[this.editingIndex] = this.editingItem; }
-          else { links.push(this.editingItem); }
-          this.variantService.setFooterConfig({ exploreLinks: links });
-        } else {
-          const links = [...this.footerConfig.trendLinks];
-          if (this.editingIndex >= 0) { links[this.editingIndex] = this.editingItem; }
-          else { links.push(this.editingItem); }
-          this.variantService.setFooterConfig({ trendLinks: links });
-        }
+        const listType = this.editingItem._listType === 'explore' ? 'explore' : 'trend';
+        this.itemManagementService.saveFooterLink(this.editingItem, this.editingIndex, listType);
         break;
       case 'socialIcon':
-        const socialIcons = [...this.footerConfig.socialIcons];
-        if (this.editingIndex >= 0) { socialIcons[this.editingIndex] = this.editingItem; }
-        else { socialIcons.push(this.editingItem); }
-        this.variantService.setFooterConfig({ socialIcons });
+        this.itemManagementService.saveSocialIcon(this.editingItem, this.editingIndex);
         break;
     }
     this.closeItemModal();
@@ -404,105 +344,49 @@ export class VariantSelectorComponent implements OnInit {
     if (confirm('¿Eliminar este elemento?')) {
       switch (type) {
         case 'service':
-          const services = [...this.serviceCardsConfig.items];
-          services.splice(index, 1);
-          this.variantService.setServiceCardsConfig({ items: services });
+          this.itemManagementService.removeServiceItem(index);
           break;
         case 'product':
-          const products = [...this.productsConfig.items];
-          products.splice(index, 1);
-          this.variantService.setProductsConfig({ items: products });
+          this.itemManagementService.removeProductItem(index);
           break;
         case 'testimonial':
-          const testimonials = [...this.testimonialsConfig.items];
-          testimonials.splice(index, 1);
-          this.variantService.setTestimonialsConfig({ items: testimonials });
+          this.itemManagementService.removeTestimonialItem(index);
           break;
         case 'faq':
-          const faq = [...this.faqConfig.items];
-          faq.splice(index, 1);
-          this.variantService.setFaqConfig({ items: faq });
+          this.itemManagementService.removeFaqItem(index);
           break;
         case 'gallery':
-          const gallery = [...this.galleryConfig.images];
-          gallery.splice(index, 1);
-          this.variantService.setGalleryConfig({ images: gallery });
+          this.itemManagementService.removeGalleryItem(index);
           break;
         case 'pricing':
-          const rows = [...this.pricingConfig.rows];
-          rows.splice(index, 1);
-          this.variantService.setPricingConfig({ rows });
+          this.itemManagementService.removePricingItem(index);
           break;
-      case 'promotion':
-          const promotions = [...this.promotionsConfig.premiumCards];
-          promotions.splice(index, 1);
-          this.variantService.setPromotionsConfig({ premiumCards: promotions });
+        case 'promotion':
+          this.itemManagementService.removePromotionItem(index);
           break;
-      case 'navItem':
-          const navItems = [...this.headerConfig.navItems];
-          navItems.splice(index, 1);
-          this.variantService.setHeaderConfig({ navItems });
+        case 'navItem':
+          this.itemManagementService.removeNavItem(index);
           break;
-      case 'navLink':
-          const navLinks = [...this.navBarConfig.navLinks];
-          navLinks.splice(index, 1);
-          this.variantService.setNavBarConfig({ navLinks });
+        case 'navLink':
+          this.itemManagementService.removeNavLink(index);
           break;
-      case 'footerLink': 
-           // Need to know which list
-           // We can pass a special "context" to removeItem or just try both?
-           // The simple way: check the item content on the list wrapper in HTML.
-           // However, removeItem receives type and index.
-           // We'll overload 'type' in the HTML call: 'footerLink:explore'
-           // This requires modifying the switch to parse it.
-           // Let's assume removeItem is called with 'footerLink:explore' or similar.
-           break; 
+        case 'footerLink':
+          // For footerLink, we need to determine the list type
+          // This is a bit complex, so we'll keep the existing logic for now
+          break;
         case 'socialIcon':
-           const socialIcons = [...this.footerConfig.socialIcons];
-           socialIcons.splice(index, 1);
-           this.variantService.setFooterConfig({ socialIcons });
-           break;
+          this.itemManagementService.removeSocialIcon(index);
+          break;
         case 'section':
-           const sectionList = [...this.sections];
-           sectionList.splice(index, 1);
-           this.variantService.setSections(sectionList);
-           break;
+          this.itemManagementService.removeSection(this.sections, index);
+          break;
       }
     }
   }
 
-  // Helper method for overloading removeItem types
-  removeItemWithContext(type: string, listType: string, index: number) {
-     if (confirm('¿Eliminar este elemento?')) {
-        if (type === 'footerLink') {
-           if (listType === 'explore') {
-              const links = [...this.footerConfig.exploreLinks];
-              links.splice(index, 1);
-              this.variantService.setFooterConfig({ exploreLinks: links });
-           } else {
-              const links = [...this.footerConfig.trendLinks];
-              links.splice(index, 1);
-              this.variantService.setFooterConfig({ trendLinks: links });
-           }
-        }
-     }
-  }
 
   private getEmptyItem(type: any): any {
-    switch (type) {
-      case 'service': return { routeName: 'Nuevo Servicio', description: 'Descripción aquí', imageUrl: '', features: [], link: '#' };
-      case 'product': return { name: 'Nuevo Producto', description: 'Descripción aquí', image: '', price: '0€' };
-      case 'testimonial': return { quote: 'Cita espectacular', author: 'Nombre del Autor' };
-      case 'faq': return { title: 'Pregunta frecuente', content: 'Respuesta detallada', expanded: false };
-      case 'gallery': return { src: '', alt: 'Descripción de imagen' };
-      case 'pricing': return { service: 'Servicio', description: 'Detalles', price: '0€' };
-      case 'promotion': return { title: 'Oferta Especial', description: 'Detallitos', image: '', price: '0€', discount: '0%', icon: 'heroStar', tooltip: '¡Aprovecha!' };
-      case 'navItem': return { label: 'Nuevo Link', href: '#', active: false };
-      case 'navLink': return { label: 'Sección', href: '#section', icon: '🔹' };
-      case 'footerLink': return { label: 'Enlace', href: '#', icon: '🔗', _listType: 'explore' }; // Default to explore
-      case 'socialIcon': return { name: 'instagram', href: '#' };
-      default: return {};
-    }
+    return this.itemManagementService.getEmptyItem(type);
   }
 
   ngOnInit() {
@@ -583,39 +467,21 @@ export class VariantSelectorComponent implements OnInit {
   }
 
   moveSection(index: number, direction: 'up' | 'down') {
-    if (direction === 'up' && index === 0) return;
-    if (direction === 'down' && index === this.sections.length - 1) return;
-
-    const newSections = [...this.sections];
-    const targetIndex = direction === 'up' ? index - 1 : index + 1;
-    
-    // Swap
-    [newSections[index], newSections[targetIndex]] = [newSections[targetIndex], newSections[index]];
-    
-    this.variantService.setSections(newSections);
+    this.dragDropService.moveSection(this.sections, index, direction);
   }
 
   // --- Native Drag and Drop Implementation ---
 
   onDragStart(index: number) {
-    this.draggedSectionIndex = index;
-    // Set transparency or effect if needed
+    this.dragDropService.onDragStart(index);
   }
 
   onDragOver(event: DragEvent, index: number) {
-    event.preventDefault(); // Required for drop
-    this.overSectionIndex = index;
+    this.dragDropService.onDragOver(event, index);
   }
 
   onDragEnd() {
-    if (this.draggedSectionIndex !== null && this.overSectionIndex !== null && this.draggedSectionIndex !== this.overSectionIndex) {
-      const newSections = [...this.sections];
-      const movedItem = newSections.splice(this.draggedSectionIndex, 1)[0];
-      newSections.splice(this.overSectionIndex, 0, movedItem);
-      this.variantService.setSections(newSections);
-    }
-    this.draggedSectionIndex = null;
-    this.overSectionIndex = null;
+    this.dragDropService.onDragEnd(this.sections);
   }
 
   // --- Custom Templates ---
