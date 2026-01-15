@@ -89,5 +89,8 @@ export const variants = [
     'vaporwave',
     'aurora',
     'trailblazer',
+    'elegant',
+    'vintage',
+    'luxury'
   ] as const;
   

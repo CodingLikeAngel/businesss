@@ -1109,6 +1109,45 @@ $glass-border: rgba(255, 255, 255, 0.2);
   }
 }
 
+@mixin variant-elegant {
+  --theme-bg: radial-gradient(circle at center, #2c3e50, #1a1a1a);
+  --theme-color: #f5f5f0;
+  --theme-border: 1px solid rgba(212, 175, 55, 0.3);
+  --theme-accent: #d4af37;
+  --theme-shadow: 0 4px 15px rgba(0,0,0,0.6);
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  font-family: 'Playfair Display', serif;
+}
+
+@mixin variant-luxury {
+  --theme-bg: #0f172a;
+  --theme-color: #ffffff;
+  --theme-border: 1px solid rgba(255, 255, 255, 0.1);
+  --theme-accent: #ffffff;
+  --theme-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  font-family: 'Cinzel', serif;
+}
+
+@mixin variant-vintage {
+  --theme-bg: #4e342e;
+  --theme-color: #deb887;
+  --theme-border: 2px solid #3e2723;
+  --theme-accent: #d84315;
+  --theme-shadow: 4px 4px 0px #3e2723;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  font-family: 'Courier New', monospace;
+}
+
 @mixin apply-all-variants($prefix: 'variant-') {
     &.#{$prefix}default { @include variant-default; }
     &.#{$prefix}primary { @include variant-primary; }
@@ -1205,6 +1244,9 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}overwatch { @include variant-overwatch; }
     &.#{$prefix}minecraft { @include variant-minecraft; }
     &.#{$prefix}fortnite { @include variant-fortnite; }
+    &.#{$prefix}elegant { @include variant-elegant; }
+    &.#{$prefix}luxury { @include variant-luxury; }
+    &.#{$prefix}vintage { @include variant-vintage; }
 }
 
 @mixin apply-variants-to-child($child, $prefix: 'variant-') {
@@ -1303,4 +1345,7 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}overwatch #{$child} { @include variant-overwatch; }
     &.#{$prefix}minecraft #{$child} { @include variant-minecraft; }
     &.#{$prefix}fortnite #{$child} { @include variant-fortnite; }
+    &.#{$prefix}elegant #{$child} { @include variant-elegant; }
+    &.#{$prefix}luxury #{$child} { @include variant-luxury; }
+    &.#{$prefix}vintage #{$child} { @include variant-vintage; }
 }

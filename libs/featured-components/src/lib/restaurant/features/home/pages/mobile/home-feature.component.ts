@@ -37,6 +37,9 @@ const VARIANTS = [
   'candy',
   'oceanic',
   'fiery',
+  'elegant',
+  'luxury',
+  'vintage'
 ] as const;
 
 type VariantType = typeof VARIANTS[number];
@@ -213,7 +216,7 @@ export class HomeMobileFeatureComponent implements OnDestroy, OnInit {
   }) {
     throw new Error('Method not implemented.');
   }
-  selectedVariant: CardVariant = 'default';
+  selectedVariant: CardVariant = 'elegant';
   isMobile = false;
   modalOpen = false;
   selectedService: any | null = null;

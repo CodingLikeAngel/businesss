@@ -137,6 +137,49 @@
     --theme-hover-bg: rgba(59, 130, 246, 0.2);
     --theme-accent-rgb: 59, 130, 246;
   }
+
+  /* Elegant Variant Override */
+  &.variant-elegant {
+    --theme-bg: rgba(25, 25, 35, 0.95);
+    --theme-color: #f5f5f0;
+    --theme-accent: #d4af37;
+    --theme-hover-bg: rgba(212, 175, 55, 0.2);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+    border-bottom: 1px solid rgba(212, 175, 55, 0.3);
+    
+    .nav-logo-link {
+       font-family: 'Playfair Display', serif;
+       letter-spacing: 0.1em;
+    }
+  }
+
+  /* Luxury Variant Override */
+  &.variant-luxury {
+    --theme-bg: rgba(15, 23, 42, 0.98);
+    --theme-color: #ffffff;
+    --theme-accent: #ffffff;
+    --theme-hover-bg: rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    
+    .nav-logo-link {
+       font-family: 'Cinzel', serif;
+       text-transform: uppercase;
+    }
+  }
+
+  /* Vintage Variant Override */
+  &.variant-vintage {
+    --theme-bg: #4e342e;
+    --theme-color: #deb887;
+    --theme-accent: #d84315;
+    --theme-hover-bg: rgba(216, 67, 21, 0.2);
+    box-shadow: 0 4px 0 rgba(62, 39, 35, 1);
+    
+    .nav-logo-link {
+       font-family: 'Courier New', monospace;
+       font-weight: 900;
+    }
+  }
 }
 
 /* Variante fija con entrada elegante */

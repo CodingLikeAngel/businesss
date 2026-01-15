@@ -195,11 +195,60 @@
           <h3>Listados Dinámicos</h3>
           <p class="helper-text">Gestiona los elementos que se repiten en las secciones.</p>
           <div class="content-nav">
-             <button class="content-tag" (click)="openAddModal('service')">Servicios</button>
-             <button class="content-tag" (click)="openAddModal('testimonial')">Testimonios</button>
-             <button class="content-tag" (click)="openAddModal('faq')">FAQs</button>
-             <button class="content-tag" (click)="openAddModal('product')">Productos</button>
+             <button class="content-tag" (click)="openAddModal('service')">➕ Servicio</button>
+             <button class="content-tag" (click)="openAddModal('testimonial')">➕ Testimonio</button>
+             <button class="content-tag" (click)="openAddModal('faq')">➕ FAQ</button>
+             <button class="content-tag" (click)="openAddModal('product')">➕ Producto</button>
           </div>
+
+          <!-- Services List -->
+          <div class="content-list mt-4" *ngIf="serviceCardsConfig.items.length > 0">
+            <h4 class="text-xs uppercase text-gray-500 mb-2">Servicios Activos</h4>
+            <div class="content-item-row" *ngFor="let item of serviceCardsConfig.items; let i = index">
+              <span class="truncate">{{ item.routeName }}</span>
+              <div class="actions">
+                <button (click)="openEditModal('service', item, i)">✏️</button>
+                <button (click)="removeItem('service', i)">🗑️</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Products List -->
+          <div class="content-list mt-4" *ngIf="productsConfig.items.length > 0">
+            <h4 class="text-xs uppercase text-gray-500 mb-2">Productos Activos</h4>
+            <div class="content-item-row" *ngFor="let item of productsConfig.items; let i = index">
+              <span class="truncate">{{ item.name }}</span>
+              <div class="actions">
+                <button (click)="openEditModal('product', item, i)">✏️</button>
+                <button (click)="removeItem('product', i)">🗑️</button>
+              </div>
+            </div>
+          </div>
+
+           <!-- Testimonials List -->
+           <div class="content-list mt-4" *ngIf="testimonialsConfig.items.length > 0">
+            <h4 class="text-xs uppercase text-gray-500 mb-2">Testimonios Activos</h4>
+            <div class="content-item-row" *ngFor="let item of testimonialsConfig.items; let i = index">
+              <span class="truncate">{{ item.author }}</span>
+              <div class="actions">
+                <button (click)="openEditModal('testimonial', item, i)">✏️</button>
+                <button (click)="removeItem('testimonial', i)">🗑️</button>
+              </div>
+            </div>
+          </div>
+
+           <!-- FAQs List -->
+           <div class="content-list mt-4" *ngIf="faqConfig.items.length > 0">
+            <h4 class="text-xs uppercase text-gray-500 mb-2">FAQs Activas</h4>
+            <div class="content-item-row" *ngFor="let item of faqConfig.items; let i = index">
+              <span class="truncate">{{ item.title }}</span>
+              <div class="actions">
+                <button (click)="openEditModal('faq', item, i)">✏️</button>
+                <button (click)="removeItem('faq', i)">🗑️</button>
+              </div>
+            </div>
+          </div>
+
        </div>
     </div>
 

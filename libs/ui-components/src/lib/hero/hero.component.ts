@@ -119,7 +119,7 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
     const stellarLayout = ['stellar', 'cosmic', 'galactic'];
     const phoenixLayout = ['phoenix', 'fire', 'jungle', 'electoon'];
     const secondaryLayout = ['secondary', 'video', 'carousel'];
-    const primaryLayout = ['primary', 'default', 'standard'];
+    const primaryLayout = ['primary', 'default', 'standard', 'elegant', 'vintage', 'luxury'];
     const glassLayout = ['glass', 'frosted'];
     const cyberpunkLayout = ['cyberpunk', 'neon-pulse'];
     const neonLayout = ['neon', 'sparkle'];
