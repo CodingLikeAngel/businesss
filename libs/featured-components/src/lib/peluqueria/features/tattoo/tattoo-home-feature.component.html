@@ -1,7 +1,7 @@
 <router-outlet></router-outlet>
 
 <!-- Barra de Navegación -->
-<lib-ui-nav-bar
+<lib-ui-components-nav-bar
   [variant]="selectedVariant"
   [navLinks]="navLinks"
   (linkClicked)="scrollToSection($event)"
@@ -19,7 +19,7 @@
 
 <!-- Hero -->
 <section id="hero" class="relative z-20">
-  <lib-ui-hero-section
+  <lib-ui-components-hero
     [title]="'Tattoo Art Studio'"
     [subtitle]="'Tu visión, nuestra tinta. Arte eterno en tu piel.'"
     [variant]="selectedVariant"
@@ -75,14 +75,14 @@
     <!-- Sección FAQ -->
     <section id="faq" class="mb-16 relative">
       <div class="bg-[rgba(255,255,255,0.05)] backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(255,30,86,0.3)]">
-        <lib-faq-section [variant]="selectedVariant" [faqItems]="faqItems"></lib-faq-section>
+        <lib-ui-faq-section [variant]="selectedVariant" [faqItems]="faqItems"></lib-ui-faq-section>
       </div>
     </section>
 
     <!-- Sección Precios -->
     <section id="precios" class="mb-16 relative">
       <div class="bg-[rgba(255,255,255,0.05)] backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(255,30,86,0.3)]">
-        <lib-pricing-section [variant]="selectedVariant" [priceColumns]="priceColumns" [priceRows]="priceRows"></lib-pricing-section>
+        <lib-ui-pricing-table-section [variant]="selectedVariant" [columns]="priceColumns" [rows]="priceRows"></lib-ui-pricing-table-section>
       </div>
     </section>
 
@@ -96,7 +96,7 @@
     <!-- Sección Galería -->
     <section id="galeria" class="mb-16 relative">
       <div class="bg-[rgba(255,255,255,0.05)] backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(255,30,86,0.3)]">
-        <lib-gallery-section [variant]="selectedVariant" [images]="allGalleryConfigs[0].images"></lib-gallery-section>
+        <lib-ui-components-gallery-section [variant]="selectedVariant" [images]="allGalleryConfigs[0].images"></lib-ui-components-gallery-section>
       </div>
     </section>
 

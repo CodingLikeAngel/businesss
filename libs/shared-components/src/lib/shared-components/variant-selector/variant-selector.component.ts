@@ -33,9 +33,8 @@ import {
   UIStatsSectionComponent,
   UIContactSectionComponent,
   UICardAnimatedComponent,
-  UICardComponent,
-  UITitleComponent,
-  BubbleAnimationComponent
+  BubbleAnimationComponent,
+  UIStepsSectionComponent
 } from '@negocio/ui-components';
 
 @Component({
@@ -57,9 +56,8 @@ import {
     UIStatsSectionComponent,
     UIContactSectionComponent,
     UICardAnimatedComponent,
-    UICardComponent,
-    UITitleComponent,
-    BubbleAnimationComponent
+    BubbleAnimationComponent,
+    UIStepsSectionComponent
   ],
   templateUrl: './variant-selector.component.html',
   styleUrl: './variant-selector.component.scss',
@@ -137,10 +135,11 @@ export class VariantSelectorComponent implements OnInit {
     { type: 'stats', label: 'Estadísticas', icon: '📈', variants: this.variants },
     { type: 'contact', label: 'Contacto', icon: '📞', variants: this.variants },
     { type: 'bubble', label: 'Efecto Burbujas', icon: '🫧', variants: this.variants },
+    { type: 'steps', label: 'Pasos', icon: '👣', variants: this.variants },
   ];
 
   selectedExplorerComponent: any = null;
-  selectedExplorerVariant: string = 'glass';
+  selectedExplorerVariant: any = 'glass';
 
   selectExplorerComponent(comp: any) {
     this.selectedExplorerComponent = comp;

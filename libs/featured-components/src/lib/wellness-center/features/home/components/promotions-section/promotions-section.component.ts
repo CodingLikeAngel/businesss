@@ -16,69 +16,69 @@ import { UICardPremiumComponent, UIChipComponent, UITooltipComponent, CardVarian
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- Promoción 1 -->
         <div class="relative  mt-12">
-          <lib-ui-chip
+          <lib-ui-components-chip
             [variant]="selectedVariant"
             size="sm"
             rounded="full"
             class="absolute md:top-[-2.5rem] top-[-1.5rem] left-1/2 transform -translate-x-1/2 z-20  text-white md:px-4 px-3 md:py-1 py-0.5 shadow-md font-semibold"
           >
             ¡-20%!
-          </lib-ui-chip>
-          <lib-ui-tooltip
+          </lib-ui-components-chip>
+          <lib-ui-components-tooltip
             [content]="'¡Ahorra con este combo especial!'"
             [variant]="selectedVariant"
             position="top"
           >
-            <lib-ui-card-premium
+            <lib-ui-components-card-premium
               [variant]="selectedVariant"
               [config]="premiumCardConfigs[0]"
              
-            ></lib-ui-card-premium>
-          </lib-ui-tooltip>
+            ></lib-ui-components-card-premium>
+          </lib-ui-components-tooltip>
         </div>
         <!-- Promoción 2 -->
         <div class="relative  mt-12">
-          <lib-ui-chip
+          <lib-ui-components-chip
             [variant]="selectedVariant"
             size="sm"
             rounded="full"
             class="absolute md:top-[-2.5rem] top-[-1.5rem] left-1/2 transform -translate-x-1/2 z-20  text-white md:px-4 px-3 md:py-1 py-0.5 shadow-md font-semibold"
           >
             ¡Oferta!
-          </lib-ui-chip>
-          <lib-ui-tooltip
+          </lib-ui-components-chip>
+          <lib-ui-components-tooltip
             [content]="'Manicura de larga duración.'"
             [variant]="selectedVariant"
             position="top"
           >
-            <lib-ui-card-premium
+            <lib-ui-components-card-premium
               [variant]="selectedVariant"
               [config]="premiumCardConfigs[1]"
- 
-            ></lib-ui-card-premium>
-          </lib-ui-tooltip>
+  
+            ></lib-ui-components-card-premium>
+          </lib-ui-components-tooltip>
         </div>
         <!-- Promoción 3 -->
         <div class="relative mt-12" >
-          <lib-ui-chip
+          <lib-ui-components-chip
             [variant]="selectedVariant"
             size="sm"
             rounded="full"
             class="absolute md:top-[-2.5rem] top-[-1.5rem] left-1/2 transform -translate-x-1/2 z-20  text-white md:px-4 px-3 md:py-1 py-0.5 shadow-md font-semibold"
           >
             ¡Novedad!
-          </lib-ui-chip>
-          <lib-ui-tooltip
+          </lib-ui-components-chip>
+          <lib-ui-components-tooltip
             [content]="'Revitaliza tu cabello hoy.'"
             [variant]="selectedVariant"
             position="top"
           >
-            <lib-ui-card-premium
+            <lib-ui-components-card-premium
               [variant]="selectedVariant"
               [config]="premiumCardConfigs[2]"
- 
-            ></lib-ui-card-premium>
-          </lib-ui-tooltip>
+  
+            ></lib-ui-components-card-premium>
+          </lib-ui-components-tooltip>
         </div>
       </div>
     </section>

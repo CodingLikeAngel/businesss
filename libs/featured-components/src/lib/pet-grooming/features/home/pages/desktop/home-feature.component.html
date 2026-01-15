@@ -1,6 +1,6 @@
-<lib-ui-nav-bar [variant]="getVariant('navBar')" [navLinks]="navBarConfig.navLinks" [customStyles]="navBarConfig.customStyles" (linkClicked)="scrollToSection($event)"></lib-ui-nav-bar>
+<lib-ui-components-nav-bar [variant]="getVariant('navBar')" [navLinks]="navBarConfig.navLinks" [customStyles]="navBarConfig.customStyles" (linkClicked)="scrollToSection($event)"></lib-ui-components-nav-bar>
 
-<lib-ui-hero-section [variant]="getVariant('hero')" [title]="heroConfig.title" [subtitle]="heroConfig.subtitle" [customStyles]="heroConfig.customStyles" (sectionSelected)="scrollToSection($event)"></lib-ui-hero-section>
+<lib-ui-components-hero [variant]="getVariant('hero')" [title]="heroConfig.title" [subtitle]="heroConfig.subtitle" [customStyles]="heroConfig.customStyles" (sectionSelected)="scrollToSection($event)"></lib-ui-components-hero>
 
 <lib-ui-components-title [variant]="getVariant('title')">Nuestros Servicios</lib-ui-components-title>
 

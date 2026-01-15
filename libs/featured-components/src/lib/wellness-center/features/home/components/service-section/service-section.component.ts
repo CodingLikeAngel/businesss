@@ -14,8 +14,8 @@ import { UICardComponent, UIChipComponent, UITooltipComponent, CardVariant } fro
       </h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div *ngFor="let service of services">
-          <lib-ui-tooltip [content]="service.tooltip" [variant]="variant" position="top">
-            <lib-ui-card
+          <lib-ui-components-tooltip [content]="service.tooltip" [variant]="variant" position="top">
+            <lib-ui-components-card
               [variant]="variant"
               [image]="service.image"
               size="medium"
@@ -23,10 +23,10 @@ import { UICardComponent, UIChipComponent, UITooltipComponent, CardVariant } fro
               [title]="service.title"
               [description]="service.description"
               [actions]="[{ label: 'Reservar Ahora', href: '#reservas', onClick: onReserve }]"
-            ></lib-ui-card>
-          </lib-ui-tooltip>
+            ></lib-ui-components-card>
+          </lib-ui-components-tooltip>
           <div class="flex flex-wrap gap-2 mt-2 justify-center">
-            <lib-ui-chip
+            <lib-ui-components-chip
               *ngFor="let chip of service.chips"
               [variant]="variant"
               size="sm"
@@ -34,7 +34,7 @@ import { UICardComponent, UIChipComponent, UITooltipComponent, CardVariant } fro
               (chipClick)="filterService(chip.value)"
             >
               {{ chip.label }}
-            </lib-ui-chip>
+            </lib-ui-components-chip>
           </div>
         </div>
       </div>

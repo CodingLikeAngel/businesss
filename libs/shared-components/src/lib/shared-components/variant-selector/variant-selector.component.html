@@ -331,6 +331,13 @@
                 >
                 </lib-bubble-animation>
 
+                <!-- STEPS -->
+                <lib-ui-steps-section
+                  *ngSwitchCase="'steps'"
+                  [variant]="selectedExplorerVariant"
+                >
+                </lib-ui-steps-section>
+
                 <!-- DEFAULT FALLBACK -->
                 <div
                   *ngSwitchDefault
