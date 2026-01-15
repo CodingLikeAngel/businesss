@@ -4,7 +4,7 @@ import { BaseEditorFeatureComponent } from '../base-editor-feature.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
-  UIHeroSectionComponent,
+  UIHeroSectionComponent as UIHeroSectionComponent,
   UIModalComponent,
   UICardRutasComponent,
   BubbleAnimationComponent,

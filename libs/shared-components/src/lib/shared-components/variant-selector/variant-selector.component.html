@@ -232,7 +232,7 @@
                 [ngSwitch]="selectedExplorerComponent.type"
               >
                 <!-- HERO -->
-                <lib-ui-components-hero
+                <lib-ui-hero-section
                   *ngSwitchCase="'hero'"
                   [variant]="selectedExplorerVariant"
                   [title]="heroConfig.title"
@@ -240,7 +240,7 @@
                   [showCta]="heroConfig.showCta"
                   [ctaLabel]="heroConfig.ctaLabel"
                 >
-                </lib-ui-components-hero>
+                </lib-ui-hero-section>
 
                 <!-- FEATURES -->
                 <lib-ui-features-section
