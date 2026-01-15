@@ -1,7 +1,4 @@
-@use "sass:map";
-@use "./variables" as var;
-@use "../../../styles/mixins" as shared;
-
+﻿
 
 /* Base styles */
 .ui-card-rutas-container {
@@ -340,53 +337,55 @@
 }
 
 
-.ui-card-rutas {
-  /* Centralized Variant Application */
-  @include shared.apply-all-variants('ui-card-rutas--');
+/* Elegant Variant */
 
-  /* Generic variable mapping for all variants */
-  &[class*="ui-card-rutas--"] {
-    /* Common mappings */
-    --card-bg: var(--theme-bg, rgba(255, 255, 255, 0.1));
-    --card-text-color: var(--theme-color, #e2e8f0);
-    --card-border: var(--theme-border, none);
-    --card-accent-color: var(--theme-accent, #00e5ff);
-    --card-shadow: var(--theme-shadow, 0 4px 30px rgba(0, 0, 0, 0.3));
+/* Centralized Variant Application */
+@include shared.apply-all-variants('ui-card-rutas--');
 
-    /* Titles adapt to theme font */
-    .ui-card-rutas__title {
-      font-family: var(--theme-font, 'Orbitron', sans-serif) !important;
+/* Generic variable mapping for all variants */
+&[class*="ui-card-rutas--"] {
+  /* Common mappings */
+  --card-bg: var(--theme-bg, rgba(255, 255, 255, 0.1));
+  --card-text-color: var(--theme-color, #e2e8f0);
+  --card-border: var(--theme-border, none);
+  --card-accent-color: var(--theme-accent, #00e5ff);
+  --card-shadow: var(--theme-shadow, 0 4px 30px rgba(0, 0, 0, 0.3));
+
+  /* Titles adapt to theme font */
+  .ui-card-rutas__title {
+    font-family: var(--theme-font, 'Orbitron', sans-serif) !important;
+    
+    // Reset specific overrides unless needed
+    font-weight: 700;
+  }
+
+  /* Links behave as theme accent buttons */
+  .ui-card-rutas__link {
+      background: var(--theme-accent, #00e5ff);
+      color: var(--theme-bg, #000); 
+      // For dark themes (bg is dark), button text should be dark if accent is bright. 
+      // This is a simplification; production systems might need contrast-color() function.
       
-      // Reset specific overrides unless needed
-      font-weight: 700;
-    }
-
-    /* Links behave as theme accent buttons */
-    .ui-card-rutas__link {
-        background: var(--theme-accent, #00e5ff);
-        color: var(--theme-bg, #000); 
-        // For dark themes (bg is dark), button text should be dark if accent is bright. 
-        // This is a simplification; production systems might need contrast-color() function.
-        
-        &:hover {
-             filter: brightness(1.2);
-             box-shadow: 0 0 15px var(--theme-accent, #00e5ff);
-        }
-    }
-  }
-
-  /* Specific micro-tweaks that Mixins don't cover yet */
-  &--vintage {
-    .ui-card-rutas__description, 
-    .ui-card-rutas__features li,
-    .ui-card-rutas__stats {
-        font-family: 'Georgia', serif;
-    }
-  }
-
-  &--elegant {
-    .ui-card-rutas__title {
-      letter-spacing: 0.05em;
-    }
+      &:hover {
+           filter: brightness(1.2);
+           box-shadow: 0 0 15px var(--theme-accent, #00e5ff);
+      }
   }
 }
+
+/* Specific micro-tweaks that Mixins don't cover yet */
+.ui-card-rutas--vintage {
+  .ui-card-rutas__description, 
+  .ui-card-rutas__features li,
+  .ui-card-rutas__stats {
+      font-family: 'Georgia', serif;
+  }
+}
+
+.ui-card-rutas--elegant {
+  .ui-card-rutas__title {
+    letter-spacing: 0.05em;
+  }
+}
+
+

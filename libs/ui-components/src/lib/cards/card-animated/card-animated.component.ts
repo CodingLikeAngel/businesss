@@ -11,7 +11,7 @@ export const animatedCardVariants = [
 ] as const;
 
 export type AnimatedCardVariant = typeof animatedCardVariants[number];
-export type AnimatedCardAnimation = 'bounce' | 'pulse' | 'float' | 'spin' | 'none';
+export type AnimatedCardAnimation = 'bounce' | 'pulse' | 'float' | 'spin' | 'glitch' | 'fade' | 'slide' | 'none';
 
 export interface AnimatedCardCustomStyles {
   card?: string | string[] | { [key: string]: boolean };

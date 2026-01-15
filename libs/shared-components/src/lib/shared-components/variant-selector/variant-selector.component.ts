@@ -20,7 +20,6 @@ import {
   TestimonialsConfig,
   PageSection
 } from '../../../services/variant.service';
-import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants } from '@negocio/ui-components';
 import { TemplateSelectorComponent } from '../template-selector/template-selector.component';
 
 @Component({
@@ -31,15 +30,9 @@ import { TemplateSelectorComponent } from '../template-selector/template-selecto
   styleUrl: './variant-selector.component.scss',
 })
 export class VariantSelectorComponent implements OnInit {
-  variants = [
-    'default',
-    ...new Set([...footerVariants, ...bubbleVariants, ...cardRutasVariants, ...titleVariants, ...variants]),
-    // Ensure all variants from the task are included
-    'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone',
-    'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer'
-  ];
+  variants = [...variants];
   globalVariant: string;
-  selectorVariant = 'primary';
+  selectorVariant = 'glass';
   headerConfig: HeaderConfig;
   footerConfig: FooterConfig;
   navBarConfig: NavBarConfig;
@@ -97,17 +90,17 @@ export class VariantSelectorComponent implements OnInit {
   componentVariants: { [key: string]: string } = {};
 
   availableSectionVariants = [
-    { type: 'hero', label: 'Portada Hero', icon: '🚀', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'minimal', 'corporate'] },
-    { type: 'features', label: 'Características', icon: '✨', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'grid', 'list', 'modern'] },
-    { type: 'services', label: 'Servicios', icon: '🛠️', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'cards', 'hover-special'] },
-    { type: 'products', label: 'Productos', icon: '🧩', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'ecommerce', 'minimal'] },
-    { type: 'testimonials', label: 'Testimonios', icon: '⭐', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'bubble', 'slider', 'grid'] },
-    { type: 'pricing', label: 'Precios', icon: '💰', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'table', 'columns'] },
-    { type: 'promotions', label: 'Ofertas', icon: '🎁', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'flash', 'banners'] },
-    { type: 'faq', label: 'Preguntas', icon: '❓', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'accordion', 'simple'] },
-    { type: 'gallery', label: 'Galería', icon: '🖼️', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'masonry', 'slideshow', 'grid'] },
-    { type: 'stats', label: 'Estadísticas', icon: '📈', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'counters', 'minimal'] },
-    { type: 'contact', label: 'Contacto', icon: '📞', variants: ['glass', 'neon', 'cyberpunk', 'retro', 'matrix', 'super-meat-boy', 'bioshock', 'glitch', 'portal', 'form', 'simple', 'minimal'] },
+    { type: 'hero', label: 'Portada Hero', icon: '🚀', variants: this.variants },
+    { type: 'features', label: 'Características', icon: '✨', variants: this.variants },
+    { type: 'services', label: 'Servicios', icon: '🛠️', variants: this.variants },
+    { type: 'products', label: 'Productos', icon: '🧩', variants: this.variants },
+    { type: 'testimonials', label: 'Testimonios', icon: '⭐', variants: this.variants },
+    { type: 'pricing', label: 'Precios', icon: '💰', variants: this.variants },
+    { type: 'promotions', label: 'Ofertas', icon: '🎁', variants: this.variants },
+    { type: 'faq', label: 'Preguntas', icon: '❓', variants: this.variants },
+    { type: 'gallery', label: 'Galería', icon: '🖼️', variants: this.variants },
+    { type: 'stats', label: 'Estadísticas', icon: '📈', variants: this.variants },
+    { type: 'contact', label: 'Contacto', icon: '📞', variants: this.variants },
   ];
 
   selectedExplorerComponent: any = null;

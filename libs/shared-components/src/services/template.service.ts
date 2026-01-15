@@ -2406,6 +2406,1192 @@ export class TemplateService {
         footer: 'glass',
       },
     });
+
+    // Template 11: Inmobiliaria
+    this.templates.push({
+      id: 'real-estate',
+      name: 'Inmobiliaria',
+      description: 'Template premium para agencias inmobiliarias',
+      icon: '🏠',
+      category: 'Servicios',
+      header: {
+        variant: 'luxury',
+        title: 'Inmobiliaria Premium',
+        subtitle: 'Encuentra el hogar de tus sueños',
+        align: 'center',
+        dark: false,
+        visible: true,
+        navItems: [
+          { label: 'Inicio', href: '/home', active: true },
+          { label: 'Propiedades', href: '/home#productos' },
+          { label: 'Servicios', href: '/home#servicios' },
+          { label: 'Contacto', href: '/contact' },
+        ],
+        customStyles: {},
+      },
+      footer: {
+        variant: 'luxury',
+        title: 'Inmobiliaria Premium',
+        description: 'Líderes en el sector inmobiliario de lujo',
+        exploreLinks: [
+          { label: 'Comprar', href: '#productos', icon: '🔑' },
+          { label: 'Alquilar', href: '#productos', icon: '🏠' },
+          { label: 'Vender', href: '#servicios', icon: '📝' },
+        ],
+        trendLinks: [
+          { label: 'Contacto', href: '/contact', icon: '📞' },
+        ],
+        socialIcons: [
+          { name: 'instagram', href: '#' },
+        ],
+        copyrightText: '© 2025 Inmobiliaria. Todos los derechos reservados.',
+        showParticles: true,
+        dark: true,
+        visible: true,
+        customStyles: {},
+      },
+      navBar: {
+        variant: 'luxury',
+        logoText: 'Estate',
+        showMobileMenu: true,
+        isFixed: true,
+        visible: true,
+        navLinks: [
+          { label: 'Inicio', href: '/home', icon: '🏠' },
+          { label: 'Propiedades', href: '/home#productos', icon: '🔑' },
+          { label: 'Servicios', href: '/home#servicios', icon: '📝' },
+          { label: 'Contacto', href: '/contact', icon: '📞' },
+        ],
+        customStyles: {},
+      },
+      hero: {
+        variant: 'luxury',
+        title: 'Viviendas Exclusivas',
+        subtitle: 'Una selección única de propiedades de alto standing',
+        showCta: true,
+        ctaLabel: 'Ver Propiedades',
+        showScrollIcon: true,
+        videoBackground: false,
+        videoUrl: '',
+        videoPoster: '',
+        navigationCards: [],
+        carouselItems: [],
+        customStyles: {},
+      },
+      bubble: {
+        variant: 'luxury',
+        speed: 0.5,
+        blur: 40,
+        opacity: 0.4,
+      },
+      card: {
+        variant: 'luxury',
+        backgroundColor: 'rgba(255,255,255,0.9)',
+        textColor: '#1a1a1a',
+        accentColor: '#D4AF37',
+        animation: 'fade',
+        isMobile: false,
+        customStyles: {},
+      },
+      title: {
+        variant: 'luxury',
+        level: 'h2',
+        text: 'Propiedades Destacadas',
+        animation: 'slide',
+        align: 'center',
+        customStyles: {
+           '--title-color': '#D4AF37',
+        },
+      },
+      serviceCards: {
+        variant: 'luxury',
+        items: [
+           {
+            routeName: 'Venta',
+            imageUrl: '/1029.png',
+            difficulty: 'Servicio',
+            rating: 5,
+            reviews: 100,
+            duration: 0,
+            distance: 0,
+            ascent: 0,
+            description: 'Te ayudamos a encontrar tu hogar ideal',
+            features: ['Asesoramiento legal', 'Gestión hipotecaria', 'Reformas'],
+            link: '#contacto',
+          },
+        ],
+      },
+      faq: {
+        variant: 'luxury',
+        items: [],
+      },
+      pricing: {
+        variant: 'luxury',
+        columns: [],
+        rows: [],
+      },
+      promotions: {
+        variant: 'luxury',
+        premiumCards: [],
+      },
+      gallery: {
+        variant: 'luxury',
+        images: [],
+      },
+      products: {
+        variant: 'luxury',
+        items: [
+           {
+            name: 'Villa Moderna',
+            image: '/retro-stars.png',
+            description: '4 Habitaciones, Piscina, Jadín',
+            price: '450.000€',
+          },
+           {
+            name: 'Ático Centro',
+            image: '/1029.png',
+            description: 'Vistas panorámicas, Terraza',
+            price: '320.000€',
+          },
+        ],
+      },
+      testimonials: {
+        variant: 'luxury',
+        items: [],
+      },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Hero', visible: true },
+        { id: 'productos', type: 'products', label: 'Propiedades', visible: true },
+        { id: 'servicios', type: 'services', label: 'Servicios', visible: true },
+        { id: 'contact', type: 'contact', label: 'Contacto', visible: true },
+      ],
+      globalVariant: 'luxury',
+      componentVariants: {
+        hero: 'luxury',
+        navbar: 'luxury',
+        footer: 'luxury',
+      },
+    });
+
+    // Template 12: Taller Mecánico
+    this.templates.push({
+      id: 'auto-repair',
+      name: 'Taller Mecánico',
+      description: 'Template para talleres y servicios automotrices',
+      icon: '🔧',
+      category: 'Servicios',
+      header: {
+        variant: 'glass',
+        title: 'Auto Repair',
+        subtitle: 'Servicio mecánico de confianza',
+        align: 'center',
+        dark: true,
+        visible: true,
+        navItems: [
+           { label: 'Inicio', href: '/home', active: true },
+           { label: 'Servicios', href: '/home#servicios' },
+           { label: 'Cita', href: '/home#reservas' },
+           { label: 'Contacto', href: '/contact' },
+        ],
+        customStyles: {},
+      },
+      footer: {
+        variant: 'glass',
+        title: 'Auto Repair',
+        description: 'Expertos en mecánica integral multimarca',
+        exploreLinks: [],
+        trendLinks: [],
+        socialIcons: [],
+        copyrightText: '© 2025 Auto Repair.',
+        showParticles: false,
+        dark: true,
+        visible: true,
+        customStyles: {},
+      },
+      navBar: {
+        variant: 'glass',
+        logoText: 'MotorFix',
+        showMobileMenu: true,
+        isFixed: true,
+        visible: true,
+        navLinks: [
+           { label: 'Inicio', href: '/home', icon: '🏠' },
+           { label: 'Servicios', href: '/home#servicios', icon: '🔧' },
+           { label: 'Cita Previa', href: '/home#reservas', icon: '📅' },
+        ],
+        customStyles: {},
+      },
+      hero: {
+         variant: 'glass',
+         title: 'Tu Coche en las Mejores Manos',
+         subtitle: 'Mecánica general, chapa y pintura',
+         showCta: true,
+         ctaLabel: 'Pedir Presupuesto',
+         showScrollIcon: true,
+         videoBackground: false,
+         videoUrl: '',
+         videoPoster: '',
+         navigationCards: [
+             { icon: '🔧', title: 'Mecánica', description: 'Reparaciones', sectionId: 'servicios' },
+             { icon: '🚗', title: 'Revisión', description: 'Mantenimiento', sectionId: 'servicios' },
+         ],
+         carouselItems: [],
+         customStyles: {},
+      },
+      bubble: { variant: 'metal', speed: 0.5, blur: 10, opacity: 0.8 },
+      card: {
+         variant: 'metal',
+         backgroundColor: '#1f2937',
+         textColor: '#f3f4f6',
+         accentColor: '#fbbf24',
+         animation: 'none',
+         isMobile: false,
+         customStyles: {},
+      },
+      title: {
+         variant: 'metal',
+         level: 'h2',
+         text: 'Nuestros Servicios',
+         animation: 'none',
+         align: 'center',
+         customStyles: { '--title-color': '#fbbf24' },
+      },
+      serviceCards: {
+         variant: 'metal',
+         items: [
+           {
+             routeName: 'Cambio de Aceite',
+             imageUrl: '/retro-stars.png',
+             difficulty: 'Rápido',
+             rating: 4.8,
+             reviews: 50,
+             duration: 0,
+             distance: 0,
+             ascent: 0,
+             description: 'Mantenimiento básico del motor',
+             features: ['Aceite sintético', 'Filtros incluidos', 'Revisión niveles'],
+             link: '#reservas'
+           },
+            {
+             routeName: 'Diagnóstico',
+             imageUrl: '/1029.png',
+             difficulty: 'Avanzado',
+             rating: 4.9,
+             reviews: 30,
+             duration: 0,
+             distance: 0,
+             ascent: 0,
+             description: 'Detección de averías por ordenador',
+             features: ['Escáner OBD', 'Informe detallado', 'Presupuesto sin compromiso'],
+             link: '#reservas'
+           }
+         ]
+      },
+      faq: { variant: 'metal', items: [] },
+      pricing: {
+         variant: 'metal',
+         columns: [{ key: 'service', label: 'Servicio' }, { key: 'price', label: 'Desde' }],
+         rows: [
+            { service: 'Cambio Aceite', price: '45€' },
+            { service: 'Revisión General', price: '60€' },
+         ]
+      },
+      promotions: { variant: 'metal', premiumCards: [] },
+      gallery: { variant: 'metal', images: [] },
+      products: { variant: 'metal', items: [] },
+      testimonials: { variant: 'metal', items: [] },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Hero', visible: true },
+        { id: 'servicios', type: 'services', label: 'Servicios', visible: true },
+        { id: 'precios', type: 'pricing', label: 'Tarifas', visible: true },
+        { id: 'contact', type: 'contact', label: 'Contacto', visible: true },
+      ],
+      globalVariant: 'metal',
+      componentVariants: {
+        hero: 'metal',
+        navbar: 'metal',
+        footer: 'metal',
+      },
+    });
+    
+    // Template 13: Peluquería Canina
+    this.templates.push({
+      id: 'pet-grooming',
+      name: 'Peluquería Canina',
+      description: 'Template divertido para cuidado de mascotas',
+      icon: '🐾',
+      category: 'Servicios',
+      header: {
+          variant: 'pixel',
+          title: 'Happy Pets',
+          subtitle: '¡Guau guau!',
+          align: 'center',
+          dark: false,
+          visible: true,
+          navItems: [],
+          customStyles: {}
+      },
+      footer: {
+          variant: 'pixel',
+          title: 'Happy Pets',
+          description: 'Cuidamos a tu mejor amigo',
+          exploreLinks: [],
+          trendLinks: [],
+          socialIcons: [],
+          copyrightText: '© 2025 Happy Pets',
+          showParticles: true,
+          dark: false,
+          visible: true,
+          customStyles: {}
+      },
+      navBar: {
+          variant: 'pixel',
+          logoText: 'HappyPets',
+          showMobileMenu: true,
+          isFixed: true,
+          visible: true,
+          navLinks: [
+           { label: 'Inicio', href: '/home', icon: '🏠' },
+           { label: 'Servicios', href: '/home#servicios', icon: '🚿' },
+           { label: 'Cita', href: '/home#reservas', icon: '🐾' },
+          ],
+          customStyles: {}
+      },
+      hero: {
+          variant: 'mario',
+          title: 'Estilo para tu Mascota',
+          subtitle: 'Baño, corte y mimos',
+          showCta: true,
+          ctaLabel: 'Reservar Turno',
+          showScrollIcon: true,
+          videoBackground: false,
+          videoUrl: '',
+          videoPoster: '',
+          navigationCards: [],
+          carouselItems: [],
+          customStyles: {}
+      },
+      bubble: { variant: 'mario', speed: 1.2, blur: 5, opacity: 0.9 },
+      card: {
+          variant: 'mario',
+          backgroundColor: '#fff',
+          textColor: '#333',
+          accentColor: '#ff0000',
+          animation: 'bounce',
+          isMobile: false,
+          customStyles: {}
+      },
+      title: {
+          variant: 'pixel',
+          level: 'h2',
+          text: 'Servicios para Mascotas',
+          animation: 'bounce',
+          align: 'center',
+          customStyles: { '--title-color': '#ff0000' }
+      },
+      serviceCards: {
+          variant: 'mario',
+          items: [
+            {
+               routeName: 'Baño Completo',
+               imageUrl: '/retro-stars.png',
+               difficulty: '1h',
+               rating: 5,
+               reviews: 200,
+               duration: 0,
+               distance: 0,
+               ascent: 0,
+               description: 'Champú específico y secado',
+               features: ['Corte de uñas', 'Limpieza de oídos'],
+               link: '#reservas'
+            }
+          ]
+      },
+      faq: { variant: 'pixel', items: [] },
+      pricing: { variant: 'pixel', columns: [], rows: [] },
+      promotions: { variant: 'pixel', premiumCards: [] },
+      gallery: { variant: 'pixel', images: [] },
+      products: { variant: 'pixel', items: [] },
+      testimonials: { variant: 'pixel', items: [] },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Portada', visible: true },
+        { id: 'servicios', type: 'services', label: 'Servicios', visible: true },
+        { id: 'contact', type: 'contact', label: 'Contacto', visible: true },
+      ],
+      globalVariant: 'animal-crossing',
+      componentVariants: {
+          hero: 'mario',
+          navbar: 'pixel',
+          footer: 'pixel'
+      },
+    });
+
+    // Template 14: Electrónica
+    this.templates.push({
+      id: 'electronics-shop',
+      name: 'Tienda Electrónica',
+      description: 'Template tecnológico y moderno',
+      icon: '🔌',
+      category: 'Retail',
+      header: {
+          variant: 'cyberpunk',
+          title: 'CyberTech',
+          subtitle: 'Tecnología del futuro hoy',
+          align: 'center',
+          dark: true,
+          visible: true,
+          navItems: [],
+          customStyles: {}
+      },
+      footer: {
+         variant: 'cyberpunk',
+         title: 'CyberTech',
+         description: 'Gadgets, componentes y más',
+         exploreLinks: [],
+         trendLinks: [],
+         socialIcons: [],
+         copyrightText: '© 2025 CyberTech',
+         showParticles: true,
+         dark: true,
+         visible: true,
+         customStyles: {}
+      },
+      navBar: {
+          variant: 'cyberpunk',
+          logoText: 'CYBER',
+          showMobileMenu: true,
+          isFixed: true,
+          visible: true,
+          navLinks: [
+           { label: 'Inicio', href: '/home', icon: '🏠' },
+           { label: 'Tienda', href: '/home#productos', icon: '💻' },
+          ],
+          customStyles: {}
+      },
+      hero: {
+          variant: 'cyberpunk',
+          title: 'High Tech Gear',
+          subtitle: 'Equípate con lo último',
+          showCta: true,
+          ctaLabel: 'Ver Catálogo',
+          showScrollIcon: true,
+          videoBackground: false,
+          videoUrl: '',
+          videoPoster: '',
+          navigationCards: [],
+          carouselItems: [],
+          customStyles: {}
+      },
+      bubble: { variant: 'matrix', speed: 2, blur: 5, opacity: 0.8 },
+      card: {
+          variant: 'cyberpunk',
+          backgroundColor: '#000',
+          textColor: '#0f0',
+          accentColor: '#0f0',
+          animation: 'glitch',
+          isMobile: false,
+          customStyles: {}
+      },
+      title: {
+          variant: 'cyberpunk',
+          level: 'h2',
+          text: 'Productos Destacados',
+          animation: 'glitch',
+          align: 'center',
+          customStyles: {}
+      },
+      serviceCards: { variant: 'cyberpunk', items: [] },
+      faq: { variant: 'cyberpunk', items: [] },
+      pricing: { variant: 'cyberpunk', columns: [], rows: [] },
+      promotions: { variant: 'cyberpunk', premiumCards: [] },
+      gallery: { variant: 'cyberpunk', images: [] },
+      products: {
+          variant: 'cyberpunk',
+          items: [
+             {
+               name: 'RTX 5090',
+               image: '/1029.png',
+               description: 'Tarjeta Gráfica Ultimate',
+               price: '1500€'
+             }
+          ]
+      },
+      testimonials: { variant: 'cyberpunk', items: [] },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Hero', visible: true },
+        { id: 'productos', type: 'products', label: 'Catálogo', visible: true },
+        { id: 'contact', type: 'contact', label: 'Contacto', visible: true },
+      ],
+      globalVariant: 'cyberpunk',
+      componentVariants: {
+          hero: 'cyberpunk',
+          navbar: 'cyberpunk',
+          footer: 'cyberpunk'
+      },
+    });
+    
+    // Template 15: Makeup Artist
+    this.templates.push({
+      id: 'makeup-artist',
+      name: 'Maquilladora Profesional',
+      description: 'Template elegante para artistas del maquillaje',
+      icon: '💄',
+      category: 'Belleza',
+      header: {
+          variant: 'elegant',
+          title: 'Beauty Art',
+          subtitle: 'Realza tu belleza natural',
+          align: 'center',
+          dark: false,
+          visible: true,
+          navItems: [],
+          customStyles: {}
+      },
+      footer: {
+         variant: 'elegant',
+         title: 'Beauty by Anna',
+         description: 'Servicios de maquillaje profesional para eventos',
+         exploreLinks: [],
+         trendLinks: [],
+         socialIcons: [],
+         copyrightText: '© 2025 Beauty by Anna',
+         showParticles: true,
+         dark: false,
+         visible: true,
+         customStyles: {}
+      },
+      navBar: {
+          variant: 'elegant',
+          logoText: 'ANNA',
+          showMobileMenu: true,
+          isFixed: true,
+          visible: true,
+          navLinks: [
+           { label: 'Inicio', href: '/home', icon: '🏠' },
+           { label: 'Portfolio', href: '/home#galeria', icon: '🎨' },
+           { label: 'Servicios', href: '/home#servicios', icon: '💄' },
+          ],
+          customStyles: {}
+      },
+      hero: {
+          variant: 'elegant',
+          title: 'Arte en tu Piel',
+          subtitle: 'Maquillaje para novias y eventos sociales',
+          showCta: true,
+          ctaLabel: 'Ver Portfolio',
+          showScrollIcon: true,
+          videoBackground: false,
+          videoUrl: '',
+          videoPoster: '',
+          navigationCards: [],
+          carouselItems: [],
+          customStyles: {}
+      },
+      bubble: { variant: 'elegant', speed: 0.7, blur: 20, opacity: 0.5 },
+      card: {
+          variant: 'elegant',
+          backgroundColor: '#fdf2f8',
+          textColor: '#831843',
+          accentColor: '#db2777',
+          animation: 'fade',
+          isMobile: false,
+          customStyles: {}
+      },
+      title: {
+          variant: 'elegant',
+          level: 'h2',
+          text: 'Mis Servicios',
+          animation: 'slide',
+          align: 'center',
+          customStyles: { '--title-color': '#db2777' }
+      },
+      serviceCards: {
+          variant: 'elegant',
+          items: [
+             {
+               routeName: 'Maquillaje Novia',
+               imageUrl: '/retro-stars.png',
+               difficulty: '2h',
+               rating: 5,
+               reviews: 50,
+               duration: 0,
+               distance: 0,
+               ascent: 0,
+               description: 'Prueba incluida + Domicilio',
+               features: ['Productos alta gama', 'Duración 24h'],
+               link: '#contact'
+             }
+          ]
+      },
+      faq: { variant: 'elegant', items: [] },
+      pricing: { variant: 'elegant', columns: [], rows: [] },
+      promotions: { variant: 'elegant', premiumCards: [] },
+      gallery: {
+          variant: 'elegant',
+          images: [
+             { src: '/retro-stars.png', alt: 'Novia 1' },
+             { src: '/1029.png', alt: 'Evento 1' }
+          ]
+      },
+      products: { variant: 'elegant', items: [] },
+      testimonials: { variant: 'elegant', items: [] },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Portada', visible: true },
+        { id: 'servicios', type: 'services', label: 'Servicios', visible: true },
+        { id: 'galeria', type: 'gallery', label: 'Portfolio', visible: true },
+        { id: 'contact', type: 'contact', label: 'Contacto', visible: true },
+      ],
+      globalVariant: 'rose-radial',
+      componentVariants: {
+          hero: 'elegant',
+          navbar: 'elegant',
+          footer: 'elegant'
+      },
+    });
+
+    // Template 16: Anto Studios
+    this.templates.push({
+      id: 'anto-studios',
+      name: 'Anto Studios',
+      description: 'Template creativo para agencias de diseño y marketing',
+      icon: '🎨',
+      category: 'Creativo',
+      header: {
+          variant: 'minimal',
+          title: 'ANTO STUDIOS',
+          subtitle: 'Diseño | Desarrollo | Marketing',
+          align: 'center',
+          dark: true,
+          visible: true,
+          navItems: [],
+          customStyles: {}
+      },
+      footer: {
+         variant: 'minimal',
+         title: 'Anto Studios',
+         description: 'Creamos experiencias digitales únicas',
+         exploreLinks: [],
+         trendLinks: [],
+         socialIcons: [],
+         copyrightText: '© 2025 Anto Studios',
+         showParticles: false,
+         dark: true,
+         visible: true,
+         customStyles: {}
+      },
+      navBar: {
+          variant: 'minimal',
+          logoText: 'ANTO',
+          showMobileMenu: true,
+          isFixed: true,
+          visible: true,
+          navLinks: [
+           { label: 'Inicio', href: '/home', icon: '🏠' },
+           { label: 'Proyectos', href: '/home#galeria', icon: '🖼️' },
+           { label: 'Contacto', href: '/contact', icon: '✉️' },
+          ],
+          customStyles: {}
+      },
+      hero: {
+          variant: 'minimal',
+          title: 'We Create Digital Magic',
+          subtitle: 'Transformamos ideas en realidades digitales',
+          showCta: true,
+          ctaLabel: 'Ver Proyectos',
+          showScrollIcon: true,
+          videoBackground: false,
+          videoUrl: '',
+          videoPoster: '',
+          navigationCards: [],
+          carouselItems: [],
+          customStyles: {}
+      },
+      bubble: { variant: 'minimal', speed: 0.5, blur: 0, opacity: 0.1 },
+      card: {
+          variant: 'minimal',
+          backgroundColor: '#000',
+          textColor: '#fff',
+          accentColor: '#fff',
+          animation: 'fade',
+          isMobile: false,
+          customStyles: { 'border': '1px solid #333' }
+      },
+      title: {
+          variant: 'minimal',
+          level: 'h2',
+          text: 'Nuestros Proyectos',
+          animation: 'fade',
+          align: 'center',
+          customStyles: {}
+      },
+      serviceCards: { variant: 'minimal', items: [] },
+      faq: { variant: 'minimal', items: [] },
+      pricing: { variant: 'minimal', columns: [], rows: [] },
+      promotions: { variant: 'minimal', premiumCards: [] },
+      gallery: {
+          variant: 'minimal',
+          images: [
+             { src: '/retro-stars.png', alt: 'Project 1' },
+             { src: '/1029.png', alt: 'Project 2' }
+          ]
+      },
+      products: { variant: 'minimal', items: [] },
+      testimonials: { variant: 'minimal', items: [] },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Cover', visible: true },
+        { id: 'galeria', type: 'gallery', label: 'Work', visible: true },
+        { id: 'contact', type: 'contact', label: 'Contact', visible: true },
+      ],
+      globalVariant: 'minimal',
+      componentVariants: {
+          hero: 'minimal',
+          navbar: 'minimal',
+          footer: 'minimal'
+      },
+    });
+
+    // Template 17: Clothing Store
+    this.templates.push({
+      id: 'clothing-store',
+      name: 'Tienda de Ropa',
+      description: 'Template versátil para comercio de moda',
+      icon: '👔',
+      category: 'Moda',
+      header: {
+          variant: 'glass',
+          title: 'Fashion Store',
+          subtitle: 'Estilo para todos',
+          align: 'center',
+          dark: false,
+          visible: true,
+          navItems: [],
+          customStyles: {}
+      },
+      footer: {
+         variant: 'glass',
+         title: 'Fashion Store',
+         description: 'Moda urbana y casual',
+         exploreLinks: [],
+         trendLinks: [],
+         socialIcons: [],
+         copyrightText: '© 2025 Fashion Store',
+         showParticles: true,
+         dark: false,
+         visible: true,
+         customStyles: {}
+      },
+      navBar: {
+          variant: 'glass',
+          logoText: 'FASHION',
+          showMobileMenu: true,
+          isFixed: true,
+          visible: true,
+          navLinks: [
+           { label: 'Inicio', href: '/home', icon: '🏠' },
+           { label: 'Catálogo', href: '/home#productos', icon: '👕' },
+          ],
+          customStyles: {}
+      },
+      hero: {
+          variant: 'glass',
+          title: 'Nueva Colección',
+          subtitle: 'Descubre las tendencias de esta temporada',
+          showCta: true,
+          ctaLabel: 'Ver Catálogo',
+          showScrollIcon: true,
+          videoBackground: false,
+          videoUrl: '',
+          videoPoster: '',
+          navigationCards: [],
+          carouselItems: [],
+          customStyles: {}
+      },
+      bubble: { variant: 'oceanic', speed: 1, blur: 20, opacity: 0.6 },
+      card: {
+          variant: 'glass',
+          backgroundColor: 'rgba(255,255,255,0.8)',
+          textColor: '#333',
+          accentColor: '#3b82f6',
+          animation: 'slide',
+          isMobile: false,
+          customStyles: {}
+      },
+      title: {
+          variant: 'glass',
+          level: 'h2',
+          text: 'Destacados',
+          animation: 'slide',
+          align: 'center',
+          customStyles: {}
+      },
+      serviceCards: { variant: 'glass', items: [] },
+      faq: { variant: 'glass', items: [] },
+      pricing: { variant: 'glass', columns: [], rows: [] },
+      promotions: { variant: 'glass', premiumCards: [] },
+      gallery: { variant: 'glass', images: [] },
+      products: {
+          variant: 'glass',
+          items: [
+             {
+               name: 'Camiseta Básica',
+               image: '/retro-stars.png',
+               description: 'Algodón 100%',
+               price: '15€'
+             },
+             {
+               name: 'Jeans Slim',
+               image: '/1029.png',
+               description: 'Denim elástico',
+               price: '40€'
+             }
+          ]
+      },
+      testimonials: { variant: 'glass', items: [] },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Home', visible: true },
+        { id: 'productos', type: 'products', label: 'Catálogo', visible: true },
+        { id: 'contact', type: 'contact', label: 'Contacto', visible: true },
+      ],
+      globalVariant: 'default',
+      componentVariants: {
+          hero: 'glass',
+          navbar: 'glass',
+          footer: 'glass'
+      },
+    });
+
+    // Template 18: Training Institute
+    this.templates.push({
+      id: 'training-institute',
+      name: 'Instituto de Formación',
+      description: 'Template profesional para centros de capacitación',
+      icon: '📚',
+      category: 'Educación',
+      header: {
+          variant: 'corporate',
+          title: 'Training Pro',
+          subtitle: 'Impulsa tu carrera profesional',
+          align: 'center',
+          dark: false,
+          visible: true,
+          navItems: [],
+          customStyles: {}
+      },
+      footer: {
+         variant: 'corporate',
+         title: 'Training Pro',
+         description: 'Cursos certificados para el éxito laboral',
+         exploreLinks: [],
+         trendLinks: [],
+         socialIcons: [],
+         copyrightText: '© 2025 Training Pro',
+         showParticles: false,
+         dark: true,
+         visible: true,
+         customStyles: {}
+      },
+      navBar: {
+          variant: 'corporate',
+          logoText: 'TrainPro',
+          showMobileMenu: true,
+          isFixed: true,
+          visible: true,
+          navLinks: [
+           { label: 'Inicio', href: '/home', icon: '🏠' },
+           { label: 'Cursos', href: '/home#servicios', icon: '🎓' },
+          ],
+          customStyles: {}
+      },
+      hero: {
+          variant: 'corporate',
+          title: 'Aprende y Crece',
+          subtitle: 'Formación práctica orientada al mercado laboral',
+          showCta: true,
+          ctaLabel: 'Ver Cursos',
+          showScrollIcon: true,
+          videoBackground: false,
+          videoUrl: '',
+          videoPoster: '',
+          navigationCards: [],
+          carouselItems: [],
+          customStyles: {}
+      },
+      bubble: { variant: 'corporate', speed: 0.5, blur: 5, opacity: 0.3 },
+      card: {
+          variant: 'corporate',
+          backgroundColor: '#fff',
+          textColor: '#333',
+          accentColor: '#1d4ed8',
+          animation: 'fade',
+          isMobile: false,
+          customStyles: {}
+      },
+      title: {
+          variant: 'corporate',
+          level: 'h2',
+          text: 'Nuestra Oferta Educativa',
+          animation: 'fade',
+          align: 'center',
+          customStyles: {}
+      },
+      serviceCards: {
+          variant: 'corporate',
+          items: [
+             {
+               routeName: 'Curso de Marketing',
+               imageUrl: '/retro-stars.png',
+               difficulty: '40h',
+               rating: 4,
+               reviews: 50,
+               duration: 0,
+               distance: 0,
+               ascent: 0,
+               description: 'Domina las redes sociales',
+               features: ['Certificado', 'Online'],
+               link: '#contact'
+             }
+          ]
+      },
+      faq: { variant: 'corporate', items: [] },
+      pricing: { variant: 'corporate', columns: [], rows: [] },
+      promotions: { variant: 'corporate', premiumCards: [] },
+      gallery: { variant: 'corporate', images: [] },
+      products: { variant: 'corporate', items: [] },
+      testimonials: { variant: 'corporate', items: [] },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Portada', visible: true },
+        { id: 'servicios', type: 'services', label: 'Cursos', visible: true },
+        { id: 'contact', type: 'contact', label: 'Contacto', visible: true },
+      ],
+      globalVariant: 'corporate',
+      componentVariants: {
+          hero: 'corporate',
+          navbar: 'corporate',
+          footer: 'corporate'
+      },
+    });
+
+    // Template 19: Tutoring Center
+    this.templates.push({
+      id: 'tutoring-center',
+      name: 'Centro de Tutoría',
+      description: 'Template amigable para clases de apoyo escolar',
+      icon: '📝',
+      category: 'Educación',
+      header: {
+          variant: 'pixel',
+          title: 'Clases Geniales',
+          subtitle: 'Aprender nunca fue tan divertido',
+          align: 'center',
+          dark: false,
+          visible: true,
+          navItems: [],
+          customStyles: {}
+      },
+      footer: {
+         variant: 'pixel',
+         title: 'Clases Geniales',
+         description: 'Apoyo escolar personalizado',
+         exploreLinks: [],
+         trendLinks: [],
+         socialIcons: [],
+         copyrightText: '© 2025 Clases Geniales',
+         showParticles: true,
+         dark: false,
+         visible: true,
+         customStyles: {}
+      },
+      navBar: {
+          variant: 'pixel',
+          logoText: 'Clases+',
+          showMobileMenu: true,
+          isFixed: true,
+          visible: true,
+          navLinks: [
+           { label: 'Inicio', href: '/home', icon: '🏠' },
+           { label: 'Materias', href: '/home#servicios', icon: '📚' },
+          ],
+          customStyles: {}
+      },
+      hero: {
+          variant: 'mario',
+          title: 'Supera tus Exámenes',
+          subtitle: 'Profesores expertos en todas las materias',
+          showCta: true,
+          ctaLabel: 'Inscribirme',
+          showScrollIcon: true,
+          videoBackground: false,
+          videoUrl: '',
+          videoPoster: '',
+          navigationCards: [],
+          carouselItems: [],
+          customStyles: {}
+      },
+      bubble: { variant: 'mario', speed: 1.2, blur: 5, opacity: 0.8 },
+      card: {
+          variant: 'pixel',
+          backgroundColor: '#fff',
+          textColor: '#333',
+          accentColor: '#16a34a',
+          animation: 'bounce',
+          isMobile: false,
+          customStyles: {}
+      },
+      title: {
+          variant: 'pixel',
+          level: 'h2',
+          text: 'Materias y Apoyo',
+          animation: 'bounce',
+          align: 'center',
+          customStyles: {}
+      },
+      serviceCards: {
+          variant: 'mario',
+          items: [
+             {
+               routeName: 'Matemáticas',
+               imageUrl: '/retro-stars.png',
+               difficulty: 'Todos los niveles',
+               rating: 5,
+               reviews: 80,
+               duration: 0,
+               distance: 0,
+               ascent: 0,
+               description: 'Álgebra, Geometría, Cálculo',
+               features: ['Clases individuales', 'Grupales'],
+               link: '#contact'
+             }
+          ]
+      },
+      faq: { variant: 'pixel', items: [] },
+      pricing: { variant: 'pixel', columns: [], rows: [] },
+      promotions: { variant: 'pixel', premiumCards: [] },
+      gallery: { variant: 'pixel', images: [] },
+      products: { variant: 'pixel', items: [] },
+      testimonials: { variant: 'pixel', items: [] },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Portada', visible: true },
+        { id: 'servicios', type: 'services', label: 'Materias', visible: true },
+        { id: 'contact', type: 'contact', label: 'Contacto', visible: true },
+      ],
+      globalVariant: 'animal-crossing',
+      componentVariants: {
+          hero: 'mario',
+          navbar: 'pixel',
+          footer: 'pixel'
+      },
+    });
+
+    // Template 20: Wellness Center
+    this.templates.push({
+      id: 'wellness-center',
+      name: 'Centro de Bienestar',
+      description: 'Template holístico para centros de salud y bienestar',
+      icon: '🌿',
+      category: 'Bienestar',
+      header: {
+          variant: 'oceanic',
+          title: 'Vida Plena',
+          subtitle: 'Equilibrio cuerpo y mente',
+          align: 'center',
+          dark: false,
+          visible: true,
+          navItems: [],
+          customStyles: {}
+      },
+      footer: {
+         variant: 'oceanic',
+         title: 'Vida Plena',
+         description: 'Terapias naturales y crecimiento personal',
+         exploreLinks: [],
+         trendLinks: [],
+         socialIcons: [],
+         copyrightText: '© 2025 Vida Plena',
+         showParticles: true,
+         dark: false,
+         visible: true,
+         customStyles: {}
+      },
+      navBar: {
+          variant: 'oceanic',
+          logoText: 'VIDA',
+          showMobileMenu: true,
+          isFixed: true,
+          visible: true,
+          navLinks: [
+           { label: 'Inicio', href: '/home', icon: '🏠' },
+           { label: 'Terapias', href: '/home#servicios', icon: '🌿' },
+          ],
+          customStyles: {}
+      },
+      hero: {
+          variant: 'oceanic',
+          title: 'Renueva tu Energía',
+          subtitle: 'Un espacio para la sanación y el relax',
+          showCta: true,
+          ctaLabel: 'Conocer más',
+          showScrollIcon: true,
+          videoBackground: false,
+          videoUrl: '',
+          videoPoster: '',
+          navigationCards: [],
+          carouselItems: [],
+          customStyles: {}
+      },
+      bubble: { variant: 'oceanic', speed: 1.5, blur: 40, opacity: 0.6 },
+      card: {
+          variant: 'oceanic',
+          backgroundColor: 'rgba(255,255,255,0.7)',
+          textColor: '#0f766e',
+          accentColor: '#14b8a6',
+          animation: 'fade',
+          isMobile: false,
+          customStyles: {}
+      },
+      title: {
+          variant: 'oceanic',
+          level: 'h2',
+          text: 'Nuestras Terapias',
+          animation: 'fade',
+          align: 'center',
+          customStyles: { '--title-color': '#0f766e' }
+      },
+      serviceCards: {
+          variant: 'oceanic',
+          items: [
+             {
+               routeName: 'Yoga',
+               imageUrl: '/retro-stars.png',
+               difficulty: '1h',
+               rating: 5,
+               reviews: 100,
+               duration: 0,
+               distance: 0,
+               ascent: 0,
+               description: 'Hatha Yoga y Meditación',
+               features: ['Todos los niveles', 'Clase de prueba'],
+               link: '#contact'
+             }
+          ]
+      },
+      faq: { variant: 'oceanic', items: [] },
+      pricing: { variant: 'oceanic', columns: [], rows: [] },
+      promotions: { variant: 'oceanic', premiumCards: [] },
+      gallery: { variant: 'oceanic', images: [] },
+      products: { variant: 'oceanic', items: [] },
+      testimonials: { variant: 'oceanic', items: [] },
+      sections: [
+        { id: 'hero', type: 'hero', label: 'Portada', visible: true },
+        { id: 'servicios', type: 'services', label: 'Terapias', visible: true },
+        { id: 'contact', type: 'contact', label: 'Contacto', visible: true },
+      ],
+      globalVariant: 'default',
+      componentVariants: {
+          hero: 'oceanic',
+          navbar: 'oceanic',
+          footer: 'oceanic'
+      },
+    });
   }
 }
 

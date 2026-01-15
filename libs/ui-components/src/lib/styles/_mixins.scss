@@ -1148,6 +1148,30 @@ $glass-border: rgba(255, 255, 255, 0.2);
   font-family: 'Courier New', monospace;
 }
 
+@mixin variant-corporate {
+  --theme-bg: #1e3a8a;
+  --theme-color: #ffffff;
+  --theme-border: 1px solid #1e40af;
+  --theme-accent: #3b82f6;
+  --theme-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+}
+
+@mixin variant-minimal {
+  --theme-bg: #ffffff;
+  --theme-color: #171717;
+  --theme-border: 1px solid #e5e5e5;
+  --theme-accent: #171717;
+  --theme-shadow: none;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  box-shadow: none;
+}
+
 @mixin apply-all-variants($prefix: 'variant-') {
     &.#{$prefix}default { @include variant-default; }
     &.#{$prefix}primary { @include variant-primary; }
@@ -1247,6 +1271,8 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}elegant { @include variant-elegant; }
     &.#{$prefix}luxury { @include variant-luxury; }
     &.#{$prefix}vintage { @include variant-vintage; }
+    &.#{$prefix}corporate { @include variant-corporate; }
+    &.#{$prefix}minimal { @include variant-minimal; }
 }
 
 @mixin apply-variants-to-child($child, $prefix: 'variant-') {
@@ -1348,4 +1374,6 @@ $glass-border: rgba(255, 255, 255, 0.2);
     &.#{$prefix}elegant #{$child} { @include variant-elegant; }
     &.#{$prefix}luxury #{$child} { @include variant-luxury; }
     &.#{$prefix}vintage #{$child} { @include variant-vintage; }
+    &.#{$prefix}corporate #{$child} { @include variant-corporate; }
+    &.#{$prefix}minimal #{$child} { @include variant-minimal; }
 }

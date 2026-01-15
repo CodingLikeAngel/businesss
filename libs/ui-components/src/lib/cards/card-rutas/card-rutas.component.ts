@@ -59,7 +59,7 @@ export class UICardRutasComponent implements AfterViewInit, OnDestroy {
   backgroundColor = input<string>('rgba(255,255,255,0.05)');
   textColor = input<string>('#f8fafc');
   accentColor = input<string>('#22d3ee');
-  animation = input<'pulse' | 'fade' | 'slide' | 'bounce' | 'none'>('pulse');
+  animation = input<'pulse' | 'fade' | 'slide' | 'bounce' | 'glitch' | 'none'>('pulse');
   isMobile = input<boolean>(false);
   customStyles = input<CardCustomStyles>({}); // Soporte para estilos personalizados
 

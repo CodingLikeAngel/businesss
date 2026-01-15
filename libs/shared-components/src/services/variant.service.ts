@@ -97,7 +97,7 @@ export interface CardConfig {
   backgroundColor: string;
   textColor: string;
   accentColor: string;
-  animation: 'pulse' | 'fade' | 'slide' | 'bounce' | 'none';
+  animation: 'pulse' | 'fade' | 'slide' | 'bounce' | 'glitch' | 'none';
   isMobile: boolean;
   customStyles: { [key: string]: string };
 }
