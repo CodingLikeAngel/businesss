@@ -34,7 +34,9 @@ import {
   UIContactSectionComponent,
   UICardAnimatedComponent,
   BubbleAnimationComponent,
-  UIStepsSectionComponent
+  UIStepsSectionComponent,
+  UIHeaderComponent,
+  UIFooterComponent
 } from '@negocio/ui-components';
 
 @Component({
@@ -57,7 +59,9 @@ import {
     UIContactSectionComponent,
     UICardAnimatedComponent,
     BubbleAnimationComponent,
-    UIStepsSectionComponent
+    UIStepsSectionComponent,
+    UIHeaderComponent,
+    UIFooterComponent
   ],
   templateUrl: './variant-selector.component.html',
   styleUrl: './variant-selector.component.scss',
@@ -136,6 +140,8 @@ export class VariantSelectorComponent implements OnInit {
     { type: 'contact', label: 'Contacto', icon: '📞', variants: this.variants },
     { type: 'bubble', label: 'Efecto Burbujas', icon: '🫧', variants: this.variants },
     { type: 'steps', label: 'Pasos', icon: '👣', variants: this.variants },
+    { type: 'header', label: 'Cabecera', icon: '🔝', variants: this.variants },
+    { type: 'footer', label: 'Pie de Página', icon: '⧉', variants: this.variants },
   ];
 
   selectedExplorerComponent: any = null;

@@ -338,6 +338,21 @@
                 >
                 </lib-ui-steps-section>
 
+                <!-- HEADER -->
+                <lib-ui-header
+                  *ngSwitchCase="'header'"
+                  [variant]="selectedExplorerVariant"
+                  [title]="'Vista Previa Cabecera'"
+                >
+                </lib-ui-header>
+
+                <!-- FOOTER -->
+                <lib-ui-components-footer
+                  *ngSwitchCase="'footer'"
+                  [variant]="selectedExplorerVariant"
+                >
+                </lib-ui-components-footer>
+
                 <!-- DEFAULT FALLBACK -->
                 <div
                   *ngSwitchDefault
