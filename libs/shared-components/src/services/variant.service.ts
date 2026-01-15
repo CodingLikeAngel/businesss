@@ -212,6 +212,22 @@ export interface PageSection {
   type: 'hero' | 'services' | 'products' | 'testimonials' | 'pricing' | 'promotions' | 'faq' | 'gallery' | 'contact' | 'bubble' | 'features' | 'stats';
   label: string; // User friendly name
   visible: boolean;
+  name: string;
+  styles: { [key: string]: string };
+  content: { [key: string]: any };
+  elements: any[];
+  config: { [key: string]: any };
+  customStyles: { [key: string]: string };
+  animation: string;
+  layout: string;
+  animations?: any[];
+  responsive?: {
+    mobile: { visible: boolean; styles: { [key: string]: string } };
+    tablet: { visible: boolean; styles: { [key: string]: string } };
+    desktop: { visible: boolean; styles: { [key: string]: string } };
+  };
+  locked?: boolean;
+  zIndex?: number;
 }
 
 @Injectable({
@@ -583,18 +599,18 @@ export class VariantService {
   });
 
   private sectionsSubject = new BehaviorSubject<PageSection[]>([
-    { id: 'sec_hero', type: 'hero', label: 'Portada Hero', visible: true },
-    { id: 'sec_features', type: 'features', label: 'Características Premium', visible: true },
-    { id: 'sec_stats', type: 'stats', label: 'Métricas (Stats)', visible: true },
-    { id: 'sec_bubble', type: 'bubble', label: 'Efecto Burbujas', visible: true },
-    { id: 'sec_services', type: 'services', label: 'Servicios', visible: true },
-    { id: 'sec_products', type: 'products', label: 'Módulos/Productos', visible: true },
-    { id: 'sec_testimonials', type: 'testimonials', label: 'Testimonios', visible: true },
-    { id: 'sec_pricing', type: 'pricing', label: 'Tablas de Precio', visible: true },
-    { id: 'sec_promotions', type: 'promotions', label: 'Promociones', visible: true },
-    { id: 'sec_faq', type: 'faq', label: 'Preguntas Frecuentes', visible: true },
-    { id: 'sec_gallery', type: 'gallery', label: 'Galería', visible: true },
-    { id: 'sec_contact', type: 'contact', label: 'Contacto y Formulario', visible: true },
+    { id: 'sec_hero', type: 'hero', label: 'Portada Hero', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_features', type: 'features', label: 'Características Premium', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_stats', type: 'stats', label: 'Métricas (Stats)', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_bubble', type: 'bubble', label: 'Efecto Burbujas', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_services', type: 'services', label: 'Servicios', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_products', type: 'products', label: 'Módulos/Productos', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_testimonials', type: 'testimonials', label: 'Testimonios', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_pricing', type: 'pricing', label: 'Tablas de Precio', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_promotions', type: 'promotions', label: 'Promociones', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_faq', type: 'faq', label: 'Preguntas Frecuentes', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_gallery', type: 'gallery', label: 'Galería', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_contact', type: 'contact', label: 'Contacto y Formulario', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
   ]);
   sections$ = this.sectionsSubject.asObservable();
   statsConfig$ = this.statsConfigSubject.asObservable();

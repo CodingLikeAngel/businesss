@@ -30,6 +30,7 @@ export * from './actions/page.actions';
 export * from './actions/ui.actions';
 export * from './reducers/page.reducer';
 export * from './reducers/ui.reducer';
+export * from './effects/index';
 
 // Export selectors individually to avoid conflicts
 export * from './selectors/page.selectors';

@@ -85,6 +85,8 @@ export type SectionType =
   | 'team'
   | 'blog'
   | 'cta'
+  | 'promotions'
+  | 'bubble'
   | 'custom';
 
 export type ElementType =
@@ -131,6 +133,26 @@ export interface Section {
   visible: boolean;
   locked: boolean;
   zIndex: number;
+  order?: number;
+  config?: any;
+}
+
+export interface PageSection {
+  id: string;
+  type: SectionType;
+  name: string;
+  position: Position;
+  size?: Size;
+  styles: SectionStyles;
+  content: SectionContent;
+  elements: Element[];
+  animations: Animation[];
+  responsive: ResponsiveConfig;
+  visible: boolean;
+  locked: boolean;
+  zIndex: number;
+  order?: number;
+  config?: any;
 }
 
 export interface GlobalStyles {
@@ -189,6 +211,22 @@ export interface Page {
   updatedAt: Date;
   published: boolean;
   publishedAt?: Date;
+  settings?: {
+    seo?: {
+      title?: string;
+      description?: string;
+      keywords?: string[];
+    };
+    social?: {
+      ogImage?: string;
+      twitterCard?: string;
+    };
+    analytics?: {
+      googleAnalyticsId?: string;
+      facebookPixelId?: string;
+    };
+  };
+  author?: string;
 }
 
 // UI State Models

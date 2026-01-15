@@ -227,26 +227,34 @@ export class VariantSelectorComponent implements OnInit {
   }
 
   addSectionToPage() {
-    if (!this.selectedExplorerComponent) return;
-    
-    const newSection: PageSection = {
-      id: `sec_${new Date().getTime()}`,
-      type: this.selectedExplorerComponent.type,
-      label: `${this.selectedExplorerComponent.label} (${this.selectedExplorerVariant})`,
-      visible: true
-    };
-    
-    // Set its specific variant
-    this.variantService.setComponentVariant(newSection.id, this.selectedExplorerVariant);
-    
-    const currentSections = [...this.sections];
-    currentSections.push(newSection);
-    this.variantService.setSections(currentSections);
-    
-    this.activeTab = 'structure';
-    this.selectedExplorerComponent = null;
-    alert('Sección añadida a la estructura. ¡Organízala arrastrando!');
-  }
+   if (!this.selectedExplorerComponent) return;
+   
+   const newSection: PageSection = {
+     id: `sec_${new Date().getTime()}`,
+     type: this.selectedExplorerComponent.type,
+     label: `${this.selectedExplorerComponent.label} (${this.selectedExplorerVariant})`,
+     visible: true,
+     name: '',
+     styles: {},
+     content: {},
+     elements: [],
+     config: {},
+     customStyles: {},
+     animation: 'none',
+     layout: 'default'
+   };
+   
+   // Set its specific variant
+   this.variantService.setComponentVariant(newSection.id, this.selectedExplorerVariant);
+   
+   const currentSections = [...this.sections];
+   currentSections.push(newSection);
+   this.variantService.setSections(currentSections);
+   
+   this.activeTab = 'structure';
+   this.selectedExplorerComponent = null;
+   alert('Sección añadida a la estructura. ¡Organízala arrastrando!');
+ }
 
   variantOptions: InputOption[] = this.variants.map((variant) => ({
     value: variant,
