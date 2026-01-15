@@ -1,0 +1,243 @@
+.editor-canvas {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: #f8f9fa;
+  overflow: auto;
+  transition: transform 0.2s ease;
+
+  &.dragging {
+    cursor: grabbing;
+  }
+
+  &.grid-visible {
+    background-image:
+      linear-gradient(rgba(0, 0, 0, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+}
+
+.grid-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 20px 20px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.sections-container {
+  position: relative;
+  padding: 20px;
+  min-height: calc(100vh - 40px);
+}
+
+.section-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  &.selected {
+    outline: 2px solid #007bff;
+    outline-offset: 2px;
+  }
+
+  &.dragged {
+    opacity: 0.5;
+    transform: rotate(2deg);
+  }
+}
+
+.section-content {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: all 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  &.locked {
+    opacity: 0.7;
+
+    &::after {
+      content: '🔒';
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      z-index: 10;
+    }
+  }
+}
+
+.section-toolbar {
+  position: absolute;
+  top: -40px;
+  right: 0;
+  display: flex;
+  gap: 4px;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  padding: 4px;
+  z-index: 100;
+}
+
+.toolbar-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  border-radius: 4px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #f8f9fa;
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.drag-preview {
+  background: white;
+  border: 2px solid #007bff;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(0, 123, 255, 0.3);
+  transform: rotate(2deg);
+}
+
+.section-preview {
+  font-weight: 600;
+  color: #007bff;
+  text-align: center;
+}
+
+.drag-placeholder {
+  background: rgba(0, 123, 255, 0.1);
+  border: 2px dashed #007bff;
+  border-radius: 8px;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #007bff;
+  font-weight: 500;
+}
+
+.canvas-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 5;
+}
+
+.context-menu {
+  position: fixed;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  border: 1px solid #e9ecef;
+  z-index: 1000;
+  min-width: 160px;
+  overflow: hidden;
+}
+
+.context-menu-item {
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-size: 14px;
+
+  &:hover {
+    background: #f8f9fa;
+  }
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #e9ecef;
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .sections-container {
+    padding: 10px;
+  }
+
+  .section-wrapper {
+    margin-bottom: 10px;
+  }
+
+  .section-toolbar {
+    top: -35px;
+  }
+
+  .toolbar-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+  }
+}
+
+// Dark mode support
+@media (prefers-color-scheme: dark) {
+  .editor-canvas {
+    background: #1a1a1a;
+  }
+
+  .section-content {
+    background: #2d2d2d;
+    color: white;
+  }
+
+  .section-toolbar {
+    background: #2d2d2d;
+    border: 1px solid #404040;
+  }
+
+  .toolbar-btn:hover {
+    background: #404040;
+  }
+
+  .context-menu {
+    background: #2d2d2d;
+    border-color: #404040;
+    color: white;
+  }
+
+  .context-menu-item:hover {
+    background: #404040;
+  }
+
+  .context-menu-item:not(:last-child) {
+    border-bottom-color: #404040;
+  }
+}

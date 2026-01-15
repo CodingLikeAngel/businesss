@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, PLATFORM_ID, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { EditorService } from '../../../../index';
 import { BaseEditorFeatureComponent } from '../base-editor-feature.component';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import {
@@ -67,9 +67,11 @@ export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent im
     this.sections$ = this.variantService.sections$;
   }
 
+  private editorService = inject(EditorService);
+
   override ngOnInit() {
     super.ngOnInit();
-    inject(EditorService).updateEditorState({ isMobile: false });
+    this.editorService.updateEditorState({ isMobile: false });
   }
 
   onTabSelected(sectionId: string) {
@@ -81,7 +83,7 @@ export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent im
   }
 
   scrollToSection(sectionId: string) {
-    if (typeof document !== 'undefined') {
+    if (isPlatformBrowser(this.platformId)) {
       const element = document.getElementById(sectionId);
       if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
