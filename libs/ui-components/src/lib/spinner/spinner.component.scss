@@ -1,5 +1,6 @@
 /* spinner.component.scss (Hijo) */
 /* Removed external Google Fonts import to avoid network inlining during build */
+@use "../styles/mixins" as shared;
 
 /* Base del spinner con soporte robusto para variables CSS */
 .spinner {
@@ -15,6 +16,9 @@
   border-radius: var(--spinner-border-radius, 50%);
   background: var(--spinner-bg, transparent);
   box-shadow: var(--spinner-shadow, none);
+  
+  @include shared.apply-all-variants('spinner-');
+
   width: 48px; /* Tamaño por defecto */
   height: 48px; /* Tamaño por defecto */
 }

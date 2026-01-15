@@ -1,6 +1,9 @@
+@use '../styles/mixins' as shared;
 
 .breadcrumbs {
   padding: 0.75rem 0;
+  
+  @include shared.apply-all-variants('breadcrumbs-');
   
   ol {
     display: flex;
