@@ -8,6 +8,7 @@ import { ModalState, ServiceItem, ProductItem } from '../models/editor.model';
 export class ModalService {
   private modalStateSubject = new BehaviorSubject<ModalState>({
     isOpen: false,
+    type: 'custom',
     selectedItem: null
   });
 
@@ -16,6 +17,7 @@ export class ModalService {
   openModal(item: ServiceItem | ProductItem): void {
     this.modalStateSubject.next({
       isOpen: true,
+      type: 'custom',
       selectedItem: item
     });
   }
@@ -23,6 +25,7 @@ export class ModalService {
   closeModal(): void {
     this.modalStateSubject.next({
       isOpen: false,
+      type: 'custom',
       selectedItem: null
     });
   }

@@ -4,7 +4,7 @@
   [customStyles]="navBarConfig.customStyles"
 ></lib-ui-components-nav-bar>
 
-<lib-ui-components-hero
+<lib-ui-hero-section
   [variant]="getVariant('hero')"
   [title]="heroConfig.title"
   [subtitle]="heroConfig.subtitle"
@@ -17,7 +17,7 @@
   [navigationCards]="heroConfig.navigationCards"
   [carouselItems]="heroConfig.carouselItems"
   [customStyles]="heroConfig.customStyles"
-></lib-ui-components-hero>
+></lib-ui-hero-section>
 
 <lib-ui-components-title [variant]="getVariant('title')">Nuestros Servicios</lib-ui-components-title>
 
@@ -51,5 +51,6 @@
 <lib-reservation-form [variant]="getVariant('reservation')"></lib-reservation-form>
 
 <lib-bubble-animation [config]="bubbleConfig" [variant]="getVariant('bubble')"></lib-bubble-animation>
+
 
 

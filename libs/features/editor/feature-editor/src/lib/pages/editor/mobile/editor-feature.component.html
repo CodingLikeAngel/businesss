@@ -25,7 +25,7 @@
      [carouselItems]="heroConfig.carouselItems"
      [customStyles]="heroConfig.customStyles"
      (sectionSelected)="scrollToSection($event)"
-   ></lib-ui-components-hero>
+   ></lib-ui-hero-section>
  </section>
 
 <lib-bubble-animation
@@ -188,5 +188,6 @@
    [content]="modalState.selectedItem?.description || 'Selecciona un item para ver más detalles.'"
    (modalOnClose)="closeModal()"
  ></lib-ui-components-modal>
+
 
 

@@ -13,7 +13,7 @@
       
       <!-- HERO -->
       <section *ngSwitchCase="'hero'" [id]="section.id" class="relative z-20">
-        <lib-ui-components-hero
+        <lib-ui-hero-section
           [variant]="getVariant('hero')"
           [title]="heroConfig.title"
           [subtitle]="heroConfig.subtitle"
@@ -27,7 +27,7 @@
           [carouselItems]="heroConfig.carouselItems"
           [customStyles]="heroConfig.customStyles"
           (sectionSelected)="scrollToSection($event)"
-        ></lib-ui-components-hero>
+        ></lib-ui-hero-section>
       </section>
 
       <!-- FEATURES -->
@@ -195,5 +195,6 @@
  ></lib-ui-components-modal>
 
 <!-- <lib-chat-component></lib-chat-component> -->
+
 
 

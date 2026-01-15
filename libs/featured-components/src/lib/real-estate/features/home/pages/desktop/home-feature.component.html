@@ -1,6 +1,6 @@
 <lib-ui-components-nav-bar [variant]="getVariant('navBar')" [navLinks]="navBarConfig.navLinks" [customStyles]="navBarConfig.customStyles" (linkClicked)="scrollToSection($event)"></lib-ui-components-nav-bar>
 
-<lib-ui-components-hero
+<lib-ui-hero-section
   [variant]="getVariant('hero')"
   [title]="heroConfig.title"
   [subtitle]="heroConfig.subtitle"
@@ -14,7 +14,7 @@
   [carouselItems]="heroConfig.carouselItems"
   [customStyles]="heroConfig.customStyles"
   (sectionSelected)="scrollToSection($event)"
-></lib-ui-components-hero>
+></lib-ui-hero-section>
 
 <lib-ui-components-title [variant]="getVariant('title')">Nuestros Servicios</lib-ui-components-title>
 
@@ -53,5 +53,6 @@
 <lib-ui-components-modal [isOpen]="modalOpen" [variant]="'glass'" [rounded]="'md'" [size]="'lg'" [title]="selectedService?.serviceName || 'Detalles del Servicio'" [content]="selectedService?.description || 'Selecciona un servicio para ver más detalles.'" (modalOnClose)="closeModal()"></lib-ui-components-modal>
 
 <lib-bubble-animation [config]="bubbleConfig" [variant]="getVariant('bubble')"></lib-bubble-animation>
+
 
 

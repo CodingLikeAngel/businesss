@@ -44,6 +44,7 @@ import { ServiceSectionComponent } from '../../components/service-section/servic
     BubbleAnimationComponent,
     UITitleComponent,
     UIFooterComponent,
+    ServiceSectionComponent,
   ],
   templateUrl: './home-feature.component.html',
   styles: [/* Existing styles unchanged */],

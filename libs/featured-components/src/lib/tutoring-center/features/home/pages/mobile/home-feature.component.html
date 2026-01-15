@@ -23,7 +23,7 @@
 
 <!-- Hero -->
 <section id="hero" class="relative z-20">
-   <lib-ui-components-hero
+   <lib-ui-hero-section
      [title]="'Peluquería Estilo'"
      [subtitle]="'Transforma tu look con cortes, colores y más.'"
      [variant]="selectedVariant"
@@ -33,7 +33,7 @@
      }"
      [navigationCards]="navigationCards"
      (sectionSelected)="scrollToSection($event)"
-   ></lib-ui-components-hero>
+   ></lib-ui-hero-section>
  </section>
 
 <!-- Contenedor Principal con Bubble Animation -->
@@ -174,5 +174,6 @@
   [content]="selectedService?.description || 'Selecciona un servicio para ver más detalles.'"
   (modalOnClose)="closeModal()"
 ></lib-ui-components-modal>
+
 
 

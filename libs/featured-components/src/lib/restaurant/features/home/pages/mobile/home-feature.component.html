@@ -23,12 +23,12 @@
 
 <!-- Hero -->
 <section id="hero" class="relative z-20">
-  <lib-ui-components-hero
+  <lib-ui-hero-section
     [title]="'Restaurante Italiano'"
     [subtitle]="'Disfruta de auténtica cocina italiana en un ambiente acogedor.'"
     [showScrollIcon]="true"
     (sectionSelected)="scrollToSection($event)"
-  ></lib-ui-components-hero>
+  ></lib-ui-hero-section>
 </section>
 
 <!-- Contenedor Principal con Bubble Animation -->
@@ -169,5 +169,6 @@
   [content]="selectedService?.description || 'Selecciona un servicio para ver más detalles.'"
   (modalOnClose)="closeModal()"
 ></lib-ui-components-modal>
+
 
 

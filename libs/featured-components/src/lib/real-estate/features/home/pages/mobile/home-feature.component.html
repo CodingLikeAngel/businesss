@@ -1,6 +1,6 @@
 <lib-ui-components-nav-bar [variant]="getVariant('navBar')" [navLinks]="navBarConfig.navLinks" [customStyles]="navBarConfig.customStyles" (linkClicked)="scrollToSection($event)"></lib-ui-components-nav-bar>
 
-<lib-ui-components-hero-section [variant]="getVariant('hero')" [title]="heroConfig.title" [subtitle]="heroConfig.subtitle" [customStyles]="heroConfig.customStyles" (sectionSelected)="scrollToSection($event)"></lib-ui-components-hero-section>
+<lib-ui-hero-section-section [variant]="getVariant('hero')" [title]="heroConfig.title" [subtitle]="heroConfig.subtitle" [customStyles]="heroConfig.customStyles" (sectionSelected)="scrollToSection($event)"></lib-ui-hero-section-section>
 
 <lib-ui-components-title [variant]="getVariant('title')">Nuestros Servicios</lib-ui-components-title>
 
@@ -36,5 +36,6 @@
 <lib-reservation-form [variant]="getVariant('reservation')"></lib-reservation-form>
 
 <lib-bubble-animation [config]="bubbleConfig" [variant]="getVariant('bubble')"></lib-bubble-animation>
+
 
 

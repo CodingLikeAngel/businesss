@@ -13,7 +13,7 @@
 </div>
 
 <section id="hero" class="relative z-20">
-  <lib-ui-components-hero-section
+  <lib-ui-hero-section-section
     [title]="heroConfig.title"
     [subtitle]="heroConfig.subtitle"
     [showCta]="heroConfig.showCta"
@@ -25,7 +25,7 @@
     [navigationCards]="heroConfig.navigationCards"
     [carouselItems]="heroConfig.carouselItems"
     (sectionSelected)="scrollToSection($event)"
-  ></lib-ui-components-hero-section>
+  ></lib-ui-hero-section-section>
 </section>
 
 <lib-bubble-animation
@@ -159,5 +159,6 @@
   [content]="selectedService?.description || 'Selecciona un servicio para ver más detalles.'"
   (modalOnClose)="closeModal()"
 ></lib-ui-components-modal>
+
 
 

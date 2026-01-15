@@ -10,7 +10,7 @@ export class EditorService {
   private sectionsSubject = new BehaviorSubject<PageSection[]>([]);
   private editorStateSubject = new BehaviorSubject<EditorState>({
     isMobile: false,
-    modalState: { isOpen: false, selectedItem: null },
+    modalState: { isOpen: false, type: 'custom', selectedItem: null },
     cartItems: []
   });
   private loadingSubject = new BehaviorSubject<boolean>(false);
