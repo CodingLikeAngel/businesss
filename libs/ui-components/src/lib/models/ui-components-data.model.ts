@@ -91,6 +91,8 @@ export const variants = [
     'trailblazer',
     'elegant',
     'vintage',
-    'luxury'
+    'luxury',
+    'rockstar',
+    'ubisoft'
   ] as const;
   

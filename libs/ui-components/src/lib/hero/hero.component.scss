@@ -329,51 +329,146 @@
     }
 }
 
-/* Partículas */
-.particle-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 2;
+/* 
+  ==========================================================================
+  NEW THEMATIC VARIANTS (NINTENDO, UBISOFT, ROCKSTAR, CYBERPUNK)
+  ==========================================================================
+*/
+
+.hero-section--mario {
+  --hero-bg: #e60012;
+  --hero-color: #fff;
+  background-image: radial-gradient(#ffffff 2px, transparent 2px);
+  background-size: 40px 40px;
+  font-family: 'Press Start 2P', cursive !important;
+
+  .hero-title {
+    font-size: 3rem;
+    -webkit-text-stroke: 3px #000;
+    text-shadow: 8px 8px 0 #000, 12px 12px 0 #ffd700;
+    animation: mario-jump 2s infinite ease-in-out;
+    
+    @media (max-width: 768px) { font-size: 1.75rem; -webkit-text-stroke: 1.5px #000; }
+  }
+
+  .hero-subtitle {
+    background: #fff;
+    color: #000;
+    padding: 1rem;
+    border: 4px solid #000;
+    box-shadow: 6px 6px 0 #ffd700;
+    transform: rotate(-1deg);
+  }
 }
 
-.particle {
-  position: absolute;
-  border-radius: 9999px;
-  opacity: 0.5;
+.hero-section--rayman {
+  --hero-bg: linear-gradient(135deg, #7b2ff7 0%, #3e0b8a 100%);
+  --hero-color: #fff;
+  
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.3)"/></svg>') repeat;
+    background-size: 100px 100px;
+    opacity: 0.5;
+    animation: floating-dust 20s infinite linear;
+  }
+
+  .hero-title {
+    font-size: 5rem;
+    color: #f7e017;
+    text-shadow: 0 0 20px #f7e017, 0 0 40px #ff43a1;
+    font-style: italic;
+    
+    @media (max-width: 768px) { font-size: 2.5rem; }
+  }
+
+  .hero-subtitle {
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: 0.2rem;
+    opacity: 0.8;
+  }
 }
 
-.particle-1 {
-  width: 12rem;
-  height: 12rem;
-  background: rgba(255, 255, 255, 0.15);
-  filter: blur(2rem);
-  animation: aqua-wave 4s ease-in-out infinite;
-  top: 10%;
-  left: 20%;
+.hero-section--rockstar {
+  --hero-bg: #000;
+  --hero-color: #fff;
+  
+  &::before {
+    background-image: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
+    opacity: 0.3;
+  }
+
+  .hero-title {
+    font-size: 6rem;
+    background: #f9d71c;
+    color: #000;
+    display: inline-block;
+    padding: 0 2rem;
+    transform: skewX(-10deg);
+    -webkit-background-clip: initial;
+    background-clip: initial;
+    -webkit-text-fill-color: initial;
+    letter-spacing: -4px;
+    font-weight: 900;
+    
+    @media (max-width: 768px) { font-size: 3rem; letter-spacing: -2px; }
+  }
+
+  .hero-subtitle {
+    text-transform: uppercase;
+    font-weight: 900;
+    letter-spacing: 4px;
+    border-left: 10px solid #f9d71c;
+    padding-left: 2rem;
+    margin-top: 2rem;
+  }
 }
 
-.particle-2 {
-  width: 16rem;
-  height: 16rem;
-  background: rgba(255, 255, 255, 0.1);
-  filter: blur(2.5rem);
-  animation: float 4s ease-in-out infinite;
-  bottom: 15%;
-  right: 25%;
+.hero-section--cyberpunk {
+  --hero-bg: #050510;
+  --hero-color: #00ffcc;
+  
+  .hero-title {
+    font-size: 4.5rem;
+    text-shadow: 4px 4px 0 #ff0055, -4px -4px 0 #00e5ff;
+    animation: glitch-title 1s infinite;
+    
+    @media (max-width: 768px) { font-size: 2.2rem; }
+  }
+
+  .hero-subtitle {
+    font-family: monospace;
+    color: #ff0055;
+    background: rgba(0, 255, 204, 0.1);
+    padding: 0.5rem 1rem;
+    border-right: 4px solid #00ffcc;
+  }
 }
 
-.particle-3 {
-  width: 10rem;
-  height: 10rem;
-  background: rgba(255, 255, 255, 0.1);
-  filter: blur(1.5rem);
-  animation: float-slow 5s ease-in-out infinite;
-  top: 40%;
-  right: 15%;
+/* 
+  ==========================================================================
+  NEW ANIMATIONS
+  ==========================================================================
+*/
+
+@keyframes mario-jump {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-30px); }
+}
+
+@keyframes floating-dust {
+  from { transform: translate(0, 0); }
+  to { transform: translate(-100px, -100px); }
+}
+
+@keyframes glitch-title {
+  0% { transform: translate(0); text-shadow: 4px 4px 0 #ff0055; }
+  2% { transform: translate(-5px, 2px); text-shadow: -4px -4px 0 #00e5ff; }
+  4% { transform: translate(5px, -2px); }
+  5% { transform: translate(0); }
 }
 
 /* Personalizaciones por variante */

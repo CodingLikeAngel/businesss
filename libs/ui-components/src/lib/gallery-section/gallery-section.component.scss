@@ -1,65 +1,70 @@
 @use '../styles/mixins' as shared;
-@use 'libs/shared-components/src/lib/shared-components/variant-selector/variables.scss' as variant;
+
+/* 
+  ==========================================================================
+  GALLERY SECTION BASE
+  ==========================================================================
+*/
 
 .gallery-container {
-  padding: 100px 20px;
-  background-color: var(--theme-bg, #0f172a);
-  color: var(--theme-color, white);
-  font-family: var(--theme-font, 'Outfit', sans-serif);
-
-  @include shared.apply-all-variants('gallery--');
-  @include shared.apply-variants-to-child('.gallery-item', 'gallery--');
-
-  .title {
-    color: var(--theme-color, white);
-    background: var(--theme-text-gradient, linear-gradient(135deg, #e2e8f0 0%, var(--theme-accent, #94a3b8) 100%));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .gallery-item {
-     border-color: var(--theme-border, rgba(255, 255, 255, 0.1));
+  padding: 5rem 1.5rem;
+  background: var(--gallery-bg, #0f172a);
+  color: var(--gallery-text, #fff);
+  position: relative;
+  overflow: hidden;
+  
+  @media (min-width: 1024px) {
+    padding: 8rem 4rem;
   }
 }
 
 .gallery-inner {
   max-width: 1400px;
   margin: 0 auto;
+  position: relative;
+  z-index: 10;
 }
 
 .header-content {
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 4rem;
+
+  .title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin: 0 0 1rem;
+    color: var(--gallery-accent, #3b82f6);
+  }
 
   .subtitle {
-    font-size: 1.1rem;
-    color: #94a3b8;
+    font-size: 1.125rem;
+    opacity: 0.7;
+    max-width: 600px;
+    margin: 0 auto;
   }
 }
 
 .gallery-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  gap: 1.5rem;
 }
 
 .gallery-item {
   position: relative;
-  border-radius: 16px;
-  overflow: hidden;
-  cursor: pointer;
   aspect-ratio: 4/3;
-  animation: scaleIn 0.6s backwards;
+  overflow: hidden;
+  border-radius: 1rem;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  background: #000;
   
   &:hover {
-    .gallery-img {
-      transform: scale(1.1);
-    }
+    transform: scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
     
-    .overlay {
-      opacity: 1;
-    }
+    .gallery-img { transform: scale(1.1); }
+    .overlay { opacity: 1; }
   }
 }
 
@@ -67,43 +72,94 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: transform 0.6s ease;
 }
 
 .overlay {
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
-  opacity: 0;
-  transition: opacity 0.3s ease;
+  background: rgba(0,0,0,0.6);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
 
-  .zoom-icon {
-    font-size: 2rem;
-    transform: translateY(10px);
-    transition: transform 0.4s ease;
+.zoom-icon { font-size: 2.5rem; color: #fff; }
+
+/* 
+  ==========================================================================
+  THEMATIC VARIANTS
+  ==========================================================================
+*/
+
+/* --- Nintendo / Mario --- */
+.gallery--mario {
+  --gallery-bg: #e60012;
+  --gallery-text: #fff;
+  --gallery-accent: #ffd700;
+  font-family: 'Press Start 2P', cursive;
+
+  .gallery-item {
+    border: 4px solid #000;
+    border-radius: 0;
+    box-shadow: 8px 8px 0 #000;
+    
+    &:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0 #000; }
   }
+}
+
+/* --- Ubisoft / Rayman --- */
+.gallery--rayman {
+  --gallery-bg: linear-gradient(135deg, #3e0b8a, #7b2ff7);
+  --gallery-text: #fff;
+  --gallery-accent: #f7e017;
   
-  .img-caption {
-    font-weight: 600;
-    transform: translateY(10px);
-    transition: transform 0.4s ease 0.1s;
+  .gallery-item {
+    border-radius: 4rem 1rem;
+    border: 2px solid #ff43a1;
+    box-shadow: 0 0 15px rgba(255, 67, 161, 0.4);
+    
+    &:hover { border-color: #f7e017; box-shadow: 0 0 25px #f7e017; }
   }
 }
 
-.gallery-item:hover {
-  .zoom-icon, .img-caption {
-    transform: translateY(0);
+/* --- Rockstar --- */
+.gallery--rockstar {
+  --gallery-bg: #000;
+  --gallery-text: #fff;
+  --gallery-accent: #f9d71c;
+  
+  .gallery-item {
+    border-radius: 0;
+    clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+    border-left: 6px solid #f9d71c;
+    filter: grayscale(0.5);
+    
+    &:hover { filter: grayscale(0); transform: translateY(-5px); }
   }
 }
 
-// Custom styles if needed
-
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.9); }
-  to { opacity: 1; transform: scale(1); }
+/* --- Cyberpunk --- */
+.gallery--cyberpunk {
+  --gallery-bg: #050510;
+  --gallery-text: #00ffcc;
+  --gallery-accent: #ff0055;
+  
+  .gallery-item {
+    border-radius: 0;
+    border: 1px solid #ff0055;
+    
+    &::after {
+      content: '';
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 10px;
+      height: 10px;
+      background: #00ffcc;
+      box-shadow: 0 0 10px #00ffcc;
+    }
+  }
 }

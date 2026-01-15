@@ -2,67 +2,142 @@
 @use "sass:map";
 @use "./variables" as var;
 
-/* Estilos base para el contenedor del acordeón */
+/* 
+  ==========================================================================
+  ACCORDION BASE
+  ==========================================================================
+*/
+
 .accordion-container {
-  font-family: "Orbitron", sans-serif;
   width: 100%;
-  border: 1px solid var(--accordion-border-color, #d1d5db);
-  background: var(--accordion-bg, #ffffff);
-  color: var(--accordion-color, #000000);
-  transition: all 0.2s ease-in-out;
-
-  &.accordion-rounded-none { border-radius: 0; }
-  &.accordion-rounded-md { border-radius: 0.375rem; overflow: hidden; }
-  &.accordion-rounded-full { border-radius: 9999px; overflow: hidden; }
-
-  &.accordion-sm { font-size: 14px; }
-  &.accordion-md { font-size: 16px; }
-  &.accordion-lg { font-size: 18px; }
-
-  @include shared.apply-all-variants('variant-');
-  
-  background: var(--theme-bg, var(--accordion-bg, #ffffff));
-  color: var(--theme-color, var(--accordion-color, #000000));
-  border-color: var(--theme-border-color, var(--accordion-border-color, #d1d5db));
+  border-radius: 1rem;
+  overflow: hidden;
+  background: var(--accordion-bg, #fff);
+  color: var(--accordion-text, #333);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-/* Estilos para cada ítem */
 .accordion-item {
-  &:not(:last-child) { 
-    border-bottom: 1px solid var(--accordion-item-border, rgba(0, 0, 0, 0.1)); 
-  }
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  &:last-child { border-bottom: none; }
 }
 
-/* Estilos para el encabezado */
 .accordion-header {
   width: 100%;
-  text-align: left;
-  padding: 0.5rem 0.75rem;
-  font-weight: 500;
-  background-color: var(--accordion-header-bg, rgba(0, 0, 0, 0.05));
+  padding: 1.25rem 1.5rem;
+  background: transparent;
   border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   cursor: pointer;
-  transition: background-color 0.2s ease-in-out;
-
-  &:hover { 
-    background-color: var(--accordion-header-hover-bg, rgba(0, 0, 0, 0.1)); 
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 700;
+  transition: all 0.3s ease;
+  color: inherit;
+  
+  &:hover {
+    background: rgba(0, 0, 0, 0.02);
   }
-
-  &.header-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
-  &.header-md { padding: 0.5rem 0.75rem; font-size: 0.75rem; ; }
-  &.header-lg { padding: 0.75rem 1rem; font-size: 1rem; }
 }
 
-/* Estilos para el contenido */
 .accordion-content {
-  padding: 0.5rem 0.75rem;
-  background-color: var(--accordion-content-bg, rgba(255, 255, 255, 0.9));
-  color: var(--accordion-content-color, inherit);
-  transition: max-height 0.3s ease-in-out;
+  padding: 0 1.5rem 1.5rem;
+  line-height: 1.6;
+  opacity: 0.8;
+  animation: slideDown 0.3s ease;
+}
 
-  &[hidden] { display: none; }
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
-  &.content-sm { padding: 0.25rem 0.5rem; font-size: 0.75rem; }
-  &.content-md { padding: 0.5rem 0.75rem; font-size: 0.875rem; }
-  &.content-lg { padding: 0.75rem 1rem; font-size: 1rem; }
+/* 
+  ==========================================================================
+  THEMATIC VARIANTS
+  ==========================================================================
+*/
+
+/* --- Nintendo / Mario --- */
+.variant-mario {
+  --accordion-bg: #fff;
+  --accordion-text: #000;
+  border: 4px solid #000;
+  border-radius: 0;
+  box-shadow: 8px 8px 0 #000;
+  font-family: 'Press Start 2P', cursive;
+
+  .accordion-header {
+    font-size: 0.7rem;
+    border-bottom: 4px solid #000;
+    &:hover { background: #ffd700; }
+  }
+
+  .accordion-item--active .accordion-header {
+    background: #e60012;
+    color: #fff;
+  }
+}
+
+/* --- Ubisoft / Rayman --- */
+.variant-rayman {
+  --accordion-bg: linear-gradient(135deg, #7b2ff7 0%, #3e0b8a 100%);
+  --accordion-text: #fff;
+  border: none;
+  border-radius: 2rem;
+  box-shadow: 0 10px 30px rgba(123, 47, 247, 0.3);
+
+  .accordion-header {
+    font-style: italic;
+    &:hover { color: #f7e017; }
+  }
+
+  .accordion-item--active .accordion-header {
+    color: #f7e017;
+    text-shadow: 0 0 10px #f7e017;
+  }
+}
+
+/* --- Rockstar --- */
+.variant-rockstar {
+  --accordion-bg: #111;
+  --accordion-text: #eee;
+  border-radius: 0;
+  border: none;
+  border-left: 10px solid #f9d71c;
+
+  .accordion-header {
+    text-transform: uppercase;
+    font-family: 'Impact', sans-serif;
+    letter-spacing: 2px;
+    background: #000;
+    &:hover { background: #f9d71c; color: #000; }
+  }
+
+  .accordion-item--active .accordion-header {
+    background: #f9d71c;
+    color: #000;
+  }
+}
+
+/* --- Cyberpunk --- */
+.variant-cyberpunk {
+  --accordion-bg: #050510;
+  --accordion-text: #00ffcc;
+  border: 1px solid #ff0055;
+  border-radius: 0;
+  box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
+
+  .accordion-header {
+    text-shadow: 0 0 5px #00ffcc;
+    &:hover { background: rgba(255, 0, 85, 0.1); }
+  }
+
+  .accordion-item--active .accordion-header {
+    color: #ff0055;
+    text-shadow: 0 0 10px #ff0055;
+    border-bottom: 1px solid #00ffcc;
+  }
 }

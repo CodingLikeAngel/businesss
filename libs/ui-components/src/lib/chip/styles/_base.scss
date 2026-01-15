@@ -1,97 +1,109 @@
+@use "../../styles/mixins" as shared;
 @use "sass:map";
 @use "./variables" as var;
-
-
-
-
-
 @use "sass:color";
-/* removed external Google Fonts import to avoid build-time inlining/network issues */
 
-@use "../../styles/mixins" as shared;
+/* 
+  ==========================================================================
+  CHIP BASE
+  ==========================================================================
+*/
 
 .chip {
-  font-family: var(--theme-font, "Orbitron", sans-serif);
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: var(-chip-radius, 1.25rem);
-  font-size: 0.875rem;
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 700;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
+  transition: all 0.3s ease;
+  user-select: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-  line-height: 1.2;
-  border: var(--theme-border, var(-chip-border, 2px solid rgba(255, 255, 255, 0.4)));
-  background: var(--theme-bg, var(-chip-bg, #0A0A14));
-  box-shadow: var(--theme-shadow, var(-chip-shadow, 0 4px 8px rgba(0, 0, 0, 0.3)));
-  color: var(--theme-color, var(-chip-color, #E2E8F0));
-  position: relative;
-  overflow: hidden;
-  transform: perspective(1000px) translateZ(0);
-  transform-style: preserve-3d;
-
-  @include shared.apply-all-variants('chip-');
 
   &:hover:not(.chip-disabled) {
-    transform: perspective(1000px) translateZ(10px) scale(1.05);
-    filter: brightness(1.2);
-    box-shadow: var(-chip-shadow-hover, 0 6px 12px rgba(0, 0, 0, 0.5));
-    &::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle, rgba(255, 255, 255, 0.5), transparent 70%);
-      opacity: 0;
-      animation: holoFlash 0.5s ease-out forwards;
-    }
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.15);
   }
+}
 
-  &.chip-disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    filter: grayscale(0.9);
-    transform: none;
-    box-shadow: none;
+.chip-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: grayscale(1);
+}
+
+/* 
+  ==========================================================================
+  THEMATIC VARIANTS
+  ==========================================================================
+*/
+
+/* --- Nintendo / Mario --- */
+.chip-mario {
+  background: #e60012;
+  color: #fff;
+  border: 3px solid #000;
+  border-radius: 8px;
+  box-shadow: 3px 3px 0 #000;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 0.6rem;
+  
+  &:hover:not(.chip-disabled) {
+    background: #ffd700;
+    color: #000;
   }
+}
 
-  &.chip-selected {
-    outline: 3px solid #FFD700;
-    outline-offset: 3px;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8);
-    animation: selectGlow 1.5s infinite;
+/* --- Ubisoft / Rayman --- */
+.chip-rayman {
+  background: linear-gradient(135deg, #ff43a1, #7b2ff7);
+  color: #fff;
+  border: none;
+  box-shadow: 0 0 10px rgba(255, 67, 161, 0.5);
+  font-style: italic;
+
+  &::before {
+    content: '✨';
+    font-size: 10px;
   }
+}
 
-  &.chip-sm { padding: 0.25rem 0.75rem; font-size: 0.75rem; }
-  &.chip-md { padding: 0.5rem 1rem; font-size: 0.875rem; }
-  &.chip-lg { padding: 0.75rem 1.25rem; font-size: 1rem; }
-
-  &.chip-rounded-none { border-radius: 0; }
-  &.chip-rounded-md { border-radius: 0.75rem; }
-  &.chip-rounded-full { border-radius: 9999px; }
-
-  .chip-icon {
-    font-size: 0.9em;
-    transition: transform 0.3s ease;
+/* --- Rockstar --- */
+.chip-rockstar {
+  background: #f9d71c;
+  color: #000;
+  border-radius: 0;
+  font-weight: 900;
+  border: 2px solid #000;
+  transform: skewX(-10deg);
+  
+  &:hover:not(.chip-disabled) {
+    background: #000;
+    color: #f9d71c;
+    border-color: #f9d71c;
   }
+}
 
-  .chip-icon:hover {
-    transform: rotate(30deg) scale(1.1);
-  }
+/* --- Cyberpunk --- */
+.chip-cyberpunk {
+  background: transparent;
+  color: #00ffcc;
+  border: 1px solid #00ffcc;
+  border-radius: 0;
+  clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+  text-shadow: 0 0 5px #00ffcc;
 
-  .chip-icon-remove {
-    cursor: pointer;
-    transition: all 0.3s ease;
-  }
-
-  .chip-icon-remove:hover {
-    color: #FF6B9D;
-    transform: scale(1.3) rotate(90deg);
+  &:hover:not(.chip-disabled) {
+    background: #00ffcc;
+    color: #000;
+    box-shadow: 0 0 15px #00ffcc;
   }
 }

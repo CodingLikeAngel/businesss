@@ -2,86 +2,73 @@
 @use "./variables" as var;
 @use "../../../styles/mixins" as shared;
 
+/* 
+  ==========================================================================
+  BASE STYLES & LAYOUT
+  ==========================================================================
+*/
 
-/* Base styles */
 .ui-card-rutas-container {
-  padding: 1.5rem;
+  padding: 1rem;
   display: flex;
   justify-content: center;
-  background: radial-gradient(circle at center, rgba(20, 20, 30, 0.4), transparent);
+  width: 100%;
+  
+  @media (min-width: 768px) {
+    padding: 2rem;
+  }
 }
 
 .ui-card-rutas-wrapper {
   width: 100%;
   position: relative;
-}
-
-/* Card base styles */
-.ui-card-rutas {
-  border-radius: 1.5rem;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  background: var(--card-bg, rgba(255, 255, 255, 0.1));
-  color: var(--card-text-color, #e2e8f0);
-  border: var(--card-border, none);
-  box-shadow: var(--card-shadow, 0 4px 30px rgba(0, 0, 0, 0.3));
-  position: relative;
-  backdrop-filter: blur(10px);
-
-  &:before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: var(--card-accent-gradient, transparent);
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    pointer-events: none;
-  }
-
-  &:hover {
-    border: var(--card-hover-border, var(--card-border, none));
-    box-shadow: var(--card-hover-shadow, var(--card-shadow, 0 10px 40px rgba(0, 0, 0, 0.4)));
-    transform: translateY(-0.5rem) scale(1.02);
-
-    &:before {
-      opacity: 0.2;
-    }
-  }
-}
-
-/* Desktop variant */
-.ui-card-rutas--desktop {
-  min-height: 500px;
-  backdrop-filter: blur(12px);
-}
-
-/* Mobile variant */
-.ui-card-rutas--mobile {
-  min-height: 540px;
-  backdrop-filter: blur(15px);
-  transition: transform 0.5s ease-in-out;
-  max-width: 380px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
+/* 
+  ==========================================================================
+  COMPONENT CORE
+  ==========================================================================
+*/
 
+.ui-card-rutas {
+  border-radius: 1.25rem;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  background: var(--card-bg, rgba(23, 23, 23, 0.8));
+  color: var(--card-text-color, #f8fafc);
+  border: var(--card-border, 1px solid rgba(255, 255, 255, 0.1));
+  box-shadow: var(--card-shadow, 0 8px 32px rgba(0, 0, 0, 0.3));
+  position: relative;
+  backdrop-filter: blur(8px);
+  height: 100%;
 
+  &:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+    border-color: var(--card-accent-color, rgba(255, 255, 255, 0.3));
+  }
+}
 
-/* Image container */
+/* Image Section */
 .ui-card-rutas__image-container {
   position: relative;
   overflow: hidden;
-  flex-shrink: 0;
-  height: 14rem;
+  height: 200px;
+  
+  @media (min-width: 1024px) {
+    height: 240px;
+  }
 }
 
 .ui-card-rutas__gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.95), transparent 60%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent 70%);
   z-index: 1;
 }
 
@@ -89,304 +76,431 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-top-left-radius: 1.5rem;
-  border-top-right-radius: 1.5rem;
-  transition: transform 0.6s ease, filter 0.4s ease;
+  transition: transform 0.8s ease;
 
-  .ui-card-rutas--desktop &:hover {
-    transform: scale(1.15);
-    filter: brightness(1.2) contrast(1.1);
-  }
-
-  .ui-card-rutas--mobile & {
-    height: 16rem;
-    border-top-left-radius: 1.75rem;
-    border-top-right-radius: 1.75rem;
-
-    &:hover {
-      transform: scale(1.2);
-      filter: brightness(1.3) contrast(1.15);
-    }
+  .ui-card-rutas:hover & {
+    transform: scale(1.1);
   }
 }
 
-/* Title */
 .ui-card-rutas__title-container {
   position: absolute;
   bottom: 0;
   left: 0;
-  padding: 1.75rem;
-  z-index: 10;
+  width: 100%;
+  padding: 1.25rem;
+  z-index: 2;
 }
 
 .ui-card-rutas__title {
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 700;
-  color: #ffffff;
-  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.9);
-  letter-spacing: 0.05em;
-}
-
-.ui-card-rutas__title--desktop {
-  font-size: 1.75rem;
-}
-
-.ui-card-rutas__title--mobile {
-  font-size: 2rem;
-}
-
-/* Content */
-.ui-card-rutas__content {
-  padding: 1.75rem;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  background: rgba(0, 0, 0, 0.85);
-  border-bottom-left-radius: 1.5rem;
-  border-bottom-right-radius: 1.5rem;
-
-  .ui-card-rutas--mobile & {
-    background: rgba(10, 20, 40, 0.9);
-    padding: 2.25rem;
+  margin: 0;
+  font-weight: 800;
+  color: #fff;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  font-size: 1.5rem;
+  
+  @media (min-width: 768px) {
+    font-size: 1.75rem;
   }
 }
 
-/* Header */
+/* Content Section */
+.ui-card-rutas__content {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 1rem;
+}
+
 .ui-card-rutas__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1.25rem;
 }
 
-/* Difficulty */
 .ui-card-rutas__difficulty {
-  font-size: 0.9rem;
-  background: var(--card-accent-color, #00e5ff);
-  color: #0f172a;
-  padding: 0.5rem 1.25rem;
-  border-radius: 9999px;
-  box-shadow: 0 0 8px rgba(0, 229, 255, 0.6);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-
-  &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 0 15px rgba(0, 229, 255, 0.8);
-  }
-
-  .ui-card-rutas--mobile & {
-    font-size: 1.1rem;
-    padding: 0.6rem 1.5rem;
-    box-shadow: 0 0 12px rgba(0, 229, 255, 0.7);
-  }
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  background: var(--card-accent-color, #3b82f6);
+  color: #fff;
 }
 
-/* Rating */
 .ui-card-rutas__rating {
-  font-size: 0.9rem;
-  color: #facc15;
-  text-shadow: 0 0 5px rgba(250, 204, 21, 0.5);
-
-  .ui-card-rutas--mobile & {
-    font-size: 1.1rem;
-  }
+  font-weight: 600;
+  color: #fbbf24;
 }
 
-/* Stats */
-.ui-card-rutas__stats {
-  display: flex;
-  align-items: center;
-  font-size: 0.9rem;
-  color: var(--card-text-color, rgba(200, 255, 255, 0.9));
-  margin-bottom: 1.25rem;
-
-  span {
-    margin-right: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
-
-    &:last-child {
-      margin-left: auto;
-      margin-right: 0;
-    }
-  }
-
-  .ui-card-rutas--mobile & {
-    font-size: 1rem;
-  }
-}
-
-/* Description */
 .ui-card-rutas__description {
-  font-size: 0.9rem;
-  color: var(--card-text-color, rgba(200, 255, 255, 0.95));
-  margin-bottom: 1.25rem;
+  margin: 0;
+  font-size: 0.9375rem;
   line-height: 1.6;
-
-  .ui-card-rutas--mobile & {
-    font-size: 1rem;
-  }
+  opacity: 0.9;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-/* Features */
 .ui-card-rutas__features {
-  font-size: 0.9rem;
-  color: var(--card-text-color, rgba(150, 255, 255, 0.8));
-  margin-bottom: 1.25rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 0.875rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
   flex: 1;
-  overflow-y: auto;
-
-  .ui-card-rutas--mobile & {
-    font-size: 1rem;
-    max-height: 160px;
-  }
 
   li {
-    margin-bottom: 0.6rem;
-    transition: color 0.3s ease, transform 0.3s ease;
-
-    &:hover {
-      color: var(--card-accent-color, #00e5ff);
-      transform: translateX(5px);
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    opacity: 0.8;
+    
+    &:before {
+      content: '✔';
+      color: var(--card-accent-color, #3b82f6);
     }
   }
 }
 
-/* Link */
 .ui-card-rutas__link {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #ffffff;
-  font-weight: 600;
-  font-size: 1rem;
-  padding: 0.9rem 2rem;
-  border-radius: 9999px;
-  background: linear-gradient(135deg, var(--card-accent-color, #00e5ff), #ec4899);
-  box-shadow: 0 0 20px rgba(0, 229, 255, 0.6);
+  gap: 0.75rem;
+  padding: 0.875rem;
+  background: var(--card-accent-color, #3b82f6);
+  color: #fff;
   text-decoration: none;
-  transition: all 0.4s ease;
+  font-weight: 700;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease;
+  margin-top: auto;
 
   &:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 30px rgba(0, 229, 255, 0.9);
-    background: linear-gradient(135deg, #ec4899, var(--card-accent-color, #00e5ff));
+    filter: brightness(1.1);
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(var(--card-accent-rgb, 59, 130, 246), 0.4);
   }
 
   svg {
-    width: 1.5rem;
-    height: 1.5rem;
-    margin-left: 0.6rem;
-    transition: transform 0.4s ease;
-  }
-
-  &:hover svg {
-    transform: translateX(0.4rem);
+    width: 20px;
+    height: 20px;
   }
 }
 
-/* Navigation buttons (mobile) */
-.ui-card-rutas__actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0;
-  gap: 1.5rem;
-}
+/* 
+  ==========================================================================
+  VARIANTS (Thematic Overhauls)
+  ==========================================================================
+*/
 
-.ui-card-rutas__nav {
-  padding: 0.9rem;
-  background: linear-gradient(135deg, var(--card-accent-color, #ec4899), #f472b6);
-  color: #ffffff;
-  border-radius: 9999px;
-  box-shadow: 0 0 20px rgba(236, 72, 153, 0.7);
-  transition: all 0.4s ease;
-  border: none;
-  cursor: pointer;
+/* --- Nintendo / Mario Theme --- */
+.ui-card-rutas--mario {
+  --card-bg: #fff;
+  --card-text-color: #333;
+  --card-border: 4px solid #000;
+  --card-accent-color: #e60012;
+  border-radius: 2rem;
+  box-shadow: 8px 8px 0 #000;
+  backdrop-filter: none;
 
-  &:hover:not(:disabled) {
-    background: linear-gradient(135deg, #00e5ff, var(--card-accent-color, #22d3ee));
-    box-shadow: 0 0 30px rgba(0, 229, 255, 0.9);
-    transform: scale(1.15);
+  .ui-card-rutas__image-container {
+    border-bottom: 4px solid #000;
   }
 
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    box-shadow: none;
+  .ui-card-rutas__title {
+    color: #e60012;
+    -webkit-text-stroke: 1.5px #000;
+    text-shadow: 4px 4px 0 #ffd700;
+    font-family: 'Arial Black', sans-serif;
+  }
+
+  .ui-card-rutas__difficulty {
+    border-radius: 20px;
+    border: 3px solid #000;
+    background: #009c41; // Luigi Green
+  }
+
+  .ui-card-rutas__link {
+    border: 4px solid #000;
+    background: #e60012;
+    border-radius: 1.5rem;
+    box-shadow: 4px 4px 0 #ffd700;
+    
+    &:hover {
+      background: #ffd700;
+      color: #000;
+      box-shadow: 2px 2px 0 #000;
+    }
   }
 }
 
-.ui-card-rutas__nav-icon {
-  width: 1.75rem;
-  height: 1.75rem;
+/* --- Ubisoft / Rayman Theme --- */
+.ui-card-rutas--rayman {
+  --card-bg: linear-gradient(135deg, #7b2ff7 0%, #3e0b8a 100%);
+  --card-text-color: #fff;
+  --card-border: none;
+  --card-accent-color: #f7e017;
+  border-radius: 3rem 1rem 3rem 1rem;
+  box-shadow: 0 0 30px rgba(123, 47, 247, 0.5), inset 0 0 20px rgba(255, 255, 255, 0.2);
+  
+  &:after {
+    content: '';
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: radial-gradient(circle, #f7e017 0%, transparent 70%);
+    top: -20px;
+    right: -20px;
+    border-radius: 50%;
+    animation: floating-lum 3s infinite ease-in-out;
+  }
+
+  .ui-card-rutas__image-container {
+    clip-path: ellipse(110% 100% at 50% 0%);
+    height: 220px;
+  }
+
+  .ui-card-rutas__title {
+    font-family: 'Comic Sans MS', 'Comic Sans', cursive; // Whimsical feel
+    color: #f7e017;
+    text-shadow: 0 0 10px rgba(247, 224, 23, 0.5);
+  }
+
+  .ui-card-rutas__link {
+    background: #ff43a1;
+    border-radius: 2rem;
+    font-style: italic;
+    box-shadow: 0 0 15px #ff43a1;
+    
+    &:hover {
+      background: #f7e017;
+      color: #7b2ff7;
+      box-shadow: 0 0 25px #f7e017;
+    }
+  }
 }
 
-/* Dots (mobile) */
+/* --- Rockstar Theme (Gritty/GTA/High Contrast) --- */
+.ui-card-rutas--rockstar {
+  --card-bg: #111;
+  --card-text-color: #eee;
+  --card-border: none;
+  --card-accent-color: #f9d71c;
+  border-radius: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 90%, 90% 100%, 0 100%);
+  border-left: 8px solid #f9d71c;
+  
+  .ui-card-rutas__image-container {
+    filter: grayscale(0.5) contrast(1.2);
+  }
+
+  .ui-card-rutas__title {
+    font-family: 'Pricedown', sans-serif; // Imagine a GTA-like font fallback
+    text-transform: uppercase;
+    background: #000;
+    padding: 0.5rem 1rem;
+    display: inline-block;
+    letter-spacing: -1px;
+    transform: rotate(-1deg);
+  }
+
+  .ui-card-rutas__difficulty {
+    border-radius: 0;
+    font-style: italic;
+    background: #fff;
+    color: #000;
+  }
+
+  .ui-card-rutas__link {
+    background: #000;
+    border: 2px solid #fff;
+    border-radius: 0;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    
+    &:hover {
+      background: #f9d71c;
+      color: #000;
+      border-color: #000;
+    }
+  }
+}
+
+/* --- Cyberpunk (Neon/Glitch) --- */
+.ui-card-rutas--cyberpunk {
+  --card-bg: #0b0b1a;
+  --card-text-color: #00ffcc;
+  --card-border: 2px solid #ff0055;
+  --card-accent-color: #ff0055;
+  border-radius: 0;
+  box-shadow: 0 0 15px rgba(255, 0, 85, 0.3), inset 0 0 10px rgba(0, 255, 204, 0.1);
+  overflow: visible;
+
+  &:before {
+    content: 'ACCESS_GRANTED';
+    position: absolute;
+    top: -12px;
+    right: 20px;
+    background: #ff0055;
+    color: #000;
+    font-size: 10px;
+    padding: 2px 6px;
+    font-weight: bold;
+    z-index: 10;
+  }
+
+  .ui-card-rutas__image-container {
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%);
+    border: 1px solid #00ffcc;
+  }
+
+  .ui-card-rutas__title {
+    color: #fff;
+    text-shadow: 2px 2px 0 #ff0055, -2px -2px 0 #00e5ff;
+    animation: neon-flicker 2s infinite alternate;
+  }
+
+  .ui-card-rutas__link {
+    background: transparent;
+    border: 2px solid #00ffcc;
+    color: #00ffcc;
+    border-radius: 0;
+    position: relative;
+    
+    &:after {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border: 1px solid #ff0055;
+      opacity: 0.5;
+    }
+
+    &:hover {
+      background: #00ffcc;
+      color: #000;
+      box-shadow: 0 0 25px #00ffcc;
+    }
+  }
+}
+
+/* --- Glass (Premium/Modern) --- */
+.ui-card-rutas--glass {
+  --card-bg: rgba(255, 255, 255, 0.05);
+  --card-text-color: #fff;
+  --card-border: 1px solid rgba(255, 255, 255, 0.2);
+  --card-accent-color: #fff;
+  backdrop-filter: blur(20px);
+  border-radius: 2rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+
+  .ui-card-rutas__title {
+    font-weight: 300;
+    letter-spacing: 0.1em;
+  }
+
+  .ui-card-rutas__difficulty {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+
+  .ui-card-rutas__link {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    
+    &:hover {
+      background: #fff;
+      color: #000;
+    }
+  }
+}
+
+/* 
+  ==========================================================================
+  ANIMATIONS
+  ==========================================================================
+*/
+
+@keyframes floating-lum {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.8; }
+  50% { transform: translateY(-15px) scale(1.2); opacity: 1; }
+}
+
+@keyframes neon-flicker {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+  20%, 22%, 24%, 55% { opacity: 0.5; }
+}
+
+/* 
+  ==========================================================================
+  MOBILE SPECIFIC REFINEMENTS
+  ==========================================================================
+*/
+
+.ui-card-rutas--mobile {
+  max-width: 450px;
+  margin: 0 auto;
+
+  .ui-card-rutas__image-container {
+    height: 260px;
+  }
+
+  .ui-card-rutas__content {
+    background: rgba(0,0,0,0.4);
+  }
+
+  .ui-card-rutas__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .ui-card-rutas__nav {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-accent-color, #3b82f6);
+    color: #fff;
+    border: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    cursor: pointer;
+    
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
 .ui-card-rutas__dots {
   display: flex;
   justify-content: center;
-  margin-top: 1.25rem;
-  gap: 1rem;
-}
+  gap: 0.5rem;
+  margin-top: 1.5rem;
 
-.ui-card-rutas__dot {
-  width: 0.9rem;
-  height: 0.9rem;
-  background: #6b7280;
-  border-radius: 9999px;
-  transition: all 0.4s ease;
-}
-
-
-.ui-card-rutas {
-  /* Centralized Variant Application */
-  @include shared.apply-all-variants('ui-card-rutas--');
-
-  /* Generic variable mapping for all variants */
-  &[class*="ui-card-rutas--"] {
-    /* Common mappings */
-    --card-bg: var(--theme-bg, rgba(255, 255, 255, 0.1));
-    --card-text-color: var(--theme-color, #e2e8f0);
-    --card-border: var(--theme-border, none);
-    --card-accent-color: var(--theme-accent, #00e5ff);
-    --card-shadow: var(--theme-shadow, 0 4px 30px rgba(0, 0, 0, 0.3));
-
-    /* Titles adapt to theme font */
-    .ui-card-rutas__title {
-      font-family: var(--theme-font, 'Orbitron', sans-serif) !important;
-      
-      // Reset specific overrides unless needed
-      font-weight: 700;
-    }
-
-    /* Links behave as theme accent buttons */
-    .ui-card-rutas__link {
-        background: var(--theme-accent, #00e5ff);
-        color: var(--theme-bg, #000); 
-        // For dark themes (bg is dark), button text should be dark if accent is bright. 
-        // This is a simplification; production systems might need contrast-color() function.
-        
-        &:hover {
-             filter: brightness(1.2);
-             box-shadow: 0 0 15px var(--theme-accent, #00e5ff);
-        }
-    }
-  }
-
-  /* Specific micro-tweaks that Mixins don't cover yet */
-  &--vintage {
-    .ui-card-rutas__description, 
-    .ui-card-rutas__features li,
-    .ui-card-rutas__stats {
-        font-family: 'Georgia', serif;
-    }
-  }
-
-  &--elegant {
-    .ui-card-rutas__title {
-      letter-spacing: 0.05em;
+  .ui-card-rutas__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    transition: all 0.3s ease;
+    
+    &--active {
+      background: var(--card-accent-color, #3b82f6);
+      transform: scale(1.5);
     }
   }
 }
