@@ -21,11 +21,46 @@ import {
   PageSection
 } from '../../../services/variant.service';
 import { TemplateSelectorComponent } from '../template-selector/template-selector.component';
+import { 
+  UIHeroSectionComponent,
+  UIFeaturesSectionComponent,
+  UICardRutasComponent,
+  UITestimonialsSectionComponent,
+  UIPricingTableSectionComponent,
+  UINewsletterSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIStatsSectionComponent,
+  UIContactSectionComponent,
+  UICardAnimatedComponent,
+  UICardComponent,
+  UITitleComponent,
+  BubbleAnimationComponent
+} from '@negocio/ui-components';
 
 @Component({
   selector: 'lib-variant-selector',
   standalone: true,
-  imports: [CommonModule, FormsModule, UIInputComponent, TemplateSelectorComponent],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    UIInputComponent, 
+    TemplateSelectorComponent,
+    UIHeroSectionComponent,
+    UIFeaturesSectionComponent,
+    UICardRutasComponent,
+    UITestimonialsSectionComponent,
+    UIPricingTableSectionComponent,
+    UINewsletterSectionComponent,
+    UIFaqSectionComponent,
+    UIGallerySectionComponent,
+    UIStatsSectionComponent,
+    UIContactSectionComponent,
+    UICardAnimatedComponent,
+    UICardComponent,
+    UITitleComponent,
+    BubbleAnimationComponent
+  ],
   templateUrl: './variant-selector.component.html',
   styleUrl: './variant-selector.component.scss',
 })
@@ -101,6 +136,7 @@ export class VariantSelectorComponent implements OnInit {
     { type: 'gallery', label: 'Galería', icon: '🖼️', variants: this.variants },
     { type: 'stats', label: 'Estadísticas', icon: '📈', variants: this.variants },
     { type: 'contact', label: 'Contacto', icon: '📞', variants: this.variants },
+    { type: 'bubble', label: 'Efecto Burbujas', icon: '🫧', variants: this.variants },
   ];
 
   selectedExplorerComponent: any = null;
