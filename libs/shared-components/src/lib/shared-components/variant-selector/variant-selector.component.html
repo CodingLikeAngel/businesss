@@ -253,14 +253,14 @@
                 <lib-ui-components-card-rutas
                   *ngSwitchCase="'services'"
                   [variant]="selectedExplorerVariant"
-                  [items]="serviceCardsConfig.items"
+                  [items]="serviceCardsConfig.items.length > 0 ? serviceCardsConfig.items : defaultServices"
                 >
                 </lib-ui-components-card-rutas>
 
                 <!-- PRODUCTS -->
                 <div *ngSwitchCase="'products'" class="preview-grid">
                   <lib-ui-components-card-animated
-                    *ngFor="let prod of productsConfig.items.slice(0, 2)"
+                    *ngFor="let prod of (productsConfig.items.length > 0 ? productsConfig.items : defaultProducts).slice(0, 2)"
                     [title]="prod.name"
                     [description]="prod.description"
                     [image]="prod.image"
@@ -273,7 +273,7 @@
                 <lib-ui-testimonials-section
                   *ngSwitchCase="'testimonials'"
                   [variant]="selectedExplorerVariant"
-                  [testimonials]="testimonialsConfig.items"
+                  [testimonials]="testimonialsConfig.items.length > 0 ? testimonialsConfig.items : defaultTestimonials"
                 >
                 </lib-ui-testimonials-section>
 
@@ -282,7 +282,7 @@
                   *ngSwitchCase="'pricing'"
                   [variant]="selectedExplorerVariant"
                   [columns]="pricingConfig.columns"
-                  [rows]="pricingConfig.rows"
+                  [rows]="pricingConfig.rows.length > 0 ? pricingConfig.rows : defaultPricing"
                 >
                 </lib-ui-pricing-table-section>
 
@@ -297,7 +297,7 @@
                 <lib-ui-faq-section
                   *ngSwitchCase="'faq'"
                   [variant]="selectedExplorerVariant"
-                  [items]="faqConfig.items"
+                  [items]="faqConfig.items.length > 0 ? faqConfig.items : defaultFaq"
                 >
                 </lib-ui-faq-section>
 

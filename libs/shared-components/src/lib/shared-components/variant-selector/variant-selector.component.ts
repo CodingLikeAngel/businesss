@@ -1,7 +1,26 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UIInputComponent, InputOption, variants } from '@negocio/ui-components';
+import { 
+  UIInputComponent, 
+  InputOption, 
+  variants,
+  UIHeroSectionComponent,
+  UIFeaturesSectionComponent,
+  UICardRutasComponent,
+  UITestimonialsSectionComponent,
+  UIPricingTableSectionComponent,
+  UINewsletterSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIStatsSectionComponent,
+  UIContactSectionComponent,
+  UICardAnimatedComponent,
+  BubbleAnimationComponent,
+  UIStepsSectionComponent,
+  UIHeaderComponent,
+  UIFooterComponent
+} from '@negocio/ui-components';
 import {
   VariantService,
   HeaderConfig,
@@ -21,23 +40,6 @@ import {
   PageSection
 } from '../../../services/variant.service';
 import { TemplateSelectorComponent } from '../template-selector/template-selector.component';
-import { 
-  UIHeroSectionComponent,
-  UIFeaturesSectionComponent,
-  UICardRutasComponent,
-  UITestimonialsSectionComponent,
-  UIPricingTableSectionComponent,
-  UINewsletterSectionComponent,
-  UIFaqSectionComponent,
-  UIGallerySectionComponent,
-  UIStatsSectionComponent,
-  UIContactSectionComponent,
-  UICardAnimatedComponent,
-  BubbleAnimationComponent,
-  UIStepsSectionComponent,
-  UIHeaderComponent,
-  UIFooterComponent
-} from '@negocio/ui-components';
 
 @Component({
   selector: 'lib-variant-selector',
@@ -146,6 +148,44 @@ export class VariantSelectorComponent implements OnInit {
 
   selectedExplorerComponent: any = null;
   selectedExplorerVariant: any = 'glass';
+
+  // Default data for preview when config is empty
+  defaultTestimonials = [
+    { quote: 'Excelente servicio, muy recomendado.', author: 'María García' },
+    { quote: 'La calidad supera las expectativas.', author: 'Carlos López' }
+  ];
+
+  defaultServices = [
+    {
+      routeName: 'Servicio Premium',
+      imageUrl: '',
+      difficulty: 'Fácil',
+      rating: 4.8,
+      reviews: 25,
+      duration: 2,
+      distance: 5,
+      ascent: 200,
+      description: 'Descripción del servicio premium con todas las características.',
+      features: ['Característica 1', 'Característica 2'],
+      link: '#'
+    }
+  ];
+
+  defaultProducts = [
+    { name: 'Producto Destacado', description: 'Descripción del producto con detalles.', image: '', price: '29.99€' }
+  ];
+
+  defaultFaq = [
+    { title: '¿Cómo funciona?', content: 'Nuestro servicio funciona de manera sencilla y eficiente.', expanded: false }
+  ];
+
+  defaultGallery = [
+    { src: 'https://via.placeholder.com/300x200', alt: 'Imagen de ejemplo' }
+  ];
+
+  defaultPricing = [
+    { service: 'Plan Básico', description: 'Ideal para empezar', price: '9.99€' }
+  ];
 
   selectExplorerComponent(comp: any) {
     this.selectedExplorerComponent = comp;
