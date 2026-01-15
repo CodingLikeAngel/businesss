@@ -9,7 +9,7 @@ export interface StatItem {
 }
 
 @Component({
-  selector: 'lib-ui-components-stats-section',
+  selector: 'lib-ui-stats-section',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './stats-section.component.html',
@@ -30,3 +30,4 @@ export class UIStatsSectionComponent {
     return `stats-container stats--${this.variant}`;
   }
 }
+

@@ -10,7 +10,7 @@ export interface Step {
 }
 
 @Component({
-  selector: 'lib-ui-components-steps-section',
+  selector: 'lib-ui-steps-section',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './steps-section.component.html',
@@ -22,3 +22,4 @@ export class UIStepsSectionComponent {
   @Input() steps: Step[] = [];
   @Input() variant: 'linear' | 'cards' | 'zigzag' | 'timeline' = 'linear';
 }
+

@@ -66,7 +66,7 @@ export interface ChartCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-components-chart',
+  selector: 'lib-ui-chart',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './chart.component.html',

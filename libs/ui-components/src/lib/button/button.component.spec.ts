@@ -9,7 +9,7 @@ export @Component({
   standalone: true,
   imports: [UIButtonComponent],
   template: `
-    <lib-ui-components-button
+    <lib-ui-button
       [variant]="variant"
       [rounded]="rounded"
       [size]="size"
@@ -21,7 +21,7 @@ export @Component({
       (buttonClick)="onButtonClick($event)"
     >
       {{ content }}
-    </lib-ui-components-button>
+    </lib-ui-button>
   `,
 })
 class TestHostComponent {
@@ -235,7 +235,7 @@ describe('UIButtonComponent', () => {
     component.leadingIcon = undefined;
     component.trailingIcon = undefined;
     fixture.detectChanges();
-    const buttonComponent = fixture.debugElement.query(By.css('lib-ui-components-button')).componentInstance as UIButtonComponent;
+    const buttonComponent = fixture.debugElement.query(By.css('lib-ui-button')).componentInstance as UIButtonComponent;
     expect(buttonComponent.isIconClass(undefined)).toBe(false); // Forzamos la ejecución
     const ngIconElements = fixture.debugElement.queryAll(By.css('ng-icon.icon'));
     const spanElements = fixture.debugElement.queryAll(By.css('span.icon'));

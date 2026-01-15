@@ -6,7 +6,7 @@ import { UIInputComponent } from '../forms/input/input.component';
 import { UIButtonComponent } from '../button/button.component';
 
 @Component({
-  selector: 'lib-ui-components-newsletter-section',
+  selector: 'lib-ui-newsletter-section',
   standalone: true,
   imports: [CommonModule, FormsModule, UIInputComponent, UIButtonComponent],
   templateUrl: './newsletter-section.component.html',
@@ -38,3 +38,4 @@ export class UINewsletterSectionComponent {
     }, 1000);
   }
 }
+

@@ -9,22 +9,22 @@ import { UIAccordionComponent, CardVariant, AccordionItem, UITitleComponent } fr
   template: `
     <section id="faq" class="mb-12">
       <div class="">
-    <lib-ui-components-title
+    <lib-ui-title
       level="h2"
       text="Preguntas Frecuentes"
       [variant]="variant"
       animation="bounce"
       align="center"
-    ></lib-ui-components-title>
+    ></lib-ui-title>
     </div>
 
-      <lib-ui-components-accordion
+      <lib-ui-accordion
         [variant]="variant"
         [size]="'md'"
         [rounded]="'md'"
         [singleExpand]="true"
         [items]="faqItems"
-      ></lib-ui-components-accordion>
+      ></lib-ui-accordion>
     </section>
   `,
 })

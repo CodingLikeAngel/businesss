@@ -9,7 +9,7 @@ export interface FaqItem {
 }
 
 @Component({
-  selector: 'lib-ui-components-faq-section',
+  selector: 'lib-ui-faq-section',
   standalone: true,
   imports: [CommonModule, UIAccordionComponent],
   templateUrl: './faq-section.component.html',
@@ -29,3 +29,4 @@ export class UIFaqSectionComponent {
     return `faq-container faq--${this.variant}`;
   }
 }
+

@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-
 import { DeviceResolver, DeviceGuard } from '@negocio/shared-components';
 import { HomeDesktopFeatureComponent } from '../features/home/pages/desktop/home-feature.component';
 import { HomeMobileFeatureComponent } from '../features/home/pages/mobile/home-feature.component';
 import { AboutFeatureComponent, ContactFeatureComponent, TattooHomeFeatureComponent } from '@negocio/featured-components';
-
 
 const routes: Routes = [
   {
@@ -16,7 +14,7 @@ const routes: Routes = [
   },
   {
     path: 'home',
-    resolve: { _: DeviceResolver }, // solo queremos que se ejecute
+    resolve: { _: DeviceResolver },
     runGuardsAndResolvers: 'always',
     children: [
       {
@@ -29,11 +27,11 @@ const routes: Routes = [
       },
       {
         path: '**',
-        redirectTo: '', // El resolver lo redirige dinámicamente
+        redirectTo: '',
         pathMatch: 'full'
       }
     ]
-  },  
+  },
   {
     path: 'contact',
     component: ContactFeatureComponent,
@@ -46,7 +44,6 @@ const routes: Routes = [
     path: 'tattoo',
     component: TattooHomeFeatureComponent,
   },
-
   {
     path: '**',
     redirectTo: 'home',
@@ -55,7 +52,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
+  imports: [RouterModule.forChild(routes), HomeDesktopFeatureComponent, HomeMobileFeatureComponent],
   exports: [RouterModule],
 })
 export class RealEstateShellRoutingModule {}

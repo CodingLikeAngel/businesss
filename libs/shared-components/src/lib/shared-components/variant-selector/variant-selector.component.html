@@ -56,13 +56,13 @@
           <h3>Ajustes Globales</h3>
           <p class="helper-text">Variante base para todo el proyecto.</p>
         </div>
-        <lib-ui-components-input
+        <lib-ui-input
           type="select"
           [variant]="selectorVariant"
           [(ngModel)]="globalVariant"
           (ngModelChange)="onGlobalVariantChange()"
           [options]="variantOptions"
-        ></lib-ui-components-input>
+        ></lib-ui-input>
         <button class="warning-btn mt-4" (click)="clearComponentVariants()">🧹 Limpiar Estilos Específicos</button>
       </div>
 
@@ -177,17 +177,17 @@
        <div class="config-group">
           <h3>Textos de Cabecera</h3>
           <div class="input-grid">
-            <lib-ui-components-input type="text" label="Título Header" [(ngModel)]="headerConfig.title" (ngModelChange)="updateHeaderConfig()"></lib-ui-components-input>
-            <lib-ui-components-input type="text" label="Subtítulo Header" [(ngModel)]="headerConfig.subtitle" (ngModelChange)="updateHeaderConfig()"></lib-ui-components-input>
+            <lib-ui-input type="text" label="Título Header" [(ngModel)]="headerConfig.title" (ngModelChange)="updateHeaderConfig()"></lib-ui-input>
+            <lib-ui-input type="text" label="Subtítulo Header" [(ngModel)]="headerConfig.subtitle" (ngModelChange)="updateHeaderConfig()"></lib-ui-input>
           </div>
        </div>
 
        <div class="config-group">
           <h3>Portada (Hero)</h3>
           <div class="input-grid">
-            <lib-ui-components-input type="text" label="Título Hero" [(ngModel)]="heroConfig.title" (ngModelChange)="updateHeroConfig()"></lib-ui-components-input>
-            <lib-ui-components-input type="textarea" label="Cuerpo Hero" [(ngModel)]="heroConfig.subtitle" (ngModelChange)="updateHeroConfig()"></lib-ui-components-input>
-            <lib-ui-components-input type="text" label="Botón" [(ngModel)]="heroConfig.ctaLabel" (ngModelChange)="updateHeroConfig()"></lib-ui-components-input>
+            <lib-ui-input type="text" label="Título Hero" [(ngModel)]="heroConfig.title" (ngModelChange)="updateHeroConfig()"></lib-ui-input>
+            <lib-ui-input type="textarea" label="Cuerpo Hero" [(ngModel)]="heroConfig.subtitle" (ngModelChange)="updateHeroConfig()"></lib-ui-input>
+            <lib-ui-input type="text" label="Botón" [(ngModel)]="heroConfig.ctaLabel" (ngModelChange)="updateHeroConfig()"></lib-ui-input>
           </div>
        </div>
 
@@ -236,24 +236,24 @@
     <div class="modal-body" *ngIf="editingItem">
       <ng-container [ngSwitch]="modalItemType">
         <div *ngSwitchCase="'service'" class="input-grid">
-          <lib-ui-components-input label="Nombre" type="text" [(ngModel)]="editingItem.routeName"></lib-ui-components-input>
-          <lib-ui-components-input label="Descripción" type="textarea" [(ngModel)]="editingItem.description"></lib-ui-components-input>
-          <lib-ui-components-input label="URL Imagen" type="text" [(ngModel)]="editingItem.imageUrl"></lib-ui-components-input>
-          <lib-ui-components-input label="Dificultad" type="text" [(ngModel)]="editingItem.difficulty"></lib-ui-components-input>
+          <lib-ui-input label="Nombre" type="text" [(ngModel)]="editingItem.routeName"></lib-ui-input>
+          <lib-ui-input label="Descripción" type="textarea" [(ngModel)]="editingItem.description"></lib-ui-input>
+          <lib-ui-input label="URL Imagen" type="text" [(ngModel)]="editingItem.imageUrl"></lib-ui-input>
+          <lib-ui-input label="Dificultad" type="text" [(ngModel)]="editingItem.difficulty"></lib-ui-input>
         </div>
         <div *ngSwitchCase="'product'" class="input-grid">
-          <lib-ui-components-input label="Nombre" type="text" [(ngModel)]="editingItem.name"></lib-ui-components-input>
-          <lib-ui-components-input label="Descripción" type="textarea" [(ngModel)]="editingItem.description"></lib-ui-components-input>
-          <lib-ui-components-input label="Imagen (Nombre archivo)" type="text" [(ngModel)]="editingItem.image"></lib-ui-components-input>
-          <lib-ui-components-input label="Precio" type="text" [(ngModel)]="editingItem.price"></lib-ui-components-input>
+          <lib-ui-input label="Nombre" type="text" [(ngModel)]="editingItem.name"></lib-ui-input>
+          <lib-ui-input label="Descripción" type="textarea" [(ngModel)]="editingItem.description"></lib-ui-input>
+          <lib-ui-input label="Imagen (Nombre archivo)" type="text" [(ngModel)]="editingItem.image"></lib-ui-input>
+          <lib-ui-input label="Precio" type="text" [(ngModel)]="editingItem.price"></lib-ui-input>
         </div>
         <div *ngSwitchCase="'testimonial'" class="input-grid">
-          <lib-ui-components-input label="Autor" type="text" [(ngModel)]="editingItem.author"></lib-ui-components-input>
-          <lib-ui-components-input label="Cita / Testimonio" type="textarea" [(ngModel)]="editingItem.quote"></lib-ui-components-input>
+          <lib-ui-input label="Autor" type="text" [(ngModel)]="editingItem.author"></lib-ui-input>
+          <lib-ui-input label="Cita / Testimonio" type="textarea" [(ngModel)]="editingItem.quote"></lib-ui-input>
         </div>
         <div *ngSwitchCase="'faq'" class="input-grid">
-          <lib-ui-components-input label="Pregunta" type="text" [(ngModel)]="editingItem.title"></lib-ui-components-input>
-          <lib-ui-components-input label="Respuesta" type="textarea" [(ngModel)]="editingItem.content"></lib-ui-components-input>
+          <lib-ui-input label="Pregunta" type="text" [(ngModel)]="editingItem.title"></lib-ui-input>
+          <lib-ui-input label="Respuesta" type="textarea" [(ngModel)]="editingItem.content"></lib-ui-input>
         </div>
         <!-- Add other cases as needed or keep as they were if okay -->
       </ng-container>
@@ -264,3 +264,6 @@
     </div>
   </div>
 </div>
+
+
+

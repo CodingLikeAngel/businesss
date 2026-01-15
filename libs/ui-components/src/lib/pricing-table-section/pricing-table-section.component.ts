@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { UITableComponent, TableColumn, TableRow } from '../table/table.component';
 
 @Component({
-  selector: 'lib-ui-components-pricing-table-section',
+  selector: 'lib-ui-pricing-table-section',
   standalone: true,
   imports: [CommonModule, UITableComponent],
   templateUrl: './pricing-table-section.component.html',
@@ -34,3 +34,4 @@ export class UIPricingTableSectionComponent {
       return this.variant;
   }
 }
+

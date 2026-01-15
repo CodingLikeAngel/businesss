@@ -61,8 +61,8 @@ describe('UIGamingVariantsShowcaseComponent', () => {
 
   it('should render buttons and inputs for each variant', () => {
     const compiled = fixture.nativeElement;
-    const buttons = compiled.querySelectorAll('lib-ui-components-button');
-    const inputs = compiled.querySelectorAll('lib-ui-components-input');
+    const buttons = compiled.querySelectorAll('lib-ui-button');
+    const inputs = compiled.querySelectorAll('lib-ui-input');
     
     expect(buttons.length).toBe(10);
     expect(inputs.length).toBe(10);

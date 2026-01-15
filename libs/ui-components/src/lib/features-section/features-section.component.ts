@@ -9,7 +9,7 @@ export interface FeatureItem {
 }
 
 @Component({
-  selector: 'lib-ui-components-features-section',
+  selector: 'lib-ui-features-section',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './features-section.component.html',
@@ -62,3 +62,4 @@ export class UIFeaturesSectionComponent {
     return `features-container features--${this.variant}`;
   }
 }
+

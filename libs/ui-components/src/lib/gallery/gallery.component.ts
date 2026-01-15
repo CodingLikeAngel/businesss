@@ -36,7 +36,7 @@ export interface GalleryCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-components-ui-gallery',
+  selector: 'lib-ui-ui-gallery',
   standalone: true,
   imports: [CommonModule, UIImageComponent], // Agrega UIImageComponent aquí
   templateUrl: './gallery.component.html',

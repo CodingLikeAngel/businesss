@@ -8,7 +8,7 @@ export interface BreadcrumbItem {
 }
 
 @Component({
-  selector: 'lib-ui-components-breadcrumbs',
+  selector: 'lib-ui-breadcrumbs',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './breadcrumbs.component.html',
@@ -19,3 +19,4 @@ export class UIBreadcrumbsComponent {
   @Input() separator = '/';
   @Input() variant: 'simple' | 'glass' | 'pill' = 'simple';
 }
+

@@ -10,7 +10,7 @@ import { variants } from '../models/ui-components-data.model';
 
 
 @Component({
-  selector: 'lib-ui-components-contact-section',
+  selector: 'lib-ui-contact-section',
   standalone: true,
   imports: [CommonModule, FormsModule, UIInputComponent, UIButtonComponent],
   templateUrl: './contact-section.component.html',
@@ -55,3 +55,4 @@ export class UIContactSectionComponent {
       setTimeout(() => this.successMessage = '', 3000);
   }
 }
+

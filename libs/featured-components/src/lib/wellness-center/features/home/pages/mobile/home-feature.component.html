@@ -2,7 +2,7 @@
 
 <!-- Barra de Navegación -->
  <div class="relative z-40">
-<lib-ui-components-nav-bar
+<lib-ui-nav-bar
   [variant]="selectedVariant"
   [logoText]="'Peluquería Estilo'"
   [showMobileMenu]="true"
@@ -10,30 +10,30 @@
   [navLinks]="navLinks"
   (linkClicked)="scrollToSection($event)"
  
-></lib-ui-components-nav-bar>
+></lib-ui-nav-bar>
 </div>
 <!-- Tabs para móviles -->
-<lib-ui-components-tabs
+<lib-ui-tabs
   [variant]="selectedVariant"
   [tabs]="navLinkstabs"
   [showAs]="'tabs'"
   [isMobile]="true"
   (tabSelected)="scrollToSection($event)"
-></lib-ui-components-tabs>
+></lib-ui-tabs>
 
 <!-- Hero -->
 <section id="hero" class="relative z-20">
-  <lib-ui-components-hero
-    [title]="'Peluquería Estilo'"
-    [subtitle]="'Transforma tu look con cortes, colores y más.'"
-    [variant]="selectedVariant"
-    [showScrollIcon]="true"
-    [customStyles]="{
-      '--business-bg-image': 'url(/1029.png)'
-    }"
-    [navigationCards]="navigationCards"
-    (sectionSelected)="scrollToSection($event)"
-  ></lib-ui-components-hero>
+ <lib-ui-hero-section
+   [title]="'Peluquería Estilo'"
+   [subtitle]="'Transforma tu look con cortes, colores y más.'"
+   [variant]="selectedVariant"
+   [showScrollIcon]="true"
+   [customStyles]="{
+     '--business-bg-image': 'url(/1029.png)'
+   }"
+   [navigationCards]="navigationCards"
+   (sectionSelected)="scrollToSection($event)"
+ ></lib-ui-hero-section>
 </section>
 
 <!-- Contenedor Principal con Bubble Animation -->
@@ -42,22 +42,22 @@
 
     <!-- Sección de Servicios -->
     <section id="servicios" class="relative z-30">
-      <lib-ui-components-title
+      <lib-ui-title
         level="h2"
         text="Nuestros Servicios"
         [variant]="selectedVariant"
         animation="slide"
         align="center"
-      ></lib-ui-components-title>
+      ></lib-ui-title>
        <div class="z-40">
-          <lib-ui-components-ui-card-rutas
+          <lib-ui-card-rutas
             [items]="serviceCards"
             [variant]="selectedVariant"
             [backgroundColor]="'rgba(255,255,255,0.1)'"
             [textColor]="'#FACC15'"
             [accentColor]="'#FF1E56'"
             [isMobile]="true"
-          ></lib-ui-components-ui-card-rutas>
+          ></lib-ui-card-rutas>
         </div>
     </section>
 
@@ -125,7 +125,7 @@
                 <p class="text-neon-pink font-bold text-xl mb-4 neon-text">{{ product.price }}</p>
     
 
-                <lib-ui-components-button
+                <lib-ui-button
                 [variant]="selectedVariant"
                 size="sm"
                 rounded="full"
@@ -133,7 +133,7 @@
                 type="submit"
               >
               ¡COMPRAR AHORA!
-              </lib-ui-components-button>
+              </lib-ui-button>
 
               </div>
             </div>
@@ -164,7 +164,7 @@
 
 
 <!-- Modal para detalles del servicio -->
-<lib-ui-components-modal
+<lib-ui-modal
   [isOpen]="modalOpen"
   [variant]="'glass'"
   [rounded]="'md'"
@@ -173,4 +173,6 @@
   [title]="selectedService?.serviceName || 'Detalles del Servicio'"
   [content]="selectedService?.description || 'Selecciona un servicio para ver más detalles.'"
   (modalOnClose)="closeModal()"
-></lib-ui-components-modal>
+></lib-ui-modal>
+
+

@@ -109,7 +109,7 @@
           <div class="frame-content">
             <!-- Header -->
             <div *ngIf="headerConfig.visible">
-              <lib-ui-components-header
+              <lib-ui-header
                 [variant]="getVariant('navbar')"
                 [align]="headerConfig.align"
                 [dark]="headerConfig.dark"
@@ -117,7 +117,7 @@
                 [subtitle]="headerConfig.subtitle"
                 [navItems]="headerConfig.navItems"
                 [customStyles]="headerConfig.customStyles"
-              ></lib-ui-components-header>
+              ></lib-ui-header>
             </div>
 
             <!-- Navbar / Tabs -->
@@ -125,19 +125,19 @@
               *ngIf="navBarConfig.visible"
               class="sticky top-0 z-50 bg-black/40 backdrop-blur-xl"
             >
-              <lib-ui-components-tabs
+              <lib-ui-tabs
                 [tabs]="tabsConfig"
                 [variant]="getVariant('navbar')"
                 [showAs]="'tabs'"
                 [isMobile]="previewSize === 'mobile'"
                 (tabSelected)="onTabSelected($event)"
-              ></lib-ui-components-tabs>
+              ></lib-ui-tabs>
             </div>
 
             <router-outlet></router-outlet>
 
             <!-- Footer -->
-            <lib-ui-components-footer
+            <lib-ui-footer
               *ngIf="footerConfig.visible"
               [variant]="getVariant('footer')"
               [dark]="footerConfig.dark"
@@ -151,10 +151,13 @@
               [customStyles]="footerConfig.customStyles"
               (linkClicked)="onLinkClick($event)"
               (socialClicked)="onSocialClick($event)"
-            ></lib-ui-components-footer>
+            ></lib-ui-footer>
           </div>
         </div>
       </div>
     </main>
   </div>
 </div>
+
+
+

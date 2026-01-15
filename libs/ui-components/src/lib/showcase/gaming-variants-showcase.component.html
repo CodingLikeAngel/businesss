@@ -17,26 +17,26 @@
 
         <div class="component-demo">
           <!-- Button Demo -->
-          <lib-ui-components-button 
+          <lib-ui-button 
             [variant]="variant.id"
             size="md"
             (buttonClick)="onButtonClick(variant.id)"
           >
             {{ variant.displayName }} Button
-          </lib-ui-components-button>
+          </lib-ui-button>
 
           <!-- Input Demo -->
-          <lib-ui-components-input
+          <lib-ui-input
             [variant]="variant.id"
             [placeholder]="getInputPlaceholder(variant.id)"
             class="variant-input"
-          ></lib-ui-components-input>
+          ></lib-ui-input>
         </div>
 
         <div class="usage-example">
-          <pre><code><lib-ui-components-button variant="{{ variant.id }}">
+          <pre><code><lib-ui-button variant="{{ variant.id }}">
   {{ variant.displayName }} Button
-</lib-ui-components-button></code></pre>
+</lib-ui-button></code></pre>
         </div>
       </div>
     }
@@ -47,3 +47,5 @@
     <p>🎨 Customize further by combining variants with size options (sm, md, lg) and custom styles.</p>
   </div>
 </div>
+
+

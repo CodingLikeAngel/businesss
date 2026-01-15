@@ -36,7 +36,7 @@
 <div [ngClass]="hostClasses" [ngStyle]="customStyles">
   <div class="ui-gallery__slider" #slider>
     <div class="ui-gallery__slide" *ngFor="let image of images; trackBy: trackByFn">
-      <lib-ui-components-image
+      <lib-ui-image
         [src]="image.src"
         [alt]="image.alt"
         [caption]="image.caption"
@@ -44,7 +44,7 @@
         size="custom"
         width="100%"
         height="auto" 
-      ></lib-ui-components-image>
+      ></lib-ui-image>
     </div>
   </div>
   <button
@@ -70,3 +70,5 @@
     ></span>
   </div>
 </div>
+
+

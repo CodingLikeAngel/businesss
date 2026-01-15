@@ -40,7 +40,7 @@
     <div *ngIf="builderStep === 'preview' || activeTab === 'content'" class="flex-1 flex flex-col">
         <!-- Main Content -->
         <main class="flex-1 flex flex-col">
-          <lib-ui-components-header
+          <lib-ui-header
             [variant]="headerConfig.variant"
             [align]="headerConfig.align"
             [dark]="headerConfig.dark"
@@ -48,13 +48,13 @@
             [subtitle]="headerConfig.subtitle"
             [navItems]="headerConfig.navItems"
             [customStyles]="headerConfig.customStyles"
-          ></lib-ui-components-header>
+          ></lib-ui-header>
 
           <section class="flex-1">
             <router-outlet></router-outlet>
           </section>
 
-          <lib-ui-components-footer
+          <lib-ui-footer
             [variant]="footerConfig.variant"
             [dark]="footerConfig.dark"
             [showParticles]="footerConfig.showParticles"
@@ -67,8 +67,10 @@
             [customStyles]="footerConfig.customStyles"
             (linkClicked)="onLinkClick($event)"
             (socialClicked)="onSocialClick($event)"
-          ></lib-ui-components-footer>
+          ></lib-ui-footer>
         </main>
     </div>
   </div>
 </div>
+
+

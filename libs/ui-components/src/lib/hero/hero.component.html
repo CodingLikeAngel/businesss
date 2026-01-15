@@ -43,7 +43,7 @@
     <!-- Primary: Staggered Card Grid with Dynamic Gradient Waves -->
     <div *ngSwitchCase="'primary'" class="navigation-container gradient-wave-bg" role="navigation" aria-label="Navegación principal">
       <div class="navigation-grid">
-        <lib-ui-components-card-animated
+        <lib-ui-card-animated
           *ngFor="let card of navigationCards; let i = index"
           [icon]="card.icon"
           [title]="card.title"
@@ -61,7 +61,7 @@
           <div class="card-decor" slot="decor">
             <span class="wave-ripple"></span>
           </div>
-        </lib-ui-components-card-animated>
+        </lib-ui-card-animated>
       </div>
     </div>
 
@@ -80,7 +80,7 @@
         Tu navegador no soporta videos.
       </video>
       <div class="carousel">
-        <lib-ui-components-card-animated
+        <lib-ui-card-animated
           *ngFor="let item of carouselItems; let i = index"
           [title]="item.title"
           [description]="item.description"
@@ -104,7 +104,7 @@
           >
             <source [src]="item.videoUrl" type="video/mp4" />
           </video>
-        </lib-ui-components-card-animated>
+        </lib-ui-card-animated>
         <button
           class="carousel-control prev"
           (click)="prevCarouselItem()"
@@ -139,7 +139,7 @@
       </video>
       <div class="video-overlay">
         <div class="navigation-grid">
-          <lib-ui-components-card-animated
+          <lib-ui-card-animated
             *ngFor="let card of navigationCards; let i = index"
             [icon]="card.icon"
             [title]="card.title"
@@ -157,7 +157,7 @@
             <div class="card-decor" slot="decor">
               <span class="neon-line"></span>
             </div>
-          </lib-ui-components-card-animated>
+          </lib-ui-card-animated>
         </div>
       </div>
     </div>
@@ -202,7 +202,7 @@
       <canvas class="matrix-canvas" #matrixCanvas aria-hidden="true"></canvas>
       <div class="matrix-content">
         <div class="navigation-grid">
-          <lib-ui-components-card-animated
+          <lib-ui-card-animated
             *ngFor="let card of navigationCards; let i = index"
             [icon]="card.icon"
             [title]="card.title"
@@ -220,7 +220,7 @@
             <div class="card-decor" slot="decor">
               <span class="glitch-text">{{ card.title.charAt(0) }}</span>
             </div>
-          </lib-ui-components-card-animated>
+          </lib-ui-card-animated>
         </div>
       </div>
     </div>
@@ -241,7 +241,7 @@
       </video>
       <div class="starfield"></div>
       <div class="floating-cards">
-        <lib-ui-components-card-animated
+        <lib-ui-card-animated
           *ngFor="let card of navigationCards; let i = index"
           [icon]="card.icon"
           [title]="card.title"
@@ -258,14 +258,14 @@
           <div class="card-decor" slot="decor">
             <span class="orbit-path"></span>
           </div>
-        </lib-ui-components-card-animated>
+        </lib-ui-card-animated>
       </div>
     </div>
 
     <!-- Retro: Pixelated Menu with CRT Scanlines -->
     <div *ngSwitchCase="'retro'" class="retro-container crt-scanline-bg">
       <div class="retro-menu">
-        <lib-ui-components-card-animated
+        <lib-ui-card-animated
           *ngFor="let card of navigationCards; let i = index"
           [icon]="card.icon"
           [title]="card.title"
@@ -282,7 +282,7 @@
           <div class="card-decor" slot="decor">
             <span class="pixel-frame"></span>
           </div>
-        </lib-ui-components-card-animated>
+        </lib-ui-card-animated>
         <div class="retro-controls">
           <button
             (click)="prevRetroItem()"
@@ -319,7 +319,7 @@
         Your browser does not support videos.
       </video>
       <div class="flame-grid">
-        <lib-ui-components-card-animated
+        <lib-ui-card-animated
           *ngFor="let card of navigationCards; let i = index"
           [icon]="card.icon"
           [title]="card.title"
@@ -336,7 +336,7 @@
           <div class="card-decor" slot="decor">
             <span class="ember-glow"></span>
           </div>
-        </lib-ui-components-card-animated>
+        </lib-ui-card-animated>
       </div>
     </div>
 
@@ -348,7 +348,7 @@
         <div class="shape shape-3"></div>
       </div>
       <div class="glass-grid">
-        <lib-ui-components-card-animated
+        <lib-ui-card-animated
           *ngFor="let card of navigationCards; let i = index"
           [icon]="card.icon"
           [title]="card.title"
@@ -361,14 +361,14 @@
           role="button"
           tabindex="0"
           [attr.aria-label]="card.title"
-        ></lib-ui-components-card-animated>
+        ></lib-ui-card-animated>
       </div>
     </div>
 
     <!-- Default: Holographic Card Gallery -->
     <div *ngSwitchDefault class="gallery-container holo-grid-bg">
       <div class="gallery-grid">
-        <lib-ui-components-card-animated
+        <lib-ui-card-animated
           *ngFor="let item of carouselItems; let i = index"
           [title]="item.title"
           [description]="item.description"
@@ -384,7 +384,7 @@
           <div class="card-decor" slot="decor">
             <span class="holo-shimmer"></span>
           </div>
-        </lib-ui-components-card-animated>
+        </lib-ui-card-animated>
       </div>
     </div>
   </ng-container>
@@ -396,3 +396,5 @@
     </svg>
   </div>
 </section>
+
+

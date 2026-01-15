@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'lib-ui-components-deep-footer',
+  selector: 'lib-ui-deep-footer',
   imports: [CommonModule],
   templateUrl: './deep-footer.component.html',
   styleUrl: './deep-footer.component.scss',
@@ -16,3 +16,4 @@ export class UIDeepFooterComponent {
 </footer>*/
 
 }
+

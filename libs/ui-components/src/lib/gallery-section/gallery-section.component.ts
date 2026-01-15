@@ -8,7 +8,7 @@ export interface GallerySectionImage {
 }
 
 @Component({
-  selector: 'lib-ui-components-gallery-section',
+  selector: 'lib-ui-gallery-section',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './gallery-section.component.html',
@@ -29,3 +29,4 @@ export class UIGallerySectionComponent {
     return `gallery-container gallery--${this.variant}`;
   }
 }
+

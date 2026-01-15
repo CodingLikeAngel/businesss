@@ -19,7 +19,7 @@ interface SpinnerCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-components-spinner',
+  selector: 'lib-ui-spinner',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './spinner.component.html',

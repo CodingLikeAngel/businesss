@@ -8,11 +8,11 @@ import { UIGalleryComponent, CardVariant, GalleryImage } from '@negocio/ui-compo
   imports: [CommonModule, UIGalleryComponent],
   template: `
     <div class="p-4">
-      <lib-ui-components-ui-gallery
+      <lib-ui-ui-gallery
         [variant]="variant"
         [images]="images"
         [autoSlide]="false"
-      ></lib-ui-components-ui-gallery>
+      ></lib-ui-ui-gallery>
     </div>
   `,
 })

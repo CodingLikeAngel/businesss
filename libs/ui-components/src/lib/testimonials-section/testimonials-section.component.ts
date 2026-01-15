@@ -9,7 +9,7 @@ export interface TestimonialItem {
 }
 
 @Component({
-  selector: 'lib-ui-components-testimonials-section',
+  selector: 'lib-ui-testimonials-section',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './testimonials-section.component.html',
@@ -44,3 +44,4 @@ export class UITestimonialsSectionComponent {
     return `testimonials-container testimonials--${this.variant}`;
   }
 }
+

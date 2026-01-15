@@ -22,7 +22,7 @@ interface ImageCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-components-image',
+  selector: 'lib-ui-image',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './image.component.html',

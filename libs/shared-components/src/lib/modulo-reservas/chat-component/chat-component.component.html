@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="flex items-center p-4 border-t border-gray-200 bg-white">
-    <lib-ui-components-input
+    <lib-ui-input
       [(ngModel)]="userInput"
       (ngModelChange)="userInput = $event"
       (keyup.enter)="sendMessage()"
@@ -22,8 +22,8 @@
       size="md"
       type="text"
       class="flex-1 mr-2"
-    ></lib-ui-components-input>
-    <lib-ui-components-button
+    ></lib-ui-input>
+    <lib-ui-button
       variant="primary"
       size="md"
       (buttonClick)="sendMessage()"
@@ -31,6 +31,8 @@
       class="px-4 py-2"
     >
       Enviar
-    </lib-ui-components-button>
+    </lib-ui-button>
   </div>
 </div>
+
+

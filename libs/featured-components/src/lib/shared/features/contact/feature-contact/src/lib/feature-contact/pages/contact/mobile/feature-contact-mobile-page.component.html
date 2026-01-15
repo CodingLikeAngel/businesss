@@ -1,32 +1,32 @@
 <router-outlet></router-outlet>
 
 <div >
-  <lib-ui-components-header
+  <lib-ui-header
     [title]="headerConfig.title"
     [subtitle]="headerConfig.subtitle"
     [variant]="selectedVariant"
     [align]="headerConfig.align"
     [dark]="headerConfig.dark"
     [navItems]="headerConfig.navItems"
-  ></lib-ui-components-header>
+  ></lib-ui-header>
 </div>
 
 
 <!-- Navbar para desktop -->
 
 
-<!-- <lib-ui-components-nav-bar
+<!-- <lib-ui-nav-bar
   [variant]="selectedVariant"
   [navLinks]="navLinks"
-></lib-ui-components-nav-bar> -->
+></lib-ui-nav-bar> -->
 
-<!-- <lib-ui-components-tabs
+<!-- <lib-ui-tabs
   [variant]="selectedVariant"
   [tabs]="navLinkstabs"
   [showAs]="'tabs'"
   [isMobile]="false"
   (tabSelected)="scrollToSection($event)"
-></lib-ui-components-tabs> -->
+></lib-ui-tabs> -->
 
 
 
@@ -52,13 +52,13 @@
     <div class="container mx-auto px-4 py-12 relative z-30">
       <section id="contacto" class="mb-12 relative z-10">
         <div class="bg-[rgba(255,255,255,0.1)] backdrop-blur-md p-6 rounded-lg">
-          <lib-ui-components-title
+          <lib-ui-title
             level="h2"
             text="Contáctanos"
             [variant]="selectedVariant"
             animation="bounce"
             align="center"
-          ></lib-ui-components-title>
+          ></lib-ui-title>
           <div class="z-50 px-4 py-12">
             <lib-contact-form [variant]="selectedVariant"></lib-contact-form>
           </div>
@@ -67,3 +67,5 @@
     </div>
   </div>
 </lib-forest-animation>
+
+

@@ -38,7 +38,7 @@ interface CarouselItem {
 }
 
 @Component({
-  selector: 'lib-ui-components-hero',
+  selector: 'lib-ui-hero',
   standalone: true,
   imports: [CommonModule, UICardAnimatedComponent],
   templateUrl: './hero.component.html',

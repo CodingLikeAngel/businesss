@@ -9,28 +9,28 @@
     <div class="form-container">
       <form (ngSubmit)="onSubmit()">
         <div class="form-group">
-            <lib-ui-components-input
+            <lib-ui-input
                 [label]="'Nombre'"
                 [variant]="variant" 
                 [(ngModel)]="formData.name" 
                 name="name" 
                 required>
-            </lib-ui-components-input>
+            </lib-ui-input>
         </div>
         
         <div class="form-group">
-            <lib-ui-components-input
+            <lib-ui-input
                 [label]="emailLabel"
                 [type]="'email'"
                 [variant]="variant" 
                 [(ngModel)]="formData.email" 
                 name="email" 
                 required>
-            </lib-ui-components-input>
+            </lib-ui-input>
         </div>
 
         <div class="form-group">
-             <lib-ui-components-input
+             <lib-ui-input
                 [label]="messageLabel"
                 [type]="'textarea'"
                 [rows]="5"
@@ -38,17 +38,17 @@
                 [(ngModel)]="formData.message" 
                 name="message" 
                 required>
-            </lib-ui-components-input>
+            </lib-ui-input>
         </div>
 
         <div class="actions">
-            <lib-ui-components-button 
+            <lib-ui-button 
                 [variant]="variant === 'default' ? 'primary' : variant" 
                 [size]="'lg'" 
                 [disabled]="isSubmitting"
                 (buttonClick)="onSubmit()">
                 {{ isSubmitting ? 'Enviando...' : buttonText }}
-            </lib-ui-components-button>
+            </lib-ui-button>
         </div>
         
         <div *ngIf="successMessage" class="success-message">
@@ -58,3 +58,6 @@
     </div>
   </div>
 </section>
+
+
+

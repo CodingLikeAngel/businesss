@@ -11,7 +11,7 @@ export const listVariants = [...baseVariants, ...specificListVariants] as const;
 export type ListVariantType = typeof listVariants[number] | (string & {});
 
 @Component({
-  selector: 'lib-ui-components-list',
+  selector: 'lib-ui-list',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './list.component.html',

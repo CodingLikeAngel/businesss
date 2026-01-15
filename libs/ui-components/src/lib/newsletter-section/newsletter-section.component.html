@@ -7,22 +7,25 @@
     </div>
     <div class="form-container">
       <div class="input-wrapper">
-         <lib-ui-components-input 
+         <lib-ui-input 
             [type]="'email'" 
             [placeholder]="placeholder" 
             [(ngModel)]="email" 
             [variant]="variant">
-         </lib-ui-components-input>
+         </lib-ui-input>
       </div>
-      <lib-ui-components-button 
+      <lib-ui-button 
         [variant]="variant === 'default' ? 'primary' : variant" 
         [disabled]="isSubmitting"
         (buttonClick)="onSubmit()">
         {{ isSubmitting ? '...' : buttonText }}
-      </lib-ui-components-button>
+      </lib-ui-button>
     </div>
     <div class="success-msg" *ngIf="successMessage">
         {{ successMessage }}
     </div>
   </div>
 </section>
+
+
+

@@ -1,7 +1,7 @@
 <router-outlet></router-outlet>
 
 <div class="relative z-30">
-  <lib-ui-components-nav-bar
+  <lib-ui-nav-bar
     [variant]="getVariant('navbar')"
     [logoText]="navBarConfig.logoText"
     [showMobileMenu]="navBarConfig.showMobileMenu"
@@ -9,11 +9,11 @@
     [navLinks]="navBarConfig.navLinks"
     [customStyles]="navBarConfig.customStyles"
     (linkClicked)="scrollToSection($event)"
-  ></lib-ui-components-nav-bar>
+  ></lib-ui-nav-bar>
 </div>
 
 <section id="hero" class="relative z-20">
-  <lib-ui-components-hero
+  <lib-ui-hero-section
     [variant]="getVariant('hero')"
     [title]="heroConfig.title"
     [subtitle]="heroConfig.subtitle"
@@ -27,7 +27,7 @@
     [carouselItems]="heroConfig.carouselItems"
     [customStyles]="heroConfig.customStyles"
     (sectionSelected)="scrollToSection($event)"
-  ></lib-ui-components-hero>
+  ></lib-ui-hero-section>
 </section>
 
 <lib-bubble-animation
@@ -37,23 +37,23 @@
 
 <section id="servicios" class="relative z-20 py-12">
   <div class="container mx-auto px-6 max-w-7xl">
-    <lib-ui-components-title
+    <lib-ui-title
       level="h2"
       text="Nuestros Servicios"
       [variant]="getVariant('title')"
       animation="slide"
       align="center"
       class="mb-8"
-    ></lib-ui-components-title>
+    ></lib-ui-title>
     <div class="flex justify-center py-12">
-      <lib-ui-components-ui-card-rutas
+      <lib-ui-card-rutas
         [items]="serviceCards"
         [variant]="getVariant('card')"
         [backgroundColor]="'rgba(255,255,255,0.1)'"
         [textColor]="'#FACC15'"
         [accentColor]="'#FF1E56'"
         [isMobile]="false"
-      ></lib-ui-components-ui-card-rutas>
+      ></lib-ui-card-rutas>
     </div>
   </div>
 </section>
@@ -101,14 +101,14 @@
 <section id="productos" class="mb-16 relative z-10">
   <div class="backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(255,30,86,0.3)] overflow-hidden">
     <div class="particle-layer absolute inset-0 z-0"></div>
-    <lib-ui-components-title
+    <lib-ui-title
       level="h2"
       text="Nuestros Productos"
       [variant]="getVariant('title')"
       animation="slide"
       align="center"
       class="mb-8"
-    ></lib-ui-components-title>
+    ></lib-ui-title>
     <p class="text-white text-lg mb-8 text-center max-w-2xl mx-auto animate-fade-in">
       Descubre nuestra selección premium de productos para el cabello, diseñados para realzar tu estilo con calidad y sostenibilidad.
     </p>
@@ -136,7 +136,7 @@
   </div>
 </section>
 
-<lib-ui-components-footer
+<lib-ui-footer
   [variant]="getVariant('footer')"
   [title]="footerConfig.title"
   [description]="footerConfig.description"
@@ -149,9 +149,9 @@
   [customStyles]="footerConfig.customStyles"
   (linkClicked)="scrollToSection($event)"
   (socialClicked)="onSocialClick($event)"
-></lib-ui-components-footer>
+></lib-ui-footer>
 
-<lib-ui-components-modal
+<lib-ui-modal
   [isOpen]="modalOpen"
   [variant]="'glass'"
   [rounded]="'md'"
@@ -160,4 +160,6 @@
   [title]="selectedService?.serviceName || 'Detalles del Servicio'"
   [content]="selectedService?.description || 'Selecciona un servicio para ver más detalles.'"
   (modalOnClose)="closeModal()"
-></lib-ui-components-modal>
+></lib-ui-modal>
+
+

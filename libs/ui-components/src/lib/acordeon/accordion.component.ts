@@ -28,7 +28,7 @@ export interface AcordeonCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-components-accordion',
+  selector: 'lib-ui-accordion',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './accordion.component.html',

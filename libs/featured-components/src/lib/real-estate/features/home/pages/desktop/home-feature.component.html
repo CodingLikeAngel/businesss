@@ -1,0 +1,66 @@
+<lib-ui-nav-bar [config]="navBarConfig" [variant]="getVariant('navBar')"></lib-ui-nav-bar>
+
+<lib-ui-hero
+  [variant]="getVariant('hero')"
+  [title]="heroConfig.title"
+  [subtitle]="heroConfig.subtitle"
+  [showCta]="heroConfig.showCta"
+  [ctaLabel]="heroConfig.ctaLabel"
+  [showScrollIcon]="heroConfig.showScrollIcon"
+  [videoBackground]="heroConfig.videoBackground"
+  [videoUrl]="heroConfig.videoUrl"
+  [videoPoster]="heroConfig.videoPoster"
+  [navigationCards]="heroConfig.navigationCards"
+  [carouselItems]="heroConfig.carouselItems"
+  [customStyles]="heroConfig.customStyles"
+  (sectionSelected)="scrollToSection($event)"
+></lib-ui-hero>
+
+<lib-ui-title [variant]="getVariant('title')">Nuestros Servicios</lib-ui-title>
+
+<div class="services-grid">
+  <lib-ui-card-rutas
+    *ngFor="let service of serviceCards"
+    [routeName]="service.routeName"
+    [imageUrl]="service.imageUrl"
+    [difficulty]="service.difficulty"
+    [rating]="service.rating"
+    [reviews]="service.reviews"
+    [duration]="service.duration"
+    [distance]="service.distance"
+    [ascent]="service.ascent"
+    [description]="service.description"
+    [features]="service.features"
+    [link]="service.link"
+    [variant]="getVariant('card')"
+  ></lib-ui-card-rutas>
+</div>
+
+<lib-ui-title [variant]="getVariant('title')">Productos Destacados</lib-ui-title>
+
+<div class="products-grid">
+  <div class="product-card" *ngFor="let product of products; trackBy: trackByProductId">
+    <img [src]="product.image" [alt]="product.name" class="product-image" />
+    <h3>{{ product.name }}</h3>
+    <p>{{ product.description }}</p>
+    <p class="price">{{ product.price }}</p>
+    <button (click)="addToCart(product)" class="add-to-cart">Añadir al carrito</button>
+  </div>
+</div>
+
+<lib-faq-section [faqItems]="faqItems" [variant]="getVariant('faq')"></lib-faq-section>
+
+<lib-pricing-section [priceColumns]="priceColumns" [priceRows]="priceRows" [variant]="getVariant('pricing')"></lib-pricing-section>
+
+<lib-gallery-section [images]="allGalleryConfigs[0].images" [variant]="getVariant('gallery')"></lib-gallery-section>
+
+<lib-promotions-section [premiumCardConfigs]="premiumCardConfigs" [variant]="getVariant('promotions')"></lib-promotions-section>
+
+<lib-reservation-form [variant]="getVariant('reservation')"></lib-reservation-form>
+
+
+<lib-ui-modal [isOpen]="modalOpen" [variant]="'glass'" [rounded]="'md'" [size]="'lg'" [title]="selectedService?.serviceName || 'Detalles del Servicio'" [content]="selectedService?.description || 'Selecciona un servicio para ver más detalles.'" (modalOnClose)="closeModal()"></lib-ui-modal>
+
+<lib-bubble-animation [config]="bubbleConfig" [variant]="getVariant('bubble')"></lib-bubble-animation>
+
+
