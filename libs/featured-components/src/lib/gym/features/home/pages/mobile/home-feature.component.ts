@@ -23,15 +23,15 @@ import {
 import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
 
 const VARIANTS = [
-  'jungle',
-  'enchanted',
-  'mystic',
-  'ancient',
-  'twilight',
-  'frosty',
-  'desert',
-  'candy',
-  'oceanic',
+  'cyberpunk',
+  'neon',
+  'danger',
+  'energy',
+  'matrix',
+  'stellar',
+  'retro',
+  'plasma',
+  'purple-edge', // Ubisoft style
   'fiery',
 ] as const;
 
@@ -207,12 +207,12 @@ export class HomeMobileFeatureComponent implements OnDestroy, OnInit {
   }) {
     throw new Error('Method not implemented.');
   }
-  selectedVariant: CardVariant = 'default';
+  selectedVariant: CardVariant = 'cyberpunk';
   isMobile = false;
   modalOpen = false;
   selectedService: any | null = null;
   private variantSub?: Subscription;
-  selectedForestVariant = signal<VariantType>('enchanted');
+  selectedForestVariant = signal<VariantType>('cyberpunk');
   private variantIndex = 0;
   private intervalId?: any;
 

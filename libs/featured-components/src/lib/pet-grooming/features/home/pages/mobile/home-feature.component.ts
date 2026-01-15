@@ -56,7 +56,7 @@ export class HomeMobileFeatureComponent implements OnDestroy, OnInit {
   private bubbleConfigSub?: Subscription;
 
   componentVariants: { [key: string]: string } = {};
-  globalVariant = 'default';
+  globalVariant = 'animal-crossing';
   navBarConfig: NavBarConfig;
   heroConfig: HeroConfig;
   footerConfig: FooterConfig;
@@ -275,7 +275,7 @@ export class HomeMobileFeatureComponent implements OnDestroy, OnInit {
   getVariant(componentId: string): CardVariant {
     const variant = this.componentVariants[componentId] || this.globalVariant;
     const validVariants = [
-      'default', 'cyberpunk', 'jungle', 'enchanted', 'mystic', 'ancient', 'twilight', 'frosty', 'desert',
+      'default', 'animal-crossing', 'mario', 'kirby', 'bubble', 'cyberpunk', 'jungle', 'enchanted', 'mystic', 'ancient', 'twilight', 'frosty', 'desert',
       'candy', 'oceanic', 'fiery', 'primary', 'secondary', 'neon', 'matrix', 'stellar', 'retro', 'phoenix',
       'aqua', 'plasma', 'cosmic', 'vaporwave', 'aurora'
     ];
