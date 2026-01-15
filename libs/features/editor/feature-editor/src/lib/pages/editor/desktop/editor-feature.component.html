@@ -37,11 +37,11 @@
       ></lib-ui-features-section>
 
       <!-- STATS -->
-      <lib-ui-stats-section *ngSwitchCase="'stats'"
+      <lib-ui-components-stats-section *ngSwitchCase="'stats'"
         [variant]="getVariant('stats')"
         [id]="section.id"
         [stats]="statsConfig.items"
-      ></lib-ui-stats-section>
+      ></lib-ui-components-stats-section>
 
       <!-- BUBBLE -->
       <lib-bubble-animation *ngSwitchCase="'bubble'"
