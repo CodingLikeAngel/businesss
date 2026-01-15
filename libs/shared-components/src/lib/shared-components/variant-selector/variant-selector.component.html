@@ -305,7 +305,7 @@
                 <lib-ui-components-gallery-section
                   *ngSwitchCase="'gallery'"
                   [variant]="selectedExplorerVariant"
-                  [images]="galleryConfig.images"
+                  [images]="galleryConfig.images.length > 0 ? galleryConfig.images : defaultGallery"
                 >
                 </lib-ui-components-gallery-section>
 
