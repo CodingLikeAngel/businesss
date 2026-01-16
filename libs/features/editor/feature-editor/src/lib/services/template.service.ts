@@ -55,10 +55,30 @@ export class TemplateService {
       label: section.name, // Add label property
       visible: section.visible,
       order: section.zIndex,
-      config: {
-        ...section.content,
-        styles: section.styles
-      }
+      styles: (section.styles || {}) as { [key: string]: string },
+      content: section.content || {},
+      elements: section.elements || [],
+      config: section.content || {},
+      customStyles: {},
+      animation: 'none',
+      layout: 'default',
+      animations: section.animations,
+      responsive: section.responsive ? {
+        mobile: {
+          visible: section.responsive.mobile.visible,
+          styles: section.responsive.mobile.styles as { [key: string]: string }
+        },
+        tablet: {
+          visible: section.responsive.tablet.visible,
+          styles: section.responsive.tablet.styles as { [key: string]: string }
+        },
+        desktop: {
+          visible: section.responsive.desktop.visible,
+          styles: section.responsive.desktop.styles as { [key: string]: string }
+        }
+      } : undefined,
+      locked: section.locked,
+      zIndex: section.zIndex
     }));
   }
 
