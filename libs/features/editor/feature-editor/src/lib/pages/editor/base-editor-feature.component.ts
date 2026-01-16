@@ -20,6 +20,8 @@ import {
   TestimonialsConfig,
   Testimonial,
   StatsConfig,
+  FeaturesConfig,
+  UiStateService,
 } from '@negocio/shared-components';
 import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
 import { EditorState, ModalState } from '../../models/editor.model';
@@ -30,6 +32,11 @@ import { EditorState, ModalState } from '../../models/editor.model';
   template: '',
 })
 export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
+  protected editorService = inject(EditorService);
+  protected cartService = inject(CartService);
+  protected modalService = inject(ModalService);
+  protected uiStateService = inject(UiStateService);
+
   private variantSub?: Subscription;
   private configSubs: Subscription[] = [];
   private editorStateSub?: Subscription;
@@ -51,10 +58,11 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
   productsConfig: ProductsConfig;
   testimonialsConfig: TestimonialsConfig;
   statsConfig: StatsConfig;
+  featuresConfig: FeaturesConfig;
 
   editorState: EditorState;
   modalState: ModalState;
-  loading$ = inject(EditorService).loading$;
+  loading$ = this.editorService.loading$;
 
   tabsConfig: any[] = [
     { label: 'Servicios', sectionId: 'servicios', icon: '🛠️' },
@@ -72,7 +80,6 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     testimonial: Testimonial
   ) => testimonial.author;
 
-  trackByProductName: TrackByFunction<any> = (index: number, product: any) => product.name;
 
   constructor(
     @Inject(PLATFORM_ID) protected platformId: object,
@@ -80,10 +87,6 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     protected router: Router,
     protected route: ActivatedRoute
   ) {
-    const editorService = inject(EditorService);
-    const cartService = inject(CartService);
-    const modalService = inject(ModalService);
-
     this.navBarConfig = this.variantService.getCurrentNavBarConfig();
     this.heroConfig = this.variantService.getCurrentHeroConfig();
     this.footerConfig = this.variantService.getCurrentFooterConfig();
@@ -98,9 +101,10 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     this.productsConfig = this.variantService.getCurrentProductsConfig();
     this.testimonialsConfig = this.variantService.getCurrentTestimonialsConfig();
     this.statsConfig = this.variantService.getCurrentStatsConfig();
+    this.featuresConfig = this.variantService.getCurrentFeaturesConfig();
 
-    this.editorState = editorService.getCurrentEditorState();
-    this.modalState = modalService.getCurrentModalState();
+    this.editorState = this.editorService.getCurrentEditorState();
+    this.modalState = this.modalService.getCurrentModalState();
 
     this.variantSub = this.variantService.componentVariants$.subscribe((variants) => {
       this.componentVariants = { ...variants };
@@ -122,14 +126,15 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
       this.variantService.galleryConfig$.subscribe((config) => (this.galleryConfig = config)),
       this.variantService.productsConfig$.subscribe((config) => (this.productsConfig = config)),
       this.variantService.testimonialsConfig$.subscribe((config) => (this.testimonialsConfig = config)),
-      this.variantService.statsConfig$.subscribe((config) => (this.statsConfig = config))
+      this.variantService.statsConfig$.subscribe((config) => (this.statsConfig = config)),
+      this.variantService.featuresConfig$.subscribe((config) => (this.featuresConfig = config))
     );
 
-    this.editorStateSub = editorService.editorState$.subscribe((state) => {
+    this.editorStateSub = this.editorService.editorState$.subscribe((state) => {
       this.editorState = state;
     });
 
-    this.modalStateSub = modalService.modalState$.subscribe((state) => {
+    this.modalStateSub = this.modalService.modalState$.subscribe((state) => {
       this.modalState = state;
     });
   }
@@ -139,11 +144,41 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     this.onResize();
   }
 
+  selectSection(event: Event, section: any) {
+    event.stopPropagation();
+    console.log('Selecting section:', section.id);
+    
+    // Ensure section has proper structure for editor
+    const sectionCopy = {
+      ...section,
+      content: { ...(section.content || {}) },
+      styles: { ...(section.styles || {}) }
+    };
+    
+    this.uiStateService.selectSection(sectionCopy);
+  }
+
+  selectElement(event: Event | null, element: any) {
+    if (event) {
+      event.stopPropagation();
+    }
+    console.log('Selecting element:', element);
+    this.uiStateService.selectElement(element);
+  }
+
+  trackBySectionId(index: number, section: any): string {
+    return section.id;
+  }
+
+  trackByProductName(index: number, product: any): string {
+    return product.name;
+  }
+
   @HostListener('window:resize')
   onResize() {
     if (isPlatformBrowser(this.platformId)) {
       const isMobile = window.innerWidth < 768;
-      inject(EditorService).updateEditorState({ isMobile });
+      this.editorService.updateEditorState({ isMobile });
     }
   }
 
@@ -162,11 +197,11 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
   }
 
   openServiceModal(service: any) {
-    inject(ModalService).openModal(service);
+    this.modalService.openModal(service);
   }
 
   closeModal() {
-    inject(ModalService).closeModal();
+    this.modalService.closeModal();
   }
 
   handleKeyUp(event: KeyboardEvent, service: any) {
@@ -176,7 +211,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
   }
 
   addToCart(product: { name: string; image: string; description: string; price: string }) {
-    inject(CartService).addToCart(product);
+    this.cartService.addToCart(product);
   }
 
   getVariant(componentId: string): any {

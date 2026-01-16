@@ -18,9 +18,13 @@
   z-index: 1000;
   position: relative;
   transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-  background: var(--nav-bg, rgba(15, 23, 42, 0.9));
-  color: var(--nav-text, #fff);
-  backdrop-filter: blur(10px);
+  background: var(--theme-bg, var(--nav-bg, rgba(15, 23, 42, 0.9)));
+  color: var(--theme-color, var(--nav-text, #fff));
+  border: var(--theme-border, none);
+  box-shadow: var(--theme-shadow, none);
+  backdrop-filter: var(--theme-backdrop, blur(10px));
+
+  @include shared.apply-all-variants('variant-');
   
   @media (min-width: 1024px) {
     padding: 1.25rem 4rem;

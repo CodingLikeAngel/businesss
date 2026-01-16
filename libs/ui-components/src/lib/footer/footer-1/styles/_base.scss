@@ -11,11 +11,15 @@
 
 .footer {
   padding: 4rem 1.5rem;
-  background: var(--footer-bg, #0f172a);
-  color: var(--footer-text, #fff);
+  background: var(--theme-bg, var(--footer-bg, #0f172a));
+  color: var(--theme-color, var(--footer-text, #fff));
+  border: var(--theme-border, none);
   position: relative;
   overflow: hidden;
   transition: all 0.4s ease;
+  box-shadow: var(--theme-shadow, none);
+
+  @include shared.apply-all-variants('variant-');
   
   @media (min-width: 1024px) {
     padding: 6rem 4rem 4rem;

@@ -78,12 +78,14 @@ $color-light: #ffffff;
       text-align: right;
     }
 
+    /* Dark mode override logic moved to global theme variables or specific variant adjustments */
     &.dark,
     :where([data-theme="dark"]) & {
-      box-shadow: var(--theme-shadow, 0 2px 10px rgba(0, 0, 0, 0.3));
+      /* Only set defaults if no variant is active or if we want a specific dark fallback */
+      --header-bg: rgba(30, 30, 30, 0.9);
+      background: var(--theme-bg, var(--header-bg));
       color: var(--theme-color, rgb(209, 213, 219));
-      background: var(--theme-bg, var(--header-bg, rgba(30, 30, 30, 0.9)));
-      border: var(--theme-border, none);
+      box-shadow: var(--theme-shadow, 0 2px 10px rgba(0, 0, 0, 0.3));
     }
 
     .menu-toggle {

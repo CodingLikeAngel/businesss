@@ -1,7 +1,7 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { VariantService, FooterConfig, HeaderConfig, NavBarConfig } from '@negocio/shared-components';
+import { VariantService, FooterConfig, HeaderConfig, NavBarConfig, UiStateService } from '@negocio/shared-components';
 import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
 
 @Component({
@@ -19,6 +19,8 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
   private navBarConfigSub?: Subscription;
   private variantSub?: Subscription;
   private stepSub?: Subscription;
+
+  protected uiStateService = inject(UiStateService);
 
   constructor(protected variantService: VariantService, protected router: Router) {
 
@@ -74,6 +76,14 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
 
   getVariant(componentId: string): any {
     return this.componentVariants[componentId] || this.globalVariant;
+  }
+
+  selectElement(event: Event | null, element: any) {
+    if (event) {
+      event.stopPropagation();
+    }
+    console.log('Selecting global element:', element);
+    this.uiStateService.selectElement(element);
   }
 
   setPreviewSize(size: 'mobile' | 'tablet' | 'desktop') {

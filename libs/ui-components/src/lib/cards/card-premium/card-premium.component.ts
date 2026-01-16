@@ -63,15 +63,15 @@ export interface CardPremiumCustomStyles {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div [ngClass]="hostClasses" [style.background]="config.gradient">
+    <div [ngClass]="hostClasses" [style.background]="safeGradient">
       <div class="icon">
         <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path [attr.d]="getIconPath(config.icon || 'heroStar')" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+          <path [attr.d]="safeIconPath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
         </svg>
       </div>
       <div class="content">
-        <h2>{{ config.title }}</h2>
-        <p>{{ config.description }}</p>
+        <h2>{{ safeTitle }}</h2>
+        <p>{{ safeDescription }}</p>
       </div>
     </div>
   `,
@@ -102,11 +102,25 @@ export class UICardPremiumComponent {
     return this.customStyles;
   }
 
-  getIconPath(icon: HeroIcon): string {
-    return heroIconPaths[icon] || heroIconPaths['heroStar']; // Default a 'heroStar' si no coincide
+  get safeGradient(): string {
+    return this.config?.gradient || '';
+  }
+
+  get safeIconPath(): string {
+    const icon = this.config?.icon || 'heroStar';
+    return heroIconPaths[icon as HeroIcon] || heroIconPaths['heroStar'];
+  }
+
+  get safeTitle(): string {
+    return this.config?.title || 'Card Title';
+  }
+
+  get safeDescription(): string {
+    return this.config?.description || '';
   }
 
   getIconSvg(): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(heroIcons[this.config.icon]);
+    const icon = this.config?.icon || 'heroStar';
+    return this.sanitizer.bypassSecurityTrustHtml(heroIcons[icon as HeroIcon] || heroIcons['heroStar']);
   }
 }

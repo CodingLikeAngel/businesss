@@ -1,17 +1,15 @@
 @use '../styles/mixins' as shared;
 
-/* 
-  ==========================================================================
-  GALLERY SECTION BASE
-  ==========================================================================
-*/
-
 .gallery-container {
   padding: 5rem 1.5rem;
-  background: var(--gallery-bg, #0f172a);
-  color: var(--gallery-text, #fff);
+  background: var(--theme-bg, var(--gallery-bg, #0f172a));
+  color: var(--theme-color, var(--gallery-text, #fff));
+  border: var(--theme-border, none);
+  box-shadow: var(--theme-shadow, none);
   position: relative;
   overflow: hidden;
+
+  @include shared.apply-all-variants('gallery--');
   
   @media (min-width: 1024px) {
     padding: 8rem 4rem;

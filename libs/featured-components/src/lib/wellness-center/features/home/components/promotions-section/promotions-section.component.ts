@@ -97,14 +97,36 @@ export class PromotionsSectionComponent implements OnInit {
   @Input() selectedVariant = 'primary';
 
   ngOnInit() {
-    this.premiumCardConfigs = this.premiumCardConfigs.map((config, index) => ({
-      ...config,
-      tooltip:
-        index === 0
-          ? '¡Ahorra con este combo especial!'
-          : index === 1
-          ? 'Manicura de larga duración.'
-          : 'Revitaliza tu cabello hoy.',
-    }));
+    // Ensure we have at least 3 configs to avoid undefined errors in template
+    const defaultCard: CardPremiumConfig = {
+      title: 'Promoción',
+      description: 'Descripción de la oferta especial.',
+      image: '',
+      price: '0€',
+      discount: '0%',
+      icon: 'heroStar',
+      tooltip: ''
+    };
+
+    if (!this.premiumCardConfigs || !Array.isArray(this.premiumCardConfigs)) {
+      this.premiumCardConfigs = [];
+    }
+
+    while (this.premiumCardConfigs.length < 3) {
+      this.premiumCardConfigs.push({ ...defaultCard });
+    }
+
+    this.premiumCardConfigs = this.premiumCardConfigs.map((config, index) => {
+      const safeConfig = config || defaultCard;
+      return {
+        ...safeConfig,
+        tooltip:
+          safeConfig.tooltip || (index === 0
+            ? '¡Ahorra con este combo especial!'
+            : index === 1
+            ? 'Manicura de larga duración.'
+            : 'Revitaliza tu cabello hoy.'),
+      };
+    });
   }
 }

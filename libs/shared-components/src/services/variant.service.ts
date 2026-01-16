@@ -8,6 +8,8 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants, NavLi
 export interface Testimonial {
   quote: string;
   author: string;
+  variant?: string;
+  styles?: { [key: string]: string };
 }
 
 export interface TestimonialsConfig {
@@ -59,6 +61,8 @@ export interface NavigationCard {
   sectionId: string;
   videoUrl?: string;
   posterUrl?: string;
+  variant?: string;
+  styles?: { [key: string]: string };
 }
 
 export interface CarouselItem {
@@ -68,6 +72,8 @@ export interface CarouselItem {
   title: string;
   description: string;
   section: string;
+  variant?: string;
+  styles?: { [key: string]: string };
 }
 
 export interface HeroConfig {
@@ -124,6 +130,8 @@ export interface CardItem {
   description: string;
   features: string[];
   link: string;
+  variant?: string;
+  styles?: { [key: string]: string };
 }
 
 export interface ServiceCardsConfig {
@@ -135,6 +143,8 @@ export interface AccordionItem {
   title: string;
   content: string;
   expanded: boolean;
+  variant?: string;
+  styles?: { [key: string]: string };
 }
 
 export interface FaqConfig {
@@ -175,6 +185,8 @@ export interface PromotionsConfig {
 export interface GalleryImage {
   src: string;
   alt: string;
+  variant?: string;
+  styles?: { [key: string]: string };
 }
 
 export interface GalleryConfig {
@@ -187,6 +199,8 @@ export interface Product {
   image: string;
   description: string;
   price: string;
+  variant?: string;
+  styles?: { [key: string]: string };
 }
 
 
@@ -195,11 +209,27 @@ export interface StatItem {
   label: string;
   value: string | number;
   description?: string;
+  variant?: string;
+  styles?: { [key: string]: string };
 }
 
 export interface StatsConfig {
   variant: string;
   items: StatItem[];
+}
+
+export interface FeatureItem {
+  icon: string;
+  title: string;
+  description: string;
+  color?: string;
+  variant?: string;
+  styles?: { [key: string]: string };
+}
+
+export interface FeaturesConfig {
+  variant: string;
+  items: FeatureItem[];
 }
 
 export interface ProductsConfig {
@@ -612,19 +642,69 @@ export class VariantService {
     ]
   });
 
+  private featuresConfigSubject = new BehaviorSubject<FeaturesConfig>({
+    variant: 'glass',
+    items: [
+      {
+        icon: '🚀',
+        title: 'Alta Velocidad',
+        description: 'Optimizamos cada línea de código para asegurar que tu web cargue en menos de un segundo.',
+        color: '#3b82f6'
+      },
+      {
+        icon: '🛡️',
+        title: 'Seguridad Total',
+        description: 'Protegemos tus datos y los de tus clientes con los estándares más altos de la industria.',
+        color: '#10b981'
+      },
+      {
+        icon: '📱',
+        title: 'Diseño Responsive',
+        description: 'Tu sitio se verá perfecto en cualquier dispositivo, desde móviles hasta pantallas 4K.',
+        color: '#f59e0b'
+      }
+    ]
+  });
+
   private sectionsSubject = new BehaviorSubject<PageSection[]>([
-    { id: 'sec_hero', type: 'hero', label: 'Portada Hero', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_features', type: 'features', label: 'Características Premium', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_hero', type: 'hero', label: 'Portada Hero', visible: true, name: '', styles: {}, content: {
+      title: 'Eleva tu Negocio Digital',
+      subtitle: 'Creamos experiencias web excepcionales que convierten visitantes en clientes.',
+      ctaLabel: 'Comienza tu Proyecto',
+      showCta: true
+    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_features', type: 'features', label: 'Características Premium', visible: true, name: '', styles: {}, content: {
+      title: 'Nuestras Características',
+      subtitle: 'Lo que nos hace diferentes'
+    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
     { id: 'sec_stats', type: 'stats', label: 'Métricas (Stats)', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
     { id: 'sec_bubble', type: 'bubble', label: 'Efecto Burbujas', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_services', type: 'services', label: 'Servicios', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_products', type: 'products', label: 'Módulos/Productos', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_testimonials', type: 'testimonials', label: 'Testimonios', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_pricing', type: 'pricing', label: 'Tablas de Precio', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_promotions', type: 'promotions', label: 'Promociones', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_faq', type: 'faq', label: 'Preguntas Frecuentes', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_gallery', type: 'gallery', label: 'Galería', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_contact', type: 'contact', label: 'Contacto y Formulario', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_services', type: 'services', label: 'Servicios', visible: true, name: '', styles: {}, content: {
+      title: 'Nuestros Servicios',
+      subtitle: 'Soluciones a tu medida'
+    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_products', type: 'products', label: 'Módulos/Productos', visible: true, name: '', styles: {}, content: {
+      title: 'Nuestros Módulos',
+      subtitle: 'Descubre nuestra selección premium'
+    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_testimonials', type: 'testimonials', label: 'Testimonios', visible: true, name: '', styles: {}, content: {
+      title: 'Lo que Dicen Nuestros Clientes'
+    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_pricing', type: 'pricing', label: 'Tablas de Precio', visible: true, name: '', styles: {}, content: {
+      title: 'Planes y Precios'
+    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_promotions', type: 'promotions', label: 'Promociones', visible: true, name: '', styles: {}, content: {
+      title: 'Ofertas Exclusivas'
+    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_faq', type: 'faq', label: 'Preguntas Frecuentes', visible: true, name: '', styles: {}, content: {
+      title: 'Preguntas Frecuentes'
+    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_gallery', type: 'gallery', label: 'Galería', visible: true, name: '', styles: {}, content: {
+      title: 'Nuestra Galería'
+    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_contact', type: 'contact', label: 'Contacto y Formulario', visible: true, name: '', styles: {}, content: {
+      title: 'Solicita tu Demo Personalizada'
+    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
   ]);
   sections$ = this.sectionsSubject.asObservable();
 
@@ -686,6 +766,7 @@ export class VariantService {
   promotionsConfig$: Observable<PromotionsConfig> = this.promotionsConfigSubject.asObservable();
   galleryConfig$: Observable<GalleryConfig> = this.galleryConfigSubject.asObservable();
   productsConfig$: Observable<ProductsConfig> = this.productsConfigSubject.asObservable();
+  featuresConfig$: Observable<FeaturesConfig> = this.featuresConfigSubject.asObservable();
 
   componentVariants$: Observable<{ [component: string]: string }> = this.componentVariantsSubject.asObservable();
   globalVariant$: Observable<string> = this.globalVariantSubject.asObservable();
@@ -1057,7 +1138,17 @@ export class VariantService {
   }
 
   // Persistence
-  private saveToLocalStorage() {
+  getCurrentFeaturesConfig(): FeaturesConfig {
+    return this.featuresConfigSubject.getValue();
+  }
+
+  setFeaturesConfig(config: Partial<FeaturesConfig>) {
+    const current = this.featuresConfigSubject.getValue();
+    this.featuresConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
+  }
+
+  saveToLocalStorage() {
     if (typeof window !== 'undefined' && window.localStorage) {
       const state = {
         header: this.headerConfigSubject.getValue(),

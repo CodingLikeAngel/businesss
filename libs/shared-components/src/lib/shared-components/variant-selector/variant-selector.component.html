@@ -110,6 +110,20 @@
 
         <div class="config-group">
           <div class="group-header">
+            <h3>Componentes Globales</h3>
+            <p class="helper-text">Edita el contenido y estilo de los componentes base.</p>
+          </div>
+          <div class="global-selection-grid">
+            <button class="action-btn" (click)="selectGlobalComponent('navbar')">🧭 Navegación</button>
+            <button class="action-btn" (click)="selectGlobalComponent('header')">🔝 Cabecera</button>
+            <button class="action-btn" (click)="selectGlobalComponent('footer')">⧉ Pie de Página</button>
+            <button class="action-btn" (click)="selectGlobalComponent('hero')">🚀 Portada Hero</button>
+            <button class="action-btn" (click)="selectGlobalComponent('bubble')">🫧 Burbujas</button>
+          </div>
+        </div>
+
+        <div class="config-group">
+          <div class="group-header">
             <h3>Exportar / Reset</h3>
           </div>
           <div class="flex flex-col gap-4">
@@ -131,6 +145,7 @@
       <div *ngIf="activeTab === 'structure'" class="tab-content">
         <lib-section-structure
           (addSection)="onAddSection()"
+          (sectionSelected)="onSectionSelected($event)"
         ></lib-section-structure>
       </div>
 
@@ -141,26 +156,23 @@
         ></lib-component-explorer>
       </div>
 
-      <!-- Content Tab - Coming Soon -->
+      <!-- Content Tab -->
       <div *ngIf="activeTab === 'content'" class="tab-content">
-        <div class="config-group">
-          <div class="coming-soon">
-            <div class="coming-soon-icon">📝</div>
-            <h3>Editor de Contenido</h3>
-            <p>Próximamente: Edición avanzada de textos y contenido dinámico.</p>
-          </div>
-        </div>
+        <lib-content-editor
+          [selectedElement]="selectedElement"
+          [selectedSection]="selectedSection"
+          (contentChanged)="onContentChanged()"
+        ></lib-content-editor>
       </div>
 
-      <!-- Design Tab - Coming Soon -->
+      <!-- Design Tab -->
       <div *ngIf="activeTab === 'design'" class="tab-content">
-        <div class="config-group">
-          <div class="coming-soon">
-            <div class="coming-soon-icon">🎨</div>
-            <h3>Editor de Estilos</h3>
-            <p>Próximamente: Personalización avanzada de estilos y variantes.</p>
-          </div>
-        </div>
+        <lib-design-editor
+          [selectedElement]="selectedElement"
+          [selectedSection]="selectedSection"
+          (styleChanged)="onStyleChanged()"
+          (variantApplied)="onVariantApplied($event)"
+        ></lib-design-editor>
       </div>
     </div>
   </div>

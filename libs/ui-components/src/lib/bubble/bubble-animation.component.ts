@@ -107,6 +107,7 @@ export class BubbleAnimationComponent implements AfterViewInit {
   }
 
   private move() {
+    if (!this.config) return;
     this.curX += (this.tgX - this.curX) / (20 / (this.config.speed || 1));
     this.curY += (this.tgY - this.curY) / (20 / (this.config.speed || 1));
 

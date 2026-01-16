@@ -23,6 +23,7 @@ import { VariantService, PageSection } from '../../../services/variant.service';
           [class.hidden-section]="!section.visible"
           [class.is-dragging]="draggedSectionIndex === i"
           [class.is-over]="overSectionIndex === i"
+          (click)="onSelectSection(section)"
           draggable="true"
           (dragstart)="onDragStart(i)"
           (dragover)="onDragOver($event, i)"
@@ -317,6 +318,7 @@ export class SectionStructureComponent implements OnInit, OnDestroy {
   @Output() addSection = new EventEmitter<void>();
   @Output() sectionVisibilityChanged = new EventEmitter<PageSection>();
   @Output() sectionRemoved = new EventEmitter<number>();
+  @Output() sectionSelected = new EventEmitter<PageSection>();
 
   private subscriptions: Subscription[] = [];
 
@@ -363,6 +365,10 @@ export class SectionStructureComponent implements OnInit, OnDestroy {
       this.variantService.removeSectionFromCurrentPage(section.id);
       this.sectionRemoved.emit(index);
     }
+  }
+
+  onSelectSection(section: PageSection) {
+    this.sectionSelected.emit(section);
   }
 
   // Drag and Drop Implementation

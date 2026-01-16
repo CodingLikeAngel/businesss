@@ -26,6 +26,8 @@ interface NavigationCard {
   sectionId: string;
   videoUrl?: string;
   posterUrl?: string;
+  variant?: string;
+  styles?: { [key: string]: string };
 }
 
 interface CarouselItem {
@@ -34,7 +36,9 @@ interface CarouselItem {
   posterUrl?: string;
   title: string;
   description: string;
-  section:string;
+  section: string;
+  variant?: string;
+  styles?: { [key: string]: string };
 }
 
 @Component({

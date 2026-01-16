@@ -12,11 +12,27 @@
 .title {
   margin: 0;
   padding: 0.5rem 0;
-  font-family: 'Orbitron', sans-serif;
+  font-family: var(--theme-font, 'Orbitron', sans-serif);
   font-weight: 800;
   line-height: 1.2;
   transition: all 0.4s ease;
-  color: var(--title-color, inherit);
+  color: var(--theme-color, inherit);
+
+  @include shared.apply-all-variants('title--');
+  
+  /* Robust text gradient support */
+  &[class*="title--"] {
+    background-image: var(--theme-text-gradient, none);
+    @supports (-webkit-background-clip: text) {
+      & {
+        background-clip: text;
+        -webkit-background-clip: text;
+        /* We only apply transparent if we have a gradient variable set */
+        /* Since we can't check variable existence in CSS, we use a trick: 
+           The variant itself should set -webkit-text-fill-color if it provides a gradient */
+      }
+    }
+  }
 }
 
 /* Niveles */

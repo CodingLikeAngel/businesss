@@ -804,31 +804,44 @@ $glass-border: rgba(255, 255, 255, 0.2);
 }
 
 @mixin variant-purple-edge {
-  --theme-bg: #7c3aed;
+  --theme-bg: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
   --theme-color: #ffffff;
-  --theme-border: 1px solid #7c3aed;
+  --theme-border: 1px solid rgba(255, 255, 255, 0.2);
+  --theme-accent: #a78bfa;
+  --theme-text-gradient: linear-gradient(to right, #ffffff, #c4b5fd);
+  --theme-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+  -webkit-text-fill-color: transparent;
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
-  border-top: 2px solid #4f46e5;
+  box-shadow: var(--theme-shadow);
 }
 
 @mixin variant-rose-radial {
-  --theme-bg: radial-gradient(circle, #f43f5e, #dc2626);
+  --theme-bg: radial-gradient(circle at center, #f43f5e 0%, #be123c 100%);
   --theme-color: #ffffff;
-  --theme-border: none;
+  --theme-border: 1px solid rgba(255, 255, 255, 0.2);
+  --theme-accent: #ffe4e6;
+  --theme-text-gradient: linear-gradient(to right, #ffffff, #ffe4e6);
+  --theme-shadow: 0 10px 40px rgba(244, 63, 94, 0.3);
+  -webkit-text-fill-color: transparent;
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
 }
 
 @mixin variant-yellow-pulse {
-  --theme-bg: #eab308;
+  --theme-bg: linear-gradient(135deg, #eab308 0%, #ca8a04 100%);
   --theme-color: #1e293b;
-  --theme-border: 1px solid #eab308;
+  --theme-border: 1px solid rgba(0, 0, 0, 0.1);
+  --theme-accent: #fef08a;
+  --theme-shadow: 0 0 20px rgba(234, 179, 8, 0.4);
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
+  box-shadow: var(--theme-shadow);
+  animation: pulse-glow 2s infinite;
 }
 
 @mixin variant-green-inset {
@@ -842,13 +855,16 @@ $glass-border: rgba(255, 255, 255, 0.2);
 }
 
 @mixin variant-blue-skew {
-  --theme-bg: #00A2FF;
+  --theme-bg: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
   --theme-color: #ffffff;
-  --theme-border: 1px solid #00A2FF;
+  --theme-border: 1px solid rgba(255, 255, 255, 0.2);
+  --theme-accent: #7dd3fc;
+  --theme-shadow: 0 10px 25px rgba(2, 132, 199, 0.3);
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
-  transform: skew(-10deg);
+  box-shadow: var(--theme-shadow);
+  transform: skewX(-6deg);
 }
 
 @mixin variant-orange-dash {

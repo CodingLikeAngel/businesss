@@ -1,4 +1,4 @@
-import { Component, OnInit, TrackByFunction, inject } from '@angular/core';
+import { Component, OnInit, TrackByFunction, inject, Inject, PLATFORM_ID } from '@angular/core';
 import { EditorService } from '../../../../index';
 import { BaseEditorFeatureComponent } from '../base-editor-feature.component';
 import { CommonModule } from '@angular/common';
@@ -15,13 +15,22 @@ import {
   UICardComponent,
   UINavBarComponent,
   UITabsComponent,
+  UIFeaturesSectionComponent,
+  UIStatsLibSectionComponent,
+  UITestimonialsSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent,
+  UIAccordionComponent,
+  UIImageComponent
 } from '@negocio/ui-components';
-import { Product, Testimonial } from '@negocio/shared-components';
+import { Product, Testimonial, PageSection, VariantService } from '@negocio/shared-components';
 import { FaqSectionComponent } from '../../../components/faq-section/faq-section.component';
 import { GallerySectionComponent } from '../../../components/gallery-section/gallery-section.component';
 import { PricingSectionComponent } from '../../../components/pricing-section/pricing-section.component';
 import { PromotionsSectionComponent } from '../../../components/promotions-section/promotions-section.component';
 import { ReservationFormComponent } from '../../../components/reservation-form/reservation-form.component';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'lib-editor-mobile-feature',
@@ -45,23 +54,37 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
     UiTestimonialsCardComponent,
     UICardAnimatedComponent,
     UICardComponent,
-    UITabsComponent
+    UITabsComponent,
+    UIFeaturesSectionComponent,
+    UIStatsLibSectionComponent,
+    UITestimonialsSectionComponent,
+    UIFaqSectionComponent,
+    UIGallerySectionComponent,
+    UIPricingTableSectionComponent,
+    UIAccordionComponent,
+    UIImageComponent
   ],
 })
 export class EditorMobileFeatureComponent extends BaseEditorFeatureComponent implements OnInit {
+  sections$: Observable<PageSection[]>;
 
-  
+  constructor(
+    @Inject(PLATFORM_ID) protected override platformId: object,
+    protected override variantService: VariantService,
+    protected override router: Router,
+    protected override route: ActivatedRoute
+  ) {
+    super(platformId, variantService, router, route);
+    this.sections$ = this.variantService.sections$;
+  }
 
 
   testimonials: Testimonial[] = [];
-  trackByProductId: TrackByFunction<Product> = (index: number, product: Product) => product.name;
-  testimonialsConfig$: any;
-  location: any;
 
 
   override ngOnInit() {
     super.ngOnInit();
-    inject(EditorService).updateEditorState({ isMobile: true });
+    this.editorService.updateEditorState({ isMobile: true });
     // Inicializar testimonials desde testimonialsConfig
     // this.testimonialsConfig$.subscribe((config: { items: Testimonial[]; }) => {
     //   this.testimonials = config.items;

@@ -20,7 +20,10 @@ import {
   UIFaqSectionComponent,
   UIGallerySectionComponent,
   UIPricingTableSectionComponent,
-  UITabsComponent
+  UITabsComponent,
+  UIAccordionComponent,
+  UIImageComponent,
+  UiTestimonialsCardComponent
 } from '@negocio/ui-components';
 import { Product, Testimonial, PageSection, VariantService } from '@negocio/shared-components';
 import { PromotionsSectionComponent } from '../../../components/promotions-section/promotions-section.component';
@@ -50,7 +53,10 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
     UIFaqSectionComponent,
     UIGallerySectionComponent,
     UIPricingTableSectionComponent,
-    UITabsComponent
+    UITabsComponent,
+    UIAccordionComponent,
+    UIImageComponent,
+    UiTestimonialsCardComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
@@ -66,8 +72,6 @@ export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent im
     super(platformId, variantService, router, route);
     this.sections$ = this.variantService.sections$;
   }
-
-  private editorService = inject(EditorService);
 
   override ngOnInit() {
     super.ngOnInit();
@@ -91,8 +95,5 @@ export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent im
     }
   }
 
-  trackBySectionId(index: number, section: PageSection): string {
-    return section.id;
-  }
 }
 

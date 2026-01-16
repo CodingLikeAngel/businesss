@@ -12,10 +12,13 @@
   width: 100%;
   border-radius: 1rem;
   overflow: hidden;
-  background: var(--accordion-bg, #fff);
-  color: var(--accordion-text, #333);
-  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: var(--theme-bg, var(--accordion-bg, #fff));
+  color: var(--theme-color, var(--accordion-text, #333));
+  border: var(--theme-border, 1px solid rgba(0, 0, 0, 0.1));
   transition: all 0.3s ease;
+  box-shadow: var(--theme-shadow, none);
+
+  @include shared.apply-all-variants('variant-');
 }
 
 .accordion-item {

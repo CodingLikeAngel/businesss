@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostBinding } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,4 +11,11 @@ import { CommonModule } from '@angular/common';
 export class UiTestimonialsCardComponent {
   @Input() testimonial: { quote: string; author: string } = { quote: '', author: '' };
   @Input() variant: any = 'default';
+
+  @HostBinding('class') get hostClasses() {
+    return [
+      'testimonial-card',
+      `testimonial-card--${this.variant}`
+    ].join(' ');
+  }
 }

@@ -1,193 +1,292 @@
-<router-outlet></router-outlet>
-      <!-- Navbar -->
-      <div class="sticky top-0 z-50 bg-black/50 backdrop-blur-md">
-        <lib-ui-components-tabs
-          [tabs]="tabsConfig"
-          [variant]="getVariant('hero')"
-          [showAs]="'tabs'"
-          [isMobile]="editorState.isMobile"
-          (tabSelected)="onTabSelected($event)"
-        ></lib-ui-components-tabs>
-      </div>
+<div class="sections-container min-h-screen relative pb-32">
+  <div *ngIf="loading$ | async" class="flex items-center justify-center p-20">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+  </div>
+
+  <div *ngIf="(sections$ | async)?.length === 0 && !(loading$ | async)" class="flex flex-col items-center justify-center p-10 text-white/50">
+    <div class="text-4xl mb-4">🏗️</div>
+    <h2 class="text-xl font-bold">Página vacía</h2>
+    <p class="text-xs text-center">Añade secciones desde el panel de Estructura.</p>
+  </div>
+
+  <ng-container *ngFor="let section of sections$ | async; trackBy: trackBySectionId">
+    <ng-container [ngSwitch]="section.type" *ngIf="section.visible">
       
-<section id="hero" class="relative z-20">
-   <lib-ui-hero-section
-     [variant]="getVariant('hero')"
-     [title]="heroConfig.title"
-     [subtitle]="heroConfig.subtitle"
-     [showCta]="heroConfig.showCta"
-     [ctaLabel]="heroConfig.ctaLabel"
-     [showScrollIcon]="heroConfig.showScrollIcon"
-     [videoBackground]="heroConfig.videoBackground"
-     [videoUrl]="heroConfig.videoUrl"
-     [videoPoster]="heroConfig.videoPoster"
-     [navigationCards]="heroConfig.navigationCards"
-     [carouselItems]="heroConfig.carouselItems"
-     [customStyles]="heroConfig.customStyles"
-     (sectionSelected)="scrollToSection($event)"
-   ></lib-ui-hero-section>
- </section>
+      <!-- HERO (Decomposed for granular editing) -->
+      <section *ngSwitchCase="'hero'" [id]="section.id" 
+        class="relative min-h-[60vh] flex flex-col items-center justify-center cursor-pointer editor-section overflow-hidden p-6" 
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)"
+        [ngClass]="'hero-section--' + getVariant(section.id)">
+        
+        <!-- Background Overlay (Simulated) -->
+        <div class="absolute inset-0 bg-black/50 z-0"></div>
 
-<lib-bubble-animation
-  [variant]="getVariant('bubble')"
-  [config]="bubbleConfig"
-></lib-bubble-animation>
+        <div class="relative z-10 text-center w-full">
+          <lib-ui-components-title
+            [level]="'h2'"
+            [text]="section.content['title'] || heroConfig.title"
+            [variant]="getVariant(section.id)"
+            [align]="'center'"
+            class="editor-element block mb-4"
+            [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+            (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title', _original: section.content })"
+          ></lib-ui-components-title>
+          
+          <div class="mt-2 editor-element"
+               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_subtitle'"
+               (click)="selectElement($event, { id: section.id + '_subtitle', content: section.content, type: 'subtitle', _original: section.content })">
+            <p class="text-lg text-white/90">
+              {{ section.content['subtitle'] || heroConfig.subtitle }}
+            </p>
+          </div>
 
-<section id="servicios" class="relative z-20 py-12">
-  <div class="container">
-    <lib-ui-components-title
-      [level]="titleConfig.level"
-      [text]="titleConfig.text"
-      [variant]="getVariant('title')"
-      [align]="titleConfig.align"
-      class="mb-8"
-    ></lib-ui-components-title>
-    <lib-ui-components-card-rutas
-      [items]="serviceCardsConfig.items"
-      [variant]="getVariant('card')"
-      [backgroundColor]="cardConfig.backgroundColor"
-      [animation]="cardConfig.animation"
-      [isMobile]="editorState.isMobile"
-    ></lib-ui-components-card-rutas>
-  </div>
-</section>
+          <!-- CTA -->
+          <div *ngIf="section.content['showCta'] !== false" 
+               class="mt-8 editor-element inline-block"
+               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_cta'"
+               (click)="selectElement($event, { id: section.id + '_cta', content: section.content, type: 'cta', _original: section.content })">
+            <button class="cta-button px-8 py-3 rounded-lg font-bold"
+                    [ngClass]="'variant-' + getVariant(section.id)">
+              {{ section.content['ctaLabel'] || heroConfig.ctaLabel }}
+            </button>
+          </div>
+        </div>
+      </section>
 
-<section id="productos" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <div class="backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(113,255,219,0.5)] border-2 border-neon-blue">
-      <lib-ui-components-title
-        [level]="titleConfig.level"
-        [text]="'Nuestros Módulos'"
-        [variant]="getVariant('title')"
-        [align]="titleConfig.align"
-        class="mb-4"
-      ></lib-ui-components-title>
-      <lib-ui-components-title
-        [level]="'h5'"
-        [text]="'Descubre nuestra selección premium de módulos para tu web, diseñados para escalar tu negocio con eficiencia'"
-        [variant]="getVariant('title')"
-        [align]="titleConfig.align"
-        class="mb-6"
-      ></lib-ui-components-title>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ng-container *ngFor="let product of productsConfig.items; let i = index; trackBy: trackByProductId">
-          <lib-ui-components-card-animated
-            *ngIf="i % 2 === 0 && i !== 2"
-            [title]="product.name"
-            [description]="product.description"
-            [image]="product.image"
-            [variant]="getVariant('product-3d')"
-            [animation]="'bounce'"
-            [borderColor]="'#22d3ee'"
-            [backgroundColor]="'rgba(47, 79, 79, 0.9)'"
-            (addToCart)="addToCart(product)"
-            (viewDetails)="openServiceModal(product)"
-          ></lib-ui-components-card-animated>
-          <lib-ui-components-card
-            *ngIf="i % 2 === 0 && i !== 0"
-            [title]="product.name"
-            [image]="'1029.png'"
-            [description]="product.description"
-            [variant]="getVariant('default')"
-            [animation]="'fade'"
-            [size]="'medium'"
-          ></lib-ui-components-card>
-          <lib-card-products
-            *ngIf="i % 2 !== 0"
-            [product]="product"
-            [variant]="getVariant('title')"
-          ></lib-card-products>
-        </ng-container>
-        <ng-template *ngIf="!productsConfig.items?.length">
-          <p class="text-white text-center">No hay módulos disponibles en este momento.</p>
-        </ng-template>
+      <!-- FEATURES (Decomposed) -->
+      <div *ngSwitchCase="'features'" class="editor-section cursor-pointer p-6"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+        
+        <div class="text-center mb-8">
+          <h2 class="text-2xl font-bold text-white mb-2 editor-element"
+              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+              (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })">
+            {{ section.content['title'] || 'Servicios Premium' }}
+          </h2>
+        </div>
+
+        <div class="space-y-4">
+          <div *ngFor="let feat of featuresConfig.items" 
+               class="editor-element"
+               [class.is-selected]="uiStateService.selectedElement?._original === feat"
+               (click)="selectElement($event, feat)">
+            <lib-ui-components-card-animated
+              [icon]="feat.icon"
+              [title]="feat.title"
+              [description]="feat.description"
+              [variant]="feat.variant || getVariant(section.id)"
+              [customStyles]="feat.styles || {}"
+              [animation]="'bounce'"
+            ></lib-ui-components-card-animated>
+          </div>
+        </div>
       </div>
-    </div>
-  </div>
-</section>
 
-<section id="testimonios" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-ui-components-title
-      [level]="titleConfig.level"
-      [text]="'Lo que Dicen Nuestros Clientes'"
-      [variant]="getVariant('title')"
-      [align]="titleConfig.align"
-      class="mb-8"
-    ></lib-ui-components-title>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <lib-testimonials-card
-        *ngFor="let testimonial of testimonials; trackBy: trackByTestimonialId"
-        [testimonial]="testimonial"
-      ></lib-testimonials-card>
-    </div>
-  </div>
-</section>
+      <!-- STATS (Decomposed) -->
+      <div *ngSwitchCase="'stats'" class="editor-section cursor-pointer p-6"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+        
+         <div class="grid grid-cols-2 gap-4">
+            <div *ngFor="let stat of statsConfig.items" 
+                 class="editor-element"
+                 [class.is-selected]="uiStateService.selectedElement?._original === stat"
+                 (click)="selectElement($event, stat)">
+                <lib-ui-components-card
+                  [title]="stat.value.toString()"
+                  [description]="stat.label"
+                  [image]="stat.icon"
+                  [variant]="stat.variant || getVariant(section.id)"
+                  [customStyles]="stat.styles || {}"
+                  [size]="'small'"
+                ></lib-ui-components-card>
+            </div>
+         </div>
+      </div>
 
-<section id="precios" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-pricing-section
-      [variant]="getVariant('pricing')"
-      [priceColumns]="pricingConfig.columns"
-      [priceRows]="pricingConfig.rows"
-    ></lib-pricing-section>
-  </div>
-</section>
+      <!-- BUBBLE -->
+      <div *ngSwitchCase="'bubble'" class="editor-section cursor-pointer"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+        <lib-bubble-animation 
+          [variant]="getVariant(section.id)"
+          [config]="bubbleConfig"
+        ></lib-bubble-animation>
+      </div>
 
-<section id="promociones" class="relative z-20 py-12 px-12 ml-12">
-  <div class="container mx-auto px-6 max-w-7xl flex justify-center">
-    <div class="max-w-5xl">
-      <lib-promotions-section
-        [selectedVariant]="getVariant('promotions')"
-        [variant]="getVariant('promotions')"
-        [premiumCardConfigs]="promotionsConfig.premiumCards"
-      ></lib-promotions-section>
-    </div>
-  </div>
-</section>
+      <!-- SERVICES (Decomposed) -->
+      <section *ngSwitchCase="'services'" [id]="section.id" 
+        class="relative z-20 py-10 cursor-pointer editor-section" 
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+        <div class="container mx-auto px-4">
+          <lib-ui-components-title
+            [level]="'h2'"
+            [text]="section.content['title'] || 'Servicios'"
+            [variant]="getVariant(section.id)"
+            [align]="'center'"
+            class="mb-6 editor-element"
+            [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+            (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+          ></lib-ui-components-title>
+          
+          <div class="space-y-6">
+            <div *ngFor="let item of serviceCardsConfig.items" 
+                 class="editor-element"
+                 [class.is-selected]="uiStateService.selectedElement?._original === item"
+                 (click)="selectElement($event, item)">
+                <lib-ui-components-card
+                  [title]="item.routeName"
+                  [description]="item.description"
+                  [image]="item.imageUrl"
+                  [variant]="item.variant || getVariant(section.id)"
+                  [customStyles]="item.styles || {}"
+                  [size]="'medium'"
+                ></lib-ui-components-card>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<section id="faq" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-faq-section
-      [variant]="getVariant('faq')"
-      [faqItems]="faqConfig.items"
-    ></lib-faq-section>
-  </div>
-</section>
+      <!-- PRODUCTS -->
+      <section *ngSwitchCase="'products'" [id]="section.id" 
+        class="relative z-20 py-10 cursor-pointer editor-section"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+        <div class="container mx-auto px-4">
+          <div class="backdrop-blur-xl p-6 rounded-2xl border border-white/10 bg-white/5">
+            <lib-ui-components-title
+              [level]="'h2'"
+              [text]="section.content['title'] || 'Módulos'"
+              [variant]="getVariant(section.id)"
+              [align]="'center'"
+              class="mb-6 editor-element"
+              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+              (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+            ></lib-ui-components-title>
+            
+            <div class="space-y-6">
+              <ng-container *ngFor="let product of productsConfig.items; let i = index; trackBy: trackByProductName">
+                <div class="editor-element" 
+                  [class.is-selected]="uiStateService.selectedElement?._original === product"
+                  (click)="selectElement($event, product)">
+                  <lib-ui-components-card
+                    [title]="product.name"
+                    [image]="product.image"
+                    [description]="product.description"
+                    [variant]="product.variant || getVariant(section.id)"
+                    [customStyles]="product.styles || {}"
+                  ></lib-ui-components-card>
+                </div>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </section>
 
-<section id="galeria" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-gallery-section
-      [variant]="getVariant('gallery')"
-      [images]="galleryConfig.images"
-    ></lib-gallery-section>
-  </div>
-</section>
+      <!-- TESTIMONIALS (Decomposed) -->
+      <div *ngSwitchCase="'testimonials'" class="editor-section cursor-pointer py-10 p-4"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <h2 class="text-2xl font-bold text-center text-white mb-8 editor-element"
+              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+              (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })">
+            {{ section.content['title'] || 'Testimonios' }}
+          </h2>
+          <div class="space-y-4">
+            <div *ngFor="let t of testimonialsConfig.items" 
+                 class="editor-element"
+                 [class.is-selected]="uiStateService.selectedElement?._original === t"
+                 (click)="selectElement($event, t)">
+                <lib-testimonials-card
+                  [testimonial]="{ quote: t.quote, author: t.author }"
+                  [variant]="t.variant || getVariant(section.id)"
+                ></lib-testimonials-card>
+            </div>
+          </div>
+      </div>
 
-<section id="contacto" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-ui-components-title
-      [level]="titleConfig.level"
-      [text]="'Solicita tu Demo Personalizada'"
-      [variant]="getVariant('title')"
-      [align]="titleConfig.align"
-      class="mb-8"
-    ></lib-ui-components-title>
-    <lib-reservation-form
-      [variant]="getVariant('form')"
-    ></lib-reservation-form>
-  </div>
-</section>
+      <!-- FAQ (Decomposed) -->
+      <div *ngSwitchCase="'faq'" class="editor-section cursor-pointer py-10 p-4"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <h2 class="text-2xl font-bold text-center text-white mb-6 editor-element"
+              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+              (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })">
+            {{ section.content['title'] || 'FAQ' }}
+          </h2>
+          <div class="space-y-4">
+            <div *ngFor="let faq of faqConfig.items" 
+                 class="editor-element"
+                 [class.is-selected]="uiStateService.selectedElement?._original === faq"
+                 (click)="selectElement($event, faq)">
+                <lib-ui-components-accordion
+                  [items]="[{ title: faq.title, content: faq.content, expanded: false }]"
+                  [variant]="faq.variant || getVariant(section.id)"
+                  [customStyles]="faq.styles || {}"
+                ></lib-ui-components-accordion>
+            </div>
+          </div>
+      </div>
 
-<lib-ui-components-modal
-   [isOpen]="modalState.isOpen"
-   [variant]="'glass'"
-   [rounded]="'md'"
-   [size]="'lg'"
-   [title]="getModalTitle()"
-   [content]="modalState.selectedItem?.description || 'Selecciona un item para ver más detalles.'"
-   (modalOnClose)="closeModal()"
- ></lib-ui-components-modal>
+      <!-- GALLERY -->
+      <div *ngSwitchCase="'gallery'" class="editor-section cursor-pointer py-10 p-4"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <lib-ui-components-title
+            [level]="'h2'"
+            [text]="section.content['title'] || 'Galería'"
+            [variant]="getVariant(section.id)"
+            [align]="'center'"
+            class="mb-6 editor-element"
+            [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+            (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+          ></lib-ui-components-title>
+          
+          <div class="grid grid-cols-2 gap-4">
+             <div *ngFor="let img of galleryConfig.images" 
+                  class="editor-element"
+                  [class.is-selected]="uiStateService.selectedElement?._original === img"
+                  (click)="selectElement($event, img)">
+                <lib-ui-image 
+                  [src]="img.src" 
+                  [alt]="img.alt"
+                  [variant]="img.variant || getVariant(section.id)"
+                  [customStyles]="img.styles || {}"
+                  [size]="'small'"
+                  [shape]="'rounded'"
+                ></lib-ui-image>
+             </div>
+          </div>
+      </div>
 
-
-
+      <!-- CONTACT -->
+      <section *ngSwitchCase="'contact'" [id]="section.id" 
+        class="relative z-20 py-10 cursor-pointer editor-section" 
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+        <div class="container mx-auto px-4">
+          <lib-ui-components-title
+            [level]="'h2'"
+            [text]="section.content['title'] || 'Contacto'"
+            [variant]="getVariant(section.id)"
+            [align]="'center'"
+            class="mb-8 editor-element"
+            [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+            (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+          ></lib-ui-components-title>
+          <div class="editor-element" 
+               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_form'"
+               (click)="selectElement($event, { id: section.id + '_form', type: 'form' })">
+            <lib-reservation-form
+              [variant]="getVariant(section.id)"
+            ></lib-reservation-form>
+          </div>
+        </div>
+      </section>
+      
+    </ng-container>
+  </ng-container>
+</div>

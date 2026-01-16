@@ -1,28 +1,36 @@
-.testimonial-card {
+@use "../../styles/mixins" as shared;
+
+:host {
+    display: block;
     position: relative;
-    background: rgba(20, 20, 30, 0.85);
+    background: var(--theme-bg, rgba(20, 20, 30, 0.85));
     border-radius: 16px;
     padding: 24px;
-    border: 2px solid #a855f7;
+    border: var(--theme-border, 2px solid #a855f7);
+    color: var(--theme-color, #ffffff);
     transition: all 0.5s ease;
-  }
+    backdrop-filter: var(--theme-backdrop, blur(8px));
+    box-shadow: var(--theme-shadow, none);
+
+    @include shared.apply-all-variants('testimonial-card--');
+
+    &:hover {
+      transform: scale(1.05);
+      border-color: var(--theme-accent, #facc15);
+      box-shadow: var(--theme-shadow, 0 0 30px rgba(113, 255, 219, 0.6));
+    }
+}
   
-  .testimonial-card:hover {
-    transform: scale(1.05);
-    border-color: #facc15;
-    box-shadow: 0 0 30px rgba(113, 255, 219, 0.6);
-  }
-  
-  .testimonial-quote {
-    color: rgba(255, 255, 255, 0.9);
-    font-family: 'Comic Neue', cursive;
+.testimonial-quote {
+    color: var(--theme-color, rgba(255, 255, 255, 0.9));
+    font-family: var(--theme-font, 'Comic Neue', cursive);
     font-weight: 500;
     margin-bottom: 16px;
-  }
+}
   
-  .testimonial-author {
+.testimonial-author {
     font-size: 1.25rem;
     font-weight: bold;
-    color: #facc15;
+    color: var(--theme-accent, #facc15);
     text-shadow: 0 0 10px rgba(250, 204, 21, 0.8);
-  }
+}
