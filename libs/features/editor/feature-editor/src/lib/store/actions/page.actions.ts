@@ -79,7 +79,7 @@ export const setHomePage = createAction(
 // Section Actions
 export const addSection = createAction(
   '[Page] Add Section',
-  props<{ section: Section; position?: number }>()
+  props<{ section: Section; pageId: string; position?: number }>()
 );
 
 export const updateSection = createAction(

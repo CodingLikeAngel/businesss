@@ -87,7 +87,9 @@ export type SectionType =
   | 'cta'
   | 'promotions'
   | 'bubble'
-  | 'custom';
+  | 'custom'
+  | 'header'
+  | 'footer';
 
 export type ElementType =
   | 'text'
@@ -135,6 +137,7 @@ export interface Section {
   zIndex: number;
   order?: number;
   config?: any;
+  pageId?: string;
 }
 
 export interface PageSection {

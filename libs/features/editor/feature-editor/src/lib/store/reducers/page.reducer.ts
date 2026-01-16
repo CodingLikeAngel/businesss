@@ -388,10 +388,11 @@ export const pageReducer = createReducer(
   })),
 
   // Add Section
-  on(PageActions.addSection, (state, { section, position }) => {
-    if (!state.currentPage) return state;
+  on(PageActions.addSection, (state, { section, pageId, position }) => {
+    const targetPage = state.pages.find(p => p.id === pageId) || state.currentPage;
+    if (!targetPage) return state;
 
-    const sections = [...state.currentPage.sections];
+    const sections = [...targetPage.sections];
     if (position !== undefined && position >= 0 && position <= sections.length) {
       sections.splice(position, 0, section);
     } else {
@@ -399,14 +400,18 @@ export const pageReducer = createReducer(
     }
 
     const updatedPage = {
-      ...state.currentPage,
+      ...targetPage,
       sections,
       updatedAt: new Date(),
     };
 
+    const updatedPages = state.pages.map(p => p.id === updatedPage.id ? updatedPage : p);
+    const updatedCurrentPage = state.currentPage?.id === updatedPage.id ? updatedPage : state.currentPage;
+
     return {
       ...state,
-      currentPage: updatedPage,
+      pages: updatedPages,
+      currentPage: updatedCurrentPage,
       hasUnsavedChanges: true,
     };
   }),
