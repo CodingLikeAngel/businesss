@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
-import { PageState } from '../state/app.state';
+import { PageState, initialNavigationState, initialPreviewState, initialMigrationState } from '../state/app.state';
 import * as PageActions from '../actions/page.actions';
-import { Page, Section, Element } from '../../models/editor.model';
+import { Page, Section, Element, NavigationState, PreviewState, MigrationState, MigrationRecord } from '../../models/editor.model';
 
 export const initialPageState: PageState = {
   currentPage: null,
@@ -11,6 +11,9 @@ export const initialPageState: PageState = {
   saving: false,
   lastSaved: null,
   hasUnsavedChanges: false,
+  navigationState: initialNavigationState,
+  preview: initialPreviewState,
+  migration: initialMigrationState,
 };
 
 export const pageReducer = createReducer(
@@ -62,6 +65,191 @@ export const pageReducer = createReducer(
       hasUnsavedChanges: true,
     };
   }),
+
+  // Delete Page
+  on(PageActions.deletePage, (state, { pageId }) => ({
+    ...state,
+    pages: state.pages.filter(page => page.id !== pageId),
+    currentPage: state.currentPage?.id === pageId ? null : state.currentPage,
+    hasUnsavedChanges: true,
+  })),
+
+  // Duplicate Page
+  on(PageActions.duplicatePage, (state, { pageId, newName }) => {
+    const pageToDuplicate = state.pages.find(page => page.id === pageId);
+    if (!pageToDuplicate) return state;
+
+    const duplicatedPage: Page = {
+      ...pageToDuplicate,
+      id: Math.random().toString(36).substring(2, 11),
+      name: newName,
+      slug: newName.toLowerCase().replace(/\s+/g, '-'),
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+
+    return {
+      ...state,
+      pages: [...state.pages, duplicatedPage],
+      currentPage: duplicatedPage,
+      hasUnsavedChanges: true,
+    };
+  }),
+
+  // Reorder Pages
+  on(PageActions.reorderPages, (state, { pageIds }) => {
+    const reorderedPages = pageIds.map(id => state.pages.find(page => page.id === id)).filter(Boolean) as Page[];
+    return {
+      ...state,
+      pages: reorderedPages,
+      hasUnsavedChanges: true,
+    };
+  }),
+
+  // Set Current Page
+  on(PageActions.setCurrentPage, (state, { pageId }) => {
+    const page = state.pages.find(p => p.id === pageId);
+    return {
+      ...state,
+      currentPage: page || null,
+    };
+  }),
+
+  // Navigation Actions
+  on(PageActions.navigateToPage, (state, { pageId, path }) => ({
+    ...state,
+    navigationState: {
+      ...state.navigationState,
+      currentPath: path,
+      activePageId: pageId,
+      isNavigating: true,
+    },
+  })),
+
+  on(PageActions.updateBreadcrumbs, (state, { breadcrumbs }) => ({
+    ...state,
+    navigationState: {
+      ...state.navigationState,
+      breadcrumbs,
+    },
+  })),
+
+  on(PageActions.navigationStarted, (state) => ({
+    ...state,
+    navigationState: {
+      ...state.navigationState,
+      isNavigating: true,
+    },
+  })),
+
+  on(PageActions.navigationCompleted, (state) => ({
+    ...state,
+    navigationState: {
+      ...state.navigationState,
+      isNavigating: false,
+    },
+  })),
+
+  // Preview Actions
+  on(PageActions.enterPreviewMode, (state, { pageId }) => ({
+    ...state,
+    preview: {
+      ...state.preview,
+      isPreviewMode: true,
+      previewPageId: pageId,
+    },
+  })),
+
+  on(PageActions.exitPreviewMode, (state) => ({
+    ...state,
+    preview: {
+      ...state.preview,
+      isPreviewMode: false,
+      previewPageId: null,
+    },
+  })),
+
+  on(PageActions.setPreviewDevice, (state, { device }) => ({
+    ...state,
+    preview: {
+      ...state.preview,
+      previewDevice: device,
+    },
+  })),
+
+  on(PageActions.togglePreviewGrid, (state) => ({
+    ...state,
+    preview: {
+      ...state.preview,
+      showGrid: !state.preview.showGrid,
+    },
+  })),
+
+  on(PageActions.togglePreviewRulers, (state) => ({
+    ...state,
+    preview: {
+      ...state.preview,
+      showRulers: !state.preview.showRulers,
+    },
+  })),
+
+  // Migration Actions
+  on(PageActions.startMigration, (state, { fromVersion, toVersion }) => ({
+    ...state,
+    migration: {
+      ...state.migration,
+      migrationHistory: [
+        ...state.migration.migrationHistory,
+        {
+          id: Math.random().toString(36).substring(2, 11),
+          fromVersion,
+          toVersion,
+          timestamp: new Date(),
+          status: 'pending',
+        },
+      ],
+    },
+  })),
+
+  on(PageActions.migrationSuccess, (state, { record }) => ({
+    ...state,
+    migration: {
+      ...state.migration,
+      version: record.toVersion,
+      lastMigrated: new Date(),
+      migrationHistory: state.migration.migrationHistory.map(r =>
+        r.id === record.id ? { ...r, status: 'success', details: 'Migration completed successfully' } : r
+      ),
+    },
+  })),
+
+  on(PageActions.migrationFailure, (state, { error, fromVersion, toVersion }) => {
+    const pendingRecord = state.migration.migrationHistory.find((r: MigrationRecord) => r.fromVersion === fromVersion && r.toVersion === toVersion && r.status === 'pending');
+    
+    return {
+      ...state,
+      migration: {
+        ...state.migration,
+        migrationHistory: pendingRecord ? state.migration.migrationHistory.map((r: MigrationRecord) =>
+          r.id === pendingRecord.id 
+            ? { 
+                ...r, 
+                status: 'failed', 
+                details: `Migration failed: ${error}` 
+              } 
+            : r
+        ) : state.migration.migrationHistory,
+      },
+    };
+  }),
+
+  on(PageActions.updateMigrationState, (state, { state: updates }) => ({
+    ...state,
+    migration: {
+      ...state.migration,
+      ...updates,
+    },
+  })),
 
   // Save Page
   on(PageActions.savePage, (state) => ({

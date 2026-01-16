@@ -198,6 +198,38 @@ export interface PageVersion {
   snapshot: Page;
 }
 
+export interface Header {
+  id: string;
+  sections: Section[];
+  visible: boolean;
+}
+
+export interface Footer {
+  id: string;
+  sections: Section[];
+  visible: boolean;
+}
+
+export interface Navigation {
+  headerLinks: { pageId: string; label: string }[];
+  footerLinks: { pageId: string; label: string }[];
+}
+
+export interface NavigationState {
+  currentPath: string;
+  activePageId: string | null;
+  breadcrumbs: { label: string; path: string }[];
+  isNavigating: boolean;
+}
+
+export interface PreviewState {
+  isPreviewMode: boolean;
+  previewPageId: string | null;
+  previewDevice: 'mobile' | 'tablet' | 'desktop';
+  showGrid: boolean;
+  showRulers: boolean;
+}
+
 export interface Page {
   id: string;
   name: string;
@@ -227,6 +259,9 @@ export interface Page {
     };
   };
   author?: string;
+  order: number;
+  visibleInHeader: boolean;
+  visibleInFooter: boolean;
 }
 
 // UI State Models
@@ -391,4 +426,35 @@ export interface EditorState {
   isMobile: boolean;
   modalState: ModalState;
   cartItems: CartItem[];
+}
+
+// Migration interfaces for backward compatibility
+export interface LegacyPage {
+  id: string;
+  name: string;
+  sections: LegacySection[];
+  styles: any;
+  metadata: any;
+}
+
+export interface LegacySection {
+  id: string;
+  type: string;
+  content: any;
+  styles: any;
+}
+
+export interface MigrationState {
+  version: string;
+  lastMigrated: Date | null;
+  migrationHistory: MigrationRecord[];
+}
+
+export interface MigrationRecord {
+  id: string;
+  fromVersion: string;
+  toVersion: string;
+  timestamp: Date;
+  status: 'success' | 'failed' | 'pending';
+  details?: string;
 }

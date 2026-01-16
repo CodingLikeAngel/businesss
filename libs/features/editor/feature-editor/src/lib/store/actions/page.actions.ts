@@ -1,5 +1,5 @@
 import { createAction, props } from '@ngrx/store';
-import { Page, Section, Element, PageVersion } from '../../models/editor.model';
+import { Page, Section, Element, PageVersion, MigrationRecord, MigrationState } from '../../models/editor.model';
 
 // Page Actions
 export const loadPage = createAction(
@@ -54,6 +54,16 @@ export const deletePage = createAction(
 export const duplicatePage = createAction(
   '[Page] Duplicate Page',
   props<{ pageId: string; newName: string }>()
+);
+
+export const reorderPages = createAction(
+  '[Page] Reorder Pages',
+  props<{ pageIds: string[] }>()
+);
+
+export const setCurrentPage = createAction(
+  '[Page] Set Current Page',
+  props<{ pageId: string }>()
 );
 
 // Section Actions
@@ -170,4 +180,67 @@ export const applyTemplate = createAction(
 export const saveAsTemplate = createAction(
   '[Page] Save As Template',
   props<{ name: string; description?: string; category?: string }>()
+);
+
+// Navigation Actions
+export const navigateToPage = createAction(
+  '[Navigation] Navigate To Page',
+  props<{ pageId: string; path: string }>()
+);
+
+export const updateBreadcrumbs = createAction(
+  '[Navigation] Update Breadcrumbs',
+  props<{ breadcrumbs: { label: string; path: string }[] }>()
+);
+
+export const navigationStarted = createAction(
+  '[Navigation] Navigation Started'
+);
+
+export const navigationCompleted = createAction(
+  '[Navigation] Navigation Completed'
+);
+
+// Preview Actions
+export const enterPreviewMode = createAction(
+  '[Preview] Enter Preview Mode',
+  props<{ pageId: string }>()
+);
+
+export const exitPreviewMode = createAction(
+  '[Preview] Exit Preview Mode'
+);
+
+export const setPreviewDevice = createAction(
+  '[Preview] Set Preview Device',
+  props<{ device: 'mobile' | 'tablet' | 'desktop' }>()
+);
+
+export const togglePreviewGrid = createAction(
+  '[Preview] Toggle Preview Grid'
+);
+
+export const togglePreviewRulers = createAction(
+  '[Preview] Toggle Preview Rulers'
+);
+
+// Migration Actions
+export const startMigration = createAction(
+  '[Migration] Start Migration',
+  props<{ fromVersion: string; toVersion: string }>()
+);
+
+export const migrationSuccess = createAction(
+  '[Migration] Migration Success',
+  props<{ record: MigrationRecord }>()
+);
+
+export const migrationFailure = createAction(
+  '[Migration] Migration Failure',
+  props<{ error: string; fromVersion: string; toVersion: string }>()
+);
+
+export const updateMigrationState = createAction(
+  '[Migration] Update Migration State',
+  props<{ state: Partial<MigrationState> }>()
 );

@@ -1,4 +1,4 @@
-import { Page, EditorUIState, ModalState, NotificationState, HistoryState } from '../../models/editor.model';
+import { Page, EditorUIState, ModalState, NotificationState, HistoryState, Header, Footer, Navigation, NavigationState, PreviewState, MigrationState } from '../../models/editor.model';
 
 export interface EditorFeatureState {
   page: PageState;
@@ -6,6 +6,9 @@ export interface EditorFeatureState {
   modal: ModalState;
   notifications: NotificationState;
   history: HistoryState;
+  header: Header | null;
+  footer: Footer | null;
+  navigation: Navigation;
 }
 
 export interface PageState {
@@ -16,7 +19,31 @@ export interface PageState {
   saving: boolean;
   lastSaved: Date | null;
   hasUnsavedChanges: boolean;
+  navigationState: NavigationState;
+  preview: PreviewState;
+  migration: MigrationState;
 }
+
+export const initialNavigationState: NavigationState = {
+  currentPath: '/',
+  activePageId: null,
+  breadcrumbs: [],
+  isNavigating: false,
+};
+
+export const initialPreviewState: PreviewState = {
+  isPreviewMode: false,
+  previewPageId: null,
+  previewDevice: 'desktop',
+  showGrid: false,
+  showRulers: false,
+};
+
+export const initialMigrationState: MigrationState = {
+  version: '1.0.0',
+  lastMigrated: null,
+  migrationHistory: [],
+};
 
 export interface AppState {
   editor: EditorFeatureState;
