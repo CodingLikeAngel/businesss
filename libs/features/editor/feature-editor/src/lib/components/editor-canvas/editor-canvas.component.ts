@@ -11,11 +11,12 @@ import * as UISelectors from '../../store/selectors/ui.selectors';
 import * as PageActions from '../../store/actions/page.actions';
 import * as UIActions from '../../store/actions/ui.actions';
 import { SectionRendererComponent } from './section-renderer.component';
+import { PageSelectorModalComponent } from '../page-selector/page-selector-modal.component';
 
 @Component({
   selector: 'lib-editor-canvas',
   standalone: true,
-  imports: [CommonModule, SectionRendererComponent],
+  imports: [CommonModule, SectionRendererComponent, PageSelectorModalComponent],
   template: `
     <div class="editor-canvas"
          [class.dragging]="isDragging$ | async"
@@ -86,6 +87,15 @@ import { SectionRendererComponent } from './section-renderer.component';
       </div>
 
     </div>
+    
+    <!-- Page Selector Modal -->
+    <lib-page-selector-modal
+      *ngIf="showingPageSelector"
+      [pages]="(pages$ | async) || []"
+      [currentPageId]="currentPageId$ | async"
+      (pageSelected)="onPageSelected($event)"
+      (cancelled)="hidePageSelector()">
+    </lib-page-selector-modal>
   `,
   styleUrls: ['./editor-canvas.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -127,6 +137,10 @@ export class EditorCanvasComponent implements OnInit, OnDestroy {
     this.snapToGrid$ = this.store.select(UISelectors.selectSnapToGrid);
     this.devicePreview$ = this.store.select(UISelectors.selectDevicePreview);
     this.contextMenu$ = this.store.select(UISelectors.selectContextMenu);
+    this.pages$ = this.store.select(PageSelectors.selectPages);
+    this.currentPageId$ = this.store.select(PageSelectors.selectCurrentPage).pipe(
+      map(page => page?.id || null)
+    );
 
     // Create derived observable for hovered section
     this.hoveredSectionId$ = combineLatest([
@@ -232,8 +246,67 @@ export class EditorCanvasComponent implements OnInit, OnDestroy {
 
   // Context menu actions
   executeContextAction(action: string) {
-    // TODO: Implement context menu actions
+    switch (action) {
+      case 'add-section':
+        this.showPageSelector();
+        break;
+      case 'duplicate-section':
+        // TODO: Implement duplicate section
+        break;
+      case 'delete-section':
+        // TODO: Implement delete section
+        break;
+      default:
+        break;
+    }
     this.store.dispatch(UIActions.hideContextMenu());
+  }
+
+  // Page selection modal
+  showPageSelector() {
+    this.showingPageSelector = true;
+  }
+
+  hidePageSelector() {
+    this.showingPageSelector = false;
+  }
+
+  onPageSelected(pageId: string) {
+    this.selectedPageId = pageId;
+    this.showingPageSelector = false;
+    
+    // TODO: Show component library modal to select which component to add
+    // For now, we'll add a default hero section as example
+    const newSection: Section = {
+      id: Math.random().toString(36).substring(2, 11),
+      type: 'hero',
+      name: 'New Hero Section',
+      position: { x: 0, y: 0 },
+      styles: {
+        backgroundColor: '#ffffff',
+        minHeight: '100vh'
+      },
+      content: {
+        title: 'New Section',
+        subtitle: 'Added to page'
+      },
+      elements: [],
+      animations: [],
+      responsive: {
+        mobile: { visible: true, styles: {} },
+        tablet: { visible: true, styles: {} },
+        desktop: { visible: true, styles: {} }
+      },
+      visible: true,
+      locked: false,
+      zIndex: 1,
+      pageId: pageId
+    };
+    
+    this.store.dispatch(PageActions.addSection({ 
+      section: newSection, 
+      pageId: pageId 
+    }));
   }
 
   // Utility methods
@@ -309,6 +382,13 @@ export class EditorCanvasComponent implements OnInit, OnDestroy {
     if (event.key === 'Escape') {
       this.store.dispatch(UIActions.clearSelection());
       this.store.dispatch(UIActions.hideContextMenu());
+      this.hidePageSelector();
     }
   }
+
+  // Page selection state
+  showingPageSelector = false;
+  selectedPageId: string | null = null;
+  pages$: Observable<Page[]>;
+  currentPageId$: Observable<string | null>;
 }
