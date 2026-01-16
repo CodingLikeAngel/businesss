@@ -59,15 +59,21 @@
     <div class="builder-content">
       <!-- General Tab -->
       <div *ngIf="activeTab === 'general'" class="tab-content">
-        <div class="config-group">
+        <!-- Page Management - Most Important Section -->
+        <div class="config-group page-management-group">
           <div class="group-header">
-            <h3>Gestión de Páginas</h3>
+            <h3>📄 Gestión de Páginas</h3>
             <p class="helper-text">
-              Crea y administra múltiples páginas para tu sitio web.
+              Crea y administra múltiples páginas para tu sitio web. Cada página puede tener sus propias secciones.
             </p>
           </div>
 
           <div class="page-management">
+            <div class="current-page-indicator" *ngIf="currentPage">
+              <strong>Página Actual:</strong> {{ currentPage.name }}
+              <span class="page-sections-count">({{ currentPage.sections.length }} secciones)</span>
+            </div>
+
             <div class="page-list">
               <div
                 *ngFor="let page of pages"
@@ -75,12 +81,15 @@
                 [class.active]="currentPage?.id === page.id"
                 (click)="selectPage(page.id)"
               >
-                <span class="page-name">{{ page.name }}</span>
+                <div class="page-info">
+                  <span class="page-name">{{ page.name }}</span>
+                  <span class="page-meta">{{ page.sections.length }} secciones</span>
+                </div>
                 <div class="page-actions">
                   <button
                     class="page-action-btn"
                     (click)="renamePage(page.id); $event.stopPropagation()"
-                    title="Renombrar"
+                    title="Renombrar página"
                   >
                     ✏️
                   </button>
@@ -88,7 +97,7 @@
                     class="page-action-btn delete"
                     (click)="deletePage(page.id); $event.stopPropagation()"
                     [disabled]="pages.length <= 1"
-                    title="Eliminar"
+                    title="Eliminar página"
                   >
                     🗑️
                   </button>
@@ -96,8 +105,8 @@
               </div>
             </div>
 
-            <button class="add-item-btn" (click)="createNewPage()">
-              ➕ Nueva Página
+            <button class="add-item-btn primary-btn" (click)="createNewPage()">
+              ➕ Crear Nueva Página
             </button>
           </div>
         </div>

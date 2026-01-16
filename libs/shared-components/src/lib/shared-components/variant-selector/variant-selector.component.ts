@@ -108,7 +108,7 @@ export class VariantSelectorComponent implements OnInit {
 
   // UI State getters/setters
   get activeTab(): 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer' {
-    return this.uiStateService.activeTab;
+    return this.uiStateService.activeTab || 'general';
   }
 
   set activeTab(value: 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer') {
