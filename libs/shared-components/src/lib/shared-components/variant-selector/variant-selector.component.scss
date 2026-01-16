@@ -651,3 +651,32 @@
     }
   }
 }
+
+// Coming Soon Styles
+.coming-soon {
+text-align: center;
+padding: 3rem 2rem;
+background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.02));
+border-radius: 16px;
+border: 2px dashed rgba(99, 102, 241, 0.2);
+
+.coming-soon-icon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  opacity: 0.6;
+}
+
+h3 {
+  margin: 0 0 1rem 0;
+  color: var(--color-text-inverse);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+p {
+  margin: 0;
+  color: var(--color-text-inverse-secondary);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+}

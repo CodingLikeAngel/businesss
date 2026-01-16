@@ -51,6 +51,7 @@ export interface SectionStyles extends ElementStyles {
   backgroundSize?: string;
   backgroundPosition?: string;
   minHeight?: string;
+  [key: string]: string | number | undefined;
 }
 
 export interface ElementContent {
