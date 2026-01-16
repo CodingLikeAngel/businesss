@@ -13,7 +13,7 @@
   position: relative;
   overflow: hidden;
 
-  @include shared.apply-all-variants('');
+  @include shared.apply-all-variants('variant-');
 
   // Background decoration (optional)
   &::before {

@@ -377,6 +377,51 @@
           </div>
         </div>
       </section>
+
+      <!-- HEADER (As Section) -->
+      <div *ngSwitchCase="'header'" class="editor-section cursor-pointer py-4"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="editor-element"
+               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_header'"
+               (click)="selectElement($event, { id: section.id + '_header', content: section.content, type: 'header', _original: section.content })">
+            <lib-ui-header
+              [variant]="section.content['variant'] || getVariant(section.id)"
+              [title]="section.content['title'] || 'Encabezado'"
+              [subtitle]="section.content['subtitle'] || ''"
+              [navItems]="section.content['navItems'] || []"
+              [customStyles]="section.styles || {}"
+            ></lib-ui-header>
+          </div>
+      </div>
+
+      <!-- FOOTER (As Section) -->
+      <div *ngSwitchCase="'footer'" class="editor-section cursor-pointer py-4"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="editor-element"
+               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_footer'"
+               (click)="selectElement($event, { id: section.id + '_footer', content: section.content, type: 'footer', _original: section.content })">
+            <lib-ui-components-footer
+              [variant]="section.content['variant'] || getVariant(section.id)"
+              [title]="section.content['title'] || 'Pie de Página'"
+              [description]="section.content['description'] || 'Descripción del footer'"
+              [customStyles]="section.styles || {}"
+            ></lib-ui-components-footer>
+          </div>
+      </div>
+
+      <!-- GENERIC SECTION (Fallback for new types) -->
+      <div *ngSwitchDefault class="editor-section cursor-pointer p-10 border border-dashed border-white/20 rounded-xl m-4 bg-white/5"
+           [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+           (click)="selectSection($event, section)">
+        <div class="text-center text-white/50">
+          <div class="text-4xl mb-4">🧩</div>
+          <h3 class="text-xl font-bold mb-2">{{ section.label }}</h3>
+          <p class="text-sm opacity-70">Tipo: {{ section.type }}</p>
+          <p class="mt-4 text-xs">Este componente aún no tiene una vista previa específica en el editor, pero se ha añadido a la estructura.</p>
+        </div>
+      </div>
       
     </ng-container>
   </ng-container>

@@ -25,7 +25,7 @@ export class UIListComponent {
   items = input<string[]>([]);
 
   listClasses = computed(() => {
-    const classes = ['list-container', `list-${this.variant()}`];
+    const classes = ['list-container', `variant-${this.variant()}`];
     classes.push(`list-rounded-${this.rounded()}`);
     classes.push(`list-${this.size()}`);
     if (this.dark()) classes.push('dark');

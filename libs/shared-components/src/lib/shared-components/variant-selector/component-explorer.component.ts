@@ -560,43 +560,102 @@ export class ComponentExplorerComponent implements OnInit {
   ];
 
   availableComponents: SectionVariant[] = [
+    // --- CONTENT SECTIONS ---
     {
       type: 'hero',
       label: 'Portada Hero',
       icon: '🚀',
-      variants: ['glass', 'neon', 'cyberpunk', 'minimal'],
+      variants: ['glass', 'neon', 'cyberpunk', 'minimal', 'mario', 'rayman', 'rockstar'],
       description: 'Sección principal con título, subtítulo y llamada a la acción',
       category: 'content'
     },
     {
-      type: 'services',
-      label: 'Servicios',
-      icon: '🛠️',
-      variants: ['glass', 'cards', 'grid', 'minimal'],
-      description: 'Muestra los servicios ofrecidos con iconos y descripciones',
-      category: 'commerce'
+      type: 'header',
+      label: 'Encabezado Global',
+      icon: '🏳️',
+      variants: ['primary', 'outline', 'glass', 'neon', 'cyberpunk', 'mario', 'rayman', 'rockstar'],
+      description: 'Barra de navegación principal (Global)',
+      category: 'content'
     },
     {
-      type: 'products',
-      label: 'Productos',
-      icon: '🧩',
-      variants: ['glass', 'showcase', 'grid', 'minimal'],
-      description: 'Galería de productos con precios y detalles',
-      category: 'commerce'
+      type: 'footer',
+      label: 'Pie de Página Global',
+      icon: '🦶',
+      variants: ['primary', 'glass', 'neon', 'cyberpunk', 'mario', 'rayman', 'rockstar', 'ice', 'metal', 'energy', 'void'],
+      description: 'Sección inferior con enlaces y redes sociales (Global)',
+      category: 'content'
+    },
+    {
+      type: 'faq',
+      label: 'Preguntas Frecuentes',
+      icon: '❓',
+      variants: ['glass', 'accordion', 'minimal', 'neon', 'cyberpunk'],
+      description: 'Sección de preguntas y respuestas con acordeón',
+      category: 'content'
+    },
+    {
+      type: 'features',
+      label: 'Características',
+      icon: '✨',
+      variants: ['glass', 'cards', 'icons', 'minimal', 'neon', 'cyberpunk'],
+      description: 'Lista de características y beneficios clave',
+      category: 'content'
+    },
+    {
+      type: 'gallery',
+      label: 'Galería',
+      icon: '🖼️',
+      variants: ['glass', 'grid', 'masonry', 'carousel', 'neon', 'cyberpunk'],
+      description: 'Galería de imágenes y trabajos',
+      category: 'content'
+    },
+    {
+      type: 'stats',
+      label: 'Estadísticas',
+      icon: '📊',
+      variants: ['glass', 'cards', 'numbers', 'minimal', 'neon'],
+      description: 'Métricas, contadores y números importantes',
+      category: 'content'
+    },
+    {
+      type: 'steps',
+      label: 'Pasos / Proceso',
+      icon: '👣',
+      variants: ['default', 'glass', 'neon', 'vertical', 'horizontal'],
+      description: 'Guía paso a paso o línea de tiempo',
+      category: 'content'
+    },
+    {
+      type: 'showcase',
+      label: 'Showcase',
+      icon: '💎',
+      variants: ['default', 'glass', 'neon', 'interactive'],
+      description: 'Muestra destacada de productos o servicios',
+      category: 'content'
     },
     {
       type: 'testimonials',
       label: 'Testimonios',
       icon: '⭐',
-      variants: ['glass', 'cards', 'carousel', 'minimal'],
+      variants: ['glass', 'cards', 'carousel', 'minimal', 'neon', 'cyberpunk'],
       description: 'Opiniones de clientes satisfechos',
-      category: 'social'
+      category: 'content'
+    },
+
+    // --- COMMERCE SECTIONS ---
+    {
+      type: 'services',
+      label: 'Servicios',
+      icon: '🛠️',
+      variants: ['glass', 'cards', 'grid', 'minimal', 'neon', 'cyberpunk'],
+      description: 'Muestra los servicios ofrecidos con iconos y descripciones',
+      category: 'commerce'
     },
     {
       type: 'pricing',
       label: 'Precios',
       icon: '💰',
-      variants: ['glass', 'cards', 'table', 'minimal'],
+      variants: ['glass', 'cards', 'table', 'minimal', 'neon', 'cyberpunk'],
       description: 'Tabla de precios y planes disponibles',
       category: 'commerce'
     },
@@ -604,56 +663,148 @@ export class ComponentExplorerComponent implements OnInit {
       type: 'promotions',
       label: 'Promociones',
       icon: '🎁',
-      variants: ['glass', 'cards', 'banner', 'minimal'],
+      variants: ['glass', 'cards', 'banner', 'minimal', 'neon'],
       description: 'Ofertas especiales y descuentos',
       category: 'commerce'
     },
     {
-      type: 'faq',
-      label: 'Preguntas Frecuentes',
-      icon: '❓',
-      variants: ['glass', 'accordion', 'minimal'],
-      description: 'Sección de preguntas y respuestas',
-      category: 'content'
+      type: 'newsletter',
+      label: 'Newsletter',
+      icon: '📧',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Suscripción a boletín de noticias',
+      category: 'commerce'
     },
-    {
-      type: 'gallery',
-      label: 'Galería',
-      icon: '🖼️',
-      variants: ['glass', 'grid', 'masonry', 'carousel'],
-      description: 'Galería de imágenes y trabajos',
-      category: 'content'
-    },
+
+    // --- INTERACTIVE & UI ELEMENTS ---
     {
       type: 'contact',
       label: 'Contacto',
       icon: '📞',
-      variants: ['glass', 'form', 'cards', 'minimal'],
-      description: 'Formulario de contacto e información',
+      variants: ['glass', 'form', 'cards', 'minimal', 'neon', 'cyberpunk'],
+      description: 'Formulario de contacto e información de ubicación',
       category: 'interactive'
-    },
-    {
-      type: 'features',
-      label: 'Características',
-      icon: '✨',
-      variants: ['glass', 'cards', 'icons', 'minimal'],
-      description: 'Lista de características y beneficios',
-      category: 'content'
-    },
-    {
-      type: 'stats',
-      label: 'Estadísticas',
-      icon: '📊',
-      variants: ['glass', 'cards', 'numbers', 'minimal'],
-      description: 'Métricas y números importantes',
-      category: 'content'
     },
     {
       type: 'bubble',
       label: 'Efecto Burbujas',
       icon: '🫧',
       variants: ['glass', 'neon', 'cyberpunk', 'minimal'],
-      description: 'Animación de fondo con burbujas',
+      description: 'Animación de fondo con burbujas interactivas',
+      category: 'interactive'
+    },
+    {
+      type: 'tabs',
+      label: 'Pestañas (Tabs)',
+      icon: '📑',
+      variants: ['default', 'glass', 'neon', 'pills', 'underline', 'mario', 'cyberpunk'],
+      description: 'Navegación por pestañas para organizar contenido',
+      category: 'interactive'
+    },
+    {
+      type: 'accordion',
+      label: 'Acordeón',
+      icon: '↕️',
+      variants: ['default', 'glass', 'neon', 'minimal', 'mario', 'rayman', 'rockstar', 'cyberpunk'],
+      description: 'Lista de elementos expandibles',
+      category: 'interactive'
+    },
+    {
+      type: 'modal',
+      label: 'Modal / Popup',
+      icon: '🔲',
+      variants: ['default', 'glass', 'neon', 'cyberpunk'],
+      description: 'Ventana emergente para contenido adicional',
+      category: 'interactive'
+    },
+    {
+      type: 'tooltip',
+      label: 'Tooltip',
+      icon: '💬',
+      variants: ['default', 'glass', 'neon', 'cyberpunk'],
+      description: 'Mensaje emergente al pasar el cursor',
+      category: 'interactive'
+    },
+    {
+      type: 'button',
+      label: 'Botones UI',
+      icon: '🔘',
+      variants: ['primary', 'secondary', 'outline', 'ghost', 'link', 'glass', 'neon', 'cyberpunk', 'mario'],
+      description: 'Botones interactivos con múltiples estilos',
+      category: 'interactive'
+    },
+    {
+      type: 'chip',
+      label: 'Chips / Tags',
+      icon: '🏷️',
+      variants: ['default', 'outline', 'solid', 'glass', 'neon'],
+      description: 'Etiquetas compactas para categorías o filtros',
+      category: 'interactive'
+    },
+    {
+      type: 'spinner',
+      label: 'Loading Spinners',
+      icon: '⏳',
+      variants: ['default', 'circle', 'dots', 'bars', 'neon', 'glass'],
+      description: 'Indicadores de carga animados',
+      category: 'interactive'
+    },
+    {
+      type: 'breadcrumbs',
+      label: 'Breadcrumbs',
+      icon: '🗺️',
+      variants: ['default', 'slash', 'arrow', 'glass', 'neon'],
+      description: 'Navegación de migas de pan',
+      category: 'interactive'
+    },
+
+    // --- CARDS & MEDIA ---
+    {
+      type: 'card-animated',
+      label: 'Tarjeta Animada',
+      icon: '🃏',
+      variants: ['glass', 'neon', 'cyberpunk', 'mario', 'rayman', 'hover-scale'],
+      description: 'Tarjeta con efectos de animación avanzados',
+      category: 'content'
+    },
+    {
+      type: 'card-product',
+      label: 'Tarjeta Producto',
+      icon: '🛍️',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Tarjeta específica para mostrar productos',
+      category: 'commerce'
+    },
+    {
+      type: 'card-testimonial',
+      label: 'Tarjeta Testimonio',
+      icon: '💬',
+      variants: ['default', 'glass', 'neon', 'quote', 'bubble'],
+      description: 'Tarjeta para mostrar reseñas de clientes',
+      category: 'social'
+    },
+    {
+      type: 'image',
+      label: 'Imagen Avanzada',
+      icon: '🖼️',
+      variants: ['default', 'rounded', 'circle', 'thumbnail', 'glass', 'neon', 'hover-zoom'],
+      description: 'Componente de imagen con efectos y lazy loading',
+      category: 'content'
+    },
+    {
+      type: 'table',
+      label: 'Tabla de Datos',
+      icon: '▦',
+      variants: ['default', 'striped', 'bordered', 'hover', 'glass', 'neon'],
+      description: 'Presentación tabular de datos',
+      category: 'content'
+    },
+    {
+      type: 'forms',
+      label: 'Elementos de Formulario',
+      icon: '📝',
+      variants: ['default', 'filled', 'outlined', 'glass', 'neon', 'floating'],
+      description: 'Inputs, selects y checkboxes estilizados',
       category: 'interactive'
     }
   ];

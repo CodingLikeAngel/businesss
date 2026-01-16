@@ -1,6 +1,7 @@
 @use "sass:map";
 @use "./variables" as var;
 @use "sass:color";
+@use "../../styles/mixins" as shared;
 /* Removed external Google Fonts import to avoid network inlining during build */
 
 
@@ -49,6 +50,8 @@ $caption-font-size: 1rem;
   border: var(--container-border, none);
   box-shadow: var(--container-shadow, none);
   border-radius: var(--container-radius, 0);
+
+  @include shared.apply-all-variants('ui-gallery--');
 }
 
 /* Slider */

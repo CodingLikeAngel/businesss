@@ -5,6 +5,8 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { RouterModule, Router, ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import {
+  UIHeaderComponent,
+  UIFooterComponent,
   UIHeroSectionComponent,
   UIModalComponent,
   UICardRutasComponent,
@@ -40,6 +42,7 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
     UIHeroSectionComponent,
     ReservationFormComponent,
     PromotionsSectionComponent,
+    UIHeaderComponent,
     UIModalComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,
@@ -50,6 +53,7 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
     UIFeaturesSectionComponent,
     UIStatsLibSectionComponent,
     UITestimonialsSectionComponent,
+    UIFooterComponent,
     UIFaqSectionComponent,
     UIGallerySectionComponent,
     UIPricingTableSectionComponent,

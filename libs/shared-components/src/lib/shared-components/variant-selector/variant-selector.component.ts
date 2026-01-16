@@ -315,6 +315,20 @@ export class VariantSelectorComponent implements OnInit {
 
     // Force save to local storage
     this.variantService.saveToLocalStorage();
+
+    // Check if we are updating a global component and trigger specific update
+    // Only update global configs if the selected element is actually the global instance (identified by specific IDs)
+    const isGlobalElement = ['navbar', 'header', 'footer'].includes(this.selectedElement.id);
+    
+    if (isGlobalElement) {
+      if (this.selectedElement.type === 'header') {
+        this.variantService.setHeaderConfig(source);
+      } else if (this.selectedElement.type === 'footer') {
+        this.variantService.setFooterConfig(source);
+      } else if (this.selectedElement.type === 'navbar') {
+        this.variantService.setNavBarConfig(source);
+      }
+    }
   }
 
   updateGlobalConfigFromSelection() {

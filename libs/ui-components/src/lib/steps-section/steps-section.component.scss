@@ -1,8 +1,11 @@
+@use '../styles/mixins' as shared;
 
 .steps-section {
   padding: 4rem 1.5rem;
   max-width: 1200px;
   margin: 0 auto;
+  
+  @include shared.apply-all-variants('variant-');
 
   .header {
     text-align: center;

@@ -51,7 +51,7 @@ export class UIAccordionComponent {
   accordionClasses = computed(() => {
     const classes = [
       'accordion-container',
-      `accordion-${this.variant()}`,
+      `variant-${this.variant()}`, // Changed from accordion-variant to match SCSS
       `accordion-rounded-${this.rounded()}`,
       `accordion-${this.size()}`,
       this.dark() ? 'dark' : '',

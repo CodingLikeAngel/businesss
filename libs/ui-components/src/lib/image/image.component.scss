@@ -1,4 +1,6 @@
 /* image.component.scss */
+@use "../styles/mixins" as shared;
+
 .image-container {
   display: inline-block;
   overflow: hidden;
@@ -80,6 +82,8 @@
 }
 
 /* Resto de las variantes (adaptadas con var()) */
+@include shared.apply-all-variants('image--');
+
 .image--primary {
   border: var(--image-border, 3px solid #3b82f6);
 }

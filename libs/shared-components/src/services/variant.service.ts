@@ -777,7 +777,13 @@ export class VariantService {
     if (config.variant && !this.isValidVariant(config.variant)) {
       config.variant = current.variant;
     }
-    this.headerConfigSubject.next({ ...current, ...config });
+    const newConfig = { ...current, ...config };
+    this.headerConfigSubject.next(newConfig);
+    
+    // Sync variant with componentVariants to ensure view updates
+    if (config.variant) {
+      this.setComponentVariant('navbar', config.variant);
+    }
     this.saveToLocalStorage();
   }
 
@@ -786,7 +792,12 @@ export class VariantService {
     if (config.variant && !this.isValidVariant(config.variant)) {
       config.variant = current.variant;
     }
-    this.footerConfigSubject.next({ ...current, ...config });
+    const newConfig = { ...current, ...config };
+    this.footerConfigSubject.next(newConfig);
+
+    if (config.variant) {
+      this.setComponentVariant('footer', config.variant);
+    }
     this.saveToLocalStorage();
   }
 
@@ -796,6 +807,10 @@ export class VariantService {
       config.variant = current.variant;
     }
     this.navBarConfigSubject.next({ ...current, ...config });
+
+    if (config.variant) {
+      this.setComponentVariant('navbar', config.variant);
+    }
     this.saveToLocalStorage();
   }
 

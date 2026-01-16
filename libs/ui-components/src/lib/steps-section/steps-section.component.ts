@@ -20,6 +20,6 @@ export class UIStepsSectionComponent {
   @Input() title = 'Cómo Funciona';
   @Input() subtitle = 'Sigue estos sencillos pasos';
   @Input() steps: Step[] = [];
-  @Input() variant: 'linear' | 'cards' | 'zigzag' | 'timeline' = 'linear';
+  @Input() variant: string = 'linear';
 }
 

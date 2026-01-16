@@ -17,6 +17,6 @@ export interface BreadcrumbItem {
 export class UIBreadcrumbsComponent {
   @Input() items: BreadcrumbItem[] = [];
   @Input() separator = '/';
-  @Input() variant: 'simple' | 'glass' | 'pill' = 'simple';
+  @Input() variant: string = 'simple';
 }
 
