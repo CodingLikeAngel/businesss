@@ -26,12 +26,23 @@ export const pageReducer = createReducer(
     error: null,
   })),
 
-  on(PageActions.loadPageSuccess, (state, { page }) => ({
-    ...state,
-    currentPage: page,
-    loading: false,
-    hasUnsavedChanges: false,
-  })),
+  on(PageActions.loadPageSuccess, (state, { page }) => {
+    // Ensure backward compatibility by setting default values
+    const compatiblePage: Page = {
+      ...page,
+      visibleInHeader: page.visibleInHeader !== undefined ? page.visibleInHeader : true,
+      visibleInFooter: page.visibleInFooter !== undefined ? page.visibleInFooter : false,
+      isHomePage: page.isHomePage !== undefined ? page.isHomePage : false,
+      order: page.order !== undefined ? page.order : 0,
+    };
+
+    return {
+      ...state,
+      currentPage: compatiblePage,
+      loading: false,
+      hasUnsavedChanges: false,
+    };
+  }),
 
   on(PageActions.loadPageFailure, (state, { error }) => ({
     ...state,
@@ -46,22 +57,126 @@ export const pageReducer = createReducer(
     error: null,
   })),
 
-  on(PageActions.createPageSuccess, (state, { page }) => ({
-    ...state,
-    currentPage: page,
-    pages: [...state.pages, page],
-    loading: false,
-    hasUnsavedChanges: false,
-  })),
+  on(PageActions.createPageSuccess, (state, { page }) => {
+    // Ensure backward compatibility by setting default values
+    const compatiblePage: Page = {
+      ...page,
+      visibleInHeader: page.visibleInHeader !== undefined ? page.visibleInHeader : true,
+      visibleInFooter: page.visibleInFooter !== undefined ? page.visibleInFooter : false,
+      isHomePage: page.isHomePage !== undefined ? page.isHomePage : false,
+      order: page.order !== undefined ? page.order : state.pages.length,
+    };
 
-  // Update Page
-  on(PageActions.updatePage, (state, { page: updates }) => {
-    if (!state.currentPage) return state;
-
-    const updatedPage = { ...state.currentPage, ...updates, updatedAt: new Date() };
     return {
       ...state,
-      currentPage: updatedPage,
+      currentPage: compatiblePage,
+      pages: [...state.pages, compatiblePage],
+      loading: false,
+      hasUnsavedChanges: false,
+    };
+  }),
+
+  // Update Page
+  on(PageActions.updatePage, (state, { pageId, changes }) => {
+    const pages = state.pages.map(page =>
+      page.id === pageId ? { ...page, ...changes, updatedAt: new Date() } : page
+    );
+    
+    const updatedCurrentPage = state.currentPage?.id === pageId 
+      ? { ...state.currentPage, ...changes, updatedAt: new Date() }
+      : state.currentPage;
+
+    return {
+      ...state,
+      pages,
+      currentPage: updatedCurrentPage,
+      hasUnsavedChanges: true,
+    };
+  }),
+
+  // Toggle Page Visibility
+  on(PageActions.togglePageVisibility, (state, { pageId, visibilityType }) => {
+    const pages = state.pages.map(page =>
+      page.id === pageId 
+        ? { 
+            ...page, 
+            [visibilityType === 'header' ? 'visibleInHeader' : 'visibleInFooter']: !page[visibilityType === 'header' ? 'visibleInHeader' : 'visibleInFooter'],
+            updatedAt: new Date() 
+          }
+        : page
+    );
+
+    const updatedCurrentPage = state.currentPage?.id === pageId
+      ? { 
+          ...state.currentPage,
+          [visibilityType === 'header' ? 'visibleInHeader' : 'visibleInFooter']: !state.currentPage[visibilityType === 'header' ? 'visibleInHeader' : 'visibleInFooter'],
+          updatedAt: new Date()
+        }
+      : state.currentPage;
+
+    return {
+      ...state,
+      pages,
+      currentPage: updatedCurrentPage,
+      hasUnsavedChanges: true,
+    };
+  }),
+
+  // Set Home Page
+  on(PageActions.setHomePage, (state, { pageId }) => {
+    const pages = state.pages.map(page => ({
+      ...page,
+      isHomePage: page.id === pageId
+    }));
+
+    const updatedCurrentPage = state.currentPage?.id === pageId
+      ? { ...state.currentPage, isHomePage: true }
+      : state.currentPage;
+
+    return {
+      ...state,
+      pages,
+      currentPage: updatedCurrentPage,
+      hasUnsavedChanges: true,
+    };
+  }),
+
+  // Update Navigation Links
+  on(PageActions.updateNavigationLinks, (state, { headerLinks, footerLinks }) => {
+    const editorState = state as any;
+    return {
+      ...state,
+      navigation: {
+        ...editorState.navigation,
+        headerLinks,
+        footerLinks,
+      },
+      hasUnsavedChanges: true,
+    };
+  }),
+
+  // Set Global Header
+  on(PageActions.setGlobalHeader, (state, { headerId }) => {
+    const editorState = state as any;
+    return {
+      ...state,
+      navigation: {
+        ...editorState.navigation,
+        globalHeaderId: headerId,
+      },
+      hasUnsavedChanges: true,
+    };
+  }),
+
+  // Set Global Footer
+  on(PageActions.setGlobalFooter, (state, { footerId }) => {
+    const editorState = state as any;
+    return {
+      ...state,
+      navigation: {
+        ...editorState.navigation,
+        globalFooterId: footerId,
+      },
       hasUnsavedChanges: true,
     };
   }),

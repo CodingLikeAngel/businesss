@@ -29,7 +29,7 @@ export const createPageSuccess = createAction(
 
 export const updatePage = createAction(
   '[Page] Update Page',
-  props<{ page: Partial<Page> }>()
+  props<{ pageId: string; changes: Partial<Page> }>()
 );
 
 export const savePage = createAction(
@@ -63,6 +63,16 @@ export const reorderPages = createAction(
 
 export const setCurrentPage = createAction(
   '[Page] Set Current Page',
+  props<{ pageId: string }>()
+);
+
+export const togglePageVisibility = createAction(
+  '[Page] Toggle Page Visibility',
+  props<{ pageId: string; visibilityType: 'header' | 'footer' }>()
+);
+
+export const setHomePage = createAction(
+  '[Page] Set Home Page',
   props<{ pageId: string }>()
 );
 
@@ -199,6 +209,21 @@ export const navigationStarted = createAction(
 
 export const navigationCompleted = createAction(
   '[Navigation] Navigation Completed'
+);
+
+export const updateNavigationLinks = createAction(
+  '[Navigation] Update Navigation Links',
+  props<{ headerLinks: { pageId: string; label: string }[]; footerLinks: { pageId: string; label: string }[] }>()
+);
+
+export const setGlobalHeader = createAction(
+  '[Navigation] Set Global Header',
+  props<{ headerId: string }>()
+);
+
+export const setGlobalFooter = createAction(
+  '[Navigation] Set Global Footer',
+  props<{ footerId: string }>()
 );
 
 // Preview Actions

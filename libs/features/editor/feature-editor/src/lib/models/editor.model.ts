@@ -202,17 +202,21 @@ export interface Header {
   id: string;
   sections: Section[];
   visible: boolean;
+  isGlobal?: boolean;
 }
 
 export interface Footer {
   id: string;
   sections: Section[];
   visible: boolean;
+  isGlobal?: boolean;
 }
 
 export interface Navigation {
   headerLinks: { pageId: string; label: string }[];
   footerLinks: { pageId: string; label: string }[];
+  globalHeaderId?: string;
+  globalFooterId?: string;
 }
 
 export interface NavigationState {
@@ -262,6 +266,7 @@ export interface Page {
   order: number;
   visibleInHeader: boolean;
   visibleInFooter: boolean;
+  isHomePage?: boolean;
 }
 
 // UI State Models
