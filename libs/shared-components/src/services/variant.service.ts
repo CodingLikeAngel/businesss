@@ -230,6 +230,20 @@ export interface PageSection {
   zIndex?: number;
 }
 
+export interface Page {
+  id: string;
+  name: string;
+  slug: string;
+  sections: PageSection[];
+  globalStyles: { [key: string]: string };
+  createdAt: Date;
+  updatedAt: Date;
+  order: number;
+  visibleInHeader: boolean;
+  visibleInFooter: boolean;
+  isHomePage?: boolean;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -613,6 +627,26 @@ export class VariantService {
     { id: 'sec_contact', type: 'contact', label: 'Contacto y Formulario', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
   ]);
   sections$ = this.sectionsSubject.asObservable();
+
+  // Page management
+  private pagesSubject = new BehaviorSubject<Page[]>([
+    {
+      id: 'page_home',
+      name: 'Home',
+      slug: 'home',
+      sections: this.sectionsSubject.value,
+      globalStyles: {},
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      order: 0,
+      visibleInHeader: true,
+      visibleInFooter: false,
+      isHomePage: true
+    }
+  ]);
+  private currentPageSubject = new BehaviorSubject<Page | null>(this.pagesSubject.value[0]);
+  pages$ = this.pagesSubject.asObservable();
+  currentPage$ = this.currentPageSubject.asObservable();
   statsConfig$ = this.statsConfigSubject.asObservable();
 
 
@@ -875,6 +909,106 @@ export class VariantService {
     this.sectionsSubject.next(sections);
     this.saveToLocalStorage();
   }
+
+  // Page management methods
+  getCurrentPages(): Page[] {
+    return this.pagesSubject.getValue();
+  }
+
+  getCurrentPage(): Page | null {
+    return this.currentPageSubject.getValue();
+  }
+
+  createPage(name: string): Page {
+    const newPage: Page = {
+      id: `page_${new Date().getTime()}`,
+      name,
+      slug: name.toLowerCase().replace(/\s+/g, '-'),
+      sections: [],
+      globalStyles: {},
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      order: this.pagesSubject.value.length,
+      visibleInHeader: true,
+      visibleInFooter: false,
+      isHomePage: false
+    };
+
+    const currentPages = [...this.pagesSubject.value, newPage];
+    this.pagesSubject.next(currentPages);
+    this.saveToLocalStorage();
+    return newPage;
+  }
+
+  setCurrentPage(pageId: string): void {
+    const page = this.pagesSubject.value.find(p => p.id === pageId);
+    if (page) {
+      this.currentPageSubject.next(page);
+      // Update sections to match current page
+      this.sectionsSubject.next(page.sections);
+    }
+  }
+
+  updatePage(pageId: string, changes: Partial<Page>): void {
+    const updatedPages = this.pagesSubject.value.map(page =>
+      page.id === pageId ? { ...page, ...changes, updatedAt: new Date() } : page
+    );
+    this.pagesSubject.next(updatedPages);
+
+    // Update current page if it's the one being updated
+    const currentPage = this.currentPageSubject.getValue();
+    if (currentPage?.id === pageId) {
+      const updatedPage = updatedPages.find(p => p.id === pageId);
+      if (updatedPage) {
+        this.currentPageSubject.next(updatedPage);
+        this.sectionsSubject.next(updatedPage.sections);
+      }
+    }
+
+    this.saveToLocalStorage();
+  }
+
+  deletePage(pageId: string): void {
+    const currentPages = this.pagesSubject.value.filter(p => p.id !== pageId);
+    this.pagesSubject.next(currentPages);
+
+    // If current page is deleted, set to first page or null
+    const currentPage = this.currentPageSubject.getValue();
+    if (currentPage?.id === pageId) {
+      const newCurrentPage = currentPages.length > 0 ? currentPages[0] : null;
+      this.currentPageSubject.next(newCurrentPage);
+      this.sectionsSubject.next(newCurrentPage?.sections || []);
+    }
+
+    this.saveToLocalStorage();
+  }
+
+  // Page-aware section management
+  addSectionToCurrentPage(section: PageSection): void {
+    const currentPage = this.currentPageSubject.getValue();
+    if (!currentPage) return;
+
+    const updatedSections = [...currentPage.sections, section];
+    this.updatePage(currentPage.id, { sections: updatedSections });
+  }
+
+  updateSectionInCurrentPage(sectionId: string, changes: Partial<PageSection>): void {
+    const currentPage = this.currentPageSubject.getValue();
+    if (!currentPage) return;
+
+    const updatedSections = currentPage.sections.map(section =>
+      section.id === sectionId ? { ...section, ...changes } : section
+    );
+    this.updatePage(currentPage.id, { sections: updatedSections });
+  }
+
+  removeSectionFromCurrentPage(sectionId: string): void {
+    const currentPage = this.currentPageSubject.getValue();
+    if (!currentPage) return;
+
+    const updatedSections = currentPage.sections.filter(section => section.id !== sectionId);
+    this.updatePage(currentPage.id, { sections: updatedSections });
+  }
   getCurrentServiceCardsConfig(): ServiceCardsConfig {
     return this.serviceCardsConfigSubject.getValue();
   }
@@ -942,6 +1076,8 @@ export class VariantService {
         globalVariant: this.globalVariantSubject.getValue(),
         componentVariants: this.componentVariantsSubject.getValue(),
         sections: this.sectionsSubject.getValue(),
+        pages: this.pagesSubject.getValue(),
+        currentPageId: this.currentPageSubject.getValue()?.id || null,
       };
       localStorage.setItem('anto_studios_config', JSON.stringify(state));
     }
@@ -969,6 +1105,21 @@ export class VariantService {
           if (state.globalVariant) this.globalVariantSubject.next(state.globalVariant);
           if (state.componentVariants) this.componentVariantsSubject.next(state.componentVariants);
           if (state.sections) this.sectionsSubject.next(state.sections);
+          if (state.pages) {
+            this.pagesSubject.next(state.pages);
+            // Set current page
+            if (state.currentPageId) {
+              const currentPage = state.pages.find((p: Page) => p.id === state.currentPageId);
+              if (currentPage) {
+                this.currentPageSubject.next(currentPage);
+                this.sectionsSubject.next(currentPage.sections);
+              }
+            } else if (state.pages.length > 0) {
+              // Default to first page if no current page set
+              this.currentPageSubject.next(state.pages[0]);
+              this.sectionsSubject.next(state.pages[0].sections);
+            }
+          }
         } catch (e) {
           console.error('Error loading config from localStorage', e);
         }
@@ -987,74 +1138,84 @@ export class VariantService {
   applyTemplate(template: any) {
     console.log('VariantService: Applying template:', template?.name || 'Unknown template');
 
-    // Apply all configurations from the template
-    if (template.header) {
-      console.log('Applying header config');
-      this.headerConfigSubject.next(template.header);
-    }
-    if (template.footer) {
-      console.log('Applying footer config');
-      this.footerConfigSubject.next(template.footer);
-    }
-    if (template.navBar) {
-      console.log('Applying navbar config');
-      this.navBarConfigSubject.next(template.navBar);
-    }
-    if (template.hero) {
-      console.log('Applying hero config');
-      this.heroConfigSubject.next(template.hero);
-    }
-    if (template.bubble) {
-      console.log('Applying bubble config');
-      this.bubbleConfigSubject.next(template.bubble);
-    }
-    if (template.card) {
-      console.log('Applying card config');
-      this.cardConfigSubject.next(template.card);
-    }
-    if (template.title) {
-      console.log('Applying title config');
-      this.titleConfigSubject.next(template.title);
-    }
-    if (template.serviceCards) {
-      console.log('Applying serviceCards config');
-      this.serviceCardsConfigSubject.next(template.serviceCards);
-    }
-    if (template.faq) {
-      console.log('Applying faq config');
-      this.faqConfigSubject.next(template.faq);
-    }
-    if (template.pricing) {
-      console.log('Applying pricing config');
-      this.pricingConfigSubject.next(template.pricing);
-    }
-    if (template.promotions) {
-      console.log('Applying promotions config');
-      this.promotionsConfigSubject.next(template.promotions);
-    }
-    if (template.gallery) {
-      console.log('Applying gallery config');
-      this.galleryConfigSubject.next(template.gallery);
-    }
-    if (template.products) {
-      console.log('Applying products config');
-      this.productsConfigSubject.next(template.products);
-    }
-    if (template.testimonials) {
-      console.log('Applying testimonials config');
-      this.testimonialsConfigSubject.next(template.testimonials);
-    }
+    // Check if this is a page template (has sections) or global config template
     if (template.sections) {
-      console.log('Applying sections config');
-      this.sectionsSubject.next(template.sections);
-    }
-    if (template.globalVariant) {
-      console.log('Applying globalVariant:', template.globalVariant);
-      this.globalVariantSubject.next(template.globalVariant);
-    }
-    if (template.componentVariants) {
-      console.log('Applying componentVariants');
-      this.componentVariantsSubject.next(template.componentVariants);
+      // This is a page template - apply to current page
+      console.log('Applying page template with sections');
+      const currentPage = this.currentPageSubject.getValue();
+      if (currentPage) {
+        this.updatePage(currentPage.id, {
+          sections: template.sections,
+          globalStyles: template.globalStyles || {}
+        });
+      }
+    } else {
+      // This is a global config template - apply globally
+      // Apply all configurations from the template
+      if (template.header) {
+        console.log('Applying header config');
+        this.headerConfigSubject.next(template.header);
+      }
+      if (template.footer) {
+        console.log('Applying footer config');
+        this.footerConfigSubject.next(template.footer);
+      }
+      if (template.navBar) {
+        console.log('Applying navbar config');
+        this.navBarConfigSubject.next(template.navBar);
+      }
+      if (template.hero) {
+        console.log('Applying hero config');
+        this.heroConfigSubject.next(template.hero);
+      }
+      if (template.bubble) {
+        console.log('Applying bubble config');
+        this.bubbleConfigSubject.next(template.bubble);
+      }
+      if (template.card) {
+        console.log('Applying card config');
+        this.cardConfigSubject.next(template.card);
+      }
+      if (template.title) {
+        console.log('Applying title config');
+        this.titleConfigSubject.next(template.title);
+      }
+      if (template.serviceCards) {
+        console.log('Applying serviceCards config');
+        this.serviceCardsConfigSubject.next(template.serviceCards);
+      }
+      if (template.faq) {
+        console.log('Applying faq config');
+        this.faqConfigSubject.next(template.faq);
+      }
+      if (template.pricing) {
+        console.log('Applying pricing config');
+        this.pricingConfigSubject.next(template.pricing);
+      }
+      if (template.promotions) {
+        console.log('Applying promotions config');
+        this.promotionsConfigSubject.next(template.promotions);
+      }
+      if (template.gallery) {
+        console.log('Applying gallery config');
+        this.galleryConfigSubject.next(template.gallery);
+      }
+      if (template.products) {
+        console.log('Applying products config');
+        this.productsConfigSubject.next(template.products);
+      }
+      if (template.testimonials) {
+        console.log('Applying testimonials config');
+        this.testimonialsConfigSubject.next(template.testimonials);
+      }
+      if (template.globalVariant) {
+        console.log('Applying globalVariant:', template.globalVariant);
+        this.globalVariantSubject.next(template.globalVariant);
+      }
+      if (template.componentVariants) {
+        console.log('Applying componentVariants');
+        this.componentVariantsSubject.next(template.componentVariants);
+      }
     }
 
     this.saveToLocalStorage();

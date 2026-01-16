@@ -37,7 +37,8 @@ import {
   GalleryConfig,
   ProductsConfig,
   TestimonialsConfig,
-  PageSection
+  PageSection,
+  Page
 } from '../../../services/variant.service';
 import { TemplateSelectorComponent } from '../template-selector/template-selector.component';
 import { PreviewDataService } from './preview-data.service';
@@ -190,6 +191,10 @@ export class VariantSelectorComponent implements OnInit {
   // Sections state
   sections: PageSection[] = [];
 
+  // Page management state
+  pages: Page[] = [];
+  currentPage: Page | null = null;
+
   componentVariants: { [key: string]: string } = {};
 
   availableSectionVariants = [
@@ -227,34 +232,68 @@ export class VariantSelectorComponent implements OnInit {
   }
 
   addSectionToPage() {
-   if (!this.selectedExplorerComponent) return;
-   
-   const newSection: PageSection = {
-     id: `sec_${new Date().getTime()}`,
-     type: this.selectedExplorerComponent.type,
-     label: `${this.selectedExplorerComponent.label} (${this.selectedExplorerVariant})`,
-     visible: true,
-     name: '',
-     styles: {},
-     content: {},
-     elements: [],
-     config: {},
-     customStyles: {},
-     animation: 'none',
-     layout: 'default'
-   };
-   
-   // Set its specific variant
-   this.variantService.setComponentVariant(newSection.id, this.selectedExplorerVariant);
-   
-   const currentSections = [...this.sections];
-   currentSections.push(newSection);
-   this.variantService.setSections(currentSections);
-   
-   this.activeTab = 'structure';
-   this.selectedExplorerComponent = null;
-   alert('Sección añadida a la estructura. ¡Organízala arrastrando!');
- }
+    if (!this.selectedExplorerComponent) return;
+
+    const newSection: PageSection = {
+      id: `sec_${new Date().getTime()}`,
+      type: this.selectedExplorerComponent.type,
+      label: `${this.selectedExplorerComponent.label} (${this.selectedExplorerVariant})`,
+      visible: true,
+      name: '',
+      styles: {},
+      content: {},
+      elements: [],
+      config: {},
+      customStyles: {},
+      animation: 'none',
+      layout: 'default'
+    };
+
+    // Set its specific variant
+    this.variantService.setComponentVariant(newSection.id, this.selectedExplorerVariant);
+
+    // Add to current page
+    this.variantService.addSectionToCurrentPage(newSection);
+
+    this.activeTab = 'structure';
+    this.selectedExplorerComponent = null;
+    alert('Sección añadida a la página actual. ¡Organízala arrastrando!');
+  }
+
+  // Page management methods
+  createNewPage() {
+    const pageName = prompt('Nombre de la nueva página:');
+    if (pageName && pageName.trim()) {
+      const newPage = this.variantService.createPage(pageName.trim());
+      this.variantService.setCurrentPage(newPage.id);
+      alert(`Página "${pageName}" creada y seleccionada.`);
+    }
+  }
+
+  selectPage(pageId: string) {
+    this.variantService.setCurrentPage(pageId);
+  }
+
+  deletePage(pageId: string) {
+    if (this.pages.length <= 1) {
+      alert('No puedes eliminar la única página existente.');
+      return;
+    }
+
+    if (confirm('¿Eliminar esta página? Esta acción no se puede deshacer.')) {
+      this.variantService.deletePage(pageId);
+    }
+  }
+
+  renamePage(pageId: string) {
+    const page = this.pages.find(p => p.id === pageId);
+    if (!page) return;
+
+    const newName = prompt('Nuevo nombre de la página:', page.name);
+    if (newName && newName.trim() && newName.trim() !== page.name) {
+      this.variantService.updatePage(pageId, { name: newName.trim() });
+    }
+  }
 
   variantOptions: InputOption[] = this.variants.map((variant) => ({
     value: variant,
@@ -435,7 +474,7 @@ export class VariantSelectorComponent implements OnInit {
           this.itemManagementService.removeSocialIcon(index);
           break;
         case 'section':
-          this.itemManagementService.removeSection(this.sections, index);
+          this.variantService.removeSectionFromCurrentPage(this.sections[index].id);
           break;
       }
     }
@@ -513,6 +552,14 @@ export class VariantSelectorComponent implements OnInit {
 
     this.variantService.sections$.subscribe(sections => {
       this.sections = sections;
+    });
+
+    this.variantService.pages$.subscribe(pages => {
+      this.pages = pages;
+    });
+
+    this.variantService.currentPage$.subscribe(page => {
+      this.currentPage = page;
     });
   }
 

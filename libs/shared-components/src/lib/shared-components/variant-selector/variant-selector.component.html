@@ -61,6 +61,49 @@
       <div *ngIf="activeTab === 'general'" class="tab-content">
         <div class="config-group">
           <div class="group-header">
+            <h3>Gestión de Páginas</h3>
+            <p class="helper-text">
+              Crea y administra múltiples páginas para tu sitio web.
+            </p>
+          </div>
+
+          <div class="page-management">
+            <div class="page-list">
+              <div
+                *ngFor="let page of pages"
+                class="page-item"
+                [class.active]="currentPage?.id === page.id"
+                (click)="selectPage(page.id)"
+              >
+                <span class="page-name">{{ page.name }}</span>
+                <div class="page-actions">
+                  <button
+                    class="page-action-btn"
+                    (click)="renamePage(page.id); $event.stopPropagation()"
+                    title="Renombrar"
+                  >
+                    ✏️
+                  </button>
+                  <button
+                    class="page-action-btn delete"
+                    (click)="deletePage(page.id); $event.stopPropagation()"
+                    [disabled]="pages.length <= 1"
+                    title="Eliminar"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button class="add-item-btn" (click)="createNewPage()">
+              ➕ Nueva Página
+            </button>
+          </div>
+        </div>
+
+        <div class="config-group">
+          <div class="group-header">
             <h3>Plantillas de Negocio</h3>
             <p class="helper-text">
               Selecciona un template predefinido para comenzar rápidamente.

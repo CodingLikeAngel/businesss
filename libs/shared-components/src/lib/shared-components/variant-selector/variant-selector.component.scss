@@ -158,6 +158,75 @@
       }
     }
   }
+
+  .page-management {
+    .page-list {
+      margin-bottom: 1.5rem;
+
+      .page-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem 1.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        margin-bottom: 0.5rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        &.active {
+          background: var(--color-primary);
+          border-color: var(--color-primary-light);
+          color: white;
+        }
+
+        .page-name {
+          font-weight: 600;
+          font-size: 0.95rem;
+        }
+
+        .page-actions {
+          display: flex;
+          gap: 0.5rem;
+
+          .page-action-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: white;
+            width: 28px;
+            height: 28px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+
+            &:hover {
+              background: rgba(255, 255, 255, 0.1);
+              transform: scale(1.1);
+            }
+
+            &.delete {
+              &:hover {
+                background: rgba(239, 68, 68, 0.2);
+                color: #ef4444;
+              }
+
+              &:disabled {
+                opacity: 0.3;
+                cursor: not-allowed;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 // DRAG AND DROP STYLES
