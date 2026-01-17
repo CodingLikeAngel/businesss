@@ -373,6 +373,8 @@
                (click)="selectElement($event, { id: section.id + '_form', sectionId: section.id, type: 'form' })">
             <lib-reservation-form
               [variant]="getVariant(section.id)"
+              [title]="section.content['title'] || 'Reservar Cita'"
+              [subtitle]="section.content['subtitle'] || 'Reserva tu cita fácilmente y elige el servicio que más te guste.'"
             ></lib-reservation-form>
           </div>
         </div>

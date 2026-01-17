@@ -43,4 +43,20 @@ export class UIHeaderComponent {
     `align-${this.align()}`,
     this.dark() ? 'dark' : '',
   ].filter(Boolean));
+
+  headerStyles = computed(() => {
+    const styles: any = { ...this.customStyles() };
+    
+    // If a manual background color is provided, it should set --theme-bg
+    // so it interacts correctly with our CSS variable system.
+    if (styles['backgroundColor']) {
+      styles['--theme-bg'] = styles['backgroundColor'];
+    }
+    
+    if (styles['color']) {
+      styles['--theme-color'] = styles['color'];
+    }
+
+    return styles;
+  });
 }

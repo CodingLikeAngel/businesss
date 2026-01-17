@@ -444,15 +444,27 @@ export class VariantSelectorComponent implements OnInit {
 
   onVariantApplied(variantId: string) {
     console.log('Variant applied:', variantId);
+    
+    // Helper to clear overriding styles when applying a variant
+    const clearManualStyles = (target: any) => {
+      if (variantId !== 'default' && target.styles) {
+        delete target.styles.backgroundColor;
+        delete target.styles.color;
+      }
+    };
+
     if (this.selectedSection?.isGlobal) {
       this.selectedSection.content.variant = variantId;
+      clearManualStyles(this.selectedSection);
       this.updateGlobalConfigFromSelection();
     } else if (this.selectedSection) {
       this.selectedSection.variant = variantId;
+      clearManualStyles(this.selectedSection);
       this.variantService.setComponentVariant(this.selectedSection.id, variantId);
     } else if (this.selectedElement) {
       this.selectedElement.variant = variantId;
-        this.syncElementBack();
+      clearManualStyles(this.selectedElement);
+      this.syncElementBack();
       // Ensure the section variant mapping is also updated if sectionId is present
       if (this.selectedElement['sectionId']) {
         this.variantService.setComponentVariant(this.selectedElement['sectionId'], variantId);

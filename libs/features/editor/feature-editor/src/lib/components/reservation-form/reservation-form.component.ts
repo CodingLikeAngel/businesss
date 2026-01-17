@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, Input, OnInit, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVariant, UITitleComponent } from '@negocio/ui-components';
@@ -12,14 +12,14 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
 <div id="reservas" class="container mx-auto px-4">
 <lib-ui-components-title
       level="h2"
-      text="Reservar Cita"
-      [variant]="variant"
+      [text]="title()"
+      [variant]="variant()"
       animation="fade"
       align="center"
       class="text-4xl font-bold mb-8"
     ></lib-ui-components-title>
   <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
-    Reserva tu cita fácilmente y elige el servicio que más te guste.
+    {{ subtitle() }}
   </p>
   <form
     [formGroup]="reservationForm"
@@ -29,7 +29,7 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
     <div class="mb-6">
       <lib-ui-components-input
         type="select"
-        [variant]="variant"
+        [variant]="variant()"
         size="md"
         label="Elige tu Servicio"
         formControlName="service"
@@ -44,7 +44,7 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
     <div class="mb-6">
       <lib-ui-components-input
         type="select"
-        [variant]="variant"
+        [variant]="variant()"
         size="md"
         label="Selecciona tu Estilista"
         formControlName="employee"
@@ -54,7 +54,7 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
 
     <div class="mb-6 z-50">
       <lib-ui-components-date-time-picker
-        [variant]="variant"
+        [variant]="variant()"
         [rounded]="'full'"
         formControlName="dateTime"
       ></lib-ui-components-date-time-picker>
@@ -67,7 +67,7 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
       <div class="mb-6">
         <lib-ui-components-input
           type="select"
-          [variant]="variant"
+          [variant]="variant()"
           size="md"
           label="Tipo de Manicura"
           formControlName="manicureType"
@@ -83,7 +83,7 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
       <div class="mb-6">
         <lib-ui-components-input
           type="text"
-          [variant]="variant"
+          [variant]="variant()"
           size="md"
           label="Color Deseado"
           formControlName="color"
@@ -98,7 +98,7 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
     <div class="mb-6">
       <lib-ui-components-input
         type="textarea"
-        [variant]="variant"
+        [variant]="variant()"
         size="md"
         label="Notas Adicionales"
         formControlName="notes"
@@ -109,7 +109,7 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
 
     <div class="flex justify-center">
       <lib-ui-components-button
-        [variant]="variant"
+        [variant]="variant()"
         size="lg"
         rounded="full"
         leadingIcon="heroStar"
@@ -152,7 +152,10 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
   ]
 })
 export class ReservationFormComponent implements OnInit {
-  @Input() variant: CardVariant = 'default';
+  variant = input<CardVariant>('default');
+  title = input('Reservar Cita');
+  subtitle = input('Reserva tu cita fácilmente y elige el servicio que más te guste.');
+
 
   reservationForm!: FormGroup; // Usamos non-null assertion para indicar que se inicializará en ngOnInit
 
