@@ -18,115 +18,67 @@ import {
     UITooltipComponent
   ],
   template: `
-    <!-- Sección de Promociones -->
-    <section id="promociones" class="mb-16">
+    <section class="promotions-wrapper py-12">
       <div class="container mx-auto px-4">
-        <h2
-          class="text-4xl font-bold text-[#FACC15] text-center mb-8 md:mb-12 font-nintendo drop-shadow-[0_4px_8px_rgba(255,204,21,0.8)] animate-bounce"
-        >
-          Ofertas Especiales
-        </h2>
+        <div class="text-center mb-16">
+          <h2 class="text-5xl font-extrabold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 via-orange-500 to-red-500 tracking-tight">
+            {{ title }}
+          </h2>
+          <p class="text-xl text-white/60 max-w-2xl mx-auto leading-relaxed">
+            {{ description }}
+          </p>
+        </div>
 
-        <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
-          Descubre nuestras promociones exclusivas y ahorra en tus tratamientos favoritos.
-        </p>
-      </div>
-
-      <div class="container mx-auto px-4">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-
-          <!-- Promoción 1 -->
-          <div class="relative mt-12">
-            <lib-ui-components-chip
-              [variant]="selectedVariant"
-              size="sm"
-              rounded="full"
-              class="absolute md:top-[-2.5rem] top-[-1.5rem] left-1/2 transform -translate-x-1/2 z-20 text-white md:px-4 px-3 md:py-1 py-0.5 shadow-md font-semibold"
-            >
-              ¡-20%!
-            </lib-ui-components-chip>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div *ngFor="let config of premiumCardConfigs; let i = index" class="promo-item relative group">
+            <div class="absolute -top-6 left-1/2 -translate-x-1/2 z-30 transition-transform group-hover:scale-110">
+              <lib-ui-components-chip
+                [variant]="selectedVariant"
+                size="md"
+                rounded="full"
+                class="shadow-[0_0_20px_rgba(24ACC15,0.4)] border border-white/20"
+              >
+                {{ config.discount || 'OFERTA' }}
+              </lib-ui-components-chip>
+            </div>
 
             <lib-ui-components-tooltip
-              [content]="'¡Ahorra con este combo especial!'"
+              [content]="config.tooltip || '¡Aprovéchalo ahora!'"
               [variant]="selectedVariant"
               position="top"
             >
-              <lib-ui-components-card-premium
-                [variant]="selectedVariant"
-                [config]="premiumCardConfigs[0]"
-              ></lib-ui-components-card-premium>
+              <div class="promo-card-container p-2 rounded-[2rem] bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl transition-all duration-500 hover:bg-white/10 hover:-translate-y-2 hover:shadow-cyan-500/10">
+                <lib-ui-components-card-premium
+                  [variant]="selectedVariant"
+                  [config]="config"
+                ></lib-ui-components-card-premium>
+              </div>
             </lib-ui-components-tooltip>
           </div>
-
-          <!-- Promoción 2 -->
-          <div class="relative mt-12">
-            <lib-ui-components-chip
-              [variant]="selectedVariant"
-              size="sm"
-              rounded="full"
-              class="absolute md:top-[-2.5rem] top-[-1.5rem] left-1/2 transform -translate-x-1/2 z-20 text-white md:px-4 px-3 md:py-1 py-0.5 shadow-md font-semibold"
-            >
-              ¡Oferta!
-            </lib-ui-components-chip>
-
-            <lib-ui-components-tooltip
-              [content]="'Manicura de larga duración.'"
-              [variant]="selectedVariant"
-              position="top"
-            >
-              <lib-ui-components-card-premium
-                [variant]="selectedVariant"
-                [config]="premiumCardConfigs[1]"
-              ></lib-ui-components-card-premium>
-            </lib-ui-components-tooltip>
-          </div>
-
-          <!-- Promoción 3 -->
-          <div class="relative mt-12">
-            <lib-ui-components-chip
-              [variant]="selectedVariant"
-              size="sm"
-              rounded="full"
-              class="absolute md:top-[-2.5rem] top-[-1.5rem] left-1/2 transform -translate-x-1/2 z-20 text-white md:px-4 px-3 md:py-1 py-0.5 shadow-md font-semibold"
-            >
-              ¡Novedad!
-            </lib-ui-components-chip>
-
-            <lib-ui-components-tooltip
-              [content]="'Revitaliza tu cabello hoy.'"
-              [variant]="selectedVariant"
-              position="top"
-            >
-              <lib-ui-components-card-premium
-                [variant]="selectedVariant"
-                [config]="premiumCardConfigs[2]"
-              ></lib-ui-components-card-premium>
-            </lib-ui-components-tooltip>
-          </div>
-
         </div>
       </div>
     </section>
   `,
   styles: [
     `
-      .container {
-        max-width: 1200px;
+      .promotions-wrapper {
+        position: relative;
+        overflow: visible;
+      }
+      
+      .promo-card-container {
+        cursor: pointer;
       }
 
       .font-nintendo {
         font-family: 'Press Start 2P', cursive;
       }
-
-      @media (max-width: 768px) {
-        .container {
-          padding: 0 1rem;
-        }
-      }
     `
   ]
 })
 export class PromotionsSectionComponent implements OnInit {
+  @Input() title: string = 'Ofertas Especiales';
+  @Input() description: string = 'Descubre nuestras promociones exclusivas y ahorra en tus tratamientos favoritos.';
   @Input() variant: CardVariant = 'default';
   @Input() premiumCardConfigs: CardPremiumConfig[] = [];
   @Input() selectedVariant: CardVariant | string = 'primary';
@@ -135,31 +87,19 @@ export class PromotionsSectionComponent implements OnInit {
     const defaultCard: CardPremiumConfig = {
       title: 'Promoción',
       description: 'Descripción de la oferta especial.',
-      image: '',
-      price: '0€',
-      discount: '0%',
+      image: 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=800&auto=format&fit=crop',
+      price: '29.99€',
+      discount: '-20%',
       icon: 'heroStar',
-      tooltip: ''
+      tooltip: '¡Ahorra con este combo especial!'
     };
 
-    if (!Array.isArray(this.premiumCardConfigs)) {
-      this.premiumCardConfigs = [];
+    if (!Array.isArray(this.premiumCardConfigs) || this.premiumCardConfigs.length === 0) {
+      this.premiumCardConfigs = [
+        { ...defaultCard, title: 'Combo Relax', discount: '-25%' },
+        { ...defaultCard, title: 'Manicura Pro', discount: 'OFERTA', price: '19.99€' },
+        { ...defaultCard, title: 'Tinte & Corte', discount: 'NUEVO', price: '45.00€' }
+      ];
     }
-
-    while (this.premiumCardConfigs.length < 3) {
-      this.premiumCardConfigs.push({ ...defaultCard });
-    }
-
-    this.premiumCardConfigs = this.premiumCardConfigs.map((config, index) => ({
-      ...defaultCard,
-      ...config,
-      tooltip:
-        config.tooltip ||
-        (index === 0
-          ? '¡Ahorra con este combo especial!'
-          : index === 1
-          ? 'Manicura de larga duración.'
-          : 'Revitaliza tu cabello hoy.')
-    }));
   }
 }

@@ -9,117 +9,124 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
   imports: [CommonModule, ReactiveFormsModule, UIInputComponent, UIButtonComponent, UIDateTimePickerComponent , UITitleComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   template: `
-<div id="reservas" class="container mx-auto px-4">
-<lib-ui-components-title
-      level="h2"
-      [text]="title()"
-      [variant]="variant()"
-      animation="fade"
-      align="center"
-      class="text-4xl font-bold mb-8"
-    ></lib-ui-components-title>
-  <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
-    {{ subtitle() }}
-  </p>
-  <form
-    [formGroup]="reservationForm"
-    (ngSubmit)="onSubmit()"
-    class="reservation-form mt-12 bg-gradient-to-br from-pink-50 to-purple-50 backdrop-blur-lg rounded-2xl p-8 space-y-6 border-2 border-pink-200 shadow-2xl"
-  >
-    <div class="mb-6">
-      <lib-ui-components-input
-        type="select"
-        [variant]="variant()"
-        size="md"
-        label="Elige tu Servicio"
-        formControlName="service"
-        [options]="serviceOptions"
-        (ngModelChange)="onServiceChange($event)"
-      ></lib-ui-components-input>
-      <div *ngIf="reservationForm.get('service')?.touched && reservationForm.get('service')?.invalid" class="text-red-500 text-sm">
-        Por favor, selecciona un servicio.
-      </div>
-    </div>
-
-    <div class="mb-6">
-      <lib-ui-components-input
-        type="select"
-        [variant]="variant()"
-        size="md"
-        label="Selecciona tu Estilista"
-        formControlName="employee"
-        [options]="employeeOptions"
-      ></lib-ui-components-input>
-    </div>
-
-    <div class="mb-6 z-50">
-      <lib-ui-components-date-time-picker
-        [variant]="variant()"
-        [rounded]="'full'"
-        formControlName="dateTime"
-      ></lib-ui-components-date-time-picker>
-      <div *ngIf="reservationForm.get('dateTime')?.touched && reservationForm.get('dateTime')?.invalid" class="text-red-500 text-sm">
-        Por favor, selecciona una fecha y hora.
-      </div>
-    </div>
-
-    <ng-container *ngIf="reservationForm.get('service')?.value === 'manicura'">
-      <div class="mb-6">
-        <lib-ui-components-input
-          type="select"
+<div id="reservas" class="container mx-auto px-4 py-16">
+  <div class="max-w-4xl mx-auto">
+    <div class="text-center mb-12">
+      <lib-ui-components-title
+          level="h2"
+          [text]="title()"
           [variant]="variant()"
-          size="md"
-          label="Tipo de Manicura"
-          formControlName="manicureType"
-          [options]="[{ value: 'francesa', label: 'Francesa' }, { value: 'gel', label: 'Gel' }, { value: 'arte', label: 'Arte' }]"
-        ></lib-ui-components-input>
-        <div *ngIf="reservationForm.get('manicureType')?.touched && reservationForm.get('manicureType')?.invalid" class="text-red-500 text-sm">
-          Por favor, selecciona un tipo de manicura.
-        </div>
-      </div>
-    </ng-container>
-
-    <ng-container *ngIf="reservationForm.get('service')?.value === 'tinte'">
-      <div class="mb-6">
-        <lib-ui-components-input
-          type="text"
-          [variant]="variant()"
-          size="md"
-          label="Color Deseado"
-          formControlName="color"
-          placeholder="Ej: Rubio platino"
-        ></lib-ui-components-input>
-        <div *ngIf="reservationForm.get('color')?.touched && reservationForm.get('color')?.invalid" class="text-red-500 text-sm">
-          Por favor, ingresa un color.
-        </div>
-      </div>
-    </ng-container>
-
-    <div class="mb-6">
-      <lib-ui-components-input
-        type="textarea"
-        [variant]="variant()"
-        size="md"
-        label="Notas Adicionales"
-        formControlName="notes"
-        placeholder="Ej: Quiero un corte degradado con diseño."
-        [rows]="3"
-      ></lib-ui-components-input>
+          animation="fade"
+          align="center"
+          class="text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-600"
+      ></lib-ui-components-title>
+      <p class="text-xl text-white/60">
+        {{ subtitle() }}
+      </p>
     </div>
 
-    <div class="flex justify-center">
-      <lib-ui-components-button
-        [variant]="variant()"
-        size="lg"
-        rounded="full"
-        leadingIcon="heroStar"
-        type="submit"
-        [disabled]="reservationForm.invalid"
+    <div class="relative group">
+      <!-- Glow Effect -->
+      <div class="absolute -inset-1 bg-gradient-to-r from-pink-600 to-purple-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
+      
+      <form
+        [formGroup]="reservationForm"
+        (ngSubmit)="onSubmit()"
+        class="relative reservation-form bg-[#0f172a]/80 backdrop-blur-2xl rounded-2xl p-10 space-y-8 border border-white/10 shadow-2xl"
       >
-        ¡Reservar!
-      </lib-ui-components-button>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="space-y-2">
+            <lib-ui-components-input
+              type="select"
+              [variant]="variant()"
+              size="md"
+              label="Elige tu Servicio"
+              formControlName="service"
+              [options]="serviceOptions"
+              (ngModelChange)="onServiceChange($event)"
+            ></lib-ui-components-input>
+            <div *ngIf="reservationForm.get('service')?.touched && reservationForm.get('service')?.invalid" class="text-red-400 text-xs">
+              Por favor, selecciona un servicio.
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <lib-ui-components-input
+              type="select"
+              [variant]="variant()"
+              size="md"
+              label="Selecciona tu Estilista"
+              formControlName="employee"
+              [options]="employeeOptions"
+            ></lib-ui-components-input>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+           <label class="block text-sm font-semibold text-white/70 mb-2">Fecha y Hora de la Cita</label>
+           <lib-ui-components-date-time-picker
+            [variant]="variant()"
+            [rounded]="'md'"
+            formControlName="dateTime"
+          ></lib-ui-components-date-time-picker>
+          <div *ngIf="reservationForm.get('dateTime')?.touched && reservationForm.get('dateTime')?.invalid" class="text-red-400 text-xs mt-1">
+            Por favor, selecciona una fecha y hora.
+          </div>
+        </div>
+
+        <ng-container *ngIf="reservationForm.get('service')?.value === 'manicura'">
+          <div class="animate-fadeIn">
+            <lib-ui-components-input
+              type="select"
+              [variant]="variant()"
+              size="md"
+              label="Tipo de Manicura"
+              formControlName="manicureType"
+              [options]="[{ value: 'francesa', label: 'Francesa' }, { value: 'gel', label: 'Gel' }, { value: 'arte', label: 'Arte' }]"
+            ></lib-ui-components-input>
+          </div>
+        </ng-container>
+
+        <ng-container *ngIf="reservationForm.get('service')?.value === 'tinte'">
+          <div class="animate-fadeIn">
+            <lib-ui-components-input
+              type="text"
+              [variant]="variant()"
+              size="md"
+              label="Color Deseado"
+              formControlName="color"
+              placeholder="Ej: Rubio platino"
+            ></lib-ui-components-input>
+          </div>
+        </ng-container>
+
+        <div class="space-y-2">
+          <lib-ui-components-input
+            type="textarea"
+            [variant]="variant()"
+            size="md"
+            label="Notas Adicionales"
+            formControlName="notes"
+            placeholder="Ej: Algún detalle que debamos saber..."
+            [rows]="3"
+          ></lib-ui-components-input>
+        </div>
+
+        <div class="flex justify-center pt-4">
+          <lib-ui-components-button
+            [variant]="variant()"
+            [size]="'lg'"
+            [rounded]="'full'"
+            type="submit"
+            [disabled]="reservationForm.invalid"
+            class="w-full md:w-auto md:px-12"
+          >
+            Confirmar Reserva
+          </lib-ui-components-button>
+        </div>
+      </form>
     </div>
-  </form>
+  </div>
 </div>
   `,
   styles: [

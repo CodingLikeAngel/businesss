@@ -126,6 +126,14 @@ import { FormsModule } from '@angular/forms';
                   />
                 </div>
                 <div class="form-group">
+                  <label>Color de Texto:</label>
+                  <input
+                    type="color"
+                    [ngModel]="selectedSection.styles.color || '#ffffff'"
+                    (ngModelChange)="selectedSection.styles.color = $event; onStyleChange()"
+                  />
+                </div>
+                <div class="form-group">
                   <label>Imagen de Fondo (URL):</label>
                   <input
                     type="text"

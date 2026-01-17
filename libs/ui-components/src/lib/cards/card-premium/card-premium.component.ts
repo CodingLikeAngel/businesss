@@ -46,7 +46,8 @@ export interface CardPremiumConfig {
   image: string;
   price: string;
   discount: string;
-  tooltip:string;
+  tooltip: string;
+  variant?: string;
 }
 
 export interface CardPremiumCustomStyles {

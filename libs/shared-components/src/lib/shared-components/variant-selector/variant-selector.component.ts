@@ -291,9 +291,10 @@ export class VariantSelectorComponent implements OnInit {
                       this.selectedElement.id.includes('_testimonial_') ||
                       this.selectedElement.id.includes('_faq_') ||
                       this.selectedElement.id.includes('_image_') ||
+                      this.selectedElement.id.includes('_promo_') ||
                       this.selectedElement.id.includes('_card_');
     
-    const isTopLevelFieldMapper = ['title', 'subtitle', 'cta', 'form', 'header', 'footer'].includes(this.selectedElement.type);
+    const isTopLevelFieldMapper = ['title', 'subtitle', 'cta', 'form', 'contact', 'chart', 'header', 'footer'].includes(this.selectedElement.type);
 
     // 2. Apply updates to the source reference (crucial for items in arrays)
     if (content.title !== undefined) {
@@ -348,6 +349,64 @@ export class VariantSelectorComponent implements OnInit {
 
       if (!isListItem && styles) {
         updates.styles = styles;
+      }
+
+      // 4. Force global subject notification for components to trigger re-render
+      if (isListItem) {
+        if (this.selectedElement.id.includes('_stat_')) {
+          const config = this.variantService.getCurrentStatsConfig();
+          const index = config.items.findIndex(i => i === source);
+          if (index !== -1) config.items[index] = { ...source };
+          this.variantService.setStatsConfig(config);
+        }
+        if (this.selectedElement.id.includes('_feature_')) {
+          const config = this.variantService.getCurrentFeaturesConfig();
+          const index = config.items.findIndex(i => i === source);
+          if (index !== -1) config.items[index] = { ...source };
+          this.variantService.setFeaturesConfig(config);
+        }
+        if (this.selectedElement.id.includes('_service_')) {
+          const config = this.variantService.getCurrentServiceCardsConfig();
+          const index = config.items.findIndex(i => i === source);
+          if (index !== -1) config.items[index] = { ...source };
+          this.variantService.setServiceCardsConfig(config);
+        }
+        if (this.selectedElement.id.includes('_product_')) {
+          const config = this.variantService.getCurrentProductsConfig();
+          const index = config.items.findIndex(i => i === source);
+          if (index !== -1) config.items[index] = { ...source };
+          this.variantService.setProductsConfig(config);
+        }
+        if (this.selectedElement.id.includes('_testimonial_')) {
+          const config = this.variantService.getCurrentTestimonialsConfig();
+          const index = config.items.findIndex(i => i === source);
+          if (index !== -1) config.items[index] = { ...source };
+          this.variantService.setTestimonialsConfig(config);
+        }
+        if (this.selectedElement.id.includes('_faq_')) {
+          const config = this.variantService.getCurrentFaqConfig();
+          const index = config.items.findIndex(i => i === source);
+          if (index !== -1) config.items[index] = { ...source };
+          this.variantService.setFaqConfig(config);
+        }
+        if (this.selectedElement.id.includes('_image_')) {
+          const config = this.variantService.getCurrentGalleryConfig();
+          const index = config.images.findIndex(i => i === source);
+          if (index !== -1) config.images[index] = { ...source };
+          this.variantService.setGalleryConfig(config);
+        }
+        if (this.selectedElement.id.includes('_promo_')) {
+          const config = this.variantService.getCurrentPromotionsConfig();
+          const index = config.premiumCards.findIndex(i => i === source);
+          if (index !== -1) config.premiumCards[index] = { ...source };
+          this.variantService.setPromotionsConfig(config);
+        }
+        if (this.selectedElement.id.includes('_card_')) {
+          const config = this.variantService.getCurrentHeroConfig();
+          const index = config.navigationCards?.findIndex(i => i === source);
+          if (index !== -1 && config.navigationCards) config.navigationCards[index] = { ...source };
+          this.variantService.setHeroConfig(config);
+        }
       }
 
       // Trigger section update (this re-emits the whole section list to observers)

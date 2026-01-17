@@ -175,10 +175,13 @@ export interface CardPremiumConfig {
   discount: string;
   icon: 'heroStar';
   tooltip: string;
+  variant?: string;
 }
 
 export interface PromotionsConfig {
   variant: string;
+  title?: string;
+  description?: string;
   premiumCards: CardPremiumConfig[];
 }
 
@@ -955,7 +958,9 @@ export class VariantService {
 
   setTestimonialsConfig(config: Partial<TestimonialsConfig>) {
     const current = this.testimonialsConfigSubject.getValue();
-    this.testimonialsConfigSubject.next({ ...current, ...config });
+    const updated = { ...current, ...config };
+    if (updated.items) updated.items = [...updated.items];
+    this.testimonialsConfigSubject.next(updated);
     this.saveToLocalStorage();
   }
   
@@ -967,7 +972,9 @@ export class VariantService {
 
   setStatsConfig(config: Partial<StatsConfig>) {
     const current = this.statsConfigSubject.getValue();
-    this.statsConfigSubject.next({ ...current, ...config });
+    const updated = { ...current, ...config };
+    if (updated.items) updated.items = [...updated.items];
+    this.statsConfigSubject.next(updated);
     this.saveToLocalStorage();
   }
 
@@ -980,7 +987,9 @@ export class VariantService {
     if (config.variant && !this.isValidVariant(config.variant)) {
       config.variant = current.variant;
     }
-    this.heroConfigSubject.next({ ...current, ...config });
+    const updated = { ...current, ...config };
+    if (updated.navigationCards) updated.navigationCards = [...updated.navigationCards];
+    this.heroConfigSubject.next(updated);
     this.saveToLocalStorage();
   }
 
@@ -1014,37 +1023,50 @@ export class VariantService {
   // New setters for component data
   setServiceCardsConfig(config: Partial<ServiceCardsConfig>) {
     const current = this.serviceCardsConfigSubject.getValue();
-    this.serviceCardsConfigSubject.next({ ...current, ...config });
+    const updated = { ...current, ...config };
+    if (updated.items) updated.items = [...updated.items];
+    this.serviceCardsConfigSubject.next(updated);
     this.saveToLocalStorage();
   }
 
   setFaqConfig(config: Partial<FaqConfig>) {
     const current = this.faqConfigSubject.getValue();
-    this.faqConfigSubject.next({ ...current, ...config });
+    const updated = { ...current, ...config };
+    if (updated.items) updated.items = [...updated.items];
+    this.faqConfigSubject.next(updated);
     this.saveToLocalStorage();
   }
 
   setPricingConfig(config: Partial<PricingConfig>) {
     const current = this.pricingConfigSubject.getValue();
-    this.pricingConfigSubject.next({ ...current, ...config });
+    const updated = { ...current, ...config };
+    if (updated.columns) updated.columns = [...updated.columns];
+    if (updated.rows) updated.rows = [...updated.rows];
+    this.pricingConfigSubject.next(updated);
     this.saveToLocalStorage();
   }
 
   setPromotionsConfig(config: Partial<PromotionsConfig>) {
     const current = this.promotionsConfigSubject.getValue();
-    this.promotionsConfigSubject.next({ ...current, ...config });
+    const updated = { ...current, ...config };
+    if (updated.premiumCards) updated.premiumCards = [...updated.premiumCards];
+    this.promotionsConfigSubject.next(updated);
     this.saveToLocalStorage();
   }
 
   setGalleryConfig(config: Partial<GalleryConfig>) {
     const current = this.galleryConfigSubject.getValue();
-    this.galleryConfigSubject.next({ ...current, ...config });
+    const updated = { ...current, ...config };
+    if (updated.images) updated.images = [...updated.images];
+    this.galleryConfigSubject.next(updated);
     this.saveToLocalStorage();
   }
 
   setProductsConfig(config: Partial<ProductsConfig>) {
     const current = this.productsConfigSubject.getValue();
-    this.productsConfigSubject.next({ ...current, ...config });
+    const updated = { ...current, ...config };
+    if (updated.items) updated.items = [...updated.items];
+    this.productsConfigSubject.next(updated);
     this.saveToLocalStorage();
   }
 

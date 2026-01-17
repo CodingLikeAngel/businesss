@@ -291,17 +291,39 @@
         ></lib-ui-pricing-table-section>
       </div>
 
-      <!-- PROMOTIONS -->
+      <!-- PROMOTIONS (Decomposed for editing) -->
       <section *ngSwitchCase="'promotions'" [id]="section.id" 
         class="relative z-20 py-20 cursor-pointer editor-section" 
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
         (click)="selectSection($event, section)">
+        
         <div class="container mx-auto px-6 max-w-7xl">
-          <lib-promotions-section
-              [selectedVariant]="getVariant(section.id)"
-              [variant]="getVariant(section.id)"
-              [premiumCardConfigs]="promotionsConfig.premiumCards"
-            ></lib-promotions-section>
+          <div class="text-center mb-16">
+            <h2 class="text-5xl font-extrabold mb-6 editor-element inline-block"
+                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+                (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })">
+              {{ section.content['title'] || promotionsConfig.title || 'Ofertas Especiales' }}
+            </h2>
+            <div class="editor-element"
+                 [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_subtitle'"
+                 (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })">
+              <p class="text-xl text-white/60 max-w-2xl mx-auto">
+                {{ section.content['subtitle'] || promotionsConfig.description || 'Descubre nuestras promociones exclusivas y ahorra.' }}
+              </p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+            <div *ngFor="let promo of promotionsConfig.premiumCards; let i = index" 
+                 class="editor-element"
+                 [class.is-selected]="uiStateService.selectedElement?._original === promo"
+                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_promo_' + i, promo, 'promo'))">
+              <lib-ui-components-card-premium
+                [variant]="promo.variant || getVariant(section.id)"
+                [config]="promo"
+              ></lib-ui-components-card-premium>
+            </div>
+          </div>
         </div>
       </section>
 
