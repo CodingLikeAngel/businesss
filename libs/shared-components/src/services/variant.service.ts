@@ -768,6 +768,95 @@ export class VariantService {
   productsConfig$: Observable<ProductsConfig> = this.productsConfigSubject.asObservable();
   featuresConfig$: Observable<FeaturesConfig> = this.featuresConfigSubject.asObservable();
 
+  // ========================================
+  // SECTION MANAGEMENT METHODS
+  // ========================================
+
+  /**
+   * Get all sections from the current state
+   */
+  getSections(): PageSection[] {
+    return this.sectionsSubject.value;
+  }
+
+  /**
+   * Get a specific section by ID
+   */
+  getSectionById(sectionId: string): PageSection | undefined {
+    return this.sectionsSubject.value.find(s => s.id === sectionId);
+  }
+
+  /**
+   * Update a section (immutable - creates new array)
+   */
+  updateSection(sectionId: string, updates: Partial<PageSection>): void {
+    const sections = this.sectionsSubject.value;
+    const index = sections.findIndex(s => s.id === sectionId);
+    
+    if (index !== -1) {
+      const newSections = [...sections];
+      newSections[index] = {
+        ...newSections[index],
+        ...updates,
+        content: {
+          ...newSections[index].content,
+          ...(updates.content || {})
+        },
+        styles: {
+          ...newSections[index].styles,
+          ...(updates.styles || {})
+        }
+      };
+      
+      this.sectionsSubject.next(newSections);
+      this.saveToLocalStorage();
+    }
+  }
+
+  /**
+   * Add a new section
+   */
+  addSection(section: PageSection): void {
+    const sections = [...this.sectionsSubject.value, section];
+    this.sectionsSubject.next(sections);
+    this.saveToLocalStorage();
+  }
+
+  /**
+   * Remove a section by ID
+   */
+  removeSection(sectionId: string): void {
+    const sections = this.sectionsSubject.value.filter(s => s.id !== sectionId);
+    this.sectionsSubject.next(sections);
+    this.saveToLocalStorage();
+  }
+
+  /**
+   * Reorder sections
+   */
+  reorderSections(newOrder: PageSection[]): void {
+    this.sectionsSubject.next([...newOrder]);
+    this.saveToLocalStorage();
+  }
+
+  /**
+   * Update section visibility
+   */
+  toggleSectionVisibility(sectionId: string): void {
+    const sections = this.sectionsSubject.value;
+    const index = sections.findIndex(s => s.id === sectionId);
+    
+    if (index !== -1) {
+      const newSections = [...sections];
+      newSections[index] = {
+        ...newSections[index],
+        visible: !newSections[index].visible
+      };
+      this.sectionsSubject.next(newSections);
+      this.saveToLocalStorage();
+    }
+  }
+
   componentVariants$: Observable<{ [component: string]: string }> = this.componentVariantsSubject.asObservable();
   globalVariant$: Observable<string> = this.globalVariantSubject.asObservable();
 

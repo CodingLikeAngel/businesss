@@ -274,17 +274,62 @@ export class VariantSelectorComponent implements OnInit {
   syncElementBack() {
     if (!this.selectedElement || !this.selectedElement._original) return;
     
-    const source = this.selectedElement._original;
     const content = this.selectedElement.content;
     const styles = this.selectedElement.styles;
+    const variant = this.selectedElement.variant;
+
+    // If this is a section element (has sectionId), use immutable update
+    if (this.selectedElement['sectionId']) {
+      const sectionId = this.selectedElement['sectionId'];
+      
+      // Build the updates object
+      const updates: any = {};
+      
+      if (content) {
+        updates.content = {
+          title: content.title,
+          subtitle: content.subtitle,
+          description: content.description,
+          text: content.text,
+          label: content.label,
+          link: content.link,
+          image: content.image,
+          variant: variant
+        };
+        
+        // Remove undefined values
+        Object.keys(updates.content).forEach(key => {
+          if (updates.content[key] === undefined) {
+            delete updates.content[key];
+          }
+        });
+      }
+      
+      if (styles) {
+        updates.styles = styles;
+      }
+      
+      // Use the new immutable update method
+      this.variantService.updateSection(sectionId, updates);
+      
+      // Also update variant mapping
+      if (variant) {
+        this.variantService.setComponentVariant(sectionId, variant);
+      }
+      
+      return; // Exit early, no need for old reference-based logic
+    }
+
+    // Fallback to old logic for elements without sectionId (legacy support)
+    const source = this.selectedElement._original;
 
     // Apply styles
     source.styles = { ...(source.styles || {}), ...styles };
-    if (this.selectedElement.variant) {
-      source.variant = this.selectedElement.variant;
+    if (variant) {
+      source.variant = variant;
     }
 
-    // Map content back to original fields based on what was normalized
+    // Map content back to original fields
     if (content.title !== undefined) {
       source.title = content.title;
       if ('name' in source) source.name = content.title;
@@ -304,24 +349,10 @@ export class VariantSelectorComponent implements OnInit {
       if ('value' in source) source.value = content.subtitle;
       if ('icon' in source) source.icon = content.subtitle;
     }
-    
-    // Variant update (Preserve logic)
-    if (this.selectedElement.variant) {
-       source.variant = this.selectedElement.variant;
-    }
 
     if (content.image !== undefined) {
       source.image = content.image;
       if ('imageUrl' in source) source.imageUrl = content.image;
-    }
-
-    // Force Angular change detection by creating a new reference
-    // This ensures the template re-renders with updated values
-    if (this.selectedElement['sectionId']) {
-      const sectionId = this.selectedElement['sectionId'];
-      // Trigger a manual update by notifying the variant service
-      // Since we modified content by reference, we need to force a re-render
-      this.variantService.setComponentVariant(sectionId, source.variant || 'default');
     }
 
     // Check if we are updating a global component and trigger specific update
