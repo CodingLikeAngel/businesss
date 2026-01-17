@@ -63,6 +63,11 @@ export interface ComponentEditableProperties {
   form?: string[];
   title?: string[];
   chart?: string[];
+  pricing?: string[];
+  newsletter?: string[];
+  steps?: string[];
+  breadcrumbs?: string[];
+  spinner?: string[];
   accordion?: string[];
   tabs?: string[];
   list?: string[];
@@ -211,7 +216,30 @@ export const EDITABLE_PROPERTIES: ComponentEditableProperties = {
     'gap',
     'gridTemplateColumns',
     'padding'
-  ]
+  ],
+  pricing: [
+    'gap',
+    'padding',
+    'margin'
+  ],
+  newsletter: [
+   'padding',
+   'margin',
+   'backgroundImage'
+ ],
+ steps: [
+   'gap',
+   'padding'
+ ],
+ breadcrumbs: [
+   'fontSize',
+   'color'
+ ],
+ spinner: [
+   'width',
+   'height',
+   'color'
+ ]
 };
 
 // Detectar tipo de componente basado en su estructura
@@ -240,6 +268,11 @@ export function detectComponentType(element: any): keyof ComponentEditableProper
   if (type.includes('list')) return 'list';
   if (type.includes('chip')) return 'chip';
   if (type.includes('gallery')) return 'gallery';
+  if (type.includes('pricing')) return 'pricing';
+  if (type.includes('newsletter')) return 'newsletter';
+  if (type.includes('steps')) return 'steps';
+  if (type.includes('breadcrumbs')) return 'breadcrumbs';
+  if (type.includes('spinner')) return 'spinner';
   
   // Detectar por clase
   if (className.includes('card')) return 'card';

@@ -311,9 +311,12 @@ export class VariantSelectorComponent implements OnInit {
                       this.selectedElement.id.includes('_faq_') ||
                       this.selectedElement.id.includes('_image_') ||
                       this.selectedElement.id.includes('_promo_') ||
-                      this.selectedElement.id.includes('_card_');
+                      this.selectedElement.id.includes('_card_') ||
+                      this.selectedElement.id.includes('_list_') ||
+                      this.selectedElement.id.includes('_step_') ||
+                      this.selectedElement.id.includes('_tab_');
     
-    const isTopLevelFieldMapper = ['title', 'subtitle', 'cta', 'form', 'contact', 'chart', 'header', 'footer', 'pricing'].includes(this.selectedElement.type);
+    const isTopLevelFieldMapper = ['title', 'subtitle', 'cta', 'form', 'contact', 'chart', 'header', 'footer', 'pricing', 'newsletter', 'steps', 'gallery', 'breadcrumbs', 'spinner'].includes(this.selectedElement.type);
 
     // 2. Apply updates to the source reference (crucial for items in arrays)
     if (content.title !== undefined) {
@@ -435,6 +438,10 @@ export class VariantSelectorComponent implements OnInit {
           if (index !== -1 && config.navigationCards) config.navigationCards[index] = { ...source };
           this.variantService.setHeroConfig(config);
         }
+        // Generic list update for simpler structures if needed, but usually specific configs handle them.
+        // For list, steps, tabs, they are often direct content arrays in the section which we might need to handle if not using a specific config service.
+        // Assuming they are updated by reference in the section update logic if they are part of section.content['items'].
+
       }
 
       // Trigger section update (this re-emits the whole section list to observers)
