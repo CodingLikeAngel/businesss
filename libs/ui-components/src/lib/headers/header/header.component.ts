@@ -7,12 +7,15 @@ export type DefaultHeaderVariant = typeof headerVariants[number];
 export type HeaderVariantType = DefaultHeaderVariant | (string & {});
 
 export interface HeaderCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--header-bg'?: string;
   '--header-color'?: string;
   '--header-border'?: string;
   '--header-shadow'?: string;
   '--header-hover-bg'?: string;
   '--header-hover-shadow'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -45,20 +48,37 @@ export class UIHeaderComponent {
   ].filter(Boolean));
 
   headerStyles = computed(() => {
-    const styles: any = { ...this.customStyles() };
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
     
-    // If a manual background color is provided, it should set --theme-bg with !important
-    // to override variant-specific backgrounds
-    if (styles['backgroundColor']) {
-      styles['--theme-bg'] = styles['backgroundColor'];
-      styles['background'] = `${styles['backgroundColor']} !important`;
+    // DEBUG: Log what we're receiving
+    console.log('📰 Header customStyles received:', customStyles);
+    
+    if (customStyles['backgroundColor']) {
+      // Set CSS variables
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--header-bg'] = customStyles['backgroundColor'];
+      // Set direct properties
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+      console.log('🎨 Header applying background:', customStyles['backgroundColor']);
     }
     
-    if (styles['color']) {
-      styles['--theme-color'] = styles['color'];
-      styles['color'] = `${styles['color']} !important`;
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--header-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+      console.log('🎨 Header applying color:', customStyles['color']);
     }
-
+    
+    // Copy any other custom styles
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+    
+    console.log('📰 Header final styles:', styles);
     return styles;
   });
 }
