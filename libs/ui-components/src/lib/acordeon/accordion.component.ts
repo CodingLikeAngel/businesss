@@ -17,14 +17,20 @@ export interface AccordionItem {
 
 // Interfaz para las propiedades CSS personalizadas
 export interface AcordeonCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--accordion-bg'?: string;
   '--accordion-color'?: string;
-  '--accordion-border-color'?: string;
+  '--accordion-border'?: string;
+  '--accordion-shadow'?: string;
+  '--accordion-hover-bg'?: string;
+  '--accordion-hover-shadow'?: string;
   '--accordion-header-bg'?: string;
   '--accordion-header-hover-bg'?: string;
   '--accordion-content-bg'?: string;
   '--accordion-content-color'?: string;
   '--accordion-item-border'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -48,15 +54,29 @@ export class UIAccordionComponent {
   expandedIndex = signal(-1);
 
   accordionStyles = computed(() => {
-    const styles: any = { ...this.customStyles() };
-    if (styles['backgroundColor']) {
-      styles['--accordion-bg'] = styles['backgroundColor']; // Explicitly map to component variable
-      styles['--theme-bg'] = styles['backgroundColor'];     // Also theme var just in case
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--accordion-bg'] = customStyles['backgroundColor'];
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
     }
-    if (styles['color']) {
-      styles['--accordion-color'] = styles['color'];
-      styles['--theme-color'] = styles['color'];
+    
+    if (customStyles['color']) {
+      styles['--accordion-color'] = customStyles['color'];
+      styles['--theme-color'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
     }
+    
+    // Copy any other custom styles
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+    
     return styles;
   });
 
