@@ -202,9 +202,17 @@ import { FormsModule } from '@angular/forms';
                   <input *ngIf="item.name !== undefined" type="text" [(ngModel)]="item.name" (ngModelChange)="onContentChange()" placeholder="Nombre..." class="text-xs !p-2 mt-1" />
                   <input *ngIf="item.author !== undefined" type="text" [(ngModel)]="item.author" (ngModelChange)="onContentChange()" placeholder="Autor..." class="text-xs !p-2 mt-1" />
                 </div>
-                <div class="form-group mb-0" *ngIf="item.description !== undefined || item.quote !== undefined || item.text !== undefined">
-                  <label class="text-[10px]">Descripción / Cita:</label>
-                  <textarea [(ngModel)]="item.description || item.quote || item.text" (ngModelChange)="onContentChange()" rows="2" class="text-xs !p-2"></textarea>
+                <div class="form-group mb-0" *ngIf="item.description !== undefined">
+                  <label class="text-[10px]">Descripción:</label>
+                  <textarea [(ngModel)]="item.description" (ngModelChange)="onContentChange()" rows="2" class="text-xs !p-2"></textarea>
+                </div>
+                <div class="form-group mb-0" *ngIf="item.quote !== undefined">
+                  <label class="text-[10px]">Cita:</label>
+                  <textarea [(ngModel)]="item.quote" (ngModelChange)="onContentChange()" rows="2" class="text-xs !p-2"></textarea>
+                </div>
+                <div class="form-group mb-0" *ngIf="item.text !== undefined && item.description === undefined && item.quote === undefined">
+                  <label class="text-[10px]">Texto:</label>
+                  <textarea [(ngModel)]="item.text" (ngModelChange)="onContentChange()" rows="2" class="text-xs !p-2"></textarea>
                 </div>
               </div>
             </div>
