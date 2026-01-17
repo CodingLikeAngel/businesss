@@ -315,12 +315,14 @@ export class VariantSelectorComponent implements OnInit {
       if ('imageUrl' in source) source.imageUrl = content.image;
     }
 
-    if (content.link !== undefined) {
-      if ('link' in source) source.link = content.link;
+    // Force Angular change detection by creating a new reference
+    // This ensures the template re-renders with updated values
+    if (this.selectedElement['sectionId']) {
+      const sectionId = this.selectedElement['sectionId'];
+      // Trigger a manual update by notifying the variant service
+      // Since we modified content by reference, we need to force a re-render
+      this.variantService.setComponentVariant(sectionId, source.variant || 'default');
     }
-
-    // Force save to local storage
-    this.variantService.saveToLocalStorage();
 
     // Check if we are updating a global component and trigger specific update
     // Only update global configs if the selected element is actually the global instance (identified by specific IDs)
