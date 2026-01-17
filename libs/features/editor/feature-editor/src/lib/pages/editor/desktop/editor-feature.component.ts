@@ -120,7 +120,7 @@ export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent im
 
   onSectionResized(section: PageSection, bounds: any) {
     console.log('📏 Section resized:', section.id, bounds);
-    
+
     // Update section styles with new height
     const updatedSection = {
       ...section,
@@ -130,9 +130,19 @@ export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent im
         height: `${bounds.height}px`
       }
     };
-    
+
     // Update in service
     this.variantService.updateSectionInCurrentPage(section.id, updatedSection);
+  }
+
+  onElementMoved(bounds: any, elementId: string) {
+    console.log('📍 Element moved:', elementId, bounds);
+    // TODO: Implement element position persistence
+  }
+
+  onElementResized(bounds: any, elementId: string) {
+    console.log('📐 Element resized:', elementId, bounds);
+    // TODO: Implement element size persistence
   }
 }
 

@@ -36,25 +36,37 @@
             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
             (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })"
             [applyDynamicStyles]="section.content['titleStyles']"
+            [visualEditable]="true"
+            visualType="element"
+            (visualMoved)="onElementMoved($event, section.id + '_title')"
+            (visualResized)="onElementResized($event, section.id + '_title')"
           ></lib-ui-components-title>
           
           <div class="mt-4 editor-element"
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_subtitle'"
                (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })"
-               [applyDynamicStyles]="section.content['subtitleStyles']">
+               [applyDynamicStyles]="section.content['subtitleStyles']"
+               [visualEditable]="true"
+               visualType="element"
+               (visualMoved)="onElementMoved($event, section.id + '_subtitle')"
+               (visualResized)="onElementResized($event, section.id + '_subtitle')">
             <p class="hero-subtitle text-xl md:text-3xl text-white/90">
               {{ section.content['subtitle'] || heroConfig.subtitle }}
             </p>
           </div>
 
           <!-- CTA (Decomposed) -->
-          <div *ngIf="section.content['showCta'] !== false" 
+          <div *ngIf="section.content['showCta'] !== false"
                class="mt-10 editor-element inline-block"
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_cta'"
-               (click)="selectElement($event, { id: section.id + '_cta', sectionId: section.id, content: section.content, type: 'cta', _original: section.content })">
+               (click)="selectElement($event, { id: section.id + '_cta', sectionId: section.id, content: section.content, type: 'cta', _original: section.content })"
+               [applyDynamicStyles]="section.content['ctaStyles']"
+               [visualEditable]="true"
+               visualType="element"
+               (visualMoved)="onElementMoved($event, section.id + '_cta')"
+               (visualResized)="onElementResized($event, section.id + '_cta')">
             <button class="cta-button px-10 py-4 rounded-xl font-bold transition-all hover:scale-105 active:scale-95"
-                    [ngClass]="'variant-' + getVariant(section.id)"
-                    [applyDynamicStyles]="section.content['ctaStyles']">
+                    [ngClass]="'variant-' + getVariant(section.id)">
               {{ section.content['ctaLabel'] || heroConfig.ctaLabel }}
             </button>
           </div>
@@ -66,7 +78,11 @@
              <div *ngFor="let card of heroConfig.navigationCards; let i = index"
                   class="editor-element"
                   [class.is-selected]="uiStateService.selectedElement?._original === card"
-                  (click)="selectElement($event, getMergedElement(section.id, section.id + '_card_' + i, card, 'card'))">
+                  (click)="selectElement($event, getMergedElement(section.id, section.id + '_card_' + i, card, 'card'))"
+                  [visualEditable]="true"
+                  visualType="element"
+                  (visualMoved)="onElementMoved($event, section.id + '_card_' + i)"
+                  (visualResized)="onElementResized($event, section.id + '_card_' + i)">
                <lib-ui-components-card-animated
                  [icon]="card.icon"
                  [title]="card.title"
@@ -99,23 +115,35 @@
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
               (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
               [applyDynamicStyles]="section.content['titleStyles']"
+              [visualEditable]="true"
+              visualType="element"
+              (visualMoved)="onElementMoved($event, section.id + '_title')"
+              (visualResized)="onElementResized($event, section.id + '_title')"
             ></lib-ui-components-title>
             
             <div class="mt-4">
               <p class="text-xl text-white/70 max-w-2xl mx-auto editor-element"
                  [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_subtitle'"
                  (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle' })"
-                 [applyDynamicStyles]="section.content['subtitleStyles']">
+                 [applyDynamicStyles]="section.content['subtitleStyles']"
+                 [visualEditable]="true"
+                 visualType="element"
+                 (visualMoved)="onElementMoved($event, section.id + '_subtitle')"
+                 (visualResized)="onElementResized($event, section.id + '_subtitle')">
                 {{ section.content['subtitle'] || 'Descubre cómo podemos ayudarte.' }}
               </p>
             </div>
           </div>
 
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div *ngFor="let feat of featuresConfig.items; let i = index" 
+            <div *ngFor="let feat of featuresConfig.items; let i = index"
                  class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?._original === feat"
-                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_feature_' + i, feat, 'feature'))">
+                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_feature_' + i, feat, 'feature'))"
+                 [visualEditable]="true"
+                 visualType="element"
+                 (visualMoved)="onElementMoved($event, section.id + '_feature_' + i)"
+                 (visualResized)="onElementResized($event, section.id + '_feature_' + i)">
               <lib-ui-components-card-animated
                 [icon]="feat.icon"
                 [title]="feat.title"
@@ -148,13 +176,21 @@
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
               (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })"
               [applyDynamicStyles]="section.content['titleStyles']"
+              [visualEditable]="true"
+              visualType="element"
+              (visualMoved)="onElementMoved($event, section.id + '_title')"
+              (visualResized)="onElementResized($event, section.id + '_title')"
            ></lib-ui-components-title>
 
            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div *ngFor="let stat of statsConfig.items; let i = index" 
+              <div *ngFor="let stat of statsConfig.items; let i = index"
                    class="editor-element"
                    [class.is-selected]="uiStateService.selectedElement?._original === stat"
-                   (click)="selectElement($event, getMergedElement(section.id, section.id + '_stat_' + i, stat, 'stat'))">
+                   (click)="selectElement($event, getMergedElement(section.id, section.id + '_stat_' + i, stat, 'stat'))"
+                   [visualEditable]="true"
+                   visualType="element"
+                   (visualMoved)="onElementMoved($event, section.id + '_stat_' + i)"
+                   (visualResized)="onElementResized($event, section.id + '_stat_' + i)">
                   <lib-ui-components-card
                     [title]="stat.value.toString()"
                     [description]="stat.label"
@@ -201,14 +237,22 @@
               class="editor-element"
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
               (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+              [visualEditable]="true"
+              visualType="element"
+              (visualMoved)="onElementMoved($event, section.id + '_title')"
+              (visualResized)="onElementResized($event, section.id + '_title')"
             ></lib-ui-components-title>
           </div>
           
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div *ngFor="let item of serviceCardsConfig.items; let i = index" 
+            <div *ngFor="let item of serviceCardsConfig.items; let i = index"
                  class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?._original === item"
-                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_service_' + i, item, 'service'))">
+                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_service_' + i, item, 'service'))"
+                 [visualEditable]="true"
+                 visualType="element"
+                 (visualMoved)="onElementMoved($event, section.id + '_service_' + i)"
+                 (visualResized)="onElementResized($event, section.id + '_service_' + i)">
                 <lib-ui-components-card
                   [title]="item.routeName"
                   [description]="item.description"
