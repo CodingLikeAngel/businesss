@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChange } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UIInputComponent, InputOption, variants } from '@negocio/ui-components';
@@ -274,9 +274,14 @@ export class VariantSelectorComponent implements OnInit {
   syncElementBack() {
     if (!this.selectedElement || !this.selectedElement._original) return;
     
-    const content = this.selectedElement.content;
-    const styles = this.selectedElement.styles;
+    const content = this.selectedElement.content || {};
+    const styles = this.selectedElement.styles || {};
     const variant = this.selectedElement.variant;
+    const source = this.selectedElement._original;
+
+    // Capture old variant for ngOnChanges
+    const oldVariant = isNaN(Number(source.variant)) ? source.variant : source.variant?.(); // Handle potential signal
+    const isSignal = typeof source.variant === 'function';
 
     // If this is a section element (has sectionId), use immutable update
     if (this.selectedElement['sectionId']) {
@@ -321,11 +326,15 @@ export class VariantSelectorComponent implements OnInit {
     }
 
     // Fallback to old logic for elements without sectionId (legacy support)
-    const source = this.selectedElement._original;
 
     // Apply styles
     source.styles = { ...(source.styles || {}), ...styles };
-    if (variant) {
+    // Also update customStyles if it exists or if it's a known style property (Crucial for global components)
+    if ('customStyles' in source || ['navbar', 'header', 'footer', 'hero', 'bubble', 'card', 'title'].includes(this.selectedElement.type)) {
+         source.customStyles = { ...(source.customStyles || {}), ...styles };
+    }
+
+    if (variant && !isSignal) {
       source.variant = variant;
     }
 
@@ -355,9 +364,31 @@ export class VariantSelectorComponent implements OnInit {
       if ('imageUrl' in source) source.imageUrl = content.image;
     }
 
+    // Trigger ngOnChanges if applicable (for component instances)
+    if (source.ngOnChanges) {
+      const changes: any = {};
+      
+      // We can't easily detect style changes as SimpleChange unless we track old styles.
+      // But we can forcibly call markForCheck later.
+      if (variant && oldVariant !== variant) {
+        changes['variant'] = new SimpleChange(oldVariant, variant, false);
+      }
+      
+      if (Object.keys(changes).length > 0) {
+        source.ngOnChanges(changes);
+      }
+      
+      // Try to manually trigger change detection if the component has a change detector
+      if (source.cdr && source.cdr.markForCheck) {
+        source.cdr.markForCheck();
+      } else if (source.changeDetectorRef && source.changeDetectorRef.markForCheck) {
+        source.changeDetectorRef.markForCheck();
+      }
+    }
+
     // Check if we are updating a global component and trigger specific update
     // Only update global configs if the selected element is actually the global instance (identified by specific IDs)
-    const isGlobalElement = ['navbar', 'header', 'footer'].includes(this.selectedElement.id);
+    const isGlobalElement = ['navbar', 'header', 'footer'].includes(this.selectedElement.id) || this.selectedElement.isGlobal;
     
     if (isGlobalElement) {
       if (this.selectedElement.type === 'header') {

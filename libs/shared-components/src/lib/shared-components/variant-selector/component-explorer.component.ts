@@ -2,6 +2,37 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { VariantService, PageSection } from '../../../services/variant.service';
+import {
+  UIHeroSectionComponent,
+  UIHeaderComponent,
+  UIFooterComponent,
+  UIFaqSectionComponent,
+  UIFeaturesSectionComponent,
+  UIGallerySectionComponent,
+  UIStatsLibSectionComponent,
+  UIStepsSectionComponent,
+  UIPricingTableSectionComponent,
+  UINewsletterSectionComponent,
+  UIContactSectionComponent,
+  UITabsComponent,
+  UIAccordionComponent,
+  UIModalComponent,
+  UIButtonComponent,
+  UIChipComponent,
+  UISpinnerComponent,
+  UIBreadcrumbsComponent,
+  UICardAnimatedComponent,
+  UiCardProductsComponent,
+  UICardComponent,
+  UiTestimonialsCardComponent,
+  UIImageComponent,
+  UITableComponent,
+  BubbleAnimationComponent,
+  UITestimonialsSectionComponent,
+  UIListComponent,
+  UIGamingVariantsShowcaseComponent,
+  UIInputComponent
+} from '@negocio/ui-components';
 
 interface SectionVariant {
   type: string;
@@ -15,7 +46,39 @@ interface SectionVariant {
 @Component({
   selector: 'lib-component-explorer',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [
+    CommonModule, 
+    FormsModule,
+    UIHeroSectionComponent,
+    UIHeaderComponent,
+    UIFooterComponent,
+    UIFaqSectionComponent,
+    UIFeaturesSectionComponent,
+    UIGallerySectionComponent,
+    UIStatsLibSectionComponent,
+    UIStepsSectionComponent,
+    UIPricingTableSectionComponent,
+    UINewsletterSectionComponent,
+    UIContactSectionComponent,
+    UITabsComponent,
+    UIAccordionComponent,
+    UIModalComponent,
+    UIButtonComponent,
+    UIChipComponent,
+    UISpinnerComponent,
+    UIBreadcrumbsComponent,
+    UICardAnimatedComponent,
+    UiCardProductsComponent,
+    UICardComponent,
+    UiTestimonialsCardComponent,
+    UIImageComponent,
+    UITableComponent,
+    BubbleAnimationComponent,
+    UITestimonialsSectionComponent,
+    UIListComponent,
+    UIGamingVariantsShowcaseComponent,
+    UIInputComponent
+  ],
   template: `
     <div class="component-explorer">
       <div class="explorer-header">
@@ -77,56 +140,81 @@ interface SectionVariant {
             Vista Previa - {{ selectedVariant }}
           </div>
 
-          <div class="preview-container" [ngSwitch]="selectedComponent.type">
-            <!-- Hero Section -->
-            <div *ngSwitchCase="'hero'" class="preview-mockup hero-mockup">
-              <div class="hero-content">
-                <h1>Título Impactante</h1>
-                <p>Descripción persuasiva que invita a la acción</p>
-                <button class="cta-btn">Comenzar Ahora</button>
-              </div>
-              <div class="hero-bg"></div>
+          <div class="preview-container p-6 bg-slate-900 overflow-y-auto" [ngSwitch]="selectedComponent.type">
+            
+            <!-- CONTENT -->
+            <div *ngSwitchCase="'promotions'" class="p-4 bg-slate-800 rounded-lg text-center text-gray-400">
+              <p>Promotions Component Preview (Requires Feature Module)</p>
+            </div>
+            <lib-ui-hero-section *ngSwitchCase="'hero'" [variant]="selectedVariant" title="Título Hero" subtitle="Subtítulo descriptivo"></lib-ui-hero-section>
+            <lib-ui-header *ngSwitchCase="'header'" [variant]="selectedVariant" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header>
+            <lib-ui-components-footer *ngSwitchCase="'footer'" [variant]="selectedVariant" title="Logo"></lib-ui-components-footer>
+            <div *ngSwitchCase="'faq'" class="p-4"><lib-ui-faq-section [variant]="selectedVariant"></lib-ui-faq-section></div>
+            <div *ngSwitchCase="'features'" class="p-4"><lib-ui-features-section [variant]="selectedVariant"></lib-ui-features-section></div>
+            <div *ngSwitchCase="'gallery'" class="p-4"><lib-ui-components-gallery-section [variant]="selectedVariant"></lib-ui-components-gallery-section></div>
+            <div *ngSwitchCase="'stats'" class="p-4"><lib-ui-components-stats-section [variant]="selectedVariant"></lib-ui-components-stats-section></div>
+            <div *ngSwitchCase="'steps'" class="p-4"><lib-ui-steps-section [variant]="selectedVariant"></lib-ui-steps-section></div>
+            <div *ngSwitchCase="'showcase'" class="p-4"><lib-ui-gaming-variants-showcase></lib-ui-gaming-variants-showcase></div>
+            <div *ngSwitchCase="'testimonials'" class="p-4"><lib-ui-testimonials-section [variant]="selectedVariant"></lib-ui-testimonials-section></div>
+            
+            <!-- COMMERCE -->
+            <div *ngSwitchCase="'services'" class="p-4"><lib-ui-features-section [variant]="selectedVariant" [title]="'Nuestros Servicios'"></lib-ui-features-section></div>
+            <div *ngSwitchCase="'pricing'" class="p-4"><lib-ui-pricing-table-section [variant]="selectedVariant"></lib-ui-pricing-table-section></div>
+            
+            <div *ngSwitchCase="'newsletter'" class="p-4"><lib-ui-newsletter-section [variant]="selectedVariant"></lib-ui-newsletter-section></div>
+            
+            <!-- INTERACTIVE -->
+            <div *ngSwitchCase="'contact'" class="p-4"><lib-ui-contact-section [variant]="selectedVariant"></lib-ui-contact-section></div>
+            <div *ngSwitchCase="'bubble'" class="h-64 relative overflow-hidden rounded-xl border border-white/10 m-4">
+               <lib-bubble-animation [variant]="$any(selectedVariant)"></lib-bubble-animation>
+            </div>
+            <div *ngSwitchCase="'tabs'" class="p-4">
+              <lib-ui-components-tabs [variant]="selectedVariant" [showAs]="'tabs'" [tabs]="[{label:'Tab 1', sectionId:'tab1'}, {label:'Tab 2', sectionId:'tab2'}]"></lib-ui-components-tabs>
+            </div>
+            <div *ngSwitchCase="'accordion'" class="p-4">
+              <lib-ui-components-accordion [variant]="selectedVariant" [items]="[{title:'Item 1', content:'Detalle 1'}, {title:'Item 2', content:'Detalle 2'}]"></lib-ui-components-accordion>
+            </div>
+            
+            <!-- ELEMENTS -->
+            <div *ngSwitchCase="'button'" class="flex gap-4 justify-center items-center h-full min-h-[200px]">
+              <lib-ui-components-button [variant]="selectedVariant">Botón</lib-ui-components-button>
+            </div>
+            <div *ngSwitchCase="'chip'" class="flex justify-center items-center h-full min-h-[200px]">
+               <lib-ui-components-chip [variant]="selectedVariant" label="Chip"></lib-ui-components-chip>
+            </div>
+            <div *ngSwitchCase="'spinner'" class="flex justify-center items-center h-full min-h-[200px]">
+               <lib-ui-spinner [variant]="selectedVariant"></lib-ui-spinner>
+            </div>
+            <div *ngSwitchCase="'breadcrumbs'" class="p-8">
+               <lib-ui-breadcrumbs [variant]="selectedVariant" [items]="[{label:'Home', url:'/'}, {label:'Sección', url:'#'}]"></lib-ui-breadcrumbs>
+            </div>
+            
+            <!-- CARDS -->
+            <div *ngSwitchCase="'card-animated'" class="max-w-xs mx-auto p-4">
+               <lib-ui-components-card-animated [variant]="selectedVariant" title="Tarjeta" description="Descripción de la tarjeta animada"></lib-ui-components-card-animated>
+            </div>
+            <div *ngSwitchCase="'card-product'" class="max-w-xs mx-auto p-4">
+               <lib-card-products [variant]="selectedVariant" [product]="{name:'Producto', price:'$99', image:'', description: 'Producto de prueba'}"></lib-card-products>
+            </div>
+            <div *ngSwitchCase="'card-testimonial'" class="max-w-md mx-auto p-4">
+               <lib-testimonials-card [variant]="selectedVariant" [testimonial]="{author: 'Cliente', quote: 'Excelente servicio'}"></lib-testimonials-card>
+            </div>
+            <div *ngSwitchCase="'image'" class="p-4 flex justify-center">
+              <lib-ui-image [variant]="selectedVariant" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-image>
+            </div>
+            <div *ngSwitchCase="'table'" class="p-4">
+              <lib-ui-components-table [variant]="selectedVariant" [rows]="[{id:1, name:'Item A'}, {id:2, name:'Item B'}]" [columns]="[{key:'id', label:'ID'}, {key:'name', label:'Nombre'}]"></lib-ui-components-table>
             </div>
 
-            <!-- Services Section -->
-            <div *ngSwitchCase="'services'" class="preview-mockup services-mockup">
-              <div class="service-cards">
-                <div class="service-card" *ngFor="let i of [1,2,3]">
-                  <div class="card-icon">🛠️</div>
-                  <h3>Servicio {{ i }}</h3>
-                  <p>Descripción del servicio profesional</p>
-                </div>
-              </div>
+            <!-- LIST -->
+            <div *ngSwitchCase="'list'" class="max-w-md mx-auto p-4">
+              <lib-ui-list [variant]="selectedVariant" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-list>
             </div>
 
-            <!-- Contact Section -->
-            <div *ngSwitchCase="'contact'" class="preview-mockup contact-mockup">
-              <div class="contact-form">
-                <input type="text" placeholder="Nombre" class="form-input">
-                <input type="email" placeholder="Email" class="form-input">
-                <textarea placeholder="Mensaje" class="form-textarea"></textarea>
-                <button class="submit-btn">Enviar Mensaje</button>
-              </div>
-            </div>
-
-            <!-- Gallery Section -->
-            <div *ngSwitchCase="'gallery'" class="preview-mockup gallery-mockup">
-              <div class="gallery-grid">
-                <div class="gallery-item" *ngFor="let i of [1,2,3,4,5,6]">
-                  <div class="gallery-placeholder">📷</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Default Preview -->
+            <!-- DEFAULT -->
             <div *ngSwitchDefault class="preview-mockup default-mockup">
               <div class="mock-content">
-                <div class="mock-line long"></div>
-                <div class="mock-line medium"></div>
-                <div class="mock-line short"></div>
-                <div class="mock-blocks">
-                  <span></span><span></span><span></span>
-                </div>
+                 <p class="text-center text-white/50">Vista previa no disponible para este componente ({{ selectedComponent.type }})</p>
               </div>
             </div>
           </div>
