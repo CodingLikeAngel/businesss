@@ -17,18 +17,18 @@
   --business-bg-image: none;
 
   /* Aplicamos customStyles con mayor prioridad */
-  &[style][class*="hero-section--"] {
-    background: var(--hero-bg, transparent) !important;
+  &[class*="hero-section--"] {
+    background-color: var(--hero-bg, transparent) !important;
     color: var(--hero-color, #ffffff) !important;
     border: var(--hero-border, none) !important;
     box-shadow: var(--hero-shadow, none) !important;
     &:hover {
-      background: var(--hero-hover-bg, var(--hero-bg, transparent)) !important;
+      background-color: var(--hero-hover-bg, var(--hero-bg, transparent)) !important;
       box-shadow: var(--hero-hover-shadow, var(--hero-shadow, none)) !important;
     }
     /* Imagen del negocio con opacidad baja para ser transparente */
     position: relative;
-    background-image: var(--hero-bg, transparent) !important;
+    background-image: var(--business-bg-image, none) !important;
   }
 
   /* Usar un pseudo-elemento para la imagen de fondo con transparencia */
@@ -186,7 +186,7 @@
   --hero-bg: #3b82f6 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.1)"/></svg>') repeat !important;
   background-size: 50px 50px;
 }
-.hero-section--secondary { --hero-bg: linear-gradient(135deg, #6b7280, #374151) !important; }
+.hero-section--secondary { --hero-bg: linear-gradient(135deg, #6b7280, #374151) !important; --hero-color: #d1d5db !important; }
 .hero-section--outline { --hero-bg: #ffffff !important; color: #374151; border: 2px solid #d1d5db; }
 .hero-section--ghost { --hero-bg: rgba(255, 255, 255, 0.1) !important; backdrop-filter: blur(8px); }
 .hero-section--link {
