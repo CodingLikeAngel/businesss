@@ -30,12 +30,12 @@
             [align]="'center'"
             class="editor-element block mb-6 px-4"
             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
-            (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title', _original: section.content })"
+            (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })"
           ></lib-ui-components-title>
           
           <div class="mt-4 editor-element"
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_subtitle'"
-               (click)="selectElement($event, { id: section.id + '_subtitle', content: section.content, type: 'subtitle', _original: section.content })">
+               (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })">
             <p class="hero-subtitle text-xl md:text-3xl text-white/90">
               {{ section.content['subtitle'] || heroConfig.subtitle }}
             </p>
@@ -45,7 +45,7 @@
           <div *ngIf="section.content['showCta'] !== false" 
                class="mt-10 editor-element inline-block"
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_cta'"
-               (click)="selectElement($event, { id: section.id + '_cta', content: section.content, type: 'cta', _original: section.content })">
+               (click)="selectElement($event, { id: section.id + '_cta', sectionId: section.id, content: section.content, type: 'cta', _original: section.content })">
             <button class="cta-button px-10 py-4 rounded-xl font-bold transition-all hover:scale-105 active:scale-95"
                     [ngClass]="'variant-' + getVariant(section.id)">
               {{ section.content['ctaLabel'] || heroConfig.ctaLabel }}
@@ -59,7 +59,7 @@
              <div *ngFor="let card of heroConfig.navigationCards; let i = index"
                   class="editor-element"
                   [class.is-selected]="uiStateService.selectedElement?._original === card"
-                  (click)="selectElement($event, card)">
+                  (click)="selectElement($event, { id: section.id + '_card_' + i, sectionId: section.id, ...card, _original: card })">
                <lib-ui-components-card-animated
                  [icon]="card.icon"
                  [title]="card.title"
@@ -86,13 +86,13 @@
               [align]="'center'"
               class="editor-element"
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
-              (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+              (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
             ></lib-ui-components-title>
             
             <div class="mt-4">
               <p class="text-xl text-white/70 max-w-2xl mx-auto editor-element"
                  [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_subtitle'"
-                 (click)="selectElement($event, { id: section.id + '_subtitle', content: section.content, type: 'subtitle' })">
+                 (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle' })">
                 {{ section.content['subtitle'] || 'Descubre cómo podemos ayudarte.' }}
               </p>
             </div>
@@ -102,7 +102,7 @@
             <div *ngFor="let feat of featuresConfig.items; let i = index" 
                  class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?._original === feat"
-                 (click)="selectElement($event, feat)">
+                 (click)="selectElement($event, { id: section.id + '_feature_' + i, sectionId: section.id, ...feat, _original: feat })">
               <lib-ui-components-card-animated
                 [icon]="feat.icon"
                 [title]="feat.title"
@@ -123,10 +123,10 @@
         
         <div class="max-w-7xl mx-auto">
            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-              <div *ngFor="let stat of statsConfig.items" 
+              <div *ngFor="let stat of statsConfig.items; let i = index" 
                    class="editor-element"
                    [class.is-selected]="uiStateService.selectedElement?._original === stat"
-                   (click)="selectElement($event, stat)">
+                   (click)="selectElement($event, { id: section.id + '_stat_' + i, sectionId: section.id, ...stat, _original: stat })">
                   <lib-ui-components-card
                     [title]="stat.value.toString()"
                     [description]="stat.label"
@@ -164,15 +164,15 @@
               [align]="'center'"
               class="editor-element"
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
-              (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+              (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
             ></lib-ui-components-title>
           </div>
           
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div *ngFor="let item of serviceCardsConfig.items" 
+            <div *ngFor="let item of serviceCardsConfig.items; let i = index" 
                  class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?._original === item"
-                 (click)="selectElement($event, item)">
+                 (click)="selectElement($event, { id: section.id + '_service_' + i, sectionId: section.id, ...item, _original: item })">
                 <lib-ui-components-card
                   [title]="item.routeName"
                   [description]="item.description"
@@ -201,7 +201,7 @@
                 [align]="'center'"
                 class="editor-element"
                 [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
-                (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+                (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
               ></lib-ui-components-title>
             </div>
             
@@ -209,7 +209,7 @@
               <ng-container *ngFor="let product of productsConfig.items; let i = index; trackBy: trackByProductName">
                 <div class="editor-element" 
                   [class.is-selected]="uiStateService.selectedElement?._original === product"
-                  (click)="selectElement($event, product)">
+                  (click)="selectElement($event, { id: section.id + '_product_' + i, sectionId: section.id, ...product, _original: product })">
                   
                   <lib-ui-components-card-animated
                     *ngIf="i % 3 === 0"
@@ -250,14 +250,14 @@
         <div class="container mx-auto px-6 max-w-7xl">
           <h2 class="text-4xl font-bold text-center text-white mb-16 editor-element"
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
-              (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })">
+              (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })">
             {{ section.content['title'] || 'Lo que dicen de nosotros' }}
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div *ngFor="let t of testimonialsConfig.items" 
+            <div *ngFor="let t of testimonialsConfig.items; let i = index" 
                  class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?._original === t"
-                 (click)="selectElement($event, t)">
+                 (click)="selectElement($event, { id: section.id + '_testimonial_' + i, sectionId: section.id, ...t, _original: t })">
                 <lib-testimonials-card
                   [testimonial]="{ quote: t.quote, author: t.author }"
                   [variant]="t.variant || getVariant(section.id)"
@@ -302,14 +302,14 @@
         <div class="container mx-auto px-6 max-w-3xl">
           <h2 class="text-4xl font-bold text-center text-white mb-12 editor-element"
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
-              (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })">
+              (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })">
             {{ section.content['title'] || 'Preguntas Frecuentes' }}
           </h2>
           <div class="space-y-4">
-            <div *ngFor="let faq of faqConfig.items" 
+            <div *ngFor="let faq of faqConfig.items; let i = index" 
                  class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?._original === faq"
-                 (click)="selectElement($event, faq)">
+                 (click)="selectElement($event, { id: section.id + '_faq_' + i, sectionId: section.id, ...faq, _original: faq })">
                 <lib-ui-components-accordion
                   [items]="[{ title: faq.title, content: faq.content, expanded: false }]"
                   [variant]="faq.variant || getVariant(section.id)"
@@ -332,14 +332,14 @@
             [align]="'center'"
             class="mb-12 editor-element"
             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
-            (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+            (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
           ></lib-ui-components-title>
           
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
              <div *ngFor="let img of galleryConfig.images" 
                   class="editor-element"
                   [class.is-selected]="uiStateService.selectedElement?._original === img"
-                  (click)="selectElement($event, img)">
+                  (click)="selectElement($event, { id: section.id + '_image_' + i, sectionId: section.id, ...img, _original: img })">
                 <lib-ui-image 
                   [src]="img.src" 
                   [alt]="img.alt"
@@ -366,11 +366,11 @@
             [align]="'center'"
             class="mb-12 editor-element"
             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
-            (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+            (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
           ></lib-ui-components-title>
           <div class="editor-element" 
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_form'"
-               (click)="selectElement($event, { id: section.id + '_form', type: 'form' })">
+               (click)="selectElement($event, { id: section.id + '_form', sectionId: section.id, type: 'form' })">
             <lib-reservation-form
               [variant]="getVariant(section.id)"
             ></lib-reservation-form>
