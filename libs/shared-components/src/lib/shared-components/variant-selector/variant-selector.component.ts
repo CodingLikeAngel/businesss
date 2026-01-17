@@ -286,26 +286,32 @@ export class VariantSelectorComponent implements OnInit {
 
     // Map content back to original fields based on what was normalized
     if (content.title !== undefined) {
+      source.title = content.title;
       if ('name' in source) source.name = content.title;
       if ('routeName' in source) source.routeName = content.title;
       if ('label' in source) source.label = content.title;
       if ('author' in source) source.author = content.title;
-      if ('title' in source) source.title = content.title;
     }
     
     if (content.description !== undefined) {
-      if ('description' in source) source.description = content.description;
+      source.description = content.description;
       if ('quote' in source) source.quote = content.description;
       if ('text' in source) source.text = content.description;
     }
 
     if (content.subtitle !== undefined) {
+      source.subtitle = content.subtitle;
       if ('value' in source) source.value = content.subtitle;
       if ('icon' in source) source.icon = content.subtitle;
     }
+    
+    // Variant update (Preserve logic)
+    if (this.selectedElement.variant) {
+       source.variant = this.selectedElement.variant;
+    }
 
     if (content.image !== undefined) {
-      if ('image' in source) source.image = content.image;
+      source.image = content.image;
       if ('imageUrl' in source) source.imageUrl = content.image;
     }
 
@@ -383,6 +389,10 @@ export class VariantSelectorComponent implements OnInit {
     } else if (this.selectedElement) {
       this.selectedElement.variant = variantId;
       this.syncElementBack();
+      // Ensure the section variant mapping is also updated if sectionId is present
+      if (this.selectedElement['sectionId']) {
+        this.variantService.setComponentVariant(this.selectedElement['sectionId'], variantId);
+      }
     }
   }
 }
