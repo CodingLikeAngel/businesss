@@ -384,7 +384,7 @@
         (click)="selectSection($event, section)">
           <div class="editor-element"
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_header'"
-               (click)="selectElement($event, { id: section.id + '_header', content: section.content, type: 'header', _original: section.content })">
+               (click)="selectElement($event, { id: section.id + '_header', sectionId: section.id, content: section.content, type: 'header', _original: section.content })">
             <lib-ui-header
               [variant]="section.content['variant'] || getVariant(section.id)"
               [title]="section.content['title'] || 'Encabezado'"
@@ -401,7 +401,7 @@
         (click)="selectSection($event, section)">
           <div class="editor-element"
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_footer'"
-               (click)="selectElement($event, { id: section.id + '_footer', content: section.content, type: 'footer', _original: section.content })">
+               (click)="selectElement($event, { id: section.id + '_footer', sectionId: section.id, content: section.content, type: 'footer', _original: section.content })">
             <lib-ui-components-footer
               [variant]="section.content['variant'] || getVariant(section.id)"
               [title]="section.content['title'] || 'Pie de Página'"
@@ -411,7 +411,166 @@
           </div>
       </div>
 
-      <!-- GENERIC SECTION (Fallback for new types) -->
+      <!-- ACCORDION (Standalone) -->
+      <div *ngSwitchCase="'accordion'" class="editor-section cursor-pointer py-12"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="container mx-auto px-6 max-w-3xl editor-element"
+               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_accordion'"
+               (click)="selectElement($event, { id: section.id + '_accordion', sectionId: section.id, content: section.content, type: 'accordion', _original: section.content })">
+            
+            <lib-ui-components-title *ngIf="section.content['title']"
+              [level]="'h2'"
+              [text]="section.content['title']"
+              [variant]="getVariant(section.id)"
+              [align]="'center'"
+              class="mb-8 block"
+            ></lib-ui-components-title>
+
+            <lib-ui-components-accordion
+              [items]="section.content['items'] || [{ title: 'Accordion Item 1', content: 'Content 1' }, { title: 'Accordion Item 2', content: 'Content 2' }]"
+              [variant]="section.content['variant'] || getVariant(section.id)"
+              [customStyles]="section.styles || {}"
+            ></lib-ui-components-accordion>
+          </div>
+      </div>
+
+      <!-- LIST (Standalone) -->
+      <div *ngSwitchCase="'list'" class="editor-section cursor-pointer py-12"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="container mx-auto px-6 max-w-2xl editor-element"
+             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_list'"
+             (click)="selectElement($event, { id: section.id + '_list', sectionId: section.id, content: section.content, type: 'list', _original: section.content })">
+             <lib-ui-list
+               [items]="section.content['items'] || ['Item 1', 'Item 2', 'Item 3']"
+               [variant]="section.content['variant'] || getVariant(section.id)"
+               [rounded]="'md'"
+               [size]="'md'"
+             ></lib-ui-list>
+          </div>
+      </div>
+      <!-- NEWSLETTER (Standalone) -->
+      <div *ngSwitchCase="'newsletter'" class="editor-section cursor-pointer py-12"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="container mx-auto px-6 max-w-4xl editor-element"
+             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_newsletter'"
+             (click)="selectElement($event, { id: section.id + '_newsletter', sectionId: section.id, content: section.content, type: 'newsletter', _original: section.content })">
+             <lib-ui-newsletter-section
+               [variant]="section.content['variant'] || getVariant(section.id)"
+               [title]="section.content['title'] || 'Suscríbete a nuestro boletín'"
+               [description]="section.content['description'] || 'Recibe las últimas noticias y actualizaciones directamente en tu bandeja de entrada.'"
+             ></lib-ui-newsletter-section>
+          </div>
+      </div>
+
+      <!-- STEPS (Standalone) -->
+      <div *ngSwitchCase="'steps'" class="editor-section cursor-pointer py-12"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="editor-element"
+             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_steps'"
+             (click)="selectElement($event, { id: section.id + '_steps', sectionId: section.id, content: section.content, type: 'steps', _original: section.content })">
+             <lib-ui-steps-section
+               [variant]="section.content['variant'] || getVariant(section.id)"
+             ></lib-ui-steps-section>
+          </div>
+      </div>
+
+      <!-- TABLE (Standalone) -->
+      <div *ngSwitchCase="'table'" class="editor-section cursor-pointer py-12"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="container mx-auto px-6 max-w-4xl editor-element"
+             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_table'"
+             (click)="selectElement($event, { id: section.id + '_table', sectionId: section.id, content: section.content, type: 'table', _original: section.content })">
+             <lib-ui-components-title *ngIf="section.content['title']"
+                [level]="'h3'"
+                [text]="section.content['title']"
+                [variant]="getVariant(section.id)"
+                class="mb-6 block"
+             ></lib-ui-components-title>
+             <lib-ui-table
+               [variant]="section.content['variant'] || getVariant(section.id)"
+               [data]="section.content['data'] || [{ id: 1, name: 'Item 1', status: 'Active' }, { id: 2, name: 'Item 2', status: 'Inactive' }]"
+               [columns]="section.content['columns'] || [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }, { key: 'status', label: 'Status' }]"
+             ></lib-ui-table>
+          </div>
+      </div>
+
+      <!-- TABS (Standalone) -->
+      <div *ngSwitchCase="'tabs'" class="editor-section cursor-pointer py-12"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="container mx-auto px-6 max-w-4xl editor-element"
+             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_tabs'"
+             (click)="selectElement($event, { id: section.id + '_tabs', sectionId: section.id, content: section.content, type: 'tabs', _original: section.content })">
+             <lib-ui-components-tabs
+               [variant]="section.content['variant'] || getVariant(section.id)"
+               [tabs]="section.content['tabs'] || [{ label: 'Tab 1', content: 'Content for Tab 1' }, { label: 'Tab 2', content: 'Content for Tab 2' }]"
+               [customStyles]="section.styles || {}"
+             ></lib-ui-components-tabs>
+          </div>
+      </div>
+
+      <!-- BREADCRUMBS (Standalone) -->
+      <div *ngSwitchCase="'breadcrumbs'" class="editor-section cursor-pointer py-8"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="container mx-auto px-6 max-w-4xl editor-element"
+             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_breadcrumbs'"
+             (click)="selectElement($event, { id: section.id + '_breadcrumbs', sectionId: section.id, content: section.content, type: 'breadcrumbs', _original: section.content })">
+             <lib-ui-breadcrumbs
+               [variant]="section.content['variant'] || getVariant(section.id)"
+               [items]="section.content['items'] || [{ label: 'Home', url: '/' }, { label: 'Section', url: '/section' }, { label: 'Current', url: '' }]"
+             ></lib-ui-breadcrumbs>
+          </div>
+      </div>
+
+      <!-- CHIP (Standalone) -->
+      <div *ngSwitchCase="'chip'" class="editor-section cursor-pointer py-8"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="container mx-auto px-6 flex justify-center gap-4 editor-element"
+             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_chip'"
+             (click)="selectElement($event, { id: section.id + '_chip', sectionId: section.id, content: section.content, type: 'chip', _original: section.content })">
+             <lib-ui-chip
+               [variant]="section.content['variant'] || getVariant(section.id)"
+               [label]="section.content['label'] || 'Chip Label'"
+             ></lib-ui-chip>
+          </div>
+      </div>
+
+      <!-- SPINNER (Standalone) -->
+      <div *ngSwitchCase="'spinner'" class="editor-section cursor-pointer py-12"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="container mx-auto px-6 flex justify-center editor-element"
+             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_spinner'"
+             (click)="selectElement($event, { id: section.id + '_spinner', sectionId: section.id, content: section.content, type: 'spinner', _original: section.content })">
+             <lib-ui-spinner
+               [variant]="section.content['variant'] || getVariant(section.id)"
+               [size]="'lg'"
+             ></lib-ui-spinner>
+          </div>
+      </div>
+      
+      <!-- TOOLTIP (Standalone Demo) -->
+      <div *ngSwitchCase="'tooltip'" class="editor-section cursor-pointer py-12"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="container mx-auto px-6 flex justify-center editor-element"
+             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_tooltip'"
+             (click)="selectElement($event, { id: section.id + '_tooltip', sectionId: section.id, content: section.content, type: 'tooltip', _original: section.content })">
+             <span [libUiTooltip]="section.content['text'] || 'This is a tooltip!'" 
+                   [tooltipVariant]="section.content['variant'] || getVariant(section.id)"
+                   class="p-4 bg-white/10 rounded-lg cursor-help">
+               Hover me for Tooltip
+             </span>
+          </div>
+      </div>
+
       <div *ngSwitchDefault class="editor-section cursor-pointer p-10 border border-dashed border-white/20 rounded-xl m-4 bg-white/5"
            [class.is-selected]="uiStateService.selectedSection?.id === section.id"
            (click)="selectSection($event, section)">

@@ -9,18 +9,22 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
   imports: [CommonModule, ReactiveFormsModule, UIInputComponent, UIButtonComponent, UIDateTimePickerComponent , UITitleComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   template: `
-<div id="reservas">
+<div id="reservas" class="container mx-auto px-4">
 <lib-ui-components-title
       level="h2"
       text="Reservar Cita"
       [variant]="variant"
       animation="fade"
       align="center"
+      class="text-4xl font-bold mb-8"
     ></lib-ui-components-title>
+  <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
+    Reserva tu cita fácilmente y elige el servicio que más te guste.
+  </p>
   <form
     [formGroup]="reservationForm"
     (ngSubmit)="onSubmit()"
-    class=" mt-12 bg-[rgba(255,30,86,0.2)] backdrop-blur-lg rounded-xl p-8 space-y-4 border-2 border-[#FF6B9D] shadow-[0_0_15px_rgba(255,107,157,0.7)]"
+    class="reservation-form mt-12 bg-gradient-to-br from-pink-50 to-purple-50 backdrop-blur-lg rounded-2xl p-8 space-y-6 border-2 border-pink-200 shadow-2xl"
   >
     <div class="mb-6">
       <lib-ui-components-input
@@ -118,6 +122,34 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
   </form>
 </div>
   `,
+  styles: [
+    `
+      .reservation-form {
+        max-width: 600px;
+        margin: 0 auto;
+        transition: all 0.3s ease;
+      }
+
+      .reservation-form:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 40px rgba(255, 107, 157, 0.3);
+      }
+
+      .container {
+        max-width: 1200px;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 0 1rem;
+        }
+
+        .reservation-form {
+          padding: 1.5rem;
+        }
+      }
+    `
+  ]
 })
 export class ReservationFormComponent implements OnInit {
   @Input() variant: CardVariant = 'default';

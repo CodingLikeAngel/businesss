@@ -7,11 +7,17 @@ import { UICardComponent, UIChipComponent, UITooltipComponent, CardVariant } fro
   standalone: true,
   imports: [CommonModule, UICardComponent, UIChipComponent, UITooltipComponent],
   template: `
-    <section id="servicios" class="mb-12">
-      <h2 class="text-4xl font-bold text-[#FACC15] text-center mb-8 font-nintendo drop-shadow-[0_4px_8px_rgba(255,204,21,0.8)] animate-bounce">
-        Nuestros Servicios
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <section id="servicios" class="mb-16">
+      <div class="container mx-auto px-4">
+        <h2 class="text-4xl font-bold text-[#FACC15] text-center mb-8 font-nintendo drop-shadow-[0_4px_8px_rgba(255,204,21,0.8)] animate-bounce">
+          Nuestros Servicios
+        </h2>
+        <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">
+          Descubre todos nuestros servicios de belleza y cuidado personal.
+        </p>
+      </div>
+      <div class="container mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div *ngFor="let service of services">
           <lib-ui-components-tooltip [content]="service.tooltip" [variant]="variant" position="top">
             <lib-ui-components-card
@@ -38,6 +44,20 @@ import { UICardComponent, UIChipComponent, UITooltipComponent, CardVariant } fro
         </div>
       </div>
     </section>
+  `,
+  styles: [
+    `
+      .container {
+        max-width: 1200px;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          padding: 0 1rem;
+        }
+      }
+    `
+  ]
   `,
 })
 export class ServiceSectionComponent {

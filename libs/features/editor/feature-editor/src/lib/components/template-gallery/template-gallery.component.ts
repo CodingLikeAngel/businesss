@@ -125,6 +125,7 @@ import { Observable } from 'rxjs';
       z-index: 1000;
       overflow-y: auto;
       padding: 2rem;
+      animation: fadeIn 0.5s ease;
     }
 
     .gallery-header {
@@ -509,6 +510,17 @@ import { Observable } from 'rxjs';
       .category-btn {
         padding: 0.5rem 1rem;
         font-size: 0.875rem;
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
       }
     }
   `]

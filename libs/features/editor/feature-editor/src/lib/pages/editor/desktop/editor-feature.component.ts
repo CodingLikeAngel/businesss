@@ -25,7 +25,15 @@ import {
   UITabsComponent,
   UIAccordionComponent,
   UIImageComponent,
-  UiTestimonialsCardComponent
+  UiTestimonialsCardComponent,
+  UIListComponent,
+  UINewsletterSectionComponent,
+  UIStepsSectionComponent,
+  UITableComponent,
+  UIBreadcrumbsComponent,
+  UIChipComponent,
+  UISpinnerComponent,
+  UITooltipComponent
 } from '@negocio/ui-components';
 import { Product, Testimonial, PageSection, VariantService } from '@negocio/shared-components';
 import { PromotionsSectionComponent } from '../../../components/promotions-section/promotions-section.component';
@@ -60,7 +68,15 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
     UITabsComponent,
     UIAccordionComponent,
     UIImageComponent,
-    UiTestimonialsCardComponent
+    UiTestimonialsCardComponent,
+    UIListComponent,
+    UINewsletterSectionComponent,
+    UIStepsSectionComponent,
+    UITableComponent,
+    UIBreadcrumbsComponent,
+    UIChipComponent,
+    UISpinnerComponent,
+    UITooltipComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
