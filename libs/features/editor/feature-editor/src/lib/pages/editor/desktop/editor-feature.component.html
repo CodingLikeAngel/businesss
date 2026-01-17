@@ -556,21 +556,7 @@
           </div>
       </div>
       
-      <!-- TOOLTIP (Standalone Demo) -->
-      <div *ngSwitchCase="'tooltip'" class="editor-section cursor-pointer py-12"
-        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
-          <div class="container mx-auto px-6 flex justify-center editor-element"
-             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_tooltip'"
-             (click)="selectElement($event, { id: section.id + '_tooltip', sectionId: section.id, content: section.content, type: 'tooltip', _original: section.content })">
-             <span [libUiTooltip]="section.content['text'] || 'This is a tooltip!'" 
-                   [tooltipVariant]="section.content['variant'] || getVariant(section.id)"
-                   class="p-4 bg-white/10 rounded-lg cursor-help">
-               Hover me for Tooltip
-             </span>
-          </div>
-      </div>
-
+      
       <div *ngSwitchDefault class="editor-section cursor-pointer p-10 border border-dashed border-white/20 rounded-xl m-4 bg-white/5"
            [class.is-selected]="uiStateService.selectedSection?.id === section.id"
            (click)="selectSection($event, section)">
