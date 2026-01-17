@@ -1,4 +1,4 @@
-<ul [class]="listClasses()" role="list">
+<ul [class]="listClasses()" [style]="listStyles()" role="list">
   <li *ngFor="let item of items()" [class]="itemClasses()">
     {{ item }}
   </li>

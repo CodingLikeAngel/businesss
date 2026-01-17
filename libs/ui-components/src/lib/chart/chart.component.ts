@@ -1,4 +1,4 @@
-import { Component, input, computed, AfterViewInit, ElementRef, ViewChild, Input, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, input, computed, AfterViewInit, ElementRef, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { isPlatformBrowser } from '@angular/common';
@@ -81,7 +81,20 @@ export class UIChartComponent implements AfterViewInit {
   dark = input<boolean>(false);
   type = input<ChartType>('bar');
   data = input<ChartData>({ labels: [], datasets: [] });
-  @Input() customStyles: ChartCustomStyles = {};
+  customStyles = input<ChartCustomStyles>({});
+  
+  chartStyles = computed(() => {
+    const styles: any = { ...this.customStyles() };
+    if (styles['backgroundColor']) {
+       styles['--chart-bg'] = styles['backgroundColor'];
+       styles['--theme-bg'] = styles['backgroundColor'];
+    }
+    if (styles['color']) {
+       styles['--chart-color'] = styles['color'];
+       styles['--theme-color'] = styles['color'];
+    }
+    return styles;
+  });
 
   chartClasses = computed(() => {
     const classes = ['chart-container', `chart-${this.variant()}`];

@@ -1,5 +1,5 @@
 
-import { Component, input } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface Step {
@@ -21,5 +21,17 @@ export class UIStepsSectionComponent {
   subtitle = input('Sigue estos sencillos pasos');
   steps = input<Step[]>([]);
   variant = input('linear');
+  customStyles = input<{[key: string]: string}>({});
+
+  stepsStyles = computed(() => {
+    const styles: any = { ...this.customStyles() };
+    if (styles['backgroundColor']) {
+      styles['--theme-bg'] = styles['backgroundColor'];
+    }
+    if (styles['color']) {
+      styles['--theme-color'] = styles['color'];
+    }
+    return styles;
+  });
 }
 

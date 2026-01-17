@@ -1,5 +1,5 @@
 
-<section class="steps-section" [ngClass]="['variant-' + variant(), variant()]">
+<section class="steps-section" [ngClass]="['variant-' + variant(), variant()]" [ngStyle]="stepsStyles()">
   <div class="header">
     <h2>{{ title() }}</h2>
     <p *ngIf="subtitle()">{{ subtitle() }}</p>

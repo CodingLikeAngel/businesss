@@ -97,6 +97,17 @@ export class UIFooterComponent implements OnInit {
 
   titleClasses = computed(() => ['footer-title', `footer-title--${this.variant()}`]);
   
+  footerStyles = computed(() => {
+    const styles: any = { ...this.customStyles() };
+    if (styles['backgroundColor']) {
+      styles['--theme-bg'] = styles['backgroundColor'];
+    }
+    if (styles['color']) {
+      styles['--theme-color'] = styles['color'];
+    }
+    return styles;
+  });
+
   footerClasses = computed(() => {
     const isCustomVariant = this.variant().startsWith('custom-footer');
     return [

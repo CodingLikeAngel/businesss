@@ -142,6 +142,15 @@ export class UIGalleryComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @HostBinding('style') get hostStyles() {
-    return this.customStyles();
+    const styles: any = { ...this.customStyles() };
+    if (styles['backgroundColor']) {
+      styles['--theme-bg'] = styles['backgroundColor'];
+      styles['--container-bg'] = styles['backgroundColor'];
+    }
+    if (styles['color']) {
+      styles['--theme-color'] = styles['color'];
+      styles['--caption-color'] = styles['color'];
+    }
+    return styles;
   }
 }

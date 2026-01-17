@@ -47,6 +47,19 @@ export class UIAccordionComponent {
   // Estado interno como señal
   expandedIndex = signal(-1);
 
+  accordionStyles = computed(() => {
+    const styles: any = { ...this.customStyles() };
+    if (styles['backgroundColor']) {
+      styles['--accordion-bg'] = styles['backgroundColor']; // Explicitly map to component variable
+      styles['--theme-bg'] = styles['backgroundColor'];     // Also theme var just in case
+    }
+    if (styles['color']) {
+      styles['--accordion-color'] = styles['color'];
+      styles['--theme-color'] = styles['color'];
+    }
+    return styles;
+  });
+
   // Clases calculadas con computed basadas en señales
   accordionClasses = computed(() => {
     const classes = [

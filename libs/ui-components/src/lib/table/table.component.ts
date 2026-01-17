@@ -33,6 +33,18 @@ export class UITableComponent {
   dark = input<boolean>(false);
   columns = input<TableColumn[]>([]);
   rows = input<TableRow[]>([]);
+  customStyles = input<{[key: string]: string}>({});
+
+  tableStyles = computed(() => {
+    const styles: any = { ...this.customStyles() };
+    if (styles['backgroundColor']) {
+      styles['--theme-bg'] = styles['backgroundColor'];
+    }
+    if (styles['color']) {
+      styles['--theme-color'] = styles['color'];
+    }
+    return styles;
+  });
 
   tableClasses = computed(() => {
     const classes = ['table-container', `table-${this.variant()}`];

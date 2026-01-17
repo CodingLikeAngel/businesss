@@ -41,5 +41,16 @@ export class UISpinnerComponent {
     return classes.join(' ');
   });
 
-  spinnerStyles = computed(() => this.customStyles()); // Estilos dinámicos desde el padre
+  spinnerStyles = computed(() => {
+    const styles: any = { ...this.customStyles() };
+    if (styles['backgroundColor']) {
+      styles['--spinner-bg'] = styles['backgroundColor']; // Specific var
+      styles['--theme-bg'] = styles['backgroundColor'];   // Generic var
+    }
+    if (styles['color']) {
+      styles['--spinner-border'] = styles['color'];       // Spinner color implies border
+      styles['--theme-color'] = styles['color'];
+    }
+    return styles;
+  });
 }

@@ -1,5 +1,4 @@
-
-<section class="newsletter-section" [ngClass]="['variant-' + variant(), variant()]">
+<section [ngClass]="['newsletter-section', 'variant-' + variant()]" [ngStyle]="newsletterStyles()">
   <div class="content">
     <div class="text-content">
       <h2>{{ title() }}</h2>

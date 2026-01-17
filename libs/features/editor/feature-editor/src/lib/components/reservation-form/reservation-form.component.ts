@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, CUSTOM_ELEMENTS_SCHEMA, input } from '@angular/core';
+import { Component, Input, OnInit, CUSTOM_ELEMENTS_SCHEMA, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVariant, UITitleComponent } from '@negocio/ui-components';
@@ -32,6 +32,7 @@ import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVar
       <form
         [formGroup]="reservationForm"
         (ngSubmit)="onSubmit()"
+        [ngStyle]="formStyles()"
         class="relative reservation-form bg-[#0f172a]/80 backdrop-blur-2xl rounded-2xl p-10 space-y-8 border border-white/10 shadow-2xl"
       >
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -162,6 +163,18 @@ export class ReservationFormComponent implements OnInit {
   variant = input<CardVariant>('default');
   title = input('Reservar Cita');
   subtitle = input('Reserva tu cita fácilmente y elige el servicio que más te guste.');
+  customStyles = input<{[key: string]: string}>({});
+
+  formStyles = computed(() => {
+    const styles: any = { ...this.customStyles() };
+    if (styles['backgroundColor']) {
+      styles['--theme-bg'] = styles['backgroundColor'];
+    }
+    if (styles['color']) {
+      styles['--theme-color'] = styles['color'];
+    }
+    return styles;
+  });
 
 
   reservationForm!: FormGroup; // Usamos non-null assertion para indicar que se inicializará en ngOnInit

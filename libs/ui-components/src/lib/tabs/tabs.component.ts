@@ -34,6 +34,8 @@ export class UITabsComponent implements OnInit {
   ]);
   showAs = input<'menu' | 'tabs'>('tabs'); // Controla si se muestra como menú o pestañas
   isMobile = input<boolean>(false); // Recibe si es móvil desde el padre
+  customStyles = input<{[key: string]: string}>({});
+  
   @Output() tabSelected = new EventEmitter<string>();
 
   activeTabId: string | null = null;
@@ -55,6 +57,17 @@ export class UITabsComponent implements OnInit {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }
+
+  tabsStyles = computed(() => {
+    const styles: any = { ...this.customStyles() };
+    if (styles['backgroundColor']) {
+      styles['--theme-bg'] = styles['backgroundColor'];
+    }
+    if (styles['color']) {
+      styles['--theme-color'] = styles['color'];
+    }
+    return styles;
+  });
 
   tabsClasses = computed(() => {
     return [

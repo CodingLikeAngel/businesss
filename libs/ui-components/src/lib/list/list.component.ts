@@ -23,6 +23,18 @@ export class UIListComponent {
   size = input<'sm' | 'md' | 'lg'>('md');
   dark = input<boolean>(false);
   items = input<string[]>([]);
+  customStyles = input<{[key: string]: string}>({});
+
+  listStyles = computed(() => {
+    const styles: any = { ...this.customStyles() };
+    if (styles['backgroundColor']) {
+      styles['--theme-bg'] = styles['backgroundColor'];
+    }
+    if (styles['color']) {
+      styles['--theme-color'] = styles['color'];
+    }
+    return styles;
+  });
 
   listClasses = computed(() => {
     const classes = ['list-container', `variant-${this.variant()}`];

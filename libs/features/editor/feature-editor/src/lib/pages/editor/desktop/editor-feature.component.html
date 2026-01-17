@@ -591,6 +591,7 @@
               [variant]="getVariant(section.id)"
               [title]="section.content['title'] || 'Reservar Cita'"
               [subtitle]="section.content['subtitle'] || 'Reserva tu cita fácilmente y elige el servicio que más te guste.'"
+              [customStyles]="section.content['formStyles']"
             ></lib-reservation-form>
           </div>
         </div>
@@ -711,6 +712,7 @@
                [variant]="section.content['variant'] || getVariant(section.id)"
                [rounded]="'md'"
                [size]="'md'"
+               [customStyles]="section.styles || {}"
              ></lib-ui-list>
           </div>
       </div>
@@ -734,6 +736,7 @@
                [variant]="section.content['variant'] || getVariant(section.id)"
                [title]="section.content['title'] || 'Suscríbete a nuestro boletín'"
                [description]="section.content['description'] || 'Recibe las últimas noticias y actualizaciones directamente en tu bandeja de entrada.'"
+               [customStyles]="section.styles || {}"
              ></lib-ui-newsletter-section>
           </div>
       </div>
@@ -756,6 +759,7 @@
              (visualResized)="onElementResized($event, section.id + '_steps')">
              <lib-ui-steps-section
                [variant]="section.content['variant'] || getVariant(section.id)"
+               [customStyles]="section.styles || {}"
              ></lib-ui-steps-section>
           </div>
       </div>
@@ -793,6 +797,7 @@
                [variant]="section.content['variant'] || getVariant(section.id)"
                [data]="section.content['data'] || [{ id: 1, name: 'Item 1', status: 'Active' }, { id: 2, name: 'Item 2', status: 'Inactive' }]"
                [columns]="section.content['columns'] || [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }, { key: 'status', label: 'Status' }]"
+               [customStyles]="section.styles || {}"
              ></lib-ui-table>
           </div>
       </div>
@@ -840,6 +845,7 @@
              <lib-ui-breadcrumbs
                [variant]="section.content['variant'] || getVariant(section.id)"
                [items]="section.content['items'] || [{ label: 'Home', url: '/' }, { label: 'Section', url: '/section' }, { label: 'Current', url: '' }]"
+               [customStyles]="section.styles || {}"
              ></lib-ui-breadcrumbs>
           </div>
       </div>
@@ -863,6 +869,7 @@
              <lib-ui-chip
                [variant]="section.content['variant'] || getVariant(section.id)"
                [label]="section.content['label'] || 'Chip Label'"
+               [customStyles]="section.styles || {}"
              ></lib-ui-chip>
           </div>
       </div>
@@ -885,6 +892,7 @@
              <lib-ui-spinner
                [variant]="section.content['variant'] || getVariant(section.id)"
                [size]="'lg'"
+               [customStyles]="section.styles || {}"
              ></lib-ui-spinner>
           </div>
       </div>
@@ -926,6 +934,7 @@
                  [variant]="section.content['variant'] || getVariant(section.id)"
                  [type]="section.content['chartType'] || 'bar'"
                  [data]="section.content['chartData'] || chartConfig.data"
+                 [customStyles]="section.styles || {}"
                ></lib-ui-chart>
              </div>
           </div>

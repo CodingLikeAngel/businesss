@@ -1,5 +1,5 @@
 
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UIInputComponent } from '../forms/input/input.component';
@@ -18,6 +18,18 @@ export class UINewsletterSectionComponent {
   placeholder = input('Tu correo electrónico');
   buttonText = input('Suscribirse');
   variant = input('primary');
+  customStyles = input<{[key: string]: string}>({});
+
+  newsletterStyles = computed(() => {
+    const styles: any = { ...this.customStyles() };
+    if (styles['backgroundColor']) {
+      styles['--theme-bg'] = styles['backgroundColor'];
+    }
+    if (styles['color']) {
+      styles['--theme-color'] = styles['color'];
+    }
+    return styles;
+  });
   
   subscribe = output<string>();
 

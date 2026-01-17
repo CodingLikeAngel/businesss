@@ -1,4 +1,4 @@
-<div [ngClass]="tabsClasses()" role="tablist" aria-label="Navegación por pestañas">
+<div [ngClass]="tabsClasses()" [ngStyle]="tabsStyles()" role="tablist" aria-label="Navegación por pestañas">
   <!-- Pestañas (siempre en escritorio, o en móvil con showAs='tabs') -->
   <ul class="tabs-list" [ngClass]="{
     'tabs-list--mobile': showAs() === 'tabs' && isMobile(),

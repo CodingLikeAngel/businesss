@@ -1,5 +1,5 @@
 
-<nav class="breadcrumbs" [ngClass]="['breadcrumbs-' + variant(), variant()]" aria-label="Breadcrumb">
+<nav class="breadcrumbs" [ngClass]="['breadcrumbs-' + variant(), variant()]" aria-label="Breadcrumb" [ngStyle]="breadcrumbStyles()">
   <ol>
     <li *ngFor="let item of items(); let last = last">
       <a *ngIf="item.url && !last" [href]="item.url" class="breadcrumb-link">{{ item.label }}</a>

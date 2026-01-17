@@ -31,6 +31,18 @@ export class UIChipComponent {
 
   chipClick = output<Event>();
   removeClick = output<Event>();
+  customStyles = input<{[key: string]: string}>({});
+
+  chipStyles = computed(() => {
+    const styles: any = { ...this.customStyles() };
+    if (styles['backgroundColor']) {
+      styles['--theme-bg'] = styles['backgroundColor'];
+    }
+    if (styles['color']) {
+      styles['--theme-color'] = styles['color'];
+    }
+    return styles;
+  });
 
   chipClasses = computed(() => {
     const classes = ['chip'];
