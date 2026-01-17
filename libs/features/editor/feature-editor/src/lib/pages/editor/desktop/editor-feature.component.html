@@ -17,7 +17,11 @@
         class="relative min-h-[80vh] flex flex-col items-center justify-center cursor-pointer editor-section overflow-hidden" 
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
         (click)="selectSection($event, section)"
-        [ngClass]="'hero-section--' + getVariant(section.id)">
+        [ngClass]="'hero-section--' + getVariant(section.id)"
+        [applyDynamicStyles]="section.styles"
+        visualEditable
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
         
         <!-- Background Overlay (Simulated) -->
         <div class="absolute inset-0 bg-black/40 z-0"></div>
@@ -31,11 +35,13 @@
             class="editor-element block mb-6 px-4"
             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
             (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })"
+            [applyDynamicStyles]="section.content['titleStyles']"
           ></lib-ui-components-title>
           
           <div class="mt-4 editor-element"
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_subtitle'"
-               (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })">
+               (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })"
+               [applyDynamicStyles]="section.content['subtitleStyles']">
             <p class="hero-subtitle text-xl md:text-3xl text-white/90">
               {{ section.content['subtitle'] || heroConfig.subtitle }}
             </p>
@@ -47,7 +53,8 @@
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_cta'"
                (click)="selectElement($event, { id: section.id + '_cta', sectionId: section.id, content: section.content, type: 'cta', _original: section.content })">
             <button class="cta-button px-10 py-4 rounded-xl font-bold transition-all hover:scale-105 active:scale-95"
-                    [ngClass]="'variant-' + getVariant(section.id)">
+                    [ngClass]="'variant-' + getVariant(section.id)"
+                    [applyDynamicStyles]="section.content['ctaStyles']">
               {{ section.content['ctaLabel'] || heroConfig.ctaLabel }}
             </button>
           </div>

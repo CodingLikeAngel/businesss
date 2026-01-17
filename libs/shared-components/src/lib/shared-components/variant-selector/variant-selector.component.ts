@@ -259,15 +259,35 @@ export class VariantSelectorComponent implements OnInit {
   }
 
   onStyleChanged() {
+    console.log('🎨 Style changed detected');
+    
     if (this.selectedSection) {
+      console.log('📦 Updating section styles:', this.selectedSection.styles);
+      
       if (this.selectedSection.isGlobal) {
         this.updateGlobalConfigFromSelection();
       } else if (this.selectedSection && this.selectedSection.id) {
-        this.variantService.updateSectionInCurrentPage(this.selectedSection.id, this.selectedSection);
+        // Ensure styles are properly merged
+        const updatedSection = {
+          ...this.selectedSection,
+          styles: { ...this.selectedSection.styles }
+        };
+        
+        // Update in service
+        this.variantService.updateSectionInCurrentPage(this.selectedSection.id, updatedSection);
+        
+        // Trigger change detection by updating the observable
+        this.uiStateService.selectSection(updatedSection);
       }
     } else if (this.selectedElement) {
+      console.log('🔧 Updating element styles:', this.selectedElement.styles);
       this.syncElementBack();
     }
+    
+    // Force change detection
+    setTimeout(() => {
+      console.log('✅ Styles applied and change detection triggered');
+    }, 0);
   }
 
   syncElementBack() {

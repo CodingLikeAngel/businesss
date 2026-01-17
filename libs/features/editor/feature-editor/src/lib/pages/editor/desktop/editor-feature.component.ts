@@ -27,7 +27,15 @@ import {
   UIChartComponent,
   UIGamingVariantsShowcaseComponent
 } from '@negocio/ui-components';
-import { Product, Testimonial, PageSection, VariantService } from '@negocio/shared-components';
+import { 
+  Product, 
+  Testimonial, 
+  PageSection, 
+  VariantService,
+  ApplyDynamicStylesDirective,
+  VisualEditableDirective,
+  VisualEditorService
+} from '@negocio/shared-components';
 import { ReservationFormComponent } from '../../../components/reservation-form/reservation-form.component';
 
 @Component({
@@ -58,9 +66,12 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
     UIBreadcrumbsComponent,
     UISpinnerComponent,
     UIChartComponent,
-    UIGamingVariantsShowcaseComponent
+    UIGamingVariantsShowcaseComponent,
+    ApplyDynamicStylesDirective,
+    VisualEditableDirective
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  providers: [VisualEditorService]
 })
 export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent implements OnInit {
   sections$: Observable<PageSection[]>;
@@ -105,6 +116,23 @@ export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent im
       _original: item,
       type
     };
+  }
+
+  onSectionResized(section: PageSection, bounds: any) {
+    console.log('📏 Section resized:', section.id, bounds);
+    
+    // Update section styles with new height
+    const updatedSection = {
+      ...section,
+      styles: {
+        ...section.styles,
+        minHeight: `${bounds.height}px`,
+        height: `${bounds.height}px`
+      }
+    };
+    
+    // Update in service
+    this.variantService.updateSectionInCurrentPage(section.id, updatedSection);
   }
 }
 
