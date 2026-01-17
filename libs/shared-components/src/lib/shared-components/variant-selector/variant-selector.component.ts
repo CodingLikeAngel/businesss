@@ -421,7 +421,7 @@ export class VariantSelectorComponent implements OnInit {
       this.variantService.setComponentVariant(this.selectedSection.id, variantId);
     } else if (this.selectedElement) {
       this.selectedElement.variant = variantId;
-      this.syncElementBack();
+        this.syncElementBack();
       // Ensure the section variant mapping is also updated if sectionId is present
       if (this.selectedElement['sectionId']) {
         this.variantService.setComponentVariant(this.selectedElement['sectionId'], variantId);
