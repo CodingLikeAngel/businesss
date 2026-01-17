@@ -7,20 +7,13 @@ import { Observable } from 'rxjs';
 import {
   UIHeaderComponent,
   UIFooterComponent,
-  UIHeroSectionComponent,
   UIModalComponent,
-  UICardRutasComponent,
   BubbleAnimationComponent,
   UITitleComponent,
   UiCardProductsComponent,
   UICardAnimatedComponent,
   UICardComponent,
   UINavBarComponent,
-  UIFeaturesSectionComponent,
-  UIStatsLibSectionComponent,
-  UITestimonialsSectionComponent,
-  UIFaqSectionComponent,
-  UIGallerySectionComponent,
   UIPricingTableSectionComponent,
   UITabsComponent,
   UIAccordionComponent,
@@ -29,15 +22,12 @@ import {
   UIListComponent,
   UINewsletterSectionComponent,
   UIStepsSectionComponent,
-  UITableComponent,
   UIBreadcrumbsComponent,
-  UIChipComponent,
   UISpinnerComponent,
   UIChartComponent,
   UIGamingVariantsShowcaseComponent
 } from '@negocio/ui-components';
 import { Product, Testimonial, PageSection, VariantService } from '@negocio/shared-components';
-import { PromotionsSectionComponent } from '../../../components/promotions-section/promotions-section.component';
 import { ReservationFormComponent } from '../../../components/reservation-form/reservation-form.component';
 
 @Component({
@@ -48,23 +38,15 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
   imports: [
     CommonModule,
     RouterModule,
-    UIHeroSectionComponent,
     ReservationFormComponent,
-    PromotionsSectionComponent,
     UIHeaderComponent,
     UIModalComponent,
-    UICardRutasComponent,
     BubbleAnimationComponent,
     UITitleComponent,
     UiCardProductsComponent,
     UICardAnimatedComponent,
     UICardComponent,
-    UIFeaturesSectionComponent,
-    UIStatsLibSectionComponent,
-    UITestimonialsSectionComponent,
     UIFooterComponent,
-    UIFaqSectionComponent,
-    UIGallerySectionComponent,
     UIPricingTableSectionComponent,
     UITabsComponent,
     UIAccordionComponent,
@@ -73,9 +55,7 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
     UIListComponent,
     UINewsletterSectionComponent,
     UIStepsSectionComponent,
-    UITableComponent,
     UIBreadcrumbsComponent,
-    UIChipComponent,
     UISpinnerComponent,
     UIChartComponent,
     UIGamingVariantsShowcaseComponent

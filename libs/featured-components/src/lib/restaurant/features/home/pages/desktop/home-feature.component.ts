@@ -31,10 +31,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   imports: [
     CommonModule,
     RouterModule,
-    LibUINavBarComponent,
-    LibUIHeroSectionComponent,
     UINavBarComponent,
-    UIHeroSectionComponent,
     ReservationFormComponent,
     FaqSectionComponent,
     PricingSectionComponent,

@@ -43,7 +43,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     UICardRutasComponent,
     BubbleAnimationComponent,
     UITitleComponent,
-    UIFooterComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home-feature.component.html',
