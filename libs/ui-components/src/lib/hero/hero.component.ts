@@ -1,6 +1,5 @@
 import { Component, input, output, computed, ViewChild, ElementRef, AfterViewInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { UICardAnimatedComponent } from '../cards/card-animated/card-animated.component';
 import { variants } from '../models/ui-components-data.model';
 
 export const heroVariants = variants;
@@ -44,7 +43,7 @@ interface CarouselItem {
 @Component({
   selector: 'lib-ui-hero-section',
   standalone: true,
-  imports: [CommonModule, UICardAnimatedComponent],
+  imports: [CommonModule],
   templateUrl: './hero.component.html',
   styleUrls: ['./hero.component.scss'],
 })

@@ -41,6 +41,9 @@
     </div>
 
     <div class="hub-right">
+      <div class="header-template-selector mr-4">
+        <lib-template-selector ngSkipHydration (templateApplied)="onTemplateApplied()"></lib-template-selector>
+      </div>
       <button
         *ngIf="builderStep === 'editor'"
         (click)="variantService.setBuilderStep('preview')"
@@ -71,6 +74,7 @@
       [style.width.px]="isSidebarCollapsed ? 90 : sidebarWidth"
     >
       <lib-variant-selector
+        ngSkipHydration
         style="width: 100%; height: 100%; display: block"
         [isCollapsed]="isSidebarCollapsed"
         (toggleCollapse)="isSidebarCollapsed = !isSidebarCollapsed"

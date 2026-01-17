@@ -4,7 +4,7 @@ import {
   UIFooterComponent,
   UIHeaderComponent,
 } from '@negocio/ui-components';
-import { VariantSelectorComponent } from '@negocio/shared-components';
+import { VariantSelectorComponent, TemplateSelectorComponent } from '@negocio/shared-components';
 import { CommonModule } from '@angular/common';
 import { MainLayoutBaseComponent } from '../main-layout-base.component';
 
@@ -16,6 +16,7 @@ import { MainLayoutBaseComponent } from '../main-layout-base.component';
     RouterModule,
     UIHeaderComponent,
     VariantSelectorComponent,
+    TemplateSelectorComponent,
     UIFooterComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
@@ -100,4 +101,7 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
     this.variantService.setBuilderStep('editor');
   }
 
+  onTemplateApplied() {
+    console.log('Template applied successfully');
+  }
 }

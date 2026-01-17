@@ -176,6 +176,7 @@ export interface CardPremiumConfig {
   icon: 'heroStar';
   tooltip: string;
   variant?: string;
+  styles?: { [key: string]: string };
 }
 
 export interface PromotionsConfig {

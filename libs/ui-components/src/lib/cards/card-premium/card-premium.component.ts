@@ -48,6 +48,7 @@ export interface CardPremiumConfig {
   discount: string;
   tooltip: string;
   variant?: string;
+  styles?: { [key: string]: string };
 }
 
 export interface CardPremiumCustomStyles {
