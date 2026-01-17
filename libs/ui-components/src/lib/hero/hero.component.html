@@ -16,27 +16,6 @@
   </div>
 
   <!-- Main Content -->
-  <div class="hero-content" [ngClass]="contentClass()">
-    <h1 class="hero-title" [ngClass]="titleClass()">{{ title() }}</h1>
-    <p class="hero-subtitle" [ngClass]="subtitleClass()">{{ subtitle() }}</p>
-
-    <!-- CTA Button -->
-    <button
-      *ngIf="showCta()"
-      class="cta-button"
-      [ngClass]="ctaClass()"
-      (click)="onCtaClick()"
-      (keydown)="onInteractiveKeydown($event, onCtaClick)"
-      [attr.aria-label]="ctaLabel()"
-    >
-      {{ ctaLabel() }}
-    </button>
-
-    <!-- Development Message -->
-    <div *ngIf="showDevelopmentMessage()" class="development-message">
-      <p class="development-text">¡En desarrollo...!</p>
-    </div>
-  </div>
 
   <!-- Dynamic Layouts based on layout getter -->
   <ng-container [ngSwitch]="layout()">
