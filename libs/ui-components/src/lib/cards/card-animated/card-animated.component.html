@@ -1,7 +1,7 @@
 <article
   class="card-animated card-animated--{{ variant() }}"
   role="region"
-  [attr.aria-label]="frontContent()?.title || title()"
+  [attr.aria-label]="frontContent().title || title()"
   (mouseover)="onHover(true)"
   (mouseout)="onHover(false)"
   (focus)="onHover(true)"
@@ -24,31 +24,31 @@
     (keyup)="toggleFlip($event)"
     tabindex="0"
     role="button"
-    [attr.aria-label]="'Toggle ' + (frontContent()?.title || 'card')"
+    [attr.aria-label]="'Toggle ' + (frontContent().title || 'card')"
   >
     <div class="card-front">
-      <div class="card-icon" role="img" [attr.aria-label]="frontContent()?.title + ' icon'" [style]="customStyles()['icon']">
+      <div class="card-icon" role="img" [attr.aria-label]="frontContent().title + ' icon'" [style]="customStyles()['icon']">
         {{ icon() }}
       </div>
       <img
-        *ngIf="frontContent()?.image"
-        [src]="frontContent()?.image"
-        [alt]="frontContent()?.title"
+        *ngIf="frontContent().image"
+        [src]="frontContent().image"
+        [alt]="frontContent().title"
         class="card-image"
         [style]="customStyles()['image']"
       >
-      <h3 class="card-title" [style]="customStyles()['title']">{{ frontContent()?.title }}</h3>
+      <h3 class="card-title" [style]="customStyles()['title']">{{ frontContent().title }}</h3>
       <ng-content select=".flip-indicator"></ng-content>
     </div>
     <div class="card-back">
       <div class="card-content">
-        <p class="card-description" [style]="customStyles()['description']">{{ backContent()?.description }}</p>
+        <p class="card-description" [style]="customStyles()['description']">{{ backContent().description }}</p>
         <span
-          *ngIf="backContent()?.comestible !== undefined"
-          [class.text-green]="backContent()?.comestible"
-          [class.text-red]="!backContent()?.comestible"
+          *ngIf="backContent().comestible !== undefined"
+          [class.text-green]="backContent().comestible"
+          [class.text-red]="!backContent().comestible"
         >
-          {{ backContent()?.comestible ? 'Comestible' : 'No Comestible' }}
+          {{ backContent().comestible ? 'Comestible' : 'No Comestible' }}
         </span>
         <ng-content></ng-content>
       </div>

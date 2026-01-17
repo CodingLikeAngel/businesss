@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root'
 })
 export class UiStateService {
-  activeTab: 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer' = 'general';
+  activeTab: 'pages' | 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer' = 'pages';
 
   // Modal state
   showItemModal = false;
@@ -144,7 +144,7 @@ export class UiStateService {
   showGalleryConfig = false;
   showProductsConfig = false;
 
-  setActiveTab(tab: 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer') {
+  setActiveTab(tab: 'pages' | 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer') {
     this.activeTab = tab;
   }
 

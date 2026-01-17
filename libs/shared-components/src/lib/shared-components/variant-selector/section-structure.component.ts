@@ -8,305 +8,280 @@ import { VariantService, PageSection } from '../../../services/variant.service';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="section-structure">
-      <div class="structure-header">
-        <h3>Estructura de la Página</h3>
-        <p class="helper-text">
-          Arrastra las secciones para reordenarlas o usa el ojo para ocultarlas.
-        </p>
-      </div>
+    <div class="structure-v2">
+      <!-- Header -->
+      <header class="editor-header">
+        <div class="header-main">
+          <h2>Arquitectura</h2>
+          <span class="badge" *ngIf="sections.length > 0">{{ sections.length }} BLOQUES</span>
+        </div>
+        <p class="subtitle">Ordena, oculta o elimina los componentes de tu lienzo.</p>
+      </header>
 
-      <div class="section-list" *ngIf="sections.length > 0; else emptyState">
-        <div
-          *ngFor="let section of sections; let i = index"
-          class="section-item"
-          [class.hidden-section]="!section.visible"
-          [class.is-dragging]="draggedSectionIndex === i"
-          [class.is-over]="overSectionIndex === i"
-          (click)="onSelectSection(section)"
-          draggable="true"
-          (dragstart)="onDragStart(i)"
-          (dragover)="onDragOver($event, i)"
-          (dragend)="onDragEnd()"
-        >
-          <div class="section-drag-handle">
-            <span class="handle-icon">⋮⋮</span>
-          </div>
-
-          <div class="section-info">
-            <div class="section-header">
-              <span class="section-type-badge" [attr.data-type]="section.type">
-                {{ getSectionTypeIcon(section.type) }}
-              </span>
-              <span class="section-label">{{ section.label }}</span>
+      <!-- Section List -->
+      <div class="list-v2-container" *ngIf="sections.length > 0; else emptyState">
+        <div *ngFor="let section of sections; let i = index"
+             class="section-v2-card"
+             [class.hidden-v2]="!section.visible"
+             [class.dragging]="draggedSectionIndex === i"
+             [class.drag-over]="overSectionIndex === i"
+             (click)="onSelectSection(section)"
+             draggable="true"
+             (dragstart)="onDragStart(i)"
+             (dragover)="onDragOver($event, i)"
+             (dragend)="onDragEnd()">
+            
+            <div class="drag-handle-v2">
+                <span class="dots"></span>
             </div>
-            <div class="section-meta">
-              <span class="section-id">{{ section.id }}</span>
-              <span class="section-order">Orden: {{ i + 1 }}</span>
-            </div>
-          </div>
 
-          <div class="section-actions">
-            <button
-              class="action-btn visibility-btn"
-              [class.active]="section.visible"
-              (click)="toggleSectionVisibility(section)"
-              [title]="section.visible ? 'Ocultar sección' : 'Mostrar sección'"
-            >
-              {{ section.visible ? '👁️' : '🚫' }}
-            </button>
-            <button
-              class="action-btn delete-btn"
-              (click)="removeSection(i)"
-              title="Eliminar sección"
-            >
-              ×
-            </button>
-          </div>
+            <div class="section-v2-content">
+                <div class="content-header">
+                    <div class="type-icon-wrapper" [attr.data-type]="section.type">
+                        {{ getSectionTypeIcon(section.type) }}
+                    </div>
+                    <div class="text-group">
+                        <span class="section-title">{{ section.label }}</span>
+                        <span class="section-id">#{{ section.id.substring(0, 8) }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions-v2">
+                <button class="mini-icon-btn" 
+                        [class.active]="section.visible"
+                        (click)="toggleSectionVisibility(section); $event.stopPropagation()"
+                        [title]="section.visible ? 'Ocultar' : 'Mostrar'">
+                    {{ section.visible ? '👁️' : '🚫' }}
+                </button>
+                <button class="mini-icon-btn delete" 
+                        (click)="removeSection(i); $event.stopPropagation()"
+                        title="Eliminar">
+                    ×
+                </button>
+            </div>
+
+            <div class="active-indicator" *ngIf="i === overSectionIndex"></div>
         </div>
       </div>
 
+      <!-- Add Button -->
+      <div class="footer-actions" *ngIf="sections.length > 0">
+        <button class="add-section-v2" (click)="addSection.emit()">
+            <span class="plus-icon">+</span> AÑADIR NUEVO BLOQUE
+        </button>
+      </div>
+
+      <!-- Empty State Template -->
       <ng-template #emptyState>
-        <div class="empty-state">
-          <div class="empty-icon">📄</div>
-          <h4>No hay secciones</h4>
-          <p>Aún no has añadido ninguna sección a esta página.</p>
-          <button class="add-first-section-btn" (click)="addSection.emit()">
-            ➕ Añadir Primera Sección
+        <div class="empty-state-v2">
+          <div class="empty-glow-v2">🏗️</div>
+          <h4>Lienzo en Blanco</h4>
+          <p>Comienza a construir tu visión añadiendo el primer bloque de contenido.</p>
+          <button class="primary-add-btn" (click)="addSection.emit()">
+            + CREAR PRIMERA SECCIÓN
           </button>
         </div>
       </ng-template>
-
-      <div class="structure-footer" *ngIf="sections.length > 0">
-        <button class="add-section-btn" (click)="addSection.emit()">
-          ➕ Añadir Nueva Sección
-        </button>
-      </div>
     </div>
   `,
   styles: [`
-    .section-structure {
+    .structure-v2 {
       display: flex;
       flex-direction: column;
       gap: 1.5rem;
+      padding-bottom: 2rem;
     }
 
-    .structure-header h3 {
-      margin: 0 0 0.5rem 0;
-      color: var(--color-text-inverse);
-      font-size: 1.1rem;
-      font-weight: 700;
+    .editor-header {
+      .header-main {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        h2 { font-size: 1.25rem; font-weight: 800; color: white; margin: 0; }
+        .badge {
+          font-size: 0.6rem;
+          font-weight: 900;
+          background: rgba(16, 185, 129, 0.2);
+          color: #10b981;
+          padding: 2px 8px;
+          border-radius: 4px;
+          border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+      }
+      .subtitle { font-size: 0.8rem; color: #94a3b8; margin: 0.25rem 0 0; line-height: 1.4; }
     }
 
-    .helper-text {
-      margin: 0;
-      color: var(--color-text-inverse-secondary);
-      font-size: 0.9rem;
-      line-height: 1.4;
+    .list-v2-container {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
     }
 
-    .section-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
+    .section-v2-card {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 16px;
+        padding: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateY(-1px);
+        }
+
+        &.hidden-v2 {
+            opacity: 0.5;
+            filter: grayscale(0.5);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        &.dragging {
+            opacity: 0.4;
+            transform: scale(0.95) rotate(-1deg);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+        }
+
+        &.drag-over {
+            padding-top: 1.5rem;
+            &::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 4px;
+                background: #10b981;
+                box-shadow: 0 0 10px #10b981;
+            }
+        }
+
+        .drag-handle-v2 {
+            cursor: grab;
+            padding: 0.5rem;
+            .dots {
+                display: block;
+                width: 4px;
+                height: 4px;
+                background: #475569;
+                border-radius: 50%;
+                box-shadow: 0 8px #475569, 0 -8px #475569, 6px 0 #475569, 6px 8px #475569, 6px -8px #475569;
+            }
+            &:active { cursor: grabbing; }
+        }
+
+        .section-v2-content {
+            flex: 1;
+            .content-header {
+                display: flex;
+                align-items: center;
+                gap: 0.75rem;
+                
+                .type-icon-wrapper {
+                    width: 32px;
+                    height: 32px;
+                    background: rgba(255, 255, 255, 0.03);
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    font-size: 1rem;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                }
+
+                .text-group {
+                    display: flex;
+                    flex-direction: column;
+                    .section-title { font-size: 0.85rem; font-weight: 700; color: #f1f5f9; }
+                    .section-id { font-size: 0.65rem; color: #64748b; font-family: monospace; }
+                }
+            }
+        }
+
+        .actions-v2 {
+            display: flex;
+            gap: 0.25rem;
+            .mini-icon-btn {
+                background: rgba(255, 255, 255, 0.03);
+                border: 1px solid rgba(255, 255, 255, 0.05);
+                color: #94a3b8;
+                width: 32px;
+                height: 32px;
+                border-radius: 8px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 0.9rem;
+                transition: all 0.2s;
+                &:hover { background: rgba(255, 255, 255, 0.08); color: white; }
+                &.active { color: #10b981; background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.2); }
+                &.delete:hover { color: #ef4444; background: rgba(239, 68, 68, 0.1); }
+            }
+        }
     }
 
-    .section-item {
-      background: rgba(255, 255, 255, 0.03);
-      padding: 1rem 1.25rem;
-      border-radius: 16px;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      cursor: default;
-      transition: all 0.2s ease;
-      position: relative;
+    .footer-actions {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .section-item:hover {
-      background: rgba(255, 255, 255, 0.06);
-      border-color: rgba(255, 255, 255, 0.1);
+    .add-section-v2 {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px dashed rgba(255, 255, 255, 0.15);
+        border-radius: 12px;
+        padding: 0.75rem;
+        color: #94a3b8;
+        font-size: 0.7rem;
+        font-weight: 800;
+        letter-spacing: 0.1em;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        &:hover { background: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.3); color: white; transform: translateY(-2px); }
     }
 
-    .section-item.hidden-section {
-      opacity: 0.6;
-      background: rgba(239, 68, 68, 0.05);
-      border-color: rgba(239, 68, 68, 0.2);
-    }
+    .empty-state-v2 {
+        text-align: center;
+        padding: 4rem 1.5rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        border-radius: 24px;
+        
+        .empty-glow-v2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.4));
+        }
 
-    .section-item.is-dragging {
-      opacity: 0.4;
-      border-style: dashed;
-      transform: rotate(2deg);
-    }
+        h4 { font-size: 1.1rem; color: white; margin: 0; }
+        p { font-size: 0.85rem; color: #64748b; margin: 0.75rem 0 1.5rem; line-height: 1.5; }
 
-    .section-item.is-over {
-      background: rgba(99, 102, 241, 0.1);
-      border-color: #6366f1;
-      transform: scale(1.02);
-    }
-
-    .section-drag-handle {
-      cursor: grab;
-      color: #64748b;
-      font-size: 1.2rem;
-      padding: 0.25rem;
-      border-radius: 4px;
-      transition: all 0.2s ease;
-    }
-
-    .section-drag-handle:active {
-      cursor: grabbing;
-    }
-
-    .section-drag-handle:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .handle-icon {
-      display: block;
-      line-height: 1;
-      user-select: none;
-    }
-
-    .section-info {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-
-    .section-header {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .section-type-badge {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: 8px;
-      font-size: 1rem;
-      background: rgba(99, 102, 241, 0.2);
-      color: #6366f1;
-    }
-
-    .section-type-badge[data-type="hero"] {
-      background: rgba(34, 197, 94, 0.2);
-      color: #22c55e;
-    }
-
-    .section-type-badge[data-type="services"] {
-      background: rgba(251, 191, 36, 0.2);
-      color: #f59e0b;
-    }
-
-    .section-type-badge[data-type="contact"] {
-      background: rgba(239, 68, 68, 0.2);
-      color: #ef4444;
-    }
-
-    .section-label {
-      font-weight: 600;
-      font-size: 0.95rem;
-      color: var(--color-text-inverse);
-    }
-
-    .section-meta {
-      display: flex;
-      gap: 1rem;
-      font-size: 0.75rem;
-      color: var(--color-text-inverse-secondary);
-    }
-
-    .section-actions {
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .action-btn {
-      background: rgba(255, 255, 255, 0.05);
-      border: none;
-      color: white;
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      cursor: pointer;
-      font-size: 1rem;
-      transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .action-btn:hover {
-      background: rgba(255, 255, 255, 0.15);
-      transform: scale(1.05);
-    }
-
-    .visibility-btn.active {
-      background: rgba(34, 197, 94, 0.2);
-      color: #22c55e;
-    }
-
-    .delete-btn:hover {
-      background: rgba(239, 68, 68, 0.2);
-      color: #ef4444;
-    }
-
-    .empty-state {
-      text-align: center;
-      padding: 3rem 2rem;
-      background: rgba(255, 255, 255, 0.02);
-      border-radius: 16px;
-      border: 2px dashed rgba(255, 255, 255, 0.1);
-    }
-
-    .empty-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-      opacity: 0.5;
-    }
-
-    .empty-state h4 {
-      margin: 0 0 0.5rem 0;
-      color: var(--color-text-inverse);
-      font-size: 1.2rem;
-    }
-
-    .empty-state p {
-      margin: 0 0 2rem 0;
-      color: var(--color-text-inverse-secondary);
-      font-size: 0.9rem;
-    }
-
-    .add-first-section-btn, .add-section-btn {
-      background: linear-gradient(135deg, #6366f1, #4f46e5);
-      color: white;
-      border: none;
-      padding: 0.875rem 1.5rem;
-      border-radius: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 0.9rem;
-    }
-
-    .add-first-section-btn:hover, .add-section-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(99, 102, 241, 0.4);
-      background: linear-gradient(135deg, #4f46e5, #3730a3);
-    }
-
-    .structure-footer {
-      display: flex;
-      justify-content: center;
-      padding-top: 1rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+        .primary-add-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+            transition: all 0.2s;
+            &:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); }
+        }
     }
   `]
 })

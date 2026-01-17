@@ -78,557 +78,375 @@ interface SectionVariant {
     UIGamingVariantsShowcaseComponent
   ],
   template: `
-    <div class="component-explorer">
-      <div class="explorer-header">
-        <h3>Librería de Componentes</h3>
-        <p class="helper-text">
-          Explora los componentes disponibles y previsualiza sus variantes antes de añadirlos.
-        </p>
-      </div>
+    <div class="explorer-container">
+      <header class="explorer-header">
+        <h2 class="title-v2">Librería de Componentes</h2>
+        <p class="subtitle-v2">Pulsa sobre un componente para previsualizarlo y añadirlo a tu lienzo.</p>
+      </header>
 
-      <!-- Category Filter -->
-      <div class="category-filter">
+      <!-- Category Navigation -->
+      <nav class="category-nav-v2">
         <button
           *ngFor="let category of categories"
-          class="category-btn"
+          class="cat-chip"
           [class.active]="selectedCategory === category.id"
           (click)="selectCategory(category.id)"
         >
-          <span class="category-icon">{{ category.icon }}</span>
-          <span class="category-label">{{ category.name }}</span>
+          <span class="chip-icon">{{ category.icon }}</span>
+          {{ category.name }}
         </button>
-      </div>
+      </nav>
 
-      <!-- Component Grid -->
-      <div class="component-grid">
-        <div
-          *ngFor="let comp of filteredComponents"
-          class="component-card"
-          [class.selected]="selectedComponent?.type === comp.type"
-          (click)="selectComponent(comp)"
-        >
-          <div class="component-icon">{{ comp.icon }}</div>
-          <div class="component-info">
-            <h4 class="component-name">{{ comp.label }}</h4>
-            <p class="component-description">{{ comp.description }}</p>
-          </div>
-          <div class="component-category">{{ comp.category }}</div>
-        </div>
-      </div>
-
-      <!-- Component Preview -->
-      <div *ngIf="selectedComponent" class="component-preview">
-        <div class="preview-header">
-          <div class="preview-title">
-            <span class="preview-icon">{{ selectedComponent.icon }}</span>
-            <h4>{{ selectedComponent.label }}</h4>
-          </div>
-          <div class="variant-selector">
-            <label>Variante:</label>
-            <select [(ngModel)]="selectedVariant" class="variant-select">
-              <option *ngFor="let variant of selectedComponent.variants" [value]="variant">
-                {{ variant }}
-              </option>
-            </select>
-          </div>
-        </div>
-
-        <div class="preview-content">
-          <div class="preview-label">
-            Vista Previa - {{ selectedVariant }}
-          </div>
-
-          <div class="preview-container p-6 bg-slate-900 overflow-y-auto" [ngSwitch]="selectedComponent.type">
-            
-            <!-- CONTENT -->
-            <div *ngSwitchCase="'promotions'" class="p-4 bg-slate-800 rounded-lg text-center text-gray-400">
-              <p>Promotions Component Preview (Requires Feature Module)</p>
-            </div>
-            <lib-ui-hero-section *ngSwitchCase="'hero'" [variant]="selectedVariant" title="Título Hero" subtitle="Subtítulo descriptivo"></lib-ui-hero-section>
-            <lib-ui-header *ngSwitchCase="'header'" [variant]="selectedVariant" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header>
-            <lib-ui-components-footer *ngSwitchCase="'footer'" [variant]="selectedVariant" title="Logo"></lib-ui-components-footer>
-            <div *ngSwitchCase="'faq'" class="p-4"><lib-ui-faq-section [variant]="selectedVariant"></lib-ui-faq-section></div>
-            <div *ngSwitchCase="'features'" class="p-4"><lib-ui-features-section [variant]="selectedVariant"></lib-ui-features-section></div>
-            <div *ngSwitchCase="'gallery'" class="p-4"><lib-ui-components-gallery-section [variant]="selectedVariant"></lib-ui-components-gallery-section></div>
-            <div *ngSwitchCase="'stats'" class="p-4"><lib-ui-components-stats-section [variant]="selectedVariant"></lib-ui-components-stats-section></div>
-            <div *ngSwitchCase="'steps'" class="p-4"><lib-ui-steps-section [variant]="selectedVariant"></lib-ui-steps-section></div>
-            <div *ngSwitchCase="'showcase'" class="p-4"><lib-ui-gaming-variants-showcase></lib-ui-gaming-variants-showcase></div>
-            <div *ngSwitchCase="'testimonials'" class="p-4"><lib-ui-testimonials-section [variant]="selectedVariant"></lib-ui-testimonials-section></div>
-            
-            <!-- COMMERCE -->
-            <div *ngSwitchCase="'services'" class="p-4"><lib-ui-features-section [variant]="selectedVariant" [title]="'Nuestros Servicios'"></lib-ui-features-section></div>
-            <div *ngSwitchCase="'pricing'" class="p-4"><lib-ui-pricing-table-section [variant]="selectedVariant"></lib-ui-pricing-table-section></div>
-            
-            <div *ngSwitchCase="'newsletter'" class="p-4"><lib-ui-newsletter-section [variant]="selectedVariant"></lib-ui-newsletter-section></div>
-            
-            <!-- INTERACTIVE -->
-            <div *ngSwitchCase="'contact'" class="p-4"><lib-ui-contact-section [variant]="selectedVariant"></lib-ui-contact-section></div>
-            <div *ngSwitchCase="'bubble'" class="h-64 relative overflow-hidden rounded-xl border border-white/10 m-4">
-               <lib-bubble-animation [variant]="$any(selectedVariant)"></lib-bubble-animation>
-            </div>
-            <div *ngSwitchCase="'tabs'" class="p-4">
-              <lib-ui-components-tabs [variant]="selectedVariant" [showAs]="'tabs'" [tabs]="[{label:'Tab 1', sectionId:'tab1'}, {label:'Tab 2', sectionId:'tab2'}]"></lib-ui-components-tabs>
-            </div>
-            <div *ngSwitchCase="'accordion'" class="p-4">
-              <lib-ui-components-accordion [variant]="selectedVariant" [items]="[{title:'Item 1', content:'Detalle 1'}, {title:'Item 2', content:'Detalle 2'}]"></lib-ui-components-accordion>
-            </div>
-            
-            <!-- ELEMENTS -->
-            <div *ngSwitchCase="'button'" class="flex gap-4 justify-center items-center h-full min-h-[200px]">
-              <lib-ui-components-button [variant]="selectedVariant">Botón</lib-ui-components-button>
-            </div>
-            <div *ngSwitchCase="'chip'" class="flex justify-center items-center h-full min-h-[200px]">
-               <lib-ui-components-chip [variant]="selectedVariant" label="Chip"></lib-ui-components-chip>
-            </div>
-            <div *ngSwitchCase="'spinner'" class="flex justify-center items-center h-full min-h-[200px]">
-               <lib-ui-spinner [variant]="selectedVariant"></lib-ui-spinner>
-            </div>
-            <div *ngSwitchCase="'breadcrumbs'" class="p-8">
-               <lib-ui-breadcrumbs [variant]="selectedVariant" [items]="[{label:'Home', url:'/'}, {label:'Sección', url:'#'}]"></lib-ui-breadcrumbs>
-            </div>
-            
-            <!-- CARDS -->
-            <div *ngSwitchCase="'card-animated'" class="max-w-xs mx-auto p-4">
-               <lib-ui-components-card-animated [variant]="selectedVariant" title="Tarjeta" description="Descripción de la tarjeta animada"></lib-ui-components-card-animated>
-            </div>
-            <div *ngSwitchCase="'card-product'" class="max-w-xs mx-auto p-4">
-               <lib-card-products [variant]="selectedVariant" [product]="{name:'Producto', price:'$99', image:'', description: 'Producto de prueba'}"></lib-card-products>
-            </div>
-            <div *ngSwitchCase="'card-testimonial'" class="max-w-md mx-auto p-4">
-               <lib-testimonials-card [variant]="selectedVariant" [testimonial]="{author: 'Cliente', quote: 'Excelente servicio'}"></lib-testimonials-card>
-            </div>
-            <div *ngSwitchCase="'image'" class="p-4 flex justify-center">
-              <lib-ui-image [variant]="selectedVariant" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-image>
-            </div>
-            <div *ngSwitchCase="'table'" class="p-4">
-              <lib-ui-components-table [variant]="selectedVariant" [rows]="[{id:1, name:'Item A'}, {id:2, name:'Item B'}]" [columns]="[{key:'id', label:'ID'}, {key:'name', label:'Nombre'}]"></lib-ui-components-table>
-            </div>
-
-            <!-- LIST -->
-            <div *ngSwitchCase="'list'" class="max-w-md mx-auto p-4">
-              <lib-ui-list [variant]="selectedVariant" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-list>
-            </div>
-
-            <!-- DEFAULT -->
-            <div *ngSwitchDefault class="preview-mockup default-mockup">
-              <div class="mock-content">
-                 <p class="text-center text-white/50">Vista previa no disponible para este componente ({{ selectedComponent.type }})</p>
+      <!-- Grid Area -->
+      <div class="explorer-sections">
+        <!-- List of Components -->
+        <div class="component-list-area">
+          <div class="comp-scroll-wrapper">
+              <div
+                *ngFor="let comp of filteredComponents"
+                class="comp-card-modern"
+                [class.selected]="selectedComponent?.type === comp.type"
+                (click)="selectComponent(comp)"
+              >
+                <div class="comp-icon-box">{{ comp.icon }}</div>
+                <div class="comp-meta">
+                  <h4>{{ comp.label }}</h4>
+                  <span class="comp-cat">{{ comp.category }}</span>
+                </div>
+                <div class="comp-select-indicator"></div>
               </div>
-            </div>
           </div>
         </div>
 
-        <div class="preview-actions">
-          <button class="add-to-page-btn" (click)="addToPage()">
-            ✚ Añadir a la Página
-          </button>
-        </div>
+        <!-- Desktop Preview Area -->
+        <aside class="preview-panel-v2" *ngIf="selectedComponent">
+          <div class="panel-inner">
+            <header class="panel-header">
+              <div class="panel-info">
+                <span class="icon">{{ selectedComponent.icon }}</span>
+                <div>
+                  <h3>{{ selectedComponent.label }}</h3>
+                  <p>{{ selectedComponent.description }}</p>
+                </div>
+              </div>
+              <div class="variant-hub">
+                <label>Variante</label>
+                <select [(ngModel)]="selectedVariant" class="select-v2">
+                  <option *ngFor="let variant of selectedComponent.variants" [value]="variant">
+                    {{ variant }}
+                  </option>
+                </select>
+              </div>
+            </header>
+
+            <main class="preview-viewport">
+              <div class="viewport-label">VISTA PREVIA: {{ selectedVariant }}</div>
+              <div class="preview-overflow" [ngSwitch]="selectedComponent.type">
+                  <!-- CONTENT -->
+                  <div *ngSwitchCase="'promotions'" class="p-4 bg-slate-800 rounded-lg text-center text-gray-400">
+                    <p>Promotions Component Preview (Requires Feature Module)</p>
+                  </div>
+                  <lib-ui-hero-section *ngSwitchCase="'hero'" [variant]="selectedVariant" title="Título Hero" subtitle="Subtítulo descriptivo"></lib-ui-hero-section>
+                  <lib-ui-header *ngSwitchCase="'header'" [variant]="selectedVariant" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header>
+                  <lib-ui-components-footer *ngSwitchCase="'footer'" [variant]="selectedVariant" title="Logo"></lib-ui-components-footer>
+                  <div *ngSwitchCase="'faq'" class="p-4"><lib-ui-faq-section [variant]="selectedVariant"></lib-ui-faq-section></div>
+                  <div *ngSwitchCase="'features'" class="p-4"><lib-ui-features-section [variant]="selectedVariant"></lib-ui-features-section></div>
+                  <div *ngSwitchCase="'gallery'" class="p-4"><lib-ui-components-gallery-section [variant]="selectedVariant"></lib-ui-components-gallery-section></div>
+                  <div *ngSwitchCase="'stats'" class="p-4"><lib-ui-components-stats-section [variant]="selectedVariant"></lib-ui-components-stats-section></div>
+                  <div *ngSwitchCase="'steps'" class="p-4"><lib-ui-steps-section [variant]="selectedVariant"></lib-ui-steps-section></div>
+                  <div *ngSwitchCase="'showcase'" class="p-4"><lib-ui-gaming-variants-showcase></lib-ui-gaming-variants-showcase></div>
+                  <div *ngSwitchCase="'testimonials'" class="p-4"><lib-ui-testimonials-section [variant]="selectedVariant"></lib-ui-testimonials-section></div>
+                  <!-- COMMERCE -->
+                  <div *ngSwitchCase="'services'" class="p-4"><lib-ui-features-section [variant]="selectedVariant" [title]="'Nuestros Servicios'"></lib-ui-features-section></div>
+                  <div *ngSwitchCase="'pricing'" class="p-4"><lib-ui-pricing-table-section [variant]="selectedVariant"></lib-ui-pricing-table-section></div>
+                  <div *ngSwitchCase="'newsletter'" class="p-4"><lib-ui-newsletter-section [variant]="selectedVariant"></lib-ui-newsletter-section></div>
+                  <!-- INTERACTIVE -->
+                  <div *ngSwitchCase="'contact'" class="p-4"><lib-ui-contact-section [variant]="selectedVariant"></lib-ui-contact-section></div>
+                  <div *ngSwitchCase="'bubble'" class="h-64 relative overflow-hidden rounded-xl border border-white/10 m-4">
+                     <lib-bubble-animation [variant]="$any(selectedVariant)"></lib-bubble-animation>
+                  </div>
+                  <div *ngSwitchCase="'tabs'" class="p-4">
+                    <lib-ui-components-tabs [variant]="selectedVariant" [showAs]="'tabs'" [tabs]="[{label:'Tab 1', sectionId:'tab1'}, {label:'Tab 2', sectionId:'tab2'}]"></lib-ui-components-tabs>
+                  </div>
+                  <div *ngSwitchCase="'accordion'" class="p-4">
+                    <lib-ui-components-accordion [variant]="selectedVariant" [items]="[{title:'Item 1', content:'Detalle 1'}, {title:'Item 2', content:'Detalle 2'}]"></lib-ui-components-accordion>
+                  </div>
+                  <div *ngSwitchCase="'button'" class="flex gap-4 justify-center items-center h-full min-h-[200px]">
+                    <lib-ui-components-button [variant]="selectedVariant">Botón</lib-ui-components-button>
+                  </div>
+                  <div *ngSwitchCase="'chip'" class="flex justify-center items-center h-full min-h-[200px]">
+                     <lib-ui-components-chip [variant]="selectedVariant" label="Chip"></lib-ui-components-chip>
+                  </div>
+                  <div *ngSwitchCase="'spinner'" class="flex justify-center items-center h-full min-h-[200px]">
+                     <lib-ui-spinner [variant]="selectedVariant"></lib-ui-spinner>
+                  </div>
+                  <div *ngSwitchCase="'breadcrumbs'" class="p-8">
+                     <lib-ui-breadcrumbs [variant]="selectedVariant" [items]="[{label:'Home', url:'/'}, {label:'Sección', url:'#'}]"></lib-ui-breadcrumbs>
+                  </div>
+                  <div *ngSwitchCase="'card-animated'" class="max-w-xs mx-auto p-4">
+                     <lib-ui-components-card-animated [variant]="selectedVariant" title="Tarjeta" description="Descripción de la tarjeta animada"></lib-ui-components-card-animated>
+                  </div>
+                  <div *ngSwitchCase="'card-product'" class="max-w-xs mx-auto p-4">
+                     <lib-card-products [variant]="selectedVariant" [product]="{name:'Producto', price:'$99', image:'', description: 'Producto de prueba'}"></lib-card-products>
+                  </div>
+                  <div *ngSwitchCase="'card-testimonial'" class="max-w-md mx-auto p-4">
+                     <lib-testimonials-card [variant]="selectedVariant" [testimonial]="{author: 'Cliente', quote: 'Excelente servicio'}"></lib-testimonials-card>
+                  </div>
+                  <div *ngSwitchCase="'image'" class="p-4 flex justify-center">
+                    <lib-ui-image [variant]="selectedVariant" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-image>
+                  </div>
+                  <div *ngSwitchCase="'table'" class="p-4">
+                    <lib-ui-components-table [variant]="selectedVariant" [rows]="[{id:1, name:'Item A'}, {id:2, name:'Item B'}]" [columns]="[{key:'id', label:'ID'}, {key:'name', label:'Nombre'}]"></lib-ui-components-table>
+                  </div>
+                  <div *ngSwitchCase="'list'" class="max-w-md mx-auto p-4">
+                    <lib-ui-list [variant]="selectedVariant" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-list>
+                  </div>
+                  <div *ngSwitchDefault class="preview-mockup default-mockup">
+                    <div class="mock-content">
+                       <p class="text-center text-white/50">Vista previa no disponible para este componente ({{ selectedComponent.type }})</p>
+                    </div>
+                  </div>
+              </div>
+            </main>
+
+            <footer class="panel-footer">
+              <button class="btn-add-modern" (click)="addToPage()">
+                Añadir componente a mi lienzo &rarr;
+              </button>
+            </footer>
+          </div>
+        </aside>
       </div>
     </div>
   `,
   styles: [`
-    .component-explorer {
+    :host {
+      display: block;
+      height: 100%;
+      --accent-glow: 0 0 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .explorer-container {
       display: flex;
       flex-direction: column;
+      height: 100%;
       gap: 1.5rem;
     }
 
-    .explorer-header h3 {
-      margin: 0 0 0.5rem 0;
-      color: var(--color-text-inverse);
-      font-size: 1.1rem;
-      font-weight: 700;
+    .explorer-header {
+      .title-v2 { font-size: 1.5rem; font-weight: 800; color: white; margin: 0; }
+      .subtitle-v2 { font-size: 0.85rem; color: #94a3b8; margin: 0.25rem 0 0; }
     }
 
-    .helper-text {
-      margin: 0;
-      color: var(--color-text-inverse-secondary);
-      font-size: 0.9rem;
-      line-height: 1.4;
-    }
-
-    .category-filter {
+    .category-nav-v2 {
       display: flex;
       gap: 0.5rem;
-      flex-wrap: wrap;
+      overflow-x: auto;
+      padding-bottom: 0.5rem;
+      
+      .cat-chip {
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        color: #94a3b8;
+        font-size: 0.75rem;
+        font-weight: 700;
+        white-space: nowrap;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        &:hover { background: rgba(255, 255, 255, 0.08); color: white; }
+        &.active {
+          background: #6366f1;
+          border-color: transparent;
+          color: white;
+          box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+        }
+      }
     }
 
-    .category-btn {
+    .explorer-sections {
+      flex: 1;
       display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 25px;
-      color: var(--color-text-inverse-secondary);
-      cursor: pointer;
-      transition: all 0.2s ease;
-      font-size: 0.85rem;
-      font-weight: 500;
-    }
-
-    .category-btn:hover {
-      background: rgba(255, 255, 255, 0.1);
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    .category-btn.active {
-      background: var(--color-primary);
-      border-color: var(--color-primary);
-      color: white;
-    }
-
-    .category-icon {
-      font-size: 1rem;
-    }
-
-    .component-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
-    }
-
-    .component-card {
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 16px;
-      padding: 1.25rem;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
+      gap: 1.5rem;
       overflow: hidden;
     }
 
-    .component-card:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.15);
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-    }
-
-    .component-card.selected {
-      background: var(--color-primary);
-      border-color: var(--color-primary-light);
-      box-shadow: 0 0 30px rgba(99, 102, 241, 0.3);
-    }
-
-    .component-card.selected::before {
-      content: '✓';
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: white;
-      color: var(--color-primary);
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-      font-size: 0.8rem;
-    }
-
-    .component-icon {
-      font-size: 2.5rem;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-
-    .component-info {
-      margin-bottom: 1rem;
-    }
-
-    .component-name {
-      margin: 0 0 0.5rem 0;
-      font-size: 1rem;
-      font-weight: 600;
-      color: var(--color-text-inverse);
-    }
-
-    .component-description {
-      margin: 0;
-      font-size: 0.85rem;
-      color: var(--color-text-inverse-secondary);
-      line-height: 1.4;
-    }
-
-    .component-category {
-      font-size: 0.75rem;
-      color: var(--color-primary);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .component-preview {
-      background: #1e293b;
-      border-radius: 20px;
-      overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .preview-header {
-      padding: 1.5rem;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .preview-title {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .preview-icon {
-      font-size: 1.5rem;
-    }
-
-    .preview-title h4 {
-      margin: 0;
-      font-size: 1.1rem;
-      color: var(--color-text-inverse);
-    }
-
-    .variant-selector {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-size: 0.9rem;
-      color: var(--color-text-inverse-secondary);
-    }
-
-    .variant-select {
-      background: #1e293b;
-      color: white;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      padding: 0.25rem 0.5rem;
-      border-radius: 6px;
-      font-size: 0.85rem;
-      min-width: 120px;
-    }
-
-    .preview-content {
-      position: relative;
-      min-height: 300px;
-      max-height: 500px;
+    .component-list-area {
+      flex: 1;
       overflow-y: auto;
+      
+      .comp-scroll-wrapper {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+        gap: 0.75rem;
+        padding-bottom: 2rem;
+      }
     }
 
-    .preview-label {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      font-size: 0.6rem;
-      color: #6366f1;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      z-index: 10;
-      background: rgba(30, 41, 59, 0.8);
-      padding: 2px 8px;
-      border-radius: 4px;
-      backdrop-filter: blur(4px);
-    }
-
-    .preview-container {
-      padding: 1.5rem;
-      height: 100%;
-    }
-
-    .preview-mockup {
-      background: #0f172a;
-      border-radius: 12px;
-      padding: 2rem;
-      height: 100%;
+    .comp-card-modern {
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 1rem;
+      padding: 1rem;
+      cursor: pointer;
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
+      text-align: center;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       position: relative;
+      overflow: hidden;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.06);
+        border-color: rgba(255, 255, 255, 0.15);
+        transform: translateY(-4px);
+      }
+
+      &.selected {
+        background: rgba(99, 102, 241, 0.1);
+        border-color: #6366f1;
+        
+        .comp-icon-box { transform: scale(1.1); color: #6366f1; }
+        .comp-select-indicator { bottom: 0; }
+      }
+
+      .comp-icon-box {
+        font-size: 2rem;
+        margin-bottom: 0.75rem;
+        transition: transform 0.3s;
+      }
+
+      .comp-meta {
+        h4 { font-size: 0.875rem; font-weight: 700; color: white; margin: 0; }
+        .comp-cat { font-size: 0.65rem; color: #6366f1; text-transform: uppercase; font-weight: 800; letter-spacing: 0.05em; }
+      }
+
+      .comp-select-indicator {
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: #6366f1;
+        box-shadow: 0 0 10px #6366f1;
+        transition: bottom 0.3s;
+      }
     }
 
-    .hero-mockup {
-      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-      flex-direction: column;
-      text-align: center;
-      color: white;
-    }
-
-    .hero-content h1 {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    .hero-content p {
-      font-size: 1.1rem;
-      margin-bottom: 2rem;
-      opacity: 0.9;
-    }
-
-    .cta-btn {
-      background: #6366f1;
-      color: white;
-      border: none;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .services-mockup {
-      padding: 1rem;
-    }
-
-    .service-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 1rem;
-      width: 100%;
-    }
-
-    .service-card {
-      background: rgba(255, 255, 255, 0.05);
-      padding: 1.5rem;
-      border-radius: 12px;
-      text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .card-icon {
-      font-size: 2rem;
-      margin-bottom: 1rem;
-    }
-
-    .service-card h3 {
-      margin: 0 0 0.5rem 0;
-      font-size: 1.1rem;
-    }
-
-    .service-card p {
-      margin: 0;
-      font-size: 0.9rem;
-      opacity: 0.8;
-    }
-
-    .contact-mockup {
-      padding: 1rem;
-    }
-
-    .contact-form {
+    /* Preview Panel */
+    .preview-panel-v2 {
+      width: 450px;
+      background: rgba(15, 23, 42, 0.4);
+      border-left: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 1.5rem;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 1rem;
-      max-width: 400px;
-      width: 100%;
+      animation: previewSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+
+      .panel-inner {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
     }
 
-    .form-input, .form-textarea {
-      padding: 0.75rem;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      color: white;
-      font-size: 0.9rem;
-    }
-
-    .form-textarea {
-      min-height: 100px;
-      resize: vertical;
-    }
-
-    .submit-btn {
-      background: #10b981;
-      color: white;
-      border: none;
-      padding: 0.75rem;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .gallery-mockup {
-      padding: 1rem;
-    }
-
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-      gap: 0.5rem;
-    }
-
-    .gallery-item {
-      aspect-ratio: 1;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .gallery-placeholder {
-      font-size: 1.5rem;
-      opacity: 0.6;
-    }
-
-    .default-mockup {
-      padding: 2rem;
-    }
-
-    .mock-content {
-      width: 100%;
-    }
-
-    .mock-line {
-      height: 12px;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 6px;
-      margin-bottom: 1rem;
-    }
-
-    .mock-line.long { width: 80%; }
-    .mock-line.medium { width: 60%; }
-    .mock-line.short { width: 40%; }
-
-    .mock-blocks {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 1rem;
-    }
-
-    .mock-blocks span {
-      width: 40px;
-      height: 40px;
-      background: rgba(255, 255, 255, 0.05);
-      border-radius: 8px;
-    }
-
-    .preview-actions {
+    .panel-header {
       padding: 1.5rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      
+      .panel-info {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.25rem;
+        .icon { font-size: 2rem; }
+        h3 { font-size: 1.125rem; font-weight: 700; color: white; margin: 0; }
+        p { font-size: 0.8rem; color: #94a3b8; margin: 0.25rem 0 0; line-height: 1.4; }
+      }
+
+      .variant-hub {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: rgba(0, 0, 0, 0.2);
+        padding: 0.5rem 1rem;
+        border-radius: 0.75rem;
+        
+        label { font-size: 0.65rem; font-weight: 800; color: #6366f1; text-transform: uppercase; }
+        .select-v2 {
+          background: transparent;
+          border: none;
+          color: white;
+          font-size: 0.85rem;
+          font-weight: 600;
+          cursor: pointer;
+          outline: none;
+        }
+      }
+    }
+
+    .preview-viewport {
+      flex: 1;
+      padding: 1rem;
+      background: #020617;
+      position: relative;
+      overflow: hidden;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+
+      .viewport-label {
+        font-size: 0.6rem;
+        font-weight: 900;
+        color: #6366f1;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.75rem;
+        opacity: 0.7;
+      }
+
+      .preview-overflow {
+        flex: 1;
+        overflow-y: auto;
+        border: 1px dashed rgba(255, 255, 255, 0.1);
+        border-radius: 1rem;
+        background: rgba(255,255,255,0.01);
+      }
     }
 
-    .add-to-page-btn {
-      background: linear-gradient(135deg, #10b981, #059669);
-      color: white;
-      border: none;
-      padding: 0.875rem 2rem;
-      border-radius: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      font-size: 0.95rem;
+    .panel-footer {
+      padding: 1.5rem;
+      background: rgba(255, 255, 255, 0.02);
+      
+      .btn-add-modern {
+        width: 100%;
+        padding: 1rem;
+        border-radius: 0.75rem;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+        border: none;
+        font-weight: 700;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.3s;
+        box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+
+        &:hover { transform: translateY(-2px); box-shadow: 0 15px 20px -3px rgba(16, 185, 129, 0.4); }
+      }
     }
 
-    .add-to-page-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
-      background: linear-gradient(135deg, #059669, #047857);
+    @keyframes previewSlide {
+      from { transform: translateX(30px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @media (max-width: 1100px) {
+      .preview-panel-v2 { display: none; }
     }
   `]
 })

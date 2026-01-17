@@ -93,11 +93,11 @@ export class VariantSelectorComponent implements OnInit {
   @Output() toggleCollapse = new EventEmitter<void>();
 
   // UI State getters/setters
-  get activeTab(): 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer' {
-    return this.uiStateService.activeTab || 'general';
+  get activeTab(): 'pages' | 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer' {
+    return this.uiStateService.activeTab || 'pages';
   }
 
-  set activeTab(value: 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer') {
+  set activeTab(value: 'pages' | 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer') {
     this.uiStateService.activeTab = value;
   }
 
@@ -134,7 +134,7 @@ export class VariantSelectorComponent implements OnInit {
     this.statsConfig = this.variantService.getCurrentStatsConfig();
   }
 
-  setActiveTab(tab: 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer') {
+  setActiveTab(tab: 'pages' | 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer') {
     this.uiStateService.setActiveTab(tab);
   }
 

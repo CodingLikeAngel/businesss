@@ -1,180 +1,149 @@
-<div class="stepper-wrapper" [class.collapsed]="isCollapsed">
-  <!-- MAIN EDITOR CONTAINER -->
-  <div class="builder-container">
-    <!-- Sidebar Navigation -->
-    <aside class="builder-sidebar">
-      <button class="collapse-btn" (click)="toggleCollapse.emit()">
-        {{ isCollapsed ? '▶' : '◀' }}
+<div class="sidebar-v2-wrapper" [class.is-collapsed]="isCollapsed">
+  <!-- Sidebar Header -->
+  <header class="sidebar-v2-header">
+    <div class="brand-v2">
+       <div class="logo-box">
+          <span class="logo-dot"></span>
+       </div>
+       <div class="brand-text" *ngIf="!isCollapsed">
+          <h1>NEON</h1>
+          <span class="version">v2.0 PREVIEW</span>
+       </div>
+    </div>
+    <button class="toggle-v2-btn" (click)="toggleCollapse.emit()">
+       <span class="chevron">{{ isCollapsed ? '»' : '«' }}</span>
+    </button>
+  </header>
+
+  <!-- Sidebar Dock (Primary Navigation) -->
+  <nav class="sidebar-v2-dock">
+    <div class="dock-top">
+      <button class="dock-item" [class.active]="activeTab === 'pages'" (click)="setActiveTab('pages')" title="Mapa de Sitio">
+        <span class="dock-icon">🗺️</span>
+        <span class="dock-label" *ngIf="!isCollapsed">Páginas</span>
       </button>
+      <button class="dock-item" [class.active]="activeTab === 'structure'" (click)="setActiveTab('structure')" title="Estructura">
+        <span class="dock-icon">🏗️</span>
+        <span class="dock-label" *ngIf="!isCollapsed">Estructura</span>
+      </button>
+      <button class="dock-item" [class.active]="activeTab === 'explorer'" (click)="setActiveTab('explorer')" title="Librería">
+        <span class="dock-icon">🧩</span>
+        <span class="dock-label" *ngIf="!isCollapsed">Bloques</span>
+      </button>
+    </div>
 
-      <div class="sidebar-nav">
-        <div
-          class="nav-item"
-          [class.active]="activeTab === 'general'"
-          [attr.activeTab]="'general'"
-          (click)="setActiveTab('general')"
-        >
-          <i>⚙️</i>
-          <div class="tooltip">Panel Global</div>
-        </div>
-        <div
-          class="nav-item"
-          [class.active]="activeTab === 'structure'"
-          [attr.activeTab]="'structure'"
-          (click)="setActiveTab('structure')"
-        >
-          <i>🏗️</i>
-          <div class="tooltip">Estructura y Orden</div>
-        </div>
-        <div
-          class="nav-item"
-          [class.active]="activeTab === 'explorer'"
-          [attr.activeTab]="'explorer'"
-          (click)="setActiveTab('explorer')"
-        >
-          <i>➕</i>
-          <div class="tooltip">Añadir Componentes</div>
-        </div>
-        <div
-          class="nav-item"
-          [class.active]="activeTab === 'content'"
-          [attr.activeTab]="'content'"
-          (click)="setActiveTab('content')"
-        >
-          <i>📝</i>
-          <div class="tooltip">Contenido de Textos</div>
-        </div>
-        <div
-          class="nav-item"
-          [class.active]="activeTab === 'design'"
-          [attr.activeTab]="'design'"
-          (click)="setActiveTab('design')"
-        >
-          <i>🎨</i>
-          <div class="tooltip">Estilos y Variantes</div>
-        </div>
-      </div>
-    </aside>
+    <div class="dock-divider" *ngIf="selectedSection || selectedElement"></div>
 
-    <div class="builder-content">
-      <!-- General Tab -->
-      <div *ngIf="activeTab === 'general'" class="tab-content">
-        <!-- Page Management Component -->
-        <lib-page-management
-          (pageSelected)="onPageSelected($event)"
-        ></lib-page-management>
+    <div class="dock-contextual" *ngIf="selectedSection || selectedElement">
+      <button class="dock-item contextual" [class.active]="activeTab === 'content'" (click)="setActiveTab('content')" title="Contenido">
+        <span class="dock-icon">✍️</span>
+        <span class="dock-label" *ngIf="!isCollapsed">Redacción</span>
+      </button>
+      <button class="dock-item contextual" [class.active]="activeTab === 'design'" (click)="setActiveTab('design')" title="Diseño">
+        <span class="dock-icon">🎨</span>
+        <span class="dock-label" *ngIf="!isCollapsed">Estilo</span>
+      </button>
+    </div>
 
-        <div class="config-group">
-          <div class="group-header">
-            <h3>Plantillas de Negocio</h3>
-            <p class="helper-text">
-              Selecciona un template predefinido para comenzar rápidamente.
-            </p>
-          </div>
-          <lib-template-selector
-            (templateApplied)="onTemplateApplied()"
-          ></lib-template-selector>
-        </div>
+    <div class="dock-bottom">
+      <div class="dock-divider"></div>
+      <button class="dock-item" [class.active]="activeTab === 'general'" (click)="setActiveTab('general')" title="Ajustes">
+        <span class="dock-icon">⚙️</span>
+        <span class="dock-label" *ngIf="!isCollapsed">Ajustes</span>
+      </button>
+    </div>
+  </nav>
 
-        <div class="config-group">
-          <div class="group-header">
-            <h3>Plantilla Personalizada</h3>
-            <p class="helper-text">
-              Guarda tu diseño actual como una plantilla para usarla más tarde.
-            </p>
-          </div>
-          <button
-            class="add-item-btn export-btn"
-            (click)="saveAsCustomTemplate()"
-          >
-            💎 Guardar Diseño Actual
-          </button>
-        </div>
+  <!-- Main Panel Area -->
+  <main class="sidebar-v2-panel" *ngIf="!isCollapsed">
+    <div class="panel-inner-v2">
+      
+      <!-- PAGES PANEL -->
+      <section class="panel-v2" *ngIf="activeTab === 'pages'">
+        <lib-page-management (pageSelected)="setActiveTab('structure')"></lib-page-management>
+      </section>
 
-        <div class="config-group">
-          <div class="group-header">
-            <h3>Ajustes Globales</h3>
-            <p class="helper-text">Variante base para todo el proyecto.</p>
-          </div>
-          <lib-ui-components-input
-            type="select"
-            [variant]="selectorVariant"
-            [(ngModel)]="globalVariant"
-            (ngModelChange)="onGlobalVariantChange()"
-            [options]="variantOptions"
-          ></lib-ui-components-input>
-          <button class="warning-btn mt-4" (click)="clearComponentVariants()">
-            🧹 Limpiar Estilos Específicos
-          </button>
-        </div>
-
-        <div class="config-group">
-          <div class="group-header">
-            <h3>Componentes Globales</h3>
-            <p class="helper-text">Edita el contenido y estilo de los componentes base.</p>
-          </div>
-          <div class="global-selection-grid">
-            <button class="action-btn" (click)="selectGlobalComponent('navbar')">🧭 Navegación</button>
-            <button class="action-btn" (click)="selectGlobalComponent('header')">🔝 Cabecera</button>
-            <button class="action-btn" (click)="selectGlobalComponent('footer')">⧉ Pie de Página</button>
-            <button class="action-btn" (click)="selectGlobalComponent('hero')">🚀 Portada Hero</button>
-            <button class="action-btn" (click)="selectGlobalComponent('bubble')">🫧 Burbujas</button>
-          </div>
-        </div>
-
-        <div class="config-group">
-          <div class="group-header">
-            <h3>Exportar / Reset</h3>
-          </div>
-          <div class="flex flex-col gap-4">
-            <button
-              class="add-item-btn"
-              style="background: rgba(255, 255, 255, 0.1); color: white"
-              (click)="exportProject()"
-            >
-              📥 Descargar JSON
-            </button>
-            <button class="reset-btn" (click)="resetConfiguration()">
-              🔴 Borrar Todo
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Structure Tab -->
-      <div *ngIf="activeTab === 'structure'" class="tab-content">
+      <!-- STRUCTURE PANEL -->
+      <section class="panel-v2" *ngIf="activeTab === 'structure'">
         <lib-section-structure
-          (addSection)="onAddSection()"
           (sectionSelected)="onSectionSelected($event)"
+          (addSection)="setActiveTab('explorer')"
         ></lib-section-structure>
-      </div>
+      </section>
 
-      <!-- Explorer Tab -->
-      <div *ngIf="activeTab === 'explorer'" class="tab-content">
+      <!-- EXPLORER PANEL -->
+      <section class="panel-v2" *ngIf="activeTab === 'explorer'">
         <lib-component-explorer
           (componentSelected)="onComponentSelected($event)"
         ></lib-component-explorer>
-      </div>
+      </section>
 
-      <!-- Content Tab -->
-      <div *ngIf="activeTab === 'content'" class="tab-content">
+      <!-- CONTENT PANEL -->
+      <section class="panel-v2" *ngIf="activeTab === 'content'">
         <lib-content-editor
-          [selectedElement]="selectedElement"
           [selectedSection]="selectedSection"
+          [selectedElement]="selectedElement"
           (contentChanged)="onContentChanged()"
         ></lib-content-editor>
-      </div>
+      </section>
 
-      <!-- Design Tab -->
-      <div *ngIf="activeTab === 'design'" class="tab-content">
+      <!-- DESIGN PANEL -->
+      <section class="panel-v2" *ngIf="activeTab === 'design'">
         <lib-design-editor
-          [selectedElement]="selectedElement"
           [selectedSection]="selectedSection"
+          [selectedElement]="selectedElement"
           (styleChanged)="onStyleChanged()"
           (variantApplied)="onVariantApplied($event)"
         ></lib-design-editor>
-      </div>
-    </div>
-  </div>
-</div>
+      </section>
 
+      <!-- GENERAL PANEL -->
+      <section class="panel-v2" *ngIf="activeTab === 'general'">
+        <header class="panel-v2-header">
+            <h2>Preferencias Globais</h2>
+            <p>Configura el ADN visual de todo tu proyecto.</p>
+        </header>
+
+        <div class="settings-v2-list">
+            <div class="setting-v2-card">
+                <label>TEMA PREDETERMINADO</label>
+                <div class="custom-select-v2">
+                    <lib-ui-components-input
+                        type="select"
+                        [options]="variantOptions"
+                        [(ngModel)]="globalVariant"
+                        (ngModelChange)="onGlobalVariantChange()"
+                        [rounded]="'md'"
+                    ></lib-ui-components-input>
+                </div>
+            </div>
+
+            <div class="actions-v2-group">
+                <button class="action-v2-btn" (click)="saveAsCustomTemplate()">
+                    <span class="icon">💾</span> 
+                    <div class="txt">
+                        <strong>Guardar Plantilla</strong>
+                        <p>Convierte este diseño en preset</p>
+                    </div>
+                </button>
+                <button class="action-v2-btn primary" (click)="exportProject()">
+                    <span class="icon">🚀</span> 
+                    <div class="txt">
+                        <strong>Exportar Código</strong>
+                        <p>Generar bundle de producción</p>
+                    </div>
+                </button>
+                <button class="action-v2-btn danger" (click)="resetConfiguration()">
+                    <span class="icon">⚠️</span> 
+                    <div class="txt">
+                        <strong>Reiniciar Proyecto</strong>
+                        <p>Borrar todo el contenido</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+      </section>
+      
+    </div>
+  </main>
+</div>
