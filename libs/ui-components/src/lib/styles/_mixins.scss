@@ -1,9 +1,44 @@
 
-// Basic Colors 
+// Basic Colors
 $neon-cyan: #22d3ee;
 $neon-pink: #ec4899;
 $dark-bg: #111827;
 $glass-border: rgba(255, 255, 255, 0.2);
+
+// Unified Gaming Theme Variables
+$unified-border-radius: 0.75rem;
+$unified-transition: all 0.3s ease;
+$unified-font-family: 'Orbitron', sans-serif;
+$unified-font-weight: 600;
+$unified-hover-scale: scale(1.02);
+$unified-active-scale: scale(0.98);
+
+@mixin unified-variant-base($bg, $color, $accent, $glow-color) {
+  --theme-bg: #{$bg};
+  --theme-color: #{$color};
+  --theme-accent: #{$accent};
+  --theme-border: 2px solid rgba(#{$accent}, 0.8);
+  --theme-shadow: 0 0 20px rgba(#{$glow-color}, 0.5), 0 4px 15px rgba(0, 0, 0, 0.3);
+  --theme-glow: 0 0 30px rgba(#{$glow-color}, 0.6);
+
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  border-radius: $unified-border-radius;
+  box-shadow: var(--theme-shadow);
+  font-family: $unified-font-family;
+  font-weight: $unified-font-weight;
+  transition: $unified-transition;
+
+  &:hover {
+    transform: $unified-hover-scale;
+    box-shadow: var(--theme-glow), 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  &:active {
+    transform: $unified-active-scale;
+  }
+}
 
 @mixin variant-primary {
   --theme-bg: #2563eb;
@@ -249,19 +284,14 @@ $glass-border: rgba(255, 255, 255, 0.2);
 }
 
 @mixin variant-mario {
-  --theme-bg: linear-gradient(135deg, #e53e3e, #3182ce);
-  --theme-color: #ffffff;
-  --theme-border: 3px solid #ff0000;
-  --theme-accent: #ffcc00;
-  --theme-shadow: 0 4px 0 #9b2c2c, 0 8px 20px rgba(255, 0, 0, 0.4);
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
-  font-family: 'Press Start 2P', monospace;
+  @include unified-variant-base(
+    linear-gradient(135deg, #e53e3e, #3182ce),
+    #ffffff,
+    #ffcc00,
+    #e53e3e
+  );
   text-transform: uppercase;
   letter-spacing: 1px;
-  border-radius: 8px;
   position: relative;
   overflow: hidden;
 
@@ -272,59 +302,74 @@ $glass-border: rgba(255, 255, 255, 0.2);
     left: -100%;
     width: 100%;
     height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-    transition: left 0.5s;
-  }
-
-  &:hover::before {
-    left: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s ease;
   }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 0 #9b2c2c, 0 12px 30px rgba(255, 0, 0, 0.6);
-  }
-
-  &:active {
-    transform: translateY(2px);
-    box-shadow: 0 2px 0 #9b2c2c;
+    &::before { left: 100%; }
   }
 }
 
 @mixin variant-zelda {
-  --theme-bg: rgba(218, 165, 32, 0.1);
-  --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(34, 139, 34, 0.5);
-  --theme-accent: #ffd700;
-  --theme-shadow: 0 0 15px #228b22;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
+  @include unified-variant-base(
+    linear-gradient(135deg, #228b22, #daa520),
+    #ffffff,
+    #ffd700,
+    #228b22
+  );
 }
 
 @mixin variant-kirby {
-  --theme-bg: rgba(255, 182, 193, 0.2);
-  --theme-color: #ff1493;
-  --theme-border: 2px solid rgba(255, 105, 180, 0.5);
+  --theme-bg: linear-gradient(135deg, #ff1493, #ffb6c1);
+  --theme-color: #ffffff;
+  --theme-border: 2px solid rgba(255, 255, 255, 0.8);
   --theme-accent: #ffffff;
-  --theme-shadow: 0 0 15px #ff69b4;
+  --theme-shadow: 0 0 20px rgba(255, 20, 147, 0.5), 0 4px 15px rgba(0, 0, 0, 0.3);
+  --theme-glow: 0 0 30px rgba(255, 105, 180, 0.6);
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
   box-shadow: var(--theme-shadow);
+  border-radius: 0.75rem;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: var(--theme-glow), 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
 @mixin variant-rayman {
-  --theme-bg: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(148, 0, 211, 0.2));
+  --theme-bg: linear-gradient(135deg, #ffd700, #9400d3);
   --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(255, 215, 0, 0.5);
+  --theme-border: 2px solid rgba(255, 215, 0, 0.8);
   --theme-accent: #ff4500;
-  --theme-shadow: 0 0 15px #ffd700;
+  --theme-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 4px 15px rgba(0, 0, 0, 0.3);
+  --theme-glow: 0 0 30px rgba(148, 0, 211, 0.6);
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
   box-shadow: var(--theme-shadow);
+  border-radius: 0.75rem;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: var(--theme-glow), 0 6px 20px rgba(0, 0, 0, 0.4);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
 }
 
 @mixin variant-lum {
@@ -998,23 +1043,14 @@ $glass-border: rgba(255, 255, 255, 0.2);
 }
 
 @mixin variant-assassins-creed {
-  --theme-bg: #ffffff;
-  --theme-color: #c0392b;
-  --theme-border: 2px solid #c0392b;
-  --theme-accent: #c0392b;
-  --theme-shadow: 0 0 10px rgba(192, 57, 43, 0.5);
-  --theme-pattern: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M10 2L18 10L10 18L2 10Z" stroke="%23c0392b" stroke-width="1" fill="none"/%3E%3C/svg%3E');
-  
-  background: var(--theme-bg);
+  @include unified-variant-base(
+    linear-gradient(135deg, #c0392b, #8b4513),
+    #ffffff,
+    #c0392b,
+    #c0392b
+  );
+  --theme-pattern: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M10 2L18 10L10 18L2 10Z" stroke="%23ffffff" stroke-width="1" fill="none" opacity="0.3"/%3E%3C/svg%3E');
   background-image: var(--theme-pattern);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
-  
-  &:hover {
-    background: #f8f9fa;
-    box-shadow: 0 0 15px rgba(192, 57, 43, 0.7);
-  }
 }
 
 @mixin variant-far-cry {
