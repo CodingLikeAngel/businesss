@@ -19,7 +19,7 @@
         (click)="selectSection($event, section)"
         [ngClass]="'hero-section--' + getVariant(section.id)"
         [applyDynamicStyles]="section.styles"
-        visualEditable
+        [visualEditable]="true"
         visualType="section"
         (visualResized)="onSectionResized(section, $event)">
         
@@ -82,7 +82,11 @@
       <!-- FEATURES (Decomposed for editing) -->
       <div *ngSwitchCase="'features'" class="editor-section cursor-pointer p-12"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
         
         <div class="max-w-7xl mx-auto">
           <div class="text-center mb-16">
@@ -94,12 +98,14 @@
               class="editor-element"
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
               (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+              [applyDynamicStyles]="section.content['titleStyles']"
             ></lib-ui-components-title>
             
             <div class="mt-4">
               <p class="text-xl text-white/70 max-w-2xl mx-auto editor-element"
                  [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_subtitle'"
-                 (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle' })">
+                 (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle' })"
+                 [applyDynamicStyles]="section.content['subtitleStyles']">
                 {{ section.content['subtitle'] || 'Descubre cómo podemos ayudarte.' }}
               </p>
             </div>
@@ -126,7 +132,11 @@
       <!-- STATS (Decomposed) -->
       <div *ngSwitchCase="'stats'" class="editor-section cursor-pointer p-16"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
         
         <div class="max-w-7xl mx-auto">
            <lib-ui-components-title
@@ -137,6 +147,7 @@
               class="editor-element mb-16 block"
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
               (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })"
+              [applyDynamicStyles]="section.content['titleStyles']"
            ></lib-ui-components-title>
 
            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
