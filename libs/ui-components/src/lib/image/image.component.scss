@@ -82,7 +82,9 @@
 }
 
 /* Resto de las variantes (adaptadas con var()) */
-@include shared.apply-all-variants('image--');
+.image-container {
+  @include shared.apply-all-variants('image--');
+}
 
 .image--primary {
   border: var(--image-border, 3px solid #3b82f6);
