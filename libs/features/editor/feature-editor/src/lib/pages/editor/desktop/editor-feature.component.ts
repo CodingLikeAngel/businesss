@@ -115,5 +115,14 @@ export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent im
     }
   }
 
+  getMergedElement(sectionId: string, elementId: string, item: any, type: string = 'element'): any {
+    return {
+      id: elementId,
+      sectionId: sectionId,
+      ...item,
+      _original: item,
+      type
+    };
+  }
 }
 

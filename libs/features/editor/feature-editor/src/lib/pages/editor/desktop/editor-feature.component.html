@@ -59,7 +59,7 @@
              <div *ngFor="let card of heroConfig.navigationCards; let i = index"
                   class="editor-element"
                   [class.is-selected]="uiStateService.selectedElement?._original === card"
-                  (click)="selectElement($event, { id: section.id + '_card_' + i, sectionId: section.id, ...card, _original: card })">
+                  (click)="selectElement($event, getMergedElement(section.id, section.id + '_card_' + i, card, 'card'))">
                <lib-ui-components-card-animated
                  [icon]="card.icon"
                  [title]="card.title"
@@ -102,7 +102,7 @@
             <div *ngFor="let feat of featuresConfig.items; let i = index" 
                  class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?._original === feat"
-                 (click)="selectElement($event, { id: section.id + '_feature_' + i, sectionId: section.id, ...feat, _original: feat })">
+                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_feature_' + i, feat, 'feature'))">
               <lib-ui-components-card-animated
                 [icon]="feat.icon"
                 [title]="feat.title"
@@ -126,7 +126,7 @@
               <div *ngFor="let stat of statsConfig.items; let i = index" 
                    class="editor-element"
                    [class.is-selected]="uiStateService.selectedElement?._original === stat"
-                   (click)="selectElement($event, { id: section.id + '_stat_' + i, sectionId: section.id, ...stat, _original: stat })">
+                   (click)="selectElement($event, getMergedElement(section.id, section.id + '_stat_' + i, stat, 'stat'))">
                   <lib-ui-components-card
                     [title]="stat.value.toString()"
                     [description]="stat.label"
@@ -172,7 +172,7 @@
             <div *ngFor="let item of serviceCardsConfig.items; let i = index" 
                  class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?._original === item"
-                 (click)="selectElement($event, { id: section.id + '_service_' + i, sectionId: section.id, ...item, _original: item })">
+                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_service_' + i, item, 'service'))">
                 <lib-ui-components-card
                   [title]="item.routeName"
                   [description]="item.description"
@@ -209,7 +209,7 @@
               <ng-container *ngFor="let product of productsConfig.items; let i = index; trackBy: trackByProductName">
                 <div class="editor-element" 
                   [class.is-selected]="uiStateService.selectedElement?._original === product"
-                  (click)="selectElement($event, { id: section.id + '_product_' + i, sectionId: section.id, ...product, _original: product })">
+                  (click)="selectElement($event, getMergedElement(section.id, section.id + '_product_' + i, product, 'product'))">
                   
                   <lib-ui-components-card-animated
                     *ngIf="i % 3 === 0"
@@ -257,7 +257,7 @@
             <div *ngFor="let t of testimonialsConfig.items; let i = index" 
                  class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?._original === t"
-                 (click)="selectElement($event, { id: section.id + '_testimonial_' + i, sectionId: section.id, ...t, _original: t })">
+                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_testimonial_' + i, t, 'testimonial'))">
                 <lib-testimonials-card
                   [testimonial]="{ quote: t.quote, author: t.author }"
                   [variant]="t.variant || getVariant(section.id)"
@@ -309,7 +309,7 @@
             <div *ngFor="let faq of faqConfig.items; let i = index" 
                  class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?._original === faq"
-                 (click)="selectElement($event, { id: section.id + '_faq_' + i, sectionId: section.id, ...faq, _original: faq })">
+                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_faq_' + i, faq, 'faq'))">
                 <lib-ui-components-accordion
                   [items]="[{ title: faq.title, content: faq.content, expanded: false }]"
                   [variant]="faq.variant || getVariant(section.id)"
@@ -339,7 +339,7 @@
              <div *ngFor="let img of galleryConfig.images" 
                   class="editor-element"
                   [class.is-selected]="uiStateService.selectedElement?._original === img"
-                  (click)="selectElement($event, { id: section.id + '_image_' + i, sectionId: section.id, ...img, _original: img })">
+                  (click)="selectElement($event, getMergedElement(section.id, section.id + '_image_' + i, img, 'image'))">
                 <lib-ui-image 
                   [src]="img.src" 
                   [alt]="img.alt"
@@ -388,7 +388,7 @@
             <lib-ui-header
               [variant]="section.content['variant'] || getVariant(section.id)"
               [title]="section.content['title'] || 'Encabezado'"
-              [subtitle]="section.content['subtitle'] || ''"
+              [subtitle]="section.content['subtitle'] || '"
               [navItems]="section.content['navItems'] || []"
               [customStyles]="section.styles || {}"
             ></lib-ui-header>
@@ -523,7 +523,7 @@
              (click)="selectElement($event, { id: section.id + '_breadcrumbs', sectionId: section.id, content: section.content, type: 'breadcrumbs', _original: section.content })">
              <lib-ui-breadcrumbs
                [variant]="section.content['variant'] || getVariant(section.id)"
-               [items]="section.content['items'] || [{ label: 'Home', url: '/' }, { label: 'Section', url: '/section' }, { label: 'Current', url: '' }]"
+               [items]="section.content['items'] || [{ label: 'Home', url: '/' }, { label: 'Section', url: '/section' }, { label: 'Current', url: ' }]"
              ></lib-ui-breadcrumbs>
           </div>
       </div>

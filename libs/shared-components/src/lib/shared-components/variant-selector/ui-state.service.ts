@@ -75,7 +75,9 @@ export class UiStateService {
       styles: { ...(element.styles || {}) }
     };
 
-    // Mapping for common library items (Product, Testimonial, Stat, Route, etc.) to standard editor content
+    const type = element.type || 'element';
+
+    // Mapping for common library items 
     if (element.name && !elementCopy.content.title) elementCopy.content.title = element.name;
     if (element.routeName && !elementCopy.content.title) elementCopy.content.title = element.routeName;
     if (element.label && !elementCopy.content.title) elementCopy.content.title = element.label;
@@ -83,7 +85,7 @@ export class UiStateService {
 
     if (element.description && !elementCopy.content.description) {
       elementCopy.content.description = element.description;
-      elementCopy.content.text = element.description; // fallback
+      elementCopy.content.text = element.description; 
     }
     if (element.quote && !elementCopy.content.description) elementCopy.content.description = element.quote;
     
@@ -96,17 +98,34 @@ export class UiStateService {
     if (element.price && !elementCopy.content.label) elementCopy.content.label = element.price;
     if (element.link && !elementCopy.content.link) elementCopy.content.link = element.link;
 
-    // Ensure common fields for color inputs
-    if (!elementCopy.styles.backgroundColor) elementCopy.styles.backgroundColor = '#000000';
-    if (!elementCopy.styles.color) elementCopy.styles.color = '#ffffff';
+    // Define keys based on type to avoid cluttering the editor
+    const typeToKeys: { [key: string]: string[] } = {
+      'title': ['title'],
+      'subtitle': ['subtitle'],
+      'cta': ['label', 'link'],
+      'form': ['title', 'subtitle'],
+      'image': ['image', 'label'],
+      'feature': ['title', 'description', 'subtitle'], 
+      'stat': ['title', 'subtitle', 'label'], 
+      'testimonial': ['title', 'description'], 
+      'product': ['title', 'description', 'label', 'image'], 
+      'service': ['title', 'description', 'image', 'link'],
+      'header': ['title', 'subtitle'],
+      'footer': ['title', 'description'],
+      'card': ['title', 'description', 'subtitle']
+    };
 
-    // Ensure standard keys exist to show inputs in ContentEditor
-    const commonKeys = ['title', 'subtitle', 'description', 'text', 'link', 'image', 'label'];
-    commonKeys.forEach(key => {
+    const keysToShow = typeToKeys[type] || ['title', 'subtitle', 'description', 'text', 'link', 'image', 'label'];
+    
+    keysToShow.forEach(key => {
       if (elementCopy.content[key] === undefined) {
          elementCopy.content[key] = '';
       }
     });
+
+    // Ensure common fields for color inputs
+    if (!elementCopy.styles.backgroundColor) elementCopy.styles.backgroundColor = '#000000';
+    if (!elementCopy.styles.color) elementCopy.styles.color = '#ffffff';
 
     return elementCopy;
   }
