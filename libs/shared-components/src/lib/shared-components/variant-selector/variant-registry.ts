@@ -62,6 +62,12 @@ export interface ComponentEditableProperties {
   table?: string[];
   form?: string[];
   title?: string[];
+  chart?: string[];
+  accordion?: string[];
+  tabs?: string[];
+  list?: string[];
+  chip?: string[];
+  gallery?: string[];
 }
 
 export const EDITABLE_PROPERTIES: ComponentEditableProperties = {
@@ -175,6 +181,36 @@ export const EDITABLE_PROPERTIES: ComponentEditableProperties = {
     'textTransform',
     'letterSpacing',
     'lineHeight'
+  ],
+  chart: [
+    'height',
+    'width',
+    'padding',
+    'margin'
+  ],
+  accordion: [
+    'gap',
+    'padding',
+    'margin'
+  ],
+  tabs: [
+    'gap',
+    'padding'
+  ],
+  list: [
+    'gap',
+    'padding',
+    'fontSize'
+  ],
+  chip: [
+    'fontSize',
+    'fontWeight',
+    'padding'
+  ],
+  gallery: [
+    'gap',
+    'gridTemplateColumns',
+    'padding'
   ]
 };
 
@@ -198,6 +234,12 @@ export function detectComponentType(element: any): keyof ComponentEditableProper
   if (type.includes('table') || tagName === 'table') return 'table';
   if (type.includes('form') || tagName === 'form') return 'form';
   if (type.includes('title') || type.includes('subtitle') || (tagName >= 'h1' && tagName <= 'h6')) return 'title';
+  if (type.includes('chart')) return 'chart';
+  if (type.includes('accordion') || type.includes('faq')) return 'accordion';
+  if (type.includes('tabs')) return 'tabs';
+  if (type.includes('list')) return 'list';
+  if (type.includes('chip')) return 'chip';
+  if (type.includes('gallery')) return 'gallery';
   
   // Detectar por clase
   if (className.includes('card')) return 'card';
