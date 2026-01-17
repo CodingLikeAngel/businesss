@@ -47,7 +47,7 @@ interface SectionVariant {
   selector: 'lib-component-explorer',
   standalone: true,
   imports: [
-    CommonModule, 
+    CommonModule,
     FormsModule,
     UIHeroSectionComponent,
     UIHeaderComponent,
@@ -62,7 +62,6 @@ interface SectionVariant {
     UIContactSectionComponent,
     UITabsComponent,
     UIAccordionComponent,
-    UIModalComponent,
     UIButtonComponent,
     UIChipComponent,
     UISpinnerComponent,
@@ -76,8 +75,7 @@ interface SectionVariant {
     BubbleAnimationComponent,
     UITestimonialsSectionComponent,
     UIListComponent,
-    UIGamingVariantsShowcaseComponent,
-    UIInputComponent
+    UIGamingVariantsShowcaseComponent
   ],
   template: `
     <div class="component-explorer">

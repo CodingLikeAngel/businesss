@@ -34,7 +34,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     LibUINavBarComponent,
     LibUIHeroSectionComponent,
     UINavBarComponent,
-    UIHeroSectionComponent,
     ReservationFormComponent,
     FaqSectionComponent,
     PricingSectionComponent,

@@ -54,8 +54,6 @@ type VariantType = typeof VARIANTS[number];
     ReservationFormComponent,
     // ServiceSectionComponent,
     FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
     PromotionsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,

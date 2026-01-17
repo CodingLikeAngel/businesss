@@ -15,10 +15,6 @@ import { MainLayoutBaseComponent } from '../main-layout-base.component';
   imports: [
     CommonModule,
     RouterModule,
-    UIHeaderComponent,
-    VariantSelectorComponent,
-    UIFooterComponent,
-    UINavBarComponent,
   ],
   templateUrl: './main-desktop-layout.component.html',
   styleUrl: './main-desktop-layout.component.scss',
