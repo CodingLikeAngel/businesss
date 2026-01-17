@@ -88,6 +88,7 @@
                  [title]="card.title"
                  [description]="card.description"
                  [variant]="card.variant || getVariant(section.id)"
+                 [applyDynamicStyles]="card.styles || {}"
                  [animationDelay]="(i * 0.1) + 's'"
                ></lib-ui-components-card-animated>
              </div>
@@ -150,6 +151,7 @@
                 [description]="feat.description"
                 [variant]="feat.variant || getVariant(section.id)"
                 [customStyles]="feat.styles || {}"
+                [applyDynamicStyles]="feat.styles || {}"
                 [animation]="'bounce'"
               ></lib-ui-components-card-animated>
             </div>
@@ -197,6 +199,7 @@
                     [image]="stat.icon"
                     [variant]="stat.variant || getVariant(section.id)"
                     [customStyles]="stat.styles || {}"
+                    [applyDynamicStyles]="stat.styles || {}"
                     [size]="'small'"
                   ></lib-ui-components-card>
               </div>
@@ -229,7 +232,7 @@
         (visualResized)="onSectionResized(section, $event)">
         <div class="container mx-auto px-6 max-w-7xl">
           <div class="text-center mb-16">
-            <lib-ui-components-title
+              <lib-ui-components-title
               [level]="section.content['level'] || titleConfig.level"
               [text]="section.content['title'] || titleConfig.text"
               [variant]="getVariant(section.id)"
@@ -237,6 +240,7 @@
               class="editor-element"
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
               (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+              [applyDynamicStyles]="section.content['titleStyles']"
               [visualEditable]="true"
               visualType="element"
               (visualMoved)="onElementMoved($event, section.id + '_title')"
@@ -259,6 +263,7 @@
                   [image]="item.imageUrl"
                   [variant]="item.variant || getVariant(section.id)"
                   [customStyles]="item.styles || {}"
+                  [applyDynamicStyles]="item.styles || {}"
                   [size]="'medium'"
                 ></lib-ui-components-card>
             </div>
@@ -293,7 +298,12 @@
               <ng-container *ngFor="let product of productsConfig.items; let i = index; trackBy: trackByProductName">
                 <div class="editor-element" 
                   [class.is-selected]="uiStateService.selectedElement?._original === product"
-                  (click)="selectElement($event, getMergedElement(section.id, section.id + '_product_' + i, product, 'product'))">
+                  (click)="selectElement($event, getMergedElement(section.id, section.id + '_product_' + i, product, 'product'))"
+                  [applyDynamicStyles]="product.styles || {}"
+                  [visualEditable]="true"
+                  visualType="element"
+                  (visualMoved)="onElementMoved($event, section.id + '_product_' + i)"
+                  (visualResized)="onElementResized($event, section.id + '_product_' + i)">
                   
                   <lib-ui-components-card-animated
                     *ngIf="i % 3 === 0"
@@ -302,6 +312,7 @@
                     [image]="product.image"
                     [variant]="product.variant || getVariant(section.id)"
                     [customStyles]="product.styles || {}"
+                    [applyDynamicStyles]="product.styles || {}"
                     [animation]="'bounce'"
                   ></lib-ui-components-card-animated>
                   
@@ -312,6 +323,7 @@
                     [description]="product.description"
                     [variant]="product.variant || getVariant(section.id)"
                     [customStyles]="product.styles || {}"
+                    [applyDynamicStyles]="product.styles || {}"
                     [size]="'medium'"
                   ></lib-ui-components-card>
                   
@@ -319,6 +331,7 @@
                     *ngIf="i % 3 === 2"
                     [product]="product"
                     [variant]="product.variant || getVariant(section.id)"
+                    [applyDynamicStyles]="product.styles || {}"
                   ></lib-card-products>
                 </div>
               </ng-container>
@@ -345,10 +358,16 @@
             <div *ngFor="let t of testimonialsConfig.items; let i = index" 
                  class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?._original === t"
-                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_testimonial_' + i, t, 'testimonial'))">
+                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_testimonial_' + i, t, 'testimonial'))"
+                 [applyDynamicStyles]="t.styles || {}"
+                 [visualEditable]="true"
+                 visualType="element"
+                 (visualMoved)="onElementMoved($event, section.id + '_testimonial_' + i)"
+                 (visualResized)="onElementResized($event, section.id + '_testimonial_' + i)">
                 <lib-testimonials-card
                   [testimonial]="{ quote: t.quote, author: t.author }"
                   [variant]="t.variant || getVariant(section.id)"
+                  [applyDynamicStyles]="t.styles || {}"
                 ></lib-testimonials-card>
             </div>
           </div>
@@ -403,10 +422,16 @@
             <div *ngFor="let promo of promotionsConfig.premiumCards; let i = index" 
                  class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?._original === promo"
-                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_promo_' + i, promo, 'promo'))">
+                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_promo_' + i, promo, 'promo'))"
+                 [applyDynamicStyles]="promo.styles || {}"
+                 [visualEditable]="true"
+                 visualType="element"
+                 (visualMoved)="onElementMoved($event, section.id + '_promo_' + i)"
+                 (visualResized)="onElementResized($event, section.id + '_promo_' + i)">
               <lib-ui-components-card-premium
                 [variant]="promo.variant || getVariant(section.id)"
                 [config]="promo"
+                [applyDynamicStyles]="promo.styles || {}"
               ></lib-ui-components-card-premium>
             </div>
           </div>
@@ -431,11 +456,17 @@
             <div *ngFor="let faq of faqConfig.items; let i = index" 
                  class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?._original === faq"
-                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_faq_' + i, faq, 'faq'))">
+                 (click)="selectElement($event, getMergedElement(section.id, section.id + '_faq_' + i, faq, 'faq'))"
+                 [applyDynamicStyles]="faq.styles || {}"
+                 [visualEditable]="true"
+                 visualType="element"
+                 (visualMoved)="onElementMoved($event, section.id + '_faq_' + i)"
+                 (visualResized)="onElementResized($event, section.id + '_faq_' + i)">
                 <lib-ui-components-accordion
                   [items]="[{ title: faq.title, content: faq.content, expanded: false }]"
                   [variant]="faq.variant || getVariant(section.id)"
                   [customStyles]="faq.styles || {}"
+                  [applyDynamicStyles]="faq.styles || {}"
                 ></lib-ui-components-accordion>
             </div>
           </div>
@@ -465,12 +496,18 @@
              <div *ngFor="let img of galleryConfig.images; let i = index" 
                   class="editor-element"
                   [class.is-selected]="uiStateService.selectedElement?._original === img"
-                  (click)="selectElement($event, getMergedElement(section.id, section.id + '_image_' + i, img, 'image'))">
+                  (click)="selectElement($event, getMergedElement(section.id, section.id + '_image_' + i, img, 'image'))"
+                  [applyDynamicStyles]="img.styles || {}"
+                  [visualEditable]="true"
+                  visualType="element"
+                  (visualMoved)="onElementMoved($event, section.id + '_image_' + i)"
+                  (visualResized)="onElementResized($event, section.id + '_image_' + i)">
                 <lib-ui-image 
                   [src]="img.src" 
                   [alt]="img.alt"
                   [variant]="img.variant || getVariant(section.id)"
                   [customStyles]="img.styles || {}"
+                  [applyDynamicStyles]="img.styles || {}"
                   [size]="'medium'"
                   [shape]="'rounded'"
                 ></lib-ui-image>
@@ -500,7 +537,12 @@
           ></lib-ui-components-title>
           <div class="editor-element" 
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_form'"
-               (click)="selectElement($event, { id: section.id + '_form', sectionId: section.id, type: 'form' })">
+               (click)="selectElement($event, { id: section.id + '_form', sectionId: section.id, type: 'form', content: section.content })"
+               [applyDynamicStyles]="section.content['formStyles']"
+               [visualEditable]="true"
+               visualType="element"
+               (visualMoved)="onElementMoved($event, section.id + '_form')"
+               (visualResized)="onElementResized($event, section.id + '_form')">
             <lib-reservation-form
               [variant]="getVariant(section.id)"
               [title]="section.content['title'] || 'Reservar Cita'"
@@ -520,13 +562,19 @@
         (visualResized)="onSectionResized(section, $event)">
           <div class="editor-element"
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_header'"
-               (click)="selectElement($event, { id: section.id + '_header', sectionId: section.id, content: section.content, type: 'header', _original: section.content })">
+               (click)="selectElement($event, { id: section.id + '_header', sectionId: section.id, content: section.content, type: 'header', _original: section.content })"
+               [applyDynamicStyles]="section.styles"
+               [visualEditable]="true"
+               visualType="element"
+               (visualMoved)="onElementMoved($event, section.id + '_header')"
+               (visualResized)="onElementResized($event, section.id + '_header')">
             <lib-ui-header
               [variant]="section.content['variant'] || getVariant(section.id)"
               [title]="section.content['title'] || 'Encabezado'"
               [subtitle]="section.content['subtitle'] || ''"
               [navItems]="section.content['navItems'] || []"
               [customStyles]="section.styles || {}"
+              [applyDynamicStyles]="section.styles || {}"
             ></lib-ui-header>
           </div>
       </div>
@@ -541,12 +589,18 @@
         (visualResized)="onSectionResized(section, $event)">
           <div class="editor-element"
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_footer'"
-               (click)="selectElement($event, { id: section.id + '_footer', sectionId: section.id, content: section.content, type: 'footer', _original: section.content })">
+               (click)="selectElement($event, { id: section.id + '_footer', sectionId: section.id, content: section.content, type: 'footer', _original: section.content })"
+               [applyDynamicStyles]="section.styles"
+               [visualEditable]="true"
+               visualType="element"
+               (visualMoved)="onElementMoved($event, section.id + '_footer')"
+               (visualResized)="onElementResized($event, section.id + '_footer')">
             <lib-ui-components-footer
               [variant]="section.content['variant'] || getVariant(section.id)"
               [title]="section.content['title'] || 'Pie de Página'"
               [description]="section.content['description'] || 'Descripción del footer'"
               [customStyles]="section.styles || {}"
+              [applyDynamicStyles]="section.styles || {}"
             ></lib-ui-components-footer>
           </div>
       </div>
@@ -561,7 +615,12 @@
         (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 max-w-3xl editor-element"
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_accordion'"
-               (click)="selectElement($event, { id: section.id + '_accordion', sectionId: section.id, content: section.content, type: 'accordion', _original: section.content })">
+               (click)="selectElement($event, { id: section.id + '_accordion', sectionId: section.id, content: section.content, type: 'accordion', _original: section.content })"
+               [applyDynamicStyles]="section.styles"
+               [visualEditable]="true"
+               visualType="element"
+               (visualMoved)="onElementMoved($event, section.id + '_accordion')"
+               (visualResized)="onElementResized($event, section.id + '_accordion')">
             
             <lib-ui-components-title *ngIf="section.content['title']"
               [level]="'h2'"
@@ -575,6 +634,7 @@
               [items]="section.content['items'] || [{ title: 'Accordion Item 1', content: 'Content 1' }, { title: 'Accordion Item 2', content: 'Content 2' }]"
               [variant]="section.content['variant'] || getVariant(section.id)"
               [customStyles]="section.styles || {}"
+              [applyDynamicStyles]="section.styles || {}"
             ></lib-ui-components-accordion>
           </div>
       </div>
@@ -589,7 +649,12 @@
         (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 max-w-2xl editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_list'"
-             (click)="selectElement($event, { id: section.id + '_list', sectionId: section.id, content: section.content, type: 'list', _original: section.content })">
+             (click)="selectElement($event, { id: section.id + '_list', sectionId: section.id, content: section.content, type: 'list', _original: section.content })"
+             [applyDynamicStyles]="section.styles"
+             [visualEditable]="true"
+             visualType="element"
+             (visualMoved)="onElementMoved($event, section.id + '_list')"
+             (visualResized)="onElementResized($event, section.id + '_list')">
              <lib-ui-list
                [items]="section.content['items'] || ['Item 1', 'Item 2', 'Item 3']"
                [variant]="section.content['variant'] || getVariant(section.id)"
@@ -608,7 +673,12 @@
         (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 max-w-4xl editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_newsletter'"
-             (click)="selectElement($event, { id: section.id + '_newsletter', sectionId: section.id, content: section.content, type: 'newsletter', _original: section.content })">
+             (click)="selectElement($event, { id: section.id + '_newsletter', sectionId: section.id, content: section.content, type: 'newsletter', _original: section.content })"
+             [applyDynamicStyles]="section.styles"
+             [visualEditable]="true"
+             visualType="element"
+             (visualMoved)="onElementMoved($event, section.id + '_newsletter')"
+             (visualResized)="onElementResized($event, section.id + '_newsletter')">
              <lib-ui-newsletter-section
                [variant]="section.content['variant'] || getVariant(section.id)"
                [title]="section.content['title'] || 'Suscríbete a nuestro boletín'"
@@ -627,7 +697,12 @@
         (visualResized)="onSectionResized(section, $event)">
           <div class="editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_steps'"
-             (click)="selectElement($event, { id: section.id + '_steps', sectionId: section.id, content: section.content, type: 'steps', _original: section.content })">
+             (click)="selectElement($event, { id: section.id + '_steps', sectionId: section.id, content: section.content, type: 'steps', _original: section.content })"
+             [applyDynamicStyles]="section.styles"
+             [visualEditable]="true"
+             visualType="element"
+             (visualMoved)="onElementMoved($event, section.id + '_steps')"
+             (visualResized)="onElementResized($event, section.id + '_steps')">
              <lib-ui-steps-section
                [variant]="section.content['variant'] || getVariant(section.id)"
              ></lib-ui-steps-section>
@@ -644,7 +719,12 @@
         (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 max-w-4xl editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_table'"
-             (click)="selectElement($event, { id: section.id + '_table', sectionId: section.id, content: section.content, type: 'table', _original: section.content })">
+             (click)="selectElement($event, { id: section.id + '_table', sectionId: section.id, content: section.content, type: 'table', _original: section.content })"
+             [applyDynamicStyles]="section.styles"
+             [visualEditable]="true"
+             visualType="element"
+             (visualMoved)="onElementMoved($event, section.id + '_table')"
+             (visualResized)="onElementResized($event, section.id + '_table')">
              <lib-ui-components-title *ngIf="section.content['title']"
                 [level]="'h3'"
                 [text]="section.content['title']"
@@ -669,7 +749,12 @@
         (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 max-w-4xl editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_tabs'"
-             (click)="selectElement($event, { id: section.id + '_tabs', sectionId: section.id, content: section.content, type: 'tabs', _original: section.content })">
+             (click)="selectElement($event, { id: section.id + '_tabs', sectionId: section.id, content: section.content, type: 'tabs', _original: section.content })"
+             [applyDynamicStyles]="section.styles"
+             [visualEditable]="true"
+             visualType="element"
+             (visualMoved)="onElementMoved($event, section.id + '_tabs')"
+             (visualResized)="onElementResized($event, section.id + '_tabs')">
              <lib-ui-components-tabs
                [variant]="section.content['variant'] || getVariant(section.id)"
                [tabs]="section.content['tabs'] || [{ label: 'Tab 1', content: 'Content for Tab 1' }, { label: 'Tab 2', content: 'Content for Tab 2' }]"
@@ -688,7 +773,12 @@
         (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 max-w-4xl editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_breadcrumbs'"
-             (click)="selectElement($event, { id: section.id + '_breadcrumbs', sectionId: section.id, content: section.content, type: 'breadcrumbs', _original: section.content })">
+             (click)="selectElement($event, { id: section.id + '_breadcrumbs', sectionId: section.id, content: section.content, type: 'breadcrumbs', _original: section.content })"
+             [applyDynamicStyles]="section.styles"
+             [visualEditable]="true"
+             visualType="element"
+             (visualMoved)="onElementMoved($event, section.id + '_breadcrumbs')"
+             (visualResized)="onElementResized($event, section.id + '_breadcrumbs')">
              <lib-ui-breadcrumbs
                [variant]="section.content['variant'] || getVariant(section.id)"
                [items]="section.content['items'] || [{ label: 'Home', url: '/' }, { label: 'Section', url: '/section' }, { label: 'Current', url: '' }]"
@@ -706,7 +796,12 @@
         (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 flex justify-center gap-4 editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_chip'"
-             (click)="selectElement($event, { id: section.id + '_chip', sectionId: section.id, content: section.content, type: 'chip', _original: section.content })">
+             (click)="selectElement($event, { id: section.id + '_chip', sectionId: section.id, content: section.content, type: 'chip', _original: section.content })"
+             [applyDynamicStyles]="section.styles"
+             [visualEditable]="true"
+             visualType="element"
+             (visualMoved)="onElementMoved($event, section.id + '_chip')"
+             (visualResized)="onElementResized($event, section.id + '_chip')">
              <lib-ui-chip
                [variant]="section.content['variant'] || getVariant(section.id)"
                [label]="section.content['label'] || 'Chip Label'"
@@ -723,7 +818,12 @@
         (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 flex justify-center editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_spinner'"
-             (click)="selectElement($event, { id: section.id + '_spinner', sectionId: section.id, content: section.content, type: 'spinner', _original: section.content })">
+             (click)="selectElement($event, { id: section.id + '_spinner', sectionId: section.id, content: section.content, type: 'spinner', _original: section.content })"
+             [applyDynamicStyles]="section.styles"
+             [visualEditable]="true"
+             visualType="element"
+             (visualMoved)="onElementMoved($event, section.id + '_spinner')"
+             (visualResized)="onElementResized($event, section.id + '_spinner')">
              <lib-ui-spinner
                [variant]="section.content['variant'] || getVariant(section.id)"
                [size]="'lg'"
@@ -741,7 +841,12 @@
         (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto max-w-4xl p-10 backdrop-blur-2xl bg-white/5 rounded-[2rem] border border-white/10 shadow-2xl editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_chart'"
-             (click)="selectElement($event, { id: section.id + '_chart', sectionId: section.id, content: section.content, type: 'chart', _original: section.content })">
+             (click)="selectElement($event, { id: section.id + '_chart', sectionId: section.id, content: section.content, type: 'chart', _original: section.content })"
+             [applyDynamicStyles]="section.styles"
+             [visualEditable]="true"
+             visualType="element"
+             (visualMoved)="onElementMoved($event, section.id + '_chart')"
+             (visualResized)="onElementResized($event, section.id + '_chart')">
              
              <lib-ui-components-title *ngIf="section.content['title']"
                 [level]="'h2'"
@@ -770,7 +875,12 @@
         (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_showcase'"
-             (click)="selectElement($event, { id: section.id + '_showcase', sectionId: section.id, content: section.content, type: 'showcase', _original: section.content })">
+             (click)="selectElement($event, { id: section.id + '_showcase', sectionId: section.id, content: section.content, type: 'showcase', _original: section.content })"
+             [applyDynamicStyles]="section.styles"
+             [visualEditable]="true"
+             visualType="element"
+             (visualMoved)="onElementMoved($event, section.id + '_showcase')"
+             (visualResized)="onElementResized($event, section.id + '_showcase')">
              <lib-ui-gaming-variants-showcase></lib-ui-gaming-variants-showcase>
           </div>
       </div>
@@ -800,9 +910,14 @@
                 </p>
              </div>
 
-             <div class="editor-element inline-block"
-                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_cta'"
-                (click)="selectElement($event, { id: section.id + '_cta', sectionId: section.id, content: section.content, type: 'cta', _original: section.content })">
+              <div class="editor-element inline-block"
+                 [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_cta'"
+                 (click)="selectElement($event, { id: section.id + '_cta', sectionId: section.id, content: section.content, type: 'cta', _original: section.content })"
+                 [applyDynamicStyles]="section.content['ctaStyles']"
+                 [visualEditable]="true"
+                 visualType="element"
+                 (visualMoved)="onElementMoved($event, section.id + '_cta')"
+                 (visualResized)="onElementResized($event, section.id + '_cta')">
                 <lib-ui-components-button
                   [variant]="section.content['variant'] || getVariant(section.id)"
                   [size]="'lg'"

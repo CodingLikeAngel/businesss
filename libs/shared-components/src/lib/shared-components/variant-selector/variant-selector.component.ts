@@ -364,9 +364,18 @@ export class VariantSelectorComponent implements OnInit {
           if (content[key] !== undefined) updates.content[key] = content[key];
         });
         if (variant) updates.content.variant = variant;
+        
+        // Map styles to the correct field (title -> titleStyles)
+        if (styles && Object.keys(styles).length > 0) {
+          const styleKey = this.selectedElement.type + 'Styles';
+          updates.content[styleKey] = { ...(content[styleKey] || {}), ...styles };
+        }
       }
 
-      if (!isListItem && styles) {
+      // If it's a section-level element (not in a list) but NOT a field mapper, 
+      // it might be the section itself? No, section is handled in onStyleChanged.
+      // But just in case, if there are styles and no content-specific mapping:
+      if (!isListItem && !isTopLevelFieldMapper && styles) {
         updates.styles = styles;
       }
 
@@ -513,10 +522,12 @@ export class VariantSelectorComponent implements OnInit {
       this.selectedSection.content.variant = variantId;
       clearManualStyles(this.selectedSection);
       this.updateGlobalConfigFromSelection();
+      this.onStyleChanged();
     } else if (this.selectedSection) {
       this.selectedSection.variant = variantId;
       clearManualStyles(this.selectedSection);
       this.variantService.setComponentVariant(this.selectedSection.id, variantId);
+      this.onStyleChanged();
     } else if (this.selectedElement) {
       this.selectedElement.variant = variantId;
       clearManualStyles(this.selectedElement);
@@ -525,6 +536,7 @@ export class VariantSelectorComponent implements OnInit {
       if (this.selectedElement['sectionId']) {
         this.variantService.setComponentVariant(this.selectedElement['sectionId'], variantId);
       }
+      this.onStyleChanged();
     }
   }
 }

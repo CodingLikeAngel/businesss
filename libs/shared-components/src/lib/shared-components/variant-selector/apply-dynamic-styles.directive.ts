@@ -33,12 +33,13 @@ export class ApplyDynamicStylesDirective implements OnChanges {
     // Aplicar nuevos estilos
     Object.keys(styles).forEach(key => {
       const value = styles[key];
+      const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
+
       if (value !== undefined && value !== null && value !== '') {
-        // Convertir camelCase a kebab-case para CSS
-        const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
         this.renderer.setStyle(this.el.nativeElement, cssKey, value);
-        
         console.log(`✅ Applied style: ${cssKey} = ${value}`);
+      } else {
+        this.renderer.removeStyle(this.el.nativeElement, cssKey);
       }
     });
   }

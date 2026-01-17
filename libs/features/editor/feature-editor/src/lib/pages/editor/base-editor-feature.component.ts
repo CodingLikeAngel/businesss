@@ -166,6 +166,15 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     if (event) {
       event.stopPropagation();
     }
+
+    // Auto-populate styles from content if missing (for top-level section elements)
+    if (element.type && element.content && !element.styles) {
+      const styleKey = element.type + 'Styles';
+      if (element.content[styleKey]) {
+        element.styles = { ...element.content[styleKey] };
+      }
+    }
+
     console.log('Selecting element:', element);
     this.uiStateService.selectElement(element);
   }
