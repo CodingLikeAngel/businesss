@@ -990,11 +990,19 @@ export class DesignEditorComponent implements OnChanges {
     }
   }
 
+  get target() {
+    return this.selectedSection || this.selectedElement;
+  }
+
   get targetStyles() {
-    return this.selectedSection?._original?.styles || 
-           this.selectedSection?.styles || 
-           this.selectedElement?._original?.styles || 
-           this.selectedElement?.styles || {};
+    const target = this.target;
+    if (!target) return {};
+    
+    // Ensure styles object exists reference
+    if (!target.styles) {
+      target.styles = {};
+    }
+    return target.styles;
   }
 
   updateEditableProperties() {
@@ -1026,8 +1034,11 @@ export class DesignEditorComponent implements OnChanges {
   }
 
   updateStyle(property: string, value: any) {
-    if (this.targetStyles) {
-      this.targetStyles[property] = value;
+    if (this.target) {
+      if (!this.target.styles) {
+        this.target.styles = {};
+      }
+      this.target.styles[property] = value;
       this.styleChanged.emit();
     }
   }

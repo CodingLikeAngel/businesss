@@ -372,6 +372,13 @@ export class VariantSelectorComponent implements OnInit {
         if (styles && Object.keys(styles).length > 0) {
           const styleKey = this.selectedElement.type + 'Styles';
           updates.content[styleKey] = { ...(content[styleKey] || {}), ...styles };
+          
+          // CRITICAL FIX: For footer/header, ALSO update section.styles
+          // because the template reads section.styles for customStyles input
+          if (this.selectedElement.type === 'footer' || this.selectedElement.type === 'header') {
+            updates.styles = styles;
+            console.log(`🔧 Updating ${this.selectedElement.type} section.styles:`, styles);
+          }
         }
       }
 
@@ -467,9 +474,17 @@ export class VariantSelectorComponent implements OnInit {
 
     const isGlobalElement = ['navbar', 'header', 'footer'].includes(this.selectedElement.id) || this.selectedElement.isGlobal;
     if (isGlobalElement) {
-      if (this.selectedElement.type === 'header') this.variantService.setHeaderConfig(source);
-      else if (this.selectedElement.type === 'footer') this.variantService.setFooterConfig(source);
-      else if (this.selectedElement.type === 'navbar') this.variantService.setNavBarConfig(source);
+      // Merge element styles into customStyles for the config
+      const configWithStyles = {
+        ...source,
+        customStyles: { ...(source.customStyles || {}), ...(source.styles || {}) }
+      };
+      
+      console.log(`🌍 Updating global ${this.selectedElement.type} config with styles:`, configWithStyles.customStyles);
+      
+      if (this.selectedElement.type === 'header') this.variantService.setHeaderConfig(configWithStyles);
+      else if (this.selectedElement.type === 'footer') this.variantService.setFooterConfig(configWithStyles);
+      else if (this.selectedElement.type === 'navbar') this.variantService.setNavBarConfig(configWithStyles);
     }
   }
 

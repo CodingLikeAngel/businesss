@@ -21,6 +21,15 @@
 
   @include shared.apply-all-variants('variant-');
   
+  // CRITICAL: Force inline styles to override variant backgrounds
+  &[style*="background"] {
+    background: var(--theme-bg) !important;
+  }
+  
+  &[style*="background-color"] {
+    background-color: var(--theme-bg) !important;
+  }
+  
   @media (min-width: 1024px) {
     padding: 6rem 4rem 4rem;
   }

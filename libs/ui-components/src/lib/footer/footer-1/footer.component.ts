@@ -36,12 +36,17 @@ export const footerVariants = [
 export type FooterVariant = typeof footerVariants[number];
 
 export interface FooterCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--footer-bg'?: string;
+  '--footer-text'?: string;
+  '--footer-accent'?: string;
   '--footer-color'?: string;
   '--footer-border'?: string;
   '--footer-shadow'?: string;
   '--footer-hover-bg'?: string;
   '--footer-hover-shadow'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -98,13 +103,34 @@ export class UIFooterComponent implements OnInit {
   titleClasses = computed(() => ['footer-title', `footer-title--${this.variant()}`]);
   
   footerStyles = computed(() => {
-    const styles: any = { ...this.customStyles() };
-    if (styles['backgroundColor']) {
-      styles['--theme-bg'] = styles['backgroundColor'];
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    // DEBUG: Log what we're receiving
+    console.log('🦶 Footer customStyles received:', customStyles);
+    
+    if (customStyles['backgroundColor']) {
+      // Set CSS variable
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--footer-bg'] = customStyles['backgroundColor'];
+      // Set direct property - Angular will apply this with higher specificity
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
     }
-    if (styles['color']) {
-      styles['--theme-color'] = styles['color'];
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--footer-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
     }
+    
+    // Copy any other custom styles
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+    
     return styles;
   });
 

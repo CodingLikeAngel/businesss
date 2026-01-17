@@ -47,14 +47,16 @@ export class UIHeaderComponent {
   headerStyles = computed(() => {
     const styles: any = { ...this.customStyles() };
     
-    // If a manual background color is provided, it should set --theme-bg
-    // so it interacts correctly with our CSS variable system.
+    // If a manual background color is provided, it should set --theme-bg with !important
+    // to override variant-specific backgrounds
     if (styles['backgroundColor']) {
       styles['--theme-bg'] = styles['backgroundColor'];
+      styles['background'] = `${styles['backgroundColor']} !important`;
     }
     
     if (styles['color']) {
       styles['--theme-color'] = styles['color'];
+      styles['color'] = `${styles['color']} !important`;
     }
 
     return styles;
