@@ -172,6 +172,58 @@ import { FormsModule } from '@angular/forms';
                 placeholder="https://..."
               />
             </div>
+
+            <!-- List Items Editor (for features, testimonials, etc.) -->
+            <div *ngIf="selectedSection.content.items?.length !== undefined" class="items-editor mt-6">
+              <div class="flex justify-between items-center mb-4">
+                <h5>Elementos de Lista ({{ selectedSection.content.items?.length || 0 }})</h5>
+                <button class="add-mini-btn px-3 py-1 bg-primary/20 text-primary border border-primary/30 rounded-md text-[10px] font-bold hover:bg-primary/40 transition-colors"
+                        (click)="addItem(selectedSection.content.items)">
+                  ✚ AÑADIR
+                </button>
+              </div>
+
+              <div *ngIf="selectedSection.content.items?.length === 0" class="text-center py-4 bg-white/5 rounded-lg border border-dashed border-white/10 mb-4">
+                <p class="text-[10px] text-white/40">Sin elementos. Haz clic en "Añadir".</p>
+              </div>
+
+              <div *ngFor="let item of selectedSection.content.items; let i = index" class="item-edit-box p-4 bg-white/5 rounded-lg mb-4 border border-white/10 relative group">
+                <button class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 text-red-400 hover:text-red-500 transition-all p-1"
+                        (click)="removeItem(selectedSection.content.items, i)">
+                  🗑️
+                </button>
+                
+                <div class="flex justify-between items-center mb-2">
+                  <span class="text-xs font-bold text-primary">ITEM #{{ i + 1 }}</span>
+                </div>
+                <div class="form-group mb-2">
+                  <label class="text-[10px]">Título / Nombre:</label>
+                  <input type="text" [(ngModel)]="item.title" (ngModelChange)="onContentChange()" placeholder="Título..." class="text-xs !p-2" />
+                  <input *ngIf="item.name !== undefined" type="text" [(ngModel)]="item.name" (ngModelChange)="onContentChange()" placeholder="Nombre..." class="text-xs !p-2 mt-1" />
+                  <input *ngIf="item.author !== undefined" type="text" [(ngModel)]="item.author" (ngModelChange)="onContentChange()" placeholder="Autor..." class="text-xs !p-2 mt-1" />
+                </div>
+                <div class="form-group mb-0" *ngIf="item.description !== undefined || item.quote !== undefined || item.text !== undefined">
+                  <label class="text-[10px]">Descripción / Cita:</label>
+                  <textarea [(ngModel)]="item.description || item.quote || item.text" (ngModelChange)="onContentChange()" rows="2" class="text-xs !p-2"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Chart Data Editor -->
+            <div *ngIf="selectedSection.type === 'chart'" class="chart-editor mt-6">
+               <h5>Configuración del Gráfico</h5>
+               <div class="form-group">
+                 <label>Tipo de Gráfico:</label>
+                 <select [(ngModel)]="selectedSection.content.chartType" (ngModelChange)="onContentChange()">
+                   <option value="bar">Barras</option>
+                   <option value="line">Líneas</option>
+                   <option value="pie">Circular</option>
+                   <option value="doughnut">Doughnut</option>
+                   <option value="radar">Radar</option>
+                   <option value="area">Área</option>
+                 </select>
+               </div>
+            </div>
           </div>
         </div>
       </div>
@@ -215,6 +267,26 @@ import { FormsModule } from '@angular/forms';
       }
 
       .content-form {
+        h5 {
+          font-size: 0.8rem;
+          color: var(--color-primary);
+          margin-bottom: 1rem;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          border-left: 3px solid var(--color-primary);
+          padding-left: 10px;
+        }
+
+        .items-editor {
+          .item-edit-box {
+            transition: all 0.2s ease;
+            &:hover {
+              background: rgba(255, 255, 255, 0.08);
+              border-color: var(--color-primary);
+            }
+          }
+        }
+
         .form-row {
           display: grid;
           grid-template-columns: 1fr 1fr;
@@ -277,5 +349,27 @@ export class ContentEditorComponent {
 
   onContentChange() {
     this.contentChanged.emit();
+  }
+
+  addItem(items: any[]) {
+    if (!items) return;
+    
+    // Create a generic item based on existing ones or a default one
+    const newItem = items.length > 0 
+      ? JSON.parse(JSON.stringify(items[0]))
+      : { title: 'Nuevo Elemento', description: 'Descripción de ejemplo', icon: 'star' };
+      
+    if (newItem.id) {
+       newItem.id = `item_${new Date().getTime()}`;
+    }
+    
+    items.push(newItem);
+    this.onContentChange();
+  }
+
+  removeItem(items: any[], index: number) {
+    if (!items || items.length <= index) return;
+    items.splice(index, 1);
+    this.onContentChange();
   }
 }

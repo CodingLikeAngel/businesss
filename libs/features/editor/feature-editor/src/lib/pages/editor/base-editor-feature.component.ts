@@ -21,6 +21,7 @@ import {
   Testimonial,
   StatsConfig,
   FeaturesConfig,
+  ChartConfig,
   UiStateService,
 } from '@negocio/shared-components';
 import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
@@ -59,6 +60,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
   testimonialsConfig: TestimonialsConfig;
   statsConfig: StatsConfig;
   featuresConfig: FeaturesConfig;
+  chartConfig: ChartConfig;
 
   editorState: EditorState;
   modalState: ModalState;
@@ -102,6 +104,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     this.testimonialsConfig = this.variantService.getCurrentTestimonialsConfig();
     this.statsConfig = this.variantService.getCurrentStatsConfig();
     this.featuresConfig = this.variantService.getCurrentFeaturesConfig();
+    this.chartConfig = this.variantService.getCurrentChartConfig();
 
     this.editorState = this.editorService.getCurrentEditorState();
     this.modalState = this.modalService.getCurrentModalState();
@@ -127,7 +130,8 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
       this.variantService.productsConfig$.subscribe((config) => (this.productsConfig = config)),
       this.variantService.testimonialsConfig$.subscribe((config) => (this.testimonialsConfig = config)),
       this.variantService.statsConfig$.subscribe((config) => (this.statsConfig = config)),
-      this.variantService.featuresConfig$.subscribe((config) => (this.featuresConfig = config))
+      this.variantService.featuresConfig$.subscribe((config) => (this.featuresConfig = config)),
+      this.variantService.chartConfig$.subscribe((config) => (this.chartConfig = config))
     );
 
     this.editorStateSub = this.editorService.editorState$.subscribe((state) => {

@@ -33,7 +33,9 @@ import {
   UIBreadcrumbsComponent,
   UIChipComponent,
   UISpinnerComponent,
-  UITooltipComponent
+  UITooltipComponent,
+  UIChartComponent,
+  UIGamingVariantsShowcaseComponent
 } from '@negocio/ui-components';
 import { Product, Testimonial, PageSection, VariantService } from '@negocio/shared-components';
 import { PromotionsSectionComponent } from '../../../components/promotions-section/promotions-section.component';
@@ -76,7 +78,9 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
     UIBreadcrumbsComponent,
     UIChipComponent,
     UISpinnerComponent,
-    UITooltipComponent
+    UITooltipComponent,
+    UIChartComponent,
+    UIGamingVariantsShowcaseComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

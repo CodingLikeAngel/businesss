@@ -232,6 +232,29 @@ export interface FeaturesConfig {
   items: FeatureItem[];
 }
 
+export interface CtaConfig {
+  variant: string;
+  title: string;
+  subtitle: string;
+  buttonLabel: string;
+  buttonLink: string;
+  customStyles?: { [key: string]: string };
+}
+
+export interface ChartConfig {
+   variant: string;
+   type: 'bar' | 'line' | 'pie' | 'doughnut' | 'radar' | 'area';
+   data: {
+     labels: string[];
+     datasets: {
+       label: string;
+       data: number[];
+       backgroundColor?: string | string[];
+       borderColor?: string | string[];
+     }[];
+   };
+}
+
 export interface ProductsConfig {
   variant: string;
   items: Product[];
@@ -239,7 +262,7 @@ export interface ProductsConfig {
 
 export interface PageSection {
   id: string;
-  type: 'hero' | 'services' | 'products' | 'testimonials' | 'pricing' | 'promotions' | 'faq' | 'gallery' | 'contact' | 'bubble' | 'features' | 'stats';
+  type: 'hero' | 'services' | 'products' | 'testimonials' | 'pricing' | 'promotions' | 'faq' | 'gallery' | 'contact' | 'bubble' | 'features' | 'stats' | 'newsletter' | 'steps' | 'table' | 'breadcrumbs' | 'chip' | 'spinner' | 'chart' | 'showcase' | 'tabs' | 'accordion' | 'list' | 'header' | 'footer' | 'navBar';
   label: string; // User friendly name
   visible: boolean;
   name: string;
@@ -642,6 +665,21 @@ export class VariantService {
     ]
   });
 
+  private chartConfigSubject = new BehaviorSubject<ChartConfig>({
+    variant: 'secondary',
+    type: 'bar',
+    data: {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio'],
+      datasets: [
+        {
+          label: 'Ventas 2024',
+          data: [65, 59, 80, 81, 56, 55],
+          backgroundColor: ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899']
+        }
+      ]
+    }
+  });
+
   private featuresConfigSubject = new BehaviorSubject<FeaturesConfig>({
     variant: 'glass',
     items: [
@@ -705,6 +743,17 @@ export class VariantService {
     { id: 'sec_contact', type: 'contact', label: 'Contacto y Formulario', visible: true, name: '', styles: {}, content: {
       title: 'Solicita tu Demo Personalizada'
     }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_cta', type: 'hero', label: 'Llamada a la Acción', visible: true, name: '', styles: {}, content: {
+      title: '¿Listo para empezar?',
+      subtitle: 'Únete a miles de usuarios que ya están mejorando sus procesos.',
+      ctaLabel: 'Empezar ahora',
+      variant: 'neon'
+    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
+    { id: 'sec_chart', type: 'chart', label: 'Dashboard de Datos', visible: true, name: '', styles: {}, content: {
+      title: 'Rendimiento en tiempo real',
+      chartType: 'line',
+      variant: 'glass'
+    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
   ]);
   sections$ = this.sectionsSubject.asObservable();
 
@@ -728,6 +777,7 @@ export class VariantService {
   pages$ = this.pagesSubject.asObservable();
   currentPage$ = this.currentPageSubject.asObservable();
   statsConfig$ = this.statsConfigSubject.asObservable();
+  chartConfig$ = this.chartConfigSubject.asObservable();
 
 
   
@@ -1252,6 +1302,16 @@ export class VariantService {
     this.saveToLocalStorage();
   }
 
+  getCurrentChartConfig(): ChartConfig {
+    return this.chartConfigSubject.getValue();
+  }
+
+  setChartConfig(config: Partial<ChartConfig>): void {
+    const current = this.chartConfigSubject.getValue();
+    this.chartConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
+  }
+
   saveToLocalStorage() {
     if (typeof window !== 'undefined' && window.localStorage) {
       const state = {
@@ -1268,6 +1328,7 @@ export class VariantService {
         promotions: this.promotionsConfigSubject.getValue(),
         gallery: this.galleryConfigSubject.getValue(),
         products: this.productsConfigSubject.getValue(),
+        chart: this.chartConfigSubject.getValue(),
         globalVariant: this.globalVariantSubject.getValue(),
         componentVariants: this.componentVariantsSubject.getValue(),
         sections: this.sectionsSubject.getValue(),

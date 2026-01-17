@@ -658,6 +658,22 @@ export class ComponentExplorerComponent implements OnInit {
       category: 'content'
     },
     {
+      type: 'cta',
+      label: 'Llamada a la Acción (CTA)',
+      icon: '📢',
+      variants: ['glass', 'neon', 'cyberpunk', 'minimal', 'mario'],
+      description: 'Sección enfocada en convertir usuarios con un botón destacado',
+      category: 'content'
+    },
+    {
+      type: 'contact',
+      label: 'Formulario de Contacto',
+      icon: '📬',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Formulario de reserva o contacto para tus clientes',
+      category: 'content'
+    },
+    {
       type: 'header',
       label: 'Encabezado Global',
       icon: '🏳️',
@@ -798,6 +814,22 @@ export class ComponentExplorerComponent implements OnInit {
       category: 'interactive'
     },
     {
+      type: 'chart',
+      label: 'Gráficos y Datos',
+      icon: '📈',
+      variants: ['primary', 'secondary', 'glass', 'neon', 'cyberpunk'],
+      description: 'Visualización de datos con gráficos interactivos (Barras, Líneas, etc.)',
+      category: 'content'
+    },
+    {
+      type: 'list',
+      label: 'Lista de Items',
+      icon: '📋',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Lista simple de elementos con viñetas personalizadas',
+      category: 'content'
+    },
+    {
       type: 'modal',
       label: 'Modal / Popup',
       icon: '🔲',
@@ -845,8 +877,6 @@ export class ComponentExplorerComponent implements OnInit {
       description: 'Navegación de migas de pan',
       category: 'interactive'
     },
-
-    // --- CARDS & MEDIA ---
     {
       type: 'card-animated',
       label: 'Tarjeta Animada',
@@ -896,6 +926,7 @@ export class ComponentExplorerComponent implements OnInit {
       category: 'interactive'
     }
   ];
+
 
   @Output() componentSelected = new EventEmitter<{ component: SectionVariant; variant: string }>();
 

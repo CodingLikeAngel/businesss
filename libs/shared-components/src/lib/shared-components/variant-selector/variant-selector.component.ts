@@ -283,62 +283,19 @@ export class VariantSelectorComponent implements OnInit {
     const oldVariant = isNaN(Number(source.variant)) ? source.variant : source.variant?.(); // Handle potential signal
     const isSignal = typeof source.variant === 'function';
 
-    // If this is a section element (has sectionId), use immutable update
-    if (this.selectedElement['sectionId']) {
-      const sectionId = this.selectedElement['sectionId'];
-      
-      // Build the updates object
-      const updates: any = {};
-      
-      if (content) {
-        updates.content = {
-          title: content.title,
-          subtitle: content.subtitle,
-          description: content.description,
-          text: content.text,
-          label: content.label,
-          link: content.link,
-          image: content.image,
-          variant: variant
-        };
-        
-        // Remove undefined values
-        Object.keys(updates.content).forEach(key => {
-          if (updates.content[key] === undefined) {
-            delete updates.content[key];
-          }
-        });
-      }
-      
-      if (styles) {
-        updates.styles = styles;
-      }
-      
-      // Use the new immutable update method
-      this.variantService.updateSection(sectionId, updates);
-      
-      // Also update variant mapping
-      if (variant) {
-        this.variantService.setComponentVariant(sectionId, variant);
-      }
-      
-      return; // Exit early, no need for old reference-based logic
-    }
+    // 1. Determine element context
+    const isListItem = this.selectedElement.id.includes('_feature_') || 
+                      this.selectedElement.id.includes('_stat_') || 
+                      this.selectedElement.id.includes('_service_') ||
+                      this.selectedElement.id.includes('_product_') ||
+                      this.selectedElement.id.includes('_testimonial_') ||
+                      this.selectedElement.id.includes('_faq_') ||
+                      this.selectedElement.id.includes('_image_') ||
+                      this.selectedElement.id.includes('_card_');
+    
+    const isTopLevelFieldMapper = ['title', 'subtitle', 'cta', 'form', 'header', 'footer'].includes(this.selectedElement.type);
 
-    // Fallback to old logic for elements without sectionId (legacy support)
-
-    // Apply styles
-    source.styles = { ...(source.styles || {}), ...styles };
-    // Also update customStyles if it exists or if it's a known style property (Crucial for global components)
-    if ('customStyles' in source || ['navbar', 'header', 'footer', 'hero', 'bubble', 'card', 'title'].includes(this.selectedElement.type)) {
-         source.customStyles = { ...(source.customStyles || {}), ...styles };
-    }
-
-    if (variant && !isSignal) {
-      source.variant = variant;
-    }
-
-    // Map content back to original fields
+    // 2. Apply updates to the source reference (crucial for items in arrays)
     if (content.title !== undefined) {
       source.title = content.title;
       if ('name' in source) source.name = content.title;
@@ -364,40 +321,61 @@ export class VariantSelectorComponent implements OnInit {
       if ('imageUrl' in source) source.imageUrl = content.image;
     }
 
-    // Trigger ngOnChanges if applicable (for component instances)
+    if (variant && !isSignal) {
+      source.variant = variant;
+    }
+
+    source.styles = { ...(source.styles || {}), ...styles };
+    if ('customStyles' in source) {
+      source.customStyles = { ...(source.customStyles || {}), ...styles };
+    }
+
+    // 3. Handle observer notification and parent updates
+    if (this.selectedElement['sectionId']) {
+      const sectionId = this.selectedElement['sectionId'];
+      const updates: any = {};
+      
+      // If editing a top-level property of the section (like section title), 
+      // we need to tell the section specifically.
+      if (!isListItem && isTopLevelFieldMapper && content) {
+        updates.content = {};
+        const keys = ['title', 'subtitle', 'description', 'text', 'label', 'link', 'image'];
+        keys.forEach(key => {
+          if (content[key] !== undefined) updates.content[key] = content[key];
+        });
+        if (variant) updates.content.variant = variant;
+      }
+
+      if (!isListItem && styles) {
+        updates.styles = styles;
+      }
+
+      // Trigger section update (this re-emits the whole section list to observers)
+      this.variantService.updateSection(sectionId, updates);
+      
+      if (variant && !isListItem) {
+        this.variantService.setComponentVariant(sectionId, variant);
+      }
+      
+      return;
+    }
+
+    // Fallback for global components or elements without sectionId
     if (source.ngOnChanges) {
       const changes: any = {};
-      
-      // We can't easily detect style changes as SimpleChange unless we track old styles.
-      // But we can forcibly call markForCheck later.
       if (variant && oldVariant !== variant) {
         changes['variant'] = new SimpleChange(oldVariant, variant, false);
       }
-      
-      if (Object.keys(changes).length > 0) {
-        source.ngOnChanges(changes);
-      }
-      
-      // Try to manually trigger change detection if the component has a change detector
-      if (source.cdr && source.cdr.markForCheck) {
-        source.cdr.markForCheck();
-      } else if (source.changeDetectorRef && source.changeDetectorRef.markForCheck) {
-        source.changeDetectorRef.markForCheck();
-      }
+      if (Object.keys(changes).length > 0) source.ngOnChanges(changes);
+      if (source.cdr?.markForCheck) source.cdr.markForCheck();
+      else if (source.changeDetectorRef?.markForCheck) source.changeDetectorRef.markForCheck();
     }
 
-    // Check if we are updating a global component and trigger specific update
-    // Only update global configs if the selected element is actually the global instance (identified by specific IDs)
     const isGlobalElement = ['navbar', 'header', 'footer'].includes(this.selectedElement.id) || this.selectedElement.isGlobal;
-    
     if (isGlobalElement) {
-      if (this.selectedElement.type === 'header') {
-        this.variantService.setHeaderConfig(source);
-      } else if (this.selectedElement.type === 'footer') {
-        this.variantService.setFooterConfig(source);
-      } else if (this.selectedElement.type === 'navbar') {
-        this.variantService.setNavBarConfig(source);
-      }
+      if (this.selectedElement.type === 'header') this.variantService.setHeaderConfig(source);
+      else if (this.selectedElement.type === 'footer') this.variantService.setFooterConfig(source);
+      else if (this.selectedElement.type === 'navbar') this.variantService.setNavBarConfig(source);
     }
   }
 

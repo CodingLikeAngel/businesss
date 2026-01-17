@@ -122,6 +122,16 @@
         (click)="selectSection($event, section)">
         
         <div class="max-w-7xl mx-auto">
+           <lib-ui-components-title
+              [level]="'h2'"
+              [text]="section.content['title'] || 'Resultados que Hablan por Sí Solos'"
+              [variant]="getVariant(section.id)"
+              [align]="'center'"
+              class="editor-element mb-16 block"
+              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+              (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })"
+           ></lib-ui-components-title>
+
            <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
               <div *ngFor="let stat of statsConfig.items; let i = index" 
                    class="editor-element"
@@ -544,7 +554,6 @@
           </div>
       </div>
 
-      <!-- SPINNER (Standalone) -->
       <div *ngSwitchCase="'spinner'" class="editor-section cursor-pointer py-12"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
         (click)="selectSection($event, section)">
@@ -555,6 +564,76 @@
                [variant]="section.content['variant'] || getVariant(section.id)"
                [size]="'lg'"
              ></lib-ui-spinner>
+          </div>
+      </div>
+
+      <!-- CHART (Standalone) -->
+      <div *ngSwitchCase="'chart'" class="editor-section cursor-pointer py-20 px-6"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="container mx-auto max-w-4xl p-10 backdrop-blur-2xl bg-white/5 rounded-[2rem] border border-white/10 shadow-2xl editor-element"
+             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_chart'"
+             (click)="selectElement($event, { id: section.id + '_chart', sectionId: section.id, content: section.content, type: 'chart', _original: section.content })">
+             
+             <lib-ui-components-title *ngIf="section.content['title']"
+                [level]="'h2'"
+                [text]="section.content['title']"
+                [variant]="getVariant(section.id)"
+                [align]="'center'"
+                class="mb-10 block"
+             ></lib-ui-components-title>
+
+             <div class="h-[400px] w-full">
+               <lib-ui-chart
+                 [variant]="section.content['variant'] || getVariant(section.id)"
+                 [type]="section.content['chartType'] || 'bar'"
+                 [data]="section.content['chartData'] || chartConfig.data"
+               ></lib-ui-chart>
+             </div>
+          </div>
+      </div>
+
+      <div *ngSwitchCase="'showcase'" class="editor-section cursor-pointer py-24"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="container mx-auto px-6 editor-element"
+             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_showcase'"
+             (click)="selectElement($event, { id: section.id + '_showcase', sectionId: section.id, content: section.content, type: 'showcase', _original: section.content })">
+             <lib-ui-gaming-variants-showcase></lib-ui-gaming-variants-showcase>
+          </div>
+      </div>
+
+      <!-- CTA (Call to Action) -->
+      <div *ngSwitchCase="'cta'" class="editor-section cursor-pointer py-20 px-6 backdrop-blur-md bg-white/5 border-y border-white/5"
+        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
+        (click)="selectSection($event, section)">
+          <div class="container mx-auto max-w-4xl text-center">
+             <div class="editor-element mb-6"
+                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+                (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })">
+                <h2 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4">
+                  {{ section.content['title'] || '¿Listo para el siguiente nivel?' }}
+                </h2>
+             </div>
+             
+             <div class="editor-element mb-10"
+                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_subtitle'"
+                (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })">
+                <p class="text-xl text-white/70 max-w-2xl mx-auto">
+                  {{ section.content['subtitle'] || 'Únete a nosotros y transforma tu negocio hoy mismo.' }}
+                </p>
+             </div>
+
+             <div class="editor-element inline-block"
+                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_cta'"
+                (click)="selectElement($event, { id: section.id + '_cta', sectionId: section.id, content: section.content, type: 'cta', _original: section.content })">
+                <lib-ui-components-button
+                  [variant]="section.content['variant'] || getVariant(section.id)"
+                  [size]="'lg'"
+                >
+                  {{ section.content['ctaLabel'] || 'Empezar ahora' }}
+                </lib-ui-components-button>
+             </div>
           </div>
       </div>
       

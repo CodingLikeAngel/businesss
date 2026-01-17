@@ -161,6 +161,31 @@ import { FormsModule } from '@angular/forms';
                 </div>
               </div>
             </div>
+
+            <!-- Glass & Effects -->
+            <div class="style-group">
+              <h5>Efecto Glass & Sombras</h5>
+              <div class="form-row">
+                <div class="form-group">
+                  <label>Blur (Backdrop):</label>
+                  <input
+                    type="text"
+                    [(ngModel)]="selectedSection.styles.backdropFilter"
+                    (ngModelChange)="onStyleChange()"
+                    placeholder="blur(10px)"
+                  />
+                </div>
+                <div class="form-group">
+                  <label>Sombra CSS:</label>
+                  <input
+                    type="text"
+                    [(ngModel)]="selectedSection.styles.boxShadow"
+                    (ngModelChange)="onStyleChange()"
+                    placeholder="0 8px 32px 0 rgba(...)"
+                  />
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
