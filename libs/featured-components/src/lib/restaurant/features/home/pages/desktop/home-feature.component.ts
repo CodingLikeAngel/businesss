@@ -17,10 +17,6 @@ import {
   BubbleConfig as BubbleAnimationConfig,
   UIFooterComponent,
 } from '@negocio/ui-components';
-import { UIFooterComponent as LibUIFooterComponent } from '@negocio/ui-components';
-import { UIHeroSectionComponent as LibUIHeroSectionComponent } from '@negocio/ui-components';
-import { UINavBarComponent as LibUINavBarComponent } from '@negocio/ui-components';
-import { UIHeroSectionComponent } from '@negocio/ui-components';
 import { UINavBarComponent } from '@negocio/ui-components';
 import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
@@ -41,7 +37,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     UICardRutasComponent,
     BubbleAnimationComponent,
     UITitleComponent,
-    LibUIFooterComponent,
+    UIFooterComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home-feature.component.html',

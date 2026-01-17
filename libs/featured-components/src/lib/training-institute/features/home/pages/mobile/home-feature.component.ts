@@ -52,7 +52,6 @@ type VariantType = typeof VARIANTS[number];
     UIHeroSectionComponent,
     UITabsComponent,
     ReservationFormComponent,
-    ServiceSectionComponent,
     FaqSectionComponent,
     PricingSectionComponent,
     GallerySectionComponent,
