@@ -291,6 +291,11 @@
                 class="editor-element"
                 [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
                 (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+                [applyDynamicStyles]="section.content['titleStyles']"
+                [visualEditable]="true"
+                visualType="element"
+                (visualMoved)="onElementMoved($event, section.id + '_title')"
+                (visualResized)="onElementResized($event, section.id + '_title')"
               ></lib-ui-components-title>
             </div>
             
@@ -351,7 +356,12 @@
         <div class="container mx-auto px-6 max-w-7xl">
           <h2 class="text-4xl font-bold text-center text-white mb-16 editor-element"
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
-              (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })">
+              (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+              [applyDynamicStyles]="section.content['titleStyles']"
+              [visualEditable]="true"
+              visualType="element"
+              (visualMoved)="onElementMoved($event, section.id + '_title')"
+              (visualResized)="onElementResized($event, section.id + '_title')">
             {{ section.content['title'] || 'Lo que dicen de nosotros' }}
           </h2>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -383,13 +393,22 @@
         [visualEditable]="true"
         visualType="section"
         (visualResized)="onSectionResized(section, $event)">
-        <lib-ui-pricing-table-section 
-          [variant]="getVariant(section.id)"
-          [id]="section.id"
-          [columns]="pricingConfig.columns"
-          [rows]="pricingConfig.rows"
-          [title]="section.content['title']"
-        ></lib-ui-pricing-table-section>
+        <div class="editor-element"
+             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_pricing'"
+             (click)="selectElement($event, { id: section.id + '_pricing', sectionId: section.id, content: section.content, type: 'pricing', _original: section.content })"
+             [applyDynamicStyles]="section.styles"
+             [visualEditable]="true"
+             visualType="element"
+             (visualMoved)="onElementMoved($event, section.id + '_pricing')"
+             (visualResized)="onElementResized($event, section.id + '_pricing')">
+          <lib-ui-pricing-table-section 
+            [variant]="getVariant(section.id)"
+            [id]="section.id"
+            [columns]="pricingConfig.columns"
+            [rows]="pricingConfig.rows"
+            [title]="section.content['title']"
+          ></lib-ui-pricing-table-section>
+        </div>
       </div>
 
       <!-- PROMOTIONS (Decomposed for editing) -->
@@ -406,12 +425,22 @@
           <div class="text-center mb-16">
             <h2 class="text-5xl font-extrabold mb-6 editor-element inline-block"
                 [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
-                (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })">
+                (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })"
+                [applyDynamicStyles]="section.content['titleStyles']"
+                [visualEditable]="true"
+                visualType="element"
+                (visualMoved)="onElementMoved($event, section.id + '_title')"
+                (visualResized)="onElementResized($event, section.id + '_title')">
               {{ section.content['title'] || promotionsConfig.title || 'Ofertas Especiales' }}
             </h2>
             <div class="editor-element"
                  [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_subtitle'"
-                 (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })">
+                 (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })"
+                 [applyDynamicStyles]="section.content['subtitleStyles']"
+                 [visualEditable]="true"
+                 visualType="element"
+                 (visualMoved)="onElementMoved($event, section.id + '_subtitle')"
+                 (visualResized)="onElementResized($event, section.id + '_subtitle')">
               <p class="text-xl text-white/60 max-w-2xl mx-auto">
                 {{ section.content['subtitle'] || promotionsConfig.description || 'Descubre nuestras promociones exclusivas y ahorra.' }}
               </p>
@@ -449,7 +478,12 @@
         <div class="container mx-auto px-6 max-w-3xl">
           <h2 class="text-4xl font-bold text-center text-white mb-12 editor-element"
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
-              (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })">
+              (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+              [applyDynamicStyles]="section.content['titleStyles']"
+              [visualEditable]="true"
+              visualType="element"
+              (visualMoved)="onElementMoved($event, section.id + '_title')"
+              (visualResized)="onElementResized($event, section.id + '_title')">
             {{ section.content['title'] || 'Preguntas Frecuentes' }}
           </h2>
           <div class="space-y-4">
@@ -490,6 +524,11 @@
             class="mb-12 editor-element"
             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
             (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+            [applyDynamicStyles]="section.content['titleStyles']"
+            [visualEditable]="true"
+            visualType="element"
+            (visualMoved)="onElementMoved($event, section.id + '_title')"
+            (visualResized)="onElementResized($event, section.id + '_title')"
           ></lib-ui-components-title>
           
           <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -534,6 +573,11 @@
             class="mb-12 editor-element"
             [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
             (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+            [applyDynamicStyles]="section.content['titleStyles']"
+            [visualEditable]="true"
+            visualType="element"
+            (visualMoved)="onElementMoved($event, section.id + '_title')"
+            (visualResized)="onElementResized($event, section.id + '_title')"
           ></lib-ui-components-title>
           <div class="editor-element" 
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_form'"
@@ -627,7 +671,14 @@
               [text]="section.content['title']"
               [variant]="getVariant(section.id)"
               [align]="'center'"
-              class="mb-8 block"
+              class="mb-8 block editor-element"
+              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+              (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+              [applyDynamicStyles]="section.content['titleStyles']"
+              [visualEditable]="true"
+              visualType="element"
+              (visualMoved)="onElementMoved($event, section.id + '_title')"
+              (visualResized)="onElementResized($event, section.id + '_title')"
             ></lib-ui-components-title>
 
             <lib-ui-components-accordion
@@ -729,7 +780,14 @@
                 [level]="'h3'"
                 [text]="section.content['title']"
                 [variant]="getVariant(section.id)"
-                class="mb-6 block"
+                class="mb-6 block editor-element"
+                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+                (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+                [applyDynamicStyles]="section.content['titleStyles']"
+                [visualEditable]="true"
+                visualType="element"
+                (visualMoved)="onElementMoved($event, section.id + '_title')"
+                (visualResized)="onElementResized($event, section.id + '_title')"
              ></lib-ui-components-title>
              <lib-ui-table
                [variant]="section.content['variant'] || getVariant(section.id)"
@@ -853,7 +911,14 @@
                 [text]="section.content['title']"
                 [variant]="getVariant(section.id)"
                 [align]="'center'"
-                class="mb-10 block"
+                class="mb-10 block editor-element"
+                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
+                (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+                [applyDynamicStyles]="section.content['titleStyles']"
+                [visualEditable]="true"
+                visualType="element"
+                (visualMoved)="onElementMoved($event, section.id + '_title')"
+                (visualResized)="onElementResized($event, section.id + '_title')"
              ></lib-ui-components-title>
 
              <div class="h-[400px] w-full">
@@ -896,7 +961,12 @@
           <div class="container mx-auto max-w-4xl text-center">
              <div class="editor-element mb-6"
                 [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
-                (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })">
+                (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })"
+                [applyDynamicStyles]="section.content['titleStyles']"
+                [visualEditable]="true"
+                visualType="element"
+                (visualMoved)="onElementMoved($event, section.id + '_title')"
+                (visualResized)="onElementResized($event, section.id + '_title')">
                 <h2 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4">
                   {{ section.content['title'] || '¿Listo para el siguiente nivel?' }}
                 </h2>
@@ -904,7 +974,12 @@
              
              <div class="editor-element mb-10"
                 [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_subtitle'"
-                (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })">
+                (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })"
+                [applyDynamicStyles]="section.content['subtitleStyles']"
+                [visualEditable]="true"
+                visualType="element"
+                (visualMoved)="onElementMoved($event, section.id + '_subtitle')"
+                (visualResized)="onElementResized($event, section.id + '_subtitle')">
                 <p class="text-xl text-white/70 max-w-2xl mx-auto">
                   {{ section.content['subtitle'] || 'Únete a nosotros y transforma tu negocio hoy mismo.' }}
                 </p>

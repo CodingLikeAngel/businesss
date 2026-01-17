@@ -61,6 +61,7 @@ export interface ComponentEditableProperties {
   modal?: string[];
   table?: string[];
   form?: string[];
+  title?: string[];
 }
 
 export const EDITABLE_PROPERTIES: ComponentEditableProperties = {
@@ -166,6 +167,14 @@ export const EDITABLE_PROPERTIES: ComponentEditableProperties = {
     'flexDirection',
     'gap',
     'alignItems'
+  ],
+  title: [
+    'fontSize',
+    'fontWeight',
+    'textAlign',
+    'textTransform',
+    'letterSpacing',
+    'lineHeight'
   ]
 };
 
@@ -188,6 +197,7 @@ export function detectComponentType(element: any): keyof ComponentEditableProper
   if (type.includes('modal')) return 'modal';
   if (type.includes('table') || tagName === 'table') return 'table';
   if (type.includes('form') || tagName === 'form') return 'form';
+  if (type.includes('title') || type.includes('subtitle') || (tagName >= 'h1' && tagName <= 'h6')) return 'title';
   
   // Detectar por clase
   if (className.includes('card')) return 'card';
