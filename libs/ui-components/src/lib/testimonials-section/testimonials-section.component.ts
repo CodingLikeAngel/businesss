@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface TestimonialItem {
@@ -16,10 +16,10 @@ export interface TestimonialItem {
   styleUrls: ['./testimonials-section.component.scss']
 })
 export class UITestimonialsSectionComponent {
-  @Input() title = 'Lo que dicen nuestros clientes';
-  @Input() subtitle = 'Historias reales de éxito.';
-  @Input() variant: string = 'default';
-  @Input() testimonials: TestimonialItem[] = [
+  title = input('Lo que dicen nuestros clientes');
+  subtitle = input('Historias reales de éxito.');
+  variant = input('default');
+  testimonials = input<TestimonialItem[]>([
     { 
       quote: "Increíble atención al detalle y un diseño que supera todas las expectativas.", 
       author: "Ana García", 
@@ -38,10 +38,8 @@ export class UITestimonialsSectionComponent {
       role: "Fundadora, EcoLife", 
       avatar: "https://i.pravatar.cc/150?u=elena"
     }
-  ];
+  ]);
 
-  get containerClasses(): string {
-    return `testimonials-container testimonials--${this.variant}`;
-  }
+  containerClasses = computed(() => `testimonials-container testimonials--${this.variant()}`);
 }
 

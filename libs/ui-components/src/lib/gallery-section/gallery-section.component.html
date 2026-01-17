@@ -1,12 +1,12 @@
-<section [class]="containerClasses">
+<section [class]="containerClasses()">
   <div class="gallery-inner">
     <div class="header-content">
-      <h2 class="title">{{ title }}</h2>
-      <p class="subtitle">{{ subtitle }}</p>
+      <h2 class="title">{{ title() }}</h2>
+      <p class="subtitle">{{ subtitle() }}</p>
     </div>
 
     <div class="gallery-grid">
-      <div *ngFor="let img of images; let i = index" class="gallery-item" [style.animation-delay]="i * 0.1 + 's'">
+      <div *ngFor="let img of images(); let i = index" class="gallery-item" [style.animation-delay]="i * 0.1 + 's'">
         <img [src]="img.src" [alt]="img.alt" loading="lazy" class="gallery-img">
         <div class="overlay">
           <span class="zoom-icon">🔍</span>

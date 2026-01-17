@@ -1,11 +1,11 @@
-<section [class]="containerClasses">
+<section [class]="containerClasses()">
   <div class="stats-inner">
     <div class="header-content">
-      <h2 class="title">{{ title }}</h2>
-      <p class="subtitle">{{ subtitle }}</p>
+      <h2 class="title">{{ title() }}</h2>
+      <p class="subtitle">{{ subtitle() }}</p>
     </div>
     <div class="stats-grid">
-      <div *ngFor="let stat of stats; let i = index" class="stat-card" [style.--stat-color]="stat.icon" [style.animation-delay]="i * 0.1 + 's'">
+      <div *ngFor="let stat of stats(); let i = index" class="stat-card" [style.--stat-color]="stat.icon" [style.animation-delay]="i * 0.1 + 's'">
         <div class="icon-wrapper">
           <span class="icon">{{ stat.icon }}</span>
         </div>

@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component, input, computed, HostBinding } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -9,13 +9,12 @@ import { CommonModule } from '@angular/common';
   styleUrls: ['./testimonials-card.component.scss']
 })
 export class UiTestimonialsCardComponent {
-  @Input() testimonial: { quote: string; author: string } = { quote: '', author: '' };
-  @Input() variant: any = 'default';
+  testimonial = input<{ quote: string; author: string }>({ quote: '', author: '' });
+  variant = input<any>('default');
 
-  @HostBinding('class') get hostClasses() {
-    return [
-      'testimonial-card',
-      `testimonial-card--${this.variant}`
-    ].join(' ');
+  hostClasses = computed(() => ['testimonial-card', `testimonial-card--${this.variant()}`].join(' '));
+  
+  @HostBinding('class') get hostClass() {
+    return this.hostClasses();
   }
 }

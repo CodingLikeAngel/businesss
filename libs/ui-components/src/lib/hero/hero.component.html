@@ -1,54 +1,54 @@
 <section
-  [ngClass]="heroClasses"
-  [style]="customStyles"
+  [ngClass]="heroClasses()"
+  [style]="customStyles()"
   role="banner"
-  [attr.aria-label]="'Sección principal de ' + businessName"
+  [attr.aria-label]="'Sección principal de ' + businessName()"
 >
   <!-- Background Overlay -->
-  <div class="background-overlay" [ngClass]="overlayClass"></div>
+  <div class="background-overlay" [ngClass]="overlayClass()"></div>
 
   <!-- Particles (variant-dependent) -->
-  <div *ngIf="showParticles" class="particle-container" [ngClass]="particleClass">
+  <div *ngIf="showParticles()" class="particle-container" [ngClass]="particleClass()">
     <div class="particle particle-1"></div>
     <div class="particle particle-2"></div>
-    <span class="particle-icon particle-icon-1">{{ particleIcon1 }}</span>
-    <span class="particle-icon particle-icon-2">{{ particleIcon2 }}</span>
+    <span class="particle-icon particle-icon-1">{{ particleIcon1() }}</span>
+    <span class="particle-icon particle-icon-2">{{ particleIcon2() }}</span>
   </div>
 
   <!-- Main Content -->
-  <div class="hero-content" [ngClass]="contentClass">
-    <h1 class="hero-title" [ngClass]="titleClass">{{ title }}</h1>
-    <p class="hero-subtitle" [ngClass]="subtitleClass">{{ subtitle }}</p>
+  <div class="hero-content" [ngClass]="contentClass()">
+    <h1 class="hero-title" [ngClass]="titleClass()">{{ title() }}</h1>
+    <p class="hero-subtitle" [ngClass]="subtitleClass()">{{ subtitle() }}</p>
 
     <!-- CTA Button -->
     <button
-      *ngIf="showCta"
+      *ngIf="showCta()"
       class="cta-button"
-      [ngClass]="ctaClass"
+      [ngClass]="ctaClass()"
       (click)="onCtaClick()"
       (keydown)="onInteractiveKeydown($event, onCtaClick)"
-      [attr.aria-label]="ctaLabel"
+      [attr.aria-label]="ctaLabel()"
     >
-      {{ ctaLabel }}
+      {{ ctaLabel() }}
     </button>
 
     <!-- Development Message -->
-    <div *ngIf="showDevelopmentMessage" class="development-message">
+    <div *ngIf="showDevelopmentMessage()" class="development-message">
       <p class="development-text">¡En desarrollo...!</p>
     </div>
   </div>
 
   <!-- Dynamic Layouts based on layout getter -->
-  <ng-container [ngSwitch]="layout">
+  <ng-container [ngSwitch]="layout()">
     <!-- Primary: Staggered Card Grid with Dynamic Gradient Waves -->
     <div *ngSwitchCase="'primary'" class="navigation-container gradient-wave-bg" role="navigation" aria-label="Navegación principal">
       <div class="navigation-grid">
         <lib-ui-components-card-animated
-          *ngFor="let card of navigationCards; let i = index"
+          *ngFor="let card of navigationCards(); let i = index"
           [icon]="card.icon"
           [title]="card.title"
           [description]="card.description"
-          [variant]="variant"
+          [variant]="variant()"
           [animationDelay]="(i * 0.2) + 's'"
           [customStyles]="{ 'card': 'cursor-pointer hover:shadow-primary-glow wave-card' }"
           (click)="scrollToSection(card.sectionId)"
@@ -68,23 +68,23 @@
     <!-- Secondary: Video Card Carousel with Subtle Glow -->
     <div *ngSwitchCase="'secondary'" class="carousel-container glow-overlay" role="region" aria-label="Carrusel de videos destacados">
       <video
-        *ngIf="videoBackground"
+        *ngIf="videoBackground()"
         autoplay
         muted
         loop
         class="carousel-video-bg"
-        [ngClass]="videoClass"
-        [poster]="carouselItems[activeCarouselIndex].posterUrl"
+        [ngClass]="videoClass()"
+        [poster]="carouselItems()[activeCarouselIndex].posterUrl"
       >
-        <source [src]="carouselItems[activeCarouselIndex].videoUrl" type="video/mp4" />
+        <source [src]="carouselItems()[activeCarouselIndex].videoUrl" type="video/mp4" />
         Tu navegador no soporta videos.
       </video>
       <div class="carousel">
         <lib-ui-components-card-animated
-          *ngFor="let item of carouselItems; let i = index"
+          *ngFor="let item of carouselItems(); let i = index"
           [title]="item.title"
           [description]="item.description"
-          [variant]="variant"
+          [variant]="variant()"
           [animationDelay]="(i * 0.1) + 's'"
           [customStyles]="{ 'card': 'carousel-item ' + (i === activeCarouselIndex ? 'active glow-active' : 'glow-hover') }"
           (click)="onCarouselItemClick(item); activeCarouselIndex = i"
@@ -98,7 +98,7 @@
             muted
             loop
             class="carousel-video"
-            [ngClass]="videoClass"
+            [ngClass]="videoClass()"
             [poster]="item.posterUrl"
             slot="media"
           >
@@ -131,20 +131,20 @@
         muted
         loop
         class="hero-video"
-        [ngClass]="videoClass"
-        [poster]="videoPoster"
+        [ngClass]="videoClass()"
+        [poster]="videoPoster()"
       >
-        <source [src]="videoUrl" type="video/mp4" />
+        <source [src]="videoUrl()" type="video/mp4" />
         Tu navegador no soporta videos.
       </video>
       <div class="video-overlay">
         <div class="navigation-grid">
           <lib-ui-components-card-animated
-            *ngFor="let card of navigationCards; let i = index"
+            *ngFor="let card of navigationCards(); let i = index"
             [icon]="card.icon"
             [title]="card.title"
             [description]="card.description"
-            [variant]="variant"
+            [variant]="variant()"
             [animationDelay]="(i * 0.2) + 's'"
             [customStyles]="{ 'card': 'cursor-pointer hover:shadow-neon-glow pulse-card' }"
             (click)="scrollToSection(card.sectionId)"
@@ -165,15 +165,15 @@
     <!-- Neon: Interactive Form with Video and Sparkle Effect -->
     <div *ngSwitchCase="'neon'" class="form-container sparkle-overlay">
       <video
-        *ngIf="videoBackground"
+        *ngIf="videoBackground()"
         autoplay
         muted
         loop
         class="form-video-bg"
-        [ngClass]="videoClass"
-        [poster]="videoPoster"
+        [ngClass]="videoClass()"
+        [poster]="videoPoster()"
       >
-        <source [src]="videoUrl" type="video/mp4" />
+        <source [src]="videoUrl()" type="video/mp4" />
         Tu navegador no soporta videos.
       </video>
       <form class="hero-form" role="form" aria-label="Formulario de suscripción">
@@ -183,13 +183,13 @@
           placeholder="Tu correo electrónico"
           required
           aria-label="Correo electrónico"
-          [ngClass]="inputClass"
+          [ngClass]="inputClass()"
         />
         <button
           type="submit"
           (click)="onFormSubmit()"
           (keydown)="onInteractiveKeydown($event, onFormSubmit)"
-          [ngClass]="formButtonClass"
+          [ngClass]="formButtonClass()"
           aria-label="Enviar suscripción"
         >
           Enviar
@@ -203,11 +203,11 @@
       <div class="matrix-content">
         <div class="navigation-grid">
           <lib-ui-components-card-animated
-            *ngFor="let card of navigationCards; let i = index"
+            *ngFor="let card of navigationCards(); let i = index"
             [icon]="card.icon"
             [title]="card.title"
             [description]="card.description"
-            [variant]="variant"
+            [variant]="variant()"
             [animationDelay]="(i * 0.2) + 's'"
             [customStyles]="{ 'card': 'cursor-pointer hover:shadow-matrix-glow 3d-flip-card' }"
             (click)="scrollToSection(card.sectionId)"
@@ -228,25 +228,25 @@
     <!-- Stellar: Starfield with Video and Orbital Cards -->
     <div *ngSwitchCase="'stellar'" class="starfield-container orbit-overlay">
       <video
-        *ngIf="videoBackground"
+        *ngIf="videoBackground()"
         autoplay
         muted
         loop
         class="starfield-video-bg"
-        [ngClass]="videoClass"
-        [poster]="videoPoster"
+        [ngClass]="videoClass()"
+        [poster]="videoPoster()"
       >
-        <source [src]="videoUrl" type="video/mp4" />
+        <source [src]="videoUrl()" type="video/mp4" />
         Tu navegador no soporta videos.
       </video>
       <div class="starfield"></div>
       <div class="floating-cards">
         <lib-ui-components-card-animated
-          *ngFor="let card of navigationCards; let i = index"
+          *ngFor="let card of navigationCards(); let i = index"
           [icon]="card.icon"
           [title]="card.title"
           [description]="card.description"
-          [variant]="variant"
+          [variant]="variant()"
           [animationDelay]="(i * 0.3) + 's'"
           [customStyles]="{ 'card': 'floating-card hover:shadow-stellar-glow orbit-card' }"
           (click)="scrollToSection(card.sectionId)"
@@ -266,11 +266,11 @@
     <div *ngSwitchCase="'retro'" class="retro-container crt-scanline-bg">
       <div class="retro-menu">
         <lib-ui-components-card-animated
-          *ngFor="let card of navigationCards; let i = index"
+          *ngFor="let card of navigationCards(); let i = index"
           [icon]="card.icon"
           [title]="card.title"
           [description]="card.description"
-          [variant]="variant"
+          [variant]="variant()"
           [animationDelay]="(i * 0.2) + 's'"
           [customStyles]="{ 'card': 'retro-item ' + (i === activeRetroIndex ? 'selected scanline-active' : 'scanline-hover') }"
           (click)="scrollToSection(card.sectionId)"
@@ -307,24 +307,24 @@
     <!-- Phoenix: Animated Flame Video with Ember Cards -->
     <div *ngSwitchCase="'phoenix'" class="flame-container ember-overlay">
       <video
-        *ngIf="videoBackground"
+        *ngIf="videoBackground()"
         autoplay
         muted
         loop
         class="flame-video-bg"
-        [ngClass]="videoClass"
-        [poster]="videoPoster"
+        [ngClass]="videoClass()"
+        [poster]="videoPoster()"
       >
-        <source [src]="videoUrl" type="video/mp4" />
+        <source [src]="videoUrl()" type="video/mp4" />
         Your browser does not support videos.
       </video>
       <div class="flame-grid">
         <lib-ui-components-card-animated
-          *ngFor="let card of navigationCards; let i = index"
+          *ngFor="let card of navigationCards(); let i = index"
           [icon]="card.icon"
           [title]="card.title"
           [description]="card.description"
-          [variant]="variant"
+          [variant]="variant()"
           [animationDelay]="(i * 0.2) + 's'"
           [customStyles]="{ 'card': 'flame-card hover:shadow-phoenix-glow ember-card' }"
           (click)="scrollToSection(card.sectionId)"
@@ -349,7 +349,7 @@
       </div>
       <div class="glass-grid">
         <lib-ui-components-card-animated
-          *ngFor="let card of navigationCards; let i = index"
+          *ngFor="let card of navigationCards(); let i = index"
           [icon]="card.icon"
           [title]="card.title"
           [description]="card.description"
@@ -369,10 +369,10 @@
     <div *ngSwitchDefault class="gallery-container holo-grid-bg">
       <div class="gallery-grid">
         <lib-ui-components-card-animated
-          *ngFor="let item of carouselItems; let i = index"
+          *ngFor="let item of carouselItems(); let i = index"
           [title]="item.title"
           [description]="item.description"
-          [variant]="variant"
+          [variant]="variant()"
           [animationDelay]="(i * 0.2) + 's'"
           [customStyles]="{ 'card': 'gallery-item hover:shadow-gallery-glow holo-card' }"
           (click)="onGalleryItemClick(item)"
@@ -390,7 +390,7 @@
   </ng-container>
 
   <!-- Scroll Icon -->
-  <div *ngIf="showScrollIcon" class="scroll-icon" [ngClass]="scrollIconClass">
+  <div *ngIf="showScrollIcon()" class="scroll-icon" [ngClass]="scrollIconClass()">
     <svg class="scroll-icon-svg" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
     </svg>

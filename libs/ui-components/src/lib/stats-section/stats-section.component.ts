@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface StatItem {
@@ -16,18 +16,16 @@ export interface StatItem {
   styleUrl: './stats-section.component.scss'
 })
 export class UIStatsLibSectionComponent {
-  @Input() title = 'Nuestras Métricas';
-  @Input() subtitle = 'Indicadores clave de rendimiento.';
-  @Input() variant: string = 'default';
-  @Input() stats: StatItem[] = [
+  title = input('Nuestras Métricas');
+  subtitle = input('Indicadores clave de rendimiento.');
+  variant = input('default');
+  stats = input<StatItem[]>([
     { icon: '🚀', label: 'Velocidad', value: '0.8s', description: 'Tiempo de carga' },
     { icon: '🔒', label: 'Seguridad', value: '99.9%', description: 'Uptime' },
     { icon: '📈', label: 'Conversiones', value: '12%', description: 'Tasa de conversión' },
     { icon: '👥', label: 'Usuarios', value: '5k+', description: 'Visitantes mensuales' }
-  ];
+  ]);
 
-  get containerClasses(): string {
-    return `stats-container stats--${this.variant}`;
-  }
+  containerClasses = computed(() => `stats-container stats--${this.variant()}`);
 }
 

@@ -33,14 +33,14 @@
 
 
 
-<div [ngClass]="hostClasses" [ngStyle]="customStyles">
+<div [ngClass]="hostClasses" [ngStyle]="customStyles()">
   <div class="ui-gallery__slider" #slider>
-    <div class="ui-gallery__slide" *ngFor="let image of images; trackBy: trackByFn">
+    <div class="ui-gallery__slide" *ngFor="let image of images(); trackBy: trackByFn">
       <lib-ui-image
         [src]="image.src"
         [alt]="image.alt"
         [caption]="image.caption"
-        [variant]="variant"
+        [variant]="variant()"
         size="custom"
         width="100%"
         height="auto"
@@ -61,7 +61,7 @@
   >❯</button>
   <div class="ui-gallery__dots">
     <span
-      *ngFor="let image of images; let i = index"
+      *ngFor="let image of images(); let i = index"
       [class.ui-gallery__dot--active]="i === currentIndex"
       class="ui-gallery__dot"
       (click)="goToSlide(i)"

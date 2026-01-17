@@ -1,5 +1,5 @@
 
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface BreadcrumbItem {
@@ -15,8 +15,8 @@ export interface BreadcrumbItem {
   styleUrls: ['./breadcrumbs.component.scss']
 })
 export class UIBreadcrumbsComponent {
-  @Input() items: BreadcrumbItem[] = [];
-  @Input() separator = '/';
-  @Input() variant: string = 'simple';
+  items = input<BreadcrumbItem[]>([]);
+  separator = input('/');
+  variant = input('simple');
 }
 

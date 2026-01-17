@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UIAccordionComponent } from '../acordeon/accordion.component';
 
@@ -16,17 +16,15 @@ export interface FaqItem {
   styleUrls: ['./faq-section.component.scss']
 })
 export class UIFaqSectionComponent {
-  @Input() title = 'Preguntas Frecuentes';
-  @Input() subtitle = 'Resolvemos tus dudas principales.';
-  @Input() variant: string = 'default';
-  @Input() items: FaqItem[] = [
+  title = input('Preguntas Frecuentes');
+  subtitle = input('Resolvemos tus dudas principales.');
+  variant = input('default');
+  items = input<FaqItem[]>([
     { title: "¿Cuánto tardan en desarrollar mi web?", content: "Dependiendo de la complejidad, entre 2 y 4 semanas." },
     { title: "¿Incluye mantenimiento?", content: "Sí, ofrecemos planes de mantenimiento mensual adaptados a tus necesidades." },
     { title: "¿Es compatible con móviles?", content: "Absolutamente. Todos nuestros diseños son 100% responsivos." }
-  ];
+  ]);
 
-  get containerClasses(): string {
-    return `faq-container faq--${this.variant}`;
-  }
+  containerClasses = computed(() => `faq-container faq--${this.variant()}`);
 }
 

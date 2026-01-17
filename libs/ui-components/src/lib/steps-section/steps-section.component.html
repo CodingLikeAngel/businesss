@@ -1,15 +1,15 @@
 
-<section class="steps-section" [ngClass]="['variant-' + variant, variant]">
+<section class="steps-section" [ngClass]="['variant-' + variant(), variant()]">
   <div class="header">
-    <h2>{{ title }}</h2>
-    <p *ngIf="subtitle">{{ subtitle }}</p>
+    <h2>{{ title() }}</h2>
+    <p *ngIf="subtitle()">{{ subtitle() }}</p>
   </div>
 
   <div class="steps-container">
-    <div *ngFor="let step of steps; let i = index" class="step-item">
+    <div *ngFor="let step of steps(); let i = index" class="step-item">
       <div class="step-marker">
         <span class="step-number">{{ i + 1 }}</span>
-        <div class="step-line" *ngIf="i < steps.length - 1"></div>
+        <div class="step-line" *ngIf="i < steps().length - 1"></div>
       </div>
       <div class="step-content">
         <div class="step-icon" *ngIf="step.icon">{{ step.icon }}</div>

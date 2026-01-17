@@ -1,12 +1,12 @@
-<section [class]="containerClasses">
+<section [class]="containerClasses()">
   <div class="features-inner">
     <div class="header-content">
-      <h2 class="title">{{ title }}</h2>
-      <p class="subtitle">{{ subtitle }}</p>
+      <h2 class="title">{{ title() }}</h2>
+      <p class="subtitle">{{ subtitle() }}</p>
     </div>
 
     <div class="features-grid">
-      <div *ngFor="let feature of features; let i = index" 
+      <div *ngFor="let feature of features(); let i = index" 
            class="feature-card" 
            [style.--feature-color]="feature.color"
            [style.animation-delay]="i * 0.1 + 's'">

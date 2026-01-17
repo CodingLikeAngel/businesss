@@ -1,5 +1,5 @@
 
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface Step {
@@ -17,9 +17,9 @@ export interface Step {
   styleUrls: ['./steps-section.component.scss']
 })
 export class UIStepsSectionComponent {
-  @Input() title = 'Cómo Funciona';
-  @Input() subtitle = 'Sigue estos sencillos pasos';
-  @Input() steps: Step[] = [];
-  @Input() variant: string = 'linear';
+  title = input('Cómo Funciona');
+  subtitle = input('Sigue estos sencillos pasos');
+  steps = input<Step[]>([]);
+  variant = input('linear');
 }
 

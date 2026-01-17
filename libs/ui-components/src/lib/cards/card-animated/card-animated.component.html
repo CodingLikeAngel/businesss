@@ -1,54 +1,54 @@
 <article
-  class="card-animated card-animated--{{ variant }}"
+  class="card-animated card-animated--{{ variant() }}"
   role="region"
-  [attr.aria-label]="frontContent?.title || title"
+  [attr.aria-label]="frontContent()?.title || title()"
   (mouseover)="onHover(true)"
   (mouseout)="onHover(false)"
   (focus)="onHover(true)"
   (blur)="onHover(false)"
   tabindex="0"
-  [ngClass]="customStyles['card']"
-  [style.--border-color]="borderColor"
-  [style.--text-color]="textColor"
-  [style.--background-color]="backgroundColor"
-  [style.--hover-color]="hoverColor"
+  [ngClass]="customStyles()['card']"
+  [style.--border-color]="borderColor()"
+  [style.--text-color]="textColor()"
+  [style.--background-color]="backgroundColor()"
+  [style.--hover-color]="hoverColor()"
 >
   <div class="card-overlay" [class.is-hovered]="isHovered"></div>
 
   <!-- Variante reversible -->
   <div
-    *ngIf="variant === 'reversible'"
+    *ngIf="variant() === 'reversible'"
     class="card-inner"
     [class.flipped]="isFlipped"
     (click)="toggleFlip($event)"
     (keyup)="toggleFlip($event)"
     tabindex="0"
     role="button"
-    [attr.aria-label]="'Toggle ' + (frontContent?.title || 'card')"
+    [attr.aria-label]="'Toggle ' + (frontContent()?.title || 'card')"
   >
     <div class="card-front">
-      <div class="card-icon" role="img" [attr.aria-label]="frontContent?.title + ' icon'" [style]="customStyles['icon']">
-        {{ icon }}
+      <div class="card-icon" role="img" [attr.aria-label]="frontContent()?.title + ' icon'" [style]="customStyles()['icon']">
+        {{ icon() }}
       </div>
       <img
-        *ngIf="frontContent?.image"
-        [src]="frontContent?.image"
-        [alt]="frontContent?.title"
+        *ngIf="frontContent()?.image"
+        [src]="frontContent()?.image"
+        [alt]="frontContent()?.title"
         class="card-image"
-        [style]="customStyles['image']"
+        [style]="customStyles()['image']"
       >
-      <h3 class="card-title" [style]="customStyles['title']">{{ frontContent?.title }}</h3>
+      <h3 class="card-title" [style]="customStyles()['title']">{{ frontContent()?.title }}</h3>
       <ng-content select=".flip-indicator"></ng-content>
     </div>
     <div class="card-back">
       <div class="card-content">
-        <p class="card-description" [style]="customStyles['description']">{{ backContent?.description }}</p>
+        <p class="card-description" [style]="customStyles()['description']">{{ backContent()?.description }}</p>
         <span
-          *ngIf="backContent?.comestible !== undefined"
-          [class.text-green]="backContent?.comestible"
-          [class.text-red]="!backContent?.comestible"
+          *ngIf="backContent()?.comestible !== undefined"
+          [class.text-green]="backContent()?.comestible"
+          [class.text-red]="!backContent()?.comestible"
         >
-          {{ backContent?.comestible ? 'Comestible' : 'No Comestible' }}
+          {{ backContent()?.comestible ? 'Comestible' : 'No Comestible' }}
         </span>
         <ng-content></ng-content>
       </div>
@@ -56,37 +56,37 @@
   </div>
 
   <!-- Variante feature -->
-  <div *ngIf="variant === 'feature'" class="card-content">
+  <div *ngIf="variant() === 'feature'" class="card-content">
     <div
       class="card-icon"
-      [style.animation-delay]="animationDelay"
+      [style.animation-delay]="animationDelay()"
       role="img"
-      [attr.aria-label]="title + ' icon'"
-      [style]="customStyles['icon']"
+      [attr.aria-label]="title() + ' icon'"
+      [style]="customStyles()['icon']"
     >
-      {{ icon }}
+      {{ icon() }}
     </div>
-    <h3 class="card-title" [style]="customStyles['title']">{{ title }}</h3>
-    <p class="card-description" [style]="customStyles['description']">{{ description }}</p>
+    <h3 class="card-title" [style]="customStyles()['title']">{{ title() }}</h3>
+    <p class="card-description" [style]="customStyles()['description']">{{ description() }}</p>
   </div>
 
   <!-- Variante normativa -->
-  <div *ngIf="variant === 'normativa'" class="card-content">
+  <div *ngIf="variant() === 'normativa'" class="card-content">
     <div class="card-header">
       <div class="card-icon-wrapper">
-        <span class="card-icon" [style]="customStyles['icon']">{{ icon }}</span>
+        <span class="card-icon" [style]="customStyles()['icon']">{{ icon() }}</span>
       </div>
       <div>
-        <h3 class="card-title" [style]="customStyles['title']">{{ title }}</h3>
-        <p class="card-subtitle" [style]="customStyles['subtitle']">Región: {{ subtitle }}</p>
+        <h3 class="card-title" [style]="customStyles()['title']">{{ title() }}</h3>
+        <p class="card-subtitle" [style]="customStyles()['subtitle']">Región: {{ subtitle() }}</p>
       </div>
     </div>
-    <p class="card-description" [style]="customStyles['description']">{{ description }}</p>
+    <p class="card-description" [style]="customStyles()['description']">{{ description() }}</p>
     <div class="card-tags">
-      <span *ngFor="let tag of tags" class="card-tag" [style]="customStyles['tag']">{{ tag }}</span>
+      <span *ngFor="let tag of tags()" class="card-tag" [style]="customStyles()['tag']">{{ tag }}</span>
     </div>
     <div class="card-actions">
-      <a [href]="link" class="card-link" [style]="customStyles['link']">Descargar PDF</a>
+      <a [href]="link()" class="card-link" [style]="customStyles()['link']">Descargar PDF</a>
       <lib-ui-components-button variant="neon" size="md" (buttonClick)="onViewDetails()" aria-label="Ver detalles de la normativa">
         Ver detalles
       </lib-ui-components-button>
@@ -94,66 +94,66 @@
   </div>
 
   <!-- Variante guide -->
-  <div *ngIf="variant === 'guide'" class="card-content">
+  <div *ngIf="variant() === 'guide'" class="card-content">
     <div class="card-image-wrapper">
       <img
-        [src]="image"
-        [alt]="title"
+        [src]="image()"
+        [alt]="title()"
         class="card-image"
         [class.is-hovered]="isHovered"
-        [style]="customStyles['image']"
+        [style]="customStyles()['image']"
       >
-      <span class="card-rating" [style]="customStyles['rating']">⭐ {{ rating }}</span>
+      <span class="card-rating" [style]="customStyles()['rating']">⭐ {{ rating() }}</span>
     </div>
     <div class="card-details">
       <div class="card-header">
-        <img [src]="avatar" [alt]="title + ' avatar'" class="card-avatar" [style]="customStyles['avatar']">
+        <img [src]="avatar()" [alt]="title() + ' avatar'" class="card-avatar" [style]="customStyles()['avatar']">
         <div>
-          <h3 class="card-title" [style]="customStyles['title']">{{ title }}</h3>
-          <p class="card-subtitle" [style]="customStyles['subtitle']">{{ subtitle }}</p>
+          <h3 class="card-title" [style]="customStyles()['title']">{{ title() }}</h3>
+          <p class="card-subtitle" [style]="customStyles()['subtitle']">{{ subtitle() }}</p>
         </div>
       </div>
       <div class="card-tags">
-        <span *ngFor="let tag of tags" class="card-tag" [style]="customStyles['tag']">{{ tag }}</span>
+        <span *ngFor="let tag of tags()" class="card-tag" [style]="customStyles()['tag']">{{ tag }}</span>
       </div>
-      <p class="card-description" [style]="customStyles['description']">{{ description }}</p>
+      <p class="card-description" [style]="customStyles()['description']">{{ description() }}</p>
       <div class="card-actions">
-        <span class="card-price" [style]="customStyles['price']">{{ price | currency:'EUR' }}/día</span>
+        <span class="card-price" [style]="customStyles()['price']">{{ price() | currency:'EUR' }}/día</span>
         <lib-ui-components-button variant="neon" size="md" (buttonClick)="onAddToCart()">Ver perfil</lib-ui-components-button>
       </div>
     </div>
   </div>
 
   <!-- Variante product-3d -->
-  <div *ngIf="variant === 'product-3d'" class="card-inner">
+  <div *ngIf="variant() === 'product-3d'" class="card-inner">
     <div class="card-front">
-      <img [src]="image" [alt]="title" class="card-image" [style]="customStyles['image']">
-      <h3 class="card-title" [style]="customStyles['title']">{{ title }}</h3>
+      <img [src]="image()" [alt]="title()" class="card-image" [style]="customStyles()['image']">
+      <h3 class="card-title" [style]="customStyles()['title']">{{ title() }}</h3>
       <div class="card-actions">
-        <span class="card-price" [style]="customStyles['price']">{{ price | currency:'EUR' }}</span>
+        <span class="card-price" [style]="customStyles()['price']">{{ price() | currency:'EUR' }}</span>
         <lib-ui-components-button variant="neon" size="md" (buttonClick)="onAddToCart()">Añadir</lib-ui-components-button>
       </div>
     </div>
     <div class="card-back">
-      <h3 class="card-title" [style]="customStyles['title']">{{ title }}</h3>
-      <p class="card-description" [style]="customStyles['description']">{{ description }}</p>
+      <h3 class="card-title" [style]="customStyles()['title']">{{ title() }}</h3>
+      <p class="card-description" [style]="customStyles()['description']">{{ description() }}</p>
     </div>
   </div>
 
   <!-- Variante river -->
-  <div *ngIf="variant === 'river'" class="card-content">
+  <div *ngIf="variant() === 'river'" class="card-content">
     <div
       class="card-icon"
-      [style.animation-delay]="animationDelay"
+      [style.animation-delay]="animationDelay()"
       role="img"
-      [attr.aria-label]="title + ' icon'"
-      [style]="customStyles['icon']"
+      [attr.aria-label]="title() + ' icon'"
+      [style]="customStyles()['icon']"
     >
-      {{ icon }}
+      {{ icon() }}
     </div>
-    <h3 class="card-title" [style]="customStyles['title']">{{ title }}</h3>
-    <p class="card-description" [style]="customStyles['description']">{{ description }}</p>
-    <div class="card-gallery" [style]="customStyles['gallery']">
+    <h3 class="card-title" [style]="customStyles()['title']">{{ title() }}</h3>
+    <p class="card-description" [style]="customStyles()['description']">{{ description() }}</p>
+    <div class="card-gallery" [style]="customStyles()['gallery']">
       <ng-content select="lib-gallery"></ng-content>
     </div>
     <div class="card-actions">
@@ -170,29 +170,29 @@
 
   <!-- Variantes genéricas -->
   <div
-    *ngIf="variant !== 'reversible' && variant !== 'normativa' && variant !== 'guide' && variant !== 'product-3d' && variant !== 'feature' && variant !== 'river'"
+    *ngIf="variant() !== 'reversible' && variant() !== 'normativa' && variant() !== 'guide' && variant() !== 'product-3d' && variant() !== 'feature' && variant() !== 'river'"
     class="card-content"
   >
     <div
       class="card-icon"
-      [style.animation-delay]="animationDelay"
+      [style.animation-delay]="animationDelay()"
       role="img"
-      [attr.aria-label]="title + ' icon'"
-      [style]="customStyles['icon']"
+      [attr.aria-label]="title() + ' icon'"
+      [style]="customStyles()['icon']"
     >
-      {{ icon }}
+      {{ icon() }}
     </div>
-    <h3 class="card-title" [style]="customStyles['title']">{{ title }}</h3>
-    <p class="card-description" [style]="customStyles['description']">{{ description }}</p>
+    <h3 class="card-title" [style]="customStyles()['title']">{{ title() }}</h3>
+    <p class="card-description" [style]="customStyles()['description']">{{ description() }}</p>
     <img
-      *ngIf="variant === 'product-hover'"
-      [src]="image"
-      [alt]="title"
+      *ngIf="variant() === 'product-hover'"
+      [src]="image()"
+      [alt]="title()"
       class="card-image"
-      [style]="customStyles['image']"
+      [style]="customStyles()['image']"
     >
-    <div *ngIf="variant === 'product-hover'" class="card-actions">
-      <span class="card-price" [style]="customStyles['price']">{{ price | currency:'EUR' }}</span>
+    <div *ngIf="variant() === 'product-hover'" class="card-actions">
+      <span class="card-price" [style]="customStyles()['price']">{{ price() | currency:'EUR' }}</span>
       <lib-ui-components-button variant="neon" size="md" (buttonClick)="onAddToCart()">Añadir</lib-ui-components-button>
     </div>
   </div>

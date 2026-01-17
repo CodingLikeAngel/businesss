@@ -1,13 +1,13 @@
-<section [class]="containerClasses">
+<section [class]="containerClasses()">
   <div class="testimonials-inner">
     <div class="header-content">
-      <h2 class="title">{{ title }}</h2>
+      <h2 class="title">{{ title() }}</h2>
       <div class="title-underline"></div>
-      <p class="subtitle">{{ subtitle }}</p>
+      <p class="subtitle">{{ subtitle() }}</p>
     </div>
 
     <div class="testimonials-grid">
-      <div *ngFor="let item of testimonials; let i = index" class="testimonial-card" [style.animation-delay]="i * 0.15 + 's'">
+      <div *ngFor="let item of testimonials(); let i = index" class="testimonial-card" [style.animation-delay]="i * 0.15 + 's'">
         <div class="quote-icon">“</div>
         <p class="quote-text">{{ item.quote }}</p>
         

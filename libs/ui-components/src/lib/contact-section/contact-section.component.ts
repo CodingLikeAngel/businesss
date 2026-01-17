@@ -1,5 +1,5 @@
 
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
@@ -17,14 +17,14 @@ import { variants } from '../models/ui-components-data.model';
   styleUrls: ['./contact-section.component.scss']
 })
 export class UIContactSectionComponent {
-  @Input() variant: string = 'primary';
-  @Input() title = 'Contáctanos';
-  @Input() subtitle = 'Estamos aquí para ayudarte. Envíanos un mensaje.';
-  @Input() emailLabel = 'Email';
-  @Input() messageLabel = 'Mensaje';
-  @Input() buttonText = 'Enviar Mensaje';
+  variant = input('primary');
+  title = input('Contáctanos');
+  subtitle = input('Estamos aquí para ayudarte. Envíanos un mensaje.');
+  emailLabel = input('Email');
+  messageLabel = input('Mensaje');
+  buttonText = input('Enviar Mensaje');
   
-  @Output() formSubmit = new EventEmitter<any>();
+  formSubmit = output<any>();
 
   formData = {
     name: '',

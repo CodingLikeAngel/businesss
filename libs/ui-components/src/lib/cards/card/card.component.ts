@@ -1,4 +1,4 @@
-import { Component, HostBinding, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, HostBinding, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { animate, style, transition, trigger } from '@angular/animations';
 import { GlitchEffectPipe } from "./pipes/glitch-effect.pipe";
@@ -54,45 +54,39 @@ export interface UICardAction {
   ]
 })
 export class UICardComponent {
-  @Input() variant: CardVariant = 'default';
-  @Input() image?: string;
-  @Input() title = 'Card Title';
-  @Input() description = 'This is a description for the card.';
-  @Input() actions: UICardAction[] = [];
-  @Input() animation: CardAnimation = 'none';
-  @Input() size: CardSize = 'medium';
-  @Input() customStyles: CustomStyles = {};
+  variant = input<CardVariant>('default');
+  image = input<string | undefined>(undefined);
+  title = input('Card Title');
+  description = input('This is a description for the card.');
+  actions = input<UICardAction[]>([]);
+  animation = input<CardAnimation>('none');
+  size = input<CardSize>('medium');
+  customStyles = input<CustomStyles>({});
   isHovered = false;
 
   @HostBinding('class') get hostClasses() {
     return [
       'card',
-      `card--${this.variant}`,
-      this.image ? 'card--with-image' : '',
-      `card--animation-${this.animation}`,
-      `card--size-${this.size}`,
+      `card--${this.variant()}`,
+      this.image() ? 'card--with-image' : '',
+      `card--animation-${this.animation()}`,
+      `card--size-${this.size()}`,
       this.isHovered ? 'card--hovered' : ''
     ].filter(Boolean);
   }
 
   @HostBinding('style') get hostStyles() {
-    return { ...this.customStyles, '--card-overlay-opacity': this.isHovered ? '0.3' : '0' };
+    return { ...this.customStyles(), '--card-overlay-opacity': this.isHovered ? '0.3' : '0' };
   }
 
-  get cardClasses(): string[] {
-    return ['card', `card--${this.variant}`, `card--size-${this.size}`];
-  }
+  cardClasses = computed(() => ['card', `card--${this.variant()}`, `card--size-${this.size()}`]);
 
-  get contentClasses(): string[] {
-    return ['card-content', this.isHovered ? 'card-content--hovered' : ''];
-  }
+  contentClasses = computed(() => ['card-content', this.isHovered ? 'card-content--hovered' : '']);
 
-  get imageClasses(): string[] {
-    return ['card-image', this.isHovered ? 'card-image--parallax' : ''];
-  }
+  imageClasses = computed(() => ['card-image', this.isHovered ? 'card-image--parallax' : '']);
 
   actionClasses(index: number): string[] {
-    const action = this.actions[index];
+    const action = this.actions()[index];
     return ['card-action', `card-action--${action.variant || 'default'}`];
   }
 

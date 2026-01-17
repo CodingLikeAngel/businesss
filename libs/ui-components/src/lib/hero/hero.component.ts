@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef, AfterViewInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, input, output, computed, ViewChild, ElementRef, AfterViewInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { UICardAnimatedComponent } from '../cards/card-animated/card-animated.component';
 import { variants } from '../models/ui-components-data.model';
@@ -49,20 +49,20 @@ interface CarouselItem {
   styleUrls: ['./hero.component.scss'],
 })
 export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
-  @Input() showCta = true;
-  @Input() ctaLabel = 'Reserva Ahora';
-  @Input() businessName = 'Peluquería Estilo';
-  @Input() title = 'Transforma tu Estilo';
-  @Input() subtitle = 'Cortes, colores y tratamientos personalizados en un ambiente único.';
-  @Input() variant: string = 'default';
-  @Input() showDevelopmentMessage = false;
-  @Input() showScrollIcon = true;
-  @Input() videoBackground = true;
+  showCta = input(true);
+  ctaLabel = input('Reserva Ahora');
+  businessName = input('Peluquería Estilo');
+  title = input('Transforma tu Estilo');
+  subtitle = input('Cortes, colores y tratamientos personalizados en un ambiente único.');
+  variant = input('default');
+  showDevelopmentMessage = input(false);
+  showScrollIcon = input(true);
+  videoBackground = input(true);
 
-  @Input()  videoUrl = 'https://www.w3schools.com/tags/mov_bbb.mp4';
-  @Input() videoPoster = 'https://dummyimage.com/200x300/000/fff&text=Hola+León3';
-  @Input() customStyles: HeroCustomStyles = {};
-  @Input() navigationCards: NavigationCard[] = [
+  videoUrl = input('https://www.w3schools.com/tags/mov_bbb.mp4');
+  videoPoster = input('https://dummyimage.com/200x300/000/fff&text=Hola+León3');
+  customStyles = input<HeroCustomStyles>({});
+  navigationCards = input<NavigationCard[]>([
     {
       icon: '✂️',
       title: 'Cortes',
@@ -79,8 +79,8 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
       videoUrl : 'https://www.w3schools.com/tags/mov_bbb.mp4',
       posterUrl :'https://dummyimage.com/200x300/000/fff&text=Hola+León3',
     }
-  ];
-  @Input() carouselItems: CarouselItem[] = [
+  ]);
+  carouselItems = input<CarouselItem[]>([
     {
       videoUrl : 'https://www.w3schools.com/tags/mov_bbb.mp4',
       posterUrl :'https://dummyimage.com/200x300/000/fff&text=Hola+León3',
@@ -95,12 +95,13 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
       description: 'Tonos únicos que resaltan tu personalidad.',
       section: 'precios',
     }
-  ];
-  @Output() sectionSelected = new EventEmitter<string>();
-  @Output() ctaClicked = new EventEmitter<void>();
-  @Output() formSubmitted = new EventEmitter<string>();
-  @Output() carouselItemClicked = new EventEmitter<CarouselItem>();
-  @Output() galleryItemClicked = new EventEmitter<CarouselItem>();
+  ]);
+
+  sectionSelected = output<string>();
+  ctaClicked = output<void>();
+  formSubmitted = output<string>();
+  carouselItemClicked = output<CarouselItem>();
+  galleryItemClicked = output<CarouselItem>();
 
   @ViewChild('matrixCanvas') matrixCanvas?: ElementRef<HTMLCanvasElement>;
 
@@ -108,51 +109,41 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
   activeRetroIndex = 0;
   private matrixInterval: any;
 
+  constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
+  heroClasses = computed(() => ['hero-section', `hero-section--${this.variant()}`]);
 
-  constructor(@Inject(PLATFORM_ID) private platformId: object) {
-    
-}
-  get heroClasses(): string[] {
-    return ['hero-section', `hero-section--${this.variant}`];
-  }
-
-  get layout(): string {
+  layout = computed(() => {
+    const v = this.variant();
     const matrixLayout = ['matrix', 'bioshock', 'quantum', 'holo', 'neomorph'];
     const retroLayout = ['retro', 'super-meat-boy', 'portal', 'glitch', 'joycon', 'arcade', 'pixel'];
     const stellarLayout = ['stellar', 'cosmic', 'galactic'];
     const phoenixLayout = ['phoenix', 'fire', 'jungle', 'electoon'];
     const secondaryLayout = ['secondary', 'video', 'carousel'];
-    const primaryLayout = ['primary', 'default', 'standard', 'elegant', 'vintage', 'luxury'];
     const glassLayout = ['glass', 'frosted'];
     const cyberpunkLayout = ['cyberpunk', 'neon-pulse'];
     const neonLayout = ['neon', 'sparkle'];
 
-    if (matrixLayout.includes(this.variant)) return 'matrix';
-    if (retroLayout.includes(this.variant)) return 'retro';
-    if (stellarLayout.includes(this.variant)) return 'stellar';
-    if (phoenixLayout.includes(this.variant)) return 'phoenix';
-    if (secondaryLayout.includes(this.variant)) return 'secondary';
-    if (glassLayout.includes(this.variant)) return 'glass';
-    if (cyberpunkLayout.includes(this.variant)) return 'cyberpunk';
-    if (neonLayout.includes(this.variant)) return 'neon';
+    if (matrixLayout.includes(v)) return 'matrix';
+    if (retroLayout.includes(v)) return 'retro';
+    if (stellarLayout.includes(v)) return 'stellar';
+    if (phoenixLayout.includes(v)) return 'phoenix';
+    if (secondaryLayout.includes(v)) return 'secondary';
+    if (glassLayout.includes(v)) return 'glass';
+    if (cyberpunkLayout.includes(v)) return 'cyberpunk';
+    if (neonLayout.includes(v)) return 'neon';
     
     return 'primary';
-  }
+  });
 
-  get showParticles(): boolean {
-    return !['matrix', 'cyberpunk', 'neon', 'stellar', 'retro', 'phoenix', 'default'].includes(this.variant);
-  }
+  showParticles = computed(() => {
+    return !['matrix', 'cyberpunk', 'neon', 'stellar', 'retro', 'phoenix', 'default'].includes(this.variant());
+  });
 
-  get overlayClass(): string {
-    return `overlay--${this.variant}`;
-  }
+  overlayClass = computed(() => `overlay--${this.variant()}`);
+  particleClass = computed(() => `particle--${this.variant()}`);
 
-  get particleClass(): string {
-    return `particle--${this.variant}`;
-  }
-
-  get particleIcon1(): string {
+  particleIcon1 = computed(() => {
     const icons: { [key: string]: string } = {
       primary: '✨',
       secondary: '🌟',
@@ -161,10 +152,10 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
       retro: '🎮',
       stellar: '⭐',
     };
-    return icons[this.variant] || '✨';
-  }
+    return icons[this.variant()] || '✨';
+  });
 
-  get particleIcon2(): string {
+  particleIcon2 = computed(() => {
     const icons: { [key: string]: string } = {
       primary: '🌟',
       secondary: '✨',
@@ -173,26 +164,15 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
       retro: '🕹️',
       stellar: '🌌',
     };
-    return icons[this.variant] || '🌟';
-  }
+    return icons[this.variant()] || '🌟';
+  });
 
-  get contentClass(): string {
-    return `content--${this.variant}`;
-  }
+  contentClass = computed(() => `content--${this.variant()}`);
+  titleClass = computed(() => `title--${this.variant()}`);
+  subtitleClass = computed(() => `subtitle--${this.variant()}`);
+  ctaClass = computed(() => `cta--${this.variant()}`);
 
-  get titleClass(): string {
-    return `title--${this.variant}`;
-  }
-
-  get subtitleClass(): string {
-    return `subtitle--${this.variant}`;
-  }
-
-  get ctaClass(): string {
-    return `cta--${this.variant}`;
-  }
-
-  get videoClass(): string {
+  videoClass = computed(() => {
     const classes: { [key: string]: string } = {
       secondary: 'video-fullscreen',
       cyberpunk: 'video-neon',
@@ -202,28 +182,19 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
       phoenix: 'video-flame',
       default: 'video-gallery',
     };
-    return classes[this.variant] || 'video-standard';
-  }
+    return classes[this.variant()] || 'video-standard';
+  });
 
-  get inputClass(): string {
-    return `input--${this.variant}`;
-  }
-
-  get formButtonClass(): string {
-    return `form-button--${this.variant}`;
-  }
-
-  get scrollIconClass(): string {
-    return `scroll-icon--${this.variant}`;
-  }
+  inputClass = computed(() => `input--${this.variant()}`);
+  formButtonClass = computed(() => `form-button--${this.variant()}`);
+  scrollIconClass = computed(() => `scroll-icon--${this.variant()}`);
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
-      if (this.variant === 'matrix' && this.matrixCanvas) {
+      if (this.variant() === 'matrix' && this.matrixCanvas) {
         this.initMatrixEffect();
       }
     }
-    
   }
 
   ngOnDestroy(): void {
@@ -242,15 +213,16 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
 
   scrollToSection(sectionId: string): void {
     this.sectionSelected.emit(sectionId);
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (isPlatformBrowser(this.platformId)) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   }
 
   onCarouselItemClick(item: CarouselItem): void {
     this.carouselItemClicked.emit(item);
-
   }
 
   onGalleryItemClick(item: CarouselItem): void {
@@ -259,19 +231,19 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
   }
 
   prevCarouselItem(): void {
-    this.activeCarouselIndex = (this.activeCarouselIndex - 1 + this.carouselItems.length) % this.carouselItems.length;
+    this.activeCarouselIndex = (this.activeCarouselIndex - 1 + this.carouselItems().length) % this.carouselItems().length;
   }
 
   nextCarouselItem(): void {
-    this.activeCarouselIndex = (this.activeCarouselIndex + 1) % this.carouselItems.length;
+    this.activeCarouselIndex = (this.activeCarouselIndex + 1) % this.carouselItems().length;
   }
 
   prevRetroItem(): void {
-    this.activeRetroIndex = (this.activeRetroIndex - 1 + this.navigationCards.length) % this.navigationCards.length;
+    this.activeRetroIndex = (this.activeRetroIndex - 1 + this.navigationCards().length) % this.navigationCards().length;
   }
 
   nextRetroItem(): void {
-    this.activeRetroIndex = (this.activeRetroIndex + 1) % this.navigationCards.length;
+    this.activeRetroIndex = (this.activeRetroIndex + 1) % this.navigationCards().length;
   }
 
   onInteractiveKeydown(event: KeyboardEvent, callback: (...args: any[]) => void, ...args: any[]): void {

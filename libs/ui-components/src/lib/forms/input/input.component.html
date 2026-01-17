@@ -1,45 +1,45 @@
 <div class="input-wrapper">
-  <label *ngIf="label && type !== 'checkbox'" class="input-label">{{label}}</label>
-  <div class="input-control-container" [class.checkbox-layout]="type === 'checkbox'">
-    <ng-container [ngSwitch]="type">
+  <label *ngIf="label() && type() !== 'checkbox'" class="input-label">{{label()}}</label>
+  <div class="input-control-container" [class.checkbox-layout]="type() === 'checkbox'">
+    <ng-container [ngSwitch]="type()">
       <!-- Input normal -->
       <input
         *ngSwitchCase="'text'"
-        [type]="type"
+        [type]="type()"
         [value]="value"
         (input)="onInputChange($event)"
-        [placeholder]="placeholder"
+        [placeholder]="placeholder()"
         [disabled]="disabled"
-        [class]="'input input-' + variant + ' input-' + size"
+        [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles"
+        [ngStyle]="customStyles()"
         tag="input"
       />
 
       <!-- Email input -->
       <input
         *ngSwitchCase="'email'"
-        [type]="type"
+        [type]="type()"
         [value]="value"
         (input)="onInputChange($event)"
-        [placeholder]="placeholder"
+        [placeholder]="placeholder()"
         [disabled]="disabled"
-        [class]="'input input-' + variant + ' input-' + size"
+        [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles"
+        [ngStyle]="customStyles()"
         tag="input"
       />
 
       <!-- Datetime-local input -->
       <input
         *ngSwitchCase="'datetime-local'"
-        [type]="type"
+        [type]="type()"
         [value]="value"
         (input)="onInputChange($event)"
         [disabled]="disabled"
-        [class]="'input input-' + variant + ' input-' + size"
+        [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles"
+        [ngStyle]="customStyles()"
         tag="input"
       />
 
@@ -50,12 +50,12 @@
         [checked]="value"
         (change)="onInputChange($event)"
         [disabled]="disabled"
-        [class]="'input input-' + variant + ' input-' + size"
+        [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles"
+        [ngStyle]="customStyles()"
         tag="input"
       />
-      <span *ngIf="type === 'checkbox' && label" class="checkbox-label">{{label}}</span>
+      <span *ngIf="type() === 'checkbox' && label()" class="checkbox-label">{{label()}}</span>
 
       <!-- Select -->
       <select
@@ -63,13 +63,13 @@
         [value]="value"
         (change)="onInputChange($event)"
         [disabled]="disabled"
-        [class]="'input input-' + variant + ' input-' + size"
+        [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles"
+        [ngStyle]="customStyles()"
         tag="select"
       >
-        <option value="" disabled selected>{{ placeholder || 'Selecciona una opción' }}</option>
-        <option *ngFor="let option of options" [value]="option.value">
+        <option value="" disabled selected>{{ placeholder() || 'Selecciona una opción' }}</option>
+        <option *ngFor="let option of options()" [value]="option.value">
           {{ option.label }}
         </option>
       </select>
@@ -79,26 +79,26 @@
         *ngSwitchCase="'textarea'"
         [value]="value"
         (input)="onInputChange($event)"
-        [placeholder]="placeholder"
+        [placeholder]="placeholder()"
         [disabled]="disabled"
-        [rows]="rows || 4"
-        [class]="'input input-' + variant + ' input-' + size"
+        [rows]="rows() || 4"
+        [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles"
+        [ngStyle]="customStyles()"
         tag="textarea"
       ></textarea>
 
       <!-- Fallback -->
       <input
         *ngSwitchDefault
-        [type]="type"
+        [type]="type()"
         [value]="value"
         (input)="onInputChange($event)"
-        [placeholder]="placeholder"
+        [placeholder]="placeholder()"
         [disabled]="disabled"
-        [class]="'input input-' + variant + ' input-' + size"
+        [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles"
+        [ngStyle]="customStyles()"
         tag="input"
       />
     </ng-container>

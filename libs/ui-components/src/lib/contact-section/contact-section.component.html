@@ -1,9 +1,9 @@
 
-<section class="contact-section" [ngClass]="['variant-' + variant]">
+<section class="contact-section" [ngClass]="['variant-' + variant()]">
   <div class="container">
     <div class="header">
-      <h2 class="title">{{ title }}</h2>
-      <p class="subtitle">{{ subtitle }}</p>
+      <h2 class="title">{{ title() }}</h2>
+      <p class="subtitle">{{ subtitle() }}</p>
     </div>
 
     <div class="form-container">
@@ -11,7 +11,7 @@
         <div class="form-group">
             <lib-ui-components-input
                  [label]="'Nombre'"
-                 [variant]="variant"
+                 [variant]="variant()"
                  [(ngModel)]="formData.name"
                  name="name"
                  required>
@@ -20,9 +20,9 @@
 
         <div class="form-group">
             <lib-ui-components-input
-                 [label]="emailLabel"
+                 [label]="emailLabel()"
                  [type]="'email'"
-                 [variant]="variant"
+                 [variant]="variant()"
                  [(ngModel)]="formData.email"
                  name="email"
                  required>
@@ -31,10 +31,10 @@
 
         <div class="form-group">
              <lib-ui-components-input
-                 [label]="messageLabel"
+                 [label]="messageLabel()"
                  [type]="'textarea'"
                  [rows]="5"
-                 [variant]="variant"
+                 [variant]="variant()"
                  [(ngModel)]="formData.message"
                  name="message"
                  required>
@@ -43,11 +43,11 @@
 
         <div class="actions">
             <lib-ui-components-button
-                [variant]="variant === 'default' ? 'primary' : variant"
+                [variant]="variant() === 'default' ? 'primary' : variant()"
                 [size]="'lg'"
                 [disabled]="isSubmitting"
                 (buttonClick)="onSubmit()">
-                {{ isSubmitting ? 'Enviando...' : buttonText }}
+                {{ isSubmitting ? 'Enviando...' : buttonText() }}
             </lib-ui-components-button>
         </div>
         

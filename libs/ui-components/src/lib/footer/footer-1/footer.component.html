@@ -1,20 +1,20 @@
-<footer [ngStyle]="customStyles" [ngClass]="footerClasses" role="contentinfo">
+<footer [ngStyle]="customStyles()" [ngClass]="footerClasses()" role="contentinfo">
   <!-- Partículas de fondo -->
-  <div *ngIf="showParticles" class="particle-container">
-    <div class="particle" [ngClass]="dark ? 'dark' : ''"></div>
-    <div class="particle" [ngClass]="dark ? 'dark' : ''"></div>
-    <div class="particle" [ngClass]="dark ? 'dark' : ''"></div>
+  <div *ngIf="showParticles()" class="particle-container">
+    <div class="particle" [ngClass]="dark() ? 'dark' : ''"></div>
+    <div class="particle" [ngClass]="dark() ? 'dark' : ''"></div>
+    <div class="particle" [ngClass]="dark() ? 'dark' : ''"></div>
   </div>
 
   <!-- Contenido principal -->
   <div class="container">
     <!-- Sección Sobre -->
     <div class="space-y-3 animate-fade-in">
-      <h3 [ngClass]="titleClasses">
-        {{ title }}
+      <h3 [ngClass]="titleClasses()">
+        {{ title() }}
       </h3>
       <p class="text-gray-200">
-        {{ description }}
+        {{ description() }}
       </p>
     </div>
 
@@ -22,7 +22,7 @@
     <div class="space-y-3 animate-pulse" style="animation-delay: 0.1s;">
       <h3 class="footer-title">Explora</h3>
       <ul class="space-y-2">
-        <li *ngFor="let link of exploreLinks">
+        <li *ngFor="let link of exploreLinks()">
           <a
             [href]="link.href"
             (click)="onLinkClick(link.href)"
@@ -39,7 +39,7 @@
     <div class="space-y-3 animate-fade-in" style="animation-delay: 0.2s;">
       <h3 class="footer-title">Tendencias</h3>
       <ul class="space-y-2">
-        <li *ngFor="let link of trendLinks">
+        <li *ngFor="let link of trendLinks()">
           <a
             [href]="link.href"
             (click)="onLinkClick(link.href)"
@@ -57,7 +57,7 @@
       <h3 class="footer-title">Conecta</h3>
       <div class="flex space-x-4">
         <a
-          *ngFor="let social of socialIcons"
+          *ngFor="let social of socialIcons()"
           [href]="social.href"
           (click)="onSocialClick(social.href)"
           class="footer-social-icon"
@@ -79,7 +79,7 @@
 
   <!-- Derechos de Autor -->
   <div class="text-center text-gray-400 animate-fade-in" style="animation-delay: 0.4s;">
-    {{ copyrightText.replace('{{currentYear}}', currentYear.toString()) }}
+    {{ copyrightText().replace('{{currentYear}}', currentYear.toString()) }}
   </div>
 </footer>
 

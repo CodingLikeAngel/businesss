@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, input, output, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { variants as baseVariants } from '../../models/ui-components-data.model';
 
@@ -52,58 +52,39 @@ export interface FooterCustomStyles {
   styleUrls: ['./footer.component.scss'],
 })
 export class UIFooterComponent implements OnInit {
-  private _dark = false;
-  private _showParticles = true;
-
-  @Input()
-  get dark(): boolean {
-    return this._dark;
-  }
-  set dark(value: boolean) {
-    this._dark = value;
-    this.darkChange.emit(this._dark);
-  }
-
-  @Input()
-  get showParticles(): boolean {
-    return this._showParticles;
-  }
-  set showParticles(value: boolean) {
-    this._showParticles = value;
-    this.showParticlesChange.emit(this._showParticles);
-  }
-
-  @Input() variant: string = 'primary';
-  @Input() title = 'Outdoor Haven';
-  @Input() description = 'Todo lo que necesitas para tus aventuras al aire libre';
-  @Input() exploreLinks: Link[] = [
+  dark = input(false);
+  showParticles = input(true);
+  variant = input('primary');
+  title = input('Outdoor Haven');
+  description = input('Todo lo que necesitas para tus aventuras al aire libre');
+  exploreLinks = input<Link[]>([
     { label: 'Pesca', href: '#', icon: '🎣' },
     { label: 'Caza', href: '#', icon: '🏹' },
     { label: 'Senderismo', href: '#', icon: '🏔️' },
     { label: 'Comida', href: '#', icon: '🍖' },
-  ];
-  @Input() trendLinks: Link[] = [
+  ]);
+  trendLinks = input<Link[]>([
     { label: 'Ayuda', href: '#', icon: '❓' },
     { label: 'Devoluciones', href: '#', icon: '🔄' },
     { label: 'Contacto', href: '#', icon: '✉️' },
-  ];
-  @Input() socialIcons: SocialIcon[] = [
+  ]);
+  socialIcons = input<SocialIcon[]>([
     { name: 'twitter', href: '#' },
     { name: 'facebook', href: '#' },
     { name: 'instagram', href: '#' },
-  ];
-  @Input() copyrightText = '© {{currentYear}} Outdoor Haven - Equípate para la naturaleza';
-  @Input() customStyles: FooterCustomStyles = {};
+  ]);
+  copyrightText = input('© {{currentYear}} Outdoor Haven - Equípate para la naturaleza');
+  customStyles = input<FooterCustomStyles>({});
 
-  @Output() linkClicked = new EventEmitter<string>();
-  @Output() socialClicked = new EventEmitter<string>();
-  @Output() darkChange = new EventEmitter<boolean>();
-  @Output() showParticlesChange = new EventEmitter<boolean>();
+  linkClicked = output<string>();
+  socialClicked = output<string>();
+  darkChange = output<boolean>();
+  showParticlesChange = output<boolean>();
 
   currentYear = new Date().getFullYear();
 
   ngOnInit() {
-    console.log('Custom Styles:', this.customStyles);
+    console.log('Custom Styles:', this.customStyles());
   }
 
   onLinkClick(href: string) {
@@ -114,16 +95,15 @@ export class UIFooterComponent implements OnInit {
     this.socialClicked.emit(href);
   }
 
-  get titleClasses(): string[] {
-    return ['footer-title', `footer-title--${this.variant}`];
-  }
-  get footerClasses(): string[] {
-    const isCustomVariant = this.variant.startsWith('custom-footer');
+  titleClasses = computed(() => ['footer-title', `footer-title--${this.variant()}`]);
+  
+  footerClasses = computed(() => {
+    const isCustomVariant = this.variant().startsWith('custom-footer');
     return [
       'footer',
-      isCustomVariant ? 'footer--custom' : `variant-${this.variant}`,
-      this.dark ? 'dark' : '',
-      this.showParticles ? 'footer--with-particles' : 'footer--no-particles',
+      isCustomVariant ? 'footer--custom' : `variant-${this.variant()}`,
+      this.dark() ? 'dark' : '',
+      this.showParticles() ? 'footer--with-particles' : 'footer--no-particles',
     ].filter(Boolean);
-  }
+  });
 }

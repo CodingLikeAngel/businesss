@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding } from '@angular/core';
+import { Component, input, computed, HostBinding } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { variants as baseVariants } from '../../models/ui-components-data.model';
@@ -63,22 +63,22 @@ export interface CardPremiumCustomStyles {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div [ngClass]="hostClasses" [style.background]="safeGradient">
+    <div [ngClass]="hostClasses()" [style.background]="safeGradient()">
       <div class="icon">
         <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path [attr.d]="safeIconPath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+          <path [attr.d]="safeIconPath()" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
         </svg>
       </div>
       <div class="content">
-        <h2>{{ safeTitle }}</h2>
-        <p>{{ safeDescription }}</p>
+        <h2>{{ safeTitle() }}</h2>
+        <p>{{ safeDescription() }}</p>
       </div>
     </div>
   `,
   styleUrls: ['./card-premium.component.scss'],
 })
 export class UICardPremiumComponent {
-  @Input() config: CardPremiumConfig = {
+  config = input<CardPremiumConfig>({
     icon: 'heroStar',
     title: 'Card Title',
     description: 'This is a premium card description.',
@@ -86,41 +86,48 @@ export class UICardPremiumComponent {
     price: '',
     discount: '',
     tooltip: ''
-  };
+  });
 
-  @Input() variant = 'primary';
+  variant = input('primary');
 
-  @Input() customStyles: CardPremiumCustomStyles = {};
+  customStyles = input<CardPremiumCustomStyles>({});
 
   constructor(private sanitizer: DomSanitizer) {}
 
-  @HostBinding('class') get hostClasses() {
-    return ['card', `card--${this.variant}`];
+  hostClasses = computed(() => ['card', `card--${this.variant()}`]);
+
+  hostStyles = computed(() => this.customStyles());
+
+  @HostBinding('class') get hostClass() {
+    return this.hostClasses();
   }
 
-  @HostBinding('style') get hostStyles() {
-    return this.customStyles;
+  @HostBinding('style') get hostStyle() {
+    return this.hostStyles();
   }
 
-  get safeGradient(): string {
-    return this.config?.gradient || '';
-  }
+  safeGradient = computed(() => {
+    return this.config()?.gradient || '';
+  });
 
-  get safeIconPath(): string {
-    const icon = this.config?.icon || 'heroStar';
+  safeIconPath = computed(() => {
+    const icon = this.config()?.icon || 'heroStar';
     return heroIconPaths[icon as HeroIcon] || heroIconPaths['heroStar'];
-  }
+  });
 
-  get safeTitle(): string {
-    return this.config?.title || 'Card Title';
-  }
+  safeTitle = computed(() => {
+    return this.config()?.title || 'Card Title';
+  });
 
-  get safeDescription(): string {
-    return this.config?.description || '';
-  }
+  safeDescription = computed(() => {
+    return this.config()?.description || '';
+  });
 
-  getIconSvg(): SafeHtml {
-    const icon = this.config?.icon || 'heroStar';
+  // helper if needed
+  getIconSvg() {
+    // Only used conceptually, safeIconPath handles path d.
+    // If full SVG is needed, use sanitizer and another computed.
+    const icon = this.config()?.icon || 'heroStar';
     return this.sanitizer.bypassSecurityTrustHtml(heroIcons[icon as HeroIcon] || heroIcons['heroStar']);
   }
 }

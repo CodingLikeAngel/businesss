@@ -1,5 +1,5 @@
 
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UIButtonComponent } from '../../button/button.component';
 
@@ -11,12 +11,12 @@ import { UIButtonComponent } from '../../button/button.component';
   styleUrls: ['./card-products.component.scss']
 })
 export class UiCardProductsComponent {
-  @Input() product: { 
+  product = input<{ 
     image: string; 
     name: string; 
     description: string; 
     price: string 
-  } = { image: '', name: '', description: '', price: '' };
+  }>({ image: '', name: '', description: '', price: '' });
   
-  @Input() variant = 'title';
+  variant = input('title');
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { variants as baseVariants } from '../../models/ui-components-data.model';
 
@@ -22,31 +22,25 @@ export interface HeaderCustomStyles {
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
 })
-export class UIHeaderComponent implements OnChanges {
-  @Input() title = 'Header Title';
-  @Input() subtitle = '';
-  @Input() variant: HeaderVariantType = 'primary';
-  @Input() align: 'left' | 'center' | 'right' = 'center';
-  @Input() dark = false;
-  @Input() navItems: { label: string; href: string; active?: boolean }[] = [];
-  @Input() customStyles: HeaderCustomStyles = {};
+export class UIHeaderComponent {
+  title = input('Header Title');
+  subtitle = input('');
+  variant = input<HeaderVariantType>('primary');
+  align = input<'left' | 'center' | 'right'>('center');
+  dark = input(false);
+  navItems = input<{ label: string; href: string; active?: boolean }[]>([]);
+  customStyles = input<HeaderCustomStyles>({});
 
   isMenuOpen = false;
-
-  ngOnChanges() {
-    console.log('Header variant changed to:', this.variant);
-  }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  get headerClasses(): string[] {
-    return [
-      'header',
-      `variant-${this.variant}`,
-      `align-${this.align}`,
-      this.dark ? 'dark' : '',
-    ].filter(Boolean);
-  }
+  headerClasses = computed(() => [
+    'header',
+    `variant-${this.variant()}`,
+    `align-${this.align()}`,
+    this.dark() ? 'dark' : '',
+  ].filter(Boolean));
 }

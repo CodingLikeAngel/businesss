@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, ViewChild, AfterViewInit, OnInit, OnDestroy, HostBinding } from '@angular/core';
+import { Component, input, ElementRef, ViewChild, AfterViewInit, OnInit, OnDestroy, HostBinding } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { variants as baseVariants } from '../models/ui-components-data.model';
@@ -43,15 +43,15 @@ export interface GalleryCustomStyles {
   styleUrls: ['./gallery.component.scss'],
 })
 export class UIGalleryComponent implements OnInit, AfterViewInit, OnDestroy {
-  @Input() images: GalleryImage[] = [
+  images = input<GalleryImage[]>([
     { src: 'https://picsum.photos/200/300', alt: 'Image 1', caption: 'First Image' },
     { src: 'https://picsum.photos/200/300', alt: 'Image 2', caption: 'Second Image' },
     { src: 'https://picsum.photos/200/300', alt: 'Image 3', caption: 'Third Image' },
-  ];
-  @Input() variant = 'default'; // Relajamos el tipo para permitir personalizadas
-  @Input() autoSlide = false;
-  @Input() slideInterval = 3000;
-  @Input() customStyles: GalleryCustomStyles = {};
+  ]);
+  variant = input<GalleryVariant | string>('default');
+  autoSlide = input(false);
+  slideInterval = input(3000);
+  customStyles = input<GalleryCustomStyles>({});
 
   @ViewChild('slider', { static: false }) slider!: ElementRef<HTMLDivElement>;
 
@@ -60,7 +60,7 @@ export class UIGalleryComponent implements OnInit, AfterViewInit, OnDestroy {
   private hammerManager?: HammerManager;
 
   ngOnInit() {
-    if (this.autoSlide) {
+    if (this.autoSlide()) {
       this.startAutoSlide();
     }
   }
@@ -86,7 +86,7 @@ export class UIGalleryComponent implements OnInit, AfterViewInit, OnDestroy {
 
   startAutoSlide() {
     this.stopAutoSlide();
-    this.autoSlideInterval = setInterval(() => this.nextSlide(), this.slideInterval);
+    this.autoSlideInterval = setInterval(() => this.nextSlide(), this.slideInterval());
   }
 
   stopAutoSlide() {
@@ -96,12 +96,12 @@ export class UIGalleryComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   prevSlide() {
-    this.currentIndex = (this.currentIndex - 1 + this.images.length) % this.images.length;
+    this.currentIndex = (this.currentIndex - 1 + this.images().length) % this.images().length;
     this.updateSliderPosition();
   }
 
   nextSlide() {
-    this.currentIndex = (this.currentIndex + 1) % this.images.length;
+    this.currentIndex = (this.currentIndex + 1) % this.images().length;
     this.updateSliderPosition();
   }
 
@@ -138,10 +138,10 @@ export class UIGalleryComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @HostBinding('class') get hostClasses() {
-    return ['ui-gallery', `ui-gallery--${this.variant}`].filter(Boolean);
+    return ['ui-gallery', `ui-gallery--${this.variant()}`].filter(Boolean);
   }
 
   @HostBinding('style') get hostStyles() {
-    return this.customStyles;
+    return this.customStyles();
   }
 }

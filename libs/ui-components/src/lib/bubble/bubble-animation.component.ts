@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ElementRef, ViewChild, Input, HostBinding, Inject, PLATFORM_ID, ViewEncapsulation, OnDestroy } from '@angular/core';
+import { Component, AfterViewInit, ElementRef, ViewChild, HostBinding, Inject, PLATFORM_ID, ViewEncapsulation, OnDestroy, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { isPlatformBrowser } from '@angular/common';
 import { variants as baseVariants } from '../models/ui-components-data.model';
@@ -38,35 +38,36 @@ export interface BubbleConfig {
   styleUrls: ['./bubble-animation.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class BubbleAnimationComponent implements AfterViewInit {
+export class BubbleAnimationComponent implements AfterViewInit, OnDestroy {
   @ViewChild('interactiveBubble') interactiveBubble!: ElementRef<HTMLDivElement>;
 
-  @Input() config: BubbleConfig = {
+  config = input<BubbleConfig>({
     speed: 1,
     blur: 40,
     opacity: 0.8,
     variant: 'default'
-  };
+  });
 
-  @Input()
-  set variant(value: BubbleVariant) {
-    this._variant = bubbleVariants.includes(value) ? value : 'default';
-  }
-  get variant(): BubbleVariant {
-    return this._variant;
-  }
-  private _variant: BubbleVariant = 'default';
+  variant = input<BubbleVariant>('default');
 
-  @HostBinding('class') get hostClasses() {
-    return ['bubble-container', `bubble--${this.variant}`];
+  hostClasses = computed(() => {
+    const v = this.variant();
+    const effectiveVariant = bubbleVariants.includes(v) ? v : 'default';
+    return ['bubble-container', `bubble--${effectiveVariant}`].join(' ');
+  });
+
+  hostStyles = computed(() => ({
+      '--bubble-blur': `${this.config().blur ?? 40}px`,
+      '--bubble-opacity': this.config().opacity ?? 0.8,
+      '--bubble-speed': this.config().speed ?? 1
+  }));
+
+  @HostBinding('class') get hostClass() {
+    return this.hostClasses();
   }
 
-  @HostBinding('style') get hostStyles() {
-    return {
-      '--bubble-blur': `${this.config.blur ?? 40}px`,
-      '--bubble-opacity': this.config.opacity ?? 0.8,
-      '--bubble-speed': this.config.speed ?? 1
-    };
+  @HostBinding('style') get hostStyle() {
+    return this.hostStyles();
   }
 
   private curX = 0;
@@ -108,8 +109,8 @@ export class BubbleAnimationComponent implements AfterViewInit {
 
   private move() {
     if (!this.config) return;
-    this.curX += (this.tgX - this.curX) / (20 / (this.config.speed || 1));
-    this.curY += (this.tgY - this.curY) / (20 / (this.config.speed || 1));
+    this.curX += (this.tgX - this.curX) / (20 / (this.config().speed || 1));
+    this.curY += (this.tgY - this.curY) / (20 / (this.config().speed || 1));
 
     if (this.interactiveBubble) {
       this.interactiveBubble.nativeElement.style.transform = 

@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding, forwardRef } from '@angular/core';
+import { Component, Input, HostBinding, forwardRef, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { variants as baseVariants } from '../../models/ui-components-data.model';
@@ -45,15 +45,15 @@ export interface InputOption {
   ],
 })
 export class UIInputComponent implements ControlValueAccessor {
-  @Input() variant: InputVariantType = 'primary';
-  @Input() size: 'sm' | 'md' | 'lg' = 'md';
-  @Input() placeholder = '';
-  @Input() disabled = false;
-  @Input() type = 'text';
-  @Input() customStyles: InputCustomStyles = {};
-  @Input() options: InputOption[] = [];
-  @Input() rows?: number;
-  @Input() label = '';
+  variant = input<InputVariantType>('primary');
+  size = input<'sm' | 'md' | 'lg'>('md');
+  placeholder = input('');
+  @Input() disabled = false; // Keep as Input for CVA compatibility/mutable
+  type = input('text');
+  customStyles = input<InputCustomStyles>({});
+  options = input<InputOption[]>([]);
+  rows = input<number | undefined>(undefined);
+  label = input('');
 
   private innerValue: any = '';
 
@@ -68,14 +68,14 @@ export class UIInputComponent implements ControlValueAccessor {
   @HostBinding('class') get hostClasses() {
     return [
       'input',
-      `input-${this.variant}`,
-      `input-${this.size}`,
+      `input-${this.variant()}`,
+      `input-${this.size()}`,
       this.disabled ? 'input-disabled' : '',
     ].filter(Boolean);
   }
 
   @HostBinding('style') get hostStyles() {
-    return this.customStyles;
+    return this.customStyles();
   }
 
   get value(): any {

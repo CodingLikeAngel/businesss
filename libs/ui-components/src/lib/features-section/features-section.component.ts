@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 export interface FeatureItem {
@@ -16,10 +16,10 @@ export interface FeatureItem {
   styleUrls: ['./features-section.component.scss']
 })
 export class UIFeaturesSectionComponent {
-  @Input() title = 'Nuestros Servicios Premium';
-  @Input() subtitle = 'Descubre cómo podemos ayudarte a llevar tu negocio al siguiente nivel con nuestras soluciones innovadoras.';
-  @Input() variant: string = 'default';
-  @Input() features: FeatureItem[] = [
+  title = input('Nuestros Servicios Premium');
+  subtitle = input('Descubre cómo podemos ayudarte a llevar tu negocio al siguiente nivel con nuestras soluciones innovadoras.');
+  variant = input('default');
+  features = input<FeatureItem[]>([
     {
       icon: '🚀',
       title: 'Alta Velocidad',
@@ -56,10 +56,8 @@ export class UIFeaturesSectionComponent {
       description: 'Toma decisiones informadas con nuestras herramientas integradas de analítica.',
       color: '#ec4899'
     }
-  ];
+  ]);
 
-  get containerClasses(): string {
-    return `features-container features--${this.variant}`;
-  }
+  containerClasses = computed(() => `features-container features--${this.variant()}`);
 }
 

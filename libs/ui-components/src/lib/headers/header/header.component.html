@@ -1,8 +1,8 @@
-<header [ngClass]="headerClasses" [style]="customStyles">
+<header [ngClass]="headerClasses()" [style]="customStyles()">
   <div class="header-content">
     <div class="title-wrapper">
-      <h1>{{ title }}</h1>
-      <p *ngIf="subtitle">{{ subtitle }}</p>
+      <h1>{{ title() }}</h1>
+      <p *ngIf="subtitle()">{{ subtitle() }}</p>
     </div>
 
     <button
@@ -20,7 +20,7 @@
 
     <nav class="nav" [class.open]="isMenuOpen">
       <ul>
-        <li *ngFor="let item of navItems" [class.active]="item.active">
+        <li *ngFor="let item of navItems()" [class.active]="item.active">
           <a [href]="item.href">{{ item.label }}</a>
         </li>
       </ul>
