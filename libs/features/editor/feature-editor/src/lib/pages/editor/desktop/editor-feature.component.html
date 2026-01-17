@@ -171,18 +171,26 @@
       <!-- BUBBLE -->
       <div *ngSwitchCase="'bubble'" class="editor-section cursor-pointer"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
-        <lib-bubble-animation 
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
+        <lib-bubble-animation
           [variant]="getVariant(section.id)"
           [config]="bubbleConfig"
         ></lib-bubble-animation>
       </div>
 
       <!-- SERVICES (Decomposed) -->
-      <section *ngSwitchCase="'services'" [id]="section.id" 
-        class="relative z-20 py-20 cursor-pointer editor-section" 
+      <section *ngSwitchCase="'services'" [id]="section.id"
+        class="relative z-20 py-20 cursor-pointer editor-section"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
         <div class="container mx-auto px-6 max-w-7xl">
           <div class="text-center mb-16">
             <lib-ui-components-title
@@ -215,10 +223,14 @@
       </section>
 
       <!-- PRODUCTS (Already using elements) -->
-      <section *ngSwitchCase="'products'" [id]="section.id" 
+      <section *ngSwitchCase="'products'" [id]="section.id"
         class="relative z-20 py-20 cursor-pointer editor-section"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
         <div class="container mx-auto px-6 max-w-7xl">
           <div class="backdrop-blur-xl p-12 rounded-3xl border border-white/10 bg-white/5">
             <div class="text-center mb-12">
@@ -274,7 +286,11 @@
       <!-- TESTIMONIALS (Decomposed) -->
       <div *ngSwitchCase="'testimonials'" class="editor-section cursor-pointer py-20"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
         <div class="container mx-auto px-6 max-w-7xl">
           <h2 class="text-4xl font-bold text-center text-white mb-16 editor-element"
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
@@ -299,7 +315,11 @@
       <!-- Keeping complex component for pricing as it has special logic, but making it a bit more selectable -->
       <div *ngSwitchCase="'pricing'" class="editor-section cursor-pointer"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
         <lib-ui-pricing-table-section 
           [variant]="getVariant(section.id)"
           [id]="section.id"
@@ -310,10 +330,14 @@
       </div>
 
       <!-- PROMOTIONS (Decomposed for editing) -->
-      <section *ngSwitchCase="'promotions'" [id]="section.id" 
-        class="relative z-20 py-20 cursor-pointer editor-section" 
+      <section *ngSwitchCase="'promotions'" [id]="section.id"
+        class="relative z-20 py-20 cursor-pointer editor-section"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
         
         <div class="container mx-auto px-6 max-w-7xl">
           <div class="text-center mb-16">
@@ -348,7 +372,11 @@
       <!-- FAQ (Decomposed) -->
       <div *ngSwitchCase="'faq'" class="editor-section cursor-pointer py-20"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
         <div class="container mx-auto px-6 max-w-3xl">
           <h2 class="text-4xl font-bold text-center text-white mb-12 editor-element"
               [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
@@ -373,7 +401,11 @@
       <!-- GALLERY -->
       <div *ngSwitchCase="'gallery'" class="editor-section cursor-pointer py-20"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
         <div class="container mx-auto px-6 max-w-7xl">
           <lib-ui-components-title
             [level]="section.content['level'] || titleConfig.level"
@@ -404,10 +436,14 @@
       </div>
 
       <!-- CONTACT -->
-      <section *ngSwitchCase="'contact'" [id]="section.id" 
-        class="relative z-20 py-20 mb-16 cursor-pointer editor-section" 
+      <section *ngSwitchCase="'contact'" [id]="section.id"
+        class="relative z-20 py-20 mb-16 cursor-pointer editor-section"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
         <div class="container mx-auto px-6 max-w-3xl">
           <lib-ui-components-title
             [level]="section.content['level'] || titleConfig.level"
@@ -433,7 +469,11 @@
       <!-- HEADER (As Section) -->
       <div *ngSwitchCase="'header'" class="editor-section cursor-pointer py-4"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="editor-element"
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_header'"
                (click)="selectElement($event, { id: section.id + '_header', sectionId: section.id, content: section.content, type: 'header', _original: section.content })">
@@ -450,7 +490,11 @@
       <!-- FOOTER (As Section) -->
       <div *ngSwitchCase="'footer'" class="editor-section cursor-pointer py-4"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="editor-element"
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_footer'"
                (click)="selectElement($event, { id: section.id + '_footer', sectionId: section.id, content: section.content, type: 'footer', _original: section.content })">
@@ -466,7 +510,11 @@
       <!-- ACCORDION (Standalone) -->
       <div *ngSwitchCase="'accordion'" class="editor-section cursor-pointer py-12"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 max-w-3xl editor-element"
                [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_accordion'"
                (click)="selectElement($event, { id: section.id + '_accordion', sectionId: section.id, content: section.content, type: 'accordion', _original: section.content })">
@@ -490,7 +538,11 @@
       <!-- LIST (Standalone) -->
       <div *ngSwitchCase="'list'" class="editor-section cursor-pointer py-12"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 max-w-2xl editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_list'"
              (click)="selectElement($event, { id: section.id + '_list', sectionId: section.id, content: section.content, type: 'list', _original: section.content })">
@@ -505,7 +557,11 @@
       <!-- NEWSLETTER (Standalone) -->
       <div *ngSwitchCase="'newsletter'" class="editor-section cursor-pointer py-12"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 max-w-4xl editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_newsletter'"
              (click)="selectElement($event, { id: section.id + '_newsletter', sectionId: section.id, content: section.content, type: 'newsletter', _original: section.content })">
@@ -520,7 +576,11 @@
       <!-- STEPS (Standalone) -->
       <div *ngSwitchCase="'steps'" class="editor-section cursor-pointer py-12"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_steps'"
              (click)="selectElement($event, { id: section.id + '_steps', sectionId: section.id, content: section.content, type: 'steps', _original: section.content })">
@@ -533,7 +593,11 @@
       <!-- TABLE (Standalone) -->
       <div *ngSwitchCase="'table'" class="editor-section cursor-pointer py-12"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 max-w-4xl editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_table'"
              (click)="selectElement($event, { id: section.id + '_table', sectionId: section.id, content: section.content, type: 'table', _original: section.content })">
@@ -554,7 +618,11 @@
       <!-- TABS (Standalone) -->
       <div *ngSwitchCase="'tabs'" class="editor-section cursor-pointer py-12"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 max-w-4xl editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_tabs'"
              (click)="selectElement($event, { id: section.id + '_tabs', sectionId: section.id, content: section.content, type: 'tabs', _original: section.content })">
@@ -569,7 +637,11 @@
       <!-- BREADCRUMBS (Standalone) -->
       <div *ngSwitchCase="'breadcrumbs'" class="editor-section cursor-pointer py-8"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 max-w-4xl editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_breadcrumbs'"
              (click)="selectElement($event, { id: section.id + '_breadcrumbs', sectionId: section.id, content: section.content, type: 'breadcrumbs', _original: section.content })">
@@ -583,7 +655,11 @@
       <!-- CHIP (Standalone) -->
       <div *ngSwitchCase="'chip'" class="editor-section cursor-pointer py-8"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 flex justify-center gap-4 editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_chip'"
              (click)="selectElement($event, { id: section.id + '_chip', sectionId: section.id, content: section.content, type: 'chip', _original: section.content })">
@@ -596,7 +672,11 @@
 
       <div *ngSwitchCase="'spinner'" class="editor-section cursor-pointer py-12"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 flex justify-center editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_spinner'"
              (click)="selectElement($event, { id: section.id + '_spinner', sectionId: section.id, content: section.content, type: 'spinner', _original: section.content })">
@@ -610,7 +690,11 @@
       <!-- CHART (Standalone) -->
       <div *ngSwitchCase="'chart'" class="editor-section cursor-pointer py-20 px-6"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto max-w-4xl p-10 backdrop-blur-2xl bg-white/5 rounded-[2rem] border border-white/10 shadow-2xl editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_chart'"
              (click)="selectElement($event, { id: section.id + '_chart', sectionId: section.id, content: section.content, type: 'chart', _original: section.content })">
@@ -635,7 +719,11 @@
 
       <div *ngSwitchCase="'showcase'" class="editor-section cursor-pointer py-24"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto px-6 editor-element"
              [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_showcase'"
              (click)="selectElement($event, { id: section.id + '_showcase', sectionId: section.id, content: section.content, type: 'showcase', _original: section.content })">
@@ -646,7 +734,11 @@
       <!-- CTA (Call to Action) -->
       <div *ngSwitchCase="'cta'" class="editor-section cursor-pointer py-20 px-6 backdrop-blur-md bg-white/5 border-y border-white/5"
         [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)">
+        (click)="selectSection($event, section)"
+        [applyDynamicStyles]="section.styles"
+        [visualEditable]="true"
+        visualType="section"
+        (visualResized)="onSectionResized(section, $event)">
           <div class="container mx-auto max-w-4xl text-center">
              <div class="editor-element mb-6"
                 [class.is-selected]="uiStateService.selectedElement?.id === section.id + '_title'"
