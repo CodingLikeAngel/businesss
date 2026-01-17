@@ -4,31 +4,16 @@ import { BaseEditorFeatureComponent } from '../base-editor-feature.component';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import {
-  UIHeroSectionComponent as UIHeroSectionComponent,
-  UIModalComponent,
-  UICardRutasComponent,
   BubbleAnimationComponent,
   UITitleComponent,
-  UiCardProductsComponent,
   UiTestimonialsCardComponent,
   UICardAnimatedComponent,
   UICardComponent,
   UINavBarComponent,
-  UITabsComponent,
-  UIFeaturesSectionComponent,
-  UIStatsLibSectionComponent,
-  UITestimonialsSectionComponent,
-  UIFaqSectionComponent,
-  UIGallerySectionComponent,
-  UIPricingTableSectionComponent,
   UIAccordionComponent,
   UIImageComponent
 } from '@negocio/ui-components';
-import { Product, Testimonial, PageSection, VariantService } from '@negocio/shared-components';
-import { FaqSectionComponent } from '../../../components/faq-section/faq-section.component';
-import { GallerySectionComponent } from '../../../components/gallery-section/gallery-section.component';
-import { PricingSectionComponent } from '../../../components/pricing-section/pricing-section.component';
-import { PromotionsSectionComponent } from '../../../components/promotions-section/promotions-section.component';
+import { Testimonial, PageSection, VariantService } from '@negocio/shared-components';
 import { ReservationFormComponent } from '../../../components/reservation-form/reservation-form.component';
 import { Observable } from 'rxjs';
 
@@ -40,27 +25,12 @@ import { Observable } from 'rxjs';
   imports: [
     CommonModule,
     RouterModule,
-    UIHeroSectionComponent,
     ReservationFormComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
-    PromotionsSectionComponent,
-    UIModalComponent,
-    UICardRutasComponent,
     BubbleAnimationComponent,
     UITitleComponent,
-    UiCardProductsComponent,
     UiTestimonialsCardComponent,
     UICardAnimatedComponent,
     UICardComponent,
-    UITabsComponent,
-    UIFeaturesSectionComponent,
-    UIStatsLibSectionComponent,
-    UITestimonialsSectionComponent,
-    UIFaqSectionComponent,
-    UIGallerySectionComponent,
-    UIPricingTableSectionComponent,
     UIAccordionComponent,
     UIImageComponent
   ],

@@ -33,7 +33,6 @@ import {
   UIBreadcrumbsComponent,
   UIChipComponent,
   UISpinnerComponent,
-  UITooltipComponent,
   UIChartComponent,
   UIGamingVariantsShowcaseComponent
 } from '@negocio/ui-components';
@@ -78,7 +77,6 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
     UIBreadcrumbsComponent,
     UIChipComponent,
     UISpinnerComponent,
-    UITooltipComponent,
     UIChartComponent,
     UIGamingVariantsShowcaseComponent
   ],
