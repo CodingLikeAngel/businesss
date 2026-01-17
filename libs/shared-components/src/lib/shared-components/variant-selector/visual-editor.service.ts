@@ -1,4 +1,5 @@
-import { Injectable, ElementRef, Renderer2, RendererFactory2 } from '@angular/core';
+import { Injectable, ElementRef, Renderer2, RendererFactory2, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Subject, fromEvent } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -71,7 +72,10 @@ export class VisualEditorService {
     grid: 1
   };
 
-  constructor(private rendererFactory: RendererFactory2) {
+  constructor(
+    private rendererFactory: RendererFactory2,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     this.renderer = this.rendererFactory.createRenderer(null, null);
   }
 
@@ -79,6 +83,8 @@ export class VisualEditorService {
    * Activa el modo de edición visual
    */
   enableEditMode() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     this.isEditMode = true;
     this.addGlobalStyles();
   }
@@ -87,6 +93,8 @@ export class VisualEditorService {
    * Desactiva el modo de edición visual
    */
   disableEditMode() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     this.isEditMode = false;
     this.deselectElement();
     this.removeGlobalStyles();
@@ -99,14 +107,18 @@ export class VisualEditorService {
     element: HTMLElement,
     config: Partial<DragResizeConfig> = {}
   ): () => void {
+    if (!isPlatformBrowser(this.platformId)) {
+      return () => {}; // Return empty cleanup function for SSR
+    }
+
     const finalConfig = { ...this.defaultConfig, ...config };
-    
+
     // Añadir clase de editable
     this.renderer.addClass(element, 'visual-editable');
-    
+
     // Añadir atributo data para identificación
     this.renderer.setAttribute(element, 'data-visual-editable', 'true');
-    
+
     // Hacer el elemento posicionable si no lo es
     const position = window.getComputedStyle(element).position;
     if (position === 'static') {
@@ -166,6 +178,8 @@ export class VisualEditorService {
    * Crea el overlay de edición con handles
    */
   private createEditOverlay(element: HTMLElement, config: DragResizeConfig) {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     const rect = element.getBoundingClientRect();
     const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
     const scrollY = window.pageYOffset || document.documentElement.scrollTop;
@@ -448,6 +462,8 @@ export class VisualEditorService {
    * Actualiza la posición del overlay
    */
   private updateOverlayPosition(overlay: HTMLElement, element: HTMLElement) {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     const rect = element.getBoundingClientRect();
     const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
     const scrollY = window.pageYOffset || document.documentElement.scrollTop;
@@ -472,6 +488,8 @@ export class VisualEditorService {
    * Elimina el overlay de edición
    */
   private removeEditOverlay() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     const overlay = document.querySelector('[data-overlay="true"]');
     if (overlay) {
       this.renderer.removeChild(document.body, overlay);
@@ -482,6 +500,8 @@ export class VisualEditorService {
    * Añade estilos globales para el modo de edición
    */
   private addGlobalStyles() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     const styleId = 'visual-editor-styles';
     if (document.getElementById(styleId)) return;
 
@@ -609,6 +629,8 @@ export class VisualEditorService {
    * Elimina estilos globales
    */
   private removeGlobalStyles() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     const style = document.getElementById('visual-editor-styles');
     if (style) {
       this.renderer.removeChild(document.head, style);
