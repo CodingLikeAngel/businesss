@@ -288,15 +288,6 @@
 .hero-section--noticias { --hero-bg: radial-gradient(ellipse at top, #1a3d3d 0%, #3d6d6d 100%) !important; }
 .hero-section--default { --hero-bg: radial-gradient(ellipse at top, #1e1b4b 0%, #0a0a14 100%) !important; }
 
-/* Global Variant Mapping for Hero */
-.hero-section[class*="hero-section--"] {
-    --hero-bg: var(--theme-bg, transparent); 
-    // This mapping ensures that if the mixin sets --theme-bg, Hero picks it up.
-    
-    .hero-title {
-        font-family: var(--theme-font, 'Orbitron', sans-serif);
-    }
-}
 
 /* Specific overrides for complex variants not fully covered by generic tokens */
 .hero-section--elegant {
