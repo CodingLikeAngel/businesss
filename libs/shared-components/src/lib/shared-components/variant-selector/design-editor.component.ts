@@ -49,7 +49,7 @@ import { FormsModule } from '@angular/forms';
         </section>
 
         <!-- SECTION 2: SPECIFIC ATTRIBUTES -->
-        <div class="accordion-v2">
+        <div class="accordion-v2" *ngIf="targetStyles">
           
           <!-- COLORS & GLASS -->
           <div class="acc-item">
@@ -59,15 +59,15 @@ import { FormsModule } from '@angular/forms';
                   <div class="input-v2">
                     <label>Fondo</label>
                     <div class="color-picker-wrapper">
-                       <input type="color" [ngModel]="(selectedSection?.styles?.backgroundColor || selectedElement?.styles?.backgroundColor) || '#000000'" (ngModelChange)="updateColor('backgroundColor', $event)">
-                       <span class="color-hex">{{ (selectedSection?.styles?.backgroundColor || selectedElement?.styles?.backgroundColor) || '#000000' }}</span>
+                       <input type="color" [ngModel]="targetStyles.backgroundColor || '#000000'" (ngModelChange)="updateColor('backgroundColor', $event)">
+                       <span class="color-hex">{{ targetStyles.backgroundColor || '#000000' }}</span>
                     </div>
                   </div>
                   <div class="input-v2">
                     <label>Texto</label>
                     <div class="color-picker-wrapper">
-                       <input type="color" [ngModel]="(selectedSection?.styles?.color || selectedElement?.styles?.color) || '#ffffff'" (ngModelChange)="updateColor('color', $event)">
-                       <span class="color-hex">{{ (selectedSection?.styles?.color || selectedElement?.styles?.color) || '#ffffff' }}</span>
+                       <input type="color" [ngModel]="targetStyles.color || '#ffffff'" (ngModelChange)="updateColor('color', $event)">
+                       <span class="color-hex">{{ targetStyles.color || '#ffffff' }}</span>
                     </div>
                   </div>
                </div>
@@ -80,11 +80,11 @@ import { FormsModule } from '@angular/forms';
                <div class="grid-2 mt-3">
                   <div class="input-v2">
                     <label>Desenfoque (Blur)</label>
-                    <input type="text" class="text-v2" [(ngModel)]="(selectedSection ? selectedSection.styles.backdropFilter : selectedElement.styles.backdropFilter)" (ngModelChange)="onStyleChange()" placeholder="blur(10px)">
+                    <input type="text" class="text-v2" [(ngModel)]="targetStyles.backdropFilter" (ngModelChange)="onStyleChange()" placeholder="blur(10px)">
                   </div>
                   <div class="input-v2">
                     <label>Redondeado</label>
-                    <input type="text" class="text-v2" [(ngModel)]="(selectedSection ? selectedSection.styles.borderRadius : selectedElement.styles.borderRadius)" (ngModelChange)="onStyleChange()" placeholder="12px">
+                    <input type="text" class="text-v2" [(ngModel)]="targetStyles.borderRadius" (ngModelChange)="onStyleChange()" placeholder="12px">
                   </div>
                </div>
             </div>
@@ -119,11 +119,11 @@ import { FormsModule } from '@angular/forms';
                <div class="grid-2">
                   <div class="input-v2">
                     <label>Padding</label>
-                    <input type="text" class="text-v2" [(ngModel)]="(selectedSection ? selectedSection.styles.padding : selectedElement.styles.padding)" (ngModelChange)="onStyleChange()" placeholder="2rem">
+                    <input type="text" class="text-v2" [(ngModel)]="targetStyles.padding" (ngModelChange)="onStyleChange()" placeholder="2rem">
                   </div>
                   <div class="input-v2">
                     <label>Margin</label>
-                    <input type="text" class="text-v2" [(ngModel)]="(selectedSection ? selectedSection.styles.margin : selectedElement.styles.margin)" (ngModelChange)="onStyleChange()" placeholder="0px">
+                    <input type="text" class="text-v2" [(ngModel)]="targetStyles.margin" (ngModelChange)="onStyleChange()" placeholder="0px">
                   </div>
                </div>
                <div class="input-v2 mt-3" *ngIf="selectedSection">
@@ -299,16 +299,18 @@ export class DesignEditorComponent {
   @Output() styleChanged = new EventEmitter<void>();
   @Output() variantApplied = new EventEmitter<string>();
 
+  get targetStyles() {
+    return this.selectedSection?._original?.styles || this.selectedSection?.styles || this.selectedElement?._original?.styles || this.selectedElement?.styles;
+  }
+
   elementVariants = [
-    { id: 'default', name: 'Default' },
-    { id: 'primary', name: 'Primary' },
-    { id: 'secondary', name: 'Secondary' },
-    { id: 'success', name: 'Success' },
-    { id: 'warning', name: 'Warning' },
-    { id: 'danger', name: 'Danger' },
-    { id: 'glass', name: 'Glass' },
-    { id: 'neon', name: 'Neon' },
-    { id: 'cyberpunk', name: 'Cyberpunk' }
+    { id: 'primary', name: 'Original' },
+    { id: 'outline', name: 'Contorno' },
+    { id: 'glass', name: 'Cristal' },
+    { id: 'neon', name: 'Neón' },
+    { id: 'cyberpunk', name: 'Cyberpunk' },
+    { id: 'retro', name: 'Retro' },
+    { id: 'minimal', name: 'Minimal' }
   ];
 
   onStyleChange() {
@@ -316,14 +318,11 @@ export class DesignEditorComponent {
   }
 
   updateColor(property: string, color: string) {
-    if (this.selectedSection) {
-      if (!this.selectedSection.styles) this.selectedSection.styles = {};
-      this.selectedSection.styles[property] = color;
-    } else if (this.selectedElement) {
-      if (!this.selectedElement.styles) this.selectedElement.styles = {};
-      this.selectedElement.styles[property] = color;
+    const styles = this.targetStyles;
+    if (styles) {
+      styles[property] = color;
+      this.onStyleChange();
     }
-    this.onStyleChange();
   }
 
   applyVariant(variantId: string) {

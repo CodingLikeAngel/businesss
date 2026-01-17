@@ -36,60 +36,60 @@ import { FormsModule } from '@angular/forms';
                 <h4>Campos Principales</h4>
             </div>
 
-            <div class="form-v2">
+            <div class="form-v2" *ngIf="targetContent">
                 <!-- Title Field -->
-                <div class="input-v2" *ngIf="(selectedSection?.content?.title !== undefined) || (selectedElement?.content?.title !== undefined)">
+                <div class="input-v2" *ngIf="targetContent.title !== undefined">
                     <label>Título principal</label>
                     <input type="text" 
                            class="text-v2" 
-                           [(ngModel)]="selectedSection ? selectedSection.content.title : selectedElement.content.title" 
+                           [(ngModel)]="targetContent.title" 
                            (ngModelChange)="onContentChange()" 
                            placeholder="Ingresa un título impactante...">
                 </div>
 
                 <!-- Subtitle / Value Field -->
-                <div class="input-v2 mt-3" *ngIf="(selectedSection?.content?.subtitle !== undefined) || (selectedElement?.content?.subtitle !== undefined)">
+                <div class="input-v2 mt-3" *ngIf="targetContent.subtitle !== undefined">
                     <label>Subtítulo o Valor</label>
                     <input type="text" 
                            class="text-v2" 
-                           [(ngModel)]="selectedSection ? selectedSection.content.subtitle : selectedElement.content.subtitle" 
+                           [(ngModel)]="targetContent.subtitle" 
                            (ngModelChange)="onContentChange()" 
                            placeholder="Información secundaria...">
                 </div>
 
                 <!-- Description / Text Field -->
-                <div class="input-v2 mt-3" *ngIf="(selectedSection?.content?.description !== undefined) || (selectedElement?.content?.description !== undefined) || (selectedSection?.content?.text !== undefined) || (selectedElement?.content?.text !== undefined)">
+                <div class="input-v2 mt-3" *ngIf="targetContent.description !== undefined || targetContent.text !== undefined">
                     <label>Cuerpo del Mensaje</label>
                     <textarea class="textarea-v2" 
-                              [(ngModel)]="selectedSection ? (selectedSection.content.description || selectedSection.content.text) : (selectedElement.content.description || selectedElement.content.text)" 
-                              (ngModelChange)="onContentChange()" 
-                              rows="4" 
-                              placeholder="Escribe aquí el contenido detallado..."></textarea>
+                               [(ngModel)]="targetDescription" 
+                               (ngModelChange)="onContentChange()" 
+                               rows="4" 
+                               placeholder="Escribe aquí el contenido detallado..."></textarea>
                 </div>
             </div>
         </section>
 
         <!-- SECTION 2: ACTIONS & LINKS -->
-        <section class="edit-group" *ngIf="(selectedSection?.content?.label !== undefined) || (selectedElement?.content?.label !== undefined) || (selectedSection?.content?.link !== undefined) || (selectedElement?.content?.link !== undefined)">
+        <section class="edit-group" *ngIf="targetContent && (targetContent.label !== undefined || targetContent.link !== undefined)">
             <div class="group-title">
                 <span class="dot"></span>
                 <h4>Llamada a la Acción</h4>
             </div>
             
             <div class="grid-2">
-                <div class="input-v2">
+                <div class="input-v2" *ngIf="targetContent.label !== undefined">
                     <label>Texto del Botón</label>
-                    <input type="text" class="text-v2" [(ngModel)]="selectedSection ? selectedSection.content.label : selectedElement.content.label" (ngModelChange)="onContentChange()" placeholder="Ej: Comprar ahora">
+                    <input type="text" class="text-v2" [(ngModel)]="targetContent.label" (ngModelChange)="onContentChange()" placeholder="Ej: Comprar ahora">
                 </div>
-                <div class="input-v2">
+                <div class="input-v2" *ngIf="targetContent.link !== undefined">
                     <label>URL de Destino</label>
-                    <input type="text" class="text-v2" [(ngModel)]="selectedSection ? selectedSection.content.link : selectedElement.content.link" (ngModelChange)="onContentChange()" placeholder="https://...">
+                    <input type="text" class="text-v2" [(ngModel)]="targetContent.link" (ngModelChange)="onContentChange()" placeholder="https://...">
                 </div>
             </div>
         </section>
 
         <!-- SECTION 3: MEDIA -->
-        <section class="edit-group" *ngIf="(selectedSection?.content?.image !== undefined) || (selectedElement?.content?.image !== undefined)">
+        <section class="edit-group" *ngIf="targetContent && targetContent.image !== undefined">
             <div class="group-title">
                 <span class="dot"></span>
                 <h4>Media & Multimedia</h4>
@@ -97,16 +97,16 @@ import { FormsModule } from '@angular/forms';
             <div class="input-v2">
                 <label>URL de Imagen o Recurso</label>
                 <div class="media-input-wrapper">
-                    <input type="text" class="text-v2" [(ngModel)]="selectedSection ? selectedSection.content.image : selectedElement.content.image" (ngModelChange)="onContentChange()" placeholder="https://...">
-                    <div class="media-preview-v2" *ngIf="selectedSection ? selectedSection.content.image : selectedElement.content.image">
-                        <img [src]="selectedSection ? selectedSection.content.image : selectedElement.content.image" alt="Preview">
+                    <input type="text" class="text-v2" [(ngModel)]="targetContent.image" (ngModelChange)="onContentChange()" placeholder="https://...">
+                    <div class="media-preview-v2" *ngIf="targetContent.image">
+                        <img [src]="targetContent.image" alt="Preview">
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- SECTION 4: ITERABLES / LIST ITEMS -->
-        <section class="edit-group" *ngIf="selectedSection?.content?.items?.length !== undefined">
+        <section class="edit-group" *ngIf="selectedSection?.content?.items">
             <div class="group-title space-between">
                 <div class="flex-row">
                     <span class="dot"></span>
@@ -333,6 +333,26 @@ export class ContentEditorComponent {
   @Input() selectedElement: any = null;
   @Input() selectedSection: any = null;
   @Output() contentChanged = new EventEmitter<void>();
+
+  get targetContent() {
+    return this.selectedSection?._original?.content || this.selectedSection?.content || this.selectedElement?._original?.content || this.selectedElement?.content;
+  }
+
+  get targetDescription(): string {
+    const content = this.targetContent;
+    if (!content) return '';
+    return content.description !== undefined ? content.description : (content.text || '');
+  }
+
+  set targetDescription(val: string) {
+    const content = this.targetContent;
+    if (!content) return;
+    if (content.description !== undefined) {
+      content.description = val;
+    } else {
+      content.text = val;
+    }
+  }
 
   onContentChange() {
     this.contentChanged.emit();

@@ -3,7 +3,6 @@ import { RouterModule } from '@angular/router';
 import {
   UIFooterComponent,
   UIHeaderComponent,
-  UITabsComponent,
 } from '@negocio/ui-components';
 import { VariantSelectorComponent } from '@negocio/shared-components';
 import { CommonModule } from '@angular/common';
@@ -17,8 +16,7 @@ import { MainLayoutBaseComponent } from '../main-layout-base.component';
     RouterModule,
     UIHeaderComponent,
     VariantSelectorComponent,
-    UIFooterComponent,
-    UITabsComponent
+    UIFooterComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './main-desktop-layout.component.html',
