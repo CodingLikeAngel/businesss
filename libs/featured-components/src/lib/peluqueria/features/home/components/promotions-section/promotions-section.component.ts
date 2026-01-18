@@ -1,99 +1,30 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UICardPremiumComponent, UIChipComponent, UITooltipComponent, CardVariant, CardPremiumConfig } from '@negocio/ui-components';
+
+interface Countdown {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+}
 
 @Component({
   selector: 'lib-promotions-section',
   standalone: true,
   imports: [CommonModule, UICardPremiumComponent, UIChipComponent, UITooltipComponent],
-  template: `
-    <!-- Sección de Promociones -->
-    <section id="promociones" class="">
-      <h2 class="text-4xl font-bold text-[#FACC15] text-center mb-8 md:mb-12 font-nintendo drop-shadow-[0_4px_8px_rgba(255,204,21,0.8)] animate-bounce">
-        Ofertas Especiales
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <!-- Promoción 1 -->
-        <div class="relative  mt-12">
-          <lib-ui-components-chip
-            [variant]="selectedVariant"
-            size="sm"
-            rounded="full"
-            class="absolute md:top-[-2.5rem] top-[-1.5rem] left-1/2 transform -translate-x-1/2 z-20  text-white md:px-4 px-3 md:py-1 py-0.5 shadow-md font-semibold"
-          >
-            ¡-20%!
-          </lib-ui-components-chip>
-          <lib-ui-components-tooltip
-            [content]="'¡Ahorra con este combo especial!'"
-            [variant]="selectedVariant"
-            position="top"
-          >
-            <lib-ui-components-card-premium
-              [variant]="selectedVariant"
-              [config]="premiumCardConfigs[0]"
-             
-            ></lib-ui-components-card-premium>
-          </lib-ui-components-tooltip>
-        </div>
-        <!-- Promoción 2 -->
-        <div class="relative  mt-12">
-          <lib-ui-components-chip
-            [variant]="selectedVariant"
-            size="sm"
-            rounded="full"
-            class="absolute md:top-[-2.5rem] top-[-1.5rem] left-1/2 transform -translate-x-1/2 z-20  text-white md:px-4 px-3 md:py-1 py-0.5 shadow-md font-semibold"
-          >
-            ¡Oferta!
-          </lib-ui-components-chip>
-          <lib-ui-components-tooltip
-            [content]="'Manicura de larga duración.'"
-            [variant]="selectedVariant"
-            position="top"
-          >
-            <lib-ui-components-card-premium
-              [variant]="selectedVariant"
-              [config]="premiumCardConfigs[1]"
-
-            ></lib-ui-components-card-premium>
-          </lib-ui-components-tooltip>
-        </div>
-        <!-- Promoción 3 -->
-        <div class="relative mt-12" >
-          <lib-ui-components-chip
-            [variant]="selectedVariant"
-            size="sm"
-            rounded="full"
-            class="absolute md:top-[-2.5rem] top-[-1.5rem] left-1/2 transform -translate-x-1/2 z-20  text-white md:px-4 px-3 md:py-1 py-0.5 shadow-md font-semibold"
-          >
-            ¡Novedad!
-          </lib-ui-components-chip>
-          <lib-ui-components-tooltip
-            [content]="'Revitaliza tu cabello hoy.'"
-            [variant]="selectedVariant"
-            position="top"
-          >
-            <lib-ui-components-card-premium
-              [variant]="selectedVariant"
-              [config]="premiumCardConfigs[2]"
-           
-            ></lib-ui-components-card-premium>
-          </lib-ui-components-tooltip>
-        </div>
-      </div>
-    </section>
-  `,
-  styles: [
-    `
-      .font-nintendo {
-        font-family: 'Press Start 2P', cursive;
-      }
-    `
-  ]
+  templateUrl: './promotions-section.component.html',
+  styleUrls: ['./promotions-section.component.scss']
 })
-export class PromotionsSectionComponent implements OnInit {
+export class PromotionsSectionComponent implements OnInit, OnDestroy {
   @Input() variant: CardVariant = 'default';
   @Input() premiumCardConfigs: CardPremiumConfig[] = [];
   @Input() selectedVariant = 'primary';
+
+  countdowns: Countdown[] = [];
+  progressValues: number[] = [65, 45, 80]; // Simulated progress
+  showConfetti: boolean[] = [false, false, false];
+  private intervals: any[] = [];
 
   ngOnInit() {
     // Ensure we have at least 3 configs to avoid undefined errors in template
@@ -124,5 +55,58 @@ export class PromotionsSectionComponent implements OnInit {
           ? 'Manicura de larga duración.'
           : 'Revitaliza tu cabello hoy.'),
     }));
+
+    // Initialize countdowns
+    this.initializeCountdowns();
+
+    // Randomly trigger confetti for demonstration
+    setTimeout(() => this.showConfetti[0] = true, 2000);
+    setTimeout(() => this.showConfetti[1] = true, 4000);
+    setTimeout(() => this.showConfetti[2] = true, 6000);
+  }
+
+  ngOnDestroy() {
+    this.intervals.forEach(interval => clearInterval(interval));
+  }
+
+  private initializeCountdowns() {
+    const endTimes = [
+      new Date(Date.now() + 3 * 24 * 60 * 60 * 1000), // 3 days
+      new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // 2 days
+      new Date(Date.now() + 5 * 24 * 60 * 60 * 1000)  // 5 days
+    ];
+
+    endTimes.forEach((endTime, index) => {
+      this.updateCountdown(index, endTime);
+      const interval = setInterval(() => {
+        this.updateCountdown(index, endTime);
+      }, 1000);
+      this.intervals.push(interval);
+    });
+  }
+
+  private updateCountdown(index: number, endTime: Date) {
+    const now = new Date().getTime();
+    const distance = endTime.getTime() - now;
+
+    if (distance > 0) {
+      this.countdowns[index] = {
+        days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+        hours: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+        minutes: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+        seconds: Math.floor((distance % (1000 * 60)) / 1000)
+      };
+    } else {
+      this.countdowns[index] = { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    }
+  }
+
+  getDetailedTooltip(index: number): string {
+    const tooltips = [
+      '¡Ahorra hasta 20% en tratamientos faciales y corporales! Incluye limpieza profunda, exfoliación y mascarilla hidratante. Válido para primeras visitas.',
+      'Manicura permanente con gel de larga duración. Colores vibrantes disponibles. Incluye diseño personalizado y mantenimiento por 3 semanas.',
+      'Tratamiento revitalizante para cabello dañado. Recupera el brillo y la suavidad natural. Ideal para cabello teñido o tratado químicamente.'
+    ];
+    return tooltips[index] || 'Información detallada no disponible.';
   }
 }

@@ -1,18 +1,37 @@
-<table [ngClass]="tableClasses()" [ngStyle]="tableStyles()" role="table">
+<!-- Desktop Table View -->
+<table [ngClass]="tableClasses()" [ngStyle]="tableStyles()" role="table" aria-labelledby="precios" aria-label="Pricing comparison table">
   <thead>
     <tr>
-      <th *ngFor="let column of columns()" [class]="headerClasses()" scope="col">
+      <th *ngFor="let column of columns(); let i = index" [class]="headerClasses()" scope="col" [attr.aria-describedby]="'col-' + i">
         {{ column.label }}
+        <span *ngIf="i === 1" class="recommended-badge">Recommended</span>
       </th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let row of rows()">
-      <td *ngFor="let column of columns()" [class]="cellClasses()">
+    <tr *ngFor="let row of rows(); let rowIndex = index" [class]="'table-row row-' + rowIndex" [attr.data-row-index]="rowIndex">
+      <td *ngFor="let column of columns(); let colIndex = index" [class]="cellClasses()" title="Click for more details" [attr.aria-describedby]="'col-' + colIndex">
         {{ row[column.key] }}
       </td>
     </tr>
   </tbody>
 </table>
+
+<!-- Mobile Card View -->
+<div class="mobile-cards" *ngIf="rows().length > 0">
+  <div *ngFor="let row of rows(); let rowIndex = index" class="pricing-card" [class]="'card-' + rowIndex" [attr.data-row-index]="rowIndex">
+    <div class="card-header">
+      <h3>{{ row[columns()[0].key] }}</h3>
+      <span *ngIf="rowIndex === 0" class="recommended-badge">Recommended</span>
+    </div>
+    <div class="card-body">
+      <ng-container *ngFor="let column of columns(); let colIndex = index">
+        <div *ngIf="colIndex > 0" class="card-field">
+          <strong>{{ column.label }}:</strong> {{ row[column.key] }}
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</div>
 
 

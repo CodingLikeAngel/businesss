@@ -1,19 +1,186 @@
 <section class="products-section" [ngStyle]="componentStyles">
-  <div class="container mx-auto px-4">
-    <h2 class="text-4xl font-bold text-center mb-8">{{ title() }}</h2>
-    <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">{{ subtitle() }}</p>
+  <!-- Header Section -->
+  <div class="products-header">
+    <div class="container mx-auto px-4">
+      <h2 class="products-title">{{ title() }}</h2>
+      <p class="products-subtitle">{{ subtitle() }}</p>
+    </div>
   </div>
-  <div class="container mx-auto px-4">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div *ngFor="let product of products()">
-        <lib-ui-components-card
-          [title]="product.name"
-          [description]="product.description"
-          [image]="product.image"
-          [variant]="$any(variant())"
-          [customStyles]="product.styles || {}"
-        ></lib-ui-components-card>
+
+  <!-- Filters and Sorting Section -->
+  <div class="products-controls">
+    <div class="container mx-auto px-4">
+      <div class="filters-wrapper">
+        <div class="filter-group">
+          <label class="filter-label">Filter by Category:</label>
+          <select class="filter-select">
+            <option value="">All Categories</option>
+            <option value="electronics">Electronics</option>
+            <option value="clothing">Clothing</option>
+            <option value="home">Home & Garden</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Price Range:</label>
+          <select class="filter-select">
+            <option value="">All Prices</option>
+            <option value="0-50">$0 - $50</option>
+            <option value="50-100">$50 - $100</option>
+            <option value="100-200">$100 - $200</option>
+            <option value="200+">$200+</option>
+          </select>
+        </div>
+
+        <div class="sort-group">
+          <label class="sort-label">Sort by:</label>
+          <select class="sort-select">
+            <option value="name">Name</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="rating">Rating</option>
+            <option value="newest">Newest</option>
+          </select>
+        </div>
+
+        <div class="view-toggle">
+          <button class="view-btn grid-view active" aria-label="Grid view">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"></rect>
+              <rect x="14" y="3" width="7" height="7"></rect>
+              <rect x="14" y="14" width="7" height="7"></rect>
+              <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+          </button>
+          <button class="view-btn list-view" aria-label="List view">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="8" y1="6" x2="21" y2="6"></line>
+              <line x1="8" y1="12" x2="21" y2="12"></line>
+              <line x1="8" y1="18" x2="21" y2="18"></line>
+              <line x1="3" y1="6" x2="3.01" y2="6"></line>
+              <line x1="3" y1="12" x2="3.01" y2="12"></line>
+              <line x1="3" y1="18" x2="3.01" y2="18"></line>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Products Grid/List -->
+  <div class="products-content">
+    <div class="container mx-auto px-4">
+      <!-- Skeleton Loading -->
+      <div class="products-grid skeleton-loading" *ngIf="false">
+        <div class="product-skeleton" *ngFor="let i of [1,2,3,4,5,6]">
+          <div class="skeleton-image"></div>
+          <div class="skeleton-content">
+            <div class="skeleton-title"></div>
+            <div class="skeleton-text"></div>
+            <div class="skeleton-price"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Grid -->
+      <div class="products-grid masonry-grid">
+        <div class="product-item" *ngFor="let product of products(); let i = index">
+          <div class="product-card-wrapper">
+            <!-- Product Badges -->
+            <div class="product-badges">
+              <span class="badge discount" *ngIf="i % 3 === 0">Save 20%</span>
+              <span class="badge new" *ngIf="i % 4 === 0">New</span>
+              <span class="badge bestseller" *ngIf="i % 5 === 0">Bestseller</span>
+              <span class="badge limited" *ngIf="i % 6 === 0">Limited Stock</span>
+            </div>
+
+            <!-- Compare Checkbox -->
+            <div class="compare-checkbox">
+              <input type="checkbox" id="compare-{{i}}" class="compare-input">
+              <label for="compare-{{i}}" class="compare-label">Compare</label>
+            </div>
+
+            <!-- Product Card -->
+            <lib-ui-components-card
+              [title]="product.name"
+              [description]="product.description"
+              [image]="product.image"
+              [variant]="$any(variant())"
+              [customStyles]="product.styles || {}"
+              class="product-card"
+            ></lib-ui-components-card>
+
+            <!-- Product Actions -->
+            <div class="product-actions">
+              <button class="action-btn quick-view" aria-label="Quick view">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                  <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                Quick View
+              </button>
+              <button class="action-btn add-to-cart" aria-label="Add to cart">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="21" r="1"></circle>
+                  <circle cx="20" cy="21" r="1"></circle>
+                  <path d="m1 1 4 4h15l-1 7H6"></path>
+                </svg>
+                Add to Cart
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pagination -->
+      <div class="pagination-wrapper" *ngIf="products().length > 0">
+        <div class="pagination">
+          <button class="page-btn prev" aria-label="Previous page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="15,18 9,12 15,6"></polyline>
+            </svg>
+            Previous
+          </button>
+
+          <div class="page-numbers">
+            <button class="page-number active">1</button>
+            <button class="page-number">2</button>
+            <button class="page-number">3</button>
+            <span class="page-dots">...</span>
+            <button class="page-number">10</button>
+          </div>
+
+          <button class="page-btn next" aria-label="Next page">
+            Next
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="9,18 15,12 9,6"></polyline>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Load More Button (Infinite Scroll Alternative) -->
+      <div class="load-more-wrapper">
+        <button class="load-more-btn">
+          <span class="loading-spinner"></span>
+          Load More Products
+        </button>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="products().length === 0">
+        <div class="empty-icon">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+            <line x1="8" y1="21" x2="16" y2="21"></line>
+            <line x1="12" y1="17" x2="12" y2="21"></line>
+          </svg>
+        </div>
+        <h3 class="empty-title">No products found</h3>
+        <p class="empty-description">Try adjusting your filters or search criteria.</p>
+        <button class="reset-filters-btn">Reset Filters</button>
+      </div>
+    </div>
+  </div>
+
 </section>

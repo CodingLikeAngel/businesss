@@ -1,0 +1,74 @@
+<section id="faq" class="faq-section">
+  <div class="faq-container">
+    <lib-ui-components-title
+      level="h2"
+      text="Preguntas Frecuentes"
+      [variant]="variant"
+      animation="bounce"
+      align="center"
+    ></lib-ui-components-title>
+
+    <!-- Search Bar -->
+    <div class="faq-search">
+      <input
+        type="text"
+        class="faq-search-input"
+        placeholder="Buscar preguntas..."
+        [(ngModel)]="searchTerm"
+        (input)="onSearchChange()"
+      />
+      <div class="search-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <path d="m21 21-4.35-4.35"></path>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="faq-filters" *ngIf="categories.length > 0">
+      <button
+        class="filter-btn"
+        [class.active]="selectedCategory === ''"
+        (click)="filterByCategory('')"
+      >
+        Todas
+      </button>
+      <button
+        class="filter-btn"
+        *ngFor="let category of categories"
+        [class.active]="selectedCategory === category"
+        (click)="filterByCategory(category)"
+      >
+        {{ category }}
+      </button>
+    </div>
+
+    <!-- FAQ Items -->
+    <div class="faq-list">
+      <details
+        class="faq-item"
+        *ngFor="let item of filteredItems; let i = index"
+        [class.highlighted]="highlightedIndex === i"
+        (toggle)="onToggle(i, $event)"
+      >
+        <summary class="faq-question">
+          <span class="question-text">{{ item.title }}</span>
+          <div class="icon-container">
+            <svg class="expand-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="6,9 12,15 18,9"></polyline>
+            </svg>
+          </div>
+        </summary>
+        <div class="faq-answer">
+          <div [innerHTML]="item.content"></div>
+        </div>
+      </details>
+    </div>
+
+    <!-- No Results Message -->
+    <div class="no-results" *ngIf="filteredItems.length === 0">
+      <p>No se encontraron preguntas que coincidan con tu búsqueda.</p>
+    </div>
+  </div>
+</section>

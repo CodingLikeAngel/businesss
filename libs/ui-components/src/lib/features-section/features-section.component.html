@@ -1,26 +1,87 @@
-<section [ngClass]="containerClasses()" [ngStyle]="featuresStyles()">
+<section [ngClass]="containerClasses()" [ngStyle]="featuresStyles()" role="region" aria-labelledby="features-title">
   <div class="features-inner">
-    <div class="header-content">
-      <h2 class="title">{{ title() }}</h2>
+    <header class="header-content">
+      <h2 id="features-title" class="title">{{ title() }}</h2>
       <p class="subtitle">{{ subtitle() }}</p>
-    </div>
+    </header>
 
-    <div class="features-grid">
-      <div *ngFor="let feature of features(); let i = index" 
-           class="feature-card" 
-           [style.--feature-color]="feature.color"
-           [style.animation-delay]="i * 0.1 + 's'">
-        <div class="icon-wrapper">
-          <span class="icon">{{ feature.icon }}</span>
-          <div class="icon-bg"></div>
-        </div>
-        <div class="card-content">
-          <h3 class="feature-title">{{ feature.title }}</h3>
-          <p class="feature-description">{{ feature.description }}</p>
-        </div>
-        <div class="card-glow"></div>
+    <div class="features-controls" *ngIf="categories().length > 0">
+      <div class="category-tabs">
+        <button
+          *ngFor="let category of categories(); let i = index"
+          class="category-tab"
+          [class.active]="activeCategory() === category.id"
+          (click)="setActiveCategory(category.id)"
+          [attr.aria-pressed]="activeCategory() === category.id"
+          [attr.aria-describedby]="'category-desc-' + i">
+          <span class="tab-icon">{{ category.icon }}</span>
+          <span class="tab-label">{{ category.name }}</span>
+        </button>
       </div>
     </div>
+
+    <dl class="features-grid" role="list">
+      <div *ngFor="let feature of filteredFeatures(); let i = index"
+           class="feature-item"
+           #featureItem
+           [style.--feature-color]="feature.color"
+           [style.animation-delay]="i * 0.1 + 's'"
+           [attr.data-category]="feature.category"
+           role="listitem">
+        <dt class="feature-term">
+          <div class="icon-wrapper" [attr.aria-label]="feature.title + ' icon'">
+            <svg class="animated-icon" [attr.data-icon]="feature.iconType || 'default'" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path *ngIf="feature.iconType === 'rocket'" d="M4.5 16.5C4.5 15.12 5.62 14 7 14H17C18.38 14 19.5 15.12 19.5 16.5V19.5C19.5 20.88 18.38 22 17 22H7C5.62 22 4.5 20.88 4.5 19.5V16.5Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path *ngIf="feature.iconType === 'rocket'" d="M4.5 12.5L7 14L10.5 10.5L14 12L17.5 8.5L19.5 10.5V16.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path *ngIf="feature.iconType === 'rocket'" d="M12 2L13.09 5.26L16.5 4.24L15.48 7.64L18.74 8.73L15.48 9.82L16.5 13.24L13.09 12.22L12 15.48L10.91 12.22L7.5 13.24L8.52 9.82L5.26 8.73L8.52 7.64L7.5 4.24L10.91 5.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path *ngIf="feature.iconType === 'shield'" d="M12 2L13.09 8.26L22 9L16.91 13.74L18.18 22L12 17.77L5.82 22L7.09 13.74L2 9L10.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path *ngIf="feature.iconType === 'mobile'" d="M12 18H12.01M8 21H16C17.1046 21 18 20.1046 18 19V5C18 3.89543 17.1046 3 16 3H8C6.89543 3 6 3.89543 6 5V19C6 20.1046 6.89543 21 8 21Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path *ngIf="feature.iconType === 'palette'" d="M12 2L13.09 8.26L22 9L16.91 13.74L18.18 22L12 17.77L5.82 22L7.09 13.74L2 9L10.91 8.26L12 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle *ngIf="feature.iconType === 'palette'" cx="6" cy="12" r="3" stroke="currentColor" stroke-width="2"/>
+              <circle *ngIf="feature.iconType === 'palette'" cx="18" cy="8" r="3" stroke="currentColor" stroke-width="2"/>
+              <circle *ngIf="feature.iconType === 'palette'" cx="6" cy="18" r="3" stroke="currentColor" stroke-width="2"/>
+              <path *ngIf="feature.iconType === 'search'" d="M21 21L16.5 16.5M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <path *ngIf="feature.iconType === 'chart'" d="M3 3V19C3 20.1046 3.89543 21 5 21H21M7 13L12 8L16 12L21 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <rect *ngIf="feature.iconType === 'default'" x="3" y="3" width="18" height="18" rx="2" ry="2" stroke="currentColor" stroke-width="2"/>
+              <circle *ngIf="feature.iconType === 'default'" cx="9" cy="9" r="2" stroke="currentColor" stroke-width="2"/>
+              <path *ngIf="feature.iconType === 'default'" d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <div class="icon-bg"></div>
+          </div>
+        </dt>
+        <dd class="feature-description">
+          <div class="card-content">
+            <h3 class="feature-title">{{ feature.title }}</h3>
+            <p class="feature-text">{{ feature.description }}</p>
+            <div class="feature-stats" *ngIf="feature.stats">
+              <div class="stat-item" *ngFor="let stat of feature.stats">
+                <span class="stat-number" [attr.data-target]="stat.value">{{ stat.value }}</span>
+                <span class="stat-label">{{ stat.label }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-actions">
+            <button class="tooltip-trigger" [attr.aria-describedby]="'tooltip-' + i" tabindex="0">
+              <span class="sr-only">Más información sobre {{ feature.title }}</span>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                <path d="M12 8V12M12 16H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
+          <div class="tooltip" [id]="'tooltip-' + i" role="tooltip" [attr.aria-hidden]="true">
+            <div class="tooltip-content">
+              <h4>{{ feature.tooltipTitle || feature.title }}</h4>
+              <p>{{ feature.tooltipDescription || feature.description }}</p>
+              <ul *ngIf="feature.tooltipPoints">
+                <li *ngFor="let point of feature.tooltipPoints">{{ point }}</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card-glow"></div>
+        </dd>
+      </div>
+    </dl>
   </div>
 </section>
 

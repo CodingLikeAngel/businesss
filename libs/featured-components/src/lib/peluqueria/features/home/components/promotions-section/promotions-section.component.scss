@@ -1,0 +1,255 @@
+.font-nintendo {
+  font-family: 'Press Start 2P', cursive;
+}
+
+// Slide-in animations
+.slide-in-left {
+  animation: slideInLeft 0.8s ease-out;
+}
+
+.slide-in-up {
+  animation: slideInUp 0.8s ease-out 0.2s both;
+}
+
+.slide-in-right {
+  animation: slideInRight 0.8s ease-out 0.4s both;
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+// Countdown timer styles
+.countdown-timer {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.timer-label {
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.timer-display {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.time-unit {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: bold;
+  font-size: 0.875rem;
+  min-width: 40px;
+  text-align: center;
+  backdrop-filter: blur(10px);
+}
+
+// Progress bar styles
+.progress-bar-container {
+  background: #e5e7eb;
+  border-radius: 20px;
+  height: 8px;
+  margin-bottom: 8px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #34d399);
+  border-radius: 20px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progress-text {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-align: center;
+  display: block;
+}
+
+// Confetti styles
+.confetti-container {
+  position: absolute;
+  top: -20px;
+  left: 0;
+  right: 0;
+  height: 100px;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti-piece {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #facc15;
+  animation: confettiFall 3s linear infinite;
+}
+
+.confetti-piece:nth-child(odd) {
+  background: #ef4444;
+  animation-delay: 0.5s;
+}
+
+.confetti-piece:nth-child(3n) {
+  background: #3b82f6;
+  animation-delay: 1s;
+}
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-100px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+// Call to action styles
+.call-to-action {
+  padding: 2rem;
+  background: linear-gradient(135deg, #facc15, #eab308);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(250, 204, 21, 0.3);
+}
+
+.cta-button {
+  font-size: 1.125rem;
+  font-weight: bold;
+  padding: 0.75rem 2rem;
+  border-radius: 50px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.cta-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+.cta-text {
+  margin-top: 1rem;
+  font-size: 0.875rem;
+  opacity: 0.9;
+}
+
+// Aside styles
+.promotions-aside {
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.promotions-aside h3 {
+  color: #1f2937;
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+.promotions-aside ul {
+  padding-left: 1.5rem;
+}
+
+.promotions-aside li {
+  margin-bottom: 0.5rem;
+  color: #4b5563;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .timer-display {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .time-unit {
+    min-width: 35px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+  }
+
+  .call-to-action {
+    padding: 1.5rem;
+  }
+
+  .cta-button {
+    font-size: 1rem;
+    padding: 0.625rem 1.5rem;
+  }
+}
+
+// Accessibility improvements
+@media (prefers-reduced-motion: reduce) {
+  .slide-in-left,
+  .slide-in-up,
+  .slide-in-right {
+    animation: none;
+  }
+
+  .progress-bar {
+    transition: none;
+  }
+
+  .cta-button {
+    transition: none;
+  }
+}

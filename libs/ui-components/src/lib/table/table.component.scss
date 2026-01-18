@@ -1,5 +1,5 @@
 @use '../styles/mixins' as shared;
-  
+
 @use './styles/index' as *;
 
 .table-container {
@@ -15,5 +15,132 @@
 
     &[style*='color'] {
         color: var(--theme-color) !important;
+    }
+}
+
+// Mobile responsiveness: Hide table and show cards on small screens
+@media (max-width: 768px) {
+    table {
+        display: none;
+    }
+    .mobile-cards {
+        display: block;
+    }
+}
+
+@media (min-width: 769px) {
+    .mobile-cards {
+        display: none;
+    }
+}
+
+// Mobile card styles
+.mobile-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.pricing-card {
+    background: var(--card-bg, #ffffff);
+    border: 1px solid var(--card-border, rgba(0, 0, 0, 0.1));
+    border-radius: 0.5rem;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    animation: fadeInUp 0.5s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+    }
+
+    .card-body {
+        .card-field {
+            margin-bottom: 0.5rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+
+            strong {
+                display: block;
+                font-weight: 600;
+                color: var(--theme-color, #333);
+            }
+        }
+    }
+}
+
+// Staggered entry animations for cards
+.card-0 { animation-delay: 0s; }
+.card-1 { animation-delay: 0.1s; }
+.card-2 { animation-delay: 0.2s; }
+.card-3 { animation-delay: 0.3s; }
+.card-4 { animation-delay: 0.4s; }
+
+// Recommended badge
+.recommended-badge {
+    background: #FFD700;
+    color: #000;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+// Side-by-side comparison effects: Add borders between columns
+.table-container th:not(:last-child),
+.table-container td:not(:last-child) {
+    border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+// Enhanced hover effects for rows and cells
+.table-row {
+    transition: background-color 0.2s ease;
+
+    &:hover {
+        background: rgba(255, 215, 0, 0.1);
+    }
+
+    &:hover .table-cell {
+        transform: translateY(-1px);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+}
+
+// Staggered animations for table rows
+.table-row {
+    animation: fadeInUp 0.5s ease-out forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+.row-0 { animation-delay: 0s; }
+.row-1 { animation-delay: 0.1s; }
+.row-2 { animation-delay: 0.2s; }
+.row-3 { animation-delay: 0.3s; }
+.row-4 { animation-delay: 0.4s; }
+
+// Fade in up animation
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

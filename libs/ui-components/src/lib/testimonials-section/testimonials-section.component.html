@@ -1,4 +1,11 @@
-<section [ngClass]="containerClasses()" [ngStyle]="testimonialsStyles()">
+<section [ngClass]="containerClasses()" [ngStyle]="testimonialsStyles()" aria-roledescription="testimonials carousel" role="region">
+  <!-- Parallax Background -->
+  <div class="parallax-bg">
+    <div class="parallax-layer layer-1"></div>
+    <div class="parallax-layer layer-2"></div>
+    <div class="parallax-layer layer-3"></div>
+  </div>
+
   <div class="testimonials-inner">
     <div class="header-content">
       <h2 class="title">{{ title() }}</h2>
@@ -6,20 +13,75 @@
       <p class="subtitle">{{ subtitle() }}</p>
     </div>
 
-    <div class="testimonials-grid">
-      <div *ngFor="let item of testimonials(); let i = index" class="testimonial-card" [style.animation-delay]="i * 0.15 + 's'">
-        <div class="quote-icon">“</div>
-        <p class="quote-text">{{ item.quote }}</p>
-        
-        <div class="author-info">
-          <div class="avatar-wrapper" *ngIf="item.avatar">
-            <img [src]="item.avatar" [alt]="item.author" class="avatar">
-          </div>
-          <div class="author-details">
-            <h4 class="author-name">{{ item.author }}</h4>
-            <span class="author-role" *ngIf="item.role">{{ item.role }}</span>
+    <!-- Carousel Container -->
+    <div class="carousel-container"
+         (touchstart)="onTouchStart($event)"
+         (touchend)="onTouchEnd($event)"
+         role="region"
+         aria-label="Testimonials carousel">
+
+      <!-- Main Testimonial Display -->
+      <div class="testimonial-display" [class.animating]="isAnimating()">
+        <div class="testimonial-card main-card" role="article" aria-live="polite">
+          <blockquote class="testimonial-quote" [attr.cite]="'#testimonial-' + currentIndex()">
+            <span class="quote-icon">"</span>
+            <p class="quote-text typewriter">{{ typewriterText() }}<span class="cursor">|</span></p>
+          </blockquote>
+
+          <div class="author-info">
+            <div class="avatar-wrapper" *ngIf="currentTestimonial().avatar">
+              <img [src]="currentTestimonial().avatar" [alt]="currentTestimonial().author" class="avatar">
+            </div>
+            <div class="author-details">
+              <cite class="author-name">{{ currentTestimonial().author }}</cite>
+              <span class="author-role" *ngIf="currentTestimonial().role">{{ currentTestimonial().role }}</span>
+              <div class="rating" *ngIf="currentTestimonial().rating" role="img" [attr.aria-label]="'Rating: ' + (currentTestimonial().rating || 0) + ' out of 5 stars'">
+                <span *ngFor="let star of [].constructor(5); let i = index" class="star" [class.filled]="i < (currentTestimonial().rating || 0)">★</span>
+              </div>
+            </div>
           </div>
         </div>
+      </div>
+
+      <!-- Navigation Dots with Preview -->
+      <div class="navigation-dots" role="tablist" aria-label="Testimonial navigation">
+        <button *ngFor="let item of testimonials(); let i = index"
+                class="dot"
+                [class.active]="i === currentIndex()"
+                (click)="goToTestimonial(i)"
+                [attr.aria-label]="'Go to testimonial ' + (i + 1) + ' by ' + item.author"
+                role="tab"
+                [attr.aria-selected]="i === currentIndex()"
+                tabindex="0">
+          <div class="dot-preview">
+            <img *ngIf="item.avatar" [src]="item.avatar" [alt]="item.author" class="preview-avatar">
+            <div class="preview-rating" *ngIf="item.rating">
+              <span *ngFor="let star of [].constructor(item.rating)" class="mini-star">★</span>
+            </div>
+          </div>
+        </button>
+      </div>
+
+      <!-- Navigation Arrows -->
+      <button class="nav-arrow nav-prev"
+              (click)="prevTestimonial()"
+              aria-label="Previous testimonial"
+              [disabled]="isAnimating()">
+        <span class="arrow-icon">‹</span>
+      </button>
+      <button class="nav-arrow nav-next"
+              (click)="nextTestimonial()"
+              aria-label="Next testimonial"
+              [disabled]="isAnimating()">
+        <span class="arrow-icon">›</span>
+      </button>
+    </div>
+
+    <!-- Hidden testimonials for screen readers -->
+    <div class="sr-only">
+      <div *ngFor="let item of testimonials(); let i = index" [id]="'testimonial-' + i">
+        <blockquote>{{ item.quote }}</blockquote>
+        <cite>{{ item.author }}, {{ item.role }}</cite>
       </div>
     </div>
   </div>

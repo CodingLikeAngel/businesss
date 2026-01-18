@@ -1,0 +1,164 @@
+<!-- Sección de Promociones -->
+<section id="promociones" class="promotions-section">
+  <header class="promotions-header">
+    <h2 class="text-4xl font-bold text-[#FACC15] text-center mb-8 md:mb-12 font-nintendo drop-shadow-[0_4px_8px_rgba(255,204,21,0.8)] animate-bounce">
+      Ofertas Especiales
+    </h2>
+  </header>
+
+  <div class="promotions-grid grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Promoción 1 -->
+    <div class="promotion-item relative mt-12 slide-in-left">
+      <lib-ui-components-chip
+        [variant]="selectedVariant"
+        size="sm"
+        rounded="full"
+        class="absolute md:top-[-2.5rem] top-[-1.5rem] left-1/2 transform -translate-x-1/2 z-20 text-white md:px-4 px-3 md:py-1 py-0.5 shadow-md font-semibold"
+      >
+        ¡-20%!
+      </lib-ui-components-chip>
+
+      <!-- Countdown Timer -->
+      <div class="countdown-timer" aria-live="polite" role="timer">
+        <span class="timer-label">Tiempo restante:</span>
+        <div class="timer-display">
+          <span class="time-unit">{{ countdowns[0]?.days || 0 }}d</span>
+          <span class="time-unit">{{ countdowns[0]?.hours || 0 }}h</span>
+          <span class="time-unit">{{ countdowns[0]?.minutes || 0 }}m</span>
+          <span class="time-unit">{{ countdowns[0]?.seconds || 0 }}s</span>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-bar-container">
+        <div class="progress-bar" [style.width.%]="progressValues[0]"></div>
+        <span class="progress-text">{{ progressValues[0] }}% agotado</span>
+      </div>
+
+      <!-- Confetti Effect -->
+      <div class="confetti-container" *ngIf="showConfetti[0]">
+        <div class="confetti-piece" *ngFor="let i of [].constructor(20)"></div>
+      </div>
+
+      <lib-ui-components-tooltip
+        [content]="getDetailedTooltip(0)"
+        [variant]="selectedVariant"
+        position="top"
+      >
+        <lib-ui-components-card-premium
+          [variant]="selectedVariant"
+          [config]="premiumCardConfigs[0]"
+        ></lib-ui-components-card-premium>
+      </lib-ui-components-tooltip>
+    </div>
+
+    <!-- Promoción 2 -->
+    <div class="promotion-item relative mt-12 slide-in-up">
+      <lib-ui-components-chip
+        [variant]="selectedVariant"
+        size="sm"
+        rounded="full"
+        class="absolute md:top-[-2.5rem] top-[-1.5rem] left-1/2 transform -translate-x-1/2 z-20 text-white md:px-4 px-3 md:py-1 py-0.5 shadow-md font-semibold"
+      >
+        ¡Oferta!
+      </lib-ui-components-chip>
+
+      <!-- Countdown Timer -->
+      <div class="countdown-timer" aria-live="polite" role="timer">
+        <span class="timer-label">Tiempo restante:</span>
+        <div class="timer-display">
+          <span class="time-unit">{{ countdowns[1]?.days || 0 }}d</span>
+          <span class="time-unit">{{ countdowns[1]?.hours || 0 }}h</span>
+          <span class="time-unit">{{ countdowns[1]?.minutes || 0 }}m</span>
+          <span class="time-unit">{{ countdowns[1]?.seconds || 0 }}s</span>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-bar-container">
+        <div class="progress-bar" [style.width.%]="progressValues[1]"></div>
+        <span class="progress-text">{{ progressValues[1] }}% agotado</span>
+      </div>
+
+      <!-- Confetti Effect -->
+      <div class="confetti-container" *ngIf="showConfetti[1]">
+        <div class="confetti-piece" *ngFor="let i of [].constructor(20)"></div>
+      </div>
+
+      <lib-ui-components-tooltip
+        [content]="getDetailedTooltip(1)"
+        [variant]="selectedVariant"
+        position="top"
+      >
+        <lib-ui-components-card-premium
+          [variant]="selectedVariant"
+          [config]="premiumCardConfigs[1]"
+        ></lib-ui-components-card-premium>
+      </lib-ui-components-tooltip>
+    </div>
+
+    <!-- Promoción 3 -->
+    <div class="promotion-item relative mt-12 slide-in-right">
+      <lib-ui-components-chip
+        [variant]="selectedVariant"
+        size="sm"
+        rounded="full"
+        class="absolute md:top-[-2.5rem] top-[-1.5rem] left-1/2 transform -translate-x-1/2 z-20 text-white md:px-4 px-3 md:py-1 py-0.5 shadow-md font-semibold"
+      >
+        ¡Novedad!
+      </lib-ui-components-chip>
+
+      <!-- Countdown Timer -->
+      <div class="countdown-timer" aria-live="polite" role="timer">
+        <span class="timer-label">Tiempo restante:</span>
+        <div class="timer-display">
+          <span class="time-unit">{{ countdowns[2]?.days || 0 }}d</span>
+          <span class="time-unit">{{ countdowns[2]?.hours || 0 }}h</span>
+          <span class="time-unit">{{ countdowns[2]?.minutes || 0 }}m</span>
+          <span class="time-unit">{{ countdowns[2]?.seconds || 0 }}s</span>
+        </div>
+      </div>
+
+      <!-- Progress Bar -->
+      <div class="progress-bar-container">
+        <div class="progress-bar" [style.width.%]="progressValues[2]"></div>
+        <span class="progress-text">{{ progressValues[2] }}% agotado</span>
+      </div>
+
+      <!-- Confetti Effect -->
+      <div class="confetti-container" *ngIf="showConfetti[2]">
+        <div class="confetti-piece" *ngFor="let i of [].constructor(20)"></div>
+      </div>
+
+      <lib-ui-components-tooltip
+        [content]="getDetailedTooltip(2)"
+        [variant]="selectedVariant"
+        position="top"
+      >
+        <lib-ui-components-card-premium
+          [variant]="selectedVariant"
+          [config]="premiumCardConfigs[2]"
+        ></lib-ui-components-card-premium>
+      </lib-ui-components-tooltip>
+    </div>
+  </div>
+
+  <!-- Call to Action Section -->
+  <div class="call-to-action text-center mt-12">
+    <button class="cta-button bg-[#FACC15] text-black font-bold py-3 px-8 rounded-full hover:bg-[#EAB308] transition-colors duration-300 shadow-lg">
+      ¡Reserva tu cita ahora!
+    </button>
+    <p class="cta-text mt-4 text-gray-600">No pierdas estas ofertas limitadas. ¡Actúa rápido!</p>
+  </div>
+
+  <!-- Aside Section -->
+  <aside class="promotions-aside mt-12 p-6 bg-gray-100 rounded-lg">
+    <h3 class="text-xl font-semibold mb-4">Términos y Condiciones</h3>
+    <ul class="list-disc list-inside space-y-2 text-sm text-gray-700">
+      <li>Ofertas válidas solo para servicios seleccionados.</li>
+      <li>No acumulables con otras promociones.</li>
+      <li>Sujeto a disponibilidad y previa cita.</li>
+      <li>Precios pueden variar según el estilista.</li>
+    </ul>
+  </aside>
+</section>
