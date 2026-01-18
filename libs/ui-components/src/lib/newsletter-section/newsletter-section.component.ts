@@ -8,6 +8,10 @@ import { UIButtonComponent } from '../button/button.component';
 export interface NewsletterCustomStyles {
   backgroundColor?: string;
   color?: string;
+  '--theme-bg'?: string;
+  '--theme-color'?: string;
+  '--component-bg'?: string;
+  '--component-text'?: string;
   [key: string]: string | undefined;
 }
 
@@ -29,26 +33,42 @@ export class UINewsletterSectionComponent {
   newsletterStyles = computed(() => {
     const styles: Record<string, any> = {};
     const customStyles = this.customStyles();
-    
+     
     if (customStyles['backgroundColor']) {
       styles['--theme-bg'] = customStyles['backgroundColor'];
       styles['--component-bg'] = customStyles['backgroundColor'];
       styles['background'] = customStyles['backgroundColor'];
       styles['background-color'] = customStyles['backgroundColor'];
     }
-    
+     
     if (customStyles['color']) {
       styles['--theme-color'] = customStyles['color'];
       styles['--component-text'] = customStyles['color'];
       styles['color'] = customStyles['color'];
     }
-    
+     
+    if (customStyles['--theme-bg']) {
+      styles['--theme-bg'] = customStyles['--theme-bg'];
+    }
+     
+    if (customStyles['--theme-color']) {
+      styles['--theme-color'] = customStyles['--theme-color'];
+    }
+     
+    if (customStyles['--component-bg']) {
+      styles['--component-bg'] = customStyles['--component-bg'];
+    }
+     
+    if (customStyles['--component-text']) {
+      styles['--component-text'] = customStyles['--component-text'];
+    }
+     
     Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
+      if (key !== 'backgroundColor' && key !== 'color' && key !== '--theme-bg' && key !== '--theme-color' && key !== '--component-bg' && key !== '--component-text') {
         styles[key] = customStyles[key];
       }
     });
-    
+     
     return styles;
   });
   
