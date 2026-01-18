@@ -237,10 +237,10 @@ $unified-active-scale: scale(0.98);
 
 @mixin variant-cyberpunk {
   @include unified-variant-base(
-    linear-gradient(135deg, #fceea7, #ff0055, #00ffcc),
-    #000000,
+    linear-gradient(135deg, #1a1a2e, #16213e, #0f0f23),
+    #00ffcc,
     #ff0055,
-    #fceea7
+    #00ffcc
   );
   position: relative;
   overflow: hidden;
@@ -617,29 +617,60 @@ $unified-active-scale: scale(0.98);
 }
 
 @mixin variant-kirby {
-  --theme-bg: linear-gradient(135deg, #ff1493, #ffb6c1);
-  --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(255, 255, 255, 0.8);
-  --theme-accent: #ffffff;
-  --theme-shadow: 0 0 20px rgba(255, 20, 147, 0.5), 0 4px 15px rgba(0, 0, 0, 0.3);
-  --theme-glow: 0 0 30px rgba(255, 105, 180, 0.6);
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
-  border-radius: 0.75rem;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  @include unified-variant-base(
+    linear-gradient(135deg, #ff1493, #ffb6c1),
+    #ffffff,
+    #ffffff,
+    rgba(255, 255, 255, 0.8)
+  );
+  border-radius: 2rem;
+  font-family: 'Comic Sans MS', cursive;
+  font-weight: 700;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '★';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    font-size: 1.5rem;
+    color: #ffff00;
+    text-shadow: 0 0 10px #ffff00;
+    animation: kirby-star 3s ease-in-out infinite;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.2) 0%, transparent 50%);
+    animation: kirby-blush 4s ease-in-out infinite;
+    pointer-events: none;
+  }
 
   &:hover {
-    transform: scale(1.02);
-    box-shadow: var(--theme-glow), 0 6px 20px rgba(0, 0, 0, 0.4);
+    transform: scale(1.05) rotate(1deg);
+    box-shadow: 0 0 30px rgba(255, 20, 147, 0.8), 0 0 50px rgba(255, 182, 193, 0.6);
   }
 
   &:active {
-    transform: scale(0.98);
+    transform: scale(0.95) rotate(-0.5deg);
   }
+}
+
+@keyframes kirby-star {
+  0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.8; }
+  50% { transform: rotate(180deg) scale(1.2); opacity: 1; }
+}
+
+@keyframes kirby-blush {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
 }
 
 @mixin variant-rayman {
@@ -712,53 +743,239 @@ $unified-active-scale: scale(0.98);
 }
 
 @mixin variant-lum {
-  --theme-bg: rgba(255, 255, 224, 0.3);
-  --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(255, 255, 0, 0.5);
-  --theme-accent: #ff00ff;
-  --theme-shadow: 0 0 20px #ffff00;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
+  @include unified-variant-base(
+    linear-gradient(135deg, rgba(255, 255, 0, 0.2), rgba(255, 0, 255, 0.2)),
+    #ffffff,
+    #ff00ff,
+    rgba(255, 255, 0, 0.5)
+  );
+  border-radius: 1.5rem;
+  font-family: 'Comic Sans MS', cursive;
+  text-transform: lowercase;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '✨';
+    position: absolute;
+    top: 50%;
+    left: -20px;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    color: #ffff00;
+    text-shadow: 0 0 10px #ffff00;
+    animation: lum-sparkle 2.5s ease-in-out infinite;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 70% 30%, rgba(255,0,255,0.3) 0%, transparent 50%);
+    animation: lum-glow 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: scale(1.03) rotate(0.5deg);
+    box-shadow: 0 0 25px rgba(255, 255, 0, 0.6), 0 0 40px rgba(255, 0, 255, 0.4);
+  }
+
+  &:active {
+    transform: scale(0.97) rotate(-0.25deg);
+  }
+}
+
+@keyframes lum-sparkle {
+  0%, 100% { opacity: 0.7; transform: translateY(-50%) scale(1); }
+  50% { opacity: 1; transform: translateY(-50%) scale(1.3); }
+}
+
+@keyframes lum-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
 }
 
 @mixin variant-phoenix {
-  --theme-bg: linear-gradient(135deg, rgba(249, 115, 22, 0.2), rgba(234, 179, 8, 0.2));
-  --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(249, 115, 22, 0.5);
-  --theme-accent: #f97316;
-  --theme-shadow: 0 0 15px #f97316;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
+  @include unified-variant-base(
+    linear-gradient(135deg, #7c2d12, #ea580c, #f97316),
+    #ffffff,
+    #fed7aa,
+    #ea580c
+  );
+  border-radius: 1rem;
+  font-family: 'serif';
+  font-weight: 600;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '🔥';
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    font-size: 1.8rem;
+    opacity: 0.9;
+    animation: phoenix-flame 2s ease-in-out infinite;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+      transparent 30%,
+      rgba(249,115,22,0.3) 50%,
+      transparent 70%
+    );
+    animation: phoenix-heat 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 25px rgba(249, 115, 22, 0.8), 0 0 40px rgba(234, 88, 12, 0.6);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+@keyframes phoenix-flame {
+  0%, 100% { transform: rotate(0deg) scale(1); opacity: 0.9; }
+  50% { transform: rotate(10deg) scale(1.1); opacity: 1; }
+}
+
+@keyframes phoenix-heat {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
 }
 
 @mixin variant-galactic {
-  --theme-bg: linear-gradient(135deg, rgba(76, 29, 149, 0.9), rgba(17, 24, 39, 0.9));
-  --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(76, 29, 149, 0.5);
-  --theme-accent: #a5b4fc;
-  --theme-shadow: 0 0 15px #4c1d95;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
+  @include unified-variant-base(
+    linear-gradient(135deg, #1e1b4b, #312e81, #4c1d95),
+    #ffffff,
+    #a5b4fc,
+    #6366f1
+  );
+  border-radius: 1.25rem;
+  font-family: 'serif';
+  font-weight: 500;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '🌌';
+    position: absolute;
+    top: 50%;
+    left: -25px;
+    transform: translateY(-50%);
+    font-size: 1.5rem;
+    color: #a5b4fc;
+    text-shadow: 0 0 15px #a5b4fc;
+    animation: galaxy-orbit 4s linear infinite;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 80% 20%, rgba(165,180,252,0.2) 0%, transparent 50%);
+    animation: galaxy-twinkle 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 25px rgba(76, 29, 149, 0.8), 0 0 40px rgba(49, 46, 129, 0.6);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+@keyframes galaxy-orbit {
+  from { transform: translateY(-50%) rotate(0deg); }
+  to { transform: translateY(-50%) rotate(360deg); }
+}
+
+@keyframes galaxy-twinkle {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
 }
 
 @mixin variant-orbitron {
-  --theme-bg: rgba(0, 0, 0, 0.9);
-  --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(255, 255, 255, 0.5);
-  --theme-accent: #ffffff;
-  --theme-shadow: 0 0 15px #ffffff;
-  --theme-font: 'Orbitron', sans-serif;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
-  font-family: var(--theme-font);
+  @include unified-variant-base(
+    linear-gradient(135deg, #0f172a, #1e293b),
+    #00ffff,
+    #ffffff,
+    #00ffff
+  );
+  border-radius: 0.5rem;
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '⚛️';
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    font-size: 1.3rem;
+    color: #00ffff;
+    text-shadow: 0 0 10px #00ffff;
+    animation: orbitron-electron 2s linear infinite;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+      transparent 40%,
+      rgba(0,255,255,0.1) 50%,
+      transparent 60%
+    );
+    animation: orbitron-scan 3s ease-in-out infinite;
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 30px rgba(255, 255, 255, 0.4);
+    text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+  }
+
+  &:active {
+    transform: scale(0.98);
+  }
+}
+
+@keyframes orbitron-electron {
+  from { transform: rotate(0deg) scale(1); }
+  to { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes orbitron-scan {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
 }
 
 @mixin variant-cartoon {
@@ -1668,9 +1885,9 @@ $unified-active-scale: scale(0.98);
 @mixin variant-minimal {
   @include unified-variant-base(
     #ffffff,
-    #171717,
-    #171717,
-    #e5e5e5
+    #1e293b,
+    #3b82f6,
+    #e2e8f0
   );
   position: relative;
   overflow: hidden;
@@ -1678,9 +1895,9 @@ $unified-active-scale: scale(0.98);
   box-shadow: var(--theme-shadow);
   border-radius: 0.75rem;
   font-family: 'Inter', sans-serif;
-  font-weight: 400;
+  font-weight: 500;
   background-image: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(248,250,252,1) 100%);
-  border: 1px solid #f1f5f9;
+  border: 1px solid #e2e8f0;
   transition: all 0.2s ease;
 
   &::before {
@@ -1690,7 +1907,7 @@ $unified-active-scale: scale(0.98);
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.05), transparent);
+    background: linear-gradient(90deg, transparent, rgba(59,130,246,0.1), transparent);
   }
 
   &::after {
@@ -1700,13 +1917,13 @@ $unified-active-scale: scale(0.98);
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(0,0,0,0.02), transparent);
+    background: linear-gradient(90deg, transparent, rgba(59,130,246,0.05), transparent);
   }
 
   &:hover {
     transform: translateY(-1px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
-    border-color: #e2e8f0;
+    border-color: #3b82f6;
     background-image: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(241,245,249,1) 100%);
   }
 
