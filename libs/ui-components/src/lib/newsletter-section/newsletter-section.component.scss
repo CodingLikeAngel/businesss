@@ -55,18 +55,18 @@
 
   .text-content {
       flex: 1;
-      
+
       h2 {
           font-size: 2rem;
           font-weight: 700;
           margin-bottom: 0.5rem;
-          color: white;
+          color: var(--theme-color, white);
       }
-      
+
       p {
           font-size: 1.1rem;
           opacity: 0.9;
-          color: rgba(255,255,255,0.9);
+          color: var(--theme-color, rgba(255,255,255,0.9));
       }
   }
 
