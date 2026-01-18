@@ -1,17 +1,17 @@
-<section [ngClass]="['newsletter-section', 'variant-' + variant()]">
+<div [ngClass]="['newsletter-section', 'variant-' + variant()]">
   <div class="content">
     <div class="text-content">
       <h2>{{ title() }}</h2>
       <p>{{ description() }}</p>
     </div>
     <div class="form-container">
-      <div class="input-wrapper"> 
-         <lib-ui-components-input
-            [type]="'email'"
-            [placeholder]="placeholder()"
-            [(ngModel)]="email"
-            [variant]="variant()">
-         </lib-ui-components-input>
+      <div class="input-wrapper">
+        <lib-ui-components-input
+          [type]="'email'"
+          [placeholder]="placeholder()"
+          [(ngModel)]="email"
+          [variant]="variant()">
+        </lib-ui-components-input>
       </div>
       <lib-ui-components-button
         [variant]="variant() === 'default' ? 'primary' : variant()"
@@ -21,10 +21,10 @@
       </lib-ui-components-button>
     </div>
     <div class="success-msg" *ngIf="successMessage">
-        {{ successMessage }}
+      {{ successMessage }}
     </div>
   </div>
-</section>
+</div>
 
 
 

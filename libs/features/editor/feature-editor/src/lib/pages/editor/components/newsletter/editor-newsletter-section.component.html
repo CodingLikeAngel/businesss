@@ -1,6 +1,8 @@
 <div class="editor-section cursor-pointer py-12"
+  [id]="section.id"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
+  [ngClass]="'newsletter-section--' + getVariant(section.id)"
   [applyDynamicStyles]="section.styles"
   [visualEditable]="true"
   visualType="section"
