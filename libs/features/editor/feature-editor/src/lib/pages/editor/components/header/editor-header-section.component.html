@@ -1,0 +1,25 @@
+<div class="editor-section cursor-pointer py-4"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+    <div class="editor-element"
+         [class.is-selected]="selectedElementId === section.id + '_header'"
+         (click)="selectElement($event, { id: section.id + '_header', sectionId: section.id, content: section.content, type: 'header', _original: section.content })"
+         [applyDynamicStyles]="section.styles"
+         [visualEditable]="true"
+         visualType="element"
+         (visualMoved)="onElementMoved($event, section.id + '_header')"
+         (visualResized)="onElementResized($event, section.id + '_header')">
+      <lib-ui-header
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [title]="section.content['title'] || 'Encabezado'"
+        [subtitle]="section.content['subtitle'] || ''"
+        [navItems]="section.content['navItems'] || []"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}"
+      ></lib-ui-header>
+    </div>
+</div>

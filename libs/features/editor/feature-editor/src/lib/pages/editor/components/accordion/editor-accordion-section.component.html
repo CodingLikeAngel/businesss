@@ -1,0 +1,39 @@
+<div class="editor-section cursor-pointer py-12"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+    <div class="container mx-auto px-6 max-w-3xl editor-element"
+         [class.is-selected]="selectedElementId === section.id + '_accordion'"
+         (click)="selectElement($event, { id: section.id + '_accordion', sectionId: section.id, content: section.content, type: 'accordion', _original: section.content })"
+         [applyDynamicStyles]="section.styles"
+         [visualEditable]="true"
+         visualType="element"
+         (visualMoved)="onElementMoved($event, section.id + '_accordion')"
+         (visualResized)="onElementResized($event, section.id + '_accordion')">
+      
+      <lib-ui-components-title *ngIf="section.content['title']"
+        [level]="'h2'"
+        [text]="section.content['title']"
+        [variant]="getVariant(section.id)"
+        [align]="'center'"
+        class="mb-8 block editor-element"
+        [class.is-selected]="selectedElementId === section.id + '_title'"
+        (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+        [applyDynamicStyles]="section.content['titleStyles']"
+        [visualEditable]="true"
+        visualType="element"
+        (visualMoved)="onElementMoved($event, section.id + '_title')"
+        (visualResized)="onElementResized($event, section.id + '_title')"
+      ></lib-ui-components-title>
+
+      <lib-ui-components-accordion
+        [items]="section.content['items'] || [{ title: 'Accordion Item 1', content: 'Content 1' }, { title: 'Accordion Item 2', content: 'Content 2' }]"
+        [variant]="section.content['variant'] || getVariant(section.id)"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}"
+      ></lib-ui-components-accordion>
+    </div>
+</div>

@@ -1,0 +1,30 @@
+<!-- DESKTOP PRICING -->
+<div *ngIf="!isMobile" class="editor-section cursor-pointer"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+  <div class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_pricing'"
+       (click)="selectElement($event, { id: section.id + '_pricing', sectionId: section.id, content: section.content, type: 'pricing', _original: section.content })"
+       [applyDynamicStyles]="section.styles"
+       [visualEditable]="true"
+       visualType="element"
+       (visualMoved)="onElementMoved($event, section.id + '_pricing')"
+       (visualResized)="onElementResized($event, section.id + '_pricing')">
+    <lib-ui-pricing-table-section 
+      [variant]="$any(getVariant(section.id))"
+      [id]="section.id"
+      [columns]="pricingConfig.columns"
+      [rows]="pricingConfig.rows"
+      [title]="section.content['title']"
+    ></lib-ui-pricing-table-section>
+  </div>
+</div>
+
+<!-- MOBILE PRICING (Optional or Placeholder if missing in original) -->
+<div *ngIf="isMobile" class="p-4 text-center text-white/50 border border-dashed border-white/20 rounded-xl m-4">
+  La sección de Precios se edita mejor en escritorio.
+</div>

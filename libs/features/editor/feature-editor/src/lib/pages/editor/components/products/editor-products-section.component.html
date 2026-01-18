@@ -1,0 +1,109 @@
+<!-- DESKTOP PRODUCTS -->
+<section *ngIf="!isMobile" [id]="section.id"
+  class="relative z-20 py-20 cursor-pointer editor-section"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <div class="backdrop-blur-xl p-12 rounded-3xl border border-white/10 bg-white/5">
+      <div class="text-center mb-12">
+        <lib-ui-components-title
+          [level]="section.content['level'] || titleConfig.level"
+          [text]="section.content['title'] || 'Nuestros Módulos'"
+          [variant]="$any(getVariant(section.id))"
+          [align]="'center'"
+          class="editor-element"
+          [class.is-selected]="selectedElementId === section.id + '_title'"
+          (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+          [applyDynamicStyles]="section.content['titleStyles']"
+          [visualEditable]="true"
+          visualType="element"
+          (visualMoved)="onElementMoved($event, section.id + '_title')"
+          (visualResized)="onElementResized($event, section.id + '_title')"
+        ></lib-ui-components-title>
+      </div>
+      
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <ng-container *ngFor="let product of productsConfig.items; let i = index; trackBy: trackByProductName">
+          <div class="editor-element" 
+            [class.is-selected]="uiStateService.selectedElement?._original === product"
+            (click)="selectElement($event, getMergedElement(section.id, section.id + '_product_' + i, product, 'product'))"
+            [applyDynamicStyles]="product.styles || {}"
+            [visualEditable]="true"
+            visualType="element"
+            (visualMoved)="onElementMoved($event, section.id + '_product_' + i)"
+            (visualResized)="onElementResized($event, section.id + '_product_' + i)">
+            
+            <lib-ui-components-card-animated
+              *ngIf="i % 3 === 0"
+              [title]="product.name"
+              [description]="product.description"
+              [image]="product.image"
+              [variant]="$any(product.variant || getVariant(section.id))"
+              [customStyles]="product.styles || {}"
+              [applyDynamicStyles]="product.styles || {}"
+              [animation]="'bounce'"
+            ></lib-ui-components-card-animated>
+            
+            <lib-ui-components-card
+              *ngIf="i % 3 === 1"
+              [title]="product.name"
+              [image]="product.image"
+              [description]="product.description"
+              [variant]="$any(product.variant || getVariant(section.id))"
+              [customStyles]="product.styles || {}"
+              [applyDynamicStyles]="product.styles || {}"
+              [size]="'medium'"
+            ></lib-ui-components-card>
+            
+            <lib-card-products
+              *ngIf="i % 3 === 2"
+              [product]="product"
+              [variant]="$any(product.variant || getVariant(section.id))"
+              [applyDynamicStyles]="product.styles || {}"
+            ></lib-card-products>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOBILE PRODUCTS -->
+<section *ngIf="isMobile" [id]="section.id" 
+  class="relative z-20 py-10 cursor-pointer editor-section"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)">
+  <div class="container mx-auto px-4">
+    <div class="backdrop-blur-xl p-6 rounded-2xl border border-white/10 bg-white/5">
+      <lib-ui-components-title
+        [level]="'h2'"
+        [text]="section.content['title'] || 'Módulos'"
+        [variant]="$any(getVariant(section.id))"
+        [align]="'center'"
+        class="mb-6 editor-element"
+        [class.is-selected]="selectedElementId === section.id + '_title'"
+        (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+      ></lib-ui-components-title>
+      
+      <div class="space-y-6">
+        <ng-container *ngFor="let product of productsConfig.items; let i = index; trackBy: trackByProductName">
+          <div class="editor-element" 
+            [class.is-selected]="uiStateService.selectedElement?._original === product"
+            (click)="selectElement($event, product)">
+            <lib-ui-components-card
+              [title]="product.name"
+              [image]="product.image"
+              [description]="product.description"
+              [variant]="$any(product.variant || getVariant(section.id))"
+              [customStyles]="product.styles || {}"
+            ></lib-ui-components-card>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</section>

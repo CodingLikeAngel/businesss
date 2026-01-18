@@ -1,42 +1,39 @@
-import { Component, OnInit, Inject, PLATFORM_ID, inject, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { EditorService } from '../../../../index';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BaseEditorFeatureComponent } from '../base-editor-feature.component';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { RouterModule, Router, ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import {
-  UIHeaderComponent,
-  UIFooterComponent,
   UIModalComponent,
-  BubbleAnimationComponent,
-  UITitleComponent,
-  UiCardProductsComponent,
-  UICardAnimatedComponent,
-  UICardComponent,
-  UINavBarComponent,
-  UIPricingTableSectionComponent,
-  UITabsComponent,
-  UIAccordionComponent,
-  UIImageComponent,
-  UiTestimonialsCardComponent,
-  UIListComponent,
-  UINewsletterSectionComponent,
-  UIStepsSectionComponent,
-  UIBreadcrumbsComponent,
-  UISpinnerComponent,
-  UIChartComponent,
-  UIGamingVariantsShowcaseComponent
 } from '@negocio/ui-components';
 import { 
-  Product, 
-  Testimonial, 
-  PageSection, 
-  VariantService,
-  ApplyDynamicStylesDirective,
-  VisualEditableDirective,
   VisualEditorService
 } from '@negocio/shared-components';
-import { ReservationFormComponent } from '../../../components/reservation-form/reservation-form.component';
+import { EditorHeroSectionComponent } from '../components/hero/editor-hero-section.component';
+import { EditorFeaturesSectionComponent } from '../components/features/editor-features-section.component';
+import { EditorStatsSectionComponent } from '../components/stats/editor-stats-section.component';
+import { EditorServicesSectionComponent } from '../components/services/editor-services-section.component';
+import { EditorProductsSectionComponent } from '../components/products/editor-products-section.component';
+import { EditorTestimonialsSectionComponent } from '../components/testimonials/editor-testimonials-section.component';
+import { EditorPricingSectionComponent } from '../components/pricing/editor-pricing-section.component';
+import { EditorPromotionsSectionComponent } from '../components/promotions/editor-promotions-section.component';
+import { EditorFaqSectionComponent } from '../components/faq/editor-faq-section.component';
+import { EditorGallerySectionComponent } from '../components/gallery/editor-gallery-section.component';
+import { EditorContactSectionComponent } from '../components/contact/editor-contact-section.component';
+import { EditorBubbleSectionComponent } from '../components/bubble/editor-bubble-section.component';
+import { EditorHeaderSectionComponent } from '../components/header/editor-header-section.component';
+import { EditorFooterSectionComponent } from '../components/footer/editor-footer-section.component';
+import { EditorAccordionSectionComponent } from '../components/accordion/editor-accordion-section.component';
+import { EditorListSectionComponent } from '../components/list/editor-list-section.component';
+import { EditorNewsletterSectionComponent } from '../components/newsletter/editor-newsletter-section.component';
+import { EditorStepsSectionComponent } from '../components/steps/editor-steps-section.component';
+import { EditorTableSectionComponent } from '../components/table/editor-table-section.component';
+import { EditorTabsSectionComponent } from '../components/tabs/editor-tabs-section.component';
+import { EditorBreadcrumbsSectionComponent } from '../components/breadcrumbs/editor-breadcrumbs-section.component';
+import { EditorChartSectionComponent } from '../components/chart/editor-chart-section.component';
+import { EditorCtaSectionComponent } from '../components/cta/editor-cta-section.component';
+import { EditorShowcaseSectionComponent } from '../components/showcase/editor-showcase-section.component';
+import { EditorSpinnerSectionComponent } from '../components/spinner/editor-spinner-section.component';
+import { EditorChipSectionComponent } from '../components/chip/editor-chip-section.component';
 
 @Component({
   selector: 'lib-editor-desktop-feature',
@@ -46,103 +43,42 @@ import { ReservationFormComponent } from '../../../components/reservation-form/r
   imports: [
     CommonModule,
     RouterModule,
-    ReservationFormComponent,
-    UIHeaderComponent,
     UIModalComponent,
-    BubbleAnimationComponent,
-    UITitleComponent,
-    UiCardProductsComponent,
-    UICardAnimatedComponent,
-    UICardComponent,
-    UIFooterComponent,
-    UIPricingTableSectionComponent,
-    UITabsComponent,
-    UIAccordionComponent,
-    UIImageComponent,
-    UiTestimonialsCardComponent,
-    UIListComponent,
-    UINewsletterSectionComponent,
-    UIStepsSectionComponent,
-    UIBreadcrumbsComponent,
-    UISpinnerComponent,
-    UIChartComponent,
-    UIGamingVariantsShowcaseComponent,
-    ApplyDynamicStylesDirective,
-    VisualEditableDirective
+    EditorHeroSectionComponent,
+    EditorFeaturesSectionComponent,
+    EditorStatsSectionComponent,
+    EditorServicesSectionComponent,
+    EditorProductsSectionComponent,
+    EditorTestimonialsSectionComponent,
+    EditorPricingSectionComponent,
+    EditorPromotionsSectionComponent,
+    EditorFaqSectionComponent,
+    EditorGallerySectionComponent,
+    EditorContactSectionComponent,
+    EditorBubbleSectionComponent,
+    EditorHeaderSectionComponent,
+    EditorFooterSectionComponent,
+    EditorAccordionSectionComponent,
+    EditorListSectionComponent,
+    EditorNewsletterSectionComponent,
+    EditorStepsSectionComponent,
+    EditorTableSectionComponent,
+    EditorTabsSectionComponent,
+    EditorBreadcrumbsSectionComponent,
+    EditorChartSectionComponent,
+    EditorCtaSectionComponent,
+    EditorShowcaseSectionComponent,
+    EditorSpinnerSectionComponent,
+    EditorChipSectionComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [VisualEditorService]
 })
 export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent implements OnInit {
-  sections$: Observable<PageSection[]>;
-
-  constructor(
-    @Inject(PLATFORM_ID) protected override platformId: object,
-    protected override variantService: VariantService,
-    protected override router: Router,
-    protected override route: ActivatedRoute
-  ) {
-    super(platformId, variantService, router, route);
-    this.sections$ = this.variantService.sections$;
-  }
-
   override ngOnInit() {
     super.ngOnInit();
     this.editorService.updateEditorState({ isMobile: false });
   }
 
-  onTabSelected(sectionId: string) {
-    this.scrollToSection(sectionId);
-  }
-
-  onNavItemClick(sectionId: string) {
-    this.scrollToSection(sectionId);
-  }
-
-  scrollToSection(sectionId: string) {
-    if (isPlatformBrowser(this.platformId)) {
-      const element = document.getElementById(sectionId);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }
-  }
-
-  getMergedElement(sectionId: string, elementId: string, item: any, type: string = 'element'): any {
-    return {
-      id: elementId,
-      sectionId: sectionId,
-      ...item,
-      _original: item,
-      type
-    };
-  }
-
-  onSectionResized(section: PageSection, bounds: any) {
-    console.log('📏 Section resized:', section.id, bounds);
-
-    // Update section styles with new height
-    const updatedSection = {
-      ...section,
-      styles: {
-        ...section.styles,
-        minHeight: `${bounds.height}px`,
-        height: `${bounds.height}px`
-      }
-    };
-
-    // Update in service
-    this.variantService.updateSectionInCurrentPage(section.id, updatedSection);
-  }
-
-  onElementMoved(bounds: any, elementId: string) {
-    console.log('📍 Element moved:', elementId, bounds);
-    // TODO: Implement element position persistence
-  }
-
-  onElementResized(bounds: any, elementId: string) {
-    console.log('📐 Element resized:', elementId, bounds);
-    // TODO: Implement element size persistence
-  }
 }
 

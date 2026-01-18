@@ -1,0 +1,24 @@
+<div class="editor-section cursor-pointer py-4"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+    <div class="editor-element"
+         [class.is-selected]="selectedElementId === section.id + '_footer'"
+         (click)="selectElement($event, { id: section.id + '_footer', sectionId: section.id, content: section.content, type: 'footer', _original: section.content })"
+         [applyDynamicStyles]="section.styles"
+         [visualEditable]="true"
+         visualType="element"
+         (visualMoved)="onElementMoved($event, section.id + '_footer')"
+         (visualResized)="onElementResized($event, section.id + '_footer')">
+      <lib-ui-components-footer
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [title]="section.content['title'] || 'Pie de Página'"
+        [description]="section.content['description'] || 'Descripción del footer'"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}"
+      ></lib-ui-components-footer>
+    </div>
+</div>

@@ -1,0 +1,125 @@
+<!-- DESKTOP HERO -->
+<section *ngIf="!isMobile" [id]="section.id"
+  class="relative min-h-[80vh] flex flex-col items-center justify-center cursor-pointer editor-section overflow-hidden"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [ngClass]="'hero-section--' + getVariant(section.id)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+
+  <!-- Background Overlay (Simulated) -->
+  <div class="absolute inset-0 bg-black/40 z-0"></div>
+
+  <div class="relative z-10 hero-content text-center max-w-4xl px-6">
+    <lib-ui-components-title
+      [level]="'h1'"
+      [text]="section.content['title'] || heroConfig.title"
+      [variant]="$any(getVariant(section.id))"
+      [align]="'center'"
+      class="editor-element block mb-6 px-4"
+      [class.is-selected]="selectedElementId === section.id + '_title'"
+      (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })"
+      [applyDynamicStyles]="section.content['titleStyles']"
+      [visualEditable]="true"
+      visualType="element"
+      (visualMoved)="onElementMoved($event, section.id + '_title')"
+      (visualResized)="onElementResized($event, section.id + '_title')"
+    ></lib-ui-components-title>
+
+    <div class="mt-4 editor-element"
+         [class.is-selected]="selectedElementId === section.id + '_subtitle'"
+         (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })"
+         [applyDynamicStyles]="section.content['subtitleStyles']"
+         [visualEditable]="true"
+         visualType="element"
+         (visualMoved)="onElementMoved($event, section.id + '_subtitle')"
+         (visualResized)="onElementResized($event, section.id + '_subtitle')">
+      <p class="hero-subtitle text-xl md:text-3xl text-white/90">
+        {{ section.content['subtitle'] || heroConfig.subtitle }}
+      </p>
+    </div>
+
+    <!-- CTA (Decomposed) -->
+    <div *ngIf="section.content['showCta'] !== false"
+         class="mt-10 editor-element inline-block"
+         [class.is-selected]="selectedElementId === section.id + '_cta'"
+         (click)="selectElement($event, { id: section.id + '_cta', sectionId: section.id, content: section.content, type: 'cta', _original: section.content })"
+         [applyDynamicStyles]="section.content['ctaStyles']"
+         [visualEditable]="true"
+         visualType="element"
+         (visualMoved)="onElementMoved($event, section.id + '_cta')"
+         (visualResized)="onElementResized($event, section.id + '_cta')">
+      <button class="cta-button px-10 py-4 rounded-xl font-bold transition-all hover:scale-105 active:scale-95"
+              [ngClass]="'variant-' + getVariant(section.id)">
+        {{ section.content['ctaLabel'] || heroConfig.ctaLabel }}
+      </button>
+    </div>
+  </div>
+
+  <!-- Navigation Cards (If active) -->
+  <div class="relative z-10 mt-16 w-full max-w-7xl px-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+       <div *ngFor="let card of heroConfig.navigationCards; let i = index"
+            class="editor-element"
+            [class.is-selected]="uiStateService.selectedElement?._original === card"
+            (click)="selectElement($event, getMergedElement(section.id, section.id + '_card_' + i, card, 'card'))"
+            [visualEditable]="true"
+            visualType="element"
+            (visualMoved)="onElementMoved($event, section.id + '_card_' + i)"
+            (visualResized)="onElementResized($event, section.id + '_card_' + i)">
+         <lib-ui-components-card-animated
+           [icon]="card.icon"
+           [title]="card.title"
+           [description]="card.description"
+           [variant]="$any(card.variant || getVariant(section.id))"
+           [applyDynamicStyles]="card.styles || {}"
+           [animationDelay]="(i * 0.1) + 's'"
+         ></lib-ui-components-card-animated>
+       </div>
+    </div>
+  </div>
+</section>
+
+<!-- MOBILE HERO -->
+<section *ngIf="isMobile" [id]="section.id"
+  class="relative min-h-[60vh] flex flex-col items-center justify-center cursor-pointer editor-section overflow-hidden p-6"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [ngClass]="'hero-section--' + getVariant(section.id)">
+
+  <!-- Background Overlay (Simulated) -->
+  <div class="absolute inset-0 bg-black/50 z-0"></div>
+
+  <div class="relative z-10 text-center w-full">
+    <lib-ui-components-title
+      [level]="'h2'"
+      [text]="section.content['title'] || heroConfig.title"
+      [variant]="$any(getVariant(section.id))"
+      [align]="'center'"
+      class="editor-element block mb-4"
+      [class.is-selected]="selectedElementId === section.id + '_title'"
+      (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title', _original: section.content })"
+    ></lib-ui-components-title>
+
+    <div class="mt-2 editor-element"
+         [class.is-selected]="selectedElementId === section.id + '_subtitle'"
+         (click)="selectElement($event, { id: section.id + '_subtitle', content: section.content, type: 'subtitle', _original: section.content })">
+      <p class="text-lg text-white/90">
+        {{ section.content['subtitle'] || heroConfig.subtitle }}
+      </p>
+    </div>
+
+    <!-- CTA -->
+    <div *ngIf="section.content['showCta'] !== false"
+         class="mt-8 editor-element inline-block"
+         [class.is-selected]="selectedElementId === section.id + '_cta'"
+         (click)="selectElement($event, { id: section.id + '_cta', content: section.content, type: 'cta', _original: section.content })">
+      <button class="cta-button px-8 py-3 rounded-lg font-bold"
+              [ngClass]="'variant-' + getVariant(section.id)">
+        {{ section.content['ctaLabel'] || heroConfig.ctaLabel }}
+      </button>
+    </div>
+  </div>
+</section>

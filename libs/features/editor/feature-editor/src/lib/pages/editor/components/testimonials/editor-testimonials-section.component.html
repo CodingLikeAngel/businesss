@@ -1,0 +1,60 @@
+<!-- DESKTOP TESTIMONIALS -->
+<div *ngIf="!isMobile" class="editor-section cursor-pointer py-20"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <h2 class="text-4xl font-bold text-center text-white mb-16 editor-element"
+        [class.is-selected]="selectedElementId === section.id + '_title'"
+        (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+        [applyDynamicStyles]="section.content['titleStyles']"
+        [visualEditable]="true"
+        visualType="element"
+        (visualMoved)="onElementMoved($event, section.id + '_title')"
+        (visualResized)="onElementResized($event, section.id + '_title')">
+      {{ section.content['title'] || 'Lo que dicen de nosotros' }}
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div *ngFor="let t of testimonialsConfig.items; let i = index" 
+           class="editor-element"
+           [class.is-selected]="uiStateService.selectedElement?._original === t"
+           (click)="selectElement($event, getMergedElement(section.id, section.id + '_testimonial_' + i, t, 'testimonial'))"
+           [applyDynamicStyles]="t.styles || {}"
+           [visualEditable]="true"
+           visualType="element"
+           (visualMoved)="onElementMoved($event, section.id + '_testimonial_' + i)"
+           (visualResized)="onElementResized($event, section.id + '_testimonial_' + i)">
+          <lib-testimonials-card
+            [testimonial]="{ quote: t.quote, author: t.author }"
+            [variant]="$any(t.variant || getVariant(section.id))"
+            [applyDynamicStyles]="t.styles || {}"
+          ></lib-testimonials-card>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE TESTIMONIALS -->
+<div *ngIf="isMobile" class="editor-section cursor-pointer py-10 p-4"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)">
+    <h2 class="text-2xl font-bold text-center text-white mb-8 editor-element"
+        [class.is-selected]="selectedElementId === section.id + '_title'"
+        (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })">
+      {{ section.content['title'] || 'Testimonios' }}
+    </h2>
+    <div class="space-y-4">
+      <div *ngFor="let t of testimonialsConfig.items" 
+           class="editor-element"
+           [class.is-selected]="uiStateService.selectedElement?._original === t"
+           (click)="selectElement($event, t)">
+          <lib-testimonials-card
+            [testimonial]="{ quote: t.quote, author: t.author }"
+            [variant]="$any(t.variant || getVariant(section.id))"
+          ></lib-testimonials-card>
+      </div>
+    </div>
+</div>

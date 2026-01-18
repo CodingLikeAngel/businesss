@@ -1,0 +1,22 @@
+<div class="editor-section cursor-pointer py-8"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+    <div class="container mx-auto px-6 max-w-4xl editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_breadcrumbs'"
+       (click)="selectElement($event, { id: section.id + '_breadcrumbs', sectionId: section.id, content: section.content, type: 'breadcrumbs', _original: section.content })"
+       [applyDynamicStyles]="section.styles"
+       [visualEditable]="true"
+       visualType="element"
+       (visualMoved)="onElementMoved($event, section.id + '_breadcrumbs')"
+       (visualResized)="onElementResized($event, section.id + '_breadcrumbs')">
+       <lib-ui-breadcrumbs
+         [variant]="section.content['variant'] || getVariant(section.id)"
+         [items]="section.content['items'] || [{ label: 'Home', url: '/' }, { label: 'Section', url: '/section' }, { label: 'Current', url: '' }]"
+         [customStyles]="section.styles || {}"
+       ></lib-ui-breadcrumbs>
+    </div>
+</div>

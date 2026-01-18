@@ -1,21 +1,34 @@
-import { Component, OnInit, TrackByFunction, inject, Inject, PLATFORM_ID } from '@angular/core';
-import { EditorService } from '../../../../index';
+import { Component, OnInit } from '@angular/core';
 import { BaseEditorFeatureComponent } from '../base-editor-feature.component';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import {
-  BubbleAnimationComponent,
-  UITitleComponent,
-  UiTestimonialsCardComponent,
-  UICardAnimatedComponent,
-  UICardComponent,
-  UINavBarComponent,
-  UIAccordionComponent,
-  UIImageComponent
-} from '@negocio/ui-components';
-import { Testimonial, PageSection, VariantService } from '@negocio/shared-components';
-import { ReservationFormComponent } from '../../../components/reservation-form/reservation-form.component';
-import { Observable } from 'rxjs';
+import { RouterModule } from '@angular/router';
+
+import { EditorHeroSectionComponent } from '../components/hero/editor-hero-section.component';
+import { EditorFeaturesSectionComponent } from '../components/features/editor-features-section.component';
+import { EditorStatsSectionComponent } from '../components/stats/editor-stats-section.component';
+import { EditorServicesSectionComponent } from '../components/services/editor-services-section.component';
+import { EditorProductsSectionComponent } from '../components/products/editor-products-section.component';
+import { EditorTestimonialsSectionComponent } from '../components/testimonials/editor-testimonials-section.component';
+import { EditorPricingSectionComponent } from '../components/pricing/editor-pricing-section.component';
+import { EditorPromotionsSectionComponent } from '../components/promotions/editor-promotions-section.component';
+import { EditorFaqSectionComponent } from '../components/faq/editor-faq-section.component';
+import { EditorGallerySectionComponent } from '../components/gallery/editor-gallery-section.component';
+import { EditorContactSectionComponent } from '../components/contact/editor-contact-section.component';
+import { EditorBubbleSectionComponent } from '../components/bubble/editor-bubble-section.component';
+import { EditorHeaderSectionComponent } from '../components/header/editor-header-section.component';
+import { EditorFooterSectionComponent } from '../components/footer/editor-footer-section.component';
+import { EditorAccordionSectionComponent } from '../components/accordion/editor-accordion-section.component';
+import { EditorListSectionComponent } from '../components/list/editor-list-section.component';
+import { EditorNewsletterSectionComponent } from '../components/newsletter/editor-newsletter-section.component';
+import { EditorStepsSectionComponent } from '../components/steps/editor-steps-section.component';
+import { EditorTableSectionComponent } from '../components/table/editor-table-section.component';
+import { EditorTabsSectionComponent } from '../components/tabs/editor-tabs-section.component';
+import { EditorBreadcrumbsSectionComponent } from '../components/breadcrumbs/editor-breadcrumbs-section.component';
+import { EditorChartSectionComponent } from '../components/chart/editor-chart-section.component';
+import { EditorCtaSectionComponent } from '../components/cta/editor-cta-section.component';
+import { EditorShowcaseSectionComponent } from '../components/showcase/editor-showcase-section.component';
+import { EditorSpinnerSectionComponent } from '../components/spinner/editor-spinner-section.component';
+import { EditorChipSectionComponent } from '../components/chip/editor-chip-section.component';
 
 @Component({
   selector: 'lib-editor-mobile-feature',
@@ -25,55 +38,37 @@ import { Observable } from 'rxjs';
   imports: [
     CommonModule,
     RouterModule,
-    ReservationFormComponent,
-    BubbleAnimationComponent,
-    UITitleComponent,
-    UiTestimonialsCardComponent,
-    UICardAnimatedComponent,
-    UICardComponent,
-    UIAccordionComponent,
-    UIImageComponent
+    EditorHeroSectionComponent,
+    EditorFeaturesSectionComponent,
+    EditorStatsSectionComponent,
+    EditorServicesSectionComponent,
+    EditorProductsSectionComponent,
+    EditorTestimonialsSectionComponent,
+    EditorPricingSectionComponent,
+    EditorPromotionsSectionComponent,
+    EditorFaqSectionComponent,
+    EditorGallerySectionComponent,
+    EditorContactSectionComponent,
+    EditorBubbleSectionComponent,
+    EditorHeaderSectionComponent,
+    EditorFooterSectionComponent,
+    EditorAccordionSectionComponent,
+    EditorListSectionComponent,
+    EditorNewsletterSectionComponent,
+    EditorStepsSectionComponent,
+    EditorTableSectionComponent,
+    EditorTabsSectionComponent,
+    EditorBreadcrumbsSectionComponent,
+    EditorChartSectionComponent,
+    EditorCtaSectionComponent,
+    EditorShowcaseSectionComponent,
+    EditorSpinnerSectionComponent,
+    EditorChipSectionComponent
   ],
 })
 export class EditorMobileFeatureComponent extends BaseEditorFeatureComponent implements OnInit {
-  sections$: Observable<PageSection[]>;
-
-  constructor(
-    @Inject(PLATFORM_ID) protected override platformId: object,
-    protected override variantService: VariantService,
-    protected override router: Router,
-    protected override route: ActivatedRoute
-  ) {
-    super(platformId, variantService, router, route);
-    this.sections$ = this.variantService.sections$;
-  }
-
-
-  testimonials: Testimonial[] = [];
-
-
   override ngOnInit() {
     super.ngOnInit();
     this.editorService.updateEditorState({ isMobile: true });
-    // Inicializar testimonials desde testimonialsConfig
-    // this.testimonialsConfig$.subscribe((config: { items: Testimonial[]; }) => {
-    //   this.testimonials = config.items;
-    // });
-  }
-
-
-  onTabSelected(sectionId: string) {
-    this.scrollToSection(sectionId);
-  }
-
-  onNavItemClick(sectionId: string) {
-    this.scrollToSection(sectionId);
-  }
-
-  scrollToSection(sectionId: string) {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
   }
 }

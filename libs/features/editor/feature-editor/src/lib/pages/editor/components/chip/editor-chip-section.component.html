@@ -1,0 +1,23 @@
+<div class="editor-section cursor-pointer py-8"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+    <div class="container mx-auto px-6 flex justify-center gap-4 editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_chip'"
+       (click)="selectElement($event, { id: section.id + '_chip', sectionId: section.id, content: section.content, type: 'chip', _original: section.content })"
+       [applyDynamicStyles]="section.styles"
+       [visualEditable]="true"
+       visualType="element"
+       (visualMoved)="onElementMoved($event, section.id + '_chip')"
+       (visualResized)="onElementResized($event, section.id + '_chip')">
+       <lib-ui-components-chip
+         [variant]="$any(section.content['variant'] || getVariant(section.id))"
+         [customStyles]="section.styles || {}"
+       >
+         {{ section.content['label'] || 'Chip Label' }}
+       </lib-ui-components-chip>
+    </div>
+</div>

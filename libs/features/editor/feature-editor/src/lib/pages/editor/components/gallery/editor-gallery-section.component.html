@@ -1,0 +1,78 @@
+<!-- DESKTOP GALLERY -->
+<div *ngIf="!isMobile" class="editor-section cursor-pointer py-20"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <lib-ui-components-title
+      [level]="section.content['level'] || titleConfig.level"
+      [text]="section.content['title'] || 'Galería de Proyectos'"
+      [variant]="$any(getVariant(section.id))"
+      [align]="'center'"
+      class="mb-12 editor-element"
+      [class.is-selected]="selectedElementId === section.id + '_title'"
+      (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+      [applyDynamicStyles]="section.content['titleStyles']"
+      [visualEditable]="true"
+      visualType="element"
+      (visualMoved)="onElementMoved($event, section.id + '_title')"
+      (visualResized)="onElementResized($event, section.id + '_title')"
+    ></lib-ui-components-title>
+    
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+       <div *ngFor="let img of galleryConfig.images; let i = index" 
+            class="editor-element"
+            [class.is-selected]="uiStateService.selectedElement?._original === img"
+            (click)="selectElement($event, getMergedElement(section.id, section.id + '_image_' + i, img, 'image'))"
+            [applyDynamicStyles]="img.styles || {}"
+            [visualEditable]="true"
+            visualType="element"
+            (visualMoved)="onElementMoved($event, section.id + '_image_' + i)"
+            (visualResized)="onElementResized($event, section.id + '_image_' + i)">
+          <lib-ui-image 
+            [src]="img.src" 
+            [alt]="img.alt"
+            [variant]="$any(img.variant || getVariant(section.id))"
+            [customStyles]="img.styles || {}"
+            [applyDynamicStyles]="img.styles || {}"
+            [size]="'medium'"
+            [shape]="'rounded'"
+          ></lib-ui-image>
+       </div>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE GALLERY -->
+<div *ngIf="isMobile" class="editor-section cursor-pointer py-10 p-4"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)">
+    <lib-ui-components-title
+      [level]="'h2'"
+      [text]="section.content['title'] || 'Galería'"
+      [variant]="$any(getVariant(section.id))"
+      [align]="'center'"
+      class="mb-6 editor-element"
+      [class.is-selected]="selectedElementId === section.id + '_title'"
+      (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+    ></lib-ui-components-title>
+    
+    <div class="grid grid-cols-2 gap-4">
+       <div *ngFor="let img of galleryConfig.images" 
+            class="editor-element"
+            [class.is-selected]="uiStateService.selectedElement?._original === img"
+            (click)="selectElement($event, img)">
+          <lib-ui-image 
+            [src]="img.src" 
+            [alt]="img.alt"
+            [variant]="$any(img.variant || getVariant(section.id))"
+            [customStyles]="img.styles || {}"
+            [size]="'small'"
+            [shape]="'rounded'"
+          ></lib-ui-image>
+       </div>
+    </div>
+</div>

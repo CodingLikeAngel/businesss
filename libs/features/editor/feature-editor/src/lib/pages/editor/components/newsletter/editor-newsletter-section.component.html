@@ -1,0 +1,23 @@
+<div class="editor-section cursor-pointer py-12"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+    <div class="container mx-auto px-6 max-w-4xl editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_newsletter'"
+       (click)="selectElement($event, { id: section.id + '_newsletter', sectionId: section.id, content: section.content, type: 'newsletter', _original: section.content })"
+       [applyDynamicStyles]="section.styles"
+       [visualEditable]="true"
+       visualType="element"
+       (visualMoved)="onElementMoved($event, section.id + '_newsletter')"
+       (visualResized)="onElementResized($event, section.id + '_newsletter')">
+       <lib-ui-newsletter-section
+         [variant]="section.content['variant'] || getVariant(section.id)"
+         [title]="section.content['title'] || 'Suscríbete a nuestro boletín'"
+         [description]="section.content['description'] || 'Recibe las últimas noticias y actualizaciones directamente en tu bandeja de entrada.'"
+         [customStyles]="section.styles || {}"
+       ></lib-ui-newsletter-section>
+    </div>
+</div>

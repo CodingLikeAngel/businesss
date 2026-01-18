@@ -1,0 +1,66 @@
+<!-- DESKTOP CONTACT -->
+<section *ngIf="!isMobile" [id]="section.id"
+  class="relative z-20 py-20 mb-16 cursor-pointer editor-section"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+  <div class="container mx-auto px-6 max-w-3xl">
+    <lib-ui-components-title
+      [level]="section.content['level'] || titleConfig.level"
+      [text]="section.content['title'] || 'Solicita tu Demo Personalizada'"
+      [variant]="getVariant(section.id)"
+      [align]="'center'"
+      class="mb-12 editor-element"
+      [class.is-selected]="selectedElementId === section.id + '_title'"
+      (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+      [applyDynamicStyles]="section.content['titleStyles']"
+      [visualEditable]="true"
+      visualType="element"
+      (visualMoved)="onElementMoved($event, section.id + '_title')"
+      (visualResized)="onElementResized($event, section.id + '_title')"
+    ></lib-ui-components-title>
+    <div class="editor-element" 
+         [class.is-selected]="selectedElementId === section.id + '_form'"
+         (click)="selectElement($event, { id: section.id + '_form', sectionId: section.id, type: 'form', content: section.content })"
+         [applyDynamicStyles]="section.content['formStyles']"
+         [visualEditable]="true"
+         visualType="element"
+         (visualMoved)="onElementMoved($event, section.id + '_form')"
+         (visualResized)="onElementResized($event, section.id + '_form')">
+      <lib-reservation-form
+        [variant]="$any(getVariant(section.id))"
+        [title]="section.content['title'] || 'Reservar Cita'"
+        [subtitle]="section.content['subtitle'] || 'Reserva tu cita fácilmente y elige el servicio que más te guste.'"
+        [customStyles]="section.content['formStyles']"
+      ></lib-reservation-form>
+    </div>
+  </div>
+</section>
+
+<!-- MOBILE CONTACT -->
+<section *ngIf="isMobile" [id]="section.id" 
+  class="relative z-20 py-10 cursor-pointer editor-section" 
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)">
+  <div class="container mx-auto px-4">
+    <lib-ui-components-title
+      [level]="'h2'"
+      [text]="section.content['title'] || 'Contacto'"
+      [variant]="getVariant(section.id)"
+      [align]="'center'"
+      class="mb-8 editor-element"
+      [class.is-selected]="selectedElementId === section.id + '_title'"
+      (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+    ></lib-ui-components-title>
+    <div class="editor-element" 
+         [class.is-selected]="selectedElementId === section.id + '_form'"
+         (click)="selectElement($event, { id: section.id + '_form', type: 'form' })">
+      <lib-reservation-form
+        [variant]="$any(getVariant(section.id))"
+      ></lib-reservation-form>
+    </div>
+  </div>
+</section>

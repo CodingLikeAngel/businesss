@@ -1,0 +1,18 @@
+<div class="editor-section cursor-pointer py-24"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+    <div class="container mx-auto px-6 editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_showcase'"
+       (click)="selectElement($event, { id: section.id + '_showcase', sectionId: section.id, content: section.content, type: 'showcase', _original: section.content })"
+       [applyDynamicStyles]="section.styles"
+       [visualEditable]="true"
+       visualType="element"
+       (visualMoved)="onElementMoved($event, section.id + '_showcase')"
+       (visualResized)="onElementResized($event, section.id + '_showcase')">
+       <lib-ui-gaming-variants-showcase></lib-ui-gaming-variants-showcase>
+    </div>
+</div>

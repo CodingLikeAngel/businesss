@@ -1,0 +1,36 @@
+<div class="editor-section cursor-pointer py-12"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+    <div class="container mx-auto px-6 max-w-4xl editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_table'"
+       (click)="selectElement($event, { id: section.id + '_table', sectionId: section.id, content: section.content, type: 'table', _original: section.content })"
+       [applyDynamicStyles]="section.styles"
+       [visualEditable]="true"
+       visualType="element"
+       (visualMoved)="onElementMoved($event, section.id + '_table')"
+       (visualResized)="onElementResized($event, section.id + '_table')">
+       <lib-ui-components-title *ngIf="section.content['title']"
+          [level]="'h3'"
+          [text]="section.content['title']"
+          [variant]="$any(getVariant(section.id))"
+          class="mb-6 block editor-element"
+          [class.is-selected]="selectedElementId === section.id + '_title'"
+          (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+          [applyDynamicStyles]="section.content['titleStyles']"
+          [visualEditable]="true"
+          visualType="element"
+          (visualMoved)="onElementMoved($event, section.id + '_title')"
+          (visualResized)="onElementResized($event, section.id + '_title')"
+       ></lib-ui-components-title>
+       <lib-ui-components-table
+         [variant]="$any(section.content['variant'] || getVariant(section.id))"
+         [rows]="section.content['data'] || [{ id: 1, name: 'Item 1', status: 'Active' }, { id: 2, name: 'Item 2', status: 'Inactive' }]"
+         [columns]="section.content['columns'] || [{ key: 'id', label: 'ID' }, { key: 'name', label: 'Name' }, { key: 'status', label: 'Status' }]"
+         [customStyles]="section.styles || {}"
+       ></lib-ui-components-table>
+    </div>
+</div>

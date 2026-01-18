@@ -1,0 +1,12 @@
+<div class="editor-section cursor-pointer"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+  <lib-bubble-animation
+    [variant]="$any(getVariant(section.id))"
+    [config]="bubbleConfig"
+  ></lib-bubble-animation>
+</div>

@@ -2,8 +2,9 @@ import { Component, HostListener, OnDestroy, OnInit, Inject, PLATFORM_ID, TrackB
 import { EditorService, CartService, ModalService } from '../../../index';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
 import {
+  PageSection,
   VariantService,
   NavBarConfig,
   HeroConfig,
@@ -65,6 +66,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
   editorState: EditorState;
   modalState: ModalState;
   loading$ = this.editorService.loading$;
+  sections$: Observable<PageSection[]>;
 
   tabsConfig: any[] = [
     { label: 'Servicios', sectionId: 'servicios', icon: '🛠️' },
@@ -141,6 +143,8 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     this.modalStateSub = this.modalService.modalState$.subscribe((state) => {
       this.modalState = state;
     });
+
+    this.sections$ = this.variantService.sections$;
   }
 
 
@@ -243,5 +247,47 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     return 'Detalles';
   }
 
+  onSectionResized(section: PageSection, bounds: any) {
+    console.log('📏 Section resized:', section.id, bounds);
 
+    // Update section styles with new height
+    const updatedSection = {
+      ...section,
+      styles: {
+        ...section.styles,
+        minHeight: `${bounds.height}px`,
+        height: `${bounds.height}px`
+      }
+    };
+
+    // Update in service
+    this.variantService.updateSectionInCurrentPage(section.id, updatedSection);
+  }
+
+  onElementMoved(bounds: any, elementId: string) {
+    console.log('📍 Element moved:', elementId, bounds);
+    // TODO: Implement element position persistence
+  }
+
+  onElementResized(bounds: any, elementId: string) {
+    console.log('📐 Element resized:', elementId, bounds);
+    // TODO: Implement element size persistence
+  }
+
+  onTabSelected(sectionId: string) {
+    this.scrollToSection(sectionId);
+  }
+
+  onNavItemClick(sectionId: string) {
+    this.scrollToSection(sectionId);
+  }
+
+  scrollToSection(sectionId: string) {
+    if (isPlatformBrowser(this.platformId)) {
+      const element = document.getElementById(sectionId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+  }
 }
