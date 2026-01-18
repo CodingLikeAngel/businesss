@@ -5,9 +5,6 @@ import {
   ApplyDynamicStylesDirective,
   VisualEditableDirective
 } from '@negocio/shared-components';
-import { 
-  UiTestimonialsCardComponent 
-} from '@negocio/ui-components';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
 
 @Component({
@@ -15,7 +12,6 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
   standalone: true,
   imports: [
     CommonModule,
-    UiTestimonialsCardComponent,
     ApplyDynamicStylesDirective,
     VisualEditableDirective
   ],

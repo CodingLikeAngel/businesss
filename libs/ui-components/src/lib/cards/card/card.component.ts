@@ -11,7 +11,7 @@ export type CardVariant = typeof cardVariants[number];
 export type CardAnimation = 'none' | 'fade' | 'slide-up' | 'zoom' | 'glitch' | 'pulse';
 export type CardSize = 'small' | 'medium' | 'large';
 
-export interface CustomStyles {
+export interface CardCustomStyles {
   backgroundColor?: string;
   color?: string;
   '--card-bg'?: string;
@@ -64,7 +64,7 @@ export class UICardComponent {
   actions = input<UICardAction[]>([]);
   animation = input<CardAnimation>('none');
   size = input<CardSize>('medium');
-  customStyles = input<CustomStyles>({});
+  customStyles = input<CardCustomStyles>({});
   isHovered = false;
 
   @HostBinding('class') get hostClasses() {

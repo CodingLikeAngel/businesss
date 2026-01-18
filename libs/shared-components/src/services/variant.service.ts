@@ -8,6 +8,8 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants, NavLi
 export interface Testimonial {
   quote: string;
   author: string;
+  role?: string;
+  avatar?: string;
   variant?: string;
   styles?: { [key: string]: string };
 }

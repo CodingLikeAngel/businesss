@@ -23,7 +23,7 @@ import {
   UIBreadcrumbsComponent,
   UICardAnimatedComponent,
   UiCardProductsComponent,
-  UiTestimonialsCardComponent,
+
   UIImageComponent,
   UITableComponent,
   BubbleAnimationComponent,
@@ -67,7 +67,7 @@ interface SectionVariant {
     UIBreadcrumbsComponent,
     UICardAnimatedComponent,
     UiCardProductsComponent,
-    UiTestimonialsCardComponent,
+
     UIImageComponent,
     UITableComponent,
     BubbleAnimationComponent,
@@ -188,7 +188,10 @@ interface SectionVariant {
                      <lib-card-products [variant]="selectedVariant" [product]="{name:'Producto', price:'$99', image:'', description: 'Producto de prueba'}"></lib-card-products>
                   </div>
                   <div *ngSwitchCase="'card-testimonial'" class="max-w-md mx-auto p-4">
-                     <lib-testimonials-card [variant]="selectedVariant" [testimonial]="{author: 'Cliente', quote: 'Excelente servicio'}"></lib-testimonials-card>
+                     <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                        <p class="mb-4 italic">"Excelente servicio"</p>
+                        <div class="font-bold">Cliente</div>
+                     </div>
                   </div>
                   <div *ngSwitchCase="'image'" class="p-4 flex justify-center">
                     <lib-ui-image [variant]="selectedVariant" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-image>

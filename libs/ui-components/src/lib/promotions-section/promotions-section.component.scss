@@ -1,0 +1,66 @@
+@use '../styles/mixins' as shared;
+
+.promotions-wrapper {
+  position: relative;
+  overflow: visible;
+  padding: 3rem 0;
+  background-color: var(--theme-bg, transparent);
+  color: var(--theme-color, inherit);
+  font-family: var(--theme-font, 'Outfit', sans-serif);
+
+  @include shared.apply-all-variants('promotions--');
+  @include shared.apply-variants-to-child('.promo-card-container', 'promotions--');
+
+  // CRITICAL: Force inline styles to override variant backgrounds
+  &[style*='background'] {
+      background: var(--theme-bg) !important;
+  }
+
+  &[style*='background-color'] {
+      background-color: var(--theme-bg) !important;
+  }
+
+  &[style*='color'] {
+      color: var(--theme-color) !important;
+  }
+
+  .section-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    color: var(--theme-color, white);
+  }
+
+  .section-subtitle {
+     font-size: 1.2rem;
+     color: rgba(255,255,255,0.7);
+     max-width: 600px;
+     margin: 0 auto;
+     color: var(--theme-color, rgba(255,255,255,0.7));
+  }
+}
+
+.promo-card-container {
+  cursor: pointer;
+  border-radius: 2rem;
+  transition: all 0.5s;
+  
+  // Default look if no variant
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+   &:hover {
+     background: rgba(255, 255, 255, 0.1);
+     transform: translateY(-8px);
+     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+   }
+}
+
+// Example Variants
+.promotions--neon {
+  .section-title {
+    color: #0ff;
+    text-shadow: 0 0 10px #0ff;
+  }
+}

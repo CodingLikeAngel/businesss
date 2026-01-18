@@ -138,36 +138,28 @@
 
 <section id="testimonios" class="relative z-20 py-12">
   <div class="container mx-auto px-6 max-w-7xl">
-    <lib-ui-components-title
-      [level]="titleConfig.level"
-      [text]="'Lo que Dicen Nuestros Clientes'"
+    <lib-ui-testimonials-section
+      [title]="'Lo que Dicen Nuestros Clientes'"
+      [subtitle]="'Historias reales de éxito.'"
       [variant]="getVariant('title')"
-      [align]="titleConfig.align"
-      class="mb-8"
-    ></lib-ui-components-title>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <lib-testimonials-card
-        *ngFor="let testimonial of testimonials; trackBy: trackByTestimonialId"
-        [testimonial]="testimonial"
-      ></lib-testimonials-card>
-    </div>
+      [testimonials]="testimonials"
+    ></lib-ui-testimonials-section>
   </div>
 </section>
 
 <section id="precios" class="relative z-20 py-12">
   <div class="container mx-auto px-6 max-w-7xl">
-    <lib-pricing-section
+    <lib-ui-pricing-table-section
       [variant]="getVariant('pricing')"
-      [priceColumns]="pricingConfig.columns"
-      [priceRows]="pricingConfig.rows"
-    ></lib-pricing-section>
+      [columns]="pricingConfig.columns"
+      [rows]="pricingConfig.rows"
+    ></lib-ui-pricing-table-section>
   </div>
 </section>
 
 <section id="promociones" class="relative z-20 py-12">
   <div class="container mx-auto px-6 max-w-7xl">
     <lib-promotions-section
-        [selectedVariant]="getVariant('promotions')"
         [variant]="getVariant('promotions')"
         [premiumCardConfigs]="promotionsConfig.premiumCards"
       ></lib-promotions-section>
@@ -176,19 +168,19 @@
 
 <section id="faq" class="relative z-20 py-12">
   <div class="container mx-auto px-6 max-w-7xl">
-    <lib-faq-section
+    <lib-ui-faq-section
       [variant]="getVariant('faq')"
-      [faqItems]="faqConfig.items"
-    ></lib-faq-section>
+      [items]="faqConfig.items"
+    ></lib-ui-faq-section>
   </div>
 </section>
 
 <section id="galeria" class="relative z-20 py-12">
   <div class="container mx-auto px-6 max-w-7xl">
-    <lib-gallery-section
+    <lib-ui-components-gallery-section
       [variant]="getVariant('gallery')"
       [images]="galleryConfig.images"
-    ></lib-gallery-section>
+    ></lib-ui-components-gallery-section>
   </div>
 </section>
 

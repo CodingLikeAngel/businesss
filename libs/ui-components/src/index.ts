@@ -26,7 +26,6 @@ export * from './lib/cards/card-animated/card-animated.component';
 export * from './lib/cards/card-rutas/card-rutas.component';
 export * from './lib/cards/card-premium/card-premium.component';
 export * from './lib/cards/card-products/card-products.component';
-export * from './lib/cards/card-testimonials/testimonials-card.component';
 
 // Media
 export * from './lib/gallery/gallery.component';
@@ -58,6 +57,7 @@ export * from './lib/breadcrumbs/breadcrumbs.component';
 export * from './lib/contact-section/contact-section.component';
 export * from './lib/newsletter-section/newsletter-section.component';
 export * from './lib/steps-section/steps-section.component';
+export * from './lib/promotions-section/promotions-section.component';
 
 // Showcase Components
 export * from './lib/showcase/gaming-variants-showcase.component';

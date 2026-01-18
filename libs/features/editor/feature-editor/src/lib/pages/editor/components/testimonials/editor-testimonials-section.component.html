@@ -27,11 +27,21 @@
            visualType="element"
            (visualMoved)="onElementMoved($event, section.id + '_testimonial_' + i)"
            (visualResized)="onElementResized($event, section.id + '_testimonial_' + i)">
-          <lib-testimonials-card
-            [testimonial]="{ quote: t.quote, author: t.author }"
-            [variant]="$any(t.variant || getVariant(section.id))"
-            [applyDynamicStyles]="t.styles || {}"
-          ></lib-testimonials-card>
+           
+           <div class="testimonial-card p-8 rounded-2xl bg-white/5 border border-white/10 relative hover:bg-white/10 transition-all duration-300">
+             <div class="text-4xl text-indigo-400 mb-4 font-serif">“</div>
+             <p class="text-gray-200 mb-6 italic text-lg leading-relaxed">{{ t.quote }}</p>
+             <div class="flex items-center gap-4">
+               <div *ngIf="t.avatar" class="w-12 h-12 rounded-full overflow-hidden border-2 border-white/10">
+                 <img [src]="t.avatar" [alt]="t.author" class="w-full h-full object-cover">
+               </div>
+               <div>
+                 <h4 class="font-bold text-white">{{ t.author }}</h4>
+                 <span *ngIf="t.role" class="text-sm text-gray-400">{{ t.role }}</span>
+               </div>
+             </div>
+           </div>
+
       </div>
     </div>
   </div>
@@ -51,10 +61,12 @@
            class="editor-element"
            [class.is-selected]="uiStateService.selectedElement?._original === t"
            (click)="selectElement($event, t)">
-          <lib-testimonials-card
-            [testimonial]="{ quote: t.quote, author: t.author }"
-            [variant]="$any(t.variant || getVariant(section.id))"
-          ></lib-testimonials-card>
+           
+           <div class="testimonial-card p-6 rounded-xl bg-white/5 border border-white/10">
+              <p class="text-gray-300 mb-4 italic">"{{ t.quote }}"</p>
+              <div class="font-bold text-white">{{ t.author }}</div>
+           </div>
+           
       </div>
     </div>
 </div>

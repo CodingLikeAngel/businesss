@@ -3,11 +3,21 @@ import { BaseHomeFeatureComponent } from '../base-home-feature.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { UIHeroSectionComponent, UIModalComponent, UICardRutasComponent, BubbleAnimationComponent, UITitleComponent, UiCardProductsComponent, UiTestimonialsCardComponent, UICardAnimatedComponent, UICardComponent } from '@negocio/ui-components';
-import { FaqSectionComponent } from '../../components/faq-section/faq-section.component';
-import { GallerySectionComponent } from '../../components/gallery-section/gallery-section.component';
-import { PricingSectionComponent } from '../../components/pricing-section/pricing-section.component';
-import { PromotionsSectionComponent } from '../../components/promotions-section/promotions-section.component';
+import { 
+  UIHeroSectionComponent, 
+  UIModalComponent, 
+  UICardRutasComponent, 
+  BubbleAnimationComponent, 
+  UITitleComponent, 
+  UiCardProductsComponent, 
+  UITestimonialsSectionComponent, 
+  UICardAnimatedComponent, 
+  UICardComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent,
+  PromotionsSectionComponent
+} from '@negocio/ui-components';
 import { ReservationFormComponent } from '../../components/reservation-form/reservation-form.component';
 import { Product } from '@negocio/shared-components';
 
@@ -23,16 +33,16 @@ import { Product } from '@negocio/shared-components';
     FormsModule,
     UIHeroSectionComponent,
     ReservationFormComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
+    UIFaqSectionComponent,
+    UIPricingTableSectionComponent,
+    UIGallerySectionComponent,
     PromotionsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,
     UITitleComponent,
     UiCardProductsComponent,
-    UiTestimonialsCardComponent,
+    UITestimonialsSectionComponent,
     UICardAnimatedComponent,
     UICardComponent
   ],

@@ -1,0 +1,41 @@
+
+    <section [ngClass]="containerClasses()" [ngStyle]="promotionsStyles()">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="section-title">
+            {{ title() }}
+          </h2>
+          <p class="section-subtitle">
+            {{ description() }}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div *ngFor="let config of premiumCardConfigs; let i = index" class="promo-item relative group">
+            <div class="absolute -top-6 left-1/2 -translate-x-1/2 z-30 transition-transform group-hover:scale-110">
+              <lib-ui-components-chip
+                [variant]="variant()"
+                size="md"
+                rounded="full"
+                class="shadow-[0_0_20px_rgba(24ACC15,0.4)] border border-white/20"
+              >
+                {{ config.discount || 'OFERTA' }}
+              </lib-ui-components-chip>
+            </div>
+
+            <lib-ui-components-tooltip
+              [content]="config.tooltip || '¡Aprovéchalo ahora!'"
+              [variant]="variant()"
+              position="top"
+            >
+              <div class="promo-card-container">
+                <lib-ui-components-card-premium
+                  [variant]="variant()"
+                  [config]="config"
+                ></lib-ui-components-card-premium>
+              </div>
+            </lib-ui-components-tooltip>
+          </div>
+        </div>
+      </div>
+    </section>
