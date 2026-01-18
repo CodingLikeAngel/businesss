@@ -1,18 +1,45 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UICardComponent, UIChipComponent, UITooltipComponent, CardVariant } from '@negocio/ui-components';
+import { CustomStyles } from '../models/custom-styles.interface';
 
 @Component({
   selector: 'lib-service-section',
   standalone: true,
   imports: [CommonModule, UICardComponent, UIChipComponent, UITooltipComponent],
-  template: "<section id=\"servicios\" class=\"mb-16\"><div class=\"container mx-auto px-4\"><h2 class=\"text-4xl font-bold text-center mb-8\">Nuestros Servicios</h2><p class=\"text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto\">Descubre todos nuestros servicios de belleza y cuidado personal.</p></div><div class=\"container mx-auto px-4\"><div class=\"grid grid-cols-1 md:grid-cols-3 gap-8\"><div><lib-ui-components-card [variant]=\"variant\" [image]=\"services[0].image\" size=\"medium\" animation=\"zoom\" [title]=\"services[0].title\" [description]=\"services[0].description\" [actions]=\"[{ label: 'Reservar Ahora', href: '#reservas' }]\" ></lib-ui-components-card></div></div></div></section>",
-  styles: [ ".container { max-width: 1200px; } @media (max-width: 768px) { .container { padding: 0 1rem; } }" ]
-  ,
+  templateUrl: './service-section.component.html',
+  styleUrls: ['./service-section.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ServiceSectionComponent {
-  @Input() variant: CardVariant = 'default';
+  @Input() variant: string = 'default';
+  @Input() customStyles: CustomStyles = {};
   @Output() reserve = new EventEmitter<void>();
+
+  get componentStyles() {
+    const styles: Record<string, any> = {};
+
+    if (this.customStyles['backgroundColor']) {
+      styles['--theme-bg'] = this.customStyles['backgroundColor'];
+      styles['--component-bg'] = this.customStyles['backgroundColor'];
+      styles['background'] = this.customStyles['backgroundColor'];
+      styles['background-color'] = this.customStyles['backgroundColor'];
+    }
+
+    if (this.customStyles['color']) {
+      styles['--theme-color'] = this.customStyles['color'];
+      styles['--component-text'] = this.customStyles['color'];
+      styles['color'] = this.customStyles['color'];
+    }
+
+    Object.keys(this.customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = this.customStyles[key];
+      }
+    });
+
+    return styles;
+  }
 
   services = [
     {
@@ -20,6 +47,7 @@ export class ServiceSectionComponent {
       description: 'Cortes modernos y clásicos adaptados a tu personalidad.',
       image: 'https://dummyimage.com/200x300/000/fff&text=Hola+León',
       tooltip: 'Explora cortes modernos y clásicos.',
+      styles: {},
       chips: [
         { label: 'Degradado', value: 'degradado' },
         { label: 'Clásico', value: 'clasico' },
@@ -29,9 +57,9 @@ export class ServiceSectionComponent {
     {
       title: 'Corte Mujer',
       description: 'Personaliza tu estilo con cortes únicos.',
-    //   image: 'https://fastly.picsum.photos/id/237/200/300.jpg?hmac=TmmQSbShHz9CdQm0NkEjx1Dyh_Y984R9LpNrpvH2D_U',
        image: "https://dummyimage.com/200x300/000/fff&text=Hola+León2",
       tooltip: 'Personaliza tu estilo con cortes únicos.',
+      styles: {},
       chips: [
         { label: 'Bob', value: 'bob' },
         { label: 'Largo', value: 'largo' },
@@ -41,9 +69,9 @@ export class ServiceSectionComponent {
     {
       title: 'Manicura',
       description: 'Diseños que destacan en cualquier aventura.',
-    //   image: 'https://fastly.picsum.photos/id/429/200/300.jpg?hmac=6ShrHCg_ioSEwdK2j-TkxO08G50YITxb2h0Z42Y8piI',
        image: "https://dummyimage.com/200x300/000/fff&text=Hola+León3",
       tooltip: 'Diseños que destacan en cualquier ocasión.',
+      styles: {},
       chips: [
         { label: 'Francesa', value: 'francesa' },
         { label: 'Gel', value: 'gel' },

@@ -373,9 +373,8 @@ export class VariantSelectorComponent implements OnInit {
           const styleKey = this.selectedElement.type + 'Styles';
           updates.content[styleKey] = { ...(content[styleKey] || {}), ...styles };
           
-          // CRITICAL FIX: For footer/header, ALSO update section.styles
-          // because the template reads section.styles for customStyles input
-          if (this.selectedElement.type === 'footer' || this.selectedElement.type === 'header') {
+          // CRITICAL FIX: For components that use section.styles as customStyles input, update section.styles
+          if (['footer', 'header', 'hero', 'services', 'products', 'testimonials', 'pricing', 'promotions', 'faq', 'gallery', 'contact', 'bubble', 'features', 'stats', 'newsletter', 'steps', 'table', 'breadcrumbs', 'chip', 'spinner', 'chart', 'showcase', 'tabs', 'accordion', 'list', 'navBar'].includes(this.selectedElement.type)) {
             updates.styles = styles;
             console.log(`🔧 Updating ${this.selectedElement.type} section.styles:`, styles);
           }

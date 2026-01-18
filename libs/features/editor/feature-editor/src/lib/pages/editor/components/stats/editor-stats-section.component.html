@@ -1,69 +1,33 @@
 <!-- DESKTOP STATS -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer p-16"
+<div *ngIf="!isMobile" class="editor-section cursor-pointer"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [visualEditable]="true"
   visualType="section"
   (visualResized)="onSectionResized($event)">
-  
-  <div class="max-w-7xl mx-auto">
-     <lib-ui-components-title
-        [level]="'h2'"
-        [text]="section.content['title'] || 'Resultados que Hablan por Sí Solos'"
-        [variant]="$any(getVariant(section.id))"
-        [align]="'center'"
-        class="editor-element mb-16 block"
-        [class.is-selected]="selectedElementId === section.id + '_title'"
-        (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })"
-        [applyDynamicStyles]="section.content['titleStyles']"
-        [visualEditable]="true"
-        visualType="element"
-        (visualMoved)="onElementMoved($event, section.id + '_title')"
-        (visualResized)="onElementResized($event, section.id + '_title')"
-     ></lib-ui-components-title>
 
-     <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
-        <div *ngFor="let stat of statsConfig.items; let i = index"
-             class="editor-element"
-             [class.is-selected]="uiStateService.selectedElement?._original === stat"
-             (click)="selectElement($event, getMergedElement(section.id, section.id + '_stat_' + i, stat, 'stat'))"
-             [visualEditable]="true"
-             visualType="element"
-             (visualMoved)="onElementMoved($event, section.id + '_stat_' + i)"
-             (visualResized)="onElementResized($event, section.id + '_stat_' + i)">
-            <lib-ui-components-card
-              [title]="stat.value.toString()"
-              [description]="stat.label"
-              [image]="stat.icon"
-              [variant]="$any(stat.variant || getVariant(section.id))"
-              [customStyles]="stat.styles || {}"
-              [applyDynamicStyles]="stat.styles || {}"
-              [size]="'small'"
-            ></lib-ui-components-card>
-        </div>
-     </div>
-  </div>
+  <lib-ui-components-stats-section
+    [title]="section.content['title'] || 'Resultados que Hablan por Sí Solos'"
+    [subtitle]="section.content['subtitle'] || 'Indicadores clave de rendimiento.'"
+    [variant]="getVariant(section.id)"
+    [customStyles]="section.styles || {}"
+    [applyDynamicStyles]="section.styles"
+    [stats]="statsConfig.items"
+  ></lib-ui-components-stats-section>
 </div>
 
 <!-- MOBILE STATS -->
-<div *ngIf="isMobile" class="editor-section cursor-pointer p-6"
+<div *ngIf="isMobile" class="editor-section cursor-pointer"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)">
-  
-   <div class="grid grid-cols-2 gap-4">
-      <div *ngFor="let stat of statsConfig.items" 
-           class="editor-element"
-           [class.is-selected]="uiStateService.selectedElement?._original === stat"
-           (click)="selectElement($event, stat)">
-          <lib-ui-components-card
-            [title]="stat.value.toString()"
-            [description]="stat.label"
-            [image]="stat.icon"
-            [variant]="$any(stat.variant || getVariant(section.id))"
-            [customStyles]="stat.styles || {}"
-            [size]="'small'"
-          ></lib-ui-components-card>
-      </div>
-   </div>
+
+  <lib-ui-components-stats-section
+    [title]="section.content['title'] || 'Resultados que Hablan por Sí Solos'"
+    [subtitle]="section.content['subtitle'] || 'Indicadores clave de rendimiento.'"
+    [variant]="getVariant(section.id)"
+    [customStyles]="section.styles || {}"
+    [applyDynamicStyles]="section.styles"
+    [stats]="statsConfig.items"
+  ></lib-ui-components-stats-section>
 </div>

@@ -1,0 +1,36 @@
+@use '../styles/mixins' as shared;
+
+.service-section {
+  @include shared.apply-all-variants('service--');
+
+  // CRITICAL: Force inline styles to override variant backgrounds
+  &[style*='background'] {
+    background: var(--theme-bg) !important;
+  }
+
+  &[style*='background-color'] {
+    background-color: var(--theme-bg) !important;
+  }
+
+  &[style*='color'] {
+    color: var(--theme-color) !important;
+
+    h2 {
+      color: var(--theme-color) !important;
+    }
+
+    p {
+      color: var(--theme-color) !important;
+    }
+  }
+
+  .container {
+    max-width: 1200px;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 0 1rem;
+    }
+  }
+}

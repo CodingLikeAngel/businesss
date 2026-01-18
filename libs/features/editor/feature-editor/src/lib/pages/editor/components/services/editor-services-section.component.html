@@ -1,83 +1,27 @@
 <!-- DESKTOP SERVICES -->
-<section *ngIf="!isMobile" [id]="section.id"
-  class="relative z-20 py-20 cursor-pointer editor-section"
+<div *ngIf="!isMobile" class="editor-section cursor-pointer"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [visualEditable]="true"
   visualType="section"
   (visualResized)="onSectionResized($event)">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <div class="text-center mb-16">
-        <lib-ui-components-title
-        [level]="section.content['level'] || titleConfig.level"
-        [text]="section.content['title'] || titleConfig.text"
-        [variant]="$any(getVariant(section.id))"
-        [align]="'center'"
-        class="editor-element"
-        [class.is-selected]="selectedElementId === section.id + '_title'"
-        (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
-        [applyDynamicStyles]="section.content['titleStyles']"
-        [visualEditable]="true"
-        visualType="element"
-        (visualMoved)="onElementMoved($event, section.id + '_title')"
-        (visualResized)="onElementResized($event, section.id + '_title')"
-      ></lib-ui-components-title>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div *ngFor="let item of serviceCardsConfig.items; let i = index"
-           class="editor-element"
-           [class.is-selected]="uiStateService.selectedElement?._original === item"
-           (click)="selectElement($event, getMergedElement(section.id, section.id + '_service_' + i, item, 'service'))"
-           [visualEditable]="true"
-           visualType="element"
-           (visualMoved)="onElementMoved($event, section.id + '_service_' + i)"
-           (visualResized)="onElementResized($event, section.id + '_service_' + i)">
-          <lib-ui-components-card
-            [title]="item.routeName"
-            [description]="item.description"
-            [image]="item.imageUrl"
-            [variant]="$any(item.variant || getVariant(section.id))"
-            [customStyles]="item.styles || {}"
-            [applyDynamicStyles]="item.styles || {}"
-            [size]="'medium'"
-          ></lib-ui-components-card>
-      </div>
-    </div>
-  </div>
-</section>
+
+  <lib-service-section
+    [variant]="getVariant(section.id)"
+    [customStyles]="section.styles || {}"
+    [applyDynamicStyles]="section.styles">
+  </lib-service-section>
+</div>
 
 <!-- MOBILE SERVICES -->
-<section *ngIf="isMobile" [id]="section.id" 
-  class="relative z-20 py-10 cursor-pointer editor-section" 
+<div *ngIf="isMobile" class="editor-section cursor-pointer"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)">
-  <div class="container mx-auto px-4">
-    <lib-ui-components-title
-      [level]="'h2'"
-      [text]="section.content['title'] || 'Servicios'"
-      [variant]="$any(getVariant(section.id))"
-      [align]="'center'"
-      class="mb-6 editor-element"
-      [class.is-selected]="selectedElementId === section.id + '_title'"
-      (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
-    ></lib-ui-components-title>
-    
-    <div class="space-y-6">
-      <div *ngFor="let item of serviceCardsConfig.items" 
-           class="editor-element"
-           [class.is-selected]="uiStateService.selectedElement?._original === item"
-           (click)="selectElement($event, item)">
-          <lib-ui-components-card
-            [title]="item.routeName"
-            [description]="item.description"
-            [image]="item.imageUrl"
-            [variant]="$any(item.variant || getVariant(section.id))"
-            [customStyles]="item.styles || {}"
-            [size]="'medium'"
-          ></lib-ui-components-card>
-      </div>
-    </div>
-  </div>
-</section>
+
+  <lib-service-section
+    [variant]="getVariant(section.id)"
+    [customStyles]="section.styles || {}"
+    [applyDynamicStyles]="section.styles">
+  </lib-service-section>
+</div>

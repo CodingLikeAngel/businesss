@@ -1,5 +1,6 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CustomStyles } from '../models/custom-styles.interface';
 
 export interface StatItem {
   icon: string;
@@ -8,24 +9,19 @@ export interface StatItem {
   description?: string;
 }
 
-export interface StatsCustomStyles {
-  backgroundColor?: string;
-  color?: string;
-  [key: string]: string | undefined;
-}
-
 @Component({
   selector: 'lib-ui-components-stats-section',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './stats-section.component.html',
-  styleUrl: './stats-section.component.scss'
+  styleUrls: ['./stats-section.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class UIStatsLibSectionComponent {
   title = input('Nuestras Métricas');
   subtitle = input('Indicadores clave de rendimiento.');
   variant = input('default');
-  customStyles = input<StatsCustomStyles>({});
+  customStyles = input<CustomStyles>({});
   stats = input<StatItem[]>([
     { icon: '🚀', label: 'Velocidad', value: '0.8s', description: 'Tiempo de carga' },
     { icon: '🔒', label: 'Seguridad', value: '99.9%', description: 'Uptime' },

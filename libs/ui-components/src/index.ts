@@ -43,6 +43,7 @@ export * from './lib/animations/forest/forest-animation.component';
 export * from './lib/animations/water/water-animation.component';
 export * from './lib/bubble/bubble-animation.component';
 
+export * from './lib/service-section/service-section.component';
 export * from './lib/stats-section/stats-section.component';
 export * from './lib/testimonials-section/testimonials-section.component';
 export * from './lib/pricing-table-section/pricing-table-section.component';
