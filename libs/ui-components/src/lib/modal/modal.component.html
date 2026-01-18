@@ -1,19 +1,19 @@
-<div *ngIf="isOpen()" class="modal-wrapper" role="dialog" aria-modal="true" [attr.aria-label]="title()">
+<dialog *ngIf="isOpen()" class="modal-wrapper" [attr.aria-label]="title()" [attr.aria-modal]="isOpen()" [style.z-index]="zIndex()" (open)="trapFocus()" aria-labelledby="modal-title">
     <div
       [ngClass]="overlayClasses()"
       tabindex="0"
       (click)="closeModal()"
       (keyup)="handleKeyUp($event)"
     ></div>
-    <div [ngClass]="modalClasses()" [ngStyle]="modalStyles()">
+    <div [ngClass]="modalClasses()" [ngStyle]="modalStyles()" tabindex="0">
       <div [ngClass]="headerClasses()">
-        <h2>{{ title() }}</h2>
+        <h2 id="modal-title">{{ title() }}</h2>
         <button class="close-btn" (click)="closeModal()" aria-label="Close modal">✕</button>
       </div>
       <div [ngClass]="bodyClasses()">
         {{ content() }}
       </div>
     </div>
-  </div>
+  </dialog>
 
 

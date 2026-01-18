@@ -7,7 +7,7 @@ import { variants as baseVariants } from '../models/ui-components-data.model';
 const specificSpinnerVariants = ['cosmic-dust'] as const;
 
 // Combinamos variantes globales con específicas
-export const spinnerVariants = [...baseVariants, ...specificSpinnerVariants] as const;
+export const spinnerVariants = [...baseVariants, ...specificSpinnerVariants, 'dots', 'bars', 'rings', 'custom'] as const;
 export type SpinnerVariantType = typeof spinnerVariants[number] | (string & {});
 
 export interface SpinnerCustomStyles {
@@ -19,6 +19,13 @@ export interface SpinnerCustomStyles {
   '--spinner-bg'?: string;
   '--spinner-shadow'?: string;
   [key: string]: string | undefined;
+}
+
+export interface SpinnerContext {
+  success?: boolean;
+  error?: boolean;
+  warning?: boolean;
+  info?: boolean;
 }
 
 @Component({
@@ -33,6 +40,10 @@ export class UISpinnerComponent {
   size = input<'sm' | 'md' | 'lg'>('md');
   dark = input<boolean>(false);
   customStyles = input<SpinnerCustomStyles>({}); // Nueva señal para estilos personalizados
+  ariaLabel = input<string>('Loading'); // Descriptive label for accessibility
+  progress = input<number | null>(null); // Progress percentage
+  animate = input<boolean>(true); // Enable animations
+  context = input<SpinnerContext>({}); // Contextual state
 
   spinnerClasses = computed(() => {
     const classes = [
@@ -41,6 +52,17 @@ export class UISpinnerComponent {
       `spinner-${this.size()}`,    // Clase basada en el tamaño
     ];
     if (this.dark()) classes.push('dark');
+    
+    // Add contextual classes
+    const context = this.context();
+    if (context.success) classes.push('spinner-success');
+    if (context.error) classes.push('spinner-error');
+    if (context.warning) classes.push('spinner-warning');
+    if (context.info) classes.push('spinner-info');
+    
+    // Add animation classes
+    if (this.animate()) classes.push('fade-in');
+    
     return classes.join(' ');
   });
 
@@ -71,6 +93,20 @@ export class UISpinnerComponent {
       }
     });
     
+    return styles;
+  });
+
+  progressStyles = computed(() => {
+    const styles: Record<string, any> = {
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)',
+      color: this.dark() ? '#ffffff' : '#111827',
+      'font-size': '0.75em',
+      'font-weight': 'bold',
+      'text-shadow': '0 0 4px rgba(0, 0, 0, 0.5)'
+    };
     return styles;
   });
 }

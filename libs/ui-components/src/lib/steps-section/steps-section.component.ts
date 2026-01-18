@@ -7,6 +7,10 @@ export interface Step {
   description: string;
   icon?: string; 
   image?: string;
+  state?: 'completed' | 'current' | 'pending';
+  tooltip?: string;
+  expanded?: boolean;
+  children?: Step[];
 }
 
 export interface StepsCustomStyles {
@@ -54,5 +58,14 @@ export class UIStepsSectionComponent {
     
     return styles;
   });
+
+  getAriaCurrent(index: number): string | null {
+    const steps = this.steps();
+    const step = steps[index];
+    if (step.state === 'current') {
+      return 'step';
+    }
+    return null;
+  }
 }
 

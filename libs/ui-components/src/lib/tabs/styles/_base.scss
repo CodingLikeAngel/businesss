@@ -46,9 +46,60 @@
     background: var(--tabs-accent, #3b82f6);
     transition: width 0.3s ease;
   }
-
+  
   &:hover {
     color: var(--tabs-accent, #3b82f6);
+  }
+  
+  &.tabs-button--pill {
+    border-radius: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    
+    &::after {
+      display: none;
+    }
+    
+    &.tabs-item--active {
+      background: var(--tabs-accent, #3b82f6);
+      color: #000;
+    }
+  }
+  
+  &.tabs-button--minimal {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    
+    &::after {
+      height: 1px;
+    }
+    
+    &.tabs-item--active {
+      color: var(--tabs-accent, #3b82f6);
+      font-weight: 700;
+    }
+  }
+  
+  &.tabs-button--button {
+    background: var(--tabs-bg, #3b82f6);
+    color: #fff;
+    border: 1px solid var(--tabs-bg, #3b82f6);
+    border-radius: 0.5rem;
+    
+    &::after {
+      display: none;
+    }
+    
+    &:hover {
+      background: color.adjust(var(--tabs-bg, #3b82f6), $lightness: -10%);
+      border-color: color.adjust(var(--tabs-bg, #3b82f6), $lightness: -10%);
+    }
+    
+    &.tabs-item--active {
+      background: var(--tabs-accent, #3b82f6);
+      border-color: var(--tabs-accent, #3b82f6);
+    }
   }
 }
 
@@ -199,11 +250,11 @@
   }
 }
 
-/* 
+/*
   ==========================================================================
   MOBILE REFINE
   ==========================================================================
-*/
+ */
 
 @media (max-width: 768px) {
   .tabs-list {
@@ -211,10 +262,80 @@
     padding-bottom: 0.5rem;
     &::-webkit-scrollbar { display: none; }
   }
-  
+   
   .tabs-button {
     white-space: nowrap;
     padding: 0.6rem 1rem;
     font-size: 0.8rem;
   }
+}
+
+/*
+  ==========================================================================
+  VERTICAL TABS
+  ==========================================================================
+ */
+
+.tabs-list--vertical {
+  flex-direction: column;
+  border-bottom: none;
+  border-right: 2px solid rgba(255, 255, 255, 0.1);
+  
+  .tabs-button {
+    &::after {
+      bottom: 0;
+      left: -2px;
+      width: 3px;
+      height: 0;
+    }
+    
+    &.tabs-item--active::after {
+      height: 100%;
+    }
+  }
+}
+
+.tabs--vertical {
+  display: flex;
+  flex-direction: row;
+  
+  .tabs-list--vertical {
+    min-width: 150px;
+    border-right: 2px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .tab-panel {
+    flex: 1;
+    padding-left: 1rem;
+  }
+}
+
+/*
+  ==========================================================================
+  TRANSITIONS AND ANIMATIONS
+  ==========================================================================
+ */
+
+.tab-panel {
+  display: none;
+  animation: fadeIn 0.3s ease;
+  
+  &--active {
+    display: block;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tabs-button::after {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }

@@ -6,17 +6,46 @@
   </div>
 
   <div class="steps-container">
-    <div *ngFor="let step of steps(); let i = index" class="step-item">
-      <div class="step-marker">
-        <span class="step-number">{{ i + 1 }}</span>
-        <div class="step-line" *ngIf="i < steps().length - 1"></div>
-      </div>
-      <div class="step-content">
-        <div class="step-icon" *ngIf="step.icon">{{ step.icon }}</div>
-        <h3>{{ step.title }}</h3>
-        <p>{{ step.description }}</p>
-      </div>
-    </div>
+    <ol class="step-list">
+      <li *ngFor="let step of steps(); let i = index" class="step-item" [attr.aria-current]="getAriaCurrent(i)">
+        <details class="step-details" [open]="step.state === 'current' || step.state === 'completed' || step.expanded" [attr.aria-expanded]="step.state === 'current' || step.state === 'completed' || step.expanded" [attr.aria-controls]="'step-content-' + i">
+          <summary class="step-summary" [class.completed]="step.state === 'completed'" [class.current]="step.state === 'current'" [class.pending]="step.state === 'pending'">
+            <div class="step-marker">
+              <div class="progress-indicator">
+                <div class="progress-circle" [class.completed]="step.state === 'completed'" [class.current]="step.state === 'current'"></div>
+                <span class="step-number">{{ i + 1 }}</span>
+              </div>
+              <div class="step-line" *ngIf="i < steps().length - 1"></div>
+            </div>
+            <div class="step-summary-content">
+              <div class="step-icon" *ngIf="step.icon" [attr.aria-label]="step.title + ' icon'">{{ step.icon }}</div>
+              <h3>{{ step.title }}</h3>
+              <span class="expand-icon" aria-hidden="true"></span>
+            </div>
+          </summary>
+          <div class="step-content" [class.reveal]="step.state === 'current' || step.state === 'completed' || step.expanded" [attr.id]="'step-content-' + i">
+            <p>{{ step.description }}</p>
+            <div class="tooltip" *ngIf="step.tooltip" role="tooltip">{{ step.tooltip }}</div>
+            <ol class="nested-step-list" *ngIf="step.children && step.children.length > 0">
+              <li *ngFor="let childStep of step.children; let j = index" class="nested-step-item">
+                <details class="step-details nested" [open]="childStep.state === 'current' || childStep.state === 'completed' || childStep.expanded" [attr.aria-expanded]="childStep.state === 'current' || childStep.state === 'completed' || childStep.expanded" [attr.aria-controls]="'nested-step-content-' + i + '-' + j">
+                  <summary class="step-summary" [class.completed]="childStep.state === 'completed'" [class.current]="childStep.state === 'current'" [class.pending]="childStep.state === 'pending'">
+                    <div class="step-summary-content">
+                      <div class="step-icon" *ngIf="childStep.icon" [attr.aria-label]="childStep.title + ' icon'">{{ childStep.icon }}</div>
+                      <h4>{{ childStep.title }}</h4>
+                      <span class="expand-icon" aria-hidden="true"></span>
+                    </div>
+                  </summary>
+                  <div class="step-content" [class.reveal]="childStep.state === 'current' || childStep.state === 'completed' || childStep.expanded" [attr.id]="'nested-step-content-' + i + '-' + j">
+                    <p>{{ childStep.description }}</p>
+                  </div>
+                </details>
+              </li>
+            </ol>
+          </div>
+        </details>
+      </li>
+    </ol>
   </div>
 </section>
 

@@ -1,3 +1,5 @@
-<div [ngClass]="spinnerClasses()" [ngStyle]="spinnerStyles()" role="status" aria-label="Loading"></div>
+<div [ngClass]="spinnerClasses()" [ngStyle]="spinnerStyles()" role="status" aria-live="polite" [attr.aria-label]="ariaLabel()" [attr.data-progress]="progress()" [attr.aria-busy]="true">
+  <div *ngIf="progress() !== null" class="spinner-progress" [ngStyle]="progressStyles()">{{progress()}}%</div>
+</div>
 
 

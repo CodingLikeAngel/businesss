@@ -54,3 +54,10 @@
 @keyframes glitchFlicker { 0% { transform: translate(0); } 20% { transform: translate(-2px, 2px); } 40% { transform: translate(2px, -2px); } 100% { transform: translate(0); } }
 @keyframes portalSwirl { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
 @keyframes defaultPulse { 0%, 100% { box-shadow: 0 0 10px #1E1B4B; } 50% { box-shadow: 0 0 15px #0A0A14; } }
+
+/* Chip-specific animations */
+@keyframes fadeOut { 0% { opacity: 1; transform: scale(1); } 100% { opacity: 0; transform: scale(0.8); } }
+
+@keyframes ripple { to { transform: scale(4); opacity: 0; } }
+
+@keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }

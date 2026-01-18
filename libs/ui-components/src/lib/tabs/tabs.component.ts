@@ -41,6 +41,8 @@ export class UITabsComponent implements OnInit {
   showAs = input<'menu' | 'tabs'>('tabs'); // Controla si se muestra como menú o pestañas
   isMobile = input<boolean>(false); // Recibe si es móvil desde el padre
   customStyles = input<TabsCustomStyles>({});
+  orientation = input<'horizontal' | 'vertical'>('horizontal'); // Controla la orientación de las pestañas
+  lazyLoad = input<boolean>(false); // Controla si se carga el contenido de forma perezosa
   
   @Output() tabSelected = new EventEmitter<string>();
 

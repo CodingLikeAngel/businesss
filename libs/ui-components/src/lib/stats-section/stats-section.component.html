@@ -5,14 +5,88 @@
       <p class="subtitle">{{ subtitle() }}</p>
     </div>
     <div class="stats-grid">
-      <div *ngFor="let stat of stats(); let i = index" class="stat-card" [style.--stat-color]="stat.icon" [style.animation-delay]="i * 0.1 + 's'">
+      <div *ngFor="let stat of stats(); let i = index"
+           class="stat-card"
+           [attr.data-animation-delay]="(stat.animationDelay || i * 0.1) + 's'"
+           [attr.data-progress]="stat.progress"
+           [attr.data-trend]="stat.trend"
+           [attr.data-trend-value]="stat.trendValue"
+           [attr.data-target]="stat.target"
+           [attr.data-unit]="stat.unit">
+
+        <!-- Trend Indicator -->
+        <div class="trend-indicator" *ngIf="stat.trend" [ngClass]="stat.trend">
+          <span class="trend-icon" [ngClass]="stat.trend">
+            {{ stat.trend === 'up' ? '↗' : stat.trend === 'down' ? '↘' : '→' }}
+          </span>
+          <span class="trend-value">{{ stat.trendValue }}</span>
+        </div>
+
         <div class="icon-wrapper">
           <span class="icon">{{ stat.icon }}</span>
         </div>
+
         <div class="content">
           <h3 class="label">{{ stat.label }}</h3>
-          <p class="value">{{ stat.value }}</p>
+          <div class="value-container">
+            <p class="value" [attr.data-value]="stat.value">{{ stat.value }}</p>
+            <span class="unit" *ngIf="stat.unit">{{ stat.unit }}</span>
+          </div>
           <p class="description" *ngIf="stat.description">{{ stat.description }}</p>
+
+          <!-- Progress Bar -->
+          <div class="progress-bar" *ngIf="stat.progress !== undefined">
+            <div class="progress-fill" [style.width.%]="stat.progress"></div>
+          </div>
+
+          <!-- Progress Circle -->
+          <div class="progress-circle" *ngIf="stat.progress !== undefined">
+            <svg class="progress-svg" viewBox="0 0 36 36">
+              <path class="progress-bg"
+                    d="M18 2.0845
+                       a 15.9155 15.9155 0 0 1 0 31.831
+                       a 15.9155 15.9155 0 0 1 0 -31.831"/>
+              <path class="progress-fill-path"
+                    [attr.stroke-dasharray]="stat.progress + ', 100'"
+                    d="M18 2.0845
+                       a 15.9155 15.9155 0 0 1 0 31.831
+                       a 15.9155 15.9155 0 0 1 0 -31.831"/>
+            </svg>
+            <div class="progress-text">{{ stat.progress }}%</div>
+          </div>
+        </div>
+
+        <!-- Enhanced Tooltip -->
+        <div class="stat-tooltip" *ngIf="stat.historicalData">
+          <div class="tooltip-header">
+            <h4>{{ stat.label }} - Histórico</h4>
+          </div>
+          <div class="tooltip-content">
+            <div class="historical-chart">
+              <div class="chart-bars">
+                <div *ngFor="let data of stat.historicalData; let j = index"
+                     class="chart-bar"
+                     [style.height.%]="getBarHeight(data, stat)">
+                  <span class="bar-value">{{ data.value }}{{ stat.unit }}</span>
+                  <span class="bar-date">{{ data.date }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="tooltip-stats">
+              <div class="stat-item">
+                <span class="stat-label">Actual:</span>
+                <span class="stat-value">{{ stat.value }}</span>
+              </div>
+              <div class="stat-item" *ngIf="stat.target">
+                <span class="stat-label">Objetivo:</span>
+                <span class="stat-value">{{ stat.target }}</span>
+              </div>
+              <div class="stat-item" *ngIf="stat.trendValue">
+                <span class="stat-label">Tendencia:</span>
+                <span class="stat-value" [ngClass]="stat.trend">{{ stat.trendValue }}</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

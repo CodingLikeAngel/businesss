@@ -1,29 +1,72 @@
-<span
-  [ngClass]="chipClasses()"
-  [ngStyle]="chipStyles()"
-  (click)="handleClick($event)"
-  (keyup)="handleKeyUp($event)"
-  [attr.aria-label]="disabled() ? 'Chip disabled' : 'Chip'"
-  [attr.aria-disabled]="disabled() ? 'true' : 'false'"
-  role="button"
-  tabindex="0"
->
-  <ng-content></ng-content>
-  <ng-icon
-    *ngIf="selected()"
-    name="heroCheck"
-    class="chip-icon chip-icon-selected"
-  ></ng-icon>
-  <ng-icon
-    *ngIf="removable()"
-    name="heroXMark"
-    class="chip-icon chip-icon-remove"
-    (click)="handleRemove($event)"
-    (keyup)="handleRemoveKeyUp($event)"
+<ng-container [ngSwitch]="interactive()">
+  <button
+    *ngSwitchCase="true"
+    [ngClass]="chipClasses()"
+    [ngStyle]="chipStyles()"
+    (click)="handleClick($event)"
+    (keyup)="handleKeyUp($event)"
+    [attr.aria-label]="disabled() ? 'Chip disabled' : 'Chip'"
+    [attr.aria-disabled]="disabled() ? 'true' : 'false'"
+    [attr.aria-pressed]="selected() || multiSelected()"
+    [disabled]="disabled()"
     tabindex="0"
+  >
+    <ng-container *ngIf="avatarSrc()">
+      <img [src]="avatarSrc()" class="chip-avatar" alt="Avatar" />
+    </ng-container>
+    <ng-container *ngIf="iconName()">
+      <ng-icon [name]="iconName()" class="chip-icon chip-icon-custom"></ng-icon>
+    </ng-container>
+    <ng-content></ng-content>
+    <ng-icon
+      *ngIf="selected()"
+      name="heroCheck"
+      class="chip-icon chip-icon-selected"
+    ></ng-icon>
+    <ng-icon
+      *ngIf="removable()"
+      name="heroXMark"
+      class="chip-icon chip-icon-remove"
+      (click)="handleRemove($event)"
+      (keyup)="handleRemoveKeyUp($event)"
+      tabindex="0"
+      role="button"
+      aria-label="Remove chip"
+    ></ng-icon>
+  </button>
+  <span
+    *ngSwitchDefault
+    [ngClass]="chipClasses()"
+    [ngStyle]="chipStyles()"
+    [attr.aria-label]="disabled() ? 'Chip disabled' : 'Chip'"
+    [attr.aria-disabled]="disabled() ? 'true' : 'false'"
+    [attr.aria-pressed]="selected() || multiSelected()"
     role="button"
-    aria-label="Remove chip"
-  ></ng-icon>
-</span>
+    tabindex="0"
+  >
+    <ng-container *ngIf="avatarSrc()">
+      <img [src]="avatarSrc()" class="chip-avatar" alt="Avatar" />
+    </ng-container>
+    <ng-container *ngIf="iconName()">
+      <ng-icon [name]="iconName()" class="chip-icon chip-icon-custom"></ng-icon>
+    </ng-container>
+    <ng-content></ng-content>
+    <ng-icon
+      *ngIf="selected()"
+      name="heroCheck"
+      class="chip-icon chip-icon-selected"
+    ></ng-icon>
+    <ng-icon
+      *ngIf="removable()"
+      name="heroXMark"
+      class="chip-icon chip-icon-remove"
+      (click)="handleRemove($event)"
+      (keyup)="handleRemoveKeyUp($event)"
+      tabindex="0"
+      role="button"
+      aria-label="Remove chip"
+    ></ng-icon>
+  </span>
+</ng-container>
 
 

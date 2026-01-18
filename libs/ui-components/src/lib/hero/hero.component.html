@@ -67,7 +67,7 @@
       (click)="onCtaClick()"
       (keydown)="onInteractiveKeydown($event, onCtaClick)"
       type="button"
-      aria-label="{{ ctaLabel() }}">
+      [attr.aria-label]="ctaLabel()">
       {{ ctaLabel() }}
     </button>
 

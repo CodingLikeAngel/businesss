@@ -36,10 +36,143 @@
   }
 }
 
+/* Variant systems */
+.chip-filled {
+  background: var(--theme-bg, #3B82F6);
+  color: white;
+  border: none;
+}
+
+.chip-outlined {
+  background: transparent;
+  color: var(--theme-color, #3B82F6);
+  border: 2px solid var(--theme-color, #3B82F6);
+}
+
+.chip-ghost {
+  background: transparent;
+  color: var(--theme-color, #3B82F6);
+  border: none;
+  box-shadow: none;
+}
+
 .chip-disabled {
   opacity: 0.5;
   cursor: not-allowed;
   filter: grayscale(1);
+}
+
+.chip-icon-remove {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  cursor: pointer;
+}
+
+.chip-icon-remove:hover {
+  transform: scale(1.1);
+}
+
+.chip-remove-animation {
+  animation: fadeOut 0.3s ease forwards;
+}
+
+.chip-ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.chip-ripple::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.chip-ripple.ripple-effect::after {
+  animation: ripple 0.6s ease-out;
+}
+
+.chip-selected {
+  animation: pulse 0.3s ease;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.chip-multi-selected {
+  background: linear-gradient(135deg, var(--theme-bg, #3B82F6), var(--theme-color, #EC4899));
+  color: white;
+  border: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+}
+
+.chip-ripple-effect {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  transform: scale(0);
+  opacity: 0;
+  pointer-events: none;
+  animation: ripple 0.6s ease-out;
+  width: 10px;
+  height: 10px;
+}
+
+.chip-avatar {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 0.5rem;
+}
+
+.chip-icon-custom {
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .chip {
+    font-size: 0.6rem;
+    padding: 0.3rem 0.8rem;
+  }
+
+  .chip-avatar {
+    width: 1.2rem;
+    height: 1.2rem;
+  }
+
+  .chip-icon-custom {
+    font-size: 1rem;
+  }
+}
+
+/* Focus states for accessibility */
+.chip:focus-visible {
+  outline: 2px solid var(--theme-color, #3B82F6);
+  outline-offset: 2px;
+}
+
+.chip-icon-remove:focus-visible {
+  outline: 2px solid var(--theme-color, #3B82F6);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .chip {
+    border: 2px solid currentColor;
+  }
+
+  .chip-filled {
+    border: 2px solid currentColor;
+  }
+
+  .chip-outlined {
+    border: 3px solid currentColor;
+  }
 }
 
 /* 

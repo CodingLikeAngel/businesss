@@ -112,6 +112,8 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
 
   constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
+  trackByFn(index: number, item: any): any { return index; }
+
   heroClasses = computed(() => ['hero-section', `hero-section--${this.variant()}`]);
 
   heroStyles = computed(() => {

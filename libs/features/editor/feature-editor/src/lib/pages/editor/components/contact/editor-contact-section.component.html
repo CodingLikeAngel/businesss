@@ -1,66 +1,389 @@
 <!-- DESKTOP CONTACT -->
 <section *ngIf="!isMobile" [id]="section.id"
-  class="relative z-20 py-20 mb-16 cursor-pointer editor-section"
+  class="relative z-20 py-20 mb-16 cursor-pointer editor-section contact-section"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [visualEditable]="true"
   visualType="section"
   (visualResized)="onSectionResized($event)">
-  <div class="container mx-auto px-6 max-w-3xl">
-    <lib-ui-components-title
-      [level]="section.content['level'] || titleConfig.level"
-      [text]="section.content['title'] || 'Solicita tu Demo Personalizada'"
-      [variant]="getVariant(section.id)"
-      [align]="'center'"
-      class="mb-12 editor-element"
-      [class.is-selected]="selectedElementId === section.id + '_title'"
-      (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
-      [applyDynamicStyles]="section.content['titleStyles']"
-      [visualEditable]="true"
-      visualType="element"
-      (visualMoved)="onElementMoved($event, section.id + '_title')"
-      (visualResized)="onElementResized($event, section.id + '_title')"
-    ></lib-ui-components-title>
-    <div class="editor-element" 
-         [class.is-selected]="selectedElementId === section.id + '_form'"
-         (click)="selectElement($event, { id: section.id + '_form', sectionId: section.id, type: 'form', content: section.content })"
-         [applyDynamicStyles]="section.content['formStyles']"
-         [visualEditable]="true"
-         visualType="element"
-         (visualMoved)="onElementMoved($event, section.id + '_form')"
-         (visualResized)="onElementResized($event, section.id + '_form')">
-      <lib-reservation-form
-        [variant]="$any(getVariant(section.id))"
-        [title]="section.content['title'] || 'Reservar Cita'"
-        [subtitle]="section.content['subtitle'] || 'Reserva tu cita fácilmente y elige el servicio que más te guste.'"
-        [customStyles]="section.content['formStyles']"
-      ></lib-reservation-form>
+  <div class="container mx-auto px-6 max-w-6xl">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+      <!-- Contact Form -->
+      <div class="editor-element"
+           [class.is-selected]="selectedElementId === section.id + '_form'"
+           (click)="selectElement($event, { id: section.id + '_form', sectionId: section.id, type: 'form', content: section.content })"
+           [applyDynamicStyles]="section.content['formStyles']"
+           [visualEditable]="true"
+           visualType="element"
+           (visualMoved)="onElementMoved($event, section.id + '_form')"
+           (visualResized)="onElementResized($event, section.id + '_form')">
+        <lib-ui-components-title
+          [level]="section.content['level'] || titleConfig.level"
+          [text]="section.content['title'] || 'Contáctanos'"
+          [variant]="getVariant(section.id)"
+          [align]="'left'"
+          class="mb-8"
+        ></lib-ui-components-title>
+
+        <form class="contact-form" [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate>
+          <!-- Personal Information Fieldset -->
+          <fieldset class="form-fieldset">
+            <legend class="fieldset-legend">Información Personal</legend>
+
+            <div class="form-group">
+              <label for="name" class="form-label">Nombre completo *</label>
+              <input
+                id="name"
+                type="text"
+                formControlName="name"
+                class="form-input"
+                [class.error]="contactForm.get('name')?.invalid && contactForm.get('name')?.touched"
+                [class.success]="contactForm.get('name')?.valid && contactForm.get('name')?.touched"
+                placeholder="Tu nombre completo"
+                aria-describedby="name-error"
+                required>
+              <div class="validation-feedback" *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
+                <span id="name-error" class="error-message">El nombre es obligatorio</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="email" class="form-label">Correo electrónico *</label>
+              <input
+                id="email"
+                type="email"
+                formControlName="email"
+                class="form-input"
+                [class.error]="contactForm.get('email')?.invalid && contactForm.get('email')?.touched"
+                [class.success]="contactForm.get('email')?.valid && contactForm.get('email')?.touched"
+                placeholder="tu@email.com"
+                aria-describedby="email-error"
+                required>
+              <div class="validation-feedback" *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
+                <span id="email-error" class="error-message">
+                  <span *ngIf="contactForm.get('email')?.errors?.['required']">El correo electrónico es obligatorio</span>
+                  <span *ngIf="contactForm.get('email')?.errors?.['email']">Ingresa un correo electrónico válido</span>
+                </span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="phone" class="form-label">Teléfono</label>
+              <input
+                id="phone"
+                type="tel"
+                formControlName="phone"
+                class="form-input"
+                [class.error]="contactForm.get('phone')?.invalid && contactForm.get('phone')?.touched"
+                [class.success]="contactForm.get('phone')?.valid && contactForm.get('phone')?.touched"
+                placeholder="+34 600 000 000"
+                aria-describedby="phone-error">
+              <div class="validation-feedback" *ngIf="contactForm.get('phone')?.invalid && contactForm.get('phone')?.touched">
+                <span id="phone-error" class="error-message">Ingresa un número de teléfono válido</span>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Contact Preferences Fieldset -->
+          <fieldset class="form-fieldset">
+            <legend class="fieldset-legend">Método de Contacto Preferido</legend>
+
+            <div class="contact-methods">
+              <label class="contact-method" *ngFor="let method of contactMethods">
+                <input
+                  type="radio"
+                  formControlName="contactMethod"
+                  [value]="method.value"
+                  class="contact-radio">
+                <span class="method-icon">{{ method.icon }}</span>
+                <span class="method-label">{{ method.label }}</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <!-- Message Fieldset -->
+          <fieldset class="form-fieldset">
+            <legend class="fieldset-legend">Mensaje</legend>
+
+            <div class="form-group">
+              <label for="subject" class="form-label">Asunto</label>
+              <input
+                id="subject"
+                type="text"
+                formControlName="subject"
+                class="form-input"
+                placeholder="¿En qué podemos ayudarte?">
+            </div>
+
+            <div class="form-group">
+              <label for="message" class="form-label">Mensaje *</label>
+              <textarea
+                id="message"
+                formControlName="message"
+                class="form-textarea"
+                [class.error]="contactForm.get('message')?.invalid && contactForm.get('message')?.touched"
+                [class.success]="contactForm.get('message')?.valid && contactForm.get('message')?.touched"
+                placeholder="Describe tu consulta o solicitud..."
+                rows="5"
+                aria-describedby="message-error"
+                required></textarea>
+              <div class="validation-feedback" *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched">
+                <span id="message-error" class="error-message">El mensaje es obligatorio</span>
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Submit Button -->
+          <div class="form-actions">
+            <button
+              type="submit"
+              class="submit-button"
+              [disabled]="contactForm.invalid || isSubmitting"
+              [class.loading]="isSubmitting">
+              <span class="button-text" *ngIf="!isSubmitting">Enviar Mensaje</span>
+              <span class="button-text" *ngIf="isSubmitting">Enviando...</span>
+              <div class="loading-spinner" *ngIf="isSubmitting"></div>
+            </button>
+          </div>
+
+          <!-- Success Message -->
+          <div class="success-message" *ngIf="showSuccess" @fadeInOut>
+            <div class="success-icon">✓</div>
+            <h3>¡Mensaje enviado!</h3>
+            <p>Gracias por contactarnos. Te responderemos lo antes posible.</p>
+          </div>
+        </form>
+      </div>
+
+      <!-- Contact Info & Map -->
+      <div class="contact-info-section">
+        <div class="editor-element"
+             [class.is-selected]="selectedElementId === section.id + '_info'"
+             (click)="selectElement($event, { id: section.id + '_info', sectionId: section.id, type: 'info', content: section.content })"
+             [applyDynamicStyles]="section.content['infoStyles']"
+             [visualEditable]="true"
+             visualType="element"
+             (visualMoved)="onElementMoved($event, section.id + '_info')"
+             (visualResized)="onElementResized($event, section.id + '_info')">
+          <lib-ui-components-title
+            [level]="'h3'"
+            [text]="section.content['infoTitle'] || 'Información de Contacto'"
+            [variant]="getVariant(section.id)"
+            [align]="'left'"
+            class="mb-6"
+          ></lib-ui-components-title>
+
+          <div class="contact-info">
+            <div class="info-item" *ngFor="let info of contactInfo">
+              <div class="info-icon">{{ info.icon }}</div>
+              <div class="info-content">
+                <h4>{{ info.title }}</h4>
+                <p>{{ info.value }}</p>
+                <a *ngIf="info.link" [href]="info.link" class="info-link">{{ info.linkText }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Map Section -->
+        <div class="map-container editor-element mt-8"
+             [class.is-selected]="selectedElementId === section.id + '_map'"
+             (click)="selectElement($event, { id: section.id + '_map', sectionId: section.id, type: 'map', content: section.content })"
+             [applyDynamicStyles]="section.content['mapStyles']"
+             [visualEditable]="true"
+             visualType="element"
+             (visualMoved)="onElementMoved($event, section.id + '_map')"
+             (visualResized)="onElementResized($event, section.id + '_map')">
+          <div class="map-placeholder">
+            <div class="map-marker" *ngFor="let marker of mapMarkers">
+              <div class="marker-icon">{{ marker.icon }}</div>
+              <div class="marker-info">
+                <h4>{{ marker.title }}</h4>
+                <p>{{ marker.address }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <!-- MOBILE CONTACT -->
-<section *ngIf="isMobile" [id]="section.id" 
-  class="relative z-20 py-10 cursor-pointer editor-section" 
+<section *ngIf="isMobile" [id]="section.id"
+  class="relative z-20 py-10 cursor-pointer editor-section contact-section"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)">
   <div class="container mx-auto px-4">
     <lib-ui-components-title
       [level]="'h2'"
-      [text]="section.content['title'] || 'Contacto'"
+      [text]="section.content['title'] || 'Contáctanos'"
       [variant]="getVariant(section.id)"
       [align]="'center'"
       class="mb-8 editor-element"
       [class.is-selected]="selectedElementId === section.id + '_title'"
       (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
     ></lib-ui-components-title>
-    <div class="editor-element" 
+
+    <!-- Contact Form Mobile -->
+    <div class="editor-element mb-8"
          [class.is-selected]="selectedElementId === section.id + '_form'"
          (click)="selectElement($event, { id: section.id + '_form', type: 'form' })">
-      <lib-reservation-form
-        [variant]="$any(getVariant(section.id))"
-      ></lib-reservation-form>
+      <form class="contact-form" [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate>
+        <!-- Personal Information Fieldset -->
+        <fieldset class="form-fieldset">
+          <legend class="fieldset-legend">Información Personal</legend>
+
+          <div class="form-group">
+            <label for="name-mobile" class="form-label">Nombre completo *</label>
+            <input
+              id="name-mobile"
+              type="text"
+              formControlName="name"
+              class="form-input"
+              [class.error]="contactForm.get('name')?.invalid && contactForm.get('name')?.touched"
+              [class.success]="contactForm.get('name')?.valid && contactForm.get('name')?.touched"
+              placeholder="Tu nombre completo"
+              required>
+            <div class="validation-feedback" *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
+              <span class="error-message">El nombre es obligatorio</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="email-mobile" class="form-label">Correo electrónico *</label>
+            <input
+              id="email-mobile"
+              type="email"
+              formControlName="email"
+              class="form-input"
+              [class.error]="contactForm.get('email')?.invalid && contactForm.get('email')?.touched"
+              [class.success]="contactForm.get('email')?.valid && contactForm.get('email')?.touched"
+              placeholder="tu@email.com"
+              required>
+            <div class="validation-feedback" *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
+              <span class="error-message">
+                <span *ngIf="contactForm.get('email')?.errors?.['required']">El correo electrónico es obligatorio</span>
+                <span *ngIf="contactForm.get('email')?.errors?.['email']">Ingresa un correo electrónico válido</span>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="phone-mobile" class="form-label">Teléfono</label>
+            <input
+              id="phone-mobile"
+              type="tel"
+              formControlName="phone"
+              class="form-input"
+              placeholder="+34 600 000 000">
+          </div>
+        </fieldset>
+
+        <!-- Contact Preferences Fieldset -->
+        <fieldset class="form-fieldset">
+          <legend class="fieldset-legend">Método de Contacto Preferido</legend>
+
+          <div class="contact-methods">
+            <label class="contact-method" *ngFor="let method of contactMethods">
+              <input
+                type="radio"
+                formControlName="contactMethod"
+                [value]="method.value"
+                class="contact-radio">
+              <span class="method-icon">{{ method.icon }}</span>
+              <span class="method-label">{{ method.label }}</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- Message Fieldset -->
+        <fieldset class="form-fieldset">
+          <legend class="fieldset-legend">Mensaje</legend>
+
+          <div class="form-group">
+            <label for="subject-mobile" class="form-label">Asunto</label>
+            <input
+              id="subject-mobile"
+              type="text"
+              formControlName="subject"
+              class="form-input"
+              placeholder="¿En qué podemos ayudarte?">
+          </div>
+
+          <div class="form-group">
+            <label for="message-mobile" class="form-label">Mensaje *</label>
+            <textarea
+              id="message-mobile"
+              formControlName="message"
+              class="form-textarea"
+              [class.error]="contactForm.get('message')?.invalid && contactForm.get('message')?.touched"
+              [class.success]="contactForm.get('message')?.valid && contactForm.get('message')?.touched"
+              placeholder="Describe tu consulta..."
+              rows="4"
+              required></textarea>
+            <div class="validation-feedback" *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched">
+              <span class="error-message">El mensaje es obligatorio</span>
+            </div>
+          </div>
+        </fieldset>
+
+        <!-- Submit Button -->
+        <div class="form-actions">
+          <button
+            type="submit"
+            class="submit-button"
+            [disabled]="contactForm.invalid || isSubmitting"
+            [class.loading]="isSubmitting">
+            <span class="button-text" *ngIf="!isSubmitting">Enviar Mensaje</span>
+            <span class="button-text" *ngIf="isSubmitting">Enviando...</span>
+            <div class="loading-spinner" *ngIf="isSubmitting"></div>
+          </button>
+        </div>
+
+        <!-- Success Message -->
+        <div class="success-message" *ngIf="showSuccess" @fadeInOut>
+          <div class="success-icon">✓</div>
+          <h3>¡Mensaje enviado!</h3>
+          <p>Gracias por contactarnos. Te responderemos lo antes posible.</p>
+        </div>
+      </form>
+    </div>
+
+    <!-- Contact Info Mobile -->
+    <div class="contact-info-section">
+      <lib-ui-components-title
+        [level]="'h3'"
+        [text]="section.content['infoTitle'] || 'Información de Contacto'"
+        [variant]="getVariant(section.id)"
+        [align]="'center'"
+        class="mb-6"
+      ></lib-ui-components-title>
+
+      <div class="contact-info">
+        <div class="info-item" *ngFor="let info of contactInfo">
+          <div class="info-icon">{{ info.icon }}</div>
+          <div class="info-content">
+            <h4>{{ info.title }}</h4>
+            <p>{{ info.value }}</p>
+            <a *ngIf="info.link" [href]="info.link" class="info-link">{{ info.linkText }}</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map Section Mobile -->
+      <div class="map-container mt-8">
+        <div class="map-placeholder">
+          <div class="map-marker" *ngFor="let marker of mapMarkers">
+            <div class="marker-icon">{{ marker.icon }}</div>
+            <div class="marker-info">
+              <h4>{{ marker.title }}</h4>
+              <p>{{ marker.address }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>

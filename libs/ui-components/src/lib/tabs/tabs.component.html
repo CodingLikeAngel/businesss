@@ -2,25 +2,32 @@
   <!-- Pestañas (siempre en escritorio, o en móvil con showAs='tabs') -->
   <ul class="tabs-list" [ngClass]="{
     'tabs-list--mobile': showAs() === 'tabs' && isMobile(),
-    'tabs-list--menu': showAs() === 'menu' && !isMobile()
+    'tabs-list--menu': showAs() === 'menu' && !isMobile(),
+    'tabs-list--vertical': orientation() === 'vertical'
   }">
     <li
       *ngFor="let tab of tabs()"
       class="tabs-item"
       [class.tabs-item--active]="tab.sectionId === activeTabId"
+      role="presentation"
     >
       <button
-        [attr.aria-selected]="tab.sectionId === activeTabId"
+        [attr.aria-selected]="tab.sectionId === activeTabId ? 'true' : 'false'"
         [attr.aria-controls]="tab.sectionId"
         (click)="selectTab(tab.sectionId)"
         class="tabs-button"
+        [class.tabs-button--pill]="variant() === 'pills'"
+        [class.tabs-button--minimal]="variant() === 'minimal'"
+        [class.tabs-button--button]="variant() === 'button'"
+        role="tab"
+        [id]="tab.sectionId + '-tab'"
       >
         <span *ngIf="tab.icon" class="tabs-icon">{{ tab.icon }}</span>
         {{ tab.label }}
       </button>
     </li>
   </ul>
-
+ 
   <!-- Menú móvil (solo en móvil con showAs='menu') -->
   <div *ngIf="showAs() === 'menu' && isMobile()" class="tabs-mobile-menu">
     <ul class="tabs-mobile-list">
@@ -28,12 +35,15 @@
         *ngFor="let tab of tabs()"
         class="tabs-mobile-item"
         [class.tabs-mobile-item--active]="tab.sectionId === activeTabId"
+        role="presentation"
       >
         <button
-          [attr.aria-selected]="tab.sectionId === activeTabId"
+          [attr.aria-selected]="tab.sectionId === activeTabId ? 'true' : 'false'"
           [attr.aria-controls]="tab.sectionId"
           (click)="selectTab(tab.sectionId)"
           class="tabs-mobile-button"
+          role="tab"
+          [id]="tab.sectionId + '-tab'"
         >
           <span *ngIf="tab.icon" class="tabs-icon">{{ tab.icon }}</span>
           {{ tab.label }}
@@ -41,6 +51,11 @@
       </li>
     </ul>
   </div>
+</div>
+
+<!-- Paneles de pestañas -->
+<div *ngFor="let tab of tabs()" class="tab-panel" [class.tab-panel--active]="tab.sectionId === activeTabId" role="tabpanel" [attr.aria-labelledby]="tab.sectionId" [id]="tab.sectionId">
+  <ng-content *ngIf="tab.sectionId === activeTabId || !lazyLoad()"></ng-content>
 </div>
 
 

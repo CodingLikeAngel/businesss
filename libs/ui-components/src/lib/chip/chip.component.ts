@@ -34,6 +34,11 @@ export class UIChipComponent {
   removable = input<boolean>(false);
   selected = input<boolean>(false);
   disabled = input<boolean>(false);
+  interactive = input<boolean>(true);
+  avatarSrc = input<string>('');
+  iconName = input<string>('');
+  variantSystem = input<'filled' | 'outlined' | 'ghost'>('filled');
+  multiSelected = input<boolean>(false);
 
   chipClick = output<Event>();
   removeClick = output<Event>();
@@ -81,11 +86,39 @@ export class UIChipComponent {
     if (this.disabled()) {
       classes.push('chip-disabled');
     }
+    
+    // Add variant system classes
+    const variantSystem = this.variantSystem();
+    if (variantSystem) {
+      classes.push(`chip-${variantSystem}`);
+    }
+    
+    // Add multi-selected class if needed
+    if (this.multiSelected()) {
+      classes.push('chip-multi-selected');
+    }
+    
     return classes.join(' ');
   });
 
   handleClick(event: Event) {
     if (!this.disabled()) {
+      const chipElement = (event.target as HTMLElement).closest('.chip');
+      if (chipElement && this.interactive()) {
+        const rect = chipElement.getBoundingClientRect();
+        const x = event instanceof MouseEvent ? event.clientX - rect.left : rect.width / 2;
+        const y = event instanceof MouseEvent ? event.clientY - rect.top : rect.height / 2;
+        
+        const ripple = document.createElement('span');
+        ripple.classList.add('chip-ripple-effect');
+        ripple.style.left = x + 'px';
+        ripple.style.top = y + 'px';
+        chipElement.appendChild(ripple);
+        
+        ripple.addEventListener('animationend', () => {
+          ripple.remove();
+        }, { once: true });
+      }
       this.chipClick.emit(event);
     }
   }
@@ -100,7 +133,15 @@ export class UIChipComponent {
   handleRemove(event: Event) {
     if (!this.disabled()) {
       event.stopPropagation();
-      this.removeClick.emit(event);
+      const chipElement = (event.target as HTMLElement).closest('.chip');
+      if (chipElement) {
+        chipElement.classList.add('chip-remove-animation');
+        chipElement.addEventListener('animationend', () => {
+          this.removeClick.emit(event);
+        }, { once: true });
+      } else {
+        this.removeClick.emit(event);
+      }
     }
   }
 
