@@ -1,8 +1,9 @@
-import { Component, input, ElementRef, ViewChild, AfterViewInit, OnInit, OnDestroy, HostBinding, computed } from '@angular/core';
+import { Component, input, ElementRef, ViewChild, AfterViewInit, OnInit, OnDestroy, HostBinding, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { variants as baseVariants } from '../models/ui-components-data.model';
 import { UIImageComponent } from '../image/image.component';
+import { CustomStyles } from '../models/custom-styles.interface';
 
 // Variantes específicas del componente hijo
 const specificGalleryVariants = [
@@ -19,31 +20,13 @@ export interface GalleryImage {
   caption?: string;
 }
 
-export interface GalleryCustomStyles {
-  backgroundColor?: string;
-  color?: string;
-  '--container-bg'?: string;
-  '--container-border'?: string;
-  '--container-shadow'?: string;
-  '--container-radius'?: string;
-  '--image-object-fit'?: string;
-  '--caption-bg'?: string;
-  '--caption-color'?: string;
-  '--caption-font-size'?: string;
-  '--nav-bg'?: string;
-  '--nav-color'?: string;
-  '--nav-shadow'?: string;
-  '--dot-bg'?: string;
-  '--dot-active-bg'?: string;
-  [key: string]: string | undefined;
-}
-
 @Component({
   selector: 'lib-ui-components-ui-gallery',
   standalone: true,
   imports: [CommonModule, UIImageComponent], // Agrega UIImageComponent aquí
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class UIGalleryComponent implements OnInit, AfterViewInit, OnDestroy {
   images = input<GalleryImage[]>([
@@ -54,7 +37,7 @@ export class UIGalleryComponent implements OnInit, AfterViewInit, OnDestroy {
   variant = input<GalleryVariant | string>('default');
   autoSlide = input(false);
   slideInterval = input(3000);
-  customStyles = input<GalleryCustomStyles>({});
+  customStyles = input<CustomStyles>({});
 
   @ViewChild('slider', { static: false }) slider!: ElementRef<HTMLDivElement>;
 

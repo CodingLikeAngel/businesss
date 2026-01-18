@@ -5,8 +5,9 @@ import {
   ApplyDynamicStylesDirective,
   VisualEditableDirective
 } from '@negocio/shared-components';
-import { 
-  UIAccordionComponent 
+import {
+  UIAccordionComponent,
+  UIFaqSectionComponent
 } from '@negocio/ui-components';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
 
@@ -16,6 +17,7 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
   imports: [
     CommonModule,
     UIAccordionComponent,
+    UIFaqSectionComponent,
     ApplyDynamicStylesDirective,
     VisualEditableDirective
   ],

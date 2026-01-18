@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
+import {
   TestimonialsConfig,
   ApplyDynamicStylesDirective,
   VisualEditableDirective
 } from '@negocio/shared-components';
+import { UITestimonialsSectionComponent } from '@negocio/ui-components';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
 
 @Component({
@@ -12,6 +13,7 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
   standalone: true,
   imports: [
     CommonModule,
+    UITestimonialsSectionComponent,
     ApplyDynamicStylesDirective,
     VisualEditableDirective
   ],

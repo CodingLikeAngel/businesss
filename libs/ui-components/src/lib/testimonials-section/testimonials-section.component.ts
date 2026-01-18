@@ -1,5 +1,6 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { CustomStyles } from '../models/custom-styles.interface';
 
 export interface TestimonialItem {
   quote: string;
@@ -8,24 +9,19 @@ export interface TestimonialItem {
   avatar?: string;
 }
 
-export interface TestimonialsCustomStyles {
-  backgroundColor?: string;
-  color?: string;
-  [key: string]: string | undefined;
-}
-
 @Component({
   selector: 'lib-ui-testimonials-section',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './testimonials-section.component.html',
-  styleUrls: ['./testimonials-section.component.scss']
+  styleUrls: ['./testimonials-section.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class UITestimonialsSectionComponent {
   title = input('Lo que dicen nuestros clientes');
   subtitle = input('Historias reales de éxito.');
   variant = input('default');
-  customStyles = input<TestimonialsCustomStyles>({});
+  customStyles = input<CustomStyles>({});
   testimonials = input<TestimonialItem[]>([
     { 
       quote: "Increíble atención al detalle y un diseño que supera todas las expectativas.", 

@@ -1,62 +1,33 @@
 <!-- DESKTOP FAQ -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer py-20"
+<div *ngIf="!isMobile" class="editor-section cursor-pointer"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [visualEditable]="true"
   visualType="section"
   (visualResized)="onSectionResized($event)">
-  <div class="container mx-auto px-6 max-w-3xl">
-    <h2 class="text-4xl font-bold text-center text-white mb-12 editor-element"
-        [class.is-selected]="selectedElementId === section.id + '_title'"
-        (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
-        [applyDynamicStyles]="section.content['titleStyles']"
-        [visualEditable]="true"
-        visualType="element"
-        (visualMoved)="onElementMoved($event, section.id + '_title')"
-        (visualResized)="onElementResized($event, section.id + '_title')">
-      {{ section.content['title'] || 'Preguntas Frecuentes' }}
-    </h2>
-    <div class="space-y-4">
-      <div *ngFor="let faq of faqConfig.items; let i = index" 
-           class="editor-element"
-           [class.is-selected]="uiStateService.selectedElement?._original === faq"
-           (click)="selectElement($event, getMergedElement(section.id, section.id + '_faq_' + i, faq, 'faq'))"
-           [applyDynamicStyles]="faq.styles || {}"
-           [visualEditable]="true"
-           visualType="element"
-           (visualMoved)="onElementMoved($event, section.id + '_faq_' + i)"
-           (visualResized)="onElementResized($event, section.id + '_faq_' + i)">
-          <lib-ui-components-accordion
-            [items]="[{ title: faq.title, content: faq.content, expanded: false }]"
-            [variant]="$any(faq.variant || getVariant(section.id))"
-            [customStyles]="faq.styles || {}"
-            [applyDynamicStyles]="faq.styles || {}"
-          ></lib-ui-components-accordion>
-      </div>
-    </div>
-  </div>
+
+  <lib-ui-faq-section
+    [title]="section.content['title'] || 'Preguntas Frecuentes'"
+    [subtitle]="section.content['subtitle'] || 'Resolvemos tus dudas principales.'"
+    [variant]="getVariant(section.id)"
+    [customStyles]="section.styles || {}"
+    [applyDynamicStyles]="section.styles"
+    [items]="faqConfig.items">
+  </lib-ui-faq-section>
 </div>
 
 <!-- MOBILE FAQ -->
-<div *ngIf="isMobile" class="editor-section cursor-pointer py-10 p-4"
+<div *ngIf="isMobile" class="editor-section cursor-pointer"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)">
-    <h2 class="text-2xl font-bold text-center text-white mb-6 editor-element"
-        [class.is-selected]="selectedElementId === section.id + '_title'"
-        (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })">
-      {{ section.content['title'] || 'FAQ' }}
-    </h2>
-    <div class="space-y-4">
-      <div *ngFor="let faq of faqConfig.items" 
-           class="editor-element"
-           [class.is-selected]="uiStateService.selectedElement?._original === faq"
-           (click)="selectElement($event, faq)">
-          <lib-ui-components-accordion
-            [items]="[{ title: faq.title, content: faq.content, expanded: false }]"
-            [variant]="$any(faq.variant || getVariant(section.id))"
-            [customStyles]="faq.styles || {}"
-          ></lib-ui-components-accordion>
-      </div>
-    </div>
+
+  <lib-ui-faq-section
+    [title]="section.content['title'] || 'Preguntas Frecuentes'"
+    [subtitle]="section.content['subtitle'] || 'Resolvemos tus dudas principales.'"
+    [variant]="getVariant(section.id)"
+    [customStyles]="section.styles || {}"
+    [applyDynamicStyles]="section.styles"
+    [items]="faqConfig.items">
+  </lib-ui-faq-section>
 </div>

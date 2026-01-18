@@ -1,6 +1,7 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UIAccordionComponent } from '../acordeon/accordion.component';
+import { CustomStyles } from '../models/custom-styles.interface';
 
 export interface FaqItem {
   title: string;
@@ -8,24 +9,19 @@ export interface FaqItem {
   expanded?: boolean;
 }
 
-export interface FaqCustomStyles {
-  backgroundColor?: string;
-  color?: string;
-  [key: string]: string | undefined;
-}
-
 @Component({
   selector: 'lib-ui-faq-section',
   standalone: true,
   imports: [CommonModule, UIAccordionComponent],
   templateUrl: './faq-section.component.html',
-  styleUrls: ['./faq-section.component.scss']
+  styleUrls: ['./faq-section.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class UIFaqSectionComponent {
   title = input('Preguntas Frecuentes');
   subtitle = input('Resolvemos tus dudas principales.');
   variant = input('default');
-  customStyles = input<FaqCustomStyles>({});
+  customStyles = input<CustomStyles>({});
   items = input<FaqItem[]>([
     { title: "¿Cuánto tardan en desarrollar mi web?", content: "Dependiendo de la complejidad, entre 2 y 4 semanas." },
     { title: "¿Incluye mantenimiento?", content: "Sí, ofrecemos planes de mantenimiento mensual adaptados a tus necesidades." },

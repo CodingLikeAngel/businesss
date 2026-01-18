@@ -6,9 +6,10 @@ import {
   ApplyDynamicStylesDirective,
   VisualEditableDirective
 } from '@negocio/shared-components';
-import { 
+import {
   UIImageComponent,
-  UITitleComponent 
+  UITitleComponent,
+  UIGalleryComponent
 } from '@negocio/ui-components';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
 
@@ -19,6 +20,7 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
     CommonModule,
     UIImageComponent,
     UITitleComponent,
+    UIGalleryComponent,
     ApplyDynamicStylesDirective,
     VisualEditableDirective
   ],

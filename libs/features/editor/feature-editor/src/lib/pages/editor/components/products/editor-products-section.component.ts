@@ -6,11 +6,12 @@ import {
   ApplyDynamicStylesDirective,
   VisualEditableDirective
 } from '@negocio/shared-components';
-import { 
-  UITitleComponent, 
+import {
+  UITitleComponent,
   UICardComponent,
   UICardAnimatedComponent,
-  UiCardProductsComponent
+  UiCardProductsComponent,
+  ProductsSectionComponent
 } from '@negocio/ui-components';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
 
@@ -23,6 +24,7 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
     UICardComponent,
     UICardAnimatedComponent,
     UiCardProductsComponent,
+    ProductsSectionComponent,
     ApplyDynamicStylesDirective,
     VisualEditableDirective
   ],
