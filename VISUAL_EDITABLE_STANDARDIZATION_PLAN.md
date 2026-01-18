@@ -29,7 +29,7 @@ Standardize VisualEditableDirective usage across all editor components by creati
 
 1. **Inconsistent Mobile Support**: Some components enable visual editing on mobile elements, others don't
 2. **Manual Configuration**: Each component manually applies directive in templates with different patterns
-3. **Different Approaches**: Sections vs elements have different configuration approaches
+3. **Different Approaches**: Sections vs elements have different configuration approaches , section child components must be editable too not only section itself
 4. **No Unified Styling**: Styling application is not standardized
 5. **Basic Constraints**: Only min/max width/height, no advanced boundary constraints
 
