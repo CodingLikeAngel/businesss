@@ -34,6 +34,9 @@ import { EditorCtaSectionComponent } from '../components/cta/editor-cta-section.
 import { EditorShowcaseSectionComponent } from '../components/showcase/editor-showcase-section.component';
 import { EditorSpinnerSectionComponent } from '../components/spinner/editor-spinner-section.component';
 import { EditorChipSectionComponent } from '../components/chip/editor-chip-section.component';
+import { EditorTitleSectionComponent } from '../components/title/editor-title-section.component';
+import { EditorCardSectionComponent } from '../components/card/editor-card-section.component';
+import { EditorInputSectionComponent } from '../components/input/editor-input-section.component';
 
 @Component({
   selector: 'lib-editor-desktop-feature',
@@ -69,7 +72,10 @@ import { EditorChipSectionComponent } from '../components/chip/editor-chip-secti
     EditorCtaSectionComponent,
     EditorShowcaseSectionComponent,
     EditorSpinnerSectionComponent,
-    EditorChipSectionComponent
+    EditorChipSectionComponent,
+    EditorTitleSectionComponent,
+    EditorCardSectionComponent,
+    EditorInputSectionComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [VisualEditorService]

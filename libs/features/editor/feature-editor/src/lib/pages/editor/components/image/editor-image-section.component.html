@@ -12,7 +12,6 @@
       [src]="section.content['src'] || 'https://via.placeholder.com/800x600'"
       [alt]="section.content['alt'] || 'Image'"
       [variant]="getVariant(section.id)"
-      [lazy]="section.content['lazy'] !== false"
       [customStyles]="section.customStyles"
       class="editor-element"
       [class.is-selected]="selectedElementId === section.id + '_image'"

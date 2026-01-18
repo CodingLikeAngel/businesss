@@ -30,7 +30,9 @@ import {
   UITestimonialsSectionComponent,
   UIListComponent,
   UIGamingVariantsShowcaseComponent,
-  UIInputComponent
+  UIInputComponent,
+  UITitleComponent,
+  UICardComponent
 } from '@negocio/ui-components';
 
 interface SectionVariant {
@@ -73,7 +75,10 @@ interface SectionVariant {
     BubbleAnimationComponent,
     UITestimonialsSectionComponent,
     UIListComponent,
-    UIGamingVariantsShowcaseComponent
+    UIGamingVariantsShowcaseComponent,
+    UIInputComponent,
+    UITitleComponent,
+    UICardComponent
   ],
   template: `
     <div class="explorer-container">
@@ -201,6 +206,15 @@ interface SectionVariant {
                   </div>
                   <div *ngSwitchCase="'list'" class="max-w-md mx-auto p-4">
                     <lib-ui-list [variant]="selectedVariant" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-list>
+                  </div>
+                  <div *ngSwitchCase="'title'" class="p-4">
+                    <lib-ui-components-title [variant]="$any(selectedVariant)" [level]="'h1'" text="Título de ejemplo"></lib-ui-components-title>
+                  </div>
+                  <div *ngSwitchCase="'card'" class="max-w-xs mx-auto p-4">
+                    <lib-ui-components-card [variant]="$any(selectedVariant)" title="Tarjeta" description="Descripción de la tarjeta"></lib-ui-components-card>
+                  </div>
+                  <div *ngSwitchCase="'input'" class="p-4">
+                    <lib-ui-components-input [variant]="$any(selectedVariant)" placeholder="Escribe algo..."></lib-ui-components-input>
                   </div>
                   <div *ngSwitchDefault class="preview-mockup default-mockup">
                     <div class="mock-content">
@@ -740,6 +754,30 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '📝',
       variants: ['default', 'filled', 'outlined', 'glass', 'neon', 'floating'],
       description: 'Inputs, selects y checkboxes estilizados',
+      category: 'interactive'
+    },
+    {
+      type: 'title',
+      label: 'Título',
+      icon: '📜',
+      variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft'],
+      description: 'Títulos editables con nivel (h1-h6), alineación y animación',
+      category: 'content'
+    },
+    {
+      type: 'card',
+      label: 'Tarjeta Genérica',
+      icon: '🃏',
+      variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft'],
+      description: 'Tarjetas genéricas editables',
+      category: 'content'
+    },
+    {
+      type: 'input',
+      label: 'Input de Formulario',
+      icon: '📝',
+      variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft', 'kingfisher', 'custom1', 'custom2'],
+      description: 'Inputs de formulario editables',
       category: 'interactive'
     }
   ];

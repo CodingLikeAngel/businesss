@@ -255,6 +255,36 @@
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-spinner-section>
 
+      <!-- TITLE -->
+      <lib-editor-title-section *ngSwitchCase="'title'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-title-section>
+
+      <!-- CARD -->
+      <lib-editor-card-section *ngSwitchCase="'card'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-card-section>
+
+      <!-- INPUT -->
+      <lib-editor-input-section *ngSwitchCase="'input'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-input-section>
+
       <!-- CHART -->
       <lib-editor-chart-section *ngSwitchCase="'chart'"
         [section]="section"

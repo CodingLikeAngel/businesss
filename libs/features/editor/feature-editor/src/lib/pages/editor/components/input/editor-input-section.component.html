@@ -8,14 +8,11 @@
   (visualResized)="onSectionResized($event)">
   
   <div class="container mx-auto px-6 max-w-2xl">
-    <lib-ui-input
+    <lib-ui-components-input
       [(ngModel)]="inputValue"
-      [label]="section.content['label'] || 'Input Label'"
       [placeholder]="section.content['placeholder'] || 'Enter text...'"
       [type]="section.content['type'] || 'text'"
       [variant]="getVariant(section.id)"
-      [required]="section.content['required'] || false"
-      [disabled]="section.content['disabled'] || false"
       [customStyles]="section.customStyles"
       class="editor-element"
       [class.is-selected]="selectedElementId === section.id + '_input'"
@@ -24,7 +21,7 @@
       visualType="element"
       (visualMoved)="onElementMoved($event, section.id + '_input')"
       (visualResized)="onElementResized($event, section.id + '_input')">
-    </lib-ui-input>
+    </lib-ui-components-input>
   </div>
 </div>
 
@@ -33,14 +30,13 @@
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)">
   
-  <lib-ui-input
+  <lib-ui-components-input
     [(ngModel)]="inputValue"
-    [label]="section.content['label'] || 'Input Label'"
     [placeholder]="section.content['placeholder'] || 'Enter text...'"
     [type]="section.content['type'] || 'text'"
     [variant]="getVariant(section.id)"
     class="editor-element"
     [class.is-selected]="selectedElementId === section.id + '_input'"
     (click)="selectElement($event, { id: section.id + '_input', content: section.content, type: 'input' })">
-  </lib-ui-input>
+  </lib-ui-components-input>
 </div>
