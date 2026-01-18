@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, input, computed } from '@angular/core';
+import { Component, Input, OnInit, input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   UICardPremiumComponent,
@@ -6,12 +6,7 @@ import {
   UITooltipComponent,
 } from '../../index';
 import { CardPremiumConfig } from '@negocio/shared-components';
-
-export interface PromotionsCustomStyles {
-  backgroundColor?: string;
-  color?: string;
-  [key: string]: string | undefined;
-}
+import { CustomStyles } from '../models/custom-styles.interface';
 
 @Component({
   selector: 'lib-promotions-section',
@@ -23,7 +18,8 @@ export interface PromotionsCustomStyles {
     UITooltipComponent
   ],
   templateUrl: './promotions-section.component.html',
-  styleUrls: ['./promotions-section.component.scss']
+  styleUrls: ['./promotions-section.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class PromotionsSectionComponent implements OnInit {
   title = input('Ofertas Especiales');
@@ -34,7 +30,7 @@ export class PromotionsSectionComponent implements OnInit {
   @Input() premiumCardConfigs: CardPremiumConfig[] = [];
   
   // Standard pattern styles
-  customStyles = input<PromotionsCustomStyles>({});
+  customStyles = input<CustomStyles>({});
 
   promotionsStyles = computed(() => {
     const styles: Record<string, any> = {};

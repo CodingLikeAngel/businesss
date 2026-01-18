@@ -6,22 +6,16 @@
   [visualEditable]="true"
   visualType="section"
   (visualResized)="onSectionResized($event)">
-  <div class="editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_pricing'"
-       (click)="selectElement($event, { id: section.id + '_pricing', sectionId: section.id, content: section.content, type: 'pricing', _original: section.content })"
-       [applyDynamicStyles]="section.styles"
-       [visualEditable]="true"
-       visualType="element"
-       (visualMoved)="onElementMoved($event, section.id + '_pricing')"
-       (visualResized)="onElementResized($event, section.id + '_pricing')">
-    <lib-ui-pricing-table-section 
-      [variant]="$any(getVariant(section.id))"
-      [id]="section.id"
-      [columns]="pricingConfig.columns"
-      [rows]="pricingConfig.rows"
-      [title]="section.content['title']"
-    ></lib-ui-pricing-table-section>
-  </div>
+
+  <lib-ui-pricing-table-section
+    [title]="section.content['title'] || 'Planes y Precios'"
+    [subtitle]="section.content['subtitle'] || 'Elige el plan perfecto para ti.'"
+    [variant]="getVariant(section.id)"
+    [customStyles]="section.styles || {}"
+    [applyDynamicStyles]="section.styles"
+    [columns]="pricingConfig.columns"
+    [rows]="pricingConfig.rows">
+  </lib-ui-pricing-table-section>
 </div>
 
 <!-- MOBILE PRICING (Optional or Placeholder if missing in original) -->

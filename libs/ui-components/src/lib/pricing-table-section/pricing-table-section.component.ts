@@ -1,25 +1,21 @@
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UITableComponent, TableColumn, TableRow } from '../table/table.component';
-
-export interface PricingTableCustomStyles {
-  backgroundColor?: string;
-  color?: string;
-  [key: string]: string | undefined;
-}
+import { CustomStyles } from '../models/custom-styles.interface';
 
 @Component({
   selector: 'lib-ui-pricing-table-section',
   standalone: true,
   imports: [CommonModule, UITableComponent],
   templateUrl: './pricing-table-section.component.html',
-  styleUrls: ['./pricing-table-section.component.scss']
+  styleUrls: ['./pricing-table-section.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class UIPricingTableSectionComponent {
   title = input('Planes y Precios');
   subtitle = input('Elige el plan perfecto para ti.');
   variant = input('default');
-  customStyles = input<PricingTableCustomStyles>({});
+  customStyles = input<CustomStyles>({});
   
   columns = input<TableColumn[]>([
       { key: 'plan', label: 'Plan' },
