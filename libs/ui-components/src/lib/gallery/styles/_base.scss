@@ -125,4 +125,35 @@ $caption-font-size: 1rem;
   background: var(--dot-active-bg, #ff0000);
 }
 
+/* Desktop Enhancements */
+@media (min-width: 1024px) {
+  .ui-gallery {
+    max-width: 1200px;
+  }
+
+  .ui-gallery__slider {
+    height: 600px;
+  }
+
+  .ui-gallery__nav {
+    padding: 1rem 1.5rem;
+    font-size: 2rem;
+  }
+
+  .ui-gallery__caption {
+    padding: 2rem;
+    font-size: 1.25rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .ui-gallery {
+    max-width: 900px;
+  }
+
+  .ui-gallery__slider {
+    height: 500px;
+  }
+}
+
 

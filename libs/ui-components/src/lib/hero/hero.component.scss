@@ -645,6 +645,13 @@
   }
 }
 
+@media (min-width: 1024px) {
+  .hero-title {
+    font-size: 6rem;
+    line-height: 1.1;
+  }
+}
+
 .hero-subtitle {
   margin-top: 1.5rem;
   font-size: 1.125rem;
@@ -655,6 +662,14 @@
 @media (min-width: 768px) {
   .hero-subtitle {
     font-size: 1.75rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-subtitle {
+    font-size: 2rem;
+    max-width: 800px;
+    margin: 2rem auto 0;
   }
 }
 
