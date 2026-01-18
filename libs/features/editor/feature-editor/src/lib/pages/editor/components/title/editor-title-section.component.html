@@ -1,0 +1,43 @@
+<!-- DESKTOP TITLE -->
+<div *ngIf="!isMobile" class="editor-section cursor-pointer py-12"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+  
+  <div class="container mx-auto px-6 max-w-7xl">
+    <lib-ui-components-title
+      [level]="section.content['level'] || 'h2'"
+      [text]="section.content['text'] || 'Title Text'"
+      [variant]="getVariant(section.id)"
+      [align]="section.content['align'] || 'center'"
+      [animation]="section.content['animation'] || 'none'"
+      [customStyles]="section.customStyles"
+      class="editor-element"
+      [class.is-selected]="selectedElementId === section.id + '_title'"
+      (click)="selectElement($event, getMergedElement(section.id, section.id + '_title', section.content, 'title'))"
+      [visualEditable]="true"
+      visualType="element"
+      (visualMoved)="onElementMoved($event, section.id + '_title')"
+      (visualResized)="onElementResized($event, section.id + '_title')">
+    </lib-ui-components-title>
+  </div>
+</div>
+
+<!-- MOBILE TITLE -->
+<div *ngIf="isMobile" class="editor-section cursor-pointer py-8 p-4"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)">
+  
+  <lib-ui-components-title
+    [level]="section.content['level'] || 'h3'"
+    [text]="section.content['text'] || 'Title Text'"
+    [variant]="getVariant(section.id)"
+    [align]="section.content['align'] || 'center'"
+    class="editor-element"
+    [class.is-selected]="selectedElementId === section.id + '_title'"
+    (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })">
+  </lib-ui-components-title>
+</div>

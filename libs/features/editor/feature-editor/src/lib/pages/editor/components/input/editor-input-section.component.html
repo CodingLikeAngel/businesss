@@ -1,0 +1,46 @@
+<!-- DESKTOP INPUT -->
+<div *ngIf="!isMobile" class="editor-section cursor-pointer py-12"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+  
+  <div class="container mx-auto px-6 max-w-2xl">
+    <lib-ui-input
+      [(ngModel)]="inputValue"
+      [label]="section.content['label'] || 'Input Label'"
+      [placeholder]="section.content['placeholder'] || 'Enter text...'"
+      [type]="section.content['type'] || 'text'"
+      [variant]="getVariant(section.id)"
+      [required]="section.content['required'] || false"
+      [disabled]="section.content['disabled'] || false"
+      [customStyles]="section.customStyles"
+      class="editor-element"
+      [class.is-selected]="selectedElementId === section.id + '_input'"
+      (click)="selectElement($event, getMergedElement(section.id, section.id + '_input', section.content, 'input'))"
+      [visualEditable]="true"
+      visualType="element"
+      (visualMoved)="onElementMoved($event, section.id + '_input')"
+      (visualResized)="onElementResized($event, section.id + '_input')">
+    </lib-ui-input>
+  </div>
+</div>
+
+<!-- MOBILE INPUT -->
+<div *ngIf="isMobile" class="editor-section cursor-pointer py-8 p-4"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)">
+  
+  <lib-ui-input
+    [(ngModel)]="inputValue"
+    [label]="section.content['label'] || 'Input Label'"
+    [placeholder]="section.content['placeholder'] || 'Enter text...'"
+    [type]="section.content['type'] || 'text'"
+    [variant]="getVariant(section.id)"
+    class="editor-element"
+    [class.is-selected]="selectedElementId === section.id + '_input'"
+    (click)="selectElement($event, { id: section.id + '_input', content: section.content, type: 'input' })">
+  </lib-ui-input>
+</div>

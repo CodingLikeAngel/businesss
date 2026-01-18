@@ -1,0 +1,44 @@
+<!-- DESKTOP BUTTON -->
+<div *ngIf="!isMobile" class="editor-section cursor-pointer py-12"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+  
+  <div class="container mx-auto px-6 max-w-7xl flex justify-center items-center gap-4">
+    <lib-ui-components-button
+      [variant]="getVariant(section.id)"
+      [size]="section.content['size'] || 'md'"
+      [rounded]="section.content['rounded'] || 'md'"
+      [customStyles]="section.customStyles"
+      class="editor-element"
+      [class.is-selected]="selectedElementId === section.id + '_button'"
+      (click)="selectElement($event, getMergedElement(section.id, section.id + '_button', section.content, 'button'))"
+      [visualEditable]="true"
+      visualType="element"
+      (visualMoved)="onElementMoved($event, section.id + '_button')"
+      (visualResized)="onElementResized($event, section.id + '_button')">
+      {{ section.content['label'] || 'Click Me' }}
+    </lib-ui-components-button>
+  </div>
+</div>
+
+<!-- MOBILE BUTTON -->
+<div *ngIf="isMobile" class="editor-section cursor-pointer py-8 p-4"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)">
+  
+  <div class="flex justify-center">
+    <lib-ui-components-button
+      [variant]="getVariant(section.id)"
+      [size]="section.content['size'] || 'sm'"
+      [rounded]="section.content['rounded'] || 'md'"
+      class="editor-element"
+      [class.is-selected]="selectedElementId === section.id + '_button'"
+      (click)="selectElement($event, { id: section.id + '_button', content: section.content, type: 'button' })">
+      {{ section.content['label'] || 'Click Me' }}
+    </lib-ui-components-button>
+  </div>
+</div>

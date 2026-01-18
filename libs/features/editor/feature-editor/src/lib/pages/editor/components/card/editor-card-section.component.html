@@ -1,0 +1,46 @@
+<!-- DESKTOP CARD -->
+<div *ngIf="!isMobile" class="editor-section cursor-pointer py-12"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [visualEditable]="true"
+  visualType="section"
+  (visualResized)="onSectionResized($event)">
+  
+  <div class="container mx-auto px-6 max-w-7xl">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <lib-ui-components-card
+        [title]="section.content['title'] || 'Card Title'"
+        [description]="section.content['description'] || 'Card description goes here'"
+        [image]="section.content['image'] || ''"
+        [variant]="$any(getVariant(section.id))"
+        [size]="section.content['size'] || 'medium'"
+        [animation]="section.content['animation'] || 'fade'"
+        [customStyles]="section.customStyles"
+        class="editor-element"
+        [class.is-selected]="selectedElementId === section.id + '_card'"
+        (click)="selectElement($event, getMergedElement(section.id, section.id + '_card', section.content, 'card'))"
+        [visualEditable]="true"
+        visualType="element"
+        (visualMoved)="onElementMoved($event, section.id + '_card')"
+        (visualResized)="onElementResized($event, section.id + '_card')">
+      </lib-ui-components-card>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE CARD -->
+<div *ngIf="isMobile" class="editor-section cursor-pointer py-8 p-4"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)">
+  
+  <lib-ui-components-card
+    [title]="section.content['title'] || 'Card Title'"
+    [description]="section.content['description'] || 'Card description'"
+    [variant]="$any(getVariant(section.id))"
+    [size]="'small'"
+    class="editor-element"
+    [class.is-selected]="selectedElementId === section.id + '_card'"
+    (click)="selectElement($event, { id: section.id + '_card', content: section.content, type: 'card' })">
+  </lib-ui-components-card>
+</div>
