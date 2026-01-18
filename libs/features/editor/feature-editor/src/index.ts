@@ -5,5 +5,5 @@ export * from './lib/pages/main-layout/desktop/main-desktop-layout.component';
 export * from './lib/services/editor.service';
 export * from './lib/services/cart.service';
 export * from './lib/services/modal.service';
-export * from './lib/models/editor.model';export * from './lib/services/template.service';
-export * from './lib/components/template-gallery/template-gallery.component';
+export * from './lib/models/editor.model';
+export * from './lib/services/template.service';

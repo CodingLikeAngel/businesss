@@ -1,8 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TemplateService } from '../../services/template.service';
-import { Template, TemplateCategory } from '../../models/editor.model';
+import { TemplateService } from '../../../../features/editor/feature-editor/src/lib/services/template.service';
+import { Template, TemplateCategory } from '../../../../features/editor/feature-editor/src/lib/models/editor.model';
 import { Observable } from 'rxjs';
 
 @Component({

@@ -8,7 +8,7 @@ import {
 import { 
   UITitleComponent 
 } from '@negocio/ui-components';
-import { ReservationFormComponent } from '../../../../components/reservation-form/reservation-form.component';
+import { ReservationFormComponent } from '../../../../../../../../../ui-components/src/lib/reservation-form/reservation-form.component';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
 
 @Component({
