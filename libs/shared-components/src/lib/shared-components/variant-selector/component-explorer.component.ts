@@ -16,14 +16,12 @@ import {
   UIContactSectionComponent,
   UITabsComponent,
   UIAccordionComponent,
-  UIModalComponent,
   UIButtonComponent,
   UIChipComponent,
   UISpinnerComponent,
   UIBreadcrumbsComponent,
   UICardAnimatedComponent,
   UiCardProductsComponent,
-
   UIImageComponent,
   UITableComponent,
   BubbleAnimationComponent,
@@ -32,7 +30,10 @@ import {
   UIGamingVariantsShowcaseComponent,
   UIInputComponent,
   UITitleComponent,
-  UICardComponent
+  UICardComponent,
+  PromotionsSectionComponent,
+  ProductsSectionComponent,
+  ServiceSectionComponent
 } from '@negocio/ui-components';
 
 interface SectionVariant {
@@ -69,7 +70,6 @@ interface SectionVariant {
     UIBreadcrumbsComponent,
     UICardAnimatedComponent,
     UiCardProductsComponent,
-
     UIImageComponent,
     UITableComponent,
     BubbleAnimationComponent,
@@ -78,7 +78,10 @@ interface SectionVariant {
     UIGamingVariantsShowcaseComponent,
     UIInputComponent,
     UITitleComponent,
-    UICardComponent
+    UICardComponent,
+    PromotionsSectionComponent,
+    ProductsSectionComponent,
+    ServiceSectionComponent
   ],
   template: `
     <div class="explorer-container">
@@ -100,54 +103,63 @@ interface SectionVariant {
         </button>
       </nav>
 
-      <!-- Grid Area -->
-      <div class="explorer-sections">
-        <!-- List of Components -->
-        <div class="component-list-area">
-          <div class="comp-scroll-wrapper">
-              <div
-                *ngFor="let comp of filteredComponents"
-                class="comp-card-modern"
-                [class.selected]="selectedComponent?.type === comp.type"
-                (click)="selectComponent(comp)"
-              >
-                <div class="comp-icon-box">{{ comp.icon }}</div>
-                <div class="comp-meta">
-                  <h4>{{ comp.label }}</h4>
-                  <span class="comp-cat">{{ comp.category }}</span>
-                </div>
-                <div class="comp-select-indicator"></div>
-              </div>
+      <!-- Component Grid -->
+      <div class="component-grid-area">
+        <div class="comp-scroll-wrapper" role="grid" aria-label="Lista de componentes">
+          <div
+            *ngFor="let comp of filteredComponents"
+            class="comp-card-modern"
+            [class.selected]="selectedComponent?.type === comp.type"
+            (click)="selectComponent(comp)"
+            (keydown.enter)="selectComponent(comp)"
+            (keydown.space)="selectComponent(comp); $event.preventDefault()"
+            role="button"
+            tabindex="0"
+            [attr.aria-label]="'Seleccionar componente ' + comp.label"
+            [attr.aria-selected]="selectedComponent?.type === comp.type"
+          >
+            <div class="comp-icon-box" aria-hidden="true">{{ comp.icon }}</div>
+            <div class="comp-meta">
+              <h4>{{ comp.label }}</h4>
+              <span class="comp-cat">{{ comp.category }}</span>
+            </div>
+            <div class="comp-select-indicator" aria-hidden="true"></div>
           </div>
         </div>
+      </div>
 
-        <!-- Desktop Preview Area -->
-        <aside class="preview-panel-v2" *ngIf="selectedComponent">
-          <div class="panel-inner">
-            <header class="panel-header">
-              <div class="panel-info">
-                <span class="icon">{{ selectedComponent.icon }}</span>
-                <div>
-                  <h3>{{ selectedComponent.label }}</h3>
-                  <p>{{ selectedComponent.description }}</p>
-                </div>
+      <!-- Modal Preview -->
+      <div *ngIf="selectedComponent" class="preview-modal-overlay" (click)="closePreview()">
+        <div class="preview-modal" (click)="$event.stopPropagation()">
+          <div class="modal-header">
+            <div class="modal-info">
+              <span class="icon">{{ selectedComponent.icon }}</span>
+              <div>
+                <h3>{{ selectedComponent.label }}</h3>
+                <p>{{ selectedComponent.description }}</p>
               </div>
-              <div class="variant-hub">
-                <label>Variante</label>
-                <select [(ngModel)]="selectedVariant" class="select-v2">
-                  <option *ngFor="let variant of selectedComponent.variants" [value]="variant">
-                    {{ variant }}
-                  </option>
-                </select>
-              </div>
-            </header>
+            </div>
+            <button class="close-btn" (click)="closePreview()" aria-label="Cerrar previsualización">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </button>
+          </div>
 
-            <main class="preview-viewport">
-              <div class="viewport-label">VISTA PREVIA: {{ selectedVariant }}</div>
-              <div class="preview-overflow" [ngSwitch]="selectedComponent.type">
+          <div class="modal-variant-selector">
+            <label>Variante</label>
+            <select [(ngModel)]="selectedVariant" class="select-v2">
+              <option *ngFor="let variant of selectedComponent.variants" [value]="variant">
+                {{ variant }}
+              </option>
+            </select>
+          </div>
+
+          <div class="modal-preview-content">
+            <div class="preview-viewport" [ngSwitch]="selectedComponent.type" role="region" aria-label="Vista previa del componente">
                   <!-- CONTENT -->
-                  <div *ngSwitchCase="'promotions'" class="p-4 bg-slate-800 rounded-lg text-center text-gray-400">
-                    <p>Promotions Component Preview (Requires Feature Module)</p>
+                  <div *ngSwitchCase="'promotions'" class="p-4">
+                    <lib-promotions-section [variant]="selectedVariant"></lib-promotions-section>
                   </div>
                   <lib-ui-hero-section *ngSwitchCase="'hero'" [variant]="selectedVariant" title="Título Hero" subtitle="Subtítulo descriptivo"></lib-ui-hero-section>
                   <lib-ui-header *ngSwitchCase="'header'" [variant]="selectedVariant" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header>
@@ -160,9 +172,10 @@ interface SectionVariant {
                   <div *ngSwitchCase="'showcase'" class="p-4"><lib-ui-gaming-variants-showcase></lib-ui-gaming-variants-showcase></div>
                   <div *ngSwitchCase="'testimonials'" class="p-4"><lib-ui-testimonials-section [variant]="selectedVariant"></lib-ui-testimonials-section></div>
                   <!-- COMMERCE -->
-                  <div *ngSwitchCase="'services'" class="p-4"><lib-ui-features-section [variant]="selectedVariant" [title]="'Nuestros Servicios'"></lib-ui-features-section></div>
+                  <div *ngSwitchCase="'services'" class="p-4"><lib-service-section [variant]="selectedVariant" [title]="'Nuestros Servicios'"></lib-service-section></div>
                   <div *ngSwitchCase="'pricing'" class="p-4"><lib-ui-pricing-table-section [variant]="selectedVariant"></lib-ui-pricing-table-section></div>
                   <div *ngSwitchCase="'newsletter'" class="p-4"><lib-ui-newsletter-section [variant]="selectedVariant"></lib-ui-newsletter-section></div>
+                  <div *ngSwitchCase="'products'" class="p-4"><lib-products-section [variant]="selectedVariant"></lib-products-section></div>
                   <!-- INTERACTIVE -->
                   <div *ngSwitchCase="'contact'" class="p-4"><lib-ui-contact-section [variant]="selectedVariant"></lib-ui-contact-section></div>
                   <div *ngSwitchCase="'bubble'" class="h-64 relative overflow-hidden rounded-xl border border-white/10 m-4">
@@ -221,16 +234,15 @@ interface SectionVariant {
                        <p class="text-center text-white/50">Vista previa no disponible para este componente ({{ selectedComponent.type }})</p>
                     </div>
                   </div>
-              </div>
-            </main>
-
-            <footer class="panel-footer">
-              <button class="btn-add-modern" (click)="addToPage()">
-                Añadir componente a mi lienzo &rarr;
-              </button>
-            </footer>
+            </div>
           </div>
-        </aside>
+
+          <div class="modal-footer">
+            <button class="btn-add-modern" (click)="addToPage()">
+              Añadir componente a mi lienzo &rarr;
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   `,
@@ -238,76 +250,154 @@ interface SectionVariant {
     :host {
       display: block;
       height: 100%;
+      --accent-color: #6366f1;
+      --accent-hover: #818cf8;
       --accent-glow: 0 0 20px rgba(99, 102, 241, 0.4);
+      --success-color: #10b981;
+      --success-hover: #34d399;
+      --background: #0f172a;
+      --surface: rgba(30, 41, 59, 0.6);
+      --surface-hover: rgba(51, 65, 85, 0.6);
+      --border: rgba(148, 163, 184, 0.2);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
     }
 
     .explorer-container {
       display: flex;
       flex-direction: column;
       height: 100%;
-      gap: 1.5rem;
+      gap: 2rem;
+      padding: 1.5rem;
     }
 
     .explorer-header {
-      .title-v2 { font-size: 1.5rem; font-weight: 800; color: white; margin: 0; }
-      .subtitle-v2 { font-size: 0.85rem; color: #94a3b8; margin: 0.25rem 0 0; }
+      text-align: center;
+      padding: 1rem 0;
+      .title-v2 {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin: 0 0 0.5rem 0;
+        letter-spacing: -0.02em;
+        background: linear-gradient(135deg, var(--accent-color), var(--accent-hover));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .subtitle-v2 {
+        font-size: 0.95rem;
+        color: var(--text-secondary);
+        margin: 0;
+        line-height: 1.5;
+      }
     }
 
     .category-nav-v2 {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.75rem;
       overflow-x: auto;
-      padding-bottom: 0.5rem;
+      padding: 0.5rem 0;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
+
+      &::-webkit-scrollbar {
+        height: 4px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 2px;
+      }
       
       .cat-chip {
-        padding: 0.5rem 1rem;
+        padding: 0.75rem 1.25rem;
         border-radius: 50px;
-        background: rgba(255, 255, 255, 0.03);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        color: #94a3b8;
-        font-size: 0.75rem;
-        font-weight: 700;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text-secondary);
+        font-size: 0.8rem;
+        font-weight: 600;
         white-space: nowrap;
         cursor: pointer;
         display: flex;
         align-items: center;
-        gap: 0.4rem;
+        gap: 0.5rem;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
 
-        &:hover { background: rgba(255, 255, 255, 0.08); color: white; }
+        &:hover {
+          background: var(--surface-hover);
+          color: var(--text-primary);
+          border-color: var(--accent-color);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
         &.active {
-          background: #6366f1;
-          border-color: transparent;
+          background: var(--accent-color);
+          border-color: var(--accent-color);
           color: white;
-          box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+          box-shadow: var(--accent-glow);
+          transform: translateY(-2px);
+          
+          &::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+            animation: pulse 2s ease-in-out infinite;
+          }
         }
       }
     }
 
-    .explorer-sections {
-      flex: 1;
-      display: flex;
-      gap: 1.5rem;
-      overflow: hidden;
+    @keyframes pulse {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
     }
 
-    .component-list-area {
+    .component-grid-area {
       flex: 1;
       overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border) transparent;
       
+      &::-webkit-scrollbar {
+        width: 6px;
+      }
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        background: var(--border);
+        border-radius: 3px;
+      }
+
       .comp-scroll-wrapper {
         display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-        gap: 0.75rem;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1rem;
         padding-bottom: 2rem;
       }
     }
 
     .comp-card-modern {
-      background: rgba(255, 255, 255, 0.025);
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      border-radius: 1rem;
-      padding: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
       cursor: pointer;
       display: flex;
       flex-direction: column;
@@ -317,151 +407,388 @@ interface SectionVariant {
       position: relative;
       overflow: hidden;
 
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
       &:hover {
-        background: rgba(255, 255, 255, 0.06);
-        border-color: rgba(255, 255, 255, 0.15);
-        transform: translateY(-4px);
+        background: var(--surface-hover);
+        border-color: var(--accent-color);
+        transform: translateY(-6px) scale(1.02);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+        &::before {
+          opacity: 1;
+        }
       }
 
       &.selected {
-        background: rgba(99, 102, 241, 0.1);
-        border-color: #6366f1;
-        
-        .comp-icon-box { transform: scale(1.1); color: #6366f1; }
-        .comp-select-indicator { bottom: 0; }
+        background: rgba(99, 102, 241, 0.15);
+        border-color: var(--accent-color);
+        box-shadow: var(--accent-glow);
+
+        .comp-icon-box {
+          transform: scale(1.1);
+          color: var(--accent-color);
+          background: rgba(99, 102, 241, 0.2);
+        }
+        .comp-select-indicator {
+          bottom: 0;
+        }
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
       }
 
       .comp-icon-box {
-        font-size: 2rem;
-        margin-bottom: 0.75rem;
-        transition: transform 0.3s;
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 4rem;
+        height: 4rem;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        position: relative;
+        z-index: 1;
       }
 
       .comp-meta {
-        h4 { font-size: 0.875rem; font-weight: 700; color: white; margin: 0; }
-        .comp-cat { font-size: 0.65rem; color: #6366f1; text-transform: uppercase; font-weight: 800; letter-spacing: 0.05em; }
+        position: relative;
+        z-index: 1;
+        h4 {
+          font-size: 0.95rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          margin: 0;
+          line-height: 1.3;
+        }
+        .comp-cat {
+          font-size: 0.7rem;
+          color: var(--accent-color);
+          text-transform: uppercase;
+          font-weight: 800;
+          letter-spacing: 0.05em;
+          margin-top: 0.5rem;
+        }
       }
 
       .comp-select-indicator {
         position: absolute;
-        bottom: -2px;
+        bottom: -3px;
         left: 0;
         right: 0;
-        height: 2px;
-        background: #6366f1;
-        box-shadow: 0 0 10px #6366f1;
+        height: 3px;
+        background: var(--accent-color);
+        box-shadow: 0 0 10px var(--accent-color);
         transition: bottom 0.3s;
       }
     }
 
-    /* Preview Panel */
-    .preview-panel-v2 {
-      width: 450px;
-      background: rgba(15, 23, 42, 0.4);
-      border-left: 1px solid rgba(255, 255, 255, 0.08);
+    /* Modal Preview */
+    .preview-modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 2rem;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    .preview-modal {
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 1.5rem;
-      overflow: hidden;
+      width: 100%;
+      max-width: 700px;
+      max-height: 90vh;
       display: flex;
       flex-direction: column;
-      animation: previewSlide 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.3s ease;
+    }
 
-      .panel-inner {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
+    @keyframes slideUp {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
       }
     }
 
-    .panel-header {
-      padding: 1.5rem;
-      background: rgba(255, 255, 255, 0.02);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    .modal-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
       
-      .panel-info {
+      .modal-info {
+        flex: 1;
         display: flex;
-        gap: 1rem;
-        margin-bottom: 1.25rem;
-        .icon { font-size: 2rem; }
-        h3 { font-size: 1.125rem; font-weight: 700; color: white; margin: 0; }
-        p { font-size: 0.8rem; color: #94a3b8; margin: 0.25rem 0 0; line-height: 1.4; }
+        gap: 1.25rem;
+        
+        .icon {
+          font-size: 2.5rem;
+          flex-shrink: 0;
+        }
+        
+        h3 {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: var(--text-primary);
+          margin: 0 0 0.5rem 0;
+        }
+        
+        p {
+          font-size: 0.9rem;
+          color: var(--text-secondary);
+          margin: 0;
+          line-height: 1.5;
+        }
       }
-
-      .variant-hub {
+      
+      .close-btn {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid var(--border);
+        color: var(--text-secondary);
+        cursor: pointer;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        background: rgba(0, 0, 0, 0.2);
-        padding: 0.5rem 1rem;
-        border-radius: 0.75rem;
-        
-        label { font-size: 0.65rem; font-weight: 800; color: #6366f1; text-transform: uppercase; }
-        .select-v2 {
-          background: transparent;
-          border: none;
-          color: white;
-          font-size: 0.85rem;
-          font-weight: 600;
-          cursor: pointer;
-          outline: none;
+        justify-content: center;
+        transition: all 0.3s;
+        flex-shrink: 0;
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.1);
+          color: var(--text-primary);
+          border-color: var(--accent-color);
+          transform: rotate(90deg);
         }
       }
     }
 
-    .preview-viewport {
-      flex: 1;
-      padding: 1rem;
-      background: #020617;
-      position: relative;
-      overflow: hidden;
+    .modal-variant-selector {
+      padding: 1rem 2rem;
+      background: rgba(255, 255, 255, 0.02);
       display: flex;
-      flex-direction: column;
-
-      .viewport-label {
-        font-size: 0.6rem;
-        font-weight: 900;
-        color: #6366f1;
-        letter-spacing: 0.1em;
-        margin-bottom: 0.75rem;
-        opacity: 0.7;
+      align-items: center;
+      gap: 1rem;
+      
+      label {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--accent-color);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
       }
-
-      .preview-overflow {
-        flex: 1;
-        overflow-y: auto;
-        border: 1px dashed rgba(255, 255, 255, 0.1);
-        border-radius: 1rem;
-        background: rgba(255,255,255,0.01);
+      
+      .select-v2 {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 0.75rem;
+        color: var(--text-primary);
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        outline: none;
+        padding: 0.5rem 1rem;
+        min-width: 150px;
+        
+        &:hover {
+          border-color: var(--accent-color);
+        }
+        
+        option {
+          background: var(--background);
+          color: var(--text-primary);
+        }
       }
     }
 
-    .panel-footer {
-      padding: 1.5rem;
+    .modal-preview-content {
+      flex: 1;
+      padding: 1.5rem 2rem;
+      overflow-y: auto;
+      background: #020617;
+      
+      .preview-viewport {
+        border: 1px dashed var(--border);
+        border-radius: 1.25rem;
+        background: rgba(255,255,255,0.01);
+        padding: 1.5rem;
+        min-height: 300px;
+      }
+    }
+
+    .modal-footer {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid var(--border);
       background: rgba(255, 255, 255, 0.02);
       
       .btn-add-modern {
         width: 100%;
-        padding: 1rem;
-        border-radius: 0.75rem;
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        padding: 1.125rem;
+        border-radius: 1rem;
+        background: linear-gradient(135deg, var(--success-color) 0%, var(--success-hover) 100%);
         color: white;
         border: none;
         font-weight: 700;
-        font-size: 0.95rem;
+        font-size: 1rem;
         cursor: pointer;
-        transition: all 0.3s;
-        box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        position: relative;
+        overflow: hidden;
 
-        &:hover { transform: translateY(-2px); box-shadow: 0 15px 20px -3px rgba(16, 185, 129, 0.4); }
+        &::before {
+          content: '';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-radius: 50%;
+          background: rgba(255, 255, 255, 0.3);
+          transform: translate(-50%, -50%);
+          transition: width 0.6s, height 0.6s;
+        }
+
+        &:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 25px rgba(16, 185, 129, 0.4);
+          
+          &::before {
+            width: 300px;
+            height: 300px;
+          }
+        }
+
+        &:active {
+          transform: translateY(-1px);
+        }
       }
     }
 
-    @keyframes previewSlide {
-      from { transform: translateX(30px); opacity: 0; }
-      to { transform: translateX(0); opacity: 1; }
-    }
+    @media (max-width: 768px) {
+      .explorer-container {
+        gap: 1.5rem;
+        padding: 1rem;
+      }
 
-    @media (max-width: 1100px) {
-      .preview-panel-v2 { display: none; }
+      .explorer-header {
+        .title-v2 {
+          font-size: 1.5rem;
+        }
+        .subtitle-v2 {
+          font-size: 0.85rem;
+        }
+      }
+
+      .category-nav-v2 {
+        gap: 0.5rem;
+
+        .cat-chip {
+          padding: 0.6rem 1rem;
+          font-size: 0.75rem;
+        }
+      }
+
+      .comp-scroll-wrapper {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 0.75rem;
+      }
+
+      .comp-card-modern {
+        padding: 1.25rem;
+
+        .comp-icon-box {
+          font-size: 2rem;
+          width: 3.5rem;
+          height: 3.5rem;
+        }
+
+        .comp-meta h4 {
+          font-size: 0.85rem;
+        }
+
+        .comp-meta .comp-cat {
+          font-size: 0.65rem;
+        }
+      }
+
+      .preview-modal {
+        max-height: 95vh;
+        margin: 1rem;
+        border-radius: 1rem;
+      }
+
+      .modal-header {
+        padding: 1.25rem 1.5rem;
+        
+        .modal-info {
+          gap: 1rem;
+          
+          .icon {
+            font-size: 2rem;
+          }
+          
+          h3 {
+            font-size: 1.25rem;
+          }
+          
+          p {
+            font-size: 0.8rem;
+          }
+        }
+      }
+
+      .modal-variant-selector {
+        padding: 1rem 1.5rem;
+      }
+
+      .modal-preview-content {
+        padding: 1rem 1.5rem;
+        
+        .preview-viewport {
+          padding: 1rem;
+          min-height: 200px;
+        }
+      }
+
+      .modal-footer {
+        padding: 1.25rem 1.5rem;
+      }
     }
   `]
 })
@@ -608,6 +935,14 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '📧',
       variants: ['default', 'glass', 'neon', 'minimal'],
       description: 'Suscripción a boletín de noticias',
+      category: 'commerce'
+    },
+    {
+      type: 'products',
+      label: 'Productos',
+      icon: '🛍️',
+      variants: ['glass', 'grid', 'list', 'minimal', 'neon'],
+      description: 'Muestra de productos con información detallada',
       category: 'commerce'
     },
 
@@ -809,6 +1144,10 @@ export class ComponentExplorerComponent implements OnInit {
   selectComponent(component: SectionVariant) {
     this.selectedComponent = component;
     this.selectedVariant = component.variants[0];
+  }
+
+  closePreview() {
+    this.selectedComponent = null;
   }
 
   addToPage() {
