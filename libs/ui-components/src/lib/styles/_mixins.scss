@@ -76,20 +76,17 @@ $unified-active-scale: scale(0.98);
 }
 
 @mixin variant-glass {
-  --theme-bg: rgba(255, 255, 255, 0.1);
-  --theme-color: #fff;
-  --theme-border: 1px solid #{$glass-border};
-  --theme-accent: #6366f1;
-  --theme-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+  @include unified-variant-base(
+    rgba(255, 255, 255, 0.1),
+    #ffffff,
+    #6366f1,
+    rgba(255, 255, 255, 0.2)
+  );
   --theme-backdrop: blur(12px);
-  
-  background: var(--theme-bg);
   backdrop-filter: var(--theme-backdrop);
   -webkit-backdrop-filter: var(--theme-backdrop);
-  border: var(--theme-border);
-  color: var(--theme-color);
-  box-shadow: var(--theme-shadow);
-  
+  border-radius: 1rem;
+
   // Specific for interactive elements like selects or buttons
   &.input, &.btn {
     --theme-bg: rgba(0, 0, 0, 0.4);
@@ -98,29 +95,28 @@ $unified-active-scale: scale(0.98);
 }
 
 @mixin variant-neon {
-  --theme-bg: #0f172a;
-  --theme-color: #00ff9d;
-  --theme-border: 1px solid #00ff9d;
-  --theme-accent: #00ff9d;
-  --theme-shadow: 0 0 15px rgba(0, 255, 157, 0.5);
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
+  @include unified-variant-base(
+    #0f172a,
+    #00ff9d,
+    #00ff9d,
+    #00ff9d
+  );
+  text-shadow: 0 0 10px rgba(0, 255, 157, 0.8);
+  border-radius: 0.75rem;
 }
 
 @mixin variant-cyberpunk {
-  --theme-bg: #fceea7;
-  --theme-color: #000;
-  --theme-border: 2px solid #000;
-  --theme-accent: #fceea7;
-  --theme-shadow: 4px 4px 0px #000;
+  @include unified-variant-base(
+    #fceea7,
+    #000000,
+    #fceea7,
+    #000000
+  );
   --theme-clip: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
   clip-path: var(--theme-clip);
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 2px;
 }
 
 @mixin variant-retro {
@@ -294,6 +290,9 @@ $unified-active-scale: scale(0.98);
   letter-spacing: 1px;
   position: relative;
   overflow: hidden;
+  font-family: 'Press Start 2P', cursive;
+  border-radius: 0.5rem;
+  box-shadow: 4px 4px 0 #000;
 
   &::before {
     content: '';
@@ -307,7 +306,14 @@ $unified-active-scale: scale(0.98);
   }
 
   &:hover {
+    transform: translate(-2px, -2px) scale(1.02);
+    box-shadow: 6px 6px 0 #000, var(--theme-glow);
     &::before { left: 100%; }
+  }
+
+  &:active {
+    transform: translate(2px, 2px) scale(0.98);
+    box-shadow: 2px 2px 0 #000;
   }
 }
 
@@ -318,6 +324,18 @@ $unified-active-scale: scale(0.98);
     #ffd700,
     #228b22
   );
+  font-family: 'serif';
+  border-radius: 1rem;
+  position: relative;
+
+  &::before {
+    content: '🗡️';
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    font-size: 1.5rem;
+    opacity: 0.7;
+  }
 }
 
 @mixin variant-kirby {
@@ -1243,16 +1261,32 @@ $unified-active-scale: scale(0.98);
   box-shadow: var(--theme-shadow);
 }
 
+@mixin variant-rockstar {
+  @include unified-variant-base(
+    #000000,
+    #ffffff,
+    #f9d71c,
+    #f9d71c
+  );
+  --theme-clip: polygon(0 0, 100% 0, 100% 80%, 90% 100%, 0 100%);
+  clip-path: var(--theme-clip);
+  font-family: 'Impact', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
 @mixin variant-minimal {
-  --theme-bg: #ffffff;
-  --theme-color: #171717;
-  --theme-border: 1px solid #e5e5e5;
-  --theme-accent: #171717;
+  @include unified-variant-base(
+    #ffffff,
+    #171717,
+    #171717,
+    #e5e5e5
+  );
   --theme-shadow: none;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
   box-shadow: none;
+  border-radius: 0.5rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
 }
 
 @mixin apply-all-variants($prefix: 'variant-') {

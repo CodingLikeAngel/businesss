@@ -50,6 +50,30 @@
   &--animation-zoom { animation: zoomIn 1s ease-out; }
   &--animation-glitch { animation: glitch 0.5s infinite; } /* Suavizado para menos distracción */
   &--animation-pulse { animation: pulse 2s infinite; }
+
+  @media (min-width: 1024px) {
+    max-width: 500px;
+
+    .card-title {
+      font-size: 2rem;
+    }
+
+    .card-description {
+      font-size: 1.1rem;
+    }
+
+    .card-actions {
+      padding: 2rem 2.5rem;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    max-width: 450px;
+
+    .card-title {
+      font-size: 1.9rem;
+    }
+  }
 }
 
 .card-overlay {

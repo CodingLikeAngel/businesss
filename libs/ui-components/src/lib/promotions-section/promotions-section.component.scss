@@ -38,6 +38,28 @@
      margin: 0 auto;
      color: var(--theme-color, rgba(255,255,255,0.7));
   }
+
+  @media (min-width: 1024px) {
+    padding: 7rem 4rem;
+
+    .section-title {
+      font-size: 3.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.4rem;
+      max-width: 800px;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 1023px) {
+    padding: 6rem 2rem;
+
+    .section-title {
+      font-size: 3rem;
+    }
+  }
 }
 
 .promo-card-container {
