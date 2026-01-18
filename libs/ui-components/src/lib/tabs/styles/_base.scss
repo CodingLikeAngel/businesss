@@ -92,8 +92,8 @@
     }
     
     &:hover {
-      background: color.adjust(var(--tabs-bg, #3b82f6), $lightness: -10%);
-      border-color: color.adjust(var(--tabs-bg, #3b82f6), $lightness: -10%);
+      background: color.adjust(#3b82f6, $lightness: -10%);
+      border-color: color.adjust(#3b82f6, $lightness: -10%);
     }
     
     &.tabs-item--active {
