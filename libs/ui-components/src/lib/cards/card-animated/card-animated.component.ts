@@ -1,4 +1,4 @@
-import { Component, input, output, HostBinding } from '@angular/core';
+import { Component, input, output, HostBinding, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UIButtonComponent } from '../../button/button.component';
 import { variants as baseVariants } from '../../models/ui-components-data.model';
@@ -14,6 +14,8 @@ export type AnimatedCardVariant = typeof animatedCardVariants[number];
 export type AnimatedCardAnimation = 'bounce' | 'pulse' | 'float' | 'spin' | 'glitch' | 'fade' | 'slide' | 'none';
 
 export interface AnimatedCardCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   card?: string | string[] | { [key: string]: boolean };
   host?: { [key: string]: string };
   [key: string]: string | string[] | { [key: string]: boolean } | { [key: string]: string } | undefined;
@@ -72,9 +74,38 @@ export class UICardAnimatedComponent {
       '--text-color': this.textColor(),
       '--background-color': this.backgroundColor(),
       '--hover-color': this.hoverColor(),
+      ...this.componentStyles(),
       ...(this.customStyles()['host'] as Record<string, string> || {}),
     };
   }
+
+  componentStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+      styles['--background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+      styles['--text-color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color' && key !== 'card' && key !== 'host') {
+        styles[key] = customStyles[key];
+      }
+    });
+    
+    return styles;
+  });
 
   onHover(hovered: boolean): void {
     this.isHovered = hovered;

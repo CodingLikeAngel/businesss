@@ -57,12 +57,15 @@ export interface ChartData {
 }
 
 export interface ChartCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--chart-bg'?: string;
   '--chart-color'?: string;
   '--chart-border'?: string;
   '--chart-shadow'?: string;
   '--chart-hover-bg'?: string;
   '--chart-hover-shadow'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -84,15 +87,31 @@ export class UIChartComponent implements AfterViewInit {
   customStyles = input<ChartCustomStyles>({});
   
   chartStyles = computed(() => {
-    const styles: any = { ...this.customStyles() };
-    if (styles['backgroundColor']) {
-       styles['--chart-bg'] = styles['backgroundColor'];
-       styles['--theme-bg'] = styles['backgroundColor'];
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+       styles['--chart-bg'] = customStyles['backgroundColor'];
+       styles['--theme-bg'] = customStyles['backgroundColor'];
+       styles['--component-bg'] = customStyles['backgroundColor'];
+       styles['background'] = customStyles['backgroundColor'];
+       styles['background-color'] = customStyles['backgroundColor'];
     }
-    if (styles['color']) {
-       styles['--chart-color'] = styles['color'];
-       styles['--theme-color'] = styles['color'];
+    
+    if (customStyles['color']) {
+       styles['--chart-color'] = customStyles['color'];
+       styles['--theme-color'] = customStyles['color'];
+       styles['--component-text'] = customStyles['color'];
+       styles['color'] = customStyles['color'];
     }
+    
+    // Copy any other custom styles
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
     return styles;
   });
 

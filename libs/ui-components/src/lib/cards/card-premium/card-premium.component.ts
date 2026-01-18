@@ -52,12 +52,15 @@ export interface CardPremiumConfig {
 }
 
 export interface CardPremiumCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--card-bg'?: string;
   '--card-color'?: string;
   '--card-border'?: string;
   '--card-shadow'?: string;
   '--card-hover-bg'?: string;
   '--card-hover-shadow'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -65,7 +68,7 @@ export interface CardPremiumCustomStyles {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div [ngClass]="hostClasses()" [style.background]="safeGradient()">
+    <div [ngClass]="hostClasses()" [ngStyle]="hostStyles()" [style.background]="safeGradient()">
       <div class="icon">
         <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path [attr.d]="safeIconPath()" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
@@ -98,7 +101,31 @@ export class UICardPremiumComponent {
 
   hostClasses = computed(() => ['card', `card--${this.variant()}`]);
 
-  hostStyles = computed(() => this.customStyles());
+  hostStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+    
+    return styles;
+  });
 
   @HostBinding('class') get hostClass() {
     return this.hostClasses();

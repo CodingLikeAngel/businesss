@@ -19,6 +19,20 @@
   
   @include shared.apply-all-variants('spinner-');
 
+  // CRITICAL: Force inline styles to override variant backgrounds
+  &[style*='background'] {
+    background: var(--theme-bg) !important;
+  }
+
+  &[style*='background-color'] {
+    background-color: var(--theme-bg) !important;
+  }
+
+  &[style*='color'] {
+    border-color: var(--theme-color) !important;
+    border-top-color: var(--theme-color) !important;
+  }
+
   width: 48px; /* Tamaño por defecto */
   height: 48px; /* Tamaño por defecto */
 }

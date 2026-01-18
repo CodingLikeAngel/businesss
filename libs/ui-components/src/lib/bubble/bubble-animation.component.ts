@@ -28,6 +28,12 @@ export interface BubbleConfig {
   opacity?: number;
 }
 
+export interface BubbleCustomStyles {
+  backgroundColor?: string;
+  color?: string;
+  [key: string]: string | undefined;
+}
+
 
 
 @Component({
@@ -49,6 +55,36 @@ export class BubbleAnimationComponent implements AfterViewInit, OnDestroy {
   });
 
   variant = input<BubbleVariant>('default');
+  customStyles = input<BubbleCustomStyles>({});
+
+  bubbleStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    return {
+      ...this.hostStyles(),
+      ...styles
+    };
+  });
 
   hostClasses = computed(() => {
     const v = this.variant();

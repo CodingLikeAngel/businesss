@@ -8,12 +8,15 @@ export type DefaultNavBarVariant = typeof variants[number];
 export type NavBarVariant = string;
 
 export interface NavBarCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--nav-bg'?: string;
   '--nav-color'?: string;
   '--nav-border'?: string;
   '--nav-shadow'?: string;
   '--nav-hover-bg'?: string;
   '--nav-hover-shadow'?: string;
+  [key: string]: string | undefined;
 }
 
 export interface NavLink {
@@ -52,11 +55,39 @@ export class UINavBarComponent implements OnInit {
 
   isMobileMenuOpen = false;
 
+  navStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--nav-bg'] = customStyles['backgroundColor'];
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--nav-color'] = customStyles['color'];
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    return styles;
+  });
+
   navBarClasses = computed(() => {
     return [
       'nav-bar',
       `variant-${this.variant()}`,
-      this.isMobileMenuOpen ? 'nav-bar--mobile-open' : '', // This depends on internal state, so computed might not re-run if ONLY isMobileMenuOpen changes, UNLESS isMobileMenuOpen is a signal.
+      this._isMobileMenuOpen() ? 'nav-bar--mobile-open' : '',
       this.isFixed() ? 'nav-bar--fixed' : '',
       this.isDarkMode() ? 'nav-bar--dark' : '',
       this.isMobile() ? 'nav-bar--force-mobile' : '',

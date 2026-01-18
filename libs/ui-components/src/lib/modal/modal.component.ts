@@ -7,6 +7,12 @@ export const modalVariants = variants;
 export type DefaultModalVariant = typeof modalVariants[number];
 export type ModalVariantType = DefaultModalVariant | (string & {});
 
+export interface ModalCustomStyles {
+  backgroundColor?: string;
+  color?: string;
+  [key: string]: string | undefined;
+}
+
 @Component({
   selector: 'lib-ui-components-modal',
   standalone: true,
@@ -22,7 +28,34 @@ export class UIModalComponent {
   title = input<string>('Modal Title');
   content = input<string>('Modal Content');
   isOpen = input<boolean>(false);
+  customStyles = input<ModalCustomStyles>({});
   modalOnClose = output<void>();
+
+  modalStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    return styles;
+  });
 
   modalClasses = computed(() => {
     const classes = ['modal-container', `modal-${this.variant()}`];

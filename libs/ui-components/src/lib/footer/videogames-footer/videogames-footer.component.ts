@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 interface Link {
@@ -23,12 +23,15 @@ export const videogameVariants = [
 export type VideogameVariant = typeof videogameVariants[number];
 
 export interface videoGamesFooterCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--footer-bg'?: string;
   '--footer-color'?: string;
   '--footer-border'?: string;
   '--footer-shadow'?: string;
   '--footer-hover-bg'?: string;
   '--footer-hover-shadow'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -39,32 +42,58 @@ export interface videoGamesFooterCustomStyles {
   styleUrls: ['./videogames-footer.component.scss'],
 })
 export class UIVideogamesFooterComponent {
-  @Input() variant = 'arcade';
-  @Input() title = 'Your Business';
-  @Input() description = 'Impulsa tu éxito con nosotros';
-  @Input() exploreLinks: Link[] = [
+  variant = input<string>('arcade');
+  title = input<string>('Your Business');
+  description = input<string>('Impulsa tu éxito con nosotros');
+  exploreLinks = input<Link[]>([
     { label: 'Servicios', href: '#', icon: '⚙️' },
     { label: 'Productos', href: '#', icon: '🛍️' },
     { label: 'Nosotros', href: '#', icon: '👥' },
     { label: 'Contacto', href: '#', icon: '📞' },
-  ];
-  @Input() trendLinks: Link[] = [
+  ]);
+  trendLinks = input<Link[]>([
     { label: 'Blog', href: '#', icon: '📝' },
     { label: 'FAQ', href: '#', icon: '❓' },
     { label: 'Soporte', href: '#', icon: '🛠️' },
-  ];
-  @Input() socialIcons: SocialIcon[] = [
+  ]);
+  socialIcons = input<SocialIcon[]>([
     { name: 'twitter', href: '#' },
     { name: 'facebook', href: '#' },
     { name: 'instagram', href: '#' },
     { name: 'linkedin', href: '#' },
-  ];
-  @Input() copyrightText = '© {{currentYear}} Your Business - Todos los derechos reservados';
-  @Input() showParticles = true;
-  @Input() customStyles: videoGamesFooterCustomStyles = {};
+  ]);
+  copyrightText = input<string>('© {{currentYear}} Your Business - Todos los derechos reservados');
+  showParticles = input<boolean>(true);
+  customStyles = input<videoGamesFooterCustomStyles>({});
 
-  @Output() linkClicked = new EventEmitter<string>();
-  @Output() socialClicked = new EventEmitter<string>();
+  videogamesFooterStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--footer-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--footer-color'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    return styles;
+  });
+
+  linkClicked = output<string>();
+  socialClicked = output<string>();
 
   currentYear = new Date().getFullYear();
 
@@ -76,13 +105,9 @@ export class UIVideogamesFooterComponent {
     this.socialClicked.emit(href);
   }
 
-  get titleClasses(): string[] {
-    return ['footer-title', `footer-title--${this.variant}`];
-  }
+  titleClasses = computed(() => ['footer-title', `footer-title--${this.variant()}`]);
 
-  get footerClasses(): string[] {
-    return ['footer', `footer--${this.variant}`, this.showParticles ? 'footer--with-particles' : ''].filter(Boolean);
-  }
+  footerClasses = computed(() => ['footer', `footer--${this.variant()}`, this.showParticles() ? 'footer--with-particles' : ''].filter(Boolean));
 
   getSocialIcon(name: SocialIcon['name']): string {
     const icons: Record<SocialIcon['name'], string> = {

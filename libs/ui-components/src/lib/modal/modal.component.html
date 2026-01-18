@@ -1,16 +1,16 @@
 <div *ngIf="isOpen()" class="modal-wrapper" role="dialog" aria-modal="true" [attr.aria-label]="title()">
     <div
-      [class]="overlayClasses()"
+      [ngClass]="overlayClasses()"
       tabindex="0"
       (click)="closeModal()"
       (keyup)="handleKeyUp($event)"
     ></div>
-    <div [class]="modalClasses()">
-      <div [class]="headerClasses()">
+    <div [ngClass]="modalClasses()" [ngStyle]="modalStyles()">
+      <div [ngClass]="headerClasses()">
         <h2>{{ title() }}</h2>
         <button class="close-btn" (click)="closeModal()" aria-label="Close modal">✕</button>
       </div>
-      <div [class]="bodyClasses()">
+      <div [ngClass]="bodyClasses()">
         {{ content() }}
       </div>
     </div>

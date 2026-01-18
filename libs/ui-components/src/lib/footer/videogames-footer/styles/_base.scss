@@ -16,6 +16,26 @@
       transform: translateY(-5px);
       box-shadow: 0 0 40px rgba(255, 255, 255, 0.4); /* Más brillo futurista */
     }
+
+    // CRITICAL: Force inline styles to override variant backgrounds
+    &[style*='background'] {
+        background: var(--theme-bg) !important;
+    }
+
+    &[style*='background-color'] {
+        background-color: var(--theme-bg) !important;
+    }
+
+    &[style*='color'] {
+        color: var(--theme-color) !important;
+        
+        // Ensure nested text elements also inherit the custom color if provided
+        .footer-title, .core-text, .node-title, .node-label, .hud-title, .ticker-text {
+            color: var(--theme-color) !important;
+            -webkit-text-fill-color: var(--theme-color) !important;
+            background: none !important;
+        }
+    }
   }
   
   /* Mapa de juego - Diseño compacto */

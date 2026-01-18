@@ -6,6 +6,23 @@
   padding: 24px;
   border: 2px solid #a855f7;
   transition: all 0.5s ease;
+
+  // CRITICAL: Force inline styles to override variant backgrounds
+  &[style*='background'] {
+      background: var(--theme-bg) !important;
+  }
+
+  &[style*='background-color'] {
+      background-color: var(--theme-bg) !important;
+  }
+
+  &[style*='color'] {
+      color: var(--theme-color) !important;
+      
+      .product-title, .product-description, .product-price {
+          color: var(--theme-color) !important;
+      }
+  }
 }
 
 .product-card:hover {

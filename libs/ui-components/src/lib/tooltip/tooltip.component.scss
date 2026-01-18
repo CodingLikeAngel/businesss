@@ -1,2 +1,19 @@
+@use '../styles/mixins' as shared;
 @use './styles/index' as *;
-  
+
+.tooltip {
+  @include shared.apply-all-variants('tooltip-');
+
+  // CRITICAL: Force inline styles to override variant backgrounds
+  &[style*='background'] {
+    background: var(--theme-bg, var(--tooltip-bg)) !important;
+  }
+
+  &[style*='background-color'] {
+    background-color: var(--theme-bg, var(--tooltip-bg)) !important;
+  }
+
+  &[style*='color'] {
+    color: var(--theme-color, var(--tooltip-color)) !important;
+  }
+}

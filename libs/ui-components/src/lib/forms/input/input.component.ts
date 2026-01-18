@@ -1,4 +1,4 @@
-import { Component, Input, HostBinding, forwardRef, input } from '@angular/core';
+import { Component, Input, HostBinding, forwardRef, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { variants as baseVariants } from '../../models/ui-components-data.model';
@@ -15,6 +15,8 @@ export const inputVariants = [...baseVariants, ...specificInputVariants] as cons
 export type InputVariantType = typeof inputVariants[number] | (string & {});
 
 export interface InputCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--input-bg'?: string;
   '--input-border'?: string;
   '--input-shadow'?: string;
@@ -23,6 +25,7 @@ export interface InputCustomStyles {
   '--input-focus-bg'?: string;
   '--input-focus-border'?: string;
   '--input-focus-shadow'?: string;
+  [key: string]: string | undefined;
 }
 
 export interface InputOption {
@@ -64,6 +67,34 @@ export class UIInputComponent implements ControlValueAccessor {
   private onTouched: () => void = () => {
     // This will be overridden by registerOnTouched
   };
+
+  inputStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--input-bg'] = customStyles['backgroundColor'];
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--input-color'] = customStyles['color'];
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    return styles;
+  });
 
   @HostBinding('class') get hostClasses() {
     return [

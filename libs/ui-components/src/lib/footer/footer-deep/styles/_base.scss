@@ -40,6 +40,32 @@ $retro-purple: #8b00ff;
     overflow: hidden;
     min-height: 600px;
     z-index: 1000;
+
+  // CRITICAL: Force inline styles to override variant backgrounds
+  &[style*='background'] {
+      background: var(--theme-bg) !important;
+  }
+
+  &[style*='background-color'] {
+      background-color: var(--theme-bg) !important;
+  }
+
+  &[style*='color'] {
+      color: var(--theme-color) !important;
+      
+      // Ensure nested text elements also inherit the custom color if provided
+      .footer-title, .footer-text, .node-title, .node-label, .ticker-text, .copyright {
+          color: var(--theme-color) !important;
+          -webkit-text-fill-color: var(--theme-color) !important;
+          background: none !important;
+      }
+
+      a {
+          color: var(--theme-color) !important;
+          opacity: 0.85;
+          &:hover { opacity: 1; }
+      }
+  }
     
     /* Theme: Mario (Classic Pixel) */
     &.theme-mario {

@@ -7,12 +7,29 @@
 */
 
 .stats-container {
-  padding: 5rem 1.5rem;
-  background: var(--stats-bg, #0f172a);
-  color: var(--stats-text, #fff);
-  position: relative;
-  overflow: hidden;
-  
+  @include shared.apply-all-variants('stats--');
+
+  // CRITICAL: Force inline styles to override variant backgrounds
+  &[style*='background'] {
+      background: var(--theme-bg) !important;
+  }
+
+  &[style*='background-color'] {
+      background-color: var(--theme-bg) !important;
+  }
+
+  &[style*='color'] {
+      color: var(--theme-color) !important;
+
+      .title {
+        color: var(--theme-color) !important;
+      }
+      
+      .stat-card .label {
+        color: var(--theme-color) !important;
+      }
+  }
+
   @media (min-width: 1024px) {
     padding: 8rem 4rem;
   }

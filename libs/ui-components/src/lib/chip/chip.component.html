@@ -1,6 +1,6 @@
 <span
-  [class]="chipClasses()"
-  [style]="chipStyles()"
+  [ngClass]="chipClasses()"
+  [ngStyle]="chipStyles()"
   (click)="handleClick($event)"
   (keyup)="handleKeyUp($event)"
   [attr.aria-label]="disabled() ? 'Chip disabled' : 'Chip'"

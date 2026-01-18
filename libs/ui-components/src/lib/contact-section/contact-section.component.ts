@@ -1,13 +1,15 @@
 
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { UIButtonComponent } from '../button/button.component';
 import { UIInputComponent } from '../forms/input/input.component';
-import { variants } from '../models/ui-components-data.model';
-
-
+import { variants } from '../models/ui-components-data.model';export interface ContactCustomStyles {
+  backgroundColor?: string;
+  color?: string;
+  [key: string]: string | undefined;
+}
 
 @Component({
   selector: 'lib-ui-contact-section',
@@ -23,6 +25,33 @@ export class UIContactSectionComponent {
   emailLabel = input('Email');
   messageLabel = input('Mensaje');
   buttonText = input('Enviar Mensaje');
+  customStyles = input<ContactCustomStyles>({});
+
+  contactStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    return styles;
+  });
   
   formSubmit = output<any>();
 

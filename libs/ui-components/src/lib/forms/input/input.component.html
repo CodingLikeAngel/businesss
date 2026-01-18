@@ -12,7 +12,7 @@
         [disabled]="disabled"
         [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles()"
+        [ngStyle]="inputStyles()"
         tag="input"
       />
 
@@ -26,7 +26,7 @@
         [disabled]="disabled"
         [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles()"
+        [ngStyle]="inputStyles()"
         tag="input"
       />
 
@@ -39,7 +39,7 @@
         [disabled]="disabled"
         [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles()"
+        [ngStyle]="inputStyles()"
         tag="input"
       />
 
@@ -52,7 +52,7 @@
         [disabled]="disabled"
         [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles()"
+        [ngStyle]="inputStyles()"
         tag="input"
       />
       <span *ngIf="type() === 'checkbox' && label()" class="checkbox-label">{{label()}}</span>
@@ -65,7 +65,7 @@
         [disabled]="disabled"
         [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles()"
+        [ngStyle]="inputStyles()"
         tag="select"
       >
         <option value="" disabled selected>{{ placeholder() || 'Selecciona una opción' }}</option>
@@ -84,7 +84,7 @@
         [rows]="rows() || 4"
         [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles()"
+        [ngStyle]="inputStyles()"
         tag="textarea"
       ></textarea>
 
@@ -98,7 +98,7 @@
         [disabled]="disabled"
         [class]="'input input-' + variant() + ' input-' + size()"
         [class.input-disabled]="disabled"
-        [ngStyle]="customStyles()"
+        [ngStyle]="inputStyles()"
         tag="input"
       />
     </ng-container>

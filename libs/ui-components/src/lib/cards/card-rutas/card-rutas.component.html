@@ -1,7 +1,7 @@
 <!-- Desktop View -->
 <div *ngIf="!isMobile()" class="ui-card-rutas-container">
   <div class="ui-card-rutas-wrapper grid grid-cols-3 gap-6">
-    <article *ngFor="let item of items(); let i = index" [class]="cardClasses()" [style]="cardStyles()">
+    <article *ngFor="let item of items(); let i = index" [class]="cardClasses()" [ngStyle]="cardStyles()">
       <div class="ui-card-rutas__image-container">
         <div class="ui-card-rutas__gradient"></div>
         <img
@@ -46,7 +46,7 @@
 <!-- Mobile View -->
 <div *ngIf="isMobile()" class="ui-card-rutas-container">
   <div class="ui-card-rutas-wrapper">
-    <article #postCard [class]="cardClasses()" [style]="cardStyles()">
+    <article #postCard [class]="cardClasses()" [ngStyle]="cardStyles()">
       <div class="ui-card-rutas__image-container">
         <div class="ui-card-rutas__gradient"></div>
         <img

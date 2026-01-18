@@ -8,10 +8,7 @@
   (blur)="onHover(false)"
   tabindex="0"
   [ngClass]="customStyles()['card']"
-  [style.--border-color]="borderColor()"
-  [style.--text-color]="textColor()"
-  [style.--background-color]="backgroundColor()"
-  [style.--hover-color]="hoverColor()"
+  [ngStyle]="hostStyles"
 >
   <div class="card-overlay" [class.is-hovered]="isHovered"></div>
 

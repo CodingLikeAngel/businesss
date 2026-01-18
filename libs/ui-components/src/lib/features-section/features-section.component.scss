@@ -38,6 +38,29 @@
   // Moved to end to override defaults correctly
   @include shared.apply-all-variants('features--');
   @include shared.apply-variants-to-child('.feature-card', 'features--');
+
+  // CRITICAL: Force inline styles to override variant backgrounds
+  &[style*='background'] {
+      background: var(--theme-bg) !important;
+  }
+
+  &[style*='background-color'] {
+      background-color: var(--theme-bg) !important;
+  }
+
+  &[style*='color'] {
+      color: var(--theme-color) !important;
+
+      .title {
+        color: var(--theme-color) !important;
+        -webkit-text-fill-color: var(--theme-color) !important;
+        background: none !important;
+      }
+      
+      .feature-card .feature-title {
+        color: var(--theme-color) !important;
+      }
+  }
   
   // Apply theme variables to inner elements
   .title {

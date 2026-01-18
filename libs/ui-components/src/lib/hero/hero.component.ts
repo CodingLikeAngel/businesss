@@ -7,6 +7,8 @@ export const heroVariants = variants;
 export type HeroVariant = typeof heroVariants[number];
 
 export interface HeroCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--hero-bg'?: string;
   '--hero-color'?: string;
   '--hero-border'?: string;
@@ -111,6 +113,33 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
   constructor(@Inject(PLATFORM_ID) private platformId: object) {}
 
   heroClasses = computed(() => ['hero-section', `hero-section--${this.variant()}`]);
+
+  heroStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--hero-bg'] = customStyles['backgroundColor'];
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--hero-color'] = customStyles['color'];
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    return styles;
+  });
 
   layout = computed(() => {
     const v = this.variant();

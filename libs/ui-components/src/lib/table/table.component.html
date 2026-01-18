@@ -1,4 +1,4 @@
-<table [class]="tableClasses()" [style]="tableStyles()" role="table">
+<table [ngClass]="tableClasses()" [ngStyle]="tableStyles()" role="table">
   <thead>
     <tr>
       <th *ngFor="let column of columns()" [class]="headerClasses()" scope="col">

@@ -1,4 +1,4 @@
-import { Component, input, ElementRef, ViewChild, AfterViewInit, OnInit, OnDestroy, HostBinding } from '@angular/core';
+import { Component, input, ElementRef, ViewChild, AfterViewInit, OnInit, OnDestroy, HostBinding, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { variants as baseVariants } from '../models/ui-components-data.model';
@@ -20,6 +20,8 @@ export interface GalleryImage {
 }
 
 export interface GalleryCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--container-bg'?: string;
   '--container-border'?: string;
   '--container-shadow'?: string;
@@ -33,6 +35,7 @@ export interface GalleryCustomStyles {
   '--nav-shadow'?: string;
   '--dot-bg'?: string;
   '--dot-active-bg'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -142,15 +145,34 @@ export class UIGalleryComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   @HostBinding('style') get hostStyles() {
-    const styles: any = { ...this.customStyles() };
-    if (styles['backgroundColor']) {
-      styles['--theme-bg'] = styles['backgroundColor'];
-      styles['--container-bg'] = styles['backgroundColor'];
-    }
-    if (styles['color']) {
-      styles['--theme-color'] = styles['color'];
-      styles['--caption-color'] = styles['color'];
-    }
-    return styles;
+    return this.galleryStyles();
   }
+
+  galleryStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--container-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--caption-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+    
+    return styles;
+  });
 }

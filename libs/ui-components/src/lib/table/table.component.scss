@@ -4,4 +4,16 @@
 
 .table-container {
     @include shared.apply-all-variants('table-');
+
+    &[style*='background'] {
+        background: var(--theme-bg) !important;
+    }
+
+    &[style*='background-color'] {
+        background-color: var(--theme-bg) !important;
+    }
+
+    &[style*='color'] {
+        color: var(--theme-color) !important;
+    }
 }

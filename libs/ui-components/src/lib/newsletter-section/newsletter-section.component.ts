@@ -5,6 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { UIInputComponent } from '../forms/input/input.component';
 import { UIButtonComponent } from '../button/button.component';
 
+export interface NewsletterCustomStyles {
+  backgroundColor?: string;
+  color?: string;
+  [key: string]: string | undefined;
+}
+
 @Component({
   selector: 'lib-ui-newsletter-section',
   standalone: true,
@@ -18,7 +24,7 @@ export class UINewsletterSectionComponent {
   placeholder = input('Tu correo electrónico');
   buttonText = input('Suscribirse');
   variant = input('primary');
-  customStyles = input<{[key: string]: string}>({});
+  customStyles = input<NewsletterCustomStyles>({});
 
   newsletterStyles = computed(() => {
     const styles: Record<string, any> = {};
@@ -26,12 +32,14 @@ export class UINewsletterSectionComponent {
     
     if (customStyles['backgroundColor']) {
       styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
       styles['background'] = customStyles['backgroundColor'];
       styles['background-color'] = customStyles['backgroundColor'];
     }
     
     if (customStyles['color']) {
       styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
       styles['color'] = customStyles['color'];
     }
     

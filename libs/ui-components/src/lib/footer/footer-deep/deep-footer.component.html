@@ -1,108 +1,108 @@
-<footer class="footer" [ngClass]="theme">
+<footer class="footer" [ngClass]="theme()" [ngStyle]="deepFooterStyles()">
   <!-- Unique Decorations per Theme -->
-  <ng-container *ngIf="theme === 'theme-mario'">
+  <ng-container *ngIf="theme() === 'theme-mario'">
     <div class="footer-decoration pipe" style="bottom: 5%; left: 10%;"></div>
     <div class="footer-decoration question-block" style="top: 15%; right: 15%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-zelda'">
+  <ng-container *ngIf="theme() === 'theme-zelda'">
     <div class="footer-decoration triforce-glow" style="top: 10%; left: 20%;"></div>
     <div class="footer-decoration heart-container" style="bottom: 10%; right: 20%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-rayman'">
+  <ng-container *ngIf="theme() === 'theme-rayman'">
     <div class="footer-decoration lum-swirl" style="top: 5%; right: 10%;"></div>
     <div class="footer-decoration electoon" style="bottom: 15%; left: 15%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-dragonball'">
+  <ng-container *ngIf="theme() === 'theme-dragonball'">
     <div class="footer-decoration dragonball-star" style="top: 12%; left: 8%;"></div>
     <div class="footer-decoration ki-burst" style="bottom: 10%; right: 12%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-onepiece'">
+  <ng-container *ngIf="theme() === 'theme-onepiece'">
     <div class="footer-decoration treasure-chest" style="bottom: 10%; left: 15%;"></div>
     <div class="footer-decoration jolly-roger" style="top: 15%; right: 10%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-supermeatboy'">
+  <ng-container *ngIf="theme() === 'theme-supermeatboy'">
     <div class="footer-decoration meat-splatter" style="top: 10%; left: 12%;"></div>
     <div class="footer-decoration sawblade" style="bottom: 15%; right: 8%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-cyberpunk'">
+  <ng-container *ngIf="theme() === 'theme-cyberpunk'">
     <div class="footer-decoration hologram" style="top: 8%; left: 10%;"></div>
     <div class="footer-decoration datastream" style="bottom: 12%; right: 15%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-vaporwave'">
+  <ng-container *ngIf="theme() === 'theme-vaporwave'">
     <div class="footer-decoration retro-statue" style="top: 10%; left: 15%;"></div>
     <div class="footer-decoration vhs-glitch" style="bottom: 10%; right: 10%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-retroarcade'">
+  <ng-container *ngIf="theme() === 'theme-retroarcade'">
     <div class="footer-decoration pixel-sprite" style="top: 12%; left: 8%;"></div>
     <div class="footer-decoration arcade-cabinet" style="bottom: 15%; right: 12%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-pixeladventure'">
+  <ng-container *ngIf="theme() === 'theme-pixeladventure'">
     <div class="footer-decoration crystal-shard" style="top: 10%; left: 10%;"></div>
     <div class="footer-decoration floating-platform" style="bottom: 12%; right: 10%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-cosmicgalaxy'">
+  <ng-container *ngIf="theme() === 'theme-cosmicgalaxy'">
     <div class="footer-decoration comet-trail" style="top: 8%; left: 15%;"></div>
     <div class="footer-decoration black-hole" style="bottom: 10%; right: 8%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-steampunk'">
+  <ng-container *ngIf="theme() === 'theme-steampunk'">
     <div class="footer-decoration steam-valve" style="top: 15%; left: 12%;"></div>
     <div class="footer-decoration clockwork" style="bottom: 10%; right: 15%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-tropicalisland'">
+  <ng-container *ngIf="theme() === 'theme-tropicalisland'">
     <div class="footer-decoration coconut-tree" style="top: 10%; left: 10%;"></div>
     <div class="footer-decoration tiki-torch" style="bottom: 12%; right: 12%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-hauntedmansion'">
+  <ng-container *ngIf="theme() === 'theme-hauntedmansion'">
     <div class="footer-decoration floating-candle" style="top: 12%; left: 8%;"></div>
     <div class="footer-decoration creepy-portrait" style="bottom: 15%; right: 10%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-fantasykingdom'">
+  <ng-container *ngIf="theme() === 'theme-fantasykingdom'">
     <div class="footer-decoration enchanted-sword" style="top: 10%; left: 15%;"></div>
     <div class="footer-decoration castle-turret" style="bottom: 10%; right: 8%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-synthwave'">
+  <ng-container *ngIf="theme() === 'theme-synthwave'">
     <div class="footer-decoration neon-grid" style="top: 8%; left: 12%;"></div>
     <div class="footer-decoration retro-car" style="bottom: 12%; right: 15%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-minimalistzen'">
+  <ng-container *ngIf="theme() === 'theme-minimalistzen'">
     <div class="footer-decoration zen-stone" style="top: 10%; left: 10%;"></div>
     <div class="footer-decoration ripple-water" style="bottom: 10%; right: 10%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-underwaterabyss'">
+  <ng-container *ngIf="theme() === 'theme-underwaterabyss'">
     <div class="footer-decoration glowing-jellyfish" style="top: 12%; left: 15%;"></div>
     <div class="footer-decoration sunken-anchor" style="bottom: 10%; right: 12%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-desertoasis'">
+  <ng-container *ngIf="theme() === 'theme-desertoasis'">
     <div class="footer-decoration palm-oasis" style="top: 10%; left: 8%;"></div>
     <div class="footer-decoration desert-ruin" style="bottom: 15%; right: 10%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-glitchart'">
+  <ng-container *ngIf="theme() === 'theme-glitchart'">
     <div class="footer-decoration glitch-distortion" style="top: 8%; left: 12%;"></div>
     <div class="footer-decoration rgb-split" style="bottom: 12%; right: 8%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-baroque'">
+  <ng-container *ngIf="theme() === 'theme-baroque'">
     <div class="footer-decoration golden-candelabra" style="top: 10%; left: 15%;"></div>
     <div class="footer-decoration velvet-curtain" style="bottom: 10%; right: 12%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-kawaii'">
+  <ng-container *ngIf="theme() === 'theme-kawaii'">
     <div class="footer-decoration sparkling-star" style="top: 12%; left: 10%;"></div>
     <div class="footer-decoration fluffy-cloud" style="bottom: 15%; right: 10%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-spaceodyssey'">
+  <ng-container *ngIf="theme() === 'theme-spaceodyssey'">
     <div class="footer-decoration orbiting-satellite" style="top: 10%; left: 8%;"></div>
     <div class="footer-decoration star-cluster" style="bottom: 12%; right: 15%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-graffiti'">
+  <ng-container *ngIf="theme() === 'theme-graffiti'">
     <div class="footer-decoration spray-paint" style="top: 15%; left: 10%;"></div>
     <div class="footer-decoration street-sign" style="bottom: 10%; right: 12%;"></div>
   </ng-container>
-  <ng-container *ngIf="theme === 'theme-artdeco'">
+  <ng-container *ngIf="theme() === 'theme-artdeco'">
     <div class="footer-decoration geometric-fan" style="top: 12%; left: 8%;"></div>
     <div class="footer-decoration gilded-frame" style="bottom: 15%; right: 10%;"></div>
   </ng-container>
 
   <!-- Dynamic Layouts -->
-  <ng-container [ngSwitch]="theme">
+  <ng-container [ngSwitch]="theme()">
     <!-- Mario: Classic grid with interactive blocks -->
     <div *ngSwitchCase="'theme-mario'" class="footer-grid grid-classic">
       <div class="footer-section main-section">
@@ -539,7 +539,7 @@
 
   <!-- Copyright -->
   <p class="copyright">
-    <ng-container [ngSwitch]="theme">
+    <ng-container [ngSwitch]="theme()">
       <ng-container *ngSwitchCase="'theme-mario'">Super angel World</ng-container>
       <ng-container *ngSwitchCase="'theme-zelda'">Hyrule Chronicles</ng-container>
       <ng-container *ngSwitchCase="'theme-rayman'">Glade of Dreams</ng-container>

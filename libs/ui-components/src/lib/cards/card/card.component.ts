@@ -12,6 +12,8 @@ export type CardAnimation = 'none' | 'fade' | 'slide-up' | 'zoom' | 'glitch' | '
 export type CardSize = 'small' | 'medium' | 'large';
 
 export interface CustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--card-bg'?: string;
   '--card-color'?: string;
   '--card-border'?: string;
@@ -19,6 +21,7 @@ export interface CustomStyles {
   '--card-hover-bg'?: string;
   '--card-hover-shadow'?: string;
   '--card-overlay-opacity'?: string;
+  [key: string]: string | undefined;
 }
 
 export interface UICardAction {
@@ -76,8 +79,34 @@ export class UICardComponent {
   }
 
   @HostBinding('style') get hostStyles() {
-    return { ...this.customStyles(), '--card-overlay-opacity': this.isHovered ? '0.3' : '0' };
+    return { ...this.componentStyles(), '--card-overlay-opacity': this.isHovered ? '0.3' : '0' };
   }
+
+  componentStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+    
+    return styles;
+  });
 
   cardClasses = computed(() => ['card', `card--${this.variant()}`, `card--size-${this.size()}`]);
 

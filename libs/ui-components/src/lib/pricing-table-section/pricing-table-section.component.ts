@@ -2,6 +2,12 @@ import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UITableComponent, TableColumn, TableRow } from '../table/table.component';
 
+export interface PricingTableCustomStyles {
+  backgroundColor?: string;
+  color?: string;
+  [key: string]: string | undefined;
+}
+
 @Component({
   selector: 'lib-ui-pricing-table-section',
   standalone: true,
@@ -13,6 +19,7 @@ export class UIPricingTableSectionComponent {
   title = input('Planes y Precios');
   subtitle = input('Elige el plan perfecto para ti.');
   variant = input('default');
+  customStyles = input<PricingTableCustomStyles>({});
   
   columns = input<TableColumn[]>([
       { key: 'plan', label: 'Plan' },
@@ -25,6 +32,32 @@ export class UIPricingTableSectionComponent {
       { plan: 'Pro', features: 'Tienda online, SEO avanzado', price: '1200€' },
       { plan: 'Enterprise', features: 'A medida, Soporte 24/7', price: 'Consultar' },
   ]);
+
+  pricingStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    return styles;
+  });
 
   containerClasses = computed(() => `pricing-container pricing--${this.variant()}`);
   tableVariant = computed(() => this.variant());

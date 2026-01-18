@@ -1,31 +1,31 @@
 <!-- title.component.html -->
 <ng-container [ngSwitch]="level()">
-  <h1 *ngSwitchCase="'h1'" [ngClass]="titleClasses()" [style]="titleStyles()">
+  <h1 *ngSwitchCase="'h1'" [ngClass]="titleClasses()" [ngStyle]="titleStyles()">
     <span *ngIf="icon()" class="title-icon">{{ icon() }}</span>
     <ng-container *ngIf="text() && text() !== 'Título por defecto'; else content1">{{ text() }}</ng-container>
     <ng-template #content1><ng-content></ng-content></ng-template>
   </h1>
-  <h2 *ngSwitchCase="'h2'" [ngClass]="titleClasses()" [style]="titleStyles()">
+  <h2 *ngSwitchCase="'h2'" [ngClass]="titleClasses()" [ngStyle]="titleStyles()">
     <span *ngIf="icon()" class="title-icon">{{ icon() }}</span>
     <ng-container *ngIf="text() && text() !== 'Título por defecto'; else content2">{{ text() }}</ng-container>
     <ng-template #content2><ng-content></ng-content></ng-template>
   </h2>
-  <h3 *ngSwitchCase="'h3'" [ngClass]="titleClasses()" [style]="titleStyles()">
+  <h3 *ngSwitchCase="'h3'" [ngClass]="titleClasses()" [ngStyle]="titleStyles()">
     <span *ngIf="icon()" class="title-icon">{{ icon() }}</span>
     <ng-container *ngIf="text() && text() !== 'Título por defecto'; else content3">{{ text() }}</ng-container>
     <ng-template #content3><ng-content></ng-content></ng-template>
   </h3>
-  <h4 *ngSwitchCase="'h4'" [ngClass]="titleClasses()" [style]="titleStyles()">
+  <h4 *ngSwitchCase="'h4'" [ngClass]="titleClasses()" [ngStyle]="titleStyles()">
     <span *ngIf="icon()" class="title-icon">{{ icon() }}</span>
     <ng-container *ngIf="text() && text() !== 'Título por defecto'; else content4">{{ text() }}</ng-container>
     <ng-template #content4><ng-content></ng-content></ng-template>
   </h4>
-  <h5 *ngSwitchCase="'h5'" [ngClass]="titleClasses()" [style]="titleStyles()">
+  <h5 *ngSwitchCase="'h5'" [ngClass]="titleClasses()" [ngStyle]="titleStyles()">
     <span *ngIf="icon()" class="title-icon">{{ icon() }}</span>
     <ng-container *ngIf="text() && text() !== 'Título por defecto'; else content5">{{ text() }}</ng-container>
     <ng-template #content5><ng-content></ng-content></ng-template>
   </h5>
-  <h6 *ngSwitchCase="'h6'" [ngClass]="titleClasses()" [style]="titleStyles()">
+  <h6 *ngSwitchCase="'h6'" [ngClass]="titleClasses()" [ngStyle]="titleStyles()">
     <span *ngIf="icon()" class="title-icon">{{ icon() }}</span>
     <ng-container *ngIf="text() && text() !== 'Título por defecto'; else content6">{{ text() }}</ng-container>
     <ng-template #content6><ng-content></ng-content></ng-template>

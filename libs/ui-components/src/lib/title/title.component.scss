@@ -1,2 +1,23 @@
+@use '../styles/mixins' as shared;
 @use './styles/index' as *;
-  
+
+.title {
+    @include shared.apply-all-variants('title--');
+
+    // CRITICAL: Force inline styles to override variant backgrounds
+    &[style*='background'] {
+        background: var(--theme-bg, transparent) !important;
+        -webkit-background-clip: initial !important;
+        background-clip: initial !important;
+        -webkit-text-fill-color: initial !important;
+    }
+
+    &[style*='background-color'] {
+        background-color: var(--theme-bg, transparent) !important;
+    }
+
+    &[style*='color'] {
+        color: var(--theme-color) !important;
+        -webkit-text-fill-color: var(--theme-color) !important;
+    }
+}

@@ -33,7 +33,7 @@
 
 
 
-<div [ngClass]="hostClasses" [ngStyle]="customStyles()">
+<div [ngClass]="hostClasses" [ngStyle]="galleryStyles()">
   <div class="ui-gallery__slider" #slider>
     <div class="ui-gallery__slide" *ngFor="let image of images(); trackBy: trackByFn">
       <lib-ui-image

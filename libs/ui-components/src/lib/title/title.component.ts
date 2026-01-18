@@ -13,12 +13,15 @@ export type TitleVariantType = typeof titleVariants[number] | (string & {});
 export type TitleLevel = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
 export type TitleAnimation = 'none' | 'fade' | 'pulse' | 'bounce' | 'glitch' | 'slide';
 
-interface TitleCustomStyles {
+export interface TitleCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--title-color'?: string;
   '--title-shadow'?: string;
   '--title-bg'?: string;
   '--title-border'?: string;
   '--title-accent'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -46,12 +49,31 @@ export class UITitleComponent {
     `title--align-${this.align()}`,
   ].filter(Boolean));
 
-  titleStyles = computed(() => ({
-    ...this.customStyles(),
-    color: this.customStyles()['--title-color'],
-    'text-shadow': this.customStyles()['--title-shadow'],
-    background: this.customStyles()['--title-bg'],
-    border: this.customStyles()['--title-border'],
-    '--title-accent': this.customStyles()['--title-accent'], // Variable CSS para usar en SCSS
-  }));
+  titleStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--title-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--title-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    return styles;
+  });
 }

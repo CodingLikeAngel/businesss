@@ -40,6 +40,19 @@
   // Apply global variants
   @include shared.apply-all-variants('modal-');
 
+  // CRITICAL: Force inline styles to override variant backgrounds
+  &[style*='background'] {
+    background: var(--theme-bg, #ffffff) !important;
+  }
+
+  &[style*='background-color'] {
+    background-color: var(--theme-bg, #ffffff) !important;
+  }
+
+  &[style*='color'] {
+    color: var(--theme-color) !important;
+  }
+
   &.modal-sm {
     width: 300px;
     max-height: 80vh;

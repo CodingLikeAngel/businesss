@@ -1,9 +1,9 @@
-<footer [class]="footerClasses" [style]="customStyles" role="contentinfo">
+<footer [ngClass]="footerClasses()" [ngStyle]="videogamesFooterStyles()" role="contentinfo">
     <!-- Fondo dinámico interactivo -->
     <div class="footer-background"></div>
   
     <!-- Fondo interactivo con partículas (opcional según showParticles) -->
-    <div *ngIf="showParticles" class="game-particles">
+    <div *ngIf="showParticles()" class="game-particles">
       <div class="particle particle--coin"></div>
       <div class="particle particle--star"></div>
       <div class="particle particle--gem"></div>
@@ -13,15 +13,15 @@
     <div class="game-map">
       <!-- Núcleo central (Título y Descripción) -->
       <div class="core-hub animate-spin-slow">
-        <h3 [ngClass]="titleClasses">{{ title }}</h3>
-        <p class="core-text animate-pulse">{{ description }}</p>
+        <h3 [ngClass]="titleClasses()">{{ title() }}</h3>
+        <p class="core-text animate-pulse">{{ description() }}</p>
       </div>
   
       <!-- Nodos flotantes para Explora -->
       <div class="node-cluster node-cluster--explore">
         <h4 class="node-title">Explora</h4>
         <ul class="node-links">
-          <li *ngFor="let link of exploreLinks" class="node-item animate-float">
+          <li *ngFor="let link of exploreLinks()" class="node-item animate-float">
             <a [href]="link.href" (click)="onLinkClick(link.href)" class="node-link">
               <span *ngIf="link.icon" class="node-icon">{{ link.icon }}</span>
               <span class="node-label">{{ link.label }}</span>
@@ -34,7 +34,7 @@
       <div class="node-cluster node-cluster--trends">
         <h4 class="node-title">Tendencias</h4>
         <ul class="node-links">
-          <li *ngFor="let link of trendLinks" class="node-item animate-float" style="animation-delay: 0.2s;">
+          <li *ngFor="let link of trendLinks()" class="node-item animate-float" style="animation-delay: 0.2s;">
             <a [href]="link.href" (click)="onLinkClick(link.href)" class="node-link">
               <span *ngIf="link.icon" class="node-icon">{{ link.icon }}</span>
               <span class="node-label">{{ link.label }}</span>
@@ -48,7 +48,7 @@
         <h4 class="hud-title">Conecta</h4>
         <div class="hud-icons">
           <a
-            *ngFor="let social of socialIcons"
+            *ngFor="let social of socialIcons()"
             [href]="social.href"
             (click)="onSocialClick(social.href)"
             class="hud-icon animate-bounce"
@@ -64,7 +64,7 @@
       <!-- Barra inferior de copyright -->
       <div class="game-ticker">
         <span class="ticker-text">
-          {{ copyrightText.replace('{{currentYear}}', currentYear.toString()) }}
+          {{ copyrightText().replace('{{currentYear}}', currentYear.toString()) }}
         </span>
       </div>
     </div>

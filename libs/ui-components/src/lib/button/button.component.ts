@@ -13,6 +13,8 @@ type BaseButtonVariant = typeof baseButtonVariants[number];
 
 // Interfaz para estilos personalizados (solo para variantes nuevas del padre)
 export interface ButtonCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--btn-bg'?: string;
   '--btn-color'?: string;
   '--btn-border'?: string;
@@ -20,6 +22,7 @@ export interface ButtonCustomStyles {
   '--btn-hover-shadow'?: string;
   '--btn-disabled-bg'?: string;
   '--btn-disabled-color'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -40,6 +43,32 @@ export class UIButtonComponent {
   ariaLabel = input<string | undefined>(undefined);
   disabled = input<boolean>(false);
   customStyles = input<ButtonCustomStyles>({}); // Solo para variantes personalizadas
+
+  buttonStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--btn-bg'] = customStyles['backgroundColor'];
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--btn-color'] = customStyles['color'];
+      styles['--theme-color'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    return styles;
+  });
 
   buttonClick = output<Event>();
 

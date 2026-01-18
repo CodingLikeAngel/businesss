@@ -1,6 +1,6 @@
 <button
-  [class]="buttonClasses()"
-  [style]="customStyles()"
+  [ngClass]="buttonClasses()"
+  [ngStyle]="buttonStyles()"
   (click)="handleClick($event)"
   [attr.aria-label]="ariaLabel() || 'Button'"
   [attr.aria-disabled]="disabled() ? 'true' : 'false'"

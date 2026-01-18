@@ -12,6 +12,12 @@ const specificChipVariants = ['magic-spark'] as const;
 export const chipVariants = [...baseVariants, ...specificChipVariants] as const;
 export type ChipVariantType = typeof chipVariants[number] | (string & {});
 
+export interface ChipCustomStyles {
+  backgroundColor?: string;
+  color?: string;
+  [key: string]: string | undefined;
+}
+
 @Component({
   selector: 'lib-ui-components-chip',
   standalone: true,
@@ -31,16 +37,31 @@ export class UIChipComponent {
 
   chipClick = output<Event>();
   removeClick = output<Event>();
-  customStyles = input<{[key: string]: string}>({});
+  customStyles = input<ChipCustomStyles>({});
 
   chipStyles = computed(() => {
-    const styles: any = { ...this.customStyles() };
-    if (styles['backgroundColor']) {
-      styles['--theme-bg'] = styles['backgroundColor'];
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
     }
-    if (styles['color']) {
-      styles['--theme-color'] = styles['color'];
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
     }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+    
     return styles;
   });
 

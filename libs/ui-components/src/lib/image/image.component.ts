@@ -14,11 +14,14 @@ export type ImageSize = 'small' | 'medium' | 'large' | 'custom';
 export type ImageShape = 'square' | 'circle' | 'rounded';
 export type ImageAnimation = 'none' | 'fade' | 'zoom' | 'slide';
 
-interface ImageCustomStyles {
+export interface ImageCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--image-border'?: string;
   '--image-shadow'?: string;
   '--image-bg'?: string;
   '--image-accent'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -49,13 +52,33 @@ export class UIImageComponent {
     `image--animation-${this.animation()}`,
   ].filter(Boolean));
 
-  imageStyles = computed(() => ({
-    ...this.customStyles(),
-    border: this.customStyles()['--image-border'],
-    'box-shadow': this.customStyles()['--image-shadow'],
-    background: this.customStyles()['--image-bg'],
-    '--image-accent': this.customStyles()['--image-accent'], // Variable CSS para usar en SCSS
-    ...(this.size() === 'custom' && this.width() ? { width: this.width() } : {}),
-    ...(this.size() === 'custom' && this.height() ? { height: this.height() } : {}),
-  }));
+  imageStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--image-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    if (this.size() === 'custom' && this.width()) styles['width'] = this.width();
+    if (this.size() === 'custom' && this.height()) styles['height'] = this.height();
+
+    return styles;
+  });
 }

@@ -24,6 +24,25 @@
 
   @include shared.apply-all-variants('card-animated--');
 
+  // CRITICAL: Force inline styles to override variant backgrounds
+  &[style*='background'] {
+      background: var(--theme-bg, var(--background-color)) !important;
+  }
+
+  &[style*='background-color'] {
+      background-color: var(--theme-bg, var(--background-color)) !important;
+  }
+
+  &[style*='color'] {
+      color: var(--theme-color, var(--text-color)) !important;
+      
+      .card-title, .card-description, .card-subtitle, .card-icon {
+          color: var(--theme-color, var(--text-color)) !important;
+          -webkit-text-fill-color: var(--theme-color, var(--text-color)) !important;
+          background: none !important;
+      }
+  }
+
   // Override internal colors with theme specific ones
   .card-icon {
     color: var(--theme-accent, inherit);

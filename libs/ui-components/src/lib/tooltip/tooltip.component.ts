@@ -10,12 +10,15 @@ const specificTooltipVariants = ['pixel-info'] as const;
 export const tooltipVariants = [...baseVariants, ...specificTooltipVariants] as const;
 export type TooltipVariantType = typeof tooltipVariants[number] | (string & {});
 
-interface TooltipCustomStyles {
+export interface TooltipCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--tooltip-bg'?: string;
   '--tooltip-color'?: string;
   '--tooltip-border'?: string;
   '--tooltip-shadow'?: string;
   '--tooltip-radius'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -48,5 +51,31 @@ export class UITooltipComponent {
     return classes.join(' ');
   });
 
-  tooltipStyles = computed(() => this.customStyles()); // Estilos dinámicos desde el padre
+  tooltipStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--tooltip-bg'] = customStyles['backgroundColor'];
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--tooltip-color'] = customStyles['color'];
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    return styles;
+  });
 }

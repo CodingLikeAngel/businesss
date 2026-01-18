@@ -7,12 +7,15 @@ export const datePickerVariants = variants;
 
 export type DateTimePickerVariantType = typeof datePickerVariants[number] | (string & {});
 
-interface DateTimePickerCustomStyles {
+export interface DateTimePickerCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--picker-bg'?: string;
   '--picker-border'?: string;
   '--picker-shadow'?: string;
   '--picker-color'?: string;
   '--picker-accent'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -70,14 +73,33 @@ export class UIDateTimePickerComponent implements ControlValueAccessor {
     this.disabled() ? 'picker-disabled' : '',
   ].filter(Boolean));
 
-  pickerStyles = computed(() => ({
-    ...this.customStyles(),
-    background: this.customStyles()['--picker-bg'],
-    border: this.customStyles()['--picker-border'],
-    'box-shadow': this.customStyles()['--picker-shadow'],
-    color: this.customStyles()['--picker-color'],
-    '--picker-accent': this.customStyles()['--picker-accent'],
-  }));
+  pickerStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--picker-bg'] = customStyles['backgroundColor'];
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--picker-color'] = customStyles['color'];
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    return styles;
+  });
 
   formattedDateTime = computed(() => {
     const date = this.selectedDate();

@@ -1,5 +1,5 @@
 <!--< ui-card-products.component.html> -->
-<div class="product-card">
+<div class="product-card" [ngStyle]="cardProductsStyles()">
     <div class="image-container">
       <img [src]="product().image" [alt]="product().name" class="product-image" loading="lazy" />
       <div class="image-overlay"></div>

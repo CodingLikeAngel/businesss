@@ -47,6 +47,29 @@
   backdrop-filter: blur(8px);
   height: 100%;
 
+  // CRITICAL: Force inline styles to override variant backgrounds
+  &[style*='background'] {
+      background: var(--theme-bg, var(--card-bg)) !important;
+  }
+
+  &[style*='background-color'] {
+      background-color: var(--theme-bg, var(--card-bg)) !important;
+  }
+
+  &[style*='color'] {
+      color: var(--theme-color, var(--card-text-color)) !important;
+      
+      .ui-card-rutas__title, .ui-card-rutas__description, .ui-card-rutas__rating {
+          color: var(--theme-color, var(--card-text-color)) !important;
+          -webkit-text-fill-color: var(--theme-color, var(--card-text-color)) !important;
+      }
+
+      .ui-card-rutas__features li {
+           color: var(--theme-color, var(--card-text-color)) !important;
+           opacity: 0.9 !important;
+      }
+  }
+
   &:hover {
     transform: translateY(-8px) scale(1.01);
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);

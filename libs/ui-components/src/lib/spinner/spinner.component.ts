@@ -10,12 +10,15 @@ const specificSpinnerVariants = ['cosmic-dust'] as const;
 export const spinnerVariants = [...baseVariants, ...specificSpinnerVariants] as const;
 export type SpinnerVariantType = typeof spinnerVariants[number] | (string & {});
 
-interface SpinnerCustomStyles {
+export interface SpinnerCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--spinner-border'?: string;
   '--spinner-border-top'?: string;
   '--spinner-border-radius'?: string;
   '--spinner-bg'?: string;
   '--spinner-shadow'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -42,15 +45,32 @@ export class UISpinnerComponent {
   });
 
   spinnerStyles = computed(() => {
-    const styles: any = { ...this.customStyles() };
-    if (styles['backgroundColor']) {
-      styles['--spinner-bg'] = styles['backgroundColor']; // Specific var
-      styles['--theme-bg'] = styles['backgroundColor'];   // Generic var
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--spinner-bg'] = customStyles['backgroundColor']; // Specific var
+      styles['--theme-bg'] = customStyles['backgroundColor'];   // Generic var
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
     }
-    if (styles['color']) {
-      styles['--spinner-border'] = styles['color'];       // Spinner color implies border
-      styles['--theme-color'] = styles['color'];
+    
+    if (customStyles['color']) {
+      styles['--spinner-border'] = `4px solid ${customStyles['color']}`; // Spinner color implies border
+      styles['--spinner-border-top'] = `4px solid ${customStyles['color']}`;
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
     }
+    
+    // Copy any other custom styles
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+    
     return styles;
   });
 }

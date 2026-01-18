@@ -1,1 +1,17 @@
+@use '../../styles/mixins' as shared;
 @use './styles/index' as *;
+
+.card-animated {
+    // CRITICAL: Force inline styles to override variant backgrounds
+    &[style*='background'] {
+        background: var(--theme-bg, var(--background-color)) !important;
+    }
+
+    &[style*='background-color'] {
+        background-color: var(--theme-bg, var(--background-color)) !important;
+    }
+
+    &[style*='color'] {
+        color: var(--theme-color, var(--text-color)) !important;
+    }
+}

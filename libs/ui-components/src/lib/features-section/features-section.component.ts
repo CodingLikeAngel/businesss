@@ -8,6 +8,12 @@ export interface FeatureItem {
   color?: string;
 }
 
+export interface FeaturesCustomStyles {
+  backgroundColor?: string;
+  color?: string;
+  [key: string]: string | undefined;
+}
+
 @Component({
   selector: 'lib-ui-features-section',
   standalone: true,
@@ -19,6 +25,7 @@ export class UIFeaturesSectionComponent {
   title = input('Nuestros Servicios Premium');
   subtitle = input('Descubre cómo podemos ayudarte a llevar tu negocio al siguiente nivel con nuestras soluciones innovadoras.');
   variant = input('default');
+  customStyles = input<FeaturesCustomStyles>({});
   features = input<FeatureItem[]>([
     {
       icon: '🚀',
@@ -57,6 +64,32 @@ export class UIFeaturesSectionComponent {
       color: '#ec4899'
     }
   ]);
+
+  featuresStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    }
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    }
+    
+    Object.keys(customStyles).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = customStyles[key];
+      }
+    });
+
+    return styles;
+  });
 
   containerClasses = computed(() => `features-container features--${this.variant()}`);
 }

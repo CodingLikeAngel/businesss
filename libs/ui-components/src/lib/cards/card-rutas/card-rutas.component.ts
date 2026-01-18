@@ -25,11 +25,14 @@ export interface CardItem {
 }
 
 interface CardCustomStyles {
+  backgroundColor?: string;
+  color?: string;
   '--card-bg'?: string;
   '--card-text-color'?: string;
   '--card-accent-color'?: string;
   '--card-border'?: string;
   '--card-shadow'?: string;
+  [key: string]: string | undefined;
 }
 
 @Component({
@@ -89,12 +92,33 @@ export class UICardRutasComponent implements AfterViewInit, OnDestroy {
     return classes.join(' ');
   });
 
-  cardStyles = computed(() => ({
-    ...this.customStyles(),
-    background: this.backgroundColor(),
-    color: this.textColor(),
-    '--accent-color': this.accentColor(), // Variable CSS para usar en SCSS
-  }));
+  cardStyles = computed(() => {
+    const styles: Record<string, any> = {
+      ...this.customStyles(),
+      '--accent-color': this.accentColor(), // Variable CSS para usar en SCSS
+    };
+
+    const customStyles = this.customStyles();
+    
+    if (customStyles['backgroundColor']) {
+      styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--card-bg'] = customStyles['backgroundColor'];
+      styles['background'] = customStyles['backgroundColor'];
+      styles['background-color'] = customStyles['backgroundColor'];
+    } else {
+       styles['background'] = this.backgroundColor();
+    }
+    
+    if (customStyles['color']) {
+      styles['--theme-color'] = customStyles['color'];
+      styles['--card-text-color'] = customStyles['color'];
+      styles['color'] = customStyles['color'];
+    } else {
+      styles['color'] = this.textColor();
+    }
+
+    return styles;
+  });
 
   ngAfterViewInit() {
     this.initHammer();

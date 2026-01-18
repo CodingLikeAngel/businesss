@@ -18,8 +18,8 @@
 
   /* Aplicamos customStyles con mayor prioridad */
   &[class*="hero-section--"] {
-    background-color: var(--hero-bg, transparent) !important;
-    color: var(--hero-color, #ffffff) !important;
+    background-color: var(--theme-bg, var(--hero-bg, transparent)) !important;
+    color: var(--theme-color, var(--hero-color, #ffffff)) !important;
     border: var(--hero-border, none) !important;
     box-shadow: var(--hero-shadow, none) !important;
     &:hover {
@@ -29,6 +29,29 @@
     /* Imagen del negocio con opacidad baja para ser transparente */
     position: relative;
     background-image: var(--business-bg-image, none) !important;
+
+    // CRITICAL: Force inline styles to override variant backgrounds
+    &[style*='background'] {
+      background: var(--theme-bg) !important;
+    }
+
+    &[style*='background-color'] {
+      background-color: var(--theme-bg) !important;
+    }
+
+    &[style*='color'] {
+      color: var(--theme-color) !important;
+
+      .hero-title {
+        color: var(--theme-color) !important;
+        -webkit-text-fill-color: var(--theme-color) !important;
+        background: none !important;
+      }
+
+      .hero-subtitle {
+        color: var(--theme-color) !important;
+      }
+    }
   }
 
   /* Usar un pseudo-elemento para la imagen de fondo con transparencia */

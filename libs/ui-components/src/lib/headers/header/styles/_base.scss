@@ -46,6 +46,14 @@ $color-light: #ffffff;
       background-color: var(--theme-bg) !important;
     }
 
+    &[style*="color"] {
+      color: var(--theme-color) !important;
+      
+      h1, p, a {
+        color: var(--theme-color) !important;
+      }
+    }
+
     /*
     &[style][class*="header-"] {
       // Logic removed to allow variants to apply.

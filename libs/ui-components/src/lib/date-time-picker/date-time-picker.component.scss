@@ -1,5 +1,22 @@
-
-  
+@use '../styles/mixins' as shared;
 @use './styles/index' as *;
-  
 
+.date-time-picker-container {
+    background: var(--theme-bg, transparent);
+    color: var(--theme-color, inherit);
+
+    @include shared.apply-all-variants('picker-');
+
+    // CRITICAL: Force inline styles to override variant backgrounds
+    &[style*='background'] {
+        background: var(--theme-bg, var(--picker-bg)) !important;
+    }
+
+    &[style*='background-color'] {
+        background-color: var(--theme-bg, var(--picker-bg)) !important;
+    }
+
+    &[style*='color'] {
+        color: var(--theme-color, var(--picker-color)) !important;
+    }
+}

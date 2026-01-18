@@ -1,4 +1,4 @@
-<div [class]="accordionClasses()" [style]="accordionStyles()" role="region" aria-label="Accordion">
+<div [ngClass]="accordionClasses()" [ngStyle]="accordionStyles()" role="region" aria-label="Accordion">
   <div *ngFor="let item of items(); let i = index" class="accordion-item">
     <button
       [class]="headerClasses()"

@@ -1,5 +1,22 @@
-
-
-
+@use '../styles/mixins' as shared;
 @use './styles/index' as *;
-  
+
+.ui-gallery {
+    background: var(--theme-bg, transparent);
+    color: var(--theme-color, inherit);
+
+    @include shared.apply-all-variants('ui-gallery--');
+
+    // CRITICAL: Force inline styles to override variant backgrounds
+    &[style*='background'] {
+        background: var(--theme-bg, var(--container-bg)) !important;
+    }
+
+    &[style*='background-color'] {
+        background-color: var(--theme-bg, var(--container-bg)) !important;
+    }
+
+    &[style*='color'] {
+        color: var(--theme-color) !important;
+    }
+}

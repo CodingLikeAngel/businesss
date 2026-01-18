@@ -10,6 +10,12 @@ const specificListVariants = ['cosmic-dust'] as const;
 export const listVariants = [...baseVariants, ...specificListVariants] as const;
 export type ListVariantType = typeof listVariants[number] | (string & {});
 
+export interface ListCustomStyles {
+  backgroundColor?: string;
+  color?: string;
+  [key: string]: string | undefined;
+}
+
 @Component({
   selector: 'lib-ui-list',
   standalone: true,
@@ -23,7 +29,7 @@ export class UIListComponent {
   size = input<'sm' | 'md' | 'lg'>('md');
   dark = input<boolean>(false);
   items = input<string[]>([]);
-  customStyles = input<{[key: string]: string}>({});
+  customStyles = input<ListCustomStyles>({});
 
   listStyles = computed(() => {
     const styles: Record<string, any> = {};
@@ -31,12 +37,14 @@ export class UIListComponent {
     
     if (customStyles['backgroundColor']) {
       styles['--theme-bg'] = customStyles['backgroundColor'];
+      styles['--component-bg'] = customStyles['backgroundColor'];
       styles['background'] = customStyles['backgroundColor'];
       styles['background-color'] = customStyles['backgroundColor'];
     }
     
     if (customStyles['color']) {
       styles['--theme-color'] = customStyles['color'];
+      styles['--component-text'] = customStyles['color'];
       styles['color'] = customStyles['color'];
     }
     
@@ -45,7 +53,7 @@ export class UIListComponent {
         styles[key] = customStyles[key];
       }
     });
-    
+
     return styles;
   });
 

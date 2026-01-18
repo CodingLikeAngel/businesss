@@ -12,6 +12,24 @@
     backdrop-filter: var(--theme-backdrop, blur(8px));
     box-shadow: var(--theme-shadow, none);
 
+    // CRITICAL: Force inline styles to override variant backgrounds
+    &[style*='background'] {
+        background: var(--theme-bg) !important;
+    }
+
+    &[style*='background-color'] {
+        background-color: var(--theme-bg) !important;
+    }
+
+    &[style*='color'] {
+        color: var(--theme-color) !important;
+
+        .testimonial-quote, .testimonial-author {
+             color: var(--theme-color) !important;
+             opacity: 0.9 !important;
+        }
+    }
+
     @include shared.apply-all-variants('testimonial-card--');
 
     &:hover {

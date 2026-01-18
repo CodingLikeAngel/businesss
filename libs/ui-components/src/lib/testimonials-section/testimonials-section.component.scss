@@ -16,6 +16,33 @@
   @include shared.apply-all-variants('testimonials--');
   @include shared.apply-variants-to-child('.testimonial-card', 'testimonials--');
 
+  // CRITICAL: Force inline styles to override variant backgrounds
+  &[style*='background'] {
+      background: var(--theme-bg) !important;
+  }
+
+  &[style*='background-color'] {
+      background-color: var(--theme-bg) !important;
+  }
+
+  &[style*='color'] {
+      color: var(--theme-color) !important;
+
+      .title {
+        color: var(--theme-color) !important;
+        -webkit-text-fill-color: var(--theme-color) !important;
+        background: none !important;
+      }
+      
+      .testimonial-card .quote-text {
+        color: var(--theme-color) !important;
+      }
+      
+      .testimonial-card .author-name {
+        color: var(--theme-color) !important;
+      }
+  }
+
   .title {
     color: var(--theme-color, white);
     background: var(--theme-text-gradient, linear-gradient(to right, #fff, #94a3b8));
