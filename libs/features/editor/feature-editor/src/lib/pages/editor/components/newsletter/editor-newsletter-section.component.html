@@ -8,11 +8,11 @@
   visualType="section"
   (visualResized)="onSectionResized($event)">
     <div class="container mx-auto px-6 max-w-4xl editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_newsletter'"
-       (click)="selectElement($event, { id: section.id + '_newsletter', sectionId: section.id, content: section.content, type: 'newsletter', _original: section.content })"
+       [class.is-selected]="selectedSectionId === section.id"
+       (click)="selectSection($event, section)"
        [applyDynamicStyles]="section.styles"
        [visualEditable]="true"
-       visualType="element"
+       visualType="section"
        (visualMoved)="onElementMoved($event, section.id + '_newsletter')"
        (visualResized)="onElementResized($event, section.id + '_newsletter')">
        <lib-ui-newsletter-section
