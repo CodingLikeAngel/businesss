@@ -76,30 +76,33 @@
 
 /* --- Nintendo / Mario Theme --- */
 .btn-mario {
-  background: #e60012; // Mario Red
+  background: linear-gradient(135deg, #e53e3e, #3182ce);
   color: #fff;
   border: 4px solid #000;
   border-radius: 12px;
   box-shadow: 4px 4px 0 #000;
-  font-family: 'Press Start 2P', cursive, sans-serif;
-  font-size: 0.7rem; // Pixel fonts need to be smaller bits
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 0.7rem;
+  font-weight: 400;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
 
   &::before {
     background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, transparent 50%);
   }
 
   &:hover {
-    background: #ff0000;
+    background: linear-gradient(135deg, #ff0000, #4a90e2);
     transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 #000;
-    
+    box-shadow: 6px 6px 0 #000, 0 0 15px rgba(229, 62, 62, 0.6);
+
     &::after {
-      content: '★';
+      content: '⭐';
       position: absolute;
       top: -10px;
       right: -10px;
       color: #ffd700;
       font-size: 20px;
+      text-shadow: 0 0 10px #ffd700;
       animation: star-pop 0.5s ease-out forwards;
     }
   }
@@ -112,66 +115,77 @@
 
 /* --- Ubisoft / Rayman Theme --- */
 .btn-rayman {
-  background: linear-gradient(135deg, #7b2ff7, #ff43a1);
+  background: linear-gradient(135deg, #ff6b35, #f7931e, #00ff88);
   color: #fff;
   border-radius: 2rem;
-  box-shadow: 0 0 15px rgba(123, 47, 247, 0.4);
+  box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
   backdrop-filter: blur(4px);
   border: 2px solid rgba(255, 255, 255, 0.3);
+  font-family: 'Comic Neue', 'Comic Sans MS', cursive;
+  font-weight: 700;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
 
   &.btn-sm { border-radius: 1rem; }
   &.btn-lg { border-radius: 3rem; }
 
   &:hover {
     transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 0 25px rgba(255, 67, 161, 0.6);
-    background: linear-gradient(135deg, #ff43a1, #7b2ff7);
+    box-shadow: 0 0 25px rgba(255, 107, 53, 0.6), 0 0 15px rgba(0, 255, 136, 0.4);
+    background: linear-gradient(135deg, #00ff88, #ff6b35, #f7931e);
   }
 }
 
 /* --- Rockstar Theme --- */
 .btn-rockstar {
-  background: #000;
+  background: linear-gradient(135deg, #000000, #1a1a1a);
   color: #fff;
   border-radius: 0;
   padding: 1rem 2rem;
   clip-path: polygon(0 0, 100% 0, 100% 80%, 90% 100%, 0 100%);
   border-right: 6px solid #f9d71c;
-  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-family: 'Bungee', 'Impact', sans-serif;
   letter-spacing: 2px;
+  font-weight: 400;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+  box-shadow: 3px 3px 0 rgba(249, 215, 28, 0.3);
 
   &:hover {
-    background: #f9d71c;
+    background: linear-gradient(135deg, #f9d71c, #fbbf24);
     color: #000;
     border-right-color: #000;
     clip-path: polygon(0 0, 90% 0, 100% 20%, 100% 100%, 0 100%);
+    box-shadow: 5px 5px 0 rgba(249, 215, 28, 0.5), 0 0 20px rgba(249, 215, 28, 0.6);
+    text-shadow: none;
   }
 }
 
 /* --- Cyberpunk Theme --- */
 .btn-cyberpunk {
-  background: transparent;
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
   color: #00ffcc;
-  border: 1px solid #00ffcc;
+  border: 2px solid #00ffcc;
   border-radius: 0;
-  text-shadow: 0 0 8px rgba(0, 255, 204, 0.5);
-  box-shadow: inset 0 0 10px rgba(0, 255, 204, 0.2);
+  text-shadow: 0 0 8px rgba(0, 255, 204, 0.8);
+  box-shadow: inset 0 0 10px rgba(0, 255, 204, 0.2), 0 0 10px rgba(0, 255, 204, 0.4);
+  font-family: 'Courier New', monospace;
+  font-weight: 400;
+  letter-spacing: 1px;
 
   &::after {
-    content: '';
+    content: '01010101';
     position: absolute;
-    bottom: 0;
-    right: 0;
-    width: 10px;
-    height: 10px;
-    background: #ff0055;
-    clip-path: polygon(100% 0, 0 100%, 100% 100%);
+    bottom: 2px;
+    right: 5px;
+    font-size: 6px;
+    color: #ff0055;
+    opacity: 0.7;
   }
 
   &:hover {
-    background: #00ffcc;
+    background: linear-gradient(135deg, #00ffcc, #00ffff);
     color: #000;
-    box-shadow: 0 0 20px #00ffcc;
+    box-shadow: 0 0 20px #00ffcc, 0 0 30px #00ffcc;
+    text-shadow: none;
     animation: glitch-button 0.3s infinite;
   }
 }
