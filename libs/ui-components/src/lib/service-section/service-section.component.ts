@@ -1,7 +1,10 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UICardComponent, UIChipComponent, UITooltipComponent, CardVariant } from '@negocio/ui-components';
+
 import { CustomStyles } from '../models/custom-styles.interface';
+import { UICardComponent } from '../cards/card/card.component';
+import { UIChipComponent } from '../chip/chip.component';
+import { UITooltipComponent } from '../tooltip/tooltip.component';
 
 @Component({
   selector: 'lib-service-section',

@@ -44,8 +44,12 @@
       &:focus {
         background: var(--theme-bg, rgba(15, 23, 42, 0.8));
         border-color: var(--theme-accent, #6366f1);
-        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
-        transform: translateY(-1px);
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.3), 0 4px 8px rgba(0,0,0,0.2);
+        transform: translateY(-2px) scale(1.01);
+      }
+
+      &:focus ~ .input-icon {
+        color: #6366f1;
       }
 
       &.input-disabled {
@@ -93,6 +97,94 @@
           color: #ffffff;
         }
       }
+    }
+    
+    // New styles for enhanced input
+    .input-fieldset {
+      border: none;
+      padding: 0;
+      margin: 0;
+    
+      &.input-error {
+        .input {
+          border-color: #ef4444;
+          box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+      }
+    
+      &.input-success {
+        .input {
+          border-color: #10b981;
+          box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+      }
+    }
+    
+    .input-legend {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #f1f5f9;
+      margin-bottom: 0.5rem;
+    }
+    
+    .input-group {
+      position: relative;
+    
+      .input {
+        padding-right: 2.5rem; // Space for icon
+      }
+    }
+    
+    .floating-label {
+      position: absolute;
+      top: 50%;
+      left: 1.25rem;
+      transform: translateY(-50%);
+      font-size: 0.95rem;
+      color: #94a3b8;
+      pointer-events: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: var(--theme-bg, rgba(15, 23, 42, 0.6));
+      padding: 0 0.25rem;
+      z-index: 1;
+    
+      &.floated {
+        top: 0;
+        transform: translateY(-50%) scale(0.85);
+        color: #6366f1;
+        font-weight: 600;
+      }
+    }
+    
+    .input-icon {
+      position: absolute;
+      top: 50%;
+      right: 1rem;
+      transform: translateY(-50%);
+      color: #94a3b8;
+      font-size: 1.1rem;
+      pointer-events: none;
+      z-index: 1;
+    }
+    
+    .error-message {
+      font-size: 0.8rem;
+      color: #ef4444;
+      margin-top: 0.25rem;
+      font-weight: 500;
+    }
+    
+    .success-message {
+      font-size: 0.8rem;
+      color: #10b981;
+      margin-top: 0.25rem;
+      font-weight: 500;
+    }
+    
+    datalist option {
+      background-color: #1e293b;
+      color: #f1f5f9;
+      padding: 0.5rem;
     }
 
     textarea.input {

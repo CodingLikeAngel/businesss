@@ -57,8 +57,17 @@ export class UIInputComponent implements ControlValueAccessor {
   options = input<InputOption[]>([]);
   rows = input<number | undefined>(undefined);
   label = input('');
+  legend = input('');
+  icon = input('');
+  errorMessage = input('');
+  successMessage = input('');
+  isValid = input<boolean | null>(null);
 
   private innerValue: any = '';
+  isFocused = false;
+  errorId = `input-error-${Math.random().toString(36).substr(2, 9)}`;
+
+  isFloated = computed(() => this.isFocused || (this.value !== null && this.value !== undefined && this.value !== ''));
 
   // Initialize with no-op to satisfy ESLint
   private onChange: (value: any) => void = (_: any) => {
@@ -139,13 +148,22 @@ export class UIInputComponent implements ControlValueAccessor {
   
   onInputChange(event: Event): void {
     const target = event.target as HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
-  
+
     if (target instanceof HTMLInputElement && target.type === 'checkbox') {
       this.value = target.checked;
     } else {
       this.value = target.value;
     }
-  
+
+    this.onTouched();
+  }
+
+  onFocus(): void {
+    this.isFocused = true;
+  }
+
+  onBlur(): void {
+    this.isFocused = false;
     this.onTouched();
   }
 }  

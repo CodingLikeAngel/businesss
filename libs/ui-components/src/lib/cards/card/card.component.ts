@@ -9,7 +9,7 @@ import { variants } from '../../models/ui-components-data.model';
 export const cardVariants = variants;
 export type CardVariant = typeof cardVariants[number];
 export type CardAnimation = 'none' | 'fade' | 'slide-up' | 'zoom' | 'glitch' | 'pulse';
-export type CardSize = 'small' | 'medium' | 'large';
+export type CardSize = 'square' | 'wide' | 'tall';
 
 export interface CardCustomStyles {
   backgroundColor?: string;
@@ -63,7 +63,9 @@ export class UICardComponent {
   description = input('This is a description for the card.');
   actions = input<UICardAction[]>([]);
   animation = input<CardAnimation>('none');
-  size = input<CardSize>('medium');
+  size = input<CardSize>('square');
+  badge = input<string | undefined>(undefined);
+  status = input<'active' | 'inactive' | 'pending' | undefined>(undefined);
   customStyles = input<CardCustomStyles>({});
   isHovered = false;
 
@@ -74,6 +76,7 @@ export class UICardComponent {
       this.image() ? 'card--with-image' : '',
       `card--animation-${this.animation()}`,
       `card--size-${this.size()}`,
+      this.status() ? `card--status-${this.status()}` : '',
       this.isHovered ? 'card--hovered' : ''
     ].filter(Boolean);
   }

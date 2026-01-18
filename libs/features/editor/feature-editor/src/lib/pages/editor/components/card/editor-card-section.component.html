@@ -14,7 +14,7 @@
         [description]="section.content['description'] || 'Card description goes here'"
         [image]="section.content['image'] || ''"
         [variant]="$any(getVariant(section.id))"
-        [size]="section.content['size'] || 'medium'"
+        [size]="section.content['size'] || 'wide'"
         [animation]="section.content['animation'] || 'fade'"
         [customStyles]="section.customStyles"
         class="editor-element"
@@ -38,7 +38,7 @@
     [title]="section.content['title'] || 'Card Title'"
     [description]="section.content['description'] || 'Card description'"
     [variant]="$any(getVariant(section.id))"
-    [size]="'small'"
+    [size]="'square'"
     class="editor-element"
     [class.is-selected]="selectedElementId === section.id + '_card'"
     (click)="selectElement($event, { id: section.id + '_card', content: section.content, type: 'card' })">

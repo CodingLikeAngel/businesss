@@ -1,8 +1,14 @@
-<div [ngClass]="cardClasses()" [style]="hostStyles" (mouseenter)="onHover()" (mouseleave)="onLeave()">
-  <img *ngIf="image()" [src]="image()" alt="Card image" class="card-image" [ngClass]="imageClasses()" />
+<article [ngClass]="cardClasses()" [style]="hostStyles" (mouseenter)="onHover()" (mouseleave)="onLeave()">
+  <figure *ngIf="image()">
+    <img [src]="image()" alt="Card image" class="card-image" [ngClass]="imageClasses()" />
+  </figure>
   <div class="card-content" [ngClass]="contentClasses()">
-    <h3 class="card-title" [innerHTML]="title() | highlightEffect"></h3>
+    <div class="card-header">
+      <h3 class="card-title" [innerHTML]="title() | highlightEffect"></h3>
+      <span class="card-badge" *ngIf="badge()">{{badge()}}</span>
+    </div>
     <p class="card-description" [innerHTML]="description() | glitchEffect"></p>
+    <div class="card-status-indicator" *ngIf="status()"></div>
     <div class="card-actions" *ngIf="actions().length">
       <a *ngFor="let action of actions(); let i = index"
          [href]="action.href || '#'"
@@ -14,6 +20,6 @@
     </div>
   </div>
   <div class="card-overlay" *ngIf="isHovered"></div>
-</div>
+</article>
 
 

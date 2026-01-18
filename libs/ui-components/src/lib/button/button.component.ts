@@ -43,6 +43,13 @@ export class UIButtonComponent {
   ariaLabel = input<string | undefined>(undefined);
   disabled = input<boolean>(false);
   customStyles = input<ButtonCustomStyles>({}); // Solo para variantes personalizadas
+  loading = input<boolean>(false);
+  expanded = input<boolean | undefined>(undefined);
+  pressed = input<boolean | undefined>(undefined);
+  soundUrl = input<string | undefined>(undefined);
+  haptic = input<boolean>(false);
+
+  rippleActive = false;
 
   buttonStyles = computed(() => {
     const styles: Record<string, any> = {};
@@ -83,10 +90,24 @@ export class UIButtonComponent {
   });
 
   handleClick(event: Event) {
-    if (!this.disabled()) this.buttonClick.emit(event);
+    if (!this.disabled()) {
+      this.buttonClick.emit(event);
+      this.rippleActive = true;
+      setTimeout(() => this.rippleActive = false, 600);
+      if (this.soundUrl()) {
+        const audio = new Audio(this.soundUrl());
+        audio.play();
+      }
+      if (this.haptic() && 'vibrate' in navigator) {
+        navigator.vibrate(50);
+      }
+    }
   }
 
-  isIconClass(icon: string | undefined): boolean {
-    return icon?.startsWith('hero') || false;
+  getIconType(icon: string | undefined): 'ng-icon' | 'svg' | 'text' {
+    if (!icon) return 'text';
+    if (icon.startsWith('<svg')) return 'svg';
+    if (icon.startsWith('hero')) return 'ng-icon';
+    return 'text';
   }
 }

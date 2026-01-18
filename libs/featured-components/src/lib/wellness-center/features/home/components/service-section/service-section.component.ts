@@ -18,7 +18,7 @@ import { UICardComponent, UIChipComponent, UITooltipComponent, CardVariant } fro
             <lib-ui-components-card
               [variant]="variant"
               [image]="service.image"
-              size="medium"
+              size="wide"
               animation="zoom"
               [title]="service.title"
               [description]="service.description"

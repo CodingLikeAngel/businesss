@@ -1,0 +1,337 @@
+<section
+  class="hero-section"
+  [ngClass]="heroClasses()"
+  [style]="heroStyles()"
+  role="banner"
+  aria-labelledby="hero-title"
+  aria-describedby="hero-subtitle">
+
+  <!-- Background Video Container -->
+  <div class="video-container" *ngIf="videoBackground()">
+    <video
+      [src]="videoUrl()"
+      [poster]="videoPoster()"
+      [ngClass]="videoClass()"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="metadata"
+      loading="lazy"
+      aria-hidden="true">
+    </video>
+  </div>
+
+  <!-- Background Overlay -->
+  <div class="background-overlay" [ngClass]="overlayClass()"></div>
+
+  <!-- Particle System -->
+  <div class="particle-container" *ngIf="showParticles()" [ngClass]="particleClass()" aria-hidden="true">
+    <div class="particle particle-1" [style.animation-delay]="'0s'">
+      <span class="particle-icon particle-icon-1">{{ particleIcon1() }}</span>
+    </div>
+    <div class="particle particle-2" [style.animation-delay]="'1s'">
+      <span class="particle-icon particle-icon-2">{{ particleIcon2() }}</span>
+    </div>
+    <div class="particle particle-3" [style.animation-delay]="'2s'"></div>
+  </div>
+
+  <!-- Matrix Effect Canvas -->
+  <div class="matrix-container" *ngIf="layout() === 'matrix'" aria-hidden="true">
+    <canvas #matrixCanvas class="matrix-canvas"></canvas>
+  </div>
+
+  <!-- Main Hero Content -->
+  <header class="hero-content" [ngClass]="contentClass()">
+    <h1
+      id="hero-title"
+      class="hero-title"
+      [ngClass]="titleClass()"
+      tabindex="0">
+      {{ title() }}
+    </h1>
+
+    <p
+      id="hero-subtitle"
+      class="hero-subtitle"
+      [ngClass]="subtitleClass()"
+      tabindex="0">
+      {{ subtitle() }}
+    </p>
+
+    <!-- CTA Button -->
+    <button
+      *ngIf="showCta()"
+      class="cta-button"
+      [ngClass]="ctaClass()"
+      (click)="onCtaClick()"
+      (keydown)="onInteractiveKeydown($event, onCtaClick)"
+      type="button"
+      aria-label="{{ ctaLabel() }}">
+      {{ ctaLabel() }}
+    </button>
+
+    <!-- Development Message -->
+    <div *ngIf="showDevelopmentMessage()" class="development-message" role="status" aria-live="polite">
+      <p class="development-text">🚀 Componente en desarrollo - Próximamente más funcionalidades</p>
+    </div>
+  </header>
+
+  <!-- Navigation Cards -->
+  <nav class="navigation-container" *ngIf="navigationCards().length > 0" aria-label="Navegación principal">
+    <div class="navigation-grid">
+      <article
+        *ngFor="let card of navigationCards(); trackBy: trackByFn; let i = index"
+        class="hero-card"
+        [style.animation-delay]="i * 0.2 + 's'"
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="'Ir a ' + card.title"
+        (click)="scrollToSection(card.sectionId)"
+        (keydown)="onInteractiveKeydown($event, scrollToSection, card.sectionId)">
+
+        <figure class="card-media" *ngIf="card.videoUrl">
+          <video
+            [src]="card.videoUrl"
+            [poster]="card.posterUrl"
+            class="card-video"
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            loading="lazy"
+            aria-hidden="true">
+          </video>
+        </figure>
+
+        <div class="card-content">
+          <div class="card-icon" [innerHTML]="card.icon" aria-hidden="true"></div>
+          <h3 class="card-title">{{ card.title }}</h3>
+          <p class="card-description">{{ card.description }}</p>
+        </div>
+      </article>
+    </div>
+  </nav>
+
+  <!-- Carousel Section -->
+  <aside class="carousel-container" *ngIf="carouselItems().length > 0" aria-label="Carrusel de servicios">
+    <div class="carousel">
+      <article
+        *ngFor="let item of carouselItems(); trackBy: trackByFn; let i = index"
+        class="carousel-item"
+        [class.active]="i === activeCarouselIndex"
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="'Ver ' + item.title"
+        (click)="onCarouselItemClick(item)"
+        (keydown)="onInteractiveKeydown($event, onCarouselItemClick, item)">
+
+        <figure class="carousel-media" *ngIf="item.videoUrl || item.imageUrl">
+          <video
+            *ngIf="item.videoUrl"
+            [src]="item.videoUrl"
+            [poster]="item.posterUrl"
+            class="carousel-video"
+            muted
+            loop
+            playsinline
+            preload="metadata"
+            loading="lazy"
+            aria-hidden="true">
+          </video>
+          <img
+            *ngIf="!item.videoUrl && item.imageUrl"
+            [src]="item.imageUrl"
+            [alt]="item.title"
+            class="carousel-image"
+            loading="lazy" />
+        </figure>
+
+        <div class="carousel-caption">
+          <h4 class="carousel-title">{{ item.title }}</h4>
+          <p class="carousel-description">{{ item.description }}</p>
+        </div>
+      </article>
+
+      <!-- Carousel Controls -->
+      <button
+        class="carousel-control prev"
+        (click)="prevCarouselItem()"
+        (keydown)="onInteractiveKeydown($event, prevCarouselItem)"
+        type="button"
+        aria-label="Anterior elemento del carrusel">
+        ‹
+      </button>
+      <button
+        class="carousel-control next"
+        (click)="nextCarouselItem()"
+        (keydown)="onInteractiveKeydown($event, nextCarouselItem)"
+        type="button"
+        aria-label="Siguiente elemento del carrusel">
+        ›
+      </button>
+    </div>
+  </aside>
+
+  <!-- Glass Layout -->
+  <div class="glass-container" *ngIf="layout() === 'glass'">
+    <div class="glass-shapes" aria-hidden="true">
+      <div class="shape shape-1"></div>
+      <div class="shape shape-2"></div>
+      <div class="shape shape-3"></div>
+    </div>
+
+    <div class="glass-grid">
+      <article class="glass-card" *ngFor="let card of navigationCards(); trackBy: trackByFn">
+        <div class="card-icon" [innerHTML]="card.icon" aria-hidden="true"></div>
+        <h3 class="card-title">{{ card.title }}</h3>
+        <p class="card-description">{{ card.description }}</p>
+      </article>
+    </div>
+  </div>
+
+  <!-- Starfield Layout -->
+  <div class="starfield-container" *ngIf="layout() === 'stellar'" aria-hidden="true">
+    <div class="starfield"></div>
+    <div class="floating-cards">
+      <article
+        *ngFor="let card of navigationCards(); trackBy: trackByFn"
+        class="floating-card"
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="'Ir a ' + card.title"
+        (click)="scrollToSection(card.sectionId)"
+        (keydown)="onInteractiveKeydown($event, scrollToSection, card.sectionId)">
+        <div class="card-icon" [innerHTML]="card.icon" aria-hidden="true"></div>
+        <h4 class="card-title">{{ card.title }}</h4>
+      </article>
+    </div>
+  </div>
+
+  <!-- Retro Layout -->
+  <div class="retro-container" *ngIf="layout() === 'retro'">
+    <div class="retro-menu">
+      <article
+        *ngFor="let card of navigationCards(); trackBy: trackByFn; let i = index"
+        class="retro-item"
+        [class.selected]="i === activeRetroIndex"
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="'Seleccionar ' + card.title"
+        (click)="scrollToSection(card.sectionId)"
+        (keydown)="onInteractiveKeydown($event, scrollToSection, card.sectionId)">
+        <div class="retro-icon" [innerHTML]="card.icon" aria-hidden="true"></div>
+        <div class="retro-content">
+          <span class="retro-title">{{ card.title }}</span>
+        </div>
+      </article>
+    </div>
+
+    <div class="retro-controls">
+      <button
+        class="retro-prev"
+        (click)="prevRetroItem()"
+        (keydown)="onInteractiveKeydown($event, prevRetroItem)"
+        type="button"
+        aria-label="Elemento anterior">
+        ▲
+      </button>
+      <button
+        class="retro-next"
+        (click)="nextRetroItem()"
+        (keydown)="onInteractiveKeydown($event, nextRetroItem)"
+        type="button"
+        aria-label="Elemento siguiente">
+        ▼
+      </button>
+    </div>
+  </div>
+
+  <!-- Flame Layout -->
+  <div class="flame-container" *ngIf="layout() === 'phoenix'" aria-hidden="true">
+    <div class="flame-grid">
+      <article
+        *ngFor="let card of navigationCards(); trackBy: trackByFn"
+        class="flame-card"
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="'Ir a ' + card.title"
+        (click)="scrollToSection(card.sectionId)"
+        (keydown)="onInteractiveKeydown($event, scrollToSection, card.sectionId)">
+        <div class="card-icon" [innerHTML]="card.icon" aria-hidden="true"></div>
+        <h4 class="card-title">{{ card.title }}</h4>
+        <p class="card-description">{{ card.description }}</p>
+      </article>
+    </div>
+  </div>
+
+  <!-- Gallery Layout -->
+  <div class="gallery-container" *ngIf="layout() === 'secondary'" aria-hidden="true">
+    <div class="gallery-grid">
+      <figure
+        *ngFor="let item of carouselItems(); trackBy: trackByFn"
+        class="gallery-item"
+        tabindex="0"
+        role="button"
+        [attr.aria-label]="'Ver ' + item.title"
+        (click)="onGalleryItemClick(item)"
+        (keydown)="onInteractiveKeydown($event, onGalleryItemClick, item)">
+        <video
+          *ngIf="item.videoUrl"
+          [src]="item.videoUrl"
+          [poster]="item.posterUrl"
+          class="gallery-video"
+          muted
+          loop
+          playsinline
+          preload="metadata"
+          loading="lazy"
+          aria-hidden="true">
+        </video>
+        <img
+          *ngIf="!item.videoUrl && item.imageUrl"
+          [src]="item.imageUrl"
+          [alt]="item.title"
+          class="gallery-image"
+          loading="lazy" />
+        <div class="gallery-overlay">
+          <h4>{{ item.title }}</h4>
+        </div>
+      </figure>
+    </div>
+  </div>
+
+  <!-- Form Container -->
+  <div class="form-container" *ngIf="!showCta()">
+    <form class="hero-form" (ngSubmit)="onFormSubmit()" role="form" aria-labelledby="form-title">
+      <h3 id="form-title" class="sr-only">Formulario de contacto</h3>
+      <input
+        type="email"
+        placeholder="Tu email"
+        [ngClass]="inputClass()"
+        required
+        aria-label="Correo electrónico" />
+      <button
+        type="submit"
+        [ngClass]="formButtonClass()"
+        aria-label="Enviar formulario">
+        Suscribirse
+      </button>
+    </form>
+  </div>
+
+  <!-- Scroll Icon -->
+  <div
+    *ngIf="showScrollIcon()"
+    class="scroll-icon"
+    [ngClass]="scrollIconClass()"
+    tabindex="0"
+    role="button"
+    aria-label="Desplazarse hacia abajo"
+    (click)="scrollToSection('main-content')"
+    (keydown)="onInteractiveKeydown($event, scrollToSection, 'main-content')">
+    <svg class="scroll-icon-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M7 13L12 18L17 13M7 6L12 11L17 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+</section>

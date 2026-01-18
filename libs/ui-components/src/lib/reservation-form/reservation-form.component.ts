@@ -1,7 +1,11 @@
 import { Component, Input, OnInit, CUSTOM_ELEMENTS_SCHEMA, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { UIInputComponent, UIButtonComponent, UIDateTimePickerComponent, CardVariant, UITitleComponent } from '@negocio/ui-components';
+import { UIButtonComponent } from '../button/button.component';
+import { CardVariant } from '../cards/card/card.component';
+import { UIDateTimePickerComponent } from '../date-time-picker/date-time-picker.component';
+import { UIInputComponent } from '../forms/input/input.component';
+import { UITitleComponent } from '../title/title.component';
 
 @Component({
   selector: 'lib-reservation-form',

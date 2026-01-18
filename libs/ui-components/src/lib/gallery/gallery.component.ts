@@ -1,4 +1,4 @@
-import { Component, input, ElementRef, ViewChild, AfterViewInit, OnInit, OnDestroy, HostBinding, computed, ViewEncapsulation } from '@angular/core';
+import { Component, input, ElementRef, ViewChild, AfterViewInit, OnInit, OnDestroy, HostBinding, computed, signal, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { variants as baseVariants } from '../models/ui-components-data.model';
@@ -18,6 +18,7 @@ export interface GalleryImage {
   src: string;
   alt: string;
   caption?: string;
+  category?: string;
 }
 
 @Component({
@@ -39,6 +40,24 @@ export class UIGalleryComponent implements OnInit, AfterViewInit, OnDestroy {
   slideInterval = input(3000);
   customStyles = input<CustomStyles>({});
 
+  categories = computed(() => {
+    const cats = this.images().map(img => img.category).filter(Boolean) as string[];
+    return ['all', ...new Set(cats)];
+  });
+
+  selectedCategory = signal<string>('all');
+
+  filteredImages = computed(() => {
+    if (this.selectedCategory() === 'all') return this.images();
+    return this.images().filter(img => img.category === this.selectedCategory());
+  });
+
+  loadedImages = signal<Map<string, boolean>>(new Map());
+
+  isModalOpen = signal(false);
+
+  modalImageIndex = signal(0);
+
   @ViewChild('slider', { static: false }) slider!: ElementRef<HTMLDivElement>;
 
   currentIndex = 0;
@@ -49,6 +68,9 @@ export class UIGalleryComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.autoSlide()) {
       this.startAutoSlide();
     }
+    this.images().forEach(img => {
+      this.loadedImages.update(map => map.set(img.src, true));
+    });
   }
 
   ngAfterViewInit() {
@@ -158,4 +180,45 @@ export class UIGalleryComponent implements OnInit, AfterViewInit, OnDestroy {
     
     return styles;
   });
+
+  selectCategory(cat: string) {
+    this.selectedCategory.set(cat);
+  }
+
+  openModal(index: number) {
+    this.modalImageIndex.set(index);
+    this.isModalOpen.set(true);
+  }
+
+  closeModal() {
+    this.isModalOpen.set(false);
+  }
+
+  prevModal() {
+    const len = this.filteredImages().length;
+    this.modalImageIndex.set((this.modalImageIndex() - 1 + len) % len);
+  }
+
+  nextModal() {
+    const len = this.filteredImages().length;
+    this.modalImageIndex.set((this.modalImageIndex() + 1) % len);
+  }
+
+  onModalKey(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      this.closeModal();
+    } else if (event.key === 'ArrowLeft') {
+      this.prevModal();
+    } else if (event.key === 'ArrowRight') {
+      this.nextModal();
+    }
+  }
+
+  onMouseMove(event: MouseEvent, element: HTMLElement) {
+    element.classList.add('ui-gallery__item--hovered');
+  }
+
+  onMouseLeave(element: HTMLElement) {
+    element.classList.remove('ui-gallery__item--hovered');
+  }
 }
