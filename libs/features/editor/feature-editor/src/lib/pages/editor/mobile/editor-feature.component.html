@@ -1,315 +1,348 @@
 <div class="sections-container min-h-screen relative pb-32">
   <div *ngIf="loading$ | async" class="flex items-center justify-center p-20">
-    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+    <div
+      class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"
+    ></div>
   </div>
 
-  <div *ngIf="(sections$ | async)?.length === 0 && !(loading$ | async)" class="flex flex-col items-center justify-center p-10 text-white/50">
+  <div
+    *ngIf="(sections$ | async)?.length === 0 && !(loading$ | async)"
+    class="flex flex-col items-center justify-center p-10 text-white/50"
+  >
     <div class="text-4xl mb-4">🏗️</div>
     <h2 class="text-xl font-bold">Página vacía</h2>
-    <p class="text-xs text-center">Añade secciones desde el panel de Estructura.</p>
+    <p class="text-xs text-center">
+      Añade secciones desde el panel de Estructura.
+    </p>
   </div>
 
-  <ng-container *ngFor="let section of sections$ | async; trackBy: trackBySectionId">
+  <ng-container
+    *ngFor="let section of sections$ | async; trackBy: trackBySectionId"
+  >
     <ng-container [ngSwitch]="section.type" *ngIf="section.visible">
-      
       <!-- HERO -->
-      <lib-editor-hero-section *ngSwitchCase="'hero'"
+      <lib-editor-hero-section
+        *ngSwitchCase="'hero'"
         [section]="section"
         [heroConfig]="heroConfig"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-hero-section>
 
       <!-- FEATURES -->
-      <lib-editor-features-section *ngSwitchCase="'features'"
+      <lib-editor-features-section
+        *ngSwitchCase="'features'"
         [section]="section"
         [featuresConfig]="featuresConfig"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-features-section>
 
       <!-- STATS -->
-      <lib-editor-stats-section *ngSwitchCase="'stats'"
+      <lib-editor-stats-section
+        *ngSwitchCase="'stats'"
         [section]="section"
         [statsConfig]="statsConfig"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-stats-section>
 
       <!-- BUBBLE -->
-      <lib-editor-bubble-section *ngSwitchCase="'bubble'"
+      <lib-editor-bubble-section
+        *ngSwitchCase="'bubble'"
         [section]="section"
         [bubbleConfig]="bubbleConfig"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-bubble-section>
 
       <!-- SERVICES -->
-      <lib-editor-services-section *ngSwitchCase="'services'"
+      <lib-editor-services-section
+        *ngSwitchCase="'services'"
         [section]="section"
         [serviceCardsConfig]="serviceCardsConfig"
         [titleConfig]="titleConfig"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-services-section>
 
       <!-- PRODUCTS -->
-      <lib-editor-products-section *ngSwitchCase="'products'"
+      <lib-editor-products-section
+        *ngSwitchCase="'products'"
         [section]="section"
         [productsConfig]="productsConfig"
         [titleConfig]="titleConfig"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-products-section>
 
       <!-- TESTIMONIALS -->
-      <lib-editor-testimonials-section *ngSwitchCase="'testimonials'"
+      <lib-editor-testimonials-section
+        *ngSwitchCase="'testimonials'"
         [section]="section"
         [testimonialsConfig]="testimonialsConfig"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-testimonials-section>
 
       <!-- PRICING -->
-      <lib-editor-pricing-section *ngSwitchCase="'pricing'"
+      <lib-editor-pricing-section
+        *ngSwitchCase="'pricing'"
         [section]="section"
         [pricingConfig]="pricingConfig"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-pricing-section>
 
       <!-- PROMOTIONS -->
-      <lib-editor-promotions-section *ngSwitchCase="'promotions'"
+      <lib-editor-promotions-section
+        *ngSwitchCase="'promotions'"
         [section]="section"
         [promotionsConfig]="promotionsConfig"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-promotions-section>
 
       <!-- FAQ -->
-      <lib-editor-faq-section *ngSwitchCase="'faq'"
+      <lib-editor-faq-section
+        *ngSwitchCase="'faq'"
         [section]="section"
         [faqConfig]="faqConfig"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-faq-section>
 
       <!-- GALLERY -->
-      <lib-editor-gallery-section *ngSwitchCase="'gallery'"
+      <lib-editor-gallery-section
+        *ngSwitchCase="'gallery'"
         [section]="section"
         [galleryConfig]="galleryConfig"
         [titleConfig]="titleConfig"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-gallery-section>
 
       <!-- CONTACT -->
-      <lib-editor-contact-section *ngSwitchCase="'contact'"
+      <lib-editor-contact-section
+        *ngSwitchCase="'contact'"
         [section]="section"
         [titleConfig]="titleConfig"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-contact-section>
 
       <!-- HEADER -->
-      <lib-editor-header-section *ngSwitchCase="'header'"
+      <lib-editor-header-section
+        *ngSwitchCase="'header'"
         [section]="section"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-header-section>
 
       <!-- FOOTER -->
-      <lib-editor-footer-section *ngSwitchCase="'footer'"
+      <lib-editor-footer-section
+        *ngSwitchCase="'footer'"
         [section]="section"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-footer-section>
 
       <!-- ACCORDION -->
-      <lib-editor-accordion-section *ngSwitchCase="'accordion'"
+      <lib-editor-accordion-section
+        *ngSwitchCase="'accordion'"
         [section]="section"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-accordion-section>
 
       <!-- LIST -->
-      <lib-editor-list-section *ngSwitchCase="'list'"
+      <lib-editor-list-section
+        *ngSwitchCase="'list'"
         [section]="section"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-list-section>
 
       <!-- NEWSLETTER -->
-      <lib-editor-newsletter-section *ngSwitchCase="'newsletter'"
+      <lib-editor-newsletter-section
+        *ngSwitchCase="'newsletter'"
         [section]="section"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-newsletter-section>
 
       <!-- STEPS -->
-      <lib-editor-steps-section *ngSwitchCase="'steps'"
+      <lib-editor-steps-section
+        *ngSwitchCase="'steps'"
         [section]="section"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-steps-section>
 
       <!-- TABLE -->
-      <lib-editor-table-section *ngSwitchCase="'table'"
+      <lib-editor-table-section
+        *ngSwitchCase="'table'"
         [section]="section"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-table-section>
 
       <!-- TABS -->
-      <lib-editor-tabs-section *ngSwitchCase="'tabs'"
+      <lib-editor-tabs-section
+        *ngSwitchCase="'tabs'"
         [section]="section"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-tabs-section>
 
       <!-- BREADCRUMBS -->
-      <lib-editor-breadcrumbs-section *ngSwitchCase="'breadcrumbs'"
+      <lib-editor-breadcrumbs-section
+        *ngSwitchCase="'breadcrumbs'"
         [section]="section"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-breadcrumbs-section>
 
       <!-- CHIP -->
-      <lib-editor-chip-section *ngSwitchCase="'chip'"
+      <lib-editor-chip-section
+        *ngSwitchCase="'chip'"
         [section]="section"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-chip-section>
 
       <!-- SPINNER -->
-      <lib-editor-spinner-section *ngSwitchCase="'spinner'"
+      <lib-editor-spinner-section
+        *ngSwitchCase="'spinner'"
         [section]="section"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-spinner-section>
 
       <!-- CHART -->
-      <lib-editor-chart-section *ngSwitchCase="'chart'"
+      <lib-editor-chart-section
+        *ngSwitchCase="'chart'"
         [section]="section"
         [chartConfig]="chartConfig"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-chart-section>
 
       <!-- SHOWCASE -->
-      <lib-editor-showcase-section *ngSwitchCase="'showcase'"
+      <lib-editor-showcase-section
+        *ngSwitchCase="'showcase'"
         [section]="section"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-showcase-section>
 
       <!-- CTA -->
-      <lib-editor-cta-section *ngSwitchCase="'cta'"
+      <lib-editor-cta-section
+        *ngSwitchCase="'cta'"
         [section]="section"
-        [isMobile]="true"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
-        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
       </lib-editor-cta-section>
-      
     </ng-container>
   </ng-container>
 </div>
