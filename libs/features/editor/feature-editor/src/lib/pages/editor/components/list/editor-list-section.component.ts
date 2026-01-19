@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
+import {
   ApplyDynamicStylesDirective,
-  VisualEditableDirective
+  EnhancedVisualEditableDirective
 } from '@negocio/shared-components';
-import { 
-  UIListComponent 
+import {
+  UIListComponent
 } from '@negocio/ui-components';
-import { BaseEditorSectionComponent } from '../base-editor-section.component';
+import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
 @Component({
   selector: 'lib-editor-list-section',
@@ -16,8 +16,8 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
     CommonModule,
     UIListComponent,
     ApplyDynamicStylesDirective,
-    VisualEditableDirective
+    EnhancedVisualEditableDirective
   ],
   templateUrl: './editor-list-section.component.html'
 })
-export class EditorListSectionComponent extends BaseEditorSectionComponent {}
+export class EditorListSectionComponent extends EnhancedBaseEditorSectionComponent {}

@@ -1,33 +1,57 @@
 <!-- DESKTOP PRODUCTS -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer"
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer py-4"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-  <lib-products-section
-    [title]="section.content['title'] || 'Nuestros Productos'"
-    [subtitle]="section.content['subtitle'] || 'Descubre nuestra selección premium'"
-    [variant]="getVariant(section.id)"
-    [customStyles]="section.styles || {}"
-    [applyDynamicStyles]="section.styles"
-    [products]="productsConfig.items"
-  ></lib-products-section>
+  <div #productsElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_products'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_products', section.content, 'products'))"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getProductsConfig()"
+       elementId="{{section.id + '_products'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleProductsEvent($event)">
+    <lib-products-section
+      [title]="section.content['title'] || 'Nuestros Productos'"
+      [subtitle]="section.content['subtitle'] || 'Descubre nuestra selección premium'"
+      [variant]="getVariant(section.id)"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles"
+      [products]="productsConfig.items"
+    ></lib-products-section>
+  </div>
 </div>
 
 <!-- MOBILE PRODUCTS -->
-<div *ngIf="isMobile" class="editor-section cursor-pointer"
+<div *ngIf="isMobile" #sectionElement
+  class="editor-section cursor-pointer py-2 p-2"
   [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)">
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-  <lib-products-section
-    [title]="section.content['title'] || 'Nuestros Productos'"
-    [subtitle]="section.content['subtitle'] || 'Descubre nuestra selección premium'"
-    [variant]="getVariant(section.id)"
-    [customStyles]="section.styles || {}"
-    [applyDynamicStyles]="section.styles"
-    [products]="productsConfig.items"
-  ></lib-products-section>
+  <div #productsElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_products'"
+       (click)="selectElement($event, { id: section.id + '_products', content: section.content, type: 'products' })"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getProductsConfig()"
+       elementId="{{section.id + '_products'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleProductsEvent($event)">
+    <lib-products-section
+      [title]="section.content['title'] || 'Nuestros Productos'"
+      [subtitle]="section.content['subtitle'] || 'Descubre nuestra selección premium'"
+      [variant]="getVariant(section.id)"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles"
+      [products]="productsConfig.items"
+    ></lib-products-section>
+  </div>
 </div>

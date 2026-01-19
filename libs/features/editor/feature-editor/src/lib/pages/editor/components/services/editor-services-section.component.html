@@ -3,9 +3,9 @@
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
+  [enhancedVisualEditable]="createElementConfig('section')"
+  elementId="{{section.id}}"
+  (visualEvents)="handleVisualEvent($event, section.id)">
 
   <lib-service-section
     [variant]="getVariant(section.id)"

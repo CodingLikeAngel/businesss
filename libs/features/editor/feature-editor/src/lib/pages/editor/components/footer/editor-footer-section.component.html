@@ -1,24 +1,55 @@
-<div class="editor-section cursor-pointer py-4"
+<!-- DESKTOP FOOTER -->
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer py-4"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
-    <div class="editor-element"
-         [class.is-selected]="selectedElementId === section.id + '_footer'"
-         (click)="selectElement($event, { id: section.id + '_footer', sectionId: section.id, content: section.content, type: 'footer', _original: section.content })"
-         [applyDynamicStyles]="section.styles"
-         [visualEditable]="true"
-         visualType="element"
-         (visualMoved)="onElementMoved($event, section.id + '_footer')"
-         (visualResized)="onElementResized($event, section.id + '_footer')">
-      <lib-ui-components-footer
-        [variant]="$any(section.content['variant'] || getVariant(section.id))"
-        [title]="section.content['title'] || 'Pie de Página'"
-        [description]="section.content['description'] || 'Descripción del footer'"
-        [customStyles]="section.styles || {}"
-        [applyDynamicStyles]="section.styles || {}"
-      ></lib-ui-components-footer>
-    </div>
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <div #footerElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_footer'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_footer', section.content, 'footer'))"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getFooterConfig()"
+       elementId="{{section.id + '_footer'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleFooterEvent($event)">
+    <lib-ui-components-footer
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [title]="section.content['title'] || 'Pie de Página'"
+      [description]="section.content['description'] || 'Descripción del footer'"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-ui-components-footer>
+  </div>
+</div>
+
+<!-- MOBILE FOOTER -->
+<div *ngIf="isMobile" #sectionElement
+  class="editor-section cursor-pointer py-2 p-2"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <div #footerElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_footer'"
+       (click)="selectElement($event, { id: section.id + '_footer', content: section.content, type: 'footer' })"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getFooterConfig()"
+       elementId="{{section.id + '_footer'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleFooterEvent($event)">
+    <lib-ui-components-footer
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [title]="section.content['title'] || 'Pie de Página'"
+      [description]="section.content['description'] || 'Descripción del footer'"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-ui-components-footer>
+  </div>
 </div>

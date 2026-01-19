@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UIButtonComponent } from '@negocio/ui-components';
-import { 
-  ApplyDynamicStylesDirective, 
-  VisualEditableDirective 
+import {
+  ApplyDynamicStylesDirective,
+  EnhancedVisualEditableDirective
 } from '@negocio/shared-components';
-import { BaseEditorSectionComponent } from '../base-editor-section.component';
+import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
 @Component({
   selector: 'lib-editor-button-section',
@@ -14,9 +14,9 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
     CommonModule,
     UIButtonComponent,
     ApplyDynamicStylesDirective,
-    VisualEditableDirective
+    EnhancedVisualEditableDirective
   ],
   templateUrl: './editor-button-section.component.html'
 })
-export class EditorButtonSectionComponent extends BaseEditorSectionComponent {
+export class EditorButtonSectionComponent extends EnhancedBaseEditorSectionComponent {
 }

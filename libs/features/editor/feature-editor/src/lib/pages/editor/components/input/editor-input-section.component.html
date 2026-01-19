@@ -1,14 +1,14 @@
 <!-- DESKTOP INPUT -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer py-12"
+<div *ngIf="!isMobile" #sectionElement class="editor-section cursor-pointer py-12"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
-  
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
   <div class="container mx-auto px-6 max-w-2xl">
-    <lib-ui-components-input
+    <lib-ui-components-input #inputElement
       [(ngModel)]="inputValue"
       [placeholder]="section.content['placeholder'] || 'Enter text...'"
       [type]="section.content['type'] || 'text'"
@@ -17,26 +17,33 @@
       class="editor-element"
       [class.is-selected]="selectedElementId === section.id + '_input'"
       (click)="selectElement($event, getMergedElement(section.id, section.id + '_input', section.content, 'input'))"
-      [visualEditable]="true"
-      visualType="element"
-      (visualMoved)="onElementMoved($event, section.id + '_input')"
-      (visualResized)="onElementResized($event, section.id + '_input')">
+      [enhancedVisualEditable]="getInputConfig()"
+      elementId="{{section.id + '_input'}}"
+      sectionId="{{section.id}}"
+      (visualEvents)="handleInputEvent($event)">
     </lib-ui-components-input>
   </div>
 </div>
 
 <!-- MOBILE INPUT -->
-<div *ngIf="isMobile" class="editor-section cursor-pointer py-8 p-4"
+<div *ngIf="isMobile" #sectionElement class="editor-section cursor-pointer py-8 p-4"
   [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)">
-  
-  <lib-ui-components-input
+  (click)="selectSection($event, section)"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <lib-ui-components-input #inputElement
     [(ngModel)]="inputValue"
     [placeholder]="section.content['placeholder'] || 'Enter text...'"
     [type]="section.content['type'] || 'text'"
     [variant]="getVariant(section.id)"
     class="editor-element"
     [class.is-selected]="selectedElementId === section.id + '_input'"
-    (click)="selectElement($event, { id: section.id + '_input', content: section.content, type: 'input' })">
+    (click)="selectElement($event, { id: section.id + '_input', content: section.content, type: 'input' })"
+    [enhancedVisualEditable]="getInputConfig()"
+    elementId="{{section.id + '_input'}}"
+    sectionId="{{section.id}}"
+    (visualEvents)="handleInputEvent($event)">
   </lib-ui-components-input>
 </div>

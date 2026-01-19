@@ -1,18 +1,18 @@
-<div class="editor-section cursor-pointer py-12"
+<div #sectionElement class="editor-section cursor-pointer py-12"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
-    <div class="container mx-auto px-6 max-w-4xl editor-element"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+    <div #tabsElement class="container mx-auto px-6 max-w-4xl editor-element"
        [class.is-selected]="selectedElementId === section.id + '_tabs'"
-       (click)="selectElement($event, { id: section.id + '_tabs', sectionId: section.id, content: section.content, type: 'tabs', _original: section.content })"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_tabs', section.content, 'tabs'))"
        [applyDynamicStyles]="section.styles"
-       [visualEditable]="true"
-       visualType="element"
-       (visualMoved)="onElementMoved($event, section.id + '_tabs')"
-       (visualResized)="onElementResized($event, section.id + '_tabs')">
+       [enhancedVisualEditable]="getTabsConfig()"
+       elementId="{{section.id + '_tabs'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleTabsEvent($event)">
        <lib-ui-components-tabs
          [variant]="section.content['variant'] || getVariant(section.id)"
          [tabs]="section.content['tabs'] || [{ label: 'Tab 1', content: 'Content for Tab 1' }, { label: 'Tab 2', content: 'Content for Tab 2' }]"

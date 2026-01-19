@@ -1,38 +1,34 @@
 import { Component, Input, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UIImageComponent } from '@negocio/ui-components';
-import {
-  ApplyDynamicStylesDirective,
-  EnhancedVisualEditableDirective,
-  VisualEditingConfig,
-  VisualEditingEvent
-} from '@negocio/shared-components';
+import { UITitleComponent } from '@negocio/ui-components';
+import { ApplyDynamicStylesDirective, EnhancedVisualEditableDirective } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { VisualEditingConfig, VisualEditingEvent } from '../../../../../shared-components/variant-selector/enhanced-visual-editing.interfaces';
 
 /**
- * Enhanced Editor Image Section Component
+ * Enhanced Editor Title Section Component
  * Example implementation using the new EnhancedBaseEditorSectionComponent
  * and EnhancedVisualEditableDirective for standardized visual editing
  */
 @Component({
-  selector: 'lib-editor-image-section',
+  selector: 'lib-enhanced-editor-title-section',
   standalone: true,
   imports: [
     CommonModule,
-    UIImageComponent,
+    UITitleComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective
   ],
-  templateUrl: './editor-image-section.component.html'
+  templateUrl: './enhanced-editor-title-section.component.html'
 })
-export class EditorImageSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
+export class EnhancedEditorTitleSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
-  @ViewChild('imageElement', { static: true }) imageElement!: ElementRef;
+  @ViewChild('titleElement', { static: true }) titleElement!: ElementRef;
 
   ngAfterViewInit() {
     // Apply standardized visual editing to elements
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
-    this.applyElementVisualEditing(this.imageElement, this.section.id + '_image');
+    this.applyElementVisualEditing(this.titleElement, this.section.id + '_title');
   }
 
   /**
@@ -42,13 +38,10 @@ export class EditorImageSectionComponent extends EnhancedBaseEditorSectionCompon
     return this.createElementConfig('section', {
       constraints: {
         containment: 'parent',
-        minDistance: { top: 10, right: 10, bottom: 10, left: 10 },
-        collisionDetection: false,
-        safeZones: []
+        minDistance: { top: 10, right: 10, bottom: 10, left: 10 }
       },
       styling: {
         selectionOutline: '2px solid #6366f1',
-        hoverEffects: true,
         dimensionLabels: true,
         resizeHandles: true
       }
@@ -56,25 +49,22 @@ export class EditorImageSectionComponent extends EnhancedBaseEditorSectionCompon
   }
 
   /**
-   * Get configuration for the image element
+   * Get configuration for the title element
    */
-  getImageConfig(): VisualEditingConfig {
+  getTitleConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
       interactions: {
-        touchEnabled: this.platformInfo.isTouch,
-        multiSelect: true,
         snapToGrid: 5,
         animationDuration: 150,
-        hapticFeedback: true
+        touchEnabled: this.platformInfo.isTouch
       },
       constraints: {
         containment: 'parent',
         collisionDetection: true,
-        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
-        safeZones: []
+        minDistance: { top: 5, right: 5, bottom: 5, left: 5 }
       },
       styling: {
-        selectionOutline: '2px solid #059669',
+        selectionOutline: '2px solid #10b981',
         hoverEffects: !this.platformInfo.isMobile, // Disable hover on mobile
         dimensionLabels: !this.platformInfo.isMobile, // Reduce clutter on mobile
         resizeHandles: true
@@ -89,35 +79,37 @@ export class EditorImageSectionComponent extends EnhancedBaseEditorSectionCompon
     this.handleVisualEvent(event, this.section.id);
   }
 
-  handleImageEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_image');
+  handleTitleEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id + '_title');
   }
 
   /**
-   * Custom event handling for image-specific logic
+   * Custom event handling for title-specific logic
    */
-  protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_image') {
-      // Image-specific visual event handling
+  protected onVisualEvent(event: VisualEditingEvent, elementId: string): void {
+    if (elementId === this.section.id + '_title') {
+      // Title-specific visual event handling
       switch (event.type) {
         case 'selected':
-          console.log('Image element selected for editing');
+          console.log('Title element selected for editing');
           break;
         case 'moved':
-          this.updateImagePosition(event.bounds);
+          // Update title position in section content
+          this.updateTitlePosition(event.bounds);
           break;
         case 'resized':
-          // Handle image resize if needed
+          // Handle title resize if needed
           break;
       }
     }
   }
 
   /**
-   * Update image position in section data
+   * Update title position in section data
    */
-  private updateImagePosition(bounds: any): void {
+  private updateTitlePosition(bounds: any): void {
     // This would update the section content with new position
-    console.log('Image position updated:', bounds);
+    // For now, just log the change
+    console.log('Title position updated:', bounds);
   }
 }

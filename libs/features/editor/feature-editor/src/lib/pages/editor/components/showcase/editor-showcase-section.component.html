@@ -1,18 +1,18 @@
-<div class="editor-section cursor-pointer py-24"
+<div #sectionElement class="editor-section cursor-pointer py-24"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
-    <div class="container mx-auto px-6 editor-element"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+    <div #showcaseElement class="container mx-auto px-6 editor-element"
        [class.is-selected]="selectedElementId === section.id + '_showcase'"
-       (click)="selectElement($event, { id: section.id + '_showcase', sectionId: section.id, content: section.content, type: 'showcase', _original: section.content })"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_showcase', section.content, 'showcase'))"
        [applyDynamicStyles]="section.styles"
-       [visualEditable]="true"
-       visualType="element"
-       (visualMoved)="onElementMoved($event, section.id + '_showcase')"
-       (visualResized)="onElementResized($event, section.id + '_showcase')">
+       [enhancedVisualEditable]="getShowcaseConfig()"
+       elementId="{{section.id + '_showcase'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleShowcaseEvent($event)">
        <lib-ui-gaming-variants-showcase></lib-ui-gaming-variants-showcase>
     </div>
 </div>

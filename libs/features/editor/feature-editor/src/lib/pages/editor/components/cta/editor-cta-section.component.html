@@ -1,51 +1,109 @@
-<div class="editor-section cursor-pointer py-20 px-6 backdrop-blur-md bg-white/5 border-y border-white/5"
+<!-- DESKTOP CTA -->
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer py-20 px-6 backdrop-blur-md bg-white/5 border-y border-white/5"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
-    <div class="container mx-auto max-w-4xl text-center">
-       <div class="editor-element mb-6"
-          [class.is-selected]="selectedElementId === section.id + '_title'"
-          (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })"
-          [applyDynamicStyles]="section.content['titleStyles']"
-          [visualEditable]="true"
-          visualType="element"
-          (visualMoved)="onElementMoved($event, section.id + '_title')"
-          (visualResized)="onElementResized($event, section.id + '_title')">
-          <h2 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4">
-            {{ section.content['title'] || '¿Listo para el siguiente nivel?' }}
-          </h2>
-       </div>
-       
-       <div class="editor-element mb-10"
-          [class.is-selected]="selectedElementId === section.id + '_subtitle'"
-          (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })"
-          [applyDynamicStyles]="section.content['subtitleStyles']"
-          [visualEditable]="true"
-          visualType="element"
-          (visualMoved)="onElementMoved($event, section.id + '_subtitle')"
-          (visualResized)="onElementResized($event, section.id + '_subtitle')">
-          <p class="text-xl text-white/70 max-w-2xl mx-auto">
-            {{ section.content['subtitle'] || 'Únete a nosotros y transforma tu negocio hoy mismo.' }}
-          </p>
-       </div>
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-        <div class="editor-element inline-block"
-           [class.is-selected]="selectedElementId === section.id + '_cta'"
-           (click)="selectElement($event, { id: section.id + '_cta', sectionId: section.id, content: section.content, type: 'cta', _original: section.content })"
-           [applyDynamicStyles]="section.content['ctaStyles']"
-           [visualEditable]="true"
-           visualType="element"
-           (visualMoved)="onElementMoved($event, section.id + '_cta')"
-           (visualResized)="onElementResized($event, section.id + '_cta')">
-          <lib-ui-components-button
-            [variant]="section.content['variant'] || getVariant(section.id)"
-            [size]="'lg'"
-          >
-            {{ section.content['ctaLabel'] || 'Empezar ahora' }}
-          </lib-ui-components-button>
-       </div>
+  <div class="container mx-auto max-w-4xl text-center">
+    <div #titleElement class="editor-element mb-6"
+       [class.is-selected]="selectedElementId === section.id + '_title'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_title', section.content, 'title'))"
+       [applyDynamicStyles]="section.content['titleStyles']"
+       [enhancedVisualEditable]="getTitleConfig()"
+       elementId="{{section.id + '_title'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleTitleEvent($event)">
+      <h2 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4">
+        {{ section.content['title'] || '¿Listo para el siguiente nivel?' }}
+      </h2>
     </div>
+
+    <div #ctaElement class="editor-element mb-10"
+       [class.is-selected]="selectedElementId === section.id + '_subtitle'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_subtitle', section.content, 'subtitle'))"
+       [applyDynamicStyles]="section.content['subtitleStyles']"
+       [enhancedVisualEditable]="getCtaConfig()"
+       elementId="{{section.id + '_subtitle'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleCtaEvent($event)">
+      <p class="text-xl text-white/70 max-w-2xl mx-auto">
+        {{ section.content['subtitle'] || 'Únete a nosotros y transforma tu negocio hoy mismo.' }}
+      </p>
+    </div>
+
+    <div #buttonElement class="editor-element inline-block"
+       [class.is-selected]="selectedElementId === section.id + '_cta'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_cta', section.content, 'cta'))"
+       [applyDynamicStyles]="section.content['ctaStyles']"
+       [enhancedVisualEditable]="getButtonConfig()"
+       elementId="{{section.id + '_cta'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleButtonEvent($event)">
+      <lib-ui-components-button
+        [variant]="section.content['variant'] || getVariant(section.id)"
+        [size]="'lg'"
+      >
+        {{ section.content['ctaLabel'] || 'Empezar ahora' }}
+      </lib-ui-components-button>
+    </div>
+  </div>
+</div>
+
+<!-- MOBILE CTA -->
+<div *ngIf="isMobile" #sectionElement
+  class="editor-section cursor-pointer py-12 px-4"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <div class="container mx-auto max-w-4xl text-center">
+    <div #titleElement class="editor-element mb-6"
+       [class.is-selected]="selectedElementId === section.id + '_title'"
+       (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+       [applyDynamicStyles]="section.content['titleStyles']"
+       [enhancedVisualEditable]="getTitleConfig()"
+       elementId="{{section.id + '_title'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleTitleEvent($event)">
+      <h2 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4">
+        {{ section.content['title'] || '¿Listo para el siguiente nivel?' }}
+      </h2>
+    </div>
+
+    <div #ctaElement class="editor-element mb-8"
+       [class.is-selected]="selectedElementId === section.id + '_subtitle'"
+       (click)="selectElement($event, { id: section.id + '_subtitle', content: section.content, type: 'subtitle' })"
+       [applyDynamicStyles]="section.content['subtitleStyles']"
+       [enhancedVisualEditable]="getCtaConfig()"
+       elementId="{{section.id + '_subtitle'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleCtaEvent($event)">
+      <p class="text-lg text-white/70 max-w-2xl mx-auto">
+        {{ section.content['subtitle'] || 'Únete a nosotros y transforma tu negocio hoy mismo.' }}
+      </p>
+    </div>
+
+    <div #buttonElement class="editor-element inline-block"
+       [class.is-selected]="selectedElementId === section.id + '_cta'"
+       (click)="selectElement($event, { id: section.id + '_cta', content: section.content, type: 'cta' })"
+       [applyDynamicStyles]="section.content['ctaStyles']"
+       [enhancedVisualEditable]="getButtonConfig()"
+       elementId="{{section.id + '_cta'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleButtonEvent($event)">
+      <lib-ui-components-button
+        [variant]="section.content['variant'] || getVariant(section.id)"
+        [size]="'md'"
+      >
+        {{ section.content['ctaLabel'] || 'Empezar ahora' }}
+      </lib-ui-components-button>
+    </div>
+  </div>
 </div>

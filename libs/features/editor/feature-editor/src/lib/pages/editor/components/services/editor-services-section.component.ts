@@ -1,17 +1,17 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
+import {
   ServiceCardsConfig,
   TitleConfig,
   ApplyDynamicStylesDirective,
-  VisualEditableDirective
+  EnhancedVisualEditableDirective
 } from '@negocio/shared-components';
 import {
   UITitleComponent,
   UICardComponent,
   ServiceSectionComponent
 } from '@negocio/ui-components';
-import { BaseEditorSectionComponent } from '../base-editor-section.component';
+import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
 @Component({
   selector: 'lib-editor-services-section',
@@ -22,11 +22,11 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
     UICardComponent,
     ServiceSectionComponent,
     ApplyDynamicStylesDirective,
-    VisualEditableDirective
+    EnhancedVisualEditableDirective
   ],
   templateUrl: './editor-services-section.component.html'
 })
-export class EditorServicesSectionComponent extends BaseEditorSectionComponent {
+export class EditorServicesSectionComponent extends EnhancedBaseEditorSectionComponent {
   @Input() serviceCardsConfig!: ServiceCardsConfig;
   @Input() titleConfig!: TitleConfig;
 }

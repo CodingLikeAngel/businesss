@@ -1,33 +1,57 @@
 <!-- DESKTOP STATS -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer"
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer py-4"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-  <lib-ui-components-stats-section
-    [title]="section.content['title'] || 'Resultados que Hablan por Sí Solos'"
-    [subtitle]="section.content['subtitle'] || 'Indicadores clave de rendimiento.'"
-    [variant]="getVariant(section.id)"
-    [customStyles]="section.styles || {}"
-    [applyDynamicStyles]="section.styles"
-    [stats]="statsConfig.items"
-  ></lib-ui-components-stats-section>
+  <div #statsElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_stats'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_stats', section.content, 'stats'))"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getStatsConfig()"
+       elementId="{{section.id + '_stats'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleStatsEvent($event)">
+    <lib-ui-components-stats-section
+      [title]="section.content['title'] || 'Resultados que Hablan por Sí Solos'"
+      [subtitle]="section.content['subtitle'] || 'Indicadores clave de rendimiento.'"
+      [variant]="getVariant(section.id)"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles"
+      [stats]="statsConfig.items"
+    ></lib-ui-components-stats-section>
+  </div>
 </div>
 
 <!-- MOBILE STATS -->
-<div *ngIf="isMobile" class="editor-section cursor-pointer"
+<div *ngIf="isMobile" #sectionElement
+  class="editor-section cursor-pointer py-2 p-2"
   [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)">
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-  <lib-ui-components-stats-section
-    [title]="section.content['title'] || 'Resultados que Hablan por Sí Solos'"
-    [subtitle]="section.content['subtitle'] || 'Indicadores clave de rendimiento.'"
-    [variant]="getVariant(section.id)"
-    [customStyles]="section.styles || {}"
-    [applyDynamicStyles]="section.styles"
-    [stats]="statsConfig.items"
-  ></lib-ui-components-stats-section>
+  <div #statsElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_stats'"
+       (click)="selectElement($event, { id: section.id + '_stats', content: section.content, type: 'stats' })"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getStatsConfig()"
+       elementId="{{section.id + '_stats'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleStatsEvent($event)">
+    <lib-ui-components-stats-section
+      [title]="section.content['title'] || 'Resultados que Hablan por Sí Solos'"
+      [subtitle]="section.content['subtitle'] || 'Indicadores clave de rendimiento.'"
+      [variant]="getVariant(section.id)"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles"
+      [stats]="statsConfig.items"
+    ></lib-ui-components-stats-section>
+  </div>
 </div>

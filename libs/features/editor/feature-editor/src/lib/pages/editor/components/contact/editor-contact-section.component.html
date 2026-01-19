@@ -1,23 +1,23 @@
 <!-- DESKTOP CONTACT -->
-<section *ngIf="!isMobile" [id]="section.id"
+<section *ngIf="!isMobile" #sectionElement [id]="section.id"
   class="relative z-20 py-20 mb-16 cursor-pointer editor-section contact-section"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
   <div class="container mx-auto px-6 max-w-6xl">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
       <!-- Contact Form -->
-      <div class="editor-element"
+      <div #contactElement class="editor-element"
            [class.is-selected]="selectedElementId === section.id + '_form'"
-           (click)="selectElement($event, { id: section.id + '_form', sectionId: section.id, type: 'form', content: section.content })"
+           (click)="selectElement($event, getMergedElement(section.id, section.id + '_form', section.content, 'form'))"
            [applyDynamicStyles]="section.content['formStyles']"
-           [visualEditable]="true"
-           visualType="element"
-           (visualMoved)="onElementMoved($event, section.id + '_form')"
-           (visualResized)="onElementResized($event, section.id + '_form')">
+           [enhancedVisualEditable]="getContactConfig()"
+           elementId="{{section.id + '_form'}}"
+           sectionId="{{section.id}}"
+           (visualEvents)="handleContactEvent($event)">
         <lib-ui-components-title
           [level]="section.content['level'] || titleConfig.level"
           [text]="section.content['title'] || 'Contáctanos'"
@@ -160,12 +160,12 @@
       <div class="contact-info-section">
         <div class="editor-element"
              [class.is-selected]="selectedElementId === section.id + '_info'"
-             (click)="selectElement($event, { id: section.id + '_info', sectionId: section.id, type: 'info', content: section.content })"
+             (click)="selectElement($event, getMergedElement(section.id, section.id + '_info', section.content, 'info'))"
              [applyDynamicStyles]="section.content['infoStyles']"
-             [visualEditable]="true"
-             visualType="element"
-             (visualMoved)="onElementMoved($event, section.id + '_info')"
-             (visualResized)="onElementResized($event, section.id + '_info')">
+             [enhancedVisualEditable]="getContactConfig()"
+             elementId="{{section.id + '_info'}}"
+             sectionId="{{section.id}}"
+             (visualEvents)="handleContactEvent($event)">
           <lib-ui-components-title
             [level]="'h3'"
             [text]="section.content['infoTitle'] || 'Información de Contacto'"
@@ -189,12 +189,12 @@
         <!-- Map Section -->
         <div class="map-container editor-element mt-8"
              [class.is-selected]="selectedElementId === section.id + '_map'"
-             (click)="selectElement($event, { id: section.id + '_map', sectionId: section.id, type: 'map', content: section.content })"
+             (click)="selectElement($event, getMergedElement(section.id, section.id + '_map', section.content, 'map'))"
              [applyDynamicStyles]="section.content['mapStyles']"
-             [visualEditable]="true"
-             visualType="element"
-             (visualMoved)="onElementMoved($event, section.id + '_map')"
-             (visualResized)="onElementResized($event, section.id + '_map')">
+             [enhancedVisualEditable]="getContactConfig()"
+             elementId="{{section.id + '_map'}}"
+             sectionId="{{section.id}}"
+             (visualEvents)="handleContactEvent($event)">
           <div class="map-placeholder">
             <div class="map-marker" *ngFor="let marker of mapMarkers">
               <div class="marker-icon">{{ marker.icon }}</div>

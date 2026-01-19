@@ -1,29 +1,53 @@
 <!-- DESKTOP GALLERY -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer"
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer py-4"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-  <lib-ui-components-ui-gallery
-    [images]="galleryConfig.images"
-    [variant]="getVariant(section.id)"
-    [customStyles]="section.styles || {}"
-    [applyDynamicStyles]="section.styles">
-  </lib-ui-components-ui-gallery>
+  <div #galleryElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_gallery'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_gallery', section.content, 'gallery'))"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getGalleryConfig()"
+       elementId="{{section.id + '_gallery'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleGalleryEvent($event)">
+    <lib-ui-components-ui-gallery
+      [images]="galleryConfig.images"
+      [variant]="getVariant(section.id)"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles">
+    </lib-ui-components-ui-gallery>
+  </div>
 </div>
 
 <!-- MOBILE GALLERY -->
-<div *ngIf="isMobile" class="editor-section cursor-pointer"
+<div *ngIf="isMobile" #sectionElement
+  class="editor-section cursor-pointer py-2 p-2"
   [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)">
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-  <lib-ui-components-ui-gallery
-    [images]="galleryConfig.images"
-    [variant]="getVariant(section.id)"
-    [customStyles]="section.styles || {}"
-    [applyDynamicStyles]="section.styles">
-  </lib-ui-components-ui-gallery>
+  <div #galleryElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_gallery'"
+       (click)="selectElement($event, { id: section.id + '_gallery', content: section.content, type: 'gallery' })"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getGalleryConfig()"
+       elementId="{{section.id + '_gallery'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleGalleryEvent($event)">
+    <lib-ui-components-ui-gallery
+      [images]="galleryConfig.images"
+      [variant]="getVariant(section.id)"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles">
+    </lib-ui-components-ui-gallery>
+  </div>
 </div>

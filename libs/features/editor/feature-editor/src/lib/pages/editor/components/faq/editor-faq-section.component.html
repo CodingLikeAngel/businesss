@@ -1,33 +1,53 @@
 <!-- DESKTOP FAQ -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer"
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-  <lib-ui-faq-section
+  <lib-ui-faq-section #faqElement
     [title]="section.content['title'] || 'Preguntas Frecuentes'"
     [subtitle]="section.content['subtitle'] || 'Resolvemos tus dudas principales.'"
     [variant]="getVariant(section.id)"
     [customStyles]="section.styles || {}"
     [applyDynamicStyles]="section.styles"
-    [items]="faqConfig.items">
+    [items]="faqConfig.items"
+    class="editor-element"
+    [class.is-selected]="selectedElementId === section.id + '_faq'"
+    (click)="selectElement($event, getMergedElement(section.id, section.id + '_faq', section.content, 'faq'))"
+    [enhancedVisualEditable]="getFaqConfig()"
+    elementId="{{section.id + '_faq'}}"
+    sectionId="{{section.id}}"
+    (visualEvents)="handleFaqEvent($event)">
   </lib-ui-faq-section>
 </div>
 
 <!-- MOBILE FAQ -->
-<div *ngIf="isMobile" class="editor-section cursor-pointer"
+<div *ngIf="isMobile" #sectionElement
+  class="editor-section cursor-pointer p-4"
   [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)">
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-  <lib-ui-faq-section
+  <lib-ui-faq-section #faqElement
     [title]="section.content['title'] || 'Preguntas Frecuentes'"
     [subtitle]="section.content['subtitle'] || 'Resolvemos tus dudas principales.'"
     [variant]="getVariant(section.id)"
     [customStyles]="section.styles || {}"
     [applyDynamicStyles]="section.styles"
-    [items]="faqConfig.items">
+    [items]="faqConfig.items"
+    class="editor-element"
+    [class.is-selected]="selectedElementId === section.id + '_faq'"
+    (click)="selectElement($event, { id: section.id + '_faq', content: section.content, type: 'faq' })"
+    [enhancedVisualEditable]="getFaqConfig()"
+    elementId="{{section.id + '_faq'}}"
+    sectionId="{{section.id}}"
+    (visualEvents)="handleFaqEvent($event)">
   </lib-ui-faq-section>
 </div>

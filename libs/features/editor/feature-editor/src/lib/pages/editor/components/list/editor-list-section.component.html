@@ -2,17 +2,17 @@
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
+  [enhancedVisualEditable]="createElementConfig('section')"
+  elementId="{{section.id}}"
+  (visualEvents)="handleVisualEvent($event, section.id)">
     <div class="container mx-auto px-6 max-w-2xl editor-element"
        [class.is-selected]="selectedElementId === section.id + '_list'"
        (click)="selectElement($event, { id: section.id + '_list', sectionId: section.id, content: section.content, type: 'list', _original: section.content })"
        [applyDynamicStyles]="section.styles"
-       [visualEditable]="true"
-       visualType="element"
-       (visualMoved)="onElementMoved($event, section.id + '_list')"
-       (visualResized)="onElementResized($event, section.id + '_list')">
+       [enhancedVisualEditable]="createElementConfig('element')"
+       elementId="{{section.id + '_list'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleVisualEvent($event, section.id + '_list')">
        <lib-ui-list
          [items]="section.content['items'] || ['Item 1', 'Item 2', 'Item 3']"
          [variant]="section.content['variant'] || getVariant(section.id)"

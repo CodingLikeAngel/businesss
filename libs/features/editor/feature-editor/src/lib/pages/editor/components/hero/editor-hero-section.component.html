@@ -1,19 +1,19 @@
 <!-- DESKTOP HERO -->
-<section *ngIf="!isMobile" [id]="section.id"
+<section *ngIf="!isMobile" #sectionElement [id]="section.id"
   class="relative min-h-[80vh] flex flex-col items-center justify-center cursor-pointer editor-section overflow-hidden"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [ngClass]="'hero-section--' + getVariant(section.id)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
   <!-- Background Overlay (Simulated) -->
   <div class="absolute inset-0 bg-black/40 z-0"></div>
 
   <div class="relative z-10 hero-content text-center max-w-4xl px-6">
-    <lib-ui-components-title
+    <lib-ui-components-title #titleElement
       [level]="'h1'"
       [text]="section.content['title'] || heroConfig.title"
       [variant]="$any(getVariant(section.id))"
@@ -22,35 +22,35 @@
       [class.is-selected]="selectedElementId === section.id + '_title'"
       (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })"
       [applyDynamicStyles]="section.content['titleStyles']"
-      [visualEditable]="true"
-      visualType="element"
-      (visualMoved)="onElementMoved($event, section.id + '_title')"
-      (visualResized)="onElementResized($event, section.id + '_title')"
+      [enhancedVisualEditable]="getTitleConfig()"
+      elementId="{{section.id + '_title'}}"
+      sectionId="{{section.id}}"
+      (visualEvents)="handleTitleEvent($event)"
     ></lib-ui-components-title>
 
-    <div class="mt-4 editor-element"
+    <div #subtitleElement class="mt-4 editor-element"
          [class.is-selected]="selectedElementId === section.id + '_subtitle'"
          (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })"
          [applyDynamicStyles]="section.content['subtitleStyles']"
-         [visualEditable]="true"
-         visualType="element"
-         (visualMoved)="onElementMoved($event, section.id + '_subtitle')"
-         (visualResized)="onElementResized($event, section.id + '_subtitle')">
+         [enhancedVisualEditable]="getSubtitleConfig()"
+         elementId="{{section.id + '_subtitle'}}"
+         sectionId="{{section.id}}"
+         (visualEvents)="handleSubtitleEvent($event)">
       <p class="hero-subtitle text-xl md:text-3xl text-white/90">
         {{ section.content['subtitle'] || heroConfig.subtitle }}
       </p>
     </div>
 
     <!-- CTA (Decomposed) -->
-    <div *ngIf="section.content['showCta'] !== false"
+    <div #ctaElement *ngIf="section.content['showCta'] !== false"
          class="mt-10 editor-element inline-block"
          [class.is-selected]="selectedElementId === section.id + '_cta'"
          (click)="selectElement($event, { id: section.id + '_cta', sectionId: section.id, content: section.content, type: 'cta', _original: section.content })"
          [applyDynamicStyles]="section.content['ctaStyles']"
-         [visualEditable]="true"
-         visualType="element"
-         (visualMoved)="onElementMoved($event, section.id + '_cta')"
-         (visualResized)="onElementResized($event, section.id + '_cta')">
+         [enhancedVisualEditable]="getCtaConfig()"
+         elementId="{{section.id + '_cta'}}"
+         sectionId="{{section.id}}"
+         (visualEvents)="handleCtaEvent($event)">
       <button class="cta-button px-10 py-4 rounded-xl font-bold transition-all hover:scale-105 active:scale-95"
               [ngClass]="'variant-' + getVariant(section.id)">
         {{ section.content['ctaLabel'] || heroConfig.ctaLabel }}
@@ -83,17 +83,20 @@
 </section>
 
 <!-- MOBILE HERO -->
-<section *ngIf="isMobile" [id]="section.id"
+<section *ngIf="isMobile" #sectionElement [id]="section.id"
   class="relative min-h-[60vh] flex flex-col items-center justify-center cursor-pointer editor-section overflow-hidden p-6"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
-  [ngClass]="'hero-section--' + getVariant(section.id)">
+  [ngClass]="'hero-section--' + getVariant(section.id)"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
   <!-- Background Overlay (Simulated) -->
   <div class="absolute inset-0 bg-black/50 z-0"></div>
 
   <div class="relative z-10 text-center w-full">
-    <lib-ui-components-title
+    <lib-ui-components-title #titleElement
       [level]="'h2'"
       [text]="section.content['title'] || heroConfig.title"
       [variant]="$any(getVariant(section.id))"
@@ -101,21 +104,33 @@
       class="editor-element block mb-4"
       [class.is-selected]="selectedElementId === section.id + '_title'"
       (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title', _original: section.content })"
+      [enhancedVisualEditable]="getTitleConfig()"
+      elementId="{{section.id + '_title'}}"
+      sectionId="{{section.id}}"
+      (visualEvents)="handleTitleEvent($event)"
     ></lib-ui-components-title>
 
-    <div class="mt-2 editor-element"
+    <div #subtitleElement class="mt-2 editor-element"
          [class.is-selected]="selectedElementId === section.id + '_subtitle'"
-         (click)="selectElement($event, { id: section.id + '_subtitle', content: section.content, type: 'subtitle', _original: section.content })">
+         (click)="selectElement($event, { id: section.id + '_subtitle', content: section.content, type: 'subtitle', _original: section.content })"
+         [enhancedVisualEditable]="getSubtitleConfig()"
+         elementId="{{section.id + '_subtitle'}}"
+         sectionId="{{section.id}}"
+         (visualEvents)="handleSubtitleEvent($event)">
       <p class="text-lg text-white/90">
         {{ section.content['subtitle'] || heroConfig.subtitle }}
       </p>
     </div>
 
     <!-- CTA -->
-    <div *ngIf="section.content['showCta'] !== false"
+    <div #ctaElement *ngIf="section.content['showCta'] !== false"
          class="mt-8 editor-element inline-block"
          [class.is-selected]="selectedElementId === section.id + '_cta'"
-         (click)="selectElement($event, { id: section.id + '_cta', content: section.content, type: 'cta', _original: section.content })">
+         (click)="selectElement($event, { id: section.id + '_cta', content: section.content, type: 'cta', _original: section.content })"
+         [enhancedVisualEditable]="getCtaConfig()"
+         elementId="{{section.id + '_cta'}}"
+         sectionId="{{section.id}}"
+         (visualEvents)="handleCtaEvent($event)">
       <button class="cta-button px-8 py-3 rounded-lg font-bold"
               [ngClass]="'variant-' + getVariant(section.id)">
         {{ section.content['ctaLabel'] || heroConfig.ctaLabel }}

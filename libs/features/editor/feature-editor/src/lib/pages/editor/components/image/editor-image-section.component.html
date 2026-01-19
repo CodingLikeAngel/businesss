@@ -1,14 +1,14 @@
 <!-- DESKTOP IMAGE -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer py-12"
+<div *ngIf="!isMobile" #sectionElement class="editor-section cursor-pointer py-12"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
-  
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
   <div class="container mx-auto px-6 max-w-7xl">
-    <lib-ui-image
+    <lib-ui-image #imageElement
       [src]="section.content['src'] || 'https://via.placeholder.com/800x600'"
       [alt]="section.content['alt'] || 'Image'"
       [variant]="getVariant(section.id)"
@@ -16,25 +16,32 @@
       class="editor-element"
       [class.is-selected]="selectedElementId === section.id + '_image'"
       (click)="selectElement($event, getMergedElement(section.id, section.id + '_image', section.content, 'image'))"
-      [visualEditable]="true"
-      visualType="element"
-      (visualMoved)="onElementMoved($event, section.id + '_image')"
-      (visualResized)="onElementResized($event, section.id + '_image')">
+      [enhancedVisualEditable]="getImageConfig()"
+      elementId="{{section.id + '_image'}}"
+      sectionId="{{section.id}}"
+      (visualEvents)="handleImageEvent($event)">
     </lib-ui-image>
   </div>
 </div>
 
 <!-- MOBILE IMAGE -->
-<div *ngIf="isMobile" class="editor-section cursor-pointer py-8 p-4"
+<div *ngIf="isMobile" #sectionElement class="editor-section cursor-pointer py-8 p-4"
   [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)">
-  
-  <lib-ui-image
+  (click)="selectSection($event, section)"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <lib-ui-image #imageElement
     [src]="section.content['src'] || 'https://via.placeholder.com/600x400'"
     [alt]="section.content['alt'] || 'Image'"
     [variant]="getVariant(section.id)"
     class="editor-element w-full"
     [class.is-selected]="selectedElementId === section.id + '_image'"
-    (click)="selectElement($event, { id: section.id + '_image', content: section.content, type: 'image' })">
+    (click)="selectElement($event, { id: section.id + '_image', content: section.content, type: 'image' })"
+    [enhancedVisualEditable]="getImageConfig()"
+    elementId="{{section.id + '_image'}}"
+    sectionId="{{section.id}}"
+    (visualEvents)="handleImageEvent($event)">
   </lib-ui-image>
 </div>

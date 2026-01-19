@@ -1,41 +1,85 @@
-<div class="editor-section cursor-pointer py-20 px-6"
+<!-- DESKTOP CHART -->
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer py-20 px-6"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
-    <div class="container mx-auto max-w-4xl p-10 backdrop-blur-2xl bg-white/5 rounded-[2rem] border border-white/10 shadow-2xl editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_chart'"
-       (click)="selectElement($event, { id: section.id + '_chart', sectionId: section.id, content: section.content, type: 'chart', _original: section.content })"
-       [applyDynamicStyles]="section.styles"
-       [visualEditable]="true"
-       visualType="element"
-       (visualMoved)="onElementMoved($event, section.id + '_chart')"
-       (visualResized)="onElementResized($event, section.id + '_chart')">
-       
-       <lib-ui-components-title *ngIf="section.content['title']"
-          [level]="'h2'"
-          [text]="section.content['title']"
-          [variant]="getVariant(section.id)"
-          [align]="'center'"
-          class="mb-10 block editor-element"
-          [class.is-selected]="selectedElementId === section.id + '_title'"
-          (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
-          [applyDynamicStyles]="section.content['titleStyles']"
-          [visualEditable]="true"
-          visualType="element"
-          (visualMoved)="onElementMoved($event, section.id + '_title')"
-          (visualResized)="onElementResized($event, section.id + '_title')"
-       ></lib-ui-components-title>
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-       <div class="h-[400px] w-full">
-         <lib-ui-chart
-           [variant]="section.content['variant'] || getVariant(section.id)"
-           [type]="section.content['chartType'] || 'bar'"
-           [data]="section.content['chartData'] || chartConfig.data"
-           [customStyles]="section.styles || {}"
-         ></lib-ui-chart>
-       </div>
+  <div class="container mx-auto max-w-4xl p-10 backdrop-blur-2xl bg-white/5 rounded-[2rem] border border-white/10 shadow-2xl">
+    <lib-ui-components-title #titleElement *ngIf="section.content['title']"
+       [level]="'h2'"
+       [text]="section.content['title']"
+       [variant]="getVariant(section.id)"
+       [align]="'center'"
+       class="mb-10 block editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_title'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_title', section.content, 'title'))"
+       [applyDynamicStyles]="section.content['titleStyles']"
+       [enhancedVisualEditable]="getTitleConfig()"
+       elementId="{{section.id + '_title'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleTitleEvent($event)">
+    </lib-ui-components-title>
+
+    <div #chartElement class="h-[400px] w-full editor-element"
+         [class.is-selected]="selectedElementId === section.id + '_chart'"
+         (click)="selectElement($event, getMergedElement(section.id, section.id + '_chart', section.content, 'chart'))"
+         [enhancedVisualEditable]="getChartConfig()"
+         elementId="{{section.id + '_chart'}}"
+         sectionId="{{section.id}}"
+         (visualEvents)="handleChartEvent($event)">
+      <lib-ui-chart
+        [variant]="section.content['variant'] || getVariant(section.id)"
+        [type]="section.content['chartType'] || 'bar'"
+        [data]="section.content['chartData'] || chartConfig.data"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}">
+      </lib-ui-chart>
     </div>
+  </div>
+</div>
+
+<!-- MOBILE CHART -->
+<div *ngIf="isMobile" #sectionElement
+  class="editor-section cursor-pointer py-12 p-4"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <lib-ui-components-title #titleElement *ngIf="section.content['title']"
+     [level]="'h3'"
+     [text]="section.content['title']"
+     [variant]="getVariant(section.id)"
+     [align]="'center'"
+     class="mb-6 block editor-element"
+     [class.is-selected]="selectedElementId === section.id + '_title'"
+     (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
+     [applyDynamicStyles]="section.content['titleStyles']"
+     [enhancedVisualEditable]="getTitleConfig()"
+     elementId="{{section.id + '_title'}}"
+     sectionId="{{section.id}}"
+     (visualEvents)="handleTitleEvent($event)">
+  </lib-ui-components-title>
+
+  <div #chartElement class="h-[300px] w-full editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_chart'"
+       (click)="selectElement($event, { id: section.id + '_chart', content: section.content, type: 'chart' })"
+       [enhancedVisualEditable]="getChartConfig()"
+       elementId="{{section.id + '_chart'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleChartEvent($event)">
+    <lib-ui-chart
+      [variant]="section.content['variant'] || getVariant(section.id)"
+      [type]="section.content['chartType'] || 'bar'"
+      [data]="section.content['chartData'] || chartConfig.data"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles || {}">
+    </lib-ui-chart>
+  </div>
 </div>

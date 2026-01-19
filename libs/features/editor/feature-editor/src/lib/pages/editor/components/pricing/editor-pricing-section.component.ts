@@ -1,14 +1,14 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { 
+import {
   PricingConfig,
   ApplyDynamicStylesDirective,
-  VisualEditableDirective
+  EnhancedVisualEditableDirective
 } from '@negocio/shared-components';
-import { 
-  UIPricingTableSectionComponent 
+import {
+  UIPricingTableSectionComponent
 } from '@negocio/ui-components';
-import { BaseEditorSectionComponent } from '../base-editor-section.component';
+import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
 @Component({
   selector: 'lib-editor-pricing-section',
@@ -17,10 +17,10 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
     CommonModule,
     UIPricingTableSectionComponent,
     ApplyDynamicStylesDirective,
-    VisualEditableDirective
+    EnhancedVisualEditableDirective
   ],
   templateUrl: './editor-pricing-section.component.html'
 })
-export class EditorPricingSectionComponent extends BaseEditorSectionComponent {
+export class EditorPricingSectionComponent extends EnhancedBaseEditorSectionComponent {
   @Input() pricingConfig!: PricingConfig;
 }

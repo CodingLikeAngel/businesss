@@ -3,10 +3,10 @@
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
-  
+  [enhancedVisualEditable]="createElementConfig('section')"
+  elementId="{{section.id}}"
+  (visualEvents)="handleVisualEvent($event, section.id)">
+
   <div class="container mx-auto px-6 max-w-7xl flex justify-center items-center gap-4">
     <lib-ui-components-button
       [variant]="getVariant(section.id)"
@@ -16,10 +16,10 @@
       class="editor-element"
       [class.is-selected]="selectedElementId === section.id + '_button'"
       (click)="selectElement($event, getMergedElement(section.id, section.id + '_button', section.content, 'button'))"
-      [visualEditable]="true"
-      visualType="element"
-      (visualMoved)="onElementMoved($event, section.id + '_button')"
-      (visualResized)="onElementResized($event, section.id + '_button')">
+      [enhancedVisualEditable]="createElementConfig('element')"
+      elementId="{{section.id + '_button'}}"
+      sectionId="{{section.id}}"
+      (visualEvents)="handleVisualEvent($event, section.id + '_button')">
       {{ section.content['label'] || 'Click Me' }}
     </lib-ui-components-button>
   </div>
@@ -29,7 +29,7 @@
 <div *ngIf="isMobile" class="editor-section cursor-pointer py-8 p-4"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)">
-  
+
   <div class="flex justify-center">
     <lib-ui-components-button
       [variant]="getVariant(section.id)"

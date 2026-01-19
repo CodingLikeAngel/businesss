@@ -1,12 +1,45 @@
-<div class="editor-section cursor-pointer"
+<!-- DESKTOP BUBBLE -->
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
-  <lib-bubble-animation
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <lib-bubble-animation #bubbleElement
     [variant]="$any(getVariant(section.id))"
     [config]="bubbleConfig"
-  ></lib-bubble-animation>
+    class="editor-element"
+    [class.is-selected]="selectedElementId === section.id + '_bubble'"
+    (click)="selectElement($event, getMergedElement(section.id, section.id + '_bubble', section.content, 'bubble'))"
+    [enhancedVisualEditable]="getBubbleConfig()"
+    elementId="{{section.id + '_bubble'}}"
+    sectionId="{{section.id}}"
+    (visualEvents)="handleBubbleEvent($event)">
+  </lib-bubble-animation>
+</div>
+
+<!-- MOBILE BUBBLE -->
+<div *ngIf="isMobile" #sectionElement
+  class="editor-section cursor-pointer p-4"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <lib-bubble-animation #bubbleElement
+    [variant]="$any(getVariant(section.id))"
+    [config]="bubbleConfig"
+    class="editor-element"
+    [class.is-selected]="selectedElementId === section.id + '_bubble'"
+    (click)="selectElement($event, { id: section.id + '_bubble', content: section.content, type: 'bubble' })"
+    [enhancedVisualEditable]="getBubbleConfig()"
+    elementId="{{section.id + '_bubble'}}"
+    sectionId="{{section.id}}"
+    (visualEvents)="handleBubbleEvent($event)">
+  </lib-bubble-animation>
 </div>

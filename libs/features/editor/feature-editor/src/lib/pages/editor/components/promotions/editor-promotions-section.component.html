@@ -1,49 +1,32 @@
 <!-- DESKTOP PROMOTIONS -->
-<section *ngIf="!isMobile" [id]="section.id"
+<section *ngIf="!isMobile" #sectionElement [id]="section.id"
   class="relative z-20 py-20 cursor-pointer editor-section"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
-  
-  <div class="container mx-auto px-6 max-w-7xl">
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <div #promotionsElement class="container mx-auto px-6 max-w-7xl editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_promotions'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_promotions', section.content, 'promotions'))"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getPromotionsConfig()"
+       elementId="{{section.id + '_promotions'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handlePromotionsEvent($event)">
     <div class="text-center mb-16">
-      <h2 class="text-5xl font-extrabold mb-6 editor-element inline-block"
-          [class.is-selected]="selectedElementId === section.id + '_title'"
-          (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title', _original: section.content })"
-          [applyDynamicStyles]="section.content['titleStyles']"
-          [visualEditable]="true"
-          visualType="element"
-          (visualMoved)="onElementMoved($event, section.id + '_title')"
-          (visualResized)="onElementResized($event, section.id + '_title')">
+      <h2 class="text-5xl font-extrabold mb-6">
         {{ section.content['title'] || promotionsConfig.title || 'Ofertas Especiales' }}
       </h2>
-      <div class="editor-element"
-           [class.is-selected]="selectedElementId === section.id + '_subtitle'"
-           (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle', _original: section.content })"
-           [applyDynamicStyles]="section.content['subtitleStyles']"
-           [visualEditable]="true"
-           visualType="element"
-           (visualMoved)="onElementMoved($event, section.id + '_subtitle')"
-           (visualResized)="onElementResized($event, section.id + '_subtitle')">
-        <p class="text-xl text-white/60 max-w-2xl mx-auto">
-          {{ section.content['subtitle'] || promotionsConfig.description || 'Descubre nuestras promociones exclusivas y ahorra.' }}
-        </p>
-      </div>
+      <p class="text-xl text-white/60 max-w-2xl mx-auto">
+        {{ section.content['subtitle'] || promotionsConfig.description || 'Descubre nuestras promociones exclusivas y ahorra.' }}
+      </p>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-      <div *ngFor="let promo of promotionsConfig.premiumCards; let i = index" 
-           class="editor-element"
-           [class.is-selected]="uiStateService.selectedElement?._original === promo"
-           (click)="selectElement($event, getMergedElement(section.id, section.id + '_promo_' + i, promo, 'promo'))"
-           [applyDynamicStyles]="promo.styles || {}"
-           [visualEditable]="true"
-           visualType="element"
-           (visualMoved)="onElementMoved($event, section.id + '_promo_' + i)"
-           (visualResized)="onElementResized($event, section.id + '_promo_' + i)">
+      <div *ngFor="let promo of promotionsConfig.premiumCards; let i = index">
         <lib-ui-components-card-premium
           [variant]="$any(promo.variant || getVariant(section.id))"
           [config]="promo"
@@ -54,7 +37,23 @@
   </div>
 </section>
 
-<!-- MOBILE PROMOTIONS (Optional or Placeholder if missing in original) -->
-<div *ngIf="isMobile" class="p-4 text-center text-white/50 border border-dashed border-white/20 rounded-xl m-4">
-  La sección de Promociones se edita mejor en escritorio.
+<!-- MOBILE PROMOTIONS -->
+<div *ngIf="isMobile" #sectionElement class="p-4 text-center text-white/50 border border-dashed border-white/20 rounded-xl m-4 editor-section cursor-pointer"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <div #promotionsElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_promotions'"
+       (click)="selectElement($event, { id: section.id + '_promotions', content: section.content, type: 'promotions' })"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getPromotionsConfig()"
+       elementId="{{section.id + '_promotions'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handlePromotionsEvent($event)">
+    La sección de Promociones se edita mejor en escritorio.
+  </div>
 </div>

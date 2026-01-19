@@ -1,38 +1,39 @@
 <!-- DESKTOP FEATURES -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer p-12"
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer p-12"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
   
   <div class="max-w-7xl mx-auto">
     <div class="text-center mb-16">
-      <lib-ui-components-title
+      <lib-ui-components-title #titleElement
         [level]="section.content['level'] || 'h2'"
         [text]="section.content['title'] || 'Nuestros Servicios Premium'"
         [variant]="$any(getVariant(section.id))"
         [align]="'center'"
         class="editor-element"
         [class.is-selected]="selectedElementId === section.id + '_title'"
-        (click)="selectElement($event, { id: section.id + '_title', sectionId: section.id, content: section.content, type: 'title' })"
+        (click)="selectElement($event, getMergedElement(section.id, section.id + '_title', section.content, 'title'))"
         [applyDynamicStyles]="section.content['titleStyles']"
-        [visualEditable]="true"
-        visualType="element"
-        (visualMoved)="onElementMoved($event, section.id + '_title')"
-        (visualResized)="onElementResized($event, section.id + '_title')"
-      ></lib-ui-components-title>
+        [enhancedVisualEditable]="getTitleConfig()"
+        elementId="{{section.id + '_title'}}"
+        sectionId="{{section.id}}"
+        (visualEvents)="handleTitleEvent($event)">
+      </lib-ui-components-title>
       
       <div class="mt-4">
-        <p class="text-xl text-white/70 max-w-2xl mx-auto editor-element"
+        <p #featuresElement class="text-xl text-white/70 max-w-2xl mx-auto editor-element"
            [class.is-selected]="selectedElementId === section.id + '_subtitle'"
-           (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, content: section.content, type: 'subtitle' })"
+           (click)="selectElement($event, getMergedElement(section.id, section.id + '_subtitle', section.content, 'subtitle'))"
            [applyDynamicStyles]="section.content['subtitleStyles']"
-           [visualEditable]="true"
-           visualType="element"
-           (visualMoved)="onElementMoved($event, section.id + '_subtitle')"
-           (visualResized)="onElementResized($event, section.id + '_subtitle')">
+           [enhancedVisualEditable]="getFeaturesConfig()"
+           elementId="{{section.id + '_subtitle'}}"
+           sectionId="{{section.id}}"
+           (visualEvents)="handleFeaturesEvent($event)">
           {{ section.content['subtitle'] || 'Descubre cómo podemos ayudarte.' }}
         </p>
       </div>
@@ -43,10 +44,10 @@
            class="editor-element"
            [class.is-selected]="uiStateService.selectedElement?._original === feat"
            (click)="selectElement($event, getMergedElement(section.id, section.id + '_feature_' + i, feat, 'feature'))"
-           [visualEditable]="true"
-           visualType="element"
-           (visualMoved)="onElementMoved($event, section.id + '_feature_' + i)"
-           (visualResized)="onElementResized($event, section.id + '_feature_' + i)">
+           [enhancedVisualEditable]="getFeaturesConfig()"
+           elementId="{{section.id + '_feature_' + i}}"
+           sectionId="{{section.id}}"
+           (visualEvents)="handleFeaturesEvent($event)">
         <lib-ui-components-card-animated
           [icon]="feat.icon"
           [title]="feat.title"

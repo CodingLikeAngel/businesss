@@ -1,20 +1,20 @@
-<div class="editor-section cursor-pointer py-12"
+<div #sectionElement class="editor-section cursor-pointer py-12"
   [id]="section.id"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [ngClass]="'newsletter-section--' + getVariant(section.id)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
-    <div class="container mx-auto px-6 max-w-4xl editor-element"
-       [class.is-selected]="selectedSectionId === section.id"
-       (click)="selectSection($event, section)"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+    <div #newsletterElement class="container mx-auto px-6 max-w-4xl editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_newsletter'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_newsletter', section.content, 'newsletter'))"
        [applyDynamicStyles]="section.styles"
-       [visualEditable]="true"
-       visualType="section"
-       (visualMoved)="onElementMoved($event, section.id + '_newsletter')"
-       (visualResized)="onElementResized($event, section.id + '_newsletter')">
+       [enhancedVisualEditable]="getNewsletterConfig()"
+       elementId="{{section.id + '_newsletter'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleNewsletterEvent($event)">
        <lib-ui-newsletter-section
          [variant]="section.content['variant'] || getVariant(section.id)"
          [title]="section.content['title'] || 'Suscríbete a nuestro boletín'"

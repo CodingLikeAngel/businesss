@@ -1,33 +1,57 @@
 <!-- DESKTOP TESTIMONIALS -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer"
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer py-4"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-  <lib-ui-testimonials-section
-    [title]="section.content['title'] || 'Lo que dicen de nosotros'"
-    [subtitle]="section.content['subtitle'] || 'Historias reales de éxito.'"
-    [variant]="getVariant(section.id)"
-    [customStyles]="section.styles || {}"
-    [applyDynamicStyles]="section.styles"
-    [testimonials]="testimonialsConfig.items">
-  </lib-ui-testimonials-section>
+  <div #testimonialsElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_testimonials'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_testimonials', section.content, 'testimonials'))"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getTestimonialsConfig()"
+       elementId="{{section.id + '_testimonials'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleTestimonialsEvent($event)">
+    <lib-ui-testimonials-section
+      [title]="section.content['title'] || 'Lo que dicen de nosotros'"
+      [subtitle]="section.content['subtitle'] || 'Historias reales de éxito.'"
+      [variant]="getVariant(section.id)"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles"
+      [testimonials]="testimonialsConfig.items">
+    </lib-ui-testimonials-section>
+  </div>
 </div>
 
 <!-- MOBILE TESTIMONIALS -->
-<div *ngIf="isMobile" class="editor-section cursor-pointer"
+<div *ngIf="isMobile" #sectionElement
+  class="editor-section cursor-pointer py-2 p-2"
   [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)">
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-  <lib-ui-testimonials-section
-    [title]="section.content['title'] || 'Lo que dicen de nosotros'"
-    [subtitle]="section.content['subtitle'] || 'Historias reales de éxito.'"
-    [variant]="getVariant(section.id)"
-    [customStyles]="section.styles || {}"
-    [applyDynamicStyles]="section.styles"
-    [testimonials]="testimonialsConfig.items">
-  </lib-ui-testimonials-section>
+  <div #testimonialsElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_testimonials'"
+       (click)="selectElement($event, { id: section.id + '_testimonials', content: section.content, type: 'testimonials' })"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getTestimonialsConfig()"
+       elementId="{{section.id + '_testimonials'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleTestimonialsEvent($event)">
+    <lib-ui-testimonials-section
+      [title]="section.content['title'] || 'Lo que dicen de nosotros'"
+      [subtitle]="section.content['subtitle'] || 'Historias reales de éxito.'"
+      [variant]="getVariant(section.id)"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles"
+      [testimonials]="testimonialsConfig.items">
+    </lib-ui-testimonials-section>
+  </div>
 </div>

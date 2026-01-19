@@ -1,18 +1,18 @@
-<div class="editor-section cursor-pointer py-12"
+<div #sectionElement class="editor-section cursor-pointer py-12"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
-    <div class="container mx-auto px-6 flex justify-center editor-element"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+    <div #spinnerElement class="container mx-auto px-6 flex justify-center editor-element"
        [class.is-selected]="selectedElementId === section.id + '_spinner'"
-       (click)="selectElement($event, { id: section.id + '_spinner', sectionId: section.id, content: section.content, type: 'spinner', _original: section.content })"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_spinner', section.content, 'spinner'))"
        [applyDynamicStyles]="section.styles"
-       [visualEditable]="true"
-       visualType="element"
-       (visualMoved)="onElementMoved($event, section.id + '_spinner')"
-       (visualResized)="onElementResized($event, section.id + '_spinner')">
+       [enhancedVisualEditable]="getSpinnerConfig()"
+       elementId="{{section.id + '_spinner'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleSpinnerEvent($event)">
        <lib-ui-spinner
          [variant]="section.content['variant'] || getVariant(section.id)"
          [size]="'lg'"

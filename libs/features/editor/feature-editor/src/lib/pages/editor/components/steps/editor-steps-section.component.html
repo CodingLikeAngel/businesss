@@ -1,18 +1,18 @@
-<div class="editor-section cursor-pointer py-12"
+<div #sectionElement class="editor-section cursor-pointer py-12"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [visualEditable]="true"
-  visualType="section"
-  (visualResized)="onSectionResized($event)">
-    <div class="editor-element"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+    <div #stepsElement class="editor-element"
        [class.is-selected]="selectedElementId === section.id + '_steps'"
-       (click)="selectElement($event, { id: section.id + '_steps', sectionId: section.id, content: section.content, type: 'steps', _original: section.content })"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_steps', section.content, 'steps'))"
        [applyDynamicStyles]="section.styles"
-       [visualEditable]="true"
-       visualType="element"
-       (visualMoved)="onElementMoved($event, section.id + '_steps')"
-       (visualResized)="onElementResized($event, section.id + '_steps')">
+       [enhancedVisualEditable]="getStepsConfig()"
+       elementId="{{section.id + '_steps'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleStepsEvent($event)">
        <lib-ui-steps-section
          [variant]="$any(section.content['variant'] || getVariant(section.id))"
          [customStyles]="section.styles || {}"
