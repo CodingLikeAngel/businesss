@@ -26,6 +26,7 @@
     [carouselItems]="heroConfig.carouselItems"
     (sectionSelected)="scrollToSection($event)"
   ></lib-ui-hero-section-section>
+  <div class="absolute inset-0 bg-gradient-to-r from-red-500 to-yellow-400 opacity-20"></div>
 </section>
 
 <lib-bubble-animation
@@ -54,7 +55,7 @@
       align="center"
       class="mb-8"
     ></lib-ui-components-title>
-    <div class="flex justify-center py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 py-12">
       <lib-ui-components-card-rutas
         [items]="serviceCards"
         [variant]="getVariant('card')"
