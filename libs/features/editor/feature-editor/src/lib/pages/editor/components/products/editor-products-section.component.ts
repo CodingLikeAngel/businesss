@@ -9,10 +9,6 @@ import {
   VisualEditingEvent
 } from '@negocio/shared-components';
 import {
-  UITitleComponent,
-  UICardComponent,
-  UICardAnimatedComponent,
-  UiCardProductsComponent,
   ProductsSectionComponent
 } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
@@ -27,10 +23,6 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
   standalone: true,
   imports: [
     CommonModule,
-    UITitleComponent,
-    UICardComponent,
-    UICardAnimatedComponent,
-    UiCardProductsComponent,
     ProductsSectionComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective

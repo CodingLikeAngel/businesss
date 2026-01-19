@@ -9,8 +9,6 @@ import {
   VisualEditingEvent
 } from '@negocio/shared-components';
 import {
-  UIImageComponent,
-  UITitleComponent,
   UIGalleryComponent
 } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
@@ -25,8 +23,6 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
   standalone: true,
   imports: [
     CommonModule,
-    UIImageComponent,
-    UITitleComponent,
     UIGalleryComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective

@@ -2,7 +2,6 @@ import { Component, input, ElementRef, ViewChild, AfterViewInit, OnInit, OnDestr
 import { CommonModule } from '@angular/common';
 
 import { variants as baseVariants } from '../models/ui-components-data.model';
-import { UIImageComponent } from '../image/image.component';
 import { CustomStyles } from '../models/custom-styles.interface';
 
 // Variantes específicas del componente hijo
@@ -24,7 +23,7 @@ export interface GalleryImage {
 @Component({
   selector: 'lib-ui-components-ui-gallery',
   standalone: true,
-  imports: [CommonModule, UIImageComponent], // Agrega UIImageComponent aquí
+  imports: [CommonModule], // Agrega UIImageComponent aquí
   templateUrl: './gallery.component.html',
   styleUrls: ['./gallery.component.scss'],
   encapsulation: ViewEncapsulation.None

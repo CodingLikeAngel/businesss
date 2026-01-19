@@ -3,13 +3,11 @@ import { CommonModule } from '@angular/common';
 
 import { CustomStyles } from '../models/custom-styles.interface';
 import { UICardComponent } from '../cards/card/card.component';
-import { UIChipComponent } from '../chip/chip.component';
-import { UITooltipComponent } from '../tooltip/tooltip.component';
 
 @Component({
   selector: 'lib-service-section',
   standalone: true,
-  imports: [CommonModule, UICardComponent, UIChipComponent, UITooltipComponent],
+  imports: [CommonModule, UICardComponent],
   templateUrl: './service-section.component.html',
   styleUrls: ['./service-section.component.scss'],
   encapsulation: ViewEncapsulation.None

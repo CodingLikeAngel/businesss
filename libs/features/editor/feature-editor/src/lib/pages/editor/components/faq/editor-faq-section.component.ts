@@ -8,7 +8,6 @@ import {
   VisualEditingEvent
 } from '@negocio/shared-components';
 import {
-  UIAccordionComponent,
   UIFaqSectionComponent
 } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
@@ -23,7 +22,6 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
   standalone: true,
   imports: [
     CommonModule,
-    UIAccordionComponent,
     UIFaqSectionComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective
