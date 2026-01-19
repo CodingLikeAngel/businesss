@@ -31,11 +31,26 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     super(platformId);
-    // isBrowser is already set in the base class
+    // Initialize platform info immediately to prevent SSR errors
+    this.initializePlatformDetection();
+  }
+
+  /**
+   * Get mobile status for template binding
+   */
+  override get isMobile(): boolean {
+    return this.platformInfo.isMobile;
+  }
+
+  /**
+   * Get touch status for template binding
+   */
+  get isTouch(): boolean {
+    return this.platformInfo.isTouch;
   }
 
   ngOnInit() {
-    this.initializePlatformDetection();
+    // Platform detection already done in constructor
   }
 
   ngOnDestroy() {

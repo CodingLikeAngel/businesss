@@ -11,7 +11,14 @@ import {
 })
 export abstract class BaseEditorSectionComponent {
   @Input() section!: PageSection;
-  @Input() isMobile = false;
+  @Input()
+  set isMobile(value: boolean) {
+    this._isMobile = value;
+  }
+  get isMobile(): boolean {
+    return this._isMobile;
+  }
+  private _isMobile = false;
   @Input() componentVariants: { [key: string]: string } = {};
   @Input() globalVariant = 'default';
 
