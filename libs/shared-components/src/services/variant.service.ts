@@ -3,7 +3,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants, NavLink, variants } from '@negocio/ui-components';
 
-export type SectionType = 'hero' | 'features' | 'services' | 'products' | 'testimonials' | 'pricing' | 'gallery' | 'contact' | 'faq' | 'stats' | 'team' | 'blog' | 'cta' | 'promotions' | 'bubble' | 'custom' | 'header' | 'footer' | 'newsletter' | 'steps' | 'table' | 'breadcrumbs' | 'chip' | 'spinner' | 'chart' | 'showcase' | 'tabs' | 'accordion' | 'list' | 'navBar';
+export type SectionType = 'hero' | 'features' | 'services' | 'products' | 'testimonials' | 'pricing' | 'gallery' | 'contact' | 'faq' | 'stats' | 'team' | 'blog' | 'cta' | 'promotions' | 'bubble' | 'custom' | 'header' | 'footer' | 'newsletter' | 'steps' | 'table' | 'breadcrumbs' | 'chip' | 'spinner' | 'chart' | 'showcase' | 'tabs' | 'accordion' | 'list' | 'navBar' | 'button' | 'image';
 
 export interface ElementStyles {
   [key: string]: string | undefined;

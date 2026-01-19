@@ -37,6 +37,9 @@ import { EditorChipSectionComponent } from '../components/chip/editor-chip-secti
 import { EditorTitleSectionComponent } from '../components/title/editor-title-section.component';
 import { EditorCardSectionComponent } from '../components/card/editor-card-section.component';
 import { EditorInputSectionComponent } from '../components/input/editor-input-section.component';
+import { EditorButtonSectionComponent } from '../components/button/editor-button-section.component';
+import { EditorImageSectionComponent } from '../components/image/editor-image-section.component';
+
 
 @Component({
   selector: 'lib-editor-desktop-feature',
@@ -75,8 +78,11 @@ import { EditorInputSectionComponent } from '../components/input/editor-input-se
     EditorChipSectionComponent,
     EditorTitleSectionComponent,
     EditorCardSectionComponent,
-    EditorInputSectionComponent
+    EditorInputSectionComponent,
+    EditorButtonSectionComponent,
+    EditorImageSectionComponent
   ],
+
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 

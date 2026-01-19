@@ -290,6 +290,27 @@
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-input-section>
 
+      <!-- BUTTON -->
+      <lib-editor-button-section *ngSwitchCase="'button'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-button-section>
+
+      <!-- IMAGE -->
+      <lib-editor-image-section *ngSwitchCase="'image'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-image-section>
+
+
       <!-- CHART -->
       <lib-editor-chart-section *ngSwitchCase="'chart'"
         [section]="section"

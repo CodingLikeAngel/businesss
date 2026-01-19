@@ -1,0 +1,171 @@
+@use '../../../../../../ui-components/src/lib/styles/mixins' as shared;
+
+/* Standardized Hero Section Styles for Editor */
+:host {
+  display: block;
+  width: 101%; /* Slight overlap to avoid gaps */
+}
+
+/* Reproduce the complex Hero styles from ui-components to ensure visual parity */
+.hero-section {
+  min-height: 80vh;
+  position: relative;
+  overflow: hidden;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: all 0.5s ease;
+
+  &.is-selected {
+    outline: 3px solid #6366f1;
+    z-index: 50;
+  }
+}
+
+.video-container {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+
+  video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+.background-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  max-width: 64rem;
+  padding: 2rem;
+}
+
+.hero-title {
+  margin-bottom: 1.5rem;
+  transition: transform 0.3s ease;
+
+  &.is-selected {
+    transform: scale(1.02);
+  }
+}
+
+.hero-subtitle {
+  margin-bottom: 2rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.cta-button {
+  padding: 1rem 2.5rem;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
+}
+
+/* Matrix Effect */
+.matrix-container {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+
+  .matrix-canvas {
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+  }
+}
+
+/* Particles */
+.particle-container {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+
+  .particle {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    filter: blur(20px);
+    opacity: 0.2;
+    background: radial-gradient(circle, #3b82f6, transparent);
+  }
+
+  .particle-1 {
+    top: 20%;
+    left: 10%;
+    animation: float 10s infinite;
+  }
+  .particle-2 {
+    bottom: 20%;
+    right: 10%;
+    animation: float 12s infinite reverse;
+  }
+  .particle-3 {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    animation: pulse 8s infinite;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(30px, -50px);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 0.2;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0.4;
+  }
+}
+
+/* Variants (Mirroring UI Components) */
+.hero-section--matrix {
+  background: #000;
+  .hero-title {
+    -webkit-text-stroke: 1px #0f0;
+  }
+}
+.hero-section--glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+}
+.hero-section--cyberpunk {
+  background: #050510;
+  .hero-title {
+    text-shadow: 4px 4px 0 #ff0055, -4px -4px 0 #00e5ff;
+  }
+}
