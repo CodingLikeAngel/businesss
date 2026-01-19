@@ -23,8 +23,8 @@
         [heroConfig]="heroConfig"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-hero-section>
 
@@ -34,8 +34,8 @@
         [featuresConfig]="featuresConfig"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-features-section>
 
@@ -45,8 +45,8 @@
         [statsConfig]="statsConfig"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-stats-section>
 
@@ -66,8 +66,8 @@
         [titleConfig]="titleConfig"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-services-section>
 
@@ -78,8 +78,8 @@
         [titleConfig]="titleConfig"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-products-section>
 
@@ -89,8 +89,8 @@
         [testimonialsConfig]="testimonialsConfig"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-testimonials-section>
 
@@ -100,8 +100,8 @@
         [pricingConfig]="pricingConfig"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-pricing-section>
 
@@ -111,8 +111,8 @@
         [promotionsConfig]="promotionsConfig"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-promotions-section>
 
@@ -122,8 +122,8 @@
         [faqConfig]="faqConfig"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-faq-section>
 
@@ -134,8 +134,8 @@
         [titleConfig]="titleConfig"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-gallery-section>
 
@@ -145,8 +145,8 @@
         [titleConfig]="titleConfig"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-contact-section>
 
@@ -155,8 +155,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-header-section>
 
@@ -165,8 +165,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-footer-section>
 
@@ -175,8 +175,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-accordion-section>
 
@@ -185,8 +185,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-list-section>
 
@@ -195,8 +195,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-newsletter-section>
 
@@ -205,8 +205,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-steps-section>
 
@@ -215,8 +215,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-table-section>
 
@@ -225,8 +225,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-tabs-section>
 
@@ -235,8 +235,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-breadcrumbs-section>
 
@@ -245,8 +245,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-chip-section>
 
@@ -255,8 +255,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-spinner-section>
 
@@ -265,8 +265,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-title-section>
 
@@ -275,8 +275,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-card-section>
 
@@ -285,8 +285,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-input-section>
 
@@ -296,8 +296,8 @@
         [chartConfig]="chartConfig"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-chart-section>
 
@@ -306,8 +306,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-showcase-section>
 
@@ -316,8 +316,8 @@
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
-        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
-        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-cta-section>
       

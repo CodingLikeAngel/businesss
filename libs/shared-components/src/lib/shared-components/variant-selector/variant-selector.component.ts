@@ -17,7 +17,10 @@ import {
   PromotionsConfig,
   GalleryConfig,
   ProductsConfig,
-  TestimonialsConfig
+  TestimonialsConfig,
+  FeaturesConfig,
+  ChartConfig,
+  StatsConfig
 } from '../../../services/variant.service';
 
 // Import subcomponents
@@ -75,7 +78,9 @@ export class VariantSelectorComponent implements OnInit {
   galleryConfig: GalleryConfig;
   productsConfig: ProductsConfig;
   testimonialsConfig: TestimonialsConfig;
-  statsConfig: any;
+  statsConfig: StatsConfig;
+  featuresConfig: FeaturesConfig;
+  chartConfig: ChartConfig;
 
   // UI state
   private _currentStep: 'welcome' | 'editor' | 'preview' = 'welcome';
@@ -131,6 +136,8 @@ export class VariantSelectorComponent implements OnInit {
     this.productsConfig = this.variantService.getCurrentProductsConfig();
     this.testimonialsConfig = this.variantService.getCurrentTestimonialsConfig();
     this.statsConfig = this.variantService.getCurrentStatsConfig();
+    this.featuresConfig = this.variantService.getCurrentFeaturesConfig();
+    this.chartConfig = this.variantService.getCurrentChartConfig();
   }
 
   setActiveTab(tab: 'pages' | 'general' | 'structure' | 'explorer' | 'content' | 'design' | 'footer') {
@@ -210,6 +217,9 @@ export class VariantSelectorComponent implements OnInit {
     this.variantService.galleryConfig$.subscribe(c => this.galleryConfig = c);
     this.variantService.productsConfig$.subscribe(c => this.productsConfig = c);
     this.variantService.testimonialsConfig$.subscribe(c => this.testimonialsConfig = c);
+    this.variantService.statsConfig$.subscribe(c => this.statsConfig = c);
+    this.variantService.featuresConfig$.subscribe(c => this.featuresConfig = c);
+    this.variantService.chartConfig$.subscribe(c => this.chartConfig = c);
   }
 
   setStep(step: 'welcome' | 'editor' | 'preview') {
@@ -349,9 +359,9 @@ export class VariantSelectorComponent implements OnInit {
     }
 
     source.styles = { ...(source.styles || {}), ...styles };
-    if ('customStyles' in source) {
-      source.customStyles = { ...(source.customStyles || {}), ...styles };
-    }
+    // Bind customStyles for child components as requested
+    source.customStyles = { ...(source.customStyles || {}), ...styles };
+
 
     // 3. Handle observer notification and parent updates
     if (this.selectedElement['sectionId']) {
@@ -374,11 +384,16 @@ export class VariantSelectorComponent implements OnInit {
           updates.content[styleKey] = { ...(content[styleKey] || {}), ...styles };
           
           // CRITICAL FIX: For components that use section.styles as customStyles input, update section.styles
-          if (['footer', 'header', 'hero', 'services', 'products', 'testimonials', 'pricing', 'promotions', 'faq', 'gallery', 'contact', 'bubble', 'features', 'stats', 'newsletter', 'steps', 'table', 'breadcrumbs', 'chip', 'spinner', 'chart', 'showcase', 'tabs', 'accordion', 'list', 'navBar'].includes(this.selectedElement.type)) {
+          if (['footer', 'header', 'hero', 'services', 'products', 'testimonials', 'pricing', 'promotions', 'faq', 'gallery', 'contact', 'bubble', 'features', 'stats', 'newsletter', 'steps', 'table', 'breadcrumbs', 'chip', 'spinner', 'chart', 'showcase', 'tabs', 'accordion', 'list', 'navBar', 'cta', 'input', 'title', 'card', 'team', 'blog'].includes(this.selectedElement.type)) {
             updates.styles = styles;
             console.log(`🔧 Updating ${this.selectedElement.type} section.styles:`, styles);
+            
+            // Also ensure customStyles property matches styles for consistency if the component expects it
+            if (!updates.content) updates.content = {};
+            updates.content.customStyles = styles;
           }
         }
+
       }
 
       // If it's a section-level element (not in a list) but NOT a field mapper, 
@@ -500,6 +515,16 @@ export class VariantSelectorComponent implements OnInit {
       case 'bubble': this.variantService.setBubbleConfig({ ...content, customStyles: styles }); break;
       case 'card': this.variantService.setCardConfig({ ...content, customStyles: styles }); break;
       case 'title': this.variantService.setTitleConfig({ ...content, customStyles: styles }); break;
+      case 'services': this.variantService.setServiceCardsConfig({ ...content, customStyles: styles }); break;
+      case 'faq': this.variantService.setFaqConfig({ ...content, customStyles: styles }); break;
+      case 'pricing': this.variantService.setPricingConfig({ ...content, customStyles: styles }); break;
+      case 'promotions': this.variantService.setPromotionsConfig({ ...content, customStyles: styles }); break;
+      case 'gallery': this.variantService.setGalleryConfig({ ...content, customStyles: styles }); break;
+      case 'products': this.variantService.setProductsConfig({ ...content, customStyles: styles }); break;
+      case 'testimonials': this.variantService.setTestimonialsConfig({ ...content, customStyles: styles }); break;
+      case 'stats': this.variantService.setStatsConfig({ ...content, customStyles: styles }); break;
+      case 'features': this.variantService.setFeaturesConfig({ ...content, customStyles: styles }); break;
+      case 'chart': this.variantService.setChartConfig({ ...content, customStyles: styles }); break;
     }
   }
 
@@ -515,6 +540,16 @@ export class VariantSelectorComponent implements OnInit {
       case 'bubble': config = this.bubbleConfig; label = 'Efecto Burbujas'; break;
       case 'card': config = this.cardConfig; label = 'Configuración de Tarjetas'; break;
       case 'title': config = this.titleConfig; label = 'Configuración de Títulos'; break;
+      case 'services': config = this.serviceCardsConfig; label = 'Servicios'; break;
+      case 'faq': config = this.faqConfig; label = 'Preguntas Frecuentes'; break;
+      case 'pricing': config = this.pricingConfig; label = 'Precios'; break;
+      case 'promotions': config = this.promotionsConfig; label = 'Promociones'; break;
+      case 'gallery': config = this.galleryConfig; label = 'Galería'; break;
+      case 'products': config = this.productsConfig; label = 'Productos'; break;
+      case 'testimonials': config = this.testimonialsConfig; label = 'Testimonios'; break;
+      case 'stats': config = this.statsConfig; label = 'Estadísticas'; break;
+      case 'features': config = this.featuresConfig; label = 'Características'; break;
+      case 'chart': config = this.chartConfig; label = 'Gráficos'; break;
       default: return;
     }
 

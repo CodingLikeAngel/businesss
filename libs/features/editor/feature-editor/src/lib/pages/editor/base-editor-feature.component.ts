@@ -284,14 +284,48 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     this.variantService.updateSectionInCurrentPage(section.id, updatedSection);
   }
 
-  onElementMoved(bounds: any, elementId: string) {
-    console.log('📍 Element moved:', elementId, bounds);
-    // TODO: Implement element position persistence
+  onElementMoved(bounds: any, elementId: string, section?: PageSection) {
+    console.log('📍 Element moved:', elementId, bounds, section?.id);
+    if (!section) return;
+
+    // Persist position if element exists in section.elements
+    if (section.elements) {
+      const idx = section.elements.findIndex((e: any) => e.id === elementId);
+      if (idx !== -1) {
+        const newEl = { ...section.elements[idx] };
+        newEl.styles = { 
+          ...(newEl.styles || {}), 
+          position: 'absolute', 
+          left: `${bounds.x}px`, 
+          top: `${bounds.y}px` 
+        };
+        const newElements = [...section.elements];
+        newElements[idx] = newEl;
+        this.variantService.updateSectionInCurrentPage(section.id, { elements: newElements });
+      }
+    }
+    // TODO: Handle movement for config-based items if necessary (requires mapping ID to config index)
   }
 
-  onElementResized(bounds: any, elementId: string) {
-    console.log('📐 Element resized:', elementId, bounds);
-    // TODO: Implement element size persistence
+  onElementResized(bounds: any, elementId: string, section?: PageSection) {
+    console.log('📐 Element resized:', elementId, bounds, section?.id);
+    if (!section) return;
+
+    // Persist size if element exists in section.elements
+    if (section.elements) {
+      const idx = section.elements.findIndex((e: any) => e.id === elementId);
+      if (idx !== -1) {
+        const newEl = { ...section.elements[idx] };
+        newEl.styles = { 
+          ...(newEl.styles || {}), 
+          width: `${bounds.width}px`, 
+          height: `${bounds.height}px`
+        };
+        const newElements = [...section.elements];
+        newElements[idx] = newEl;
+        this.variantService.updateSectionInCurrentPage(section.id, { elements: newElements });
+      }
+    }
   }
 
   onTabSelected(sectionId: string) {
