@@ -15,11 +15,7 @@
       [customStyles]="section.customStyles"
       class="editor-element"
       [class.is-selected]="selectedElementId === section.id + '_button'"
-      (click)="selectElement($event, getMergedElement(section.id, section.id + '_button', section.content, 'button'))"
-      [enhancedVisualEditable]="createElementConfig('element')"
-      elementId="{{section.id + '_button'}}"
-      sectionId="{{section.id}}"
-      (visualEvents)="handleVisualEvent($event, section.id + '_button')">
+      (click)="selectElement($event, getMergedElement(section.id, section.id + '_button', section.content, 'button'))">
       {{ section.content['label'] || 'Click Me' }}
     </lib-ui-components-button>
   </div>
