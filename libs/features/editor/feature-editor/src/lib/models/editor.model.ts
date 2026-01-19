@@ -1,5 +1,7 @@
 // Enhanced Editor Models for Professional Page Builder
 
+import { SectionType } from '@negocio/shared-components';
+
 export interface Position {
   x: number;
   y: number;
@@ -41,7 +43,7 @@ export interface ElementStyles {
   border?: string;
   borderRadius?: string;
   boxShadow?: string;
-  opacity?: number;
+  opacity?: string;
   transform?: string;
   customCSS?: string;
 }
@@ -51,7 +53,6 @@ export interface SectionStyles extends ElementStyles {
   backgroundSize?: string;
   backgroundPosition?: string;
   minHeight?: string;
-  [key: string]: string | number | undefined;
 }
 
 export interface ElementContent {
@@ -72,25 +73,6 @@ export interface SectionContent {
   customData?: any;
 }
 
-export type SectionType =
-  | 'hero'
-  | 'features'
-  | 'services'
-  | 'products'
-  | 'testimonials'
-  | 'pricing'
-  | 'gallery'
-  | 'contact'
-  | 'faq'
-  | 'stats'
-  | 'team'
-  | 'blog'
-  | 'cta'
-  | 'promotions'
-  | 'bubble'
-  | 'custom'
-  | 'header'
-  | 'footer';
 
 export type ElementType =
   | 'text'
@@ -144,19 +126,27 @@ export interface Section {
 export interface PageSection {
   id: string;
   type: SectionType;
+  label: string;
+  visible: boolean;
   name: string;
-  position: Position;
+  position?: Position;
   size?: Size;
   styles: SectionStyles;
-  content: SectionContent;
-  elements: Element[];
-  animations: Animation[];
-  responsive: ResponsiveConfig;
-  visible: boolean;
-  locked: boolean;
-  zIndex: number;
+  content: { [key: string]: any };
+  elements: any[];
+  config: { [key: string]: any };
+  customStyles: { [key: string]: string };
+  animation: string;
+  layout: string;
+  animations?: any[];
+  responsive?: {
+    mobile: { visible: boolean; styles: { [key: string]: string } };
+    tablet: { visible: boolean; styles: { [key: string]: string } };
+    desktop: { visible: boolean; styles: { [key: string]: string } };
+  };
+  locked?: boolean;
+  zIndex?: number;
   order?: number;
-  config?: any;
 }
 
 export interface GlobalStyles {

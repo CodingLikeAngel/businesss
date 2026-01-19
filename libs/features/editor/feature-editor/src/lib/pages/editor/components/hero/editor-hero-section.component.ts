@@ -10,7 +10,7 @@ import {
   UICardAnimatedComponent
 } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
-import { VisualEditingConfig, VisualEditingEvent } from '../../../../../shared-components/variant-selector/enhanced-visual-editing.interfaces';
+import { VisualEditingConfig, VisualEditingEvent } from '@negocio/shared-components';
 
 /**
  * Enhanced Editor Hero Section Component

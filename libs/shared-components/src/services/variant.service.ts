@@ -3,6 +3,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants, NavLink, variants } from '@negocio/ui-components';
 
+export type SectionType = 'hero' | 'features' | 'services' | 'products' | 'testimonials' | 'pricing' | 'gallery' | 'contact' | 'faq' | 'stats' | 'team' | 'blog' | 'cta' | 'promotions' | 'bubble' | 'custom' | 'header' | 'footer' | 'newsletter' | 'steps' | 'table' | 'breadcrumbs' | 'chip' | 'spinner' | 'chart' | 'showcase' | 'tabs' | 'accordion' | 'list' | 'navBar';
+
 // Existing interfaces (NavLink, HeaderConfig, FooterConfig, NavBarConfig, HeroConfig, BubbleConfig, CardConfig, TitleConfig) remain unchanged
 
 export interface Testimonial {
@@ -268,10 +270,12 @@ export interface ProductsConfig {
 
 export interface PageSection {
   id: string;
-  type: 'hero' | 'services' | 'products' | 'testimonials' | 'pricing' | 'promotions' | 'faq' | 'gallery' | 'contact' | 'bubble' | 'features' | 'stats' | 'newsletter' | 'steps' | 'table' | 'breadcrumbs' | 'chip' | 'spinner' | 'chart' | 'showcase' | 'tabs' | 'accordion' | 'list' | 'header' | 'footer' | 'navBar';
+  type: SectionType;
   label: string; // User friendly name
   visible: boolean;
   name: string;
+  position?: { x: number; y: number };
+  size?: { width: number; height: number };
   styles: { [key: string]: string };
   content: { [key: string]: any };
   elements: any[];
@@ -287,6 +291,7 @@ export interface PageSection {
   };
   locked?: boolean;
   zIndex?: number;
+  order?: number;
 }
 
 export interface Page {

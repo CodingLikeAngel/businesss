@@ -15,7 +15,7 @@ export * from './lib/shared-components/variant-selector/variant-registry';
 export * from './lib/shared-components/variant-selector/visual-editor.service';
 export * from './lib/shared-components/variant-selector/visual-editable.directive';
 export * from './lib/shared-components/variant-selector/enhanced-visual-editable.directive';
-export * from './lib/shared-components/variant-selector/enhanced-visual-editing.interfaces';
+export { VisualEditingConfig, VisualEditingEvent, DEFAULT_CONFIGS, PlatformInfo } from './lib/shared-components/variant-selector/enhanced-visual-editing.interfaces';
 export * from './lib/shared-components/variant-selector/boundary-constraint.service';
 export * from './lib/shared-components/variant-selector/unified-styling.service';
 export * from './lib/shared-components/variant-selector/design-editor.component';

@@ -54,8 +54,8 @@ export class ApplyDynamicStylesDirective implements OnChanges {
 
       // Emit errors for invalid properties
       report.results
-        .filter(result => !result.isValid && result.severity === 'error')
-        .forEach(result => {
+        .filter((result: { isValid: any; severity: string; }) => !result.isValid && result.severity === 'error')
+        .forEach((result: { property: any; message: any; suggestions: any; }) => {
           this.styleError.emit({
             property: result.property,
             message: result.message,
@@ -108,10 +108,10 @@ export class ApplyDynamicStylesDirective implements OnChanges {
   private applyAutoCorrections(originalStyles: any, report: any): any {
     const correctedStyles = { ...originalStyles };
 
-    report.results.forEach(result => {
+    report.results.forEach((result: { isValid: any; suggestions: any[]; property: string | number; value: any; }) => {
       if (!result.isValid && result.suggestions && result.suggestions.length > 0) {
         // Find the best auto-apply suggestion
-        const autoSuggestion = result.suggestions.find(s => s.autoApply) || result.suggestions[0];
+        const autoSuggestion = result.suggestions.find((s: { autoApply: any; }) => s.autoApply) || result.suggestions[0];
         if (autoSuggestion && autoSuggestion.confidence > 0.7) { // Only auto-apply high confidence corrections
           correctedStyles[result.property] = autoSuggestion.value;
           console.log(`🔧 Auto-corrected ${result.property}: ${result.value} → ${autoSuggestion.value}`);
