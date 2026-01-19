@@ -1,4 +1,9 @@
 <div class="sections-container min-h-screen relative pb-32">
+  <!-- Floating Undo/Redo Toolbar -->
+  <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
+    <lib-undo-redo-toolbar></lib-undo-redo-toolbar>
+  </div>
+
   <div *ngIf="loading$ | async" class="flex items-center justify-center p-20">
     <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
   </div>

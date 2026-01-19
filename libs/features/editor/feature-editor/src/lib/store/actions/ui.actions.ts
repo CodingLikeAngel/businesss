@@ -181,3 +181,31 @@ export const enablePerformanceMode = createAction(
 export const disablePerformanceMode = createAction(
   '[UI] Disable Performance Mode'
 );
+
+// History Actions
+export const executeCommand = createAction(
+  '[History] Execute Command',
+  props<{ command: any }>()
+);
+
+export const undo = createAction(
+  '[History] Undo'
+);
+
+export const redo = createAction(
+  '[History] Redo'
+);
+
+export const clearHistory = createAction(
+  '[History] Clear History'
+);
+
+export const undoToCommand = createAction(
+  '[History] Undo to Command',
+  props<{ commandId: string }>()
+);
+
+export const redoToCommand = createAction(
+  '[History] Redo to Command',
+  props<{ commandId: string }>()
+);

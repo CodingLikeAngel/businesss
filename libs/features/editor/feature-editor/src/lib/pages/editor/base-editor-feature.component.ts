@@ -4,7 +4,6 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
 import {
-  PageSection,
   VariantService,
   NavBarConfig,
   HeroConfig,
@@ -26,7 +25,12 @@ import {
   UiStateService,
 } from '@negocio/shared-components';
 import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
-import { EditorState, ModalState } from '../../models/editor.model';
+import { EditorState, ModalState, PageSection } from '../../models/editor.model';
+import { HistoryService } from '../../services/history.service';
+import { KeyboardService } from '../../services/keyboard.service';
+import { ResizeSectionCommand } from '../../services/commands';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store/state/app.state';
 
 @Component({
   standalone: true,
@@ -38,6 +42,9 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
   protected cartService = inject(CartService);
   protected modalService = inject(ModalService);
   protected uiStateService = inject(UiStateService);
+  protected historyService = inject(HistoryService);
+  protected keyboardService = inject(KeyboardService);
+  protected store = inject(Store<AppState>);
 
   private variantSub?: Subscription;
   private configSubs: Subscription[] = [];
@@ -249,6 +256,18 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
 
   onSectionResized(section: PageSection, bounds: any) {
     console.log('📏 Section resized:', section.id, bounds);
+
+    // Track the operation for undo/redo
+    const oldSize = section.size || { width: bounds.width || 1200, height: bounds.height || 400 };
+    const newSize = { width: bounds.width || oldSize.width, height: bounds.height };
+
+    const command = new ResizeSectionCommand(
+      section.id,
+      oldSize,
+      newSize,
+      this.store
+    );
+    this.historyService.execute(command);
 
     // Update section styles with new height
     const updatedSection = {

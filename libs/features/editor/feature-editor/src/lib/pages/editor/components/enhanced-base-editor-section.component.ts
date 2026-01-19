@@ -1,6 +1,10 @@
 import { Component, ElementRef, inject, OnDestroy, OnInit } from '@angular/core';
 import { BaseEditorSectionComponent } from './base-editor-section.component';
 import { EnhancedVisualEditableDirective, VisualEditingConfig, VisualEditingEvent, DEFAULT_CONFIGS, PlatformInfo } from '@negocio/shared-components';
+import { HistoryService } from '../../../services/history.service';
+import { MoveElementCommand, ResizeElementCommand, StyleChangeCommand, ResizeSectionCommand } from '../../../services/commands';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../../store/state/app.state';
 
 /**
  * Enhanced Base Editor Section Component
@@ -14,18 +18,21 @@ import { EnhancedVisualEditableDirective, VisualEditingConfig, VisualEditingEven
 export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSectionComponent implements OnInit, OnDestroy {
   // Injected services for enhanced functionality
   protected platformInfo!: PlatformInfo;
+  private historyService = inject(HistoryService);
+  private store = inject(Store<AppState>);
 
   // Visual editing state
   protected activeVisualElements = new Map<string, EnhancedVisualEditableDirective>();
   protected visualEditingEnabled = true;
 
+  // Command tracking state
+  private lastElementStates = new Map<string, { position?: any; size?: any; styles?: any }>();
+
   ngOnInit() {
-    super.ngOnInit();
     this.initializePlatformDetection();
   }
 
   ngOnDestroy() {
-    super.ngOnDestroy();
     this.cleanupAllVisualEditing();
   }
 
@@ -123,11 +130,14 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
   }
 
   /**
-   * Handle visual editing events with standardized processing
+   * Handle visual editing events with standardized processing and command tracking
    */
   protected handleVisualEvent(event: VisualEditingEvent, elementId: string): void {
     // Log event for debugging
     console.log(`Visual event ${event.type} for ${elementId}:`, event);
+
+    // Track operations for undo/redo
+    this.trackOperation(event, elementId);
 
     // Emit appropriate events based on event type
     switch (event.type) {
@@ -156,7 +166,8 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
         break;
 
       case 'selected':
-        // Handle selection if needed
+        // Store current state when element is selected for potential operations
+        this.storeElementState(elementId);
         break;
 
       case 'deselected':
@@ -275,5 +286,86 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
       }),
       containerId
     );
+  }
+
+  /**
+   * Track operations for undo/redo functionality
+   */
+  protected trackOperation(event: VisualEditingEvent, elementId: string): void {
+    const previousState = this.lastElementStates.get(elementId);
+
+    switch (event.type) {
+      case 'moved':
+        if (previousState?.position) {
+          const command = new MoveElementCommand(
+            this.section.id,
+            elementId,
+            previousState.position,
+            { x: event.bounds.x, y: event.bounds.y },
+            this.store
+          );
+          this.historyService.execute(command);
+        }
+        break;
+
+      case 'resized':
+        if (previousState?.size) {
+          const command = new ResizeElementCommand(
+            this.section.id,
+            elementId,
+            previousState.size,
+            { width: event.bounds.width, height: event.bounds.height },
+            this.store
+          );
+          this.historyService.execute(command);
+        }
+        break;
+    }
+
+    // Update stored state after operation
+    this.storeElementState(elementId);
+  }
+
+  /**
+   * Store the current state of an element for operation tracking
+   */
+  protected storeElementState(elementId: string): void {
+    // Find the element in the section
+    const element = this.section.elements.find(e => e.id === elementId);
+    if (element) {
+      this.lastElementStates.set(elementId, {
+        position: { ...element.position },
+        size: element.size ? { ...element.size } : undefined,
+        styles: { ...element.styles }
+      });
+    }
+  }
+
+  /**
+   * Track section resize operations
+   */
+  protected trackSectionResize(oldBounds: any, newBounds: any): void {
+    const command = new ResizeSectionCommand(
+      this.section.id,
+      { width: oldBounds.width, height: oldBounds.height },
+      { width: newBounds.width, height: newBounds.height },
+      this.store
+    );
+    this.historyService.execute(command);
+  }
+
+  /**
+   * Track style changes
+   */
+  protected trackStyleChange(targetType: 'element' | 'section', targetId: string, oldStyles: any, newStyles: any): void {
+    const command = new StyleChangeCommand(
+      targetType,
+      targetId,
+      targetType === 'element' ? this.section.id : null,
+      oldStyles,
+      newStyles,
+      this.store
+    );
+    this.historyService.execute(command);
   }
 }
