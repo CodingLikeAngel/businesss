@@ -177,6 +177,127 @@ export interface PlatformInfo {
 }
 
 /**
+ * Element Group Interfaces
+ */
+export interface ElementGroup {
+  id: string;
+  name: string;
+  elements: GroupElement[];
+  bounds: GroupBounds;
+  config: GroupConfig;
+  createdAt: number;
+  sectionId: string;
+  lastModified: number;
+}
+
+export interface GroupElement {
+  elementId: string;
+  element: HTMLElement;
+  relativePosition: { x: number; y: number };
+  relativeScale: { x: number; y: number };
+  originalBounds: EnhancedElementBounds;
+}
+
+export interface GroupBounds {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  centerX: number;
+  centerY: number;
+}
+
+export interface GroupConfig {
+  enableDrag: boolean;
+  enableResize: boolean;
+  maintainAspectRatio: boolean;
+  proportionalScaling: boolean;
+  collisionDetection: boolean;
+  snapToGrid: number;
+  minWidth: number;
+  minHeight: number;
+  maxWidth?: number;
+  maxHeight?: number;
+  containment: 'parent' | 'viewport' | 'container' | ElementRef;
+  minDistance: {
+    top: number;
+    right: number;
+    bottom: number;
+    left: number;
+  };
+  safeZones: SafeZone[];
+}
+
+export interface GroupTransformation {
+  type: 'translate' | 'scale' | 'rotate';
+  deltaX?: number;
+  deltaY?: number;
+  scaleX?: number;
+  scaleY?: number;
+  angle?: number;
+  originX?: number;
+  originY?: number;
+}
+
+export interface CollisionResult {
+  groupId: string;
+  targetGroupId?: string;
+  elementId?: string;
+  collisionType: 'group-group' | 'group-element' | 'group-boundary';
+  overlap: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  };
+  severity: 'minor' | 'moderate' | 'severe';
+  suggestedResolution?: {
+    deltaX: number;
+    deltaY: number;
+  };
+}
+
+/**
+ * Group Operation Events
+ */
+export type GroupOperationType =
+  | 'created'
+  | 'deleted'
+  | 'elementAdded'
+  | 'elementRemoved'
+  | 'moved'
+  | 'resized'
+  | 'transformed'
+  | 'collisionDetected'
+  | 'collisionResolved';
+
+export interface GroupEvent {
+  type: GroupOperationType;
+  groupId: string;
+  elementIds?: string[];
+  bounds?: GroupBounds;
+  transformation?: GroupTransformation;
+  collisions?: CollisionResult[];
+  timestamp: number;
+  userId?: string;
+}
+
+/**
+ * Multi-Selection Interfaces
+ */
+export interface MultiSelectionState {
+  selectedElements: Set<HTMLElement>;
+  selectionBounds: {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+  } | null;
+  activeGroup: ElementGroup | null;
+  selectionMode: 'single' | 'multi' | 'group';
+}
+
+/**
  * Default configurations for different element types
  */
 export const DEFAULT_CONFIGS: Record<VisualEditingType, Omit<VisualEditingConfig, 'type'>> = {
@@ -251,5 +372,41 @@ export const DEFAULT_CONFIGS: Record<VisualEditingType, Omit<VisualEditingConfig
       animationDuration: 0,
       hapticFeedback: false
     }
+  }
+};
+
+/**
+ * Default group configurations
+ */
+export const DEFAULT_GROUP_CONFIGS: Record<string, Omit<GroupConfig, 'containment' | 'minDistance' | 'safeZones'>> = {
+  standard: {
+    enableDrag: true,
+    enableResize: true,
+    maintainAspectRatio: false,
+    proportionalScaling: true,
+    collisionDetection: true,
+    snapToGrid: 5,
+    minWidth: 50,
+    minHeight: 50
+  },
+  layout: {
+    enableDrag: true,
+    enableResize: false,
+    maintainAspectRatio: false,
+    proportionalScaling: false,
+    collisionDetection: false,
+    snapToGrid: 0,
+    minWidth: 100,
+    minHeight: 50
+  },
+  fixed: {
+    enableDrag: false,
+    enableResize: false,
+    maintainAspectRatio: true,
+    proportionalScaling: false,
+    collisionDetection: true,
+    snapToGrid: 10,
+    minWidth: 200,
+    minHeight: 100
   }
 };

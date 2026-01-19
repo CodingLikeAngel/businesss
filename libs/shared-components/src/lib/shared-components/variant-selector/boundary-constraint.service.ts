@@ -1,6 +1,6 @@
 import { Injectable, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { BoundaryConstraints, SafeZone, EnhancedElementBounds } from './enhanced-visual-editing.interfaces';
+import { BoundaryConstraints, SafeZone, EnhancedElementBounds, ElementGroup, GroupBounds, CollisionResult } from './enhanced-visual-editing.interfaces';
 
 /**
  * Boundary Constraint Service
@@ -131,6 +131,206 @@ export class BoundaryConstraintService {
     });
 
     return collisions;
+  }
+
+  /**
+   * Check for collisions between groups
+   */
+  checkGroupCollisions(
+    group: ElementGroup,
+    allGroups: ElementGroup[],
+    excludeGroups: string[] = []
+  ): CollisionResult[] {
+    if (!isPlatformBrowser(this.platformId)) {
+      return [];
+    }
+
+    const collisions: CollisionResult[] = [];
+
+    allGroups.forEach((otherGroup: ElementGroup) => {
+      if (otherGroup.id === group.id || excludeGroups.includes(otherGroup.id)) {
+        return;
+      }
+
+      const overlap = this.calculateGroupOverlap(group.bounds, otherGroup.bounds);
+      if (overlap) {
+        collisions.push({
+          groupId: group.id,
+          targetGroupId: otherGroup.id,
+          collisionType: 'group-group',
+          overlap,
+          severity: this.calculateCollisionSeverity(overlap.width * overlap.height),
+          suggestedResolution: this.calculateGroupCollisionResolution(group.bounds, otherGroup.bounds, overlap)
+        });
+      }
+    });
+
+    return collisions;
+  }
+
+  /**
+   * Check collisions between a group and individual elements
+   */
+  checkGroupElementCollisions(
+    group: ElementGroup,
+    excludeElements: string[] = []
+  ): CollisionResult[] {
+    if (!isPlatformBrowser(this.platformId)) {
+      return [];
+    }
+
+    const collisions: CollisionResult[] = [];
+    const elements = document.querySelectorAll('[data-visual-editable="true"]:not(.element-group-member)');
+
+    elements.forEach(el => {
+      const htmlEl = el as HTMLElement;
+      const elementId = htmlEl.getAttribute('data-element-id') || htmlEl.id;
+
+      if (excludeElements.includes(elementId)) {
+        return;
+      }
+
+      const elRect = htmlEl.getBoundingClientRect();
+      const elementBounds = {
+        x: elRect.left,
+        y: elRect.top,
+        width: elRect.width,
+        height: elRect.height
+      };
+
+      const overlap = this.calculateGroupElementOverlap(group.bounds, elementBounds);
+      if (overlap) {
+        collisions.push({
+          groupId: group.id,
+          elementId,
+          collisionType: 'group-element',
+          overlap,
+          severity: this.calculateCollisionSeverity(overlap.width * overlap.height),
+          suggestedResolution: this.calculateGroupElementCollisionResolution(group.bounds, elementBounds, overlap)
+        });
+      }
+    });
+
+    return collisions;
+  }
+
+  /**
+   * Resolve group collision by adjusting position
+   */
+  resolveGroupCollision(
+    groupBounds: GroupBounds,
+    collision: CollisionResult
+  ): { deltaX: number; deltaY: number } {
+    if (collision.suggestedResolution) {
+      return collision.suggestedResolution;
+    }
+
+    // Default resolution: move group away from collision
+    const overlap = collision.overlap;
+    return {
+      deltaX: overlap.x < groupBounds.centerX ? overlap.width : -overlap.width,
+      deltaY: overlap.y < groupBounds.centerY ? overlap.height : -overlap.height
+    };
+  }
+
+  /**
+   * Calculate overlap between two group bounds
+   */
+  private calculateGroupOverlap(bounds1: GroupBounds, bounds2: GroupBounds): { x: number; y: number; width: number; height: number } | null {
+    const x1 = Math.max(bounds1.x, bounds2.x);
+    const y1 = Math.max(bounds1.y, bounds2.y);
+    const x2 = Math.min(bounds1.x + bounds1.width, bounds2.x + bounds2.width);
+    const y2 = Math.min(bounds1.y + bounds1.height, bounds2.y + bounds2.height);
+
+    const width = x2 - x1;
+    const height = y2 - y1;
+
+    if (width > 0 && height > 0) {
+      return { x: x1, y: y1, width, height };
+    }
+
+    return null;
+  }
+
+  /**
+   * Calculate overlap between group bounds and element bounds
+   */
+  private calculateGroupElementOverlap(
+    groupBounds: GroupBounds,
+    elementBounds: { x: number; y: number; width: number; height: number }
+  ): { x: number; y: number; width: number; height: number } | null {
+    const x1 = Math.max(groupBounds.x, elementBounds.x);
+    const y1 = Math.max(groupBounds.y, elementBounds.y);
+    const x2 = Math.min(groupBounds.x + groupBounds.width, elementBounds.x + elementBounds.width);
+    const y2 = Math.min(groupBounds.y + groupBounds.height, elementBounds.y + elementBounds.height);
+
+    const width = x2 - x1;
+    const height = y2 - y1;
+
+    if (width > 0 && height > 0) {
+      return { x: x1, y: y1, width, height };
+    }
+
+    return null;
+  }
+
+  /**
+   * Calculate collision severity based on overlap area
+   */
+  private calculateCollisionSeverity(overlapArea: number): 'minor' | 'moderate' | 'severe' {
+    if (overlapArea < 100) return 'minor';
+    if (overlapArea < 1000) return 'moderate';
+    return 'severe';
+  }
+
+  /**
+   * Calculate resolution for group-to-group collision
+   */
+  private calculateGroupCollisionResolution(
+    bounds1: GroupBounds,
+    bounds2: GroupBounds,
+    overlap: { x: number; y: number; width: number; height: number }
+  ): { deltaX: number; deltaY: number } {
+    const center1X = bounds1.centerX;
+    const center1Y = bounds1.centerY;
+    const center2X = bounds2.centerX;
+    const center2Y = bounds2.centerY;
+
+    const deltaX = center1X < center2X ? -overlap.width : overlap.width;
+    const deltaY = center1Y < center2Y ? -overlap.height : overlap.height;
+
+    return { deltaX, deltaY };
+  }
+
+  /**
+   * Calculate resolution for group-to-element collision
+   */
+  private calculateGroupElementCollisionResolution(
+    groupBounds: GroupBounds,
+    elementBounds: { x: number; y: number; width: number; height: number },
+    overlap: { x: number; y: number; width: number; height: number }
+  ): { deltaX: number; deltaY: number } {
+    const elementCenterX = elementBounds.x + elementBounds.width / 2;
+    const elementCenterY = elementBounds.y + elementBounds.height / 2;
+
+    const deltaX = groupBounds.centerX < elementCenterX ? -overlap.width : overlap.width;
+    const deltaY = groupBounds.centerY < elementCenterY ? -overlap.height : overlap.height;
+
+    return { deltaX, deltaY };
+  }
+
+  /**
+   * Get ElementGroupService instance (to avoid circular dependency)
+   */
+  private getElementGroupService(): any {
+    // This would be injected in a real implementation
+    // For now, we'll access it through a global or service locator pattern
+    try {
+      const injector = (window as any)['ngInjector'];
+      return injector?.get?.('ElementGroupService');
+    } catch {
+      return null;
+    }
   }
 
   /**

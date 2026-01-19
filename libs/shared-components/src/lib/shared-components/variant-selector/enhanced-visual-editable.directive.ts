@@ -2,6 +2,7 @@ import { Directive, ElementRef, Input, OnInit, OnDestroy, Output, EventEmitter, 
 import { VisualEditorService } from './visual-editor.service';
 import { BoundaryConstraintService } from './boundary-constraint.service';
 import { UnifiedStylingService } from './unified-styling.service';
+import { ElementGroupService } from './element-group.service';
 import {
   VisualEditingConfig,
   VisualEditingEvent,
@@ -22,6 +23,8 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
   @Input() enhancedVisualEditable!: VisualEditingConfig;
   @Input() elementId!: string;
   @Input() sectionId!: string;
+  @Input() groupId?: string;
+  @Input() isGroupMember = false;
 
   @Output() visualEvents = new EventEmitter<VisualEditingEvent>();
 
@@ -33,6 +36,7 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
   private visualEditor = inject(VisualEditorService);
   private boundaryService = inject(BoundaryConstraintService);
   private stylingService = inject(UnifiedStylingService);
+  private elementGroupService = inject(ElementGroupService);
 
   constructor(private el: ElementRef<HTMLElement>) {}
 
@@ -86,8 +90,8 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
       },
       interactions: {
         ...baseConfig.interactions,
-        touchEnabled: this.platformInfo.isTouch,
-        ...this.enhancedVisualEditable.interactions
+        ...this.enhancedVisualEditable.interactions,
+        touchEnabled: this.platformInfo.isTouch
       }
     };
 
@@ -141,6 +145,21 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
    * Create drag-resize configuration from visual editing config
    */
   private createDragResizeConfig() {
+    const containment = this.currentConfig.constraints.containment;
+    let dragContainment: 'parent' | 'viewport' | 'container' | ElementRef | undefined;
+
+    if (containment === 'parent') {
+      dragContainment = 'parent';
+    } else if (containment === 'viewport') {
+      dragContainment = 'viewport';
+    } else if (containment === 'container') {
+      dragContainment = 'parent'; // Fallback for container
+    } else if (containment instanceof ElementRef) {
+      dragContainment = containment;
+    } else {
+      dragContainment = undefined;
+    }
+
     return {
       enableDrag: this.currentConfig.enableDrag,
       enableResize: this.currentConfig.enableResize,
@@ -159,9 +178,7 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
         bottomRight: this.currentConfig.enableResize
       },
       grid: this.currentConfig.interactions.snapToGrid,
-      containment: this.currentConfig.constraints.containment === 'parent' ? 'parent' :
-                   this.currentConfig.constraints.containment === 'viewport' ? 'viewport' :
-                   undefined
+      containment: dragContainment
     };
   }
 
@@ -287,5 +304,52 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
   updateConfig(updates: Partial<VisualEditingConfig>): void {
     this.enhancedVisualEditable = { ...this.enhancedVisualEditable, ...updates };
     this.updateConfiguration();
+  }
+
+  /**
+   * Join an element group
+   */
+  joinGroup(groupId: string): void {
+    this.groupId = groupId;
+    this.isGroupMember = true;
+    this.elementGroupService.addToGroup(groupId, [this.el.nativeElement]);
+  }
+
+  /**
+   * Leave current group
+   */
+  leaveGroup(): void {
+    if (this.groupId) {
+      this.elementGroupService.removeFromGroup(this.groupId, [this.elementId]);
+      this.groupId = undefined;
+      this.isGroupMember = false;
+    }
+  }
+
+  /**
+   * Get relative position within group
+   */
+  getGroupRelativePosition(): { x: number; y: number } | null {
+    if (!this.groupId) return null;
+
+    const group = this.elementGroupService.getGroup(this.groupId);
+    if (!group) return null;
+
+    const groupElement = group.elements.find(ge => ge.elementId === this.elementId);
+    return groupElement ? { ...groupElement.relativePosition } : null;
+  }
+
+  /**
+   * Check if element is part of a group
+   */
+  isInGroup(): boolean {
+    return this.isGroupMember && !!this.groupId;
+  }
+
+  /**
+   * Get current group ID
+   */
+  getCurrentGroupId(): string | undefined {
+    return this.groupId;
   }
 }

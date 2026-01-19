@@ -20,3 +20,7 @@ export * from './lib/shared-components/variant-selector/boundary-constraint.serv
 export * from './lib/shared-components/variant-selector/unified-styling.service';
 export * from './lib/shared-components/variant-selector/design-editor.component';
 export * from './lib/shared-components/variant-selector/apply-dynamic-styles.directive';
+
+// Element Grouping System
+export * from './lib/shared-components/variant-selector/element-group.service';
+export * from './lib/shared-components/variant-selector/element-group.directive';

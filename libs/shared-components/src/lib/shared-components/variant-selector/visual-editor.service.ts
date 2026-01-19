@@ -2,6 +2,8 @@ import { Injectable, ElementRef, Renderer2, RendererFactory2, Inject, PLATFORM_I
 import { isPlatformBrowser } from '@angular/common';
 import { Subject, fromEvent } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ElementGroupService } from './element-group.service';
+import { ElementGroup, MultiSelectionState } from './enhanced-visual-editing.interfaces';
 
 export interface ResizeHandles {
   top: boolean;
@@ -23,7 +25,7 @@ export interface DragResizeConfig {
   maxHeight?: number;
   handles?: Partial<ResizeHandles>;
   grid?: number; // Snap to grid
-  containment?: 'parent' | 'viewport' | ElementRef;
+  containment?: 'parent' | 'viewport' | 'container' | ElementRef;
 }
 
 export interface ElementBounds {
@@ -40,18 +42,32 @@ export class VisualEditorService {
   private renderer: Renderer2;
   private activeElement: HTMLElement | null = null;
   private destroy$ = new Subject<void>();
-  
+
+  // Multi-selection state
+  private multiSelectionState: MultiSelectionState = {
+    selectedElements: new Set(),
+    selectionBounds: null,
+    activeGroup: null,
+    selectionMode: 'single'
+  };
+
   // Eventos observables
   public elementSelected$ = new Subject<HTMLElement>();
   public elementResized$ = new Subject<{ element: HTMLElement; bounds: ElementBounds }>();
   public elementMoved$ = new Subject<{ element: HTMLElement; bounds: ElementBounds }>();
   public elementDeselected$ = new Subject<void>();
 
+  // Multi-selection events
+  public multiSelectionChanged$ = new Subject<MultiSelectionState>();
+  public groupSelected$ = new Subject<ElementGroup>();
+
   // Estado de edición
   private isEditMode = false;
   private isDragging = false;
   private isResizing = false;
   private resizeHandle: string | null = null;
+  private isMultiSelecting = false;
+  private selectionStartPoint: { x: number; y: number } | null = null;
 
   // Configuración por defecto
   private defaultConfig: DragResizeConfig = {
@@ -74,9 +90,150 @@ export class VisualEditorService {
 
   constructor(
     private rendererFactory: RendererFactory2,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
+    private elementGroupService: ElementGroupService
   ) {
     this.renderer = this.rendererFactory.createRenderer(null, null);
+
+    // Subscribe to group events
+    this.elementGroupService.groupEvents.subscribe(event => {
+      if (event.type === 'created' || event.type === 'deleted') {
+        this.updateMultiSelectionState();
+      }
+    });
+  }
+
+  // Multi-selection methods
+
+  /**
+   * Select multiple elements
+   */
+  selectMultiple(elements: HTMLElement[]): void {
+    this.clearSelection();
+    elements.forEach(element => this.multiSelectionState.selectedElements.add(element));
+    this.updateMultiSelectionState();
+    this.multiSelectionChanged$.next(this.multiSelectionState);
+  }
+
+  /**
+   * Add element to current selection
+   */
+  addToSelection(element: HTMLElement): void {
+    this.multiSelectionState.selectedElements.add(element);
+    this.updateMultiSelectionState();
+    this.multiSelectionChanged$.next(this.multiSelectionState);
+  }
+
+  /**
+   * Remove element from current selection
+   */
+  removeFromSelection(element: HTMLElement): void {
+    this.multiSelectionState.selectedElements.delete(element);
+    this.updateMultiSelectionState();
+    this.multiSelectionChanged$.next(this.multiSelectionState);
+  }
+
+  /**
+   * Clear all selections
+   */
+  clearSelection(): void {
+    this.multiSelectionState.selectedElements.clear();
+    this.multiSelectionState.selectionBounds = null;
+    this.multiSelectionState.activeGroup = null;
+    this.multiSelectionState.selectionMode = 'single';
+    this.updateMultiSelectionState();
+    this.multiSelectionChanged$.next(this.multiSelectionState);
+  }
+
+  /**
+   * Create group from current selection
+   */
+  createGroupFromSelection(name?: string, sectionId?: string): ElementGroup | null {
+    if (this.multiSelectionState.selectedElements.size === 0) return null;
+
+    const elements = Array.from(this.multiSelectionState.selectedElements);
+    try {
+      const group = this.elementGroupService.createGroup(elements, {}, name, sectionId);
+      this.multiSelectionState.activeGroup = group;
+      this.multiSelectionState.selectionMode = 'group';
+      this.multiSelectionChanged$.next(this.multiSelectionState);
+      this.groupSelected$.next(group);
+      return group;
+    } catch (error) {
+      console.error('Failed to create group:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Select a group
+   */
+  selectGroup(groupId: string): void {
+    const group = this.elementGroupService.getGroup(groupId);
+    if (group) {
+      this.clearSelection();
+      this.multiSelectionState.activeGroup = group;
+      this.multiSelectionState.selectionMode = 'group';
+      this.multiSelectionState.selectedElements = new Set(group.elements.map(ge => ge.element));
+      this.updateMultiSelectionState();
+      this.multiSelectionChanged$.next(this.multiSelectionState);
+      this.groupSelected$.next(group);
+    }
+  }
+
+  /**
+   * Get current multi-selection state
+   */
+  getMultiSelectionState(): MultiSelectionState {
+    return { ...this.multiSelectionState };
+  }
+
+  /**
+   * Check if element is in current selection
+   */
+  isElementSelected(element: HTMLElement): boolean {
+    return this.multiSelectionState.selectedElements.has(element);
+  }
+
+  /**
+   * Update multi-selection bounds
+   */
+  private updateMultiSelectionState(): void {
+    if (this.multiSelectionState.selectedElements.size === 0) {
+      this.multiSelectionState.selectionBounds = null;
+      return;
+    }
+
+    const elements = Array.from(this.multiSelectionState.selectedElements);
+    const bounds = this.calculateElementsBounds(elements);
+    this.multiSelectionState.selectionBounds = bounds;
+  }
+
+  /**
+   * Calculate bounds for multiple elements
+   */
+  private calculateElementsBounds(elements: HTMLElement[]): { x: number; y: number; width: number; height: number } | null {
+    if (elements.length === 0) return null;
+
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+
+    elements.forEach(element => {
+      const rect = element.getBoundingClientRect();
+      minX = Math.min(minX, rect.left);
+      minY = Math.min(minY, rect.top);
+      maxX = Math.max(maxX, rect.right);
+      maxY = Math.max(maxY, rect.bottom);
+    });
+
+    return {
+      x: minX,
+      y: minY,
+      width: maxX - minX,
+      height: maxY - minY
+    };
   }
 
   /**
@@ -129,7 +286,19 @@ export class VisualEditorService {
     const clickListener = this.renderer.listen(element, 'click', (e: MouseEvent) => {
       if (!this.isEditMode) return;
       e.stopPropagation();
-      this.selectElement(element, finalConfig);
+
+      // Check if Ctrl key is pressed for multi-selection
+      if (e.ctrlKey || e.metaKey) {
+        if (this.multiSelectionState.selectedElements.has(element)) {
+          this.removeFromSelection(element);
+        } else {
+          this.addToSelection(element);
+        }
+      } else {
+        // Single selection - clear previous and select this one
+        this.clearSelection();
+        this.selectElement(element, finalConfig);
+      }
     });
 
     // Cleanup function
@@ -155,11 +324,17 @@ export class VisualEditorService {
     this.activeElement = element;
     this.renderer.addClass(element, 'visual-selected');
 
+    // Add to multi-selection if not already there
+    this.multiSelectionState.selectedElements.add(element);
+    this.multiSelectionState.selectionMode = 'single';
+    this.updateMultiSelectionState();
+
     // Crear overlay de edición
     this.createEditOverlay(element, config);
 
     // Emitir evento
     this.elementSelected$.next(element);
+    this.multiSelectionChanged$.next(this.multiSelectionState);
   }
 
   /**
@@ -171,7 +346,15 @@ export class VisualEditorService {
     this.renderer.removeClass(this.activeElement, 'visual-selected');
     this.removeEditOverlay();
     this.activeElement = null;
+
+    // Remove from multi-selection
+    this.multiSelectionState.selectedElements.clear();
+    this.multiSelectionState.selectionBounds = null;
+    this.multiSelectionState.activeGroup = null;
+    this.multiSelectionState.selectionMode = 'single';
+
     this.elementDeselected$.next();
+    this.multiSelectionChanged$.next(this.multiSelectionState);
   }
 
   /**
@@ -619,6 +802,53 @@ export class VisualEditorService {
       .handle-bottom-right {
         bottom: -6px;
         right: -6px;
+      }
+
+      /* Element Group Styles */
+      .element-group-member {
+        position: relative;
+      }
+
+      .element-group-overlay {
+        border: 2px solid #8b5cf6;
+        background: rgba(139, 92, 246, 0.1);
+        border-radius: 6px;
+        box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2),
+                    0 0 20px rgba(139, 92, 246, 0.3);
+        animation: group-pulse 2s ease-in-out infinite;
+      }
+
+      .group-selection-border {
+        border: 2px solid #8b5cf6 !important;
+        border-radius: 6px;
+        box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2),
+                    0 0 20px rgba(139, 92, 246, 0.3);
+        animation: group-pulse 2s ease-in-out infinite;
+      }
+
+      .group-label {
+        background: #8b5cf6 !important;
+        color: white !important;
+        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4) !important;
+      }
+
+      .group-resize-handle {
+        border-color: #8b5cf6 !important;
+      }
+
+      .group-resize-handle:hover {
+        background: #8b5cf6 !important;
+      }
+
+      @keyframes group-pulse {
+        0%, 100% {
+          box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2),
+                      0 0 20px rgba(139, 92, 246, 0.3);
+        }
+        50% {
+          box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.4),
+                      0 0 30px rgba(139, 92, 246, 0.5);
+        }
       }
     `);
 
