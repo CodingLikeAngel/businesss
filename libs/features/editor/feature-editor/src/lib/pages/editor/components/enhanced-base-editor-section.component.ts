@@ -1,4 +1,5 @@
-import { Component, ElementRef, inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnDestroy, OnInit, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BaseEditorSectionComponent } from './base-editor-section.component';
 import { EnhancedVisualEditableDirective, VisualEditingConfig, VisualEditingEvent, DEFAULT_CONFIGS, PlatformInfo } from '@negocio/shared-components';
 import { HistoryService } from '../../../services/history.service';
@@ -28,6 +29,11 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
   // Command tracking state
   private lastElementStates = new Map<string, { position?: any; size?: any; styles?: any }>();
 
+  constructor(@Inject(PLATFORM_ID) platformId: object) {
+    super(platformId);
+    // isBrowser is already set in the base class
+  }
+
   ngOnInit() {
     this.initializePlatformDetection();
   }
@@ -40,6 +46,18 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
    * Initialize platform detection for responsive behavior
    */
   private initializePlatformDetection(): void {
+    if (!this.isBrowser) {
+      // Default values for SSR
+      this.platformInfo = {
+        isMobile: false,
+        isTouch: false,
+        screenSize: 'large',
+        orientation: 'landscape',
+        pixelRatio: 1
+      };
+      return;
+    }
+
     const userAgent = navigator.userAgent;
     const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
     const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;

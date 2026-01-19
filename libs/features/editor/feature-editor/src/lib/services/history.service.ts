@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Command, HistoryState } from '../models/editor.model';
 import { Store } from '@ngrx/store';
@@ -17,12 +18,22 @@ export class HistoryService {
     canUndo: false,
     canRedo: false
   });
+  private isBrowser: boolean;
 
-  constructor(private store: Store<AppState>) {
-    // Subscribe to store changes to keep local state in sync
-    this.store.select(state => state.editor.history).subscribe(historyState => {
-      this.historyState$.next(historyState);
-    });
+  constructor(
+    private store: Store<AppState>,
+    @Inject(PLATFORM_ID) platformId: object
+  ) {
+    this.isBrowser = isPlatformBrowser(platformId);
+
+    // Only subscribe to store changes on browser platform
+    if (this.isBrowser) {
+      this.store.select(state => state.editor?.history).subscribe(historyState => {
+        if (historyState) {
+          this.historyState$.next(historyState);
+        }
+      });
+    }
   }
 
   get historyState(): Observable<HistoryState> {
@@ -37,14 +48,16 @@ export class HistoryService {
    * Execute a command and add it to history
    */
   execute(command: Command): void {
-    this.store.dispatch(executeCommand({ command }));
+    if (this.isBrowser) {
+      this.store.dispatch(executeCommand({ command }));
+    }
   }
 
   /**
    * Undo the last command
    */
   undo(): void {
-    if (this.canUndo) {
+    if (this.isBrowser && this.canUndo) {
       this.store.dispatch(undo());
     }
   }
@@ -53,7 +66,7 @@ export class HistoryService {
    * Redo the next command
    */
   redo(): void {
-    if (this.canRedo) {
+    if (this.isBrowser && this.canRedo) {
       this.store.dispatch(redo());
     }
   }
@@ -76,7 +89,9 @@ export class HistoryService {
    * Clear all history
    */
   clear(): void {
-    this.store.dispatch(clearHistory());
+    if (this.isBrowser) {
+      this.store.dispatch(clearHistory());
+    }
   }
 
   /**

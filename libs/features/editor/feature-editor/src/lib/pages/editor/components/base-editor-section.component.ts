@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter, inject } from '@angular/core';
-import { 
-  PageSection, 
+import { Component, Input, Output, EventEmitter, inject, Inject, PLATFORM_ID, Optional } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import {
+  PageSection,
   UiStateService,
   VariantService
 } from '@negocio/shared-components';
@@ -20,6 +21,11 @@ export abstract class BaseEditorSectionComponent {
 
   public uiStateService = inject(UiStateService);
   protected variantService = inject(VariantService);
+  protected isBrowser: boolean;
+
+  constructor(@Inject(PLATFORM_ID) platformId: object) {
+    this.isBrowser = isPlatformBrowser(platformId);
+  }
 
   get selectedSectionId() {
     return this.uiStateService.selectedSection?.id;
