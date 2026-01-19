@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ApplyDynamicStylesDirective,
@@ -10,6 +10,7 @@ import {
   UINewsletterSectionComponent
 } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { StyleValidationService } from '../../../../services/style-validation.service';
 
 /**
  * Enhanced Editor Newsletter Section Component
@@ -30,11 +31,19 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
 export class EditorNewsletterSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('newsletterElement', { static: true }) newsletterElement!: ElementRef;
+  @ViewChild(ApplyDynamicStylesDirective) stylesDirective?: ApplyDynamicStylesDirective;
+
+  private validationService = inject(StyleValidationService);
 
   ngAfterViewInit() {
     // Apply standardized visual editing to elements
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
     this.applyElementVisualEditing(this.newsletterElement, this.section.id + '_newsletter');
+
+    // Enable style validation
+    if (this.stylesDirective) {
+      this.stylesDirective.setValidationService(this.validationService);
+    }
   }
 
   /**

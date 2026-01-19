@@ -467,3 +467,82 @@ export interface MigrationRecord {
   status: 'success' | 'failed' | 'pending';
   details?: string;
 }
+
+// Style Validation and Preset System Models
+
+export type StylePropertyType = keyof ElementStyles | keyof SectionStyles;
+
+export interface StyleValidationResult {
+  property: StylePropertyType;
+  value: any;
+  isValid: boolean;
+  severity: 'error' | 'warning' | 'info';
+  message: string;
+  suggestions?: CorrectionSuggestion[];
+}
+
+export interface CorrectionSuggestion {
+  value: any;
+  description: string;
+  confidence: number; // 0-1, how likely this correction is correct
+  autoApply?: boolean; // Whether to apply automatically
+}
+
+export interface StyleValidationReport {
+  results: StyleValidationResult[];
+  isValid: boolean;
+  hasErrors: boolean;
+  hasWarnings: boolean;
+  summary: {
+    total: number;
+    valid: number;
+    errors: number;
+    warnings: number;
+    info: number;
+  };
+}
+
+export type StylePresetCategory = 'button' | 'card' | 'section' | 'theme' | 'typography' | 'layout' | 'form' | 'custom';
+
+export interface StylePreset {
+  id: string;
+  name: string;
+  description: string;
+  category: StylePresetCategory;
+  styles: ElementStyles | SectionStyles;
+  tags: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  author: string;
+  usage: number; // Track usage frequency
+  isGlobal?: boolean; // Available across all projects
+  thumbnail?: string; // Preview image URL
+}
+
+export interface StylePresetCollection {
+  id: string;
+  name: string;
+  description: string;
+  presets: StylePreset[];
+  category: StylePresetCategory;
+  createdAt: Date;
+  updatedAt: Date;
+  author: string;
+}
+
+export interface StyleConsistencyRule {
+  id: string;
+  name: string;
+  description: string;
+  selector: string; // CSS selector or component type
+  requiredProperties: StylePropertyType[];
+  propertyConstraints: { [key in StylePropertyType]?: any };
+  severity: 'error' | 'warning' | 'info';
+}
+
+export interface StyleConsistencyReport {
+  elementId: string;
+  violations: StyleValidationResult[];
+  suggestions: CorrectionSuggestion[];
+  compliance: number; // 0-1 percentage
+}
