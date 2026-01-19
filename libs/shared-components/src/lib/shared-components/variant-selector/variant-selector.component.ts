@@ -303,8 +303,8 @@ export class VariantSelectorComponent implements OnInit {
     const isSignal = typeof source.variant === 'function';
 
     // 1. Determine element context
-    const isListItem = this.selectedElement.id.includes('_feature_') || 
-                      this.selectedElement.id.includes('_stat_') || 
+    const isListItem = this.selectedElement.id.includes('_feature_') ||
+                      this.selectedElement.id.includes('_stat_') ||
                       this.selectedElement.id.includes('_service_') ||
                       this.selectedElement.id.includes('_product_') ||
                       this.selectedElement.id.includes('_testimonial_') ||
@@ -315,8 +315,8 @@ export class VariantSelectorComponent implements OnInit {
                       this.selectedElement.id.includes('_list_') ||
                       this.selectedElement.id.includes('_step_') ||
                       this.selectedElement.id.includes('_tab_');
-    
-    const isTopLevelFieldMapper = ['title', 'subtitle', 'cta', 'form', 'contact', 'chart', 'header', 'footer', 'pricing', 'newsletter', 'steps', 'gallery', 'breadcrumbs', 'spinner'].includes(this.selectedElement.type);
+
+    const isTopLevelFieldMapper = ['header', 'navbar', 'footer'].includes(this.selectedElement.type);
 
     // 2. Apply updates to the source reference (crucial for items in arrays)
     if (content.title !== undefined) {
