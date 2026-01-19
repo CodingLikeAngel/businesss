@@ -1,9 +1,8 @@
 import { Component, Input, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UITitleComponent } from '@negocio/ui-components';
-import { ApplyDynamicStylesDirective, EnhancedVisualEditableDirective } from '@negocio/shared-components';
+import { ApplyDynamicStylesDirective, EnhancedVisualEditableDirective, VisualEditingConfig, VisualEditingEvent } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
-import { VisualEditingConfig, VisualEditingEvent } from '../../../../../shared-components/variant-selector/enhanced-visual-editing.interfaces';
 
 /**
  * Enhanced Editor Title Section Component
@@ -19,7 +18,7 @@ import { VisualEditingConfig, VisualEditingEvent } from '../../../../../shared-c
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective
   ],
-  templateUrl: './enhanced-editor-title-section.component.html'
+  templateUrl: './editor-title-section.component.html'
 })
 export class EnhancedEditorTitleSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
@@ -38,12 +37,15 @@ export class EnhancedEditorTitleSectionComponent extends EnhancedBaseEditorSecti
     return this.createElementConfig('section', {
       constraints: {
         containment: 'parent',
-        minDistance: { top: 10, right: 10, bottom: 10, left: 10 }
+        minDistance: { top: 10, right: 10, bottom: 10, left: 10 },
+        collisionDetection: false,
+        safeZones: []
       },
       styling: {
         selectionOutline: '2px solid #6366f1',
         dimensionLabels: true,
-        resizeHandles: true
+        resizeHandles: true,
+        hoverEffects: false
       }
     });
   }
@@ -56,12 +58,15 @@ export class EnhancedEditorTitleSectionComponent extends EnhancedBaseEditorSecti
       interactions: {
         snapToGrid: 5,
         animationDuration: 150,
-        touchEnabled: this.platformInfo.isTouch
+        touchEnabled: this.platformInfo.isTouch,
+        multiSelect: false,
+        hapticFeedback: false
       },
       constraints: {
         containment: 'parent',
         collisionDetection: true,
-        minDistance: { top: 5, right: 5, bottom: 5, left: 5 }
+        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
+        safeZones: []
       },
       styling: {
         selectionOutline: '2px solid #10b981',
@@ -86,7 +91,7 @@ export class EnhancedEditorTitleSectionComponent extends EnhancedBaseEditorSecti
   /**
    * Custom event handling for title-specific logic
    */
-  protected onVisualEvent(event: VisualEditingEvent, elementId: string): void {
+  protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
     if (elementId === this.section.id + '_title') {
       // Title-specific visual event handling
       switch (event.type) {
