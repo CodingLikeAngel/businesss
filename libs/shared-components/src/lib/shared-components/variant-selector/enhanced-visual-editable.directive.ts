@@ -1,4 +1,5 @@
-import { Directive, ElementRef, Input, OnInit, OnDestroy, Output, EventEmitter, inject, OnChanges, SimpleChanges } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit, OnDestroy, Output, EventEmitter, inject, OnChanges, SimpleChanges, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { VisualEditorService } from './visual-editor.service';
 import { BoundaryConstraintService } from './boundary-constraint.service';
 import { UnifiedStylingService } from './unified-styling.service';
@@ -37,6 +38,7 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
   private boundaryService = inject(BoundaryConstraintService);
   private stylingService = inject(UnifiedStylingService);
   private elementGroupService = inject(ElementGroupService);
+  private platformId = inject(PLATFORM_ID);
 
   constructor(private el: ElementRef<HTMLElement>) {}
 
@@ -61,17 +63,28 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
    * Initialize platform detection
    */
   private initializePlatformInfo(): void {
-    const userAgent = navigator.userAgent;
-    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
-    const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    if (typeof window !== 'undefined' && typeof navigator !== 'undefined' && isPlatformBrowser(this.platformId)) {
+      const userAgent = navigator.userAgent;
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(userAgent);
+      const isTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-    this.platformInfo = {
-      isMobile,
-      isTouch,
-      screenSize: window.innerWidth < 640 ? 'small' : window.innerWidth < 1024 ? 'medium' : 'large',
-      orientation: window.innerHeight > window.innerWidth ? 'portrait' : 'landscape',
-      pixelRatio: window.devicePixelRatio || 1
-    };
+      this.platformInfo = {
+        isMobile,
+        isTouch,
+        screenSize: window.innerWidth < 640 ? 'small' : window.innerWidth < 1024 ? 'medium' : 'large',
+        orientation: window.innerHeight > window.innerWidth ? 'portrait' : 'landscape',
+        pixelRatio: window.devicePixelRatio || 1
+      };
+    } else {
+      // SSR-safe defaults
+      this.platformInfo = {
+        isMobile: false,
+        isTouch: false,
+        screenSize: 'large',
+        orientation: 'landscape',
+        pixelRatio: 1
+      };
+    }
   }
 
   /**
