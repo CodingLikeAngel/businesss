@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChange } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChange, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UIInputComponent, InputOption, variants } from '@negocio/ui-components';
@@ -33,9 +33,11 @@ import { DesignEditorComponent } from './design-editor.component';
 
 // Import services
 import { ConfigurationService } from './configuration.service';
+import { VisualEditorService } from './visual-editor.service';
+import { VariantTemplateService } from './template.service';
 import { UiStateService } from './ui-state.service';
-import { TemplateService } from './template.service';
 import { ExportService } from './export.service';
+
 
 @Component({
   selector: 'lib-variant-selector',
@@ -113,13 +115,16 @@ export class VariantSelectorComponent implements OnInit {
     label: variant.charAt(0).toUpperCase() + variant.slice(1),
   }));
 
-  constructor(
-    private variantService: VariantService,
-    private configurationService: ConfigurationService,
-    private uiStateService: UiStateService,
-    private templateService: TemplateService,
-    private exportService: ExportService
-  ) {
+  // Services
+  private variantService: VariantService = inject(VariantService);
+  private configurationService: ConfigurationService = inject(ConfigurationService);
+  private uiStateService: UiStateService = inject(UiStateService);
+  private templateService: VariantTemplateService = inject(VariantTemplateService);
+  private exportService: ExportService = inject(ExportService);
+  private visualEditorService: VisualEditorService = inject(VisualEditorService);
+
+  constructor() {
+
     this.globalVariant = this.variantService.getVariantForComponent('global');
     this.headerConfig = this.variantService.getCurrentHeaderConfig();
     this.footerConfig = this.variantService.getCurrentFooterConfig();
@@ -167,6 +172,9 @@ export class VariantSelectorComponent implements OnInit {
 
   onElementSelected(element: any) {
     this.uiStateService.selectElement(element);
+    if (element && element.id) {
+      this.visualEditorService.selectElementById(element.id);
+    }
   }
 
   onSectionSelected(section: any) {
@@ -384,7 +392,10 @@ export class VariantSelectorComponent implements OnInit {
           updates.content[styleKey] = { ...(content[styleKey] || {}), ...styles };
           
           // CRITICAL FIX: For components that use section.styles as customStyles input, update section.styles
-          if (['footer', 'header', 'hero', 'services', 'products', 'testimonials', 'pricing', 'promotions', 'faq', 'gallery', 'contact', 'bubble', 'features', 'stats', 'newsletter', 'steps', 'table', 'breadcrumbs', 'chip', 'spinner', 'chart', 'showcase', 'tabs', 'accordion', 'list', 'navBar', 'cta', 'input', 'title', 'card', 'team', 'blog'].includes(this.selectedElement.type)) {
+          // We only do this if the element type corresponds to a major section type, not a sub-element like title or card
+          const sectionTypes = ['hero', 'features', 'services', 'products', 'testimonials', 'pricing', 'promotions', 'faq', 'gallery', 'contact', 'bubble', 'features', 'stats', 'newsletter', 'steps', 'table', 'breadcrumbs', 'chip', 'spinner', 'chart', 'showcase', 'tabs', 'accordion', 'list', 'navBar', 'cta', 'team', 'blog'];
+          
+          if (sectionTypes.includes(this.selectedElement.type)) {
             updates.styles = styles;
             console.log(`🔧 Updating ${this.selectedElement.type} section.styles:`, styles);
             
@@ -392,6 +403,7 @@ export class VariantSelectorComponent implements OnInit {
             if (!updates.content) updates.content = {};
             updates.content.customStyles = styles;
           }
+
         }
 
       }

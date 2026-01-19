@@ -288,7 +288,14 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     console.log('📍 Element moved:', elementId, bounds, section?.id);
     if (!section) return;
 
-    // Persist position if element exists in section.elements
+    const sectionElement = isPlatformBrowser(this.platformId) ? document.getElementById(section.id) : null;
+    const sectionRect = sectionElement?.getBoundingClientRect();
+    
+    // Calculate relative coordinates if possible
+    const relativeX = sectionRect ? bounds.x - sectionRect.left : bounds.x;
+    const relativeY = sectionRect ? bounds.y - sectionRect.top : bounds.y;
+
+    // 1. Persist position if element exists in section.elements
     if (section.elements) {
       const idx = section.elements.findIndex((e: any) => e.id === elementId);
       if (idx !== -1) {
@@ -296,22 +303,41 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
         newEl.styles = { 
           ...(newEl.styles || {}), 
           position: 'absolute', 
-          left: `${bounds.x}px`, 
-          top: `${bounds.y}px` 
+          left: `${relativeX}px`, 
+          top: `${relativeY}px` 
         };
         const newElements = [...section.elements];
         newElements[idx] = newEl;
         this.variantService.updateSectionInCurrentPage(section.id, { elements: newElements });
+        return;
       }
     }
-    // TODO: Handle movement for config-based items if necessary (requires mapping ID to config index)
+
+    // 2. Handle config-based items (title, subtitle, cta, etc)
+    const knownFields = ['title', 'subtitle', 'cta', 'description', 'text', 'label'];
+    const fieldMatch = knownFields.find(f => elementId.endsWith('_' + f));
+    if (fieldMatch) {
+      const styleKey = fieldMatch + 'Styles';
+      const currentStyles = section.content?.[styleKey] || {};
+      this.variantService.updateSectionInCurrentPage(section.id, {
+        content: {
+          ...section.content,
+          [styleKey]: {
+            ...currentStyles,
+            position: 'absolute',
+            left: `${relativeX}px`,
+            top: `${relativeY}px`
+          }
+        }
+      });
+    }
   }
 
   onElementResized(bounds: any, elementId: string, section?: PageSection) {
     console.log('📐 Element resized:', elementId, bounds, section?.id);
     if (!section) return;
 
-    // Persist size if element exists in section.elements
+    // 1. Persist size if element exists in section.elements
     if (section.elements) {
       const idx = section.elements.findIndex((e: any) => e.id === elementId);
       if (idx !== -1) {
@@ -324,7 +350,26 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
         const newElements = [...section.elements];
         newElements[idx] = newEl;
         this.variantService.updateSectionInCurrentPage(section.id, { elements: newElements });
+        return;
       }
+    }
+
+    // 2. Handle config-based items
+    const knownFields = ['title', 'subtitle', 'cta', 'description', 'text', 'label'];
+    const fieldMatch = knownFields.find(f => elementId.endsWith('_' + f));
+    if (fieldMatch) {
+      const styleKey = fieldMatch + 'Styles';
+      const currentStyles = section.content?.[styleKey] || {};
+      this.variantService.updateSectionInCurrentPage(section.id, {
+        content: {
+          ...section.content,
+          [styleKey]: {
+            ...currentStyles,
+            width: `${bounds.width}px`, 
+            height: `${bounds.height}px`
+          }
+        }
+      });
     }
   }
 

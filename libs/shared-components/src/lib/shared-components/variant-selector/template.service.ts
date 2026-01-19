@@ -4,7 +4,7 @@ import { VariantService } from '../../../services/variant.service';
 @Injectable({
   providedIn: 'root'
 })
-export class TemplateService {
+export class VariantTemplateService {
 
   constructor(private variantService: VariantService) {}
 

@@ -61,6 +61,9 @@ export class VisualEditorService {
   public multiSelectionChanged$ = new Subject<MultiSelectionState>();
   public groupSelected$ = new Subject<ElementGroup>();
 
+  private overlayListeners: Function[] = [];
+
+
   // Estado de edición
   private isEditMode = false;
   private isDragging = false;
@@ -306,16 +309,41 @@ export class VisualEditorService {
       this.renderer.removeClass(element, 'visual-editable');
       this.renderer.removeAttribute(element, 'data-visual-editable');
       clickListener();
-      if (this.activeElement === element) {
-        this.deselectElement();
-      }
+      // Only deselect if this was a permanent removal, not a reconfiguration
     };
+  }
+
+  /**
+   * Actualiza la configuración de un elemento ya editable
+   */
+  updateConfig(element: HTMLElement, config: DragResizeConfig) {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    // Si el elemento es el activo, actualizar el overlay
+    if (this.activeElement === element) {
+      this.removeEditOverlay();
+      this.createEditOverlay(element, config);
+    }
+  }
+
+
+  /**
+   * Selecciona un elemento por su ID DOM
+   */
+  selectElementById(id: string, config?: Partial<DragResizeConfig>) {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const element = document.getElementById(id);
+    if (element) {
+      const finalConfig = { ...this.defaultConfig, ...(config || {}) };
+      this.selectElement(element, finalConfig);
+    }
   }
 
   /**
    * Selecciona un elemento para edición
    */
-  private selectElement(element: HTMLElement, config: DragResizeConfig) {
+  public selectElement(element: HTMLElement, config: DragResizeConfig) {
+
     // Deseleccionar elemento anterior
     if (this.activeElement && this.activeElement !== element) {
       this.deselectElement();
@@ -375,8 +403,9 @@ export class VisualEditorService {
     this.renderer.setStyle(overlay, 'left', `${rect.left + scrollX}px`);
     this.renderer.setStyle(overlay, 'width', `${rect.width}px`);
     this.renderer.setStyle(overlay, 'height', `${rect.height}px`);
-    this.renderer.setStyle(overlay, 'pointer-events', 'none');
+    this.renderer.setStyle(overlay, 'pointer-events', 'auto');
     this.renderer.setStyle(overlay, 'z-index', '9999');
+
     this.renderer.setAttribute(overlay, 'data-overlay', 'true');
 
     // Crear borde de selección
@@ -413,15 +442,20 @@ export class VisualEditorService {
    * Crea los handles de resize
    */
   private createResizeHandles(overlay: HTMLElement, handles: Partial<ResizeHandles>) {
+    // If it's a section, we might want to only show side handles
+    // This is often what users mean by "stretch borders"
+    const isSection = this.activeElement?.getAttribute('data-type') === 'section' || 
+                      this.activeElement?.classList.contains('editor-section');
+
     const handlePositions = [
       { name: 'top', cursor: 'ns-resize', enabled: handles.top },
       { name: 'right', cursor: 'ew-resize', enabled: handles.right },
       { name: 'bottom', cursor: 'ns-resize', enabled: handles.bottom },
       { name: 'left', cursor: 'ew-resize', enabled: handles.left },
-      { name: 'top-left', cursor: 'nwse-resize', enabled: handles.topLeft },
-      { name: 'top-right', cursor: 'nesw-resize', enabled: handles.topRight },
-      { name: 'bottom-left', cursor: 'nesw-resize', enabled: handles.bottomLeft },
-      { name: 'bottom-right', cursor: 'nwse-resize', enabled: handles.bottomRight }
+      { name: 'top-left', cursor: 'nwse-resize', enabled: !isSection && handles.topLeft },
+      { name: 'top-right', cursor: 'nesw-resize', enabled: !isSection && handles.topRight },
+      { name: 'bottom-left', cursor: 'nesw-resize', enabled: !isSection && handles.bottomLeft },
+      { name: 'bottom-right', cursor: 'nwse-resize', enabled: !isSection && handles.bottomRight }
     ];
 
     handlePositions.forEach(({ name, cursor, enabled }) => {
@@ -437,16 +471,18 @@ export class VisualEditorService {
     });
   }
 
+
   /**
    * Configura el drag del elemento
    */
   private setupDrag(element: HTMLElement, overlay: HTMLElement, config: DragResizeConfig) {
     let startX = 0;
     let startY = 0;
-    let initialX = 0;
-    let initialY = 0;
+    let startStyleLeft = 0;
+    let startStyleTop = 0;
 
     const onMouseDown = (e: MouseEvent) => {
+
       // Solo drag desde el overlay, no desde handles
       if ((e.target as HTMLElement).classList.contains('visual-resize-handle')) {
         return;
@@ -456,9 +492,10 @@ export class VisualEditorService {
       startX = e.clientX;
       startY = e.clientY;
 
-      const rect = element.getBoundingClientRect();
-      initialX = rect.left;
-      initialY = rect.top;
+      const computedStyle = window.getComputedStyle(element);
+      startStyleLeft = parseInt(computedStyle.left) || 0;
+      startStyleTop = parseInt(computedStyle.top) || 0;
+
 
       e.preventDefault();
       e.stopPropagation();
@@ -470,8 +507,9 @@ export class VisualEditorService {
       const deltaX = e.clientX - startX;
       const deltaY = e.clientY - startY;
 
-      let newX = initialX + deltaX;
-      let newY = initialY + deltaY;
+      let newX = startStyleLeft + deltaX;
+      let newY = startStyleTop + deltaY;
+
 
       // Snap to grid
       if (config.grid && config.grid > 1) {
@@ -505,10 +543,11 @@ export class VisualEditorService {
     };
 
     // Listeners
-    this.renderer.listen(overlay, 'mousedown', onMouseDown);
-    this.renderer.listen(document, 'mousemove', onMouseMove);
-    this.renderer.listen(document, 'mouseup', onMouseUp);
+    this.overlayListeners.push(this.renderer.listen(overlay, 'mousedown', onMouseDown));
+    this.overlayListeners.push(this.renderer.listen(document, 'mousemove', onMouseMove));
+    this.overlayListeners.push(this.renderer.listen(document, 'mouseup', onMouseUp));
   }
+
 
   /**
    * Configura el resize del elemento
@@ -520,8 +559,12 @@ export class VisualEditorService {
     let startHeight = 0;
     let startLeft = 0;
     let startTop = 0;
+    let startStyleLeft = 0;
+    let startStyleTop = 0;
+
 
     const onHandleMouseDown = (e: MouseEvent) => {
+
       const target = e.target as HTMLElement;
       if (!target.classList.contains('visual-resize-handle')) return;
 
@@ -536,6 +579,12 @@ export class VisualEditorService {
       startHeight = rect.height;
       startLeft = rect.left;
       startTop = rect.top;
+
+      const computedStyle = window.getComputedStyle(element);
+      startStyleLeft = parseInt(computedStyle.left) || 0;
+      startStyleTop = parseInt(computedStyle.top) || 0;
+
+
 
       e.preventDefault();
       e.stopPropagation();
@@ -559,36 +608,38 @@ export class VisualEditorService {
           break;
         case 'left':
           newWidth = startWidth - deltaX;
-          newLeft = startLeft + deltaX;
+          // Use relative adjustment if possible to avoid jumping
+          this.renderer.setStyle(element, 'left', `${startStyleLeft + deltaX}px`);
           break;
         case 'bottom':
           newHeight = startHeight + deltaY;
           break;
         case 'top':
           newHeight = startHeight - deltaY;
-          newTop = startTop + deltaY;
+          this.renderer.setStyle(element, 'top', `${startStyleTop + deltaY}px`);
           break;
         case 'top-left':
           newWidth = startWidth - deltaX;
           newHeight = startHeight - deltaY;
-          newLeft = startLeft + deltaX;
-          newTop = startTop + deltaY;
+          this.renderer.setStyle(element, 'left', `${startStyleLeft + deltaX}px`);
+          this.renderer.setStyle(element, 'top', `${startStyleTop + deltaY}px`);
           break;
         case 'top-right':
           newWidth = startWidth + deltaX;
           newHeight = startHeight - deltaY;
-          newTop = startTop + deltaY;
+          this.renderer.setStyle(element, 'top', `${startStyleTop + deltaY}px`);
           break;
         case 'bottom-left':
           newWidth = startWidth - deltaX;
           newHeight = startHeight + deltaY;
-          newLeft = startLeft + deltaX;
+          this.renderer.setStyle(element, 'left', `${startStyleLeft + deltaX}px`);
           break;
         case 'bottom-right':
           newWidth = startWidth + deltaX;
           newHeight = startHeight + deltaY;
           break;
       }
+
 
       // Aplicar restricciones
       if (config.minWidth) newWidth = Math.max(newWidth, config.minWidth);
@@ -606,17 +657,11 @@ export class VisualEditorService {
       this.renderer.setStyle(element, 'width', `${newWidth}px`);
       this.renderer.setStyle(element, 'height', `${newHeight}px`);
 
-      // Si cambió la posición (handles izquierda/arriba)
-      if (newLeft !== startLeft || newTop !== startTop) {
-        this.renderer.setStyle(element, 'left', `${newLeft}px`);
-        this.renderer.setStyle(element, 'top', `${newTop}px`);
-        this.renderer.setStyle(element, 'position', 'absolute');
-      }
-
       // Actualizar overlay
       this.updateOverlayPosition(overlay, element);
       this.updateDimensionLabel(overlay, newWidth, newHeight);
     };
+
 
     const onMouseUp = () => {
       if (this.isResizing) {
@@ -636,10 +681,11 @@ export class VisualEditorService {
     };
 
     // Listeners
-    this.renderer.listen(overlay, 'mousedown', onHandleMouseDown);
-    this.renderer.listen(document, 'mousemove', onMouseMove);
-    this.renderer.listen(document, 'mouseup', onMouseUp);
+    this.overlayListeners.push(this.renderer.listen(overlay, 'mousedown', onHandleMouseDown));
+    this.overlayListeners.push(this.renderer.listen(document, 'mousemove', onMouseMove));
+    this.overlayListeners.push(this.renderer.listen(document, 'mouseup', onMouseUp));
   }
+
 
   /**
    * Actualiza la posición del overlay
@@ -673,11 +719,16 @@ export class VisualEditorService {
   private removeEditOverlay() {
     if (!isPlatformBrowser(this.platformId)) return;
 
+    // Clean up listeners
+    this.overlayListeners.forEach(unlisten => unlisten());
+    this.overlayListeners = [];
+
     const overlay = document.querySelector('[data-overlay="true"]');
     if (overlay) {
       this.renderer.removeChild(document.body, overlay);
     }
   }
+
 
   /**
    * Añade estilos globales para el modo de edición

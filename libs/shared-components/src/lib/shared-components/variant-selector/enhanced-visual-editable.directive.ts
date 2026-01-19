@@ -28,8 +28,11 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
   @Input() isGroupMember = false;
 
   @Output() visualEvents = new EventEmitter<VisualEditingEvent>();
-
+  
+  private wasActive = false;
+  private wasSelected = false; // Internal tracking for deselected event loop prevention
   private cleanup?: () => void;
+
   private currentConfig!: VisualEditingConfig;
   private platformInfo!: PlatformInfo;
 
@@ -51,7 +54,20 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['enhancedVisualEditable'] && !changes['enhancedVisualEditable'].firstChange) {
-      this.updateConfiguration();
+      // Only re-setup if critical properties changed, not on every state update
+      const prev = changes['enhancedVisualEditable'].previousValue;
+      const curr = changes['enhancedVisualEditable'].currentValue;
+      
+      if (prev?.type !== curr?.type) {
+        this.updateConfiguration();
+      } else {
+        // Just update config without full cleanup/re-setup
+        this.initializeConfiguration();
+        if (this.currentConfig) {
+          this.stylingService.applyStyling(this.el.nativeElement, this.currentConfig.styling);
+          this.visualEditor.updateConfig(this.el.nativeElement, this.createDragResizeConfig());
+        }
+      }
     }
   }
 
@@ -238,7 +254,9 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
 
     // Selection events
     this.visualEditor.elementSelected$.subscribe((element) => {
-      if (element === this.el.nativeElement) {
+      const isNowSelected = (element === this.el.nativeElement);
+      if (isNowSelected) {
+        this.wasSelected = true;
         const bounds = element.getBoundingClientRect();
         const enhancedBounds = this.createEnhancedBounds({
           x: bounds.left,
@@ -247,11 +265,23 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
           height: bounds.height
         });
         this.emitEvent('selected', element, enhancedBounds);
+      } else if (this.wasSelected) {
+        // Was selected, now another element is selected
+        this.wasSelected = false;
+        const bounds = this.el.nativeElement.getBoundingClientRect();
+        const enhancedBounds = this.createEnhancedBounds({
+          x: bounds.left,
+          y: bounds.top,
+          width: bounds.width,
+          height: bounds.height
+        });
+        this.emitEvent('deselected', this.el.nativeElement, enhancedBounds);
       }
     });
 
     this.visualEditor.elementDeselected$.subscribe(() => {
-      if (this.visualEditor.getActiveElement() !== this.el.nativeElement) {
+      if (this.wasSelected) {
+        this.wasSelected = false;
         const bounds = this.el.nativeElement.getBoundingClientRect();
         const enhancedBounds = this.createEnhancedBounds({
           x: bounds.left,

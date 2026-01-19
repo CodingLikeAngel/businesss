@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { BaseEditorFeatureComponent } from '../base-editor-feature.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -77,14 +77,16 @@ import { EditorInputSectionComponent } from '../components/input/editor-input-se
     EditorCardSectionComponent,
     EditorInputSectionComponent
   ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
-  providers: [VisualEditorService]
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
+
 export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent implements OnInit {
+  private visualEditorService = inject(VisualEditorService);
+
   override ngOnInit() {
     super.ngOnInit();
     this.editorService.updateEditorState({ isMobile: false });
+    this.visualEditorService.enableEditMode();
   }
 
 }
-
