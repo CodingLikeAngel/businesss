@@ -5,6 +5,29 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants, NavLi
 
 export type SectionType = 'hero' | 'features' | 'services' | 'products' | 'testimonials' | 'pricing' | 'gallery' | 'contact' | 'faq' | 'stats' | 'team' | 'blog' | 'cta' | 'promotions' | 'bubble' | 'custom' | 'header' | 'footer' | 'newsletter' | 'steps' | 'table' | 'breadcrumbs' | 'chip' | 'spinner' | 'chart' | 'showcase' | 'tabs' | 'accordion' | 'list' | 'navBar';
 
+export interface ElementStyles {
+  [key: string]: string | undefined;
+  color?: string;
+  backgroundColor?: string;
+  fontSize?: string;
+  fontWeight?: string;
+  padding?: string;
+  margin?: string;
+  border?: string;
+  borderRadius?: string;
+  boxShadow?: string;
+  opacity?: string;
+  transform?: string;
+  customCSS?: string;
+}
+
+export interface SectionStyles extends ElementStyles {
+  backgroundImage?: string;
+  backgroundSize?: string;
+  backgroundPosition?: string;
+  minHeight?: string;
+}
+
 // Existing interfaces (NavLink, HeaderConfig, FooterConfig, NavBarConfig, HeroConfig, BubbleConfig, CardConfig, TitleConfig) remain unchanged
 
 export interface Testimonial {
@@ -269,30 +292,30 @@ export interface ProductsConfig {
 }
 
 export interface PageSection {
-  id: string;
-  type: SectionType;
-  label: string; // User friendly name
-  visible: boolean;
-  name: string;
-  position?: { x: number; y: number };
-  size?: { width: number; height: number };
-  styles: { [key: string]: string };
-  content: { [key: string]: any };
-  elements: any[];
-  config: { [key: string]: any };
-  customStyles: { [key: string]: string };
-  animation: string;
-  layout: string;
-  animations?: any[];
-  responsive?: {
-    mobile: { visible: boolean; styles: { [key: string]: string } };
-    tablet: { visible: boolean; styles: { [key: string]: string } };
-    desktop: { visible: boolean; styles: { [key: string]: string } };
-  };
-  locked?: boolean;
-  zIndex?: number;
-  order?: number;
-}
+   id: string;
+   type: SectionType;
+   label: string; // User friendly name
+   visible: boolean;
+   name: string;
+   position?: { x: number; y: number };
+   size?: { width: number; height: number };
+   styles: SectionStyles;
+   content: { [key: string]: any };
+   elements: any[];
+   config: { [key: string]: any };
+   customStyles: { [key: string]: string };
+   animation: string;
+   layout: string;
+   animations?: any[];
+   responsive?: {
+     mobile: { visible: boolean; styles: SectionStyles };
+     tablet: { visible: boolean; styles: SectionStyles };
+     desktop: { visible: boolean; styles: SectionStyles };
+   };
+   locked?: boolean;
+   zIndex?: number;
+   order?: number;
+ }
 
 export interface Page {
   id: string;

@@ -4,10 +4,9 @@ import {
   StyleValidationResult,
   StyleValidationReport,
   CorrectionSuggestion,
-  ElementStyles,
-  SectionStyles,
   StylePropertyType
 } from '../models/editor.model';
+import { ElementStyles, SectionStyles } from '@negocio/shared-components';
 
 @Injectable({
   providedIn: 'root'

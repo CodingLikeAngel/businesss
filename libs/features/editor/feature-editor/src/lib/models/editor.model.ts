@@ -1,6 +1,6 @@
 // Enhanced Editor Models for Professional Page Builder
 
-import { SectionType } from '@negocio/shared-components';
+import { SectionType, SectionStyles, ElementStyles } from '@negocio/shared-components';
 
 export interface Position {
   x: number;
@@ -33,27 +33,7 @@ export interface ResponsiveConfig {
   desktop: { visible: boolean; styles: any };
 }
 
-export interface ElementStyles {
-  color?: string;
-  backgroundColor?: string;
-  fontSize?: string;
-  fontWeight?: string;
-  padding?: string;
-  margin?: string;
-  border?: string;
-  borderRadius?: string;
-  boxShadow?: string;
-  opacity?: string;
-  transform?: string;
-  customCSS?: string;
-}
-
-export interface SectionStyles extends ElementStyles {
-  backgroundImage?: string;
-  backgroundSize?: string;
-  backgroundPosition?: string;
-  minHeight?: string;
-}
+// SectionStyles is now imported from @negocio/shared-components
 
 export interface ElementContent {
   text?: string;
@@ -140,9 +120,9 @@ export interface PageSection {
   layout: string;
   animations?: any[];
   responsive?: {
-    mobile: { visible: boolean; styles: { [key: string]: string } };
-    tablet: { visible: boolean; styles: { [key: string]: string } };
-    desktop: { visible: boolean; styles: { [key: string]: string } };
+    mobile: { visible: boolean; styles: SectionStyles };
+    tablet: { visible: boolean; styles: SectionStyles };
+    desktop: { visible: boolean; styles: SectionStyles };
   };
   locked?: boolean;
   zIndex?: number;
@@ -460,7 +440,7 @@ export interface MigrationRecord {
 
 // Style Validation and Preset System Models
 
-export type StylePropertyType = keyof ElementStyles | keyof SectionStyles;
+export type StylePropertyType = string;
 
 export interface StyleValidationResult {
   property: StylePropertyType;
