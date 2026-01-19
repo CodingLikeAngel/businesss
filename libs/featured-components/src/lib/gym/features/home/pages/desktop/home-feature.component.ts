@@ -18,6 +18,8 @@ import {
   BubbleAnimationComponent,
   BubbleConfig as BubbleAnimationConfig,
   UIFooterComponent,
+  UIStatsLibSectionComponent,
+  StatItem,
 } from '@negocio/ui-components';
 import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
 
@@ -34,6 +36,7 @@ import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, 
     PricingSectionComponent,
     GallerySectionComponent,
     PromotionsSectionComponent,
+    UIStatsLibSectionComponent,
     UIModalComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,
@@ -185,6 +188,49 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
       image: '/1029.png',
       description: 'Pesas versátiles para ejercicios en casa.',
       price: '50€',
+    },
+  ];
+
+  gymStats: StatItem[] = [
+    {
+      icon: '💪',
+      label: 'Miembros Activos',
+      value: '1,200+',
+      description: 'Personas entrenando diariamente',
+      progress: 85,
+      trend: 'up',
+      trendValue: '+15%',
+      unit: '',
+    },
+    {
+      icon: '🏋️',
+      label: 'Clases Semanales',
+      value: '50+',
+      description: 'Variedad de entrenamientos',
+      progress: 90,
+      trend: 'up',
+      trendValue: '+5%',
+      unit: '',
+    },
+    {
+      icon: '⭐',
+      label: 'Satisfacción',
+      value: '4.9/5',
+      description: 'Calificación promedio',
+      progress: 98,
+      trend: 'stable',
+      trendValue: '0%',
+      unit: '',
+    },
+    {
+      icon: '🏆',
+      label: 'Años de Experiencia',
+      value: '10+',
+      description: 'Comprometidos con tu salud',
+      progress: 100,
+      trend: 'stable',
+      trendValue: '0%',
+      unit: '',
     },
   ];
 
