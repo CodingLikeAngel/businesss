@@ -35,6 +35,17 @@
   [config]="bubbleConfig"
 ></lib-bubble-animation>
 
+<section id="stats" class="relative z-20 py-12">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <lib-ui-components-stats-section
+      [variant]="getVariant('stats')"
+      [stats]="clinicStats"
+      title="Nuestros Logros"
+      subtitle="Datos que demuestran nuestro compromiso con tu salud"
+    ></lib-ui-components-stats-section>
+  </div>
+</section>
+
 <section id="servicios" class="relative z-20 py-12">
   <div class="container mx-auto px-6 max-w-7xl">
     <lib-ui-components-title

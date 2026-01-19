@@ -16,6 +16,8 @@ import {
   BubbleAnimationComponent,
   BubbleConfig as BubbleAnimationConfig,
   UIFooterComponent,
+  UIStatsLibSectionComponent,
+  StatItem,
 } from '@negocio/ui-components';
 import { UINavBarComponent } from '@negocio/ui-components';
 import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
@@ -33,6 +35,7 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     PricingSectionComponent,
     GallerySectionComponent,
     PromotionsSectionComponent,
+    UIStatsLibSectionComponent,
     UIModalComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,
@@ -185,6 +188,49 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
       image: '/1029.png',
       description: 'Deliciosos postres hechos a mano con ingredientes naturales.',
       price: '7€',
+    },
+  ];
+
+  restaurantStats: StatItem[] = [
+    {
+      icon: '🍽️',
+      label: 'Platos Servidos',
+      value: '5,000+',
+      description: 'Delicias culinarias cada mes',
+      progress: 85,
+      trend: 'up',
+      trendValue: '+10%',
+      unit: '',
+    },
+    {
+      icon: '⭐',
+      label: 'Calificación',
+      value: '4.8/5',
+      description: 'Satisfacción del cliente',
+      progress: 96,
+      trend: 'stable',
+      trendValue: '0%',
+      unit: '',
+    },
+    {
+      icon: '👨‍🍳',
+      label: 'Chefs Expertos',
+      value: '5+',
+      description: 'Años de experiencia culinaria',
+      progress: 100,
+      trend: 'stable',
+      trendValue: '0%',
+      unit: '',
+    },
+    {
+      icon: '🏆',
+      label: 'Años de Servicio',
+      value: '15+',
+      description: 'Tradición y calidad',
+      progress: 100,
+      trend: 'stable',
+      trendValue: '0%',
+      unit: '',
     },
   ];
 

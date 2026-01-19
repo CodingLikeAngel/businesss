@@ -18,6 +18,8 @@ import {
   BubbleAnimationComponent,
   BubbleConfig as BubbleAnimationConfig,
   UIFooterComponent,
+  UIStatsLibSectionComponent,
+  StatItem,
 } from '@negocio/ui-components';
 import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
 
@@ -34,6 +36,7 @@ import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, 
     PricingSectionComponent,
     GallerySectionComponent,
     PromotionsSectionComponent,
+    UIStatsLibSectionComponent,
     UIModalComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,
@@ -185,6 +188,49 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
       image: '/1029.png',
       description: 'Tecnología iónica para un alisado perfecto.',
       price: '80€',
+    },
+  ];
+
+  clinicStats: StatItem[] = [
+    {
+      icon: '🏥',
+      label: 'Pacientes Atendidos',
+      value: '10,000+',
+      description: 'Cuidado de calidad para la comunidad',
+      progress: 90,
+      trend: 'up',
+      trendValue: '+8%',
+      unit: '',
+    },
+    {
+      icon: '⭐',
+      label: 'Satisfacción',
+      value: '4.9/5',
+      description: 'Calificación promedio de pacientes',
+      progress: 98,
+      trend: 'stable',
+      trendValue: '0%',
+      unit: '',
+    },
+    {
+      icon: '👨‍⚕️',
+      label: 'Especialistas',
+      value: '20+',
+      description: 'Médicos certificados en diversas áreas',
+      progress: 100,
+      trend: 'stable',
+      trendValue: '0%',
+      unit: '',
+    },
+    {
+      icon: '🏆',
+      label: 'Años de Servicio',
+      value: '25+',
+      description: 'Comprometidos con tu salud',
+      progress: 100,
+      trend: 'stable',
+      trendValue: '0%',
+      unit: '',
     },
   ];
 
