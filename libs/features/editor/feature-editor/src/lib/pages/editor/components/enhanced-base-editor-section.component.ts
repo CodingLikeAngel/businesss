@@ -104,6 +104,7 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
     return {
       ...baseConfig,
       ...partialConfig,
+      type, // Ensure type is always defined
       // Apply platform-specific adjustments
       mobileSupport: partialConfig.mobileSupport !== undefined ?
         partialConfig.mobileSupport : !this.platformInfo.isMobile,

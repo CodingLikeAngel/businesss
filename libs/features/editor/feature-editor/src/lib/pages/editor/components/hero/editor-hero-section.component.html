@@ -65,10 +65,10 @@
             class="editor-element"
             [class.is-selected]="uiStateService.selectedElement?._original === card"
             (click)="selectElement($event, getMergedElement(section.id, section.id + '_card_' + i, card, 'card'))"
-            [visualEditable]="true"
-            visualType="element"
-            (visualMoved)="onElementMoved($event, section.id + '_card_' + i)"
-            (visualResized)="onElementResized($event, section.id + '_card_' + i)">
+            [enhancedVisualEditable]="getTitleConfig()"
+            elementId="{{section.id + '_card_' + i}}"
+            sectionId="{{section.id}}"
+            (visualEvents)="handleTitleEvent($event)">
          <lib-ui-components-card-animated
            [icon]="card.icon"
            [title]="card.title"

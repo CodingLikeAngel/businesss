@@ -36,7 +36,10 @@ export class EditorTitleSectionComponent extends EnhancedBaseEditorSectionCompon
   getSectionConfig(): VisualEditingConfig {
     return this.createElementConfig('section', {
       constraints: {
-        minDistance: { top: 10, right: 10, bottom: 10, left: 10 }
+        containment: 'parent',
+        minDistance: { top: 10, right: 10, bottom: 10, left: 10 },
+        collisionDetection: false,
+        safeZones: []
       }
     });
   }
@@ -47,12 +50,17 @@ export class EditorTitleSectionComponent extends EnhancedBaseEditorSectionCompon
   getTitleConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
       interactions: {
+        touchEnabled: true,
+        multiSelect: true,
         snapToGrid: 5,
-        animationDuration: 150
+        animationDuration: 150,
+        hapticFeedback: true
       },
       constraints: {
+        containment: 'parent',
         collisionDetection: true,
-        minDistance: { top: 5, right: 5, bottom: 5, left: 5 }
+        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
+        safeZones: []
       }
     });
   }

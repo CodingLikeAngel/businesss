@@ -25,7 +25,8 @@ import {
   UiStateService,
 } from '@negocio/shared-components';
 import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
-import { EditorState, ModalState, PageSection } from '../../models/editor.model';
+import { EditorState, ModalState } from '../../models/editor.model';
+import { PageSection } from '@negocio/shared-components';
 import { HistoryService } from '../../services/history.service';
 import { KeyboardService } from '../../services/keyboard.service';
 import { ResizeSectionCommand } from '../../services/commands';
