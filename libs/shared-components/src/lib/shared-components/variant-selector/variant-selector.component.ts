@@ -316,7 +316,7 @@ export class VariantSelectorComponent implements OnInit {
                       this.selectedElement.id.includes('_step_') ||
                       this.selectedElement.id.includes('_tab_');
 
-    const isTopLevelFieldMapper = ['header', 'navbar', 'footer'].includes(this.selectedElement.type);
+    const isTopLevelFieldMapper = ['title', 'subtitle', 'cta', 'form', 'contact', 'chart', 'header', 'footer', 'pricing', 'newsletter', 'steps', 'gallery', 'breadcrumbs', 'spinner'].includes(this.selectedElement.type);
 
     // 2. Apply updates to the source reference (crucial for items in arrays)
     if (content.title !== undefined) {

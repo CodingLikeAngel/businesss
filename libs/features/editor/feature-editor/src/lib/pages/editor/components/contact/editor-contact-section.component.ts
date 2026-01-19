@@ -107,6 +107,7 @@ export class EditorContactSectionComponent extends EnhancedBaseEditorSectionComp
   }
 
   override ngOnInit() {
+    super.ngOnInit();
     this.initForm();
   }
 

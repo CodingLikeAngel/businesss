@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { UIButtonComponent } from '@negocio/ui-components';
 import {
   ApplyDynamicStylesDirective,
-  EnhancedVisualEditableDirective
+  VisualEditableDirective
 } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
@@ -14,7 +14,7 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UIButtonComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    VisualEditableDirective
   ],
   templateUrl: './editor-button-section.component.html'
 })
