@@ -495,15 +495,27 @@ export class VisualEditorService {
       const computedStyle = window.getComputedStyle(element);
       const position = computedStyle.position;
       
+      const rect = element.getBoundingClientRect();
+      const parentRect = (element.offsetParent as HTMLElement)?.getBoundingClientRect() || { left: 0, top: 0 };
+      const parentBorderLeft = parseInt(computedStyle.borderLeftWidth) || 0;
+      const parentBorderTop = parseInt(computedStyle.borderTopWidth) || 0;
+
       if (position === 'static' || computedStyle.left === 'auto') {
-        const rect = element.getBoundingClientRect();
-        const parentRect = (element.offsetParent as HTMLElement)?.getBoundingClientRect() || { left: 0, top: 0 };
-        startStyleLeft = rect.left - parentRect.left;
-        startStyleTop = rect.top - parentRect.top;
+        startStyleLeft = rect.left - parentRect.left - parentBorderLeft;
+        startStyleTop = rect.top - parentRect.top - parentBorderTop;
       } else {
         startStyleLeft = parseInt(computedStyle.left) || 0;
         startStyleTop = parseInt(computedStyle.top) || 0;
       }
+
+      // 'Anchor' the element: convert to absolute with fit-content to prevent coordinate drifting
+      this.renderer.setStyle(element, 'position', 'absolute');
+      this.renderer.setStyle(element, 'left', `${startStyleLeft}px`);
+      this.renderer.setStyle(element, 'top', `${startStyleTop}px`);
+      this.renderer.setStyle(element, 'margin', '0');
+      this.renderer.setStyle(element, 'transform', 'none');
+      this.renderer.setStyle(element, 'width', 'fit-content');
+      this.renderer.addClass(element, 'is-moving');
 
       e.preventDefault();
       e.stopPropagation();
@@ -542,6 +554,7 @@ export class VisualEditorService {
       if (this.isDragging) {
         this.isDragging = false;
         this.clearGuides();
+        this.renderer.removeClass(element, 'is-moving');
         const rect = element.getBoundingClientRect();
         this.elementMoved$.next({
           element,
@@ -894,6 +907,10 @@ export class VisualEditorService {
         outline-offset: 2px;
         transition: outline 0.2s ease;
         cursor: move;
+        box-sizing: border-box;
+      }
+      .visual-editable:not(.editor-section) {
+        width: fit-content !important;
       }
       .visual-guide {
         position: absolute;

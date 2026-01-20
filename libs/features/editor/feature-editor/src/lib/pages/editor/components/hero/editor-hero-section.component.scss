@@ -3,7 +3,7 @@
 /* Standardized Hero Section Styles for Editor */
 :host {
   display: block;
-  width: 101%; /* Slight overlap to avoid gaps */
+  width: 100%;
 }
 
 /* Reproduce the complex Hero styles from ui-components to ensure visual parity */
@@ -57,6 +57,9 @@
 
 .hero-title {
   margin-bottom: 1.5rem;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
   transition: transform 0.3s ease;
 
   &.is-selected {
@@ -66,6 +69,9 @@
 
 .hero-subtitle {
   margin-bottom: 2rem;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
   color: rgba(255, 255, 255, 0.9);
 }
 

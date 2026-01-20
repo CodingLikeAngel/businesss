@@ -298,8 +298,12 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     let relativeY = bounds.y;
 
     if (parentRect) {
-      relativeX = bounds.x - parentRect.left;
-      relativeY = bounds.y - parentRect.top;
+      const computedStyle = isPlatformBrowser(this.platformId) ? window.getComputedStyle(offsetParent) : null;
+      const borderLeft = computedStyle ? parseInt(computedStyle.borderLeftWidth) || 0 : 0;
+      const borderTop = computedStyle ? parseInt(computedStyle.borderTopWidth) || 0 : 0;
+      
+      relativeX = bounds.x - parentRect.left - borderLeft;
+      relativeY = bounds.y - parentRect.top - borderTop;
     } else {
       // Fallback to section-relative if no offsetParent found
       const sectionElement = isPlatformBrowser(this.platformId) ? document.getElementById(section.id) : null;
