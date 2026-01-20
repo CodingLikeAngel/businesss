@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { map, mergeMap, catchError, tap, delay } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import {
 @Injectable()
 export class UIEffects {
 
-  constructor(private actions$: Actions) {}
+  private actions$ = inject(Actions);
 
   // Auto-hide notifications after 5 seconds
   autoHideNotification$ = createEffect(() =>

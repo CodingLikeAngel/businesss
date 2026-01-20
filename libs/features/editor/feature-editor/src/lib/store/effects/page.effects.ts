@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
 import { map, mergeMap, catchError, tap, switchMap, withLatestFrom } from 'rxjs/operators';
@@ -13,12 +13,10 @@ import * as PageSelectors from '../selectors/page.selectors';
 @Injectable()
 export class PageEffects {
 
-  constructor(
-    private actions$: Actions,
-    private templateService: TemplateService,
-    private variantService: VariantService,
-    private store: Store<AppState>
-  ) {}
+  private actions$ = inject(Actions);
+  private templateService = inject(TemplateService);
+  private variantService = inject(VariantService);
+  private store = inject(Store<AppState>);
 
   // Persistence Effect: Keep VariantService in sync with Store
   syncWithVariantService$ = createEffect(() =>
@@ -158,7 +156,7 @@ export class PageEffects {
           id: `page-${Date.now()}`,
           name: 'New Page from Template',
           slug: 'new-page-from-template',
-          sections: sections.map((section, index) => ({
+          sections: sections.map((section: any, index: number) => ({
             id: section.id,
             type: section.type as any,
             name: section.name || 'Untitled Section',

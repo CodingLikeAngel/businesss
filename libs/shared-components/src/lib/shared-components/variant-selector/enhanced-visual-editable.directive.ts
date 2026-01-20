@@ -11,6 +11,8 @@ import {
   DEFAULT_CONFIGS,
   PlatformInfo
 } from './enhanced-visual-editing.interfaces';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 /**
  * Enhanced Visual Editable Directive
@@ -29,9 +31,9 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
 
   @Output() visualEvents = new EventEmitter<VisualEditingEvent>();
   
-  private wasActive = false;
   private wasSelected = false; // Internal tracking for deselected event loop prevention
   private cleanup?: () => void;
+  private destroy$ = new Subject<void>();
 
   private currentConfig!: VisualEditingConfig;
   private platformInfo!: PlatformInfo;
@@ -54,10 +56,14 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['enhancedVisualEditable'] && !changes['enhancedVisualEditable'].firstChange) {
-      // Only re-setup if critical properties changed, not on every state update
       const prev = changes['enhancedVisualEditable'].previousValue;
       const curr = changes['enhancedVisualEditable'].currentValue;
       
+      // DEEP EQUAL CHECK to prevent infinite loops from template function calls
+      if (JSON.stringify(prev) === JSON.stringify(curr)) {
+        return;
+      }
+
       if (prev?.type !== curr?.type) {
         this.updateConfiguration();
       } else {
@@ -73,6 +79,8 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
 
   ngOnDestroy() {
     this.cleanupVisualEditing();
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   /**
@@ -216,7 +224,7 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
    */
   private setupEnhancedEventListeners(): void {
     // Enhanced resize event with boundary constraints
-    this.visualEditor.elementResized$.subscribe(({ element, bounds }) => {
+    this.visualEditor.elementResized$.pipe(takeUntil(this.destroy$)).subscribe(({ element, bounds }) => {
       if (element === this.el.nativeElement) {
         const enhancedBounds = this.createEnhancedBounds(bounds);
         const constrainedBounds = this.boundaryService.enforceBoundaries(
@@ -239,7 +247,7 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
     });
 
     // Enhanced move event with boundary constraints
-    this.visualEditor.elementMoved$.subscribe(({ element, bounds }) => {
+    this.visualEditor.elementMoved$.pipe(takeUntil(this.destroy$)).subscribe(({ element, bounds }) => {
       if (element === this.el.nativeElement) {
         const enhancedBounds = this.createEnhancedBounds(bounds);
         const constrainedBounds = this.boundaryService.enforceBoundaries(
@@ -253,7 +261,7 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
     });
 
     // Selection events
-    this.visualEditor.elementSelected$.subscribe((element) => {
+    this.visualEditor.elementSelected$.pipe(takeUntil(this.destroy$)).subscribe((element) => {
       const isNowSelected = (element === this.el.nativeElement);
       if (isNowSelected) {
         this.wasSelected = true;
@@ -279,7 +287,7 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
       }
     });
 
-    this.visualEditor.elementDeselected$.subscribe(() => {
+    this.visualEditor.elementDeselected$.pipe(takeUntil(this.destroy$)).subscribe(() => {
       if (this.wasSelected) {
         this.wasSelected = false;
         const bounds = this.el.nativeElement.getBoundingClientRect();
