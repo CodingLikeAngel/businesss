@@ -419,7 +419,7 @@ export class VisualEditorService {
     this.renderer.setStyle(overlay, 'width', `${rect.width}px`);
     this.renderer.setStyle(overlay, 'height', `${rect.height}px`);
     this.renderer.setStyle(overlay, 'pointer-events', 'none');
-    this.renderer.setStyle(overlay, 'z-index', '900'); // Higher than sidebar (500) but below custom dialogs
+    this.renderer.setStyle(overlay, 'z-index', '50'); // Keep it low enough to not block Sidebar/Modals
 
     this.renderer.setAttribute(overlay, 'data-overlay', 'true');
 
@@ -614,8 +614,8 @@ export class VisualEditorService {
         this.elementMoved$.next({
           element,
           bounds: { 
-            x: ghostRect.left, 
-            y: ghostRect.top, 
+            x: ghostRect.left,
+            y: ghostRect.top,
             width: ghostRect.width, 
             height: ghostRect.height 
           }
@@ -794,8 +794,15 @@ export class VisualEditorService {
       startTop = rect.top;
 
       const computedStyle = window.getComputedStyle(element);
-      startStyleLeft = parseInt(computedStyle.left) || 0;
-      startStyleTop = parseInt(computedStyle.top) || 0;
+      
+      // If element is not positioned, left/top might be 'auto'.
+      // We assume setupDrag/setupResize are called on elements that ARE positioning-capable or already positioned.
+      // If position is static, this logic will fail. The visual editor generally forces absolute/relative.
+      startStyleLeft = parseFloat(computedStyle.left);
+      if (isNaN(startStyleLeft)) startStyleLeft = element.offsetLeft;
+
+      startStyleTop = parseFloat(computedStyle.top);
+      if (isNaN(startStyleTop)) startStyleTop = element.offsetTop;
 
 
 
@@ -857,13 +864,14 @@ export class VisualEditorService {
 
       // Apply position compensation for Left/Top handles to anchor the opposite edge
       if (handle.includes('left')) {
-          // If width grew, left must move left (negative). If width shrank, left must move right (positive).
+          // 'effectiveWDelta' tells us exactly how much the width changed.
+          // If width increased by 10px, left must decrease by 10px to keep right edge stable.
+          // We use startStyleLeft (numeric value from element.style.left at start)
           const newLeft = startStyleLeft - effectiveWDelta;
           this.renderer.setStyle(element, 'left', `${newLeft}px`);
       }
 
       if (handle.includes('top')) {
-          // If height grew, top must move up (negative). If height shrank, top must move down (positive).
           const newTop = startStyleTop - effectiveHDelta;
           this.renderer.setStyle(element, 'top', `${newTop}px`);
       }
