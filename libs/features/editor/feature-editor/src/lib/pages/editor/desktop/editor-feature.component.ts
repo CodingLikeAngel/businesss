@@ -39,6 +39,10 @@ import { EditorCardSectionComponent } from '../components/card/editor-card-secti
 import { EditorInputSectionComponent } from '../components/input/editor-input-section.component';
 import { EditorButtonSectionComponent } from '../components/button/editor-button-section.component';
 import { EditorImageSectionComponent } from '../components/image/editor-image-section.component';
+import { EditorSmartContainerSectionComponent } from '../components/smart-container/editor-smart-container-section.component';
+import { EditorDraggableBoxSectionComponent } from '../components/draggable-box/editor-draggable-box-section.component';
+
+
 
 
 @Component({
@@ -80,7 +84,9 @@ import { EditorImageSectionComponent } from '../components/image/editor-image-se
     EditorCardSectionComponent,
     EditorInputSectionComponent,
     EditorButtonSectionComponent,
-    EditorImageSectionComponent
+    EditorImageSectionComponent,
+    EditorSmartContainerSectionComponent,
+    EditorDraggableBoxSectionComponent
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

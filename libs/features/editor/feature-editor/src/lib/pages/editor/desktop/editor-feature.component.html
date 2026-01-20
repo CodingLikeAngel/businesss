@@ -1,7 +1,7 @@
 <div class="sections-container min-h-screen relative pb-32">
   <!-- Floating Undo/Redo Toolbar -->
 
-  <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[1000] flex items-center gap-4">
+  <div class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] flex items-center gap-4" style="pointer-events: auto;">
     <lib-undo-redo-toolbar></lib-undo-redo-toolbar>
 
     <!-- Mode Switcher -->
@@ -497,6 +497,27 @@
         (sectionResized)="onSectionResized($event.section, $event.bounds)"
       >
       </lib-editor-image-section>
+
+      <!-- SMART CONTAINER -->
+      <lib-editor-smart-container-section *ngSwitchCase="'smart-container'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-smart-container-section>
+
+      <!-- DRAGGABLE BOX -->
+      <lib-editor-draggable-box-section *ngSwitchCase="'draggable-box'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-draggable-box-section>
+
 
       <!-- CHART -->
       <lib-editor-chart-section

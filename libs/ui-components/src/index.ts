@@ -63,3 +63,6 @@ export * from './lib/promotions-section/promotions-section.component';
 
 // Showcase Components
 export * from './lib/showcase/gaming-variants-showcase.component';
+
+// Smart Container (Generic Block)
+export * from './lib/smart-container/smart-container.component';

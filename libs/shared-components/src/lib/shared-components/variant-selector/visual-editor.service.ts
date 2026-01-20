@@ -76,6 +76,8 @@ export class VisualEditorService {
   private resizeHandle: string | null = null;
   private isMultiSelecting = false;
   private selectionStartPoint: { x: number; y: number } | null = null;
+  private registeredElements = new Set<HTMLElement>();
+
 
   // Configuración por defecto
   private defaultConfig: DragResizeConfig = {
@@ -273,7 +275,45 @@ export class VisualEditorService {
     this.isEditMode = true;
     this.addGlobalStyles();
     this.updateGlobalCursor();
+    
+    // Scan for editable elements after a short delay to ensure DOM is ready
+    setTimeout(() => {
+      this.scanAndRegisterEditableElements();
+    }, 100);
   }
+
+  /**
+   * Scan the DOM for elements with data-visual-editable and register them
+   */
+  private scanAndRegisterEditableElements() {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const editableElements = document.querySelectorAll('[data-visual-editable]');
+    console.log(`🔍 Found ${editableElements.length} editable elements`);
+    
+    editableElements.forEach((element: Element) => {
+      const htmlElement = element as HTMLElement;
+      const elementId = htmlElement.getAttribute('data-visual-editable');
+      
+      if (elementId && !this.registeredElements.has(htmlElement)) {
+        console.log(`✅ Registering element: ${elementId}`);
+        
+        // Add click listener to select element
+        const clickListener = this.renderer.listen(htmlElement, 'click', (e: MouseEvent) => {
+          e.stopPropagation();
+          this.selectElement(htmlElement, {
+            ...this.defaultConfig,
+            enableDrag: this._interactionMode === 'all' || this._interactionMode === 'move',
+            enableResize: this._interactionMode === 'all' || this._interactionMode === 'resize'
+          });
+        });
+        
+        this.overlayListeners.push(clickListener);
+        this.registeredElements.add(htmlElement);
+      }
+    });
+  }
+
 
   /**
    * Desactiva el modo de edición visual
@@ -650,6 +690,18 @@ export class VisualEditorService {
       this.renderer.setStyle(ghost, 'top', `${newY}px`);
     };
 
+    const cleanupGhost = () => {
+      if (ghost && ghost.parentNode) {
+        ghost.parentNode.removeChild(ghost);
+      }
+      ghost = null;
+      // Aggressive cleanup of any stray ghosts
+      const strays = document.querySelectorAll('.visual-ghost-drag');
+      strays.forEach(stray => {
+        if (stray.parentNode) stray.parentNode.removeChild(stray);
+      });
+    };
+
     const onMouseUp = () => {
       startX = 0; // Reset
       hasCrossedThreshold = false;
@@ -686,9 +738,7 @@ export class VisualEditorService {
         this.renderer.setStyle(element, 'transform', 'none');
         this.renderer.setStyle(element, 'opacity', '1');
 
-        // Cleanup
-        this.renderer.removeChild(document.body, ghost);
-        ghost = null;
+        cleanupGhost();
 
         // Restore overlay
         this.renderer.setStyle(overlay, 'display', 'block');
@@ -703,6 +753,11 @@ export class VisualEditorService {
             height: ghostRect.height 
           }
         });
+      } else {
+        // Just in case we didn't drag but ghost exists (rare)
+        cleanupGhost();
+        this.renderer.setStyle(element, 'opacity', '1');
+        this.renderer.setStyle(overlay, 'display', 'block');
       }
     };
 
@@ -710,6 +765,7 @@ export class VisualEditorService {
     this.overlayListeners.push(this.renderer.listen(element, 'mousedown', onMouseDown));
     this.overlayListeners.push(this.renderer.listen(document, 'mousemove', onMouseMove));
     this.overlayListeners.push(this.renderer.listen(document, 'mouseup', onMouseUp));
+    // Also listen to window blur or escape to cancel?
   }
 
   /**

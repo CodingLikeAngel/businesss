@@ -1076,6 +1076,22 @@ export class ComponentExplorerComponent implements OnInit {
       category: 'content'
     },
     {
+      type: 'smart-container',
+      label: 'Contenedor Inteligente',
+      icon: '📦',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Bloque genérico completamente configurable para construir layouts personalizados',
+      category: 'content'
+    },
+    {
+      type: 'draggable-box',
+      label: 'Caja Arrastrable',
+      icon: '🎯',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Elemento de prueba completamente arrastrable y redimensionable',
+      category: 'interactive'
+    },
+    {
       type: 'table',
       label: 'Tabla de Datos',
       icon: '▦',
