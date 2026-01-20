@@ -68,8 +68,8 @@ export class VisualEditorService {
 
   // Estado de edición
   private isEditMode = false;
-  private isDragging = false;
-  private isResizing = false;
+  public isDragging = false;
+  public isResizing = false;
   private resizeHandle: string | null = null;
   private isMultiSelecting = false;
   private selectionStartPoint: { x: number; y: number } | null = null;
@@ -354,9 +354,13 @@ export class VisualEditorService {
    */
   public selectElement(element: HTMLElement, config: DragResizeConfig) {
 
-    // Deseleccionar elemento anterior
-    if (this.activeElement && this.activeElement !== element) {
-      this.deselectElement();
+    // Deseleccionar elemento anterior si es distinto, o limpiar overlay si es el mismo
+    if (this.activeElement) {
+      if (this.activeElement !== element) {
+        this.deselectElement();
+      } else {
+        this.removeEditOverlay();
+      }
     }
 
     this.activeElement = element;
@@ -384,6 +388,7 @@ export class VisualEditorService {
     this.renderer.removeClass(this.activeElement, 'visual-selected');
     this.removeEditOverlay();
     this.activeElement = null;
+    this.isDragging = false;
 
     // Remove from multi-selection
     this.multiSelectionState.selectedElements.clear();
@@ -529,17 +534,20 @@ export class VisualEditorService {
         startStyleTop = parseInt(computedStyle.top) || 0;
       }
 
-      // 'Anchor' the element: convert to absolute with fit-content to prevent coordinate drifting
+      e.preventDefault();
+      e.stopPropagation(); // Stop event from bubbling up to parents
+      
+      // Preserve fixed dimensions to prevent collapse when switching to absolute
+      const w = computedStyle.width;
+      const h = computedStyle.height;
+      this.renderer.setStyle(element, 'width', w);
+      this.renderer.setStyle(element, 'height', h);
       this.renderer.setStyle(element, 'position', 'absolute');
       this.renderer.setStyle(element, 'left', `${startStyleLeft}px`);
       this.renderer.setStyle(element, 'top', `${startStyleTop}px`);
       this.renderer.setStyle(element, 'margin', '0');
       this.renderer.setStyle(element, 'transform', 'none');
-      this.renderer.setStyle(element, 'width', 'fit-content');
       this.renderer.addClass(element, 'is-moving');
-
-      e.preventDefault();
-      e.stopPropagation();
     };
 
     const onMouseMove = (e: MouseEvent) => {
@@ -566,9 +574,11 @@ export class VisualEditorService {
 
       this.renderer.setStyle(element, 'left', `${newX}px`);
       this.renderer.setStyle(element, 'top', `${newY}px`);
-      this.renderer.setStyle(element, 'position', 'absolute');
 
-      this.updateOverlayPosition(overlay, element);
+      // Use requestAnimationFrame for smoother overlay update
+      requestAnimationFrame(() => {
+        this.updateOverlayPosition(overlay, element);
+      });
     };
 
     const onMouseUp = () => {
@@ -837,7 +847,10 @@ export class VisualEditorService {
       this.renderer.setStyle(element, 'height', `${newHeight}px`);
 
       // Actualizar overlay
-      this.updateOverlayPosition(overlay, element);
+      // Actualizar overlay
+      requestAnimationFrame(() => {
+        this.updateOverlayPosition(overlay, element);
+      });
       this.updateDimensionLabel(overlay, newWidth, newHeight);
     };
 
@@ -905,10 +918,10 @@ export class VisualEditorService {
     this.overlayListeners.forEach(unlisten => unlisten());
     this.overlayListeners = [];
 
-    const overlay = document.querySelector('[data-overlay="true"]');
-    if (overlay) {
+    const overlays = document.querySelectorAll('[data-overlay="true"]');
+    overlays.forEach(overlay => {
       this.renderer.removeChild(document.body, overlay);
-    }
+    });
   }
 
 

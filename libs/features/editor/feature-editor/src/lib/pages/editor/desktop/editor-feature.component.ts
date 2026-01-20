@@ -87,7 +87,7 @@ import { EditorImageSectionComponent } from '../components/image/editor-image-se
 })
 
 export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent implements OnInit {
-  private visualEditorService = inject(VisualEditorService);
+
 
   override ngOnInit() {
     super.ngOnInit();

@@ -28,6 +28,7 @@ import {
   FeaturesConfig,
   ChartConfig,
   UiStateService,
+  VisualEditorService
 } from '@negocio/shared-components';
 import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
 import { EditorState, ModalState } from '../../models/editor.model';
@@ -53,6 +54,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
   protected store = inject(Store<AppState>);
   protected historyService = inject(HistoryService);
   protected keyboardService = inject(KeyboardService);
+  protected visualEditorService = inject(VisualEditorService);
 
   private variantSub?: Subscription;
   private configSubs: Subscription[] = [];
@@ -168,6 +170,11 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
 
     // LISTEN FOR EXTERNAL PAGE SWITCHES AND UPDATES (from sidebar/VariantService)
     this.variantService.currentPage$.pipe(takeUntil(this.destroy$)).subscribe(page => {
+      // CRITICAL: Skip sync and potential re-renders if we are currently dragging/resizing
+      if (this.visualEditorService.isDragging || this.visualEditorService.isResizing) {
+        return;
+      }
+
       if (page) {
         this.store.select(PageSelectors.selectCurrentPage).pipe(take(1)).subscribe(currentStorePage => {
           if (!currentStorePage || currentStorePage.id !== page.id) {
@@ -175,6 +182,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
             this.store.dispatch(PageActions.loadPageSuccess({ page: page as any }));
           } else {
             // Same page, check if sections or content changed (e.g. added component from sidebar)
+            // Use a simple but effective check to avoid loops
             const storeSectionsStr = JSON.stringify(currentStorePage.sections);
             const vsSectionsStr = JSON.stringify(page.sections);
             
