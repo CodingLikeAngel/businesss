@@ -95,4 +95,11 @@ export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent im
     this.visualEditorService.enableEditMode();
   }
 
+  get currentMode() {
+    return this.visualEditorService.interactionMode;
+  }
+
+  setMode(mode: any) {
+    this.visualEditorService.setInteractionMode(mode);
+  }
 }

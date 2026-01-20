@@ -5,6 +5,9 @@ import { takeUntil } from 'rxjs/operators';
 import { ElementGroupService } from './element-group.service';
 import { ElementGroup, MultiSelectionState } from './enhanced-visual-editing.interfaces';
 
+export type InteractionMode = 'select' | 'move' | 'resize' | 'all';
+
+
 export interface ResizeHandles {
   top: boolean;
   right: boolean;
@@ -92,6 +95,9 @@ export class VisualEditorService {
     },
     grid: 1
   };
+
+  private _interactionMode: InteractionMode = 'all';
+  private dragThreshold = 5; // Pixels to move before drag starts
 
   constructor(
     private rendererFactory: RendererFactory2,
@@ -242,6 +248,23 @@ export class VisualEditorService {
   }
 
   /**
+   * Set the current interaction mode
+   */
+  setInteractionMode(mode: InteractionMode) {
+    this._interactionMode = mode;
+    this.updateGlobalCursor();
+    // Re-create overlay if active to show/hide handles
+    if (this.activeElement) {
+      this.removeEditOverlay();
+      this.createEditOverlay(this.activeElement, this.defaultConfig); // Use stored config if possible? For now default
+    }
+  }
+
+  get interactionMode(): InteractionMode {
+    return this._interactionMode;
+  }
+
+  /**
    * Activa el modo de edición visual
    */
   enableEditMode() {
@@ -249,6 +272,7 @@ export class VisualEditorService {
 
     this.isEditMode = true;
     this.addGlobalStyles();
+    this.updateGlobalCursor();
   }
 
   /**
@@ -434,8 +458,9 @@ export class VisualEditorService {
     this.renderer.setProperty(label, 'textContent', `${Math.round(rect.width)} × ${Math.round(rect.height)}`);
     this.renderer.appendChild(overlay, label);
 
-    // Crear handles de resize
-    if (config.enableResize && config.handles) {
+    // Crear handles de resize (ONLY if mode allows resize)
+    const canResize = config.enableResize && (this._interactionMode === 'resize' || this._interactionMode === 'all');
+    if (canResize && config.handles) {
       this.createResizeHandles(overlay, config.handles);
     }
 
@@ -506,59 +531,114 @@ export class VisualEditorService {
     let ghost: HTMLElement | null = null;
     let ghostStartX = 0;
     let ghostStartY = 0;
+    let hasCrossedThreshold = false; // flag for threshold
 
     const onMouseDown = (e: MouseEvent) => {
+      // Check mode
+      if (this._interactionMode !== 'move' && this._interactionMode !== 'all') return;
+
       // Only drag if element is already selected (first click just selects)
       if (this.activeElement !== element) return;
       
       // Don't drag if clicking buttons or inputs inside
       const target = e.target as HTMLElement;
-      if (target.closest('button, input, a, select, textarea')) return;
+      if (target.closest('button, input, a, select, textarea, .visual-resize-handle')) return;
 
       e.preventDefault();
       e.stopPropagation();
 
-      this.isDragging = true;
+      // We DON'T set isDragging = true yet. Wait for threshold.
+      hasCrossedThreshold = false;
       startX = e.clientX;
       startY = e.clientY;
+      
+      // But we DO need to listen for move/up now
+    };
 
-      // Create Ghost Element
-      ghost = element.cloneNode(true) as HTMLElement;
-      const rect = element.getBoundingClientRect();
-      
-      // Style ghost to match exact screen position but fixed
-      this.renderer.addClass(ghost, 'visual-ghost-drag');
-      this.renderer.setStyle(ghost, 'position', 'fixed');
-      this.renderer.setStyle(ghost, 'left', `${rect.left}px`);
-      this.renderer.setStyle(ghost, 'top', `${rect.top}px`);
-      this.renderer.setStyle(ghost, 'width', `${rect.width}px`);
-      this.renderer.setStyle(ghost, 'height', `${rect.height}px`);
-      this.renderer.setStyle(ghost, 'margin', '0');
-      this.renderer.setStyle(ghost, 'z-index', '9999');
-      this.renderer.setStyle(ghost, 'opacity', '0.85');
-      this.renderer.setStyle(ghost, 'pointer-events', 'none');
-      this.renderer.setStyle(ghost, 'box-shadow', '0 15px 30px rgba(0,0,0,0.3)');
-      this.renderer.setStyle(ghost, 'transform', 'none');
-      
-      // Cleanup ghost directives/classes to avoid interference
-      ghost.removeAttribute('data-visual-editable');
-      ghost.classList.remove('visual-editable');
-      ghost.classList.remove('visual-selected');
+    const startDrag = () => {
+       this.isDragging = true;
 
-      this.renderer.appendChild(document.body, ghost);
-      
-      ghostStartX = rect.left;
-      ghostStartY = rect.top;
+       // Create Ghost Element
+       ghost = element.cloneNode(true) as HTMLElement;
+       const rect = element.getBoundingClientRect();
+       
+       // Style ghost to match exact screen position but fixed
+       this.renderer.addClass(ghost, 'visual-ghost-drag');
+       this.renderer.setStyle(ghost, 'position', 'fixed');
+       this.renderer.setStyle(ghost, 'left', `${rect.left}px`);
+       this.renderer.setStyle(ghost, 'top', `${rect.top}px`);
+       this.renderer.setStyle(ghost, 'width', `${rect.width}px`);
+       this.renderer.setStyle(ghost, 'height', `${rect.height}px`);
+       this.renderer.setStyle(ghost, 'margin', '0');
+       this.renderer.setStyle(ghost, 'z-index', '9999');
+       this.renderer.setStyle(ghost, 'opacity', '0.85');
+       this.renderer.setStyle(ghost, 'pointer-events', 'none');
+       this.renderer.setStyle(ghost, 'box-shadow', '0 15px 30px rgba(0,0,0,0.3)');
+       this.renderer.setStyle(ghost, 'transform', 'none');
+       
+       // Cleanup ghost directives/classes to avoid interference
+       ghost.removeAttribute('data-visual-editable');
+       ghost.classList.remove('visual-editable');
+       ghost.classList.remove('visual-selected');
 
-      // Dim the original element
-      this.renderer.setStyle(element, 'opacity', '0.3');
-      
-      // Hide overlay during drag
-      this.renderer.setStyle(overlay, 'display', 'none');
+       this.renderer.appendChild(document.body, ghost);
+       
+       ghostStartX = rect.left;
+       ghostStartY = rect.top;
+
+       // Dim the original element
+       this.renderer.setStyle(element, 'opacity', '0.3');
+       
+       // Hide overlay during drag
+       this.renderer.setStyle(overlay, 'display', 'none');
     };
 
     const onMouseMove = (e: MouseEvent) => {
-      if (!this.isDragging || !ghost) return;
+      // Check if we started a potential drag (startX/Y set?) 
+      // Simplified check: we use the document listener which is always active? 
+      // NO, listeners are only added when setupDrag is called. The listeners below are permanent for the session.
+      // Actually, the listeners are persistent but we need state.
+      // For this refactor, we rely on 'startX' being valid which is tricky because mouseup clears it?
+      // Better: check if mouse is down? We need state 'isPossiblyDragging'.
+      
+      // Wait, the original code had simple state. Let's stick to simple but robust.
+      // We need a 'isMouseDown' flag or similar. 
+      // Actually we can check e.buttons === 1
+      if ((e.buttons !== 1) && !this.isDragging) return;
+
+      // START MODIFICATION: Threshold Logic
+      if (!this.isDragging) {
+         // If buttons are pressed and we qualify for drag check
+         if (Math.abs(e.clientX - startX) > this.dragThreshold || Math.abs(e.clientY - startY) > this.dragThreshold) {
+            // Check interaction mode again just in case
+            if (this._interactionMode !== 'move' && this._interactionMode !== 'all') return;
+            
+            // Should also check if we are over the element? 
+            // The mouseDown happened on the element. So yes.
+             
+            // One tricky thing: startX/Y are local vars. They are 0 by default. 
+            // We need to know if mouseDown *happened on this element*.
+            // The previous code didn't handle "mouse down on A, drag over B".
+            // It relied on `startX` being set in `onMouseDown` scope. 
+            // BUT: onMouseMove is document-level. `startX` is consistent for this closure. 
+            
+            // We need a flag 'pendingDrag'.
+         } else {
+            return; // Not moved enough
+         }
+      }
+      
+      // If we are here, we are dragging or just crossed threshold
+      if (!this.isDragging) {
+         if (!hasCrossedThreshold && startX !== 0) {
+            hasCrossedThreshold = true;
+            startDrag();
+         } else {
+           return;
+         }
+      }
+      
+      if (!ghost) return;
 
       const deltaX = e.clientX - startX;
       const deltaY = e.clientY - startY;
@@ -571,6 +651,9 @@ export class VisualEditorService {
     };
 
     const onMouseUp = () => {
+      startX = 0; // Reset
+      hasCrossedThreshold = false;
+
       if (this.isDragging && ghost) {
         this.isDragging = false;
         
@@ -996,6 +1079,18 @@ export class VisualEditorService {
       .visual-editable:hover {
         outline: 2px dashed rgba(99, 102, 241, 0.6);
       }
+      
+      /* Mode specific cursor overides */
+      body.mode-move .visual-editable {
+        cursor: move !important;
+      }
+      body.mode-resize .visual-editable {
+        cursor: default; /* Select only */
+      }
+      body.mode-resize .visual-resize-handle {
+        cursor: pointer; /* Or specific resize cursor */
+        background: #6366f1; /* Highlight handles in resize mode */
+      }
 
       .visual-selected {
         outline: 2px solid #6366f1 !important;
@@ -1148,6 +1243,15 @@ export class VisualEditorService {
     `);
 
     this.renderer.appendChild(document.head, style);
+  }
+
+  private updateGlobalCursor() {
+    if (!isPlatformBrowser(this.platformId)) return;
+    
+    document.body.classList.remove('mode-move', 'mode-resize', 'mode-select');
+    if (this._interactionMode !== 'all') {
+      document.body.classList.add(`mode-${this._interactionMode}`);
+    }
   }
 
   /**
