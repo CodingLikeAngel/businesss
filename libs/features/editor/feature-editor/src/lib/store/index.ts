@@ -1,4 +1,4 @@
-import { ActionReducerMap } from '@ngrx/store';
+import { ActionReducerMap, combineReducers } from '@ngrx/store';
 import { EditorFeatureState, HistoryState, initialNavigation } from './state/app.state';
 import { pageReducer } from './reducers/page.reducer';
 import { uiReducer, modalReducer, notificationReducer } from './reducers/ui.reducer';
@@ -13,6 +13,8 @@ export const editorReducers: ActionReducerMap<EditorFeatureState> = {
   footer: (state: any = null) => state, // Placeholder reducer
   navigation: (state: any = { headerLinks: [], footerLinks: [] }) => state, // Placeholder reducer
 };
+
+export const combinedEditorReducer = combineReducers(editorReducers);
 
 import { Command } from '../models/editor.model';
 import { executeCommand, undo, redo, clearHistory, undoToCommand, redoToCommand } from './actions/ui.actions';

@@ -8,17 +8,17 @@ export const selectEditorFeature = createFeatureSelector<EditorFeatureState>('ed
 // UI state selectors
 export const selectUIState = createSelector(
   selectEditorFeature,
-  (state: EditorFeatureState) => state.ui
+  (state: EditorFeatureState) => state?.ui
 );
 
 export const selectModalState = createSelector(
   selectEditorFeature,
-  (state: EditorFeatureState) => state.modal
+  (state: EditorFeatureState) => state?.modal
 );
 
 export const selectNotificationState = createSelector(
   selectEditorFeature,
-  (state: EditorFeatureState) => state.notifications
+  (state: EditorFeatureState) => state?.notifications
 );
 
 // Selection selectors

@@ -8,37 +8,37 @@ export const selectEditorFeature = createFeatureSelector<EditorFeatureState>('ed
 // Page state selectors
 export const selectPageState = createSelector(
   selectEditorFeature,
-  (state: EditorFeatureState) => state.page
+  (state: EditorFeatureState) => state?.page
 );
 
 export const selectCurrentPage = createSelector(
   selectPageState,
-  (state: PageState) => state.currentPage
+  (state: PageState) => state?.currentPage
 );
 
 export const selectPages = createSelector(
   selectPageState,
-  (state: PageState) => state.pages
+  (state: PageState) => state?.pages || []
 );
 
 export const selectPageLoading = createSelector(
   selectPageState,
-  (state: PageState) => state.loading
+  (state: PageState) => state?.loading || false
 );
 
 export const selectPageSaving = createSelector(
   selectPageState,
-  (state: PageState) => state.saving
+  (state: PageState) => state?.saving || false
 );
 
 export const selectPageError = createSelector(
   selectPageState,
-  (state: PageState) => state.error
+  (state: PageState) => state?.error || null
 );
 
 export const selectHasUnsavedChanges = createSelector(
   selectPageState,
-  (state: PageState) => state.hasUnsavedChanges
+  (state: PageState) => state?.hasUnsavedChanges || false
 );
 
 export const selectLastSaved = createSelector(
