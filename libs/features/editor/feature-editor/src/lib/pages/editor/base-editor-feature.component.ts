@@ -288,12 +288,25 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     console.log('📍 Element moved:', elementId, bounds, section?.id);
     if (!section) return;
 
-    const sectionElement = isPlatformBrowser(this.platformId) ? document.getElementById(section.id) : null;
-    const sectionRect = sectionElement?.getBoundingClientRect();
+    // Get the actual DOM element to find its coordinate system (offsetParent)
+    const el = isPlatformBrowser(this.platformId) ? document.getElementById(elementId) : null;
+    const offsetParent = el?.offsetParent as HTMLElement;
+    const parentRect = offsetParent?.getBoundingClientRect();
     
-    // Calculate relative coordinates if possible
-    const relativeX = sectionRect ? bounds.x - sectionRect.left : bounds.x;
-    const relativeY = sectionRect ? bounds.y - sectionRect.top : bounds.y;
+    // Calculate coordinates relative to the parent that will position it
+    let relativeX = bounds.x;
+    let relativeY = bounds.y;
+
+    if (parentRect) {
+      relativeX = bounds.x - parentRect.left;
+      relativeY = bounds.y - parentRect.top;
+    } else {
+      // Fallback to section-relative if no offsetParent found
+      const sectionElement = isPlatformBrowser(this.platformId) ? document.getElementById(section.id) : null;
+      const sectionRect = sectionElement?.getBoundingClientRect();
+      relativeX = sectionRect ? bounds.x - sectionRect.left : bounds.x;
+      relativeY = sectionRect ? bounds.y - sectionRect.top : bounds.y;
+    }
 
     // 1. Persist position if element exists in section.elements
     if (section.elements) {
@@ -303,8 +316,9 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
         newEl.styles = { 
           ...(newEl.styles || {}), 
           position: 'absolute', 
-          left: `${relativeX}px`, 
-          top: `${relativeY}px` 
+          left: `${Math.round(relativeX)}px`, 
+          top: `${Math.round(relativeY)}px`,
+          zIndex: '10'
         };
         const newElements = [...section.elements];
         newElements[idx] = newEl;
@@ -325,8 +339,9 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
           [styleKey]: {
             ...currentStyles,
             position: 'absolute',
-            left: `${relativeX}px`,
-            top: `${relativeY}px`
+            left: `${Math.round(relativeX)}px`,
+            top: `${Math.round(relativeY)}px`,
+            zIndex: '10'
           }
         }
       });
@@ -344,8 +359,8 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
         const newEl = { ...section.elements[idx] };
         newEl.styles = { 
           ...(newEl.styles || {}), 
-          width: `${bounds.width}px`, 
-          height: `${bounds.height}px`
+          width: `${Math.round(bounds.width)}px`, 
+          height: `${Math.round(bounds.height)}px`
         };
         const newElements = [...section.elements];
         newElements[idx] = newEl;
@@ -365,8 +380,8 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
           ...section.content,
           [styleKey]: {
             ...currentStyles,
-            width: `${bounds.width}px`, 
-            height: `${bounds.height}px`
+            width: `${Math.round(bounds.width)}px`, 
+            height: `${Math.round(bounds.height)}px`
           }
         }
       });

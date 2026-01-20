@@ -62,6 +62,8 @@ export class VisualEditorService {
   public groupSelected$ = new Subject<ElementGroup>();
 
   private overlayListeners: Function[] = [];
+  private activeGuides: HTMLElement[] = [];
+  private snapThreshold = 5;
 
 
   // Estado de edición
@@ -482,8 +484,6 @@ export class VisualEditorService {
     let startStyleTop = 0;
 
     const onMouseDown = (e: MouseEvent) => {
-
-      // Solo drag desde el overlay, no desde handles
       if ((e.target as HTMLElement).classList.contains('visual-resize-handle')) {
         return;
       }
@@ -493,9 +493,17 @@ export class VisualEditorService {
       startY = e.clientY;
 
       const computedStyle = window.getComputedStyle(element);
-      startStyleLeft = parseInt(computedStyle.left) || 0;
-      startStyleTop = parseInt(computedStyle.top) || 0;
-
+      const position = computedStyle.position;
+      
+      if (position === 'static' || computedStyle.left === 'auto') {
+        const rect = element.getBoundingClientRect();
+        const parentRect = (element.offsetParent as HTMLElement)?.getBoundingClientRect() || { left: 0, top: 0 };
+        startStyleLeft = rect.left - parentRect.left;
+        startStyleTop = rect.top - parentRect.top;
+      } else {
+        startStyleLeft = parseInt(computedStyle.left) || 0;
+        startStyleTop = parseInt(computedStyle.top) || 0;
+      }
 
       e.preventDefault();
       e.stopPropagation();
@@ -510,25 +518,30 @@ export class VisualEditorService {
       let newX = startStyleLeft + deltaX;
       let newY = startStyleTop + deltaY;
 
+      // Smart Alignment & Snapping
+      this.clearGuides();
+      const alignments = this.detectAlignment(element, newX, newY);
+      
+      if (alignments.x !== null) newX = alignments.x;
+      if (alignments.y !== null) newY = alignments.y;
 
-      // Snap to grid
-      if (config.grid && config.grid > 1) {
+      // Snap to grid (if no alignment snap happened or optional)
+      if (config.grid && config.grid > 1 && alignments.x === null && alignments.y === null) {
         newX = Math.round(newX / config.grid) * config.grid;
         newY = Math.round(newY / config.grid) * config.grid;
       }
 
-      // Aplicar posición
       this.renderer.setStyle(element, 'left', `${newX}px`);
       this.renderer.setStyle(element, 'top', `${newY}px`);
       this.renderer.setStyle(element, 'position', 'absolute');
 
-      // Actualizar overlay
       this.updateOverlayPosition(overlay, element);
     };
 
     const onMouseUp = () => {
       if (this.isDragging) {
         this.isDragging = false;
+        this.clearGuides();
         const rect = element.getBoundingClientRect();
         this.elementMoved$.next({
           element,
@@ -542,10 +555,141 @@ export class VisualEditorService {
       }
     };
 
-    // Listeners
     this.overlayListeners.push(this.renderer.listen(overlay, 'mousedown', onMouseDown));
     this.overlayListeners.push(this.renderer.listen(document, 'mousemove', onMouseMove));
     this.overlayListeners.push(this.renderer.listen(document, 'mouseup', onMouseUp));
+  }
+
+  /**
+   * Detecta alineaciones con otros elementos para snapping y guías
+   */
+  private detectAlignment(element: HTMLElement, currentLeft: number, currentTop: number): { x: number | null, y: number | null } {
+    const parent = element.offsetParent as HTMLElement;
+    if (!parent) return { x: null, y: null };
+
+    const parentRect = parent.getBoundingClientRect();
+    const elRect = element.getBoundingClientRect();
+    const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
+    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+
+    // Viewport-relative target bounds
+    const targetX = parentRect.left + currentLeft;
+    const targetY = parentRect.top + currentTop;
+    const targetRight = targetX + elRect.width;
+    const targetBottom = targetY + elRect.height;
+    const targetCenterX = targetX + elRect.width / 2;
+    const targetCenterY = targetY + elRect.height / 2;
+
+    const parentCenterX = parentRect.left + parentRect.width / 2;
+    const parentCenterY = parentRect.top + parentRect.height / 2;
+
+    let snapX: number | null = null;
+    let snapY: number | null = null;
+
+    // Viewport-relative references for snapping
+    const verticalRefs = [
+      { ref: parentRect.left, label: 'Parent Left' },
+      { ref: parentRect.right, label: 'Parent Right' },
+      { ref: parentCenterX, label: 'Parent Center' }
+    ];
+
+    const horizontalRefs = [
+      { ref: parentRect.top, label: 'Parent Top' },
+      { ref: parentRect.bottom, label: 'Parent Bottom' },
+      { ref: parentCenterY, label: 'Parent Center' }
+    ];
+
+    // Obtener todos los elementos editables excepto el actual
+    const others = Array.from(document.querySelectorAll('.visual-editable'))
+      .filter(el => el !== element)
+      .map(el => {
+        const r = el.getBoundingClientRect();
+        return {
+          el: el as HTMLElement,
+          left: r.left,
+          top: r.top,
+          right: r.right,
+          bottom: r.bottom,
+          centerX: r.left + r.width / 2,
+          centerY: r.top + r.height / 2
+        };
+      });
+
+    // Vertical Alignments (X-axis snap)
+    const allVerticalRefs = [
+      ...verticalRefs,
+      ...others.map(o => ({ ref: o.left })),
+      ...others.map(o => ({ ref: o.right })),
+      ...others.map(o => ({ ref: o.centerX }))
+    ];
+
+    for (const refObj of allVerticalRefs) {
+      const matchX = this.getClosestMatch([
+        { val: targetX, ref: refObj.ref, type: 'left' },
+        { val: targetRight, ref: refObj.ref, type: 'right' },
+        { val: targetCenterX, ref: refObj.ref, type: 'center' }
+      ]);
+
+      if (matchX) {
+        const diff = matchX.ref - matchX.val;
+        snapX = currentLeft + diff;
+        this.drawGuide(matchX.ref + scrollX, Math.min(targetY, parentRect.top) + scrollY, 1, Math.max(targetBottom, parentRect.bottom) - Math.min(targetY, parentRect.top), 'v');
+        break; 
+      }
+    }
+
+    // Horizontal Alignments (Y-axis snap)
+    const allHorizontalRefs = [
+      ...horizontalRefs,
+      ...others.map(o => ({ ref: o.top })),
+      ...others.map(o => ({ ref: o.bottom })),
+      ...others.map(o => ({ ref: o.centerY }))
+    ];
+
+    for (const refObj of allHorizontalRefs) {
+      const matchY = this.getClosestMatch([
+        { val: targetY, ref: refObj.ref, type: 'top' },
+        { val: targetBottom, ref: refObj.ref, type: 'bottom' },
+        { val: targetCenterY, ref: refObj.ref, type: 'center' }
+      ]);
+
+      if (matchY) {
+        const diff = matchY.ref - matchY.val;
+        snapY = currentTop + diff;
+        this.drawGuide(Math.min(targetX, parentRect.left) + scrollX, matchY.ref + scrollY, Math.max(targetRight, parentRect.right) - Math.min(targetX, parentRect.left), 1, 'h');
+        break;
+      }
+    }
+
+    return { x: snapX, y: snapY };
+  }
+
+  private getClosestMatch(checks: { val: number, ref: number, type: string }[]) {
+    for (const check of checks) {
+      if (Math.abs(check.val - check.ref) <= this.snapThreshold) {
+        return check;
+      }
+    }
+    return null;
+  }
+
+  private drawGuide(x: number, y: number, w: number, h: number, orientation: 'v' | 'h') {
+    const guide = this.renderer.createElement('div');
+    this.renderer.addClass(guide, 'visual-guide');
+    this.renderer.addClass(guide, orientation === 'v' ? 'visual-guide-v' : 'visual-guide-h');
+    this.renderer.setStyle(guide, 'left', `${x}px`);
+    this.renderer.setStyle(guide, 'top', `${y}px`);
+    this.renderer.setStyle(guide, 'width', orientation === 'v' ? '1px' : `${w}px`);
+    this.renderer.setStyle(guide, 'height', orientation === 'h' ? '1px' : `${h}px`);
+    this.renderer.appendChild(document.body, guide);
+    this.activeGuides.push(guide);
+  }
+
+  private clearGuides() {
+    this.activeGuides.forEach(g => {
+      if (g.parentNode) g.parentNode.removeChild(g);
+    });
+    this.activeGuides = [];
   }
 
 
@@ -719,6 +863,9 @@ export class VisualEditorService {
   private removeEditOverlay() {
     if (!isPlatformBrowser(this.platformId)) return;
 
+    // Clean up alignment guides
+    this.clearGuides();
+
     // Clean up listeners
     this.overlayListeners.forEach(unlisten => unlisten());
     this.overlayListeners = [];
@@ -747,6 +894,19 @@ export class VisualEditorService {
         outline-offset: 2px;
         transition: outline 0.2s ease;
         cursor: move;
+      }
+      .visual-guide {
+        position: absolute;
+        background: #6366f1;
+        z-index: 99999;
+        pointer-events: none;
+        box-shadow: 0 0 4px rgba(99, 102, 241, 0.5);
+      }
+      .visual-guide-v { width: 1px; }
+      .visual-guide-h { height: 1px; }
+      .visual-editable.is-moving {
+        opacity: 0.7;
+        z-index: 9999;
       }
 
       .visual-editable:hover {
