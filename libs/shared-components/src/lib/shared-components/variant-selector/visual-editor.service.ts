@@ -308,10 +308,13 @@ export class VisualEditorService {
 
     // Cleanup function
     return () => {
+      // If the removed element was active, deselect it to prevent 'ghosting'
+      if (this.activeElement === element) {
+        this.deselectElement();
+      }
       this.renderer.removeClass(element, 'visual-editable');
       this.renderer.removeAttribute(element, 'data-visual-editable');
       clickListener();
-      // Only deselect if this was a permanent removal, not a reconfiguration
     };
   }
 
@@ -397,7 +400,7 @@ export class VisualEditorService {
     const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
     const scrollY = window.pageYOffset || document.documentElement.scrollTop;
 
-    // Crear contenedor del overlay
+    // Crear contenedor del overlay (no captura eventos para no bloquear menús)
     const overlay = this.renderer.createElement('div');
     this.renderer.addClass(overlay, 'visual-edit-overlay');
     this.renderer.setStyle(overlay, 'position', 'absolute');
@@ -405,8 +408,8 @@ export class VisualEditorService {
     this.renderer.setStyle(overlay, 'left', `${rect.left + scrollX}px`);
     this.renderer.setStyle(overlay, 'width', `${rect.width}px`);
     this.renderer.setStyle(overlay, 'height', `${rect.height}px`);
-    this.renderer.setStyle(overlay, 'pointer-events', 'auto');
-    this.renderer.setStyle(overlay, 'z-index', '9999');
+    this.renderer.setStyle(overlay, 'pointer-events', 'none');
+    this.renderer.setStyle(overlay, 'z-index', '900'); // Higher than sidebar (500) but below custom dialogs
 
     this.renderer.setAttribute(overlay, 'data-overlay', 'true');
 
@@ -438,6 +441,16 @@ export class VisualEditorService {
     if (config.enableResize) {
       this.setupResize(element, overlay, config);
     }
+
+    // Sync overlay position if element moves or changes size (e.g. sidebar collapse)
+    if (typeof window !== 'undefined' && 'ResizeObserver' in window) {
+      const ro = new ResizeObserver(() => {
+        this.updateOverlayPosition(overlay, element);
+      });
+      ro.observe(element);
+      ro.observe(document.body); // Also observe body for global layout shifts
+      this.overlayListeners.push(() => ro.disconnect());
+    }
   }
 
   /**
@@ -467,7 +480,7 @@ export class VisualEditorService {
       this.renderer.addClass(handle, 'visual-resize-handle');
       this.renderer.addClass(handle, `handle-${name}`);
       this.renderer.setStyle(handle, 'cursor', cursor);
-      this.renderer.setStyle(handle, 'pointer-events', 'all');
+      this.renderer.setStyle(handle, 'pointer-events', 'all'); // Handles should capture events
       this.renderer.setAttribute(handle, 'data-handle', name);
       this.renderer.appendChild(overlay, handle);
     });
@@ -484,9 +497,12 @@ export class VisualEditorService {
     let startStyleTop = 0;
 
     const onMouseDown = (e: MouseEvent) => {
-      if ((e.target as HTMLElement).classList.contains('visual-resize-handle')) {
-        return;
-      }
+      // Only drag if element is already selected (first click just selects)
+      if (this.activeElement !== element) return;
+      
+      // Don't drag if clicking buttons or inputs inside
+      const target = e.target as HTMLElement;
+      if (target.closest('button, input, a, select, textarea')) return;
 
       this.isDragging = true;
       startX = e.clientX;
@@ -568,7 +584,8 @@ export class VisualEditorService {
       }
     };
 
-    this.overlayListeners.push(this.renderer.listen(overlay, 'mousedown', onMouseDown));
+    // Attach drag to the element itself to allow clicking through overlay
+    this.overlayListeners.push(this.renderer.listen(element, 'mousedown', onMouseDown));
     this.overlayListeners.push(this.renderer.listen(document, 'mousemove', onMouseMove));
     this.overlayListeners.push(this.renderer.listen(document, 'mouseup', onMouseUp));
   }

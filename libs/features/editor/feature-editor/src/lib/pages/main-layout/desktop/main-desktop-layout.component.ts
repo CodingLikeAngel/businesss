@@ -74,10 +74,6 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
     this.scrollToSection('contacto');
   }
 
-  onWorkspaceClick(event: MouseEvent) {
-    // This could be used to deselect current item in the future
-    console.log('Workspace clicked');
-  }
 
   onTabSelected(sectionId: string | Event) {
     const id = typeof sectionId === 'string' ? sectionId : (sectionId as any).target?.value || sectionId;

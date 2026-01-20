@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { VariantService, FooterConfig, HeaderConfig, NavBarConfig, UiStateService } from '@negocio/shared-components';
+import { VariantService, FooterConfig, HeaderConfig, NavBarConfig, UiStateService, VisualEditorService } from '@negocio/shared-components';
 import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
 
 @Component({
@@ -21,6 +21,7 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
   private stepSub?: Subscription;
 
   protected uiStateService = inject(UiStateService);
+  protected visualEditor = inject(VisualEditorService);
 
   constructor(protected variantService: VariantService, protected router: Router) {
 
@@ -84,6 +85,18 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
     }
     console.log('Selecting global element:', element);
     this.uiStateService.selectElement(element);
+  }
+
+  onWorkspaceClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    // Only deselect if clicking the workspace background directly or non-editable areas
+    if (target.classList.contains('canvas-area') || 
+        target.classList.contains('canvas-wrapper') || 
+        target.classList.contains('frame-content')) {
+      console.log('Deselecting via workspace click');
+      this.visualEditor.deselectElement();
+      this.uiStateService.selectElement(null);
+    }
   }
 
   setPreviewSize(size: 'mobile' | 'tablet' | 'desktop') {
