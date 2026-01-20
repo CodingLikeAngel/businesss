@@ -290,7 +290,12 @@ export class VisualEditorService {
     // Click para seleccionar
     const clickListener = this.renderer.listen(element, 'click', (e: MouseEvent) => {
       if (!this.isEditMode) return;
+      
+      // PREVENT NAVIGATION / REFRESH
+      e.preventDefault(); 
       e.stopPropagation();
+
+      const elementId = element.id || element.getAttribute('id') || element.getAttribute('elementId');
 
       // Check if Ctrl key is pressed for multi-selection
       if (e.ctrlKey || e.metaKey) {

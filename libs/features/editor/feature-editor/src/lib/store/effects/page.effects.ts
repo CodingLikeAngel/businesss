@@ -1,43 +1,64 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { map, mergeMap, catchError, tap, switchMap } from 'rxjs/operators';
-import {
-  loadPage,
-  loadPageSuccess,
-  loadPageFailure,
-  createPage,
-  createPageSuccess,
-  savePage,
-  savePageSuccess,
-  savePageFailure,
-  deletePage,
-  duplicatePage,
-  importPage,
-  exportPage,
-  applyTemplate,
-  saveAsTemplate
-} from '../actions/page.actions';
-import { Page } from '../../models/editor.model';
+import { map, mergeMap, catchError, tap, switchMap, withLatestFrom } from 'rxjs/operators';
+import * as PageActions from '../actions/page.actions';
+import { Page, PageSection } from '../../models/editor.model';
 import { TemplateService } from '../../services/template.service';
+import { VariantService } from '@negocio/shared-components';
+import { Store } from '@ngrx/store';
+import { AppState } from '../state/app.state';
+import * as PageSelectors from '../selectors/page.selectors';
 
 @Injectable()
 export class PageEffects {
 
   constructor(
     private actions$: Actions,
-    private templateService: TemplateService
+    private templateService: TemplateService,
+    private variantService: VariantService,
+    private store: Store<AppState>
   ) {}
+
+  // Persistence Effect: Keep VariantService in sync with Store
+  syncWithVariantService$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(
+        PageActions.updateElement,
+        PageActions.updateSection,
+        PageActions.moveElement,
+        PageActions.addSection,
+        PageActions.deleteSection,
+        PageActions.loadPageSuccess
+      ),
+      tap((action: any) => {
+        // Here we would typically get the whole state and save it
+        // For now, let's call VariantService to save what changed
+        console.log('Syncing Store -> VariantService due to action:', action.type);
+      }),
+      withLatestFrom(this.store.select(PageSelectors.selectCurrentPage)),
+      tap(([action, currentPage]) => {
+        if (currentPage) {
+          // Sync sections to VariantService subjects
+          (this.variantService as any).sectionsSubject.next(currentPage.sections as any);
+          
+          // Trigger manual save
+          (this.variantService as any).saveToLocalStorage();
+        }
+      })
+    ),
+    { dispatch: false }
+  );
 
   // Load Page Effect
   loadPage$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(loadPage),
+      ofType(PageActions.loadPage),
       mergeMap(({ pageId }) =>
         // TODO: Replace with actual API call when data-access layer is implemented
         this.mockLoadPage(pageId).pipe(
-          map(page => loadPageSuccess({ page })),
-          catchError(error => of(loadPageFailure({ error: error.message })))
+          map(page => PageActions.loadPageSuccess({ page })),
+          catchError(error => of(PageActions.loadPageFailure({ error: error.message })))
         )
       )
     )
@@ -46,12 +67,12 @@ export class PageEffects {
   // Create Page Effect
   createPage$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(createPage),
+      ofType(PageActions.createPage),
       mergeMap(({ page }) =>
         // TODO: Replace with actual API call when data-access layer is implemented
         this.mockCreatePage(page).pipe(
-          map(createdPage => createPageSuccess({ page: createdPage })),
-          catchError(error => of(loadPageFailure({ error: error.message })))
+          map(createdPage => PageActions.createPageSuccess({ page: createdPage })),
+          catchError(error => of(PageActions.loadPageFailure({ error: error.message })))
         )
       )
     )
@@ -60,12 +81,12 @@ export class PageEffects {
   // Save Page Effect
   savePage$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(savePage),
+      ofType(PageActions.savePage),
       mergeMap(() =>
         // TODO: Replace with actual API call when data-access layer is implemented
         this.mockSavePage().pipe(
-          map(({ page, timestamp }) => savePageSuccess({ page, timestamp })),
-          catchError(error => of(savePageFailure({ error: error.message })))
+          map(({ page, timestamp }) => PageActions.savePageSuccess({ page, timestamp })),
+          catchError(error => of(PageActions.savePageFailure({ error: error.message })))
         )
       )
     )
@@ -74,12 +95,12 @@ export class PageEffects {
   // Delete Page Effect
   deletePage$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(deletePage),
+      ofType(PageActions.deletePage),
       mergeMap(({ pageId }) =>
         // TODO: Replace with actual API call when data-access layer is implemented
         this.mockDeletePage(pageId).pipe(
           map(() => ({ type: '[Page] Delete Page Success', pageId })),
-          catchError(error => of(loadPageFailure({ error: error.message })))
+          catchError(error => of(PageActions.loadPageFailure({ error: error.message })))
         )
       )
     )
@@ -88,12 +109,12 @@ export class PageEffects {
   // Duplicate Page Effect
   duplicatePage$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(duplicatePage),
+      ofType(PageActions.duplicatePage),
       mergeMap(({ pageId, newName }) =>
         // TODO: Replace with actual API call when data-access layer is implemented
         this.mockDuplicatePage(pageId, newName).pipe(
-          map(page => createPageSuccess({ page })),
-          catchError(error => of(loadPageFailure({ error: error.message })))
+          map(page => PageActions.createPageSuccess({ page })),
+          catchError(error => of(PageActions.loadPageFailure({ error: error.message })))
         )
       )
     )
@@ -102,12 +123,12 @@ export class PageEffects {
   // Import Page Effect
   importPage$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(importPage),
+      ofType(PageActions.importPage),
       mergeMap(({ data, name }) =>
         // TODO: Implement actual import logic (file parsing, validation)
         this.mockImportPage(data, name).pipe(
-          map(page => createPageSuccess({ page })),
-          catchError(error => of(loadPageFailure({ error: error.message })))
+          map(page => PageActions.createPageSuccess({ page })),
+          catchError(error => of(PageActions.loadPageFailure({ error: error.message })))
         )
       )
     )
@@ -116,7 +137,7 @@ export class PageEffects {
   // Export Page Effect
   exportPage$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(exportPage),
+      ofType(PageActions.exportPage),
       tap(({ format, options }) => {
         // TODO: Implement actual export logic (file generation, download)
         console.log(`Exporting page in ${format} format`, options);
@@ -129,7 +150,7 @@ export class PageEffects {
   // Apply Template Effect
   applyTemplate$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(applyTemplate),
+      ofType(PageActions.applyTemplate),
       switchMap(({ templateId }) => {
         const sections = this.templateService.applyTemplate(templateId);
         // TODO: Create proper page structure from template sections
@@ -186,9 +207,12 @@ export class PageEffects {
           },
           createdAt: new Date(),
           updatedAt: new Date(),
-          author: 'current-user'
+          author: 'current-user',
+          order: 0,
+          visibleInHeader: true,
+          visibleInFooter: true
         };
-        return of(createPageSuccess({ page }));
+        return of(PageActions.createPageSuccess({ page }));
       })
     )
   );
@@ -196,7 +220,7 @@ export class PageEffects {
   // Save As Template Effect
   saveAsTemplate$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(saveAsTemplate),
+      ofType(PageActions.saveAsTemplate),
       tap(({ name, description, category }) => {
         // TODO: Implement save as template logic
         console.log(`Saving page as template: ${name}`, { description, category });
@@ -242,7 +266,10 @@ export class PageEffects {
       },
       createdAt: new Date(),
       updatedAt: new Date(),
-      author: 'mock-user'
+      author: 'mock-user',
+      order: 0,
+      visibleInHeader: true,
+      visibleInFooter: true
     } as Page);
   }
 
@@ -282,7 +309,10 @@ export class PageEffects {
       },
       createdAt: new Date(),
       updatedAt: new Date(),
-      author: 'current-user'
+      author: 'current-user',
+      order: pageData.order || 0,
+      visibleInHeader: pageData.visibleInHeader !== undefined ? pageData.visibleInHeader : true,
+      visibleInFooter: pageData.visibleInFooter !== undefined ? pageData.visibleInFooter : true
     };
     return of(page);
   }
@@ -334,7 +364,10 @@ export class PageEffects {
       },
       createdAt: new Date(),
       updatedAt: new Date(),
-      author: 'current-user'
+      author: 'current-user',
+      order: 0,
+      visibleInHeader: true,
+      visibleInFooter: true
     } as Page);
   }
 
@@ -375,7 +408,10 @@ export class PageEffects {
       },
       createdAt: new Date(),
       updatedAt: new Date(),
-      author: 'current-user'
+      author: 'current-user',
+      order: data.order || 0,
+      visibleInHeader: data.visibleInHeader !== undefined ? data.visibleInHeader : true,
+      visibleInFooter: data.visibleInFooter !== undefined ? data.visibleInFooter : true
     };
     return of(page);
   }

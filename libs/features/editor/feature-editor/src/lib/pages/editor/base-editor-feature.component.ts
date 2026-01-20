@@ -1,5 +1,8 @@
 import { Component, HostListener, OnDestroy, OnInit, Inject, PLATFORM_ID, TrackByFunction, inject } from '@angular/core';
 import { EditorService, CartService, ModalService } from '../../../index';
+import * as PageActions from '../../store/actions/page.actions';
+import * as PageSelectors from '../../store/selectors/page.selectors';
+import { Page } from '../../models/editor.model';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Subscription, Observable } from 'rxjs';
@@ -32,6 +35,7 @@ import { KeyboardService } from '../../services/keyboard.service';
 import { ResizeSectionCommand } from '../../services/commands';
 import { Store } from '@ngrx/store';
 import { AppState } from '../../store/state/app.state';
+import * as UIActions from '../../store/actions/ui.actions';
 
 @Component({
   standalone: true,
@@ -43,9 +47,9 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
   protected cartService = inject(CartService);
   protected modalService = inject(ModalService);
   protected uiStateService = inject(UiStateService);
+  protected store = inject(Store<AppState>);
   protected historyService = inject(HistoryService);
   protected keyboardService = inject(KeyboardService);
-  protected store = inject(Store<AppState>);
 
   private variantSub?: Subscription;
   private configSubs: Subscription[] = [];
@@ -152,7 +156,45 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
       this.modalState = state;
     });
 
-    this.sections$ = this.variantService.sections$;
+    // UNIFY WITH STORE: Use selectors for sections
+    this.sections$ = this.store.select(PageSelectors.selectCurrentPageSections) as Observable<any[]>;
+    
+    // INITIAL LOAD: Sync VariantService data into NgRx Store
+    this.syncVariantServiceToStore();
+  }
+
+  private syncVariantServiceToStore() {
+    const sections = (this.variantService as any).sectionsSubject.value;
+    const initialPage: Page = {
+      id: 'default-page',
+      name: 'Default Page',
+      slug: 'default-page',
+      sections: sections as any,
+      globalStyles: {
+        primaryColor: '#6366f1',
+        secondaryColor: '#f59e0b',
+        accentColor: '#10b981',
+        backgroundColor: '#ffffff',
+        textColor: '#111827',
+        fontFamily: 'Inter',
+        fontSize: { h1: '3.5rem', h2: '3rem', h3: '2.25rem', body: '1rem' },
+        spacing: { small: '0.5rem', medium: '1rem', large: '2rem' },
+        borderRadius: '0.5rem',
+        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+        customCSS: ''
+      },
+      metadata: { title: 'Langing Page', description: '', keywords: [], author: 'AI', customMeta: {} },
+      versions: [],
+      collaborators: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      published: false,
+      order: 0,
+      visibleInHeader: true,
+      visibleInFooter: true
+    };
+    
+    this.store.dispatch(PageActions.loadPageSuccess({ page: initialPage }));
   }
 
 
@@ -172,6 +214,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     };
     
     this.uiStateService.selectSection(sectionCopy);
+    this.store.dispatch(UIActions.selectSection({ sectionId: section.id }));
   }
 
   selectElement(event: Event | null, element: any) {
@@ -189,6 +232,11 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
 
     console.log('Selecting element:', element);
     this.uiStateService.selectElement(element);
+    
+    const elementId = element.id || (element._original ? element._original.id : null) || element.name;
+    if (elementId) {
+      this.store.dispatch(UIActions.selectElement({ elementId }));
+    }
   }
 
   trackBySectionId(index: number, section: any): string {
@@ -254,34 +302,14 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     }
     return 'Detalles';
   }
-
   onSectionResized(section: PageSection, bounds: any) {
     console.log('📏 Section resized:', section.id, bounds);
 
-    // Track the operation for undo/redo
     const oldSize = section.size || { width: bounds.width || 1200, height: bounds.height || 400 };
     const newSize = { width: bounds.width || oldSize.width, height: bounds.height };
 
-    const command = new ResizeSectionCommand(
-      section.id,
-      oldSize,
-      newSize,
-      this.store
-    );
+    const command = new ResizeSectionCommand(section.id, oldSize, newSize, this.store);
     this.historyService.execute(command);
-
-    // Update section styles with new height
-    const updatedSection = {
-      ...section,
-      styles: {
-        ...section.styles,
-        minHeight: `${bounds.height}px`,
-        height: `${bounds.height}px`
-      }
-    };
-
-    // Update in service
-    this.variantService.updateSectionInCurrentPage(section.id, updatedSection);
   }
 
   onElementMoved(bounds: any, elementId: string, section?: PageSection) {
@@ -326,7 +354,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
         };
         const newElements = [...section.elements];
         newElements[idx] = newEl;
-        this.variantService.updateSectionInCurrentPage(section.id, { elements: newElements });
+        console.log('📍 Element repositioned in Store via Command');
         return;
       }
     }
@@ -354,42 +382,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
 
   onElementResized(bounds: any, elementId: string, section?: PageSection) {
     console.log('📐 Element resized:', elementId, bounds, section?.id);
-    if (!section) return;
-
-    // 1. Persist size if element exists in section.elements
-    if (section.elements) {
-      const idx = section.elements.findIndex((e: any) => e.id === elementId);
-      if (idx !== -1) {
-        const newEl = { ...section.elements[idx] };
-        newEl.styles = { 
-          ...(newEl.styles || {}), 
-          width: `${Math.round(bounds.width)}px`, 
-          height: `${Math.round(bounds.height)}px`
-        };
-        const newElements = [...section.elements];
-        newElements[idx] = newEl;
-        this.variantService.updateSectionInCurrentPage(section.id, { elements: newElements });
-        return;
-      }
-    }
-
-    // 2. Handle config-based items
-    const knownFields = ['title', 'subtitle', 'cta', 'description', 'text', 'label'];
-    const fieldMatch = knownFields.find(f => elementId.endsWith('_' + f));
-    if (fieldMatch) {
-      const styleKey = fieldMatch + 'Styles';
-      const currentStyles = section.content?.[styleKey] || {};
-      this.variantService.updateSectionInCurrentPage(section.id, {
-        content: {
-          ...section.content,
-          [styleKey]: {
-            ...currentStyles,
-            width: `${Math.round(bounds.width)}px`, 
-            height: `${Math.round(bounds.height)}px`
-          }
-        }
-      });
-    }
+    // Logic handled by Resizable directives and store commands
   }
 
   onTabSelected(sectionId: string) {
