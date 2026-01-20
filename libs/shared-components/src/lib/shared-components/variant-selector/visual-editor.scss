@@ -1,0 +1,84 @@
+
+/* Overlay Container */
+.visual-edit-overlay {
+  pointer-events: none !important; /* CRITICAL: Overlay must not block clicks */
+  z-index: 900;
+  box-sizing: border-box;
+}
+
+/* Border */
+.visual-selection-border {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 2px solid #3b82f6; /* Blue-500 */
+  box-sizing: border-box;
+  pointer-events: none;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.3);
+}
+
+/* Handles */
+.visual-resize-handle {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background-color: white;
+  border: 1px solid #3b82f6;
+  border-radius: 50%;
+  pointer-events: auto !important; /* CRITICAL: Handles MUST capture events */
+  z-index: 1001; /* Above border */
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  transition: transform 0.1s;
+  
+  &:hover {
+    transform: scale(1.2);
+    background-color: #eff6ff;
+  }
+}
+
+/* Specific Handle Positions */
+.handle-top { top: -6px; left: 50%; transform: translateX(-50%); cursor: ns-resize; }
+.handle-bottom { bottom: -6px; left: 50%; transform: translateX(-50%); cursor: ns-resize; }
+.handle-left { left: -6px; top: 50%; transform: translateY(-50%); cursor: ew-resize; }
+.handle-right { right: -6px; top: 50%; transform: translateY(-50%); cursor: ew-resize; }
+
+.handle-top-left { top: -6px; left: -6px; cursor: nwse-resize; }
+.handle-top-right { top: -6px; right: -6px; cursor: nesw-resize; }
+.handle-bottom-left { bottom: -6px; left: -6px; cursor: nesw-resize; }
+.handle-bottom-right { bottom: -6px; right: -6px; cursor: nwse-resize; }
+
+/* Dimensions Label */
+.visual-dimension-label {
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #3b82f6;
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  pointer-events: none;
+  white-space: nowrap;
+  z-index: 1002;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Ghost Dragging */
+.visual-ghost-drag {
+  opacity: 0.8 !important;
+  pointer-events: none !important;
+  z-index: 9999 !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04) !important;
+  transition: none !important; /* Instant follow */
+  border: 2px dashed #3b82f6 !important;
+}
+
+/* Moving State */
+.is-moving {
+  opacity: 0.5;
+  filter: grayscale(100%);
+}

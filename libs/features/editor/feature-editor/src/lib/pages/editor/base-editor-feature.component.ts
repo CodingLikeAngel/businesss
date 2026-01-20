@@ -197,6 +197,50 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
         });
       }
     });
+
+    // Subscriptions for Visual Editor persistence
+    if (this.visualEditorService) {
+      this.visualEditorService.elementMoved$.pipe(takeUntil(this.destroy$)).subscribe((event: any) => {
+        this.handleElementMoved(event);
+      });
+
+      this.visualEditorService.elementResized$.pipe(takeUntil(this.destroy$)).subscribe((event: any) => {
+        this.handleElementResized(event);
+      });
+    }
+  }
+
+  private handleElementMoved(event: { element: HTMLElement, bounds: any }) {
+    const elementId = event.element.id || event.element.getAttribute('id') || event.element.getAttribute('data-element-id');
+    if (!elementId) return;
+
+    const styles: any = {
+      position: 'absolute',
+      left: event.element.style.left,
+      top: event.element.style.top
+    };
+    
+    // Also capture width/height if set, to be safe
+    if(event.element.style.width) styles.width = event.element.style.width;
+    if(event.element.style.height) styles.height = event.element.style.height;
+
+    console.log(`Persistence: Element ${elementId} moved to`, styles);
+    this.variantService.updateElementStyles(elementId, styles);
+  }
+
+  private handleElementResized(event: { element: HTMLElement, bounds: any }) {
+    const elementId = event.element.id || event.element.getAttribute('id');
+    if (!elementId) return;
+
+    const styles: any = {
+      width: event.element.style.width,
+      height: event.element.style.height,
+      left: event.element.style.left,
+      top: event.element.style.top
+    };
+
+    console.log(`Persistence: Element ${elementId} resized to`, styles);
+    this.variantService.updateElementStyles(elementId, styles);
   }
 
   private syncVariantServiceToStore() {

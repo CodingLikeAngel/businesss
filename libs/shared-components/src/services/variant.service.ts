@@ -1392,6 +1392,50 @@ export class VariantService {
     }
   }
 
+  /**
+   * Update styles for a specific element (by ID) in the current page
+   * This is used by the Visual Editor to persist drag/resize changes
+   */
+  updateElementStyles(elementId: string, styles: { [key: string]: string }) {
+    const currentPage = this.currentPageSubject.value;
+    if (!currentPage) return;
+
+    let updated = false;
+    const newSections = currentPage.sections.map(section => {
+      // Check if the section itself is the element
+      if (section.id === elementId) {
+        updated = true;
+        return {
+          ...section,
+          styles: { ...section.styles, ...styles }
+        };
+      }
+      
+      // Check if the element is inside this section (elements array)
+      if (section.elements && section.elements.length > 0) {
+        const elemIndex = section.elements.findIndex(e => e.id === elementId);
+        if (elemIndex !== -1) {
+          updated = true;
+          const newElements = [...section.elements];
+          newElements[elemIndex] = {
+            ...newElements[elemIndex],
+            styles: { ...(newElements[elemIndex].styles || {}), ...styles }
+          };
+          return { ...section, elements: newElements };
+        }
+      }
+
+      return section;
+    });
+
+    if (updated) {
+      this.updatePage(currentPage.id, { sections: newSections });
+      console.log(`VariantService: Updated styles for ${elementId}`);
+    } else {
+      console.warn(`VariantService: Element ${elementId} not found for style update`);
+    }
+  }
+
   private loadFromLocalStorage() {
     if (typeof window !== 'undefined' && window.localStorage) {
       const saved = localStorage.getItem('anto_studios_config');
