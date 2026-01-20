@@ -43,7 +43,7 @@ export const selectHasUnsavedChanges = createSelector(
 
 export const selectLastSaved = createSelector(
   selectPageState,
-  (state: PageState) => state.lastSaved
+  (state: PageState) => state?.lastSaved || null
 );
 
 // Current page derived selectors
@@ -65,17 +65,17 @@ export const selectCurrentPageMetadata = createSelector(
 // Section selectors
 export const selectSectionById = (sectionId: string) => createSelector(
   selectCurrentPageSections,
-  (sections: Section[]) => sections.find(section => section.id === sectionId) || null
+  (sections: Section[]) => (sections || []).find(section => section.id === sectionId) || null
 );
 
 export const selectSectionsByType = (type: string) => createSelector(
   selectCurrentPageSections,
-  (sections: Section[]) => sections.filter(section => section.type === type)
+  (sections: Section[]) => (sections || []).filter(section => section.type === type)
 );
 
 export const selectVisibleSections = createSelector(
   selectCurrentPageSections,
-  (sections: Section[]) => sections.filter(section => section.visible)
+  (sections: Section[]) => (sections || []).filter(section => section.visible)
 );
 
 // Element selectors
@@ -86,32 +86,32 @@ export const selectElementsInSection = (sectionId: string) => createSelector(
 
 export const selectElementById = (sectionId: string, elementId: string) => createSelector(
   selectElementsInSection(sectionId),
-  (elements: Element[]) => elements.find(element => element.id === elementId) || null
+  (elements: Element[]) => (elements || []).find(element => element.id === elementId) || null
 );
 
 export const selectAllElements = createSelector(
   selectCurrentPageSections,
-  (sections: Section[]) => sections.flatMap(section => section.elements)
+  (sections: Section[]) => (sections || []).flatMap(section => section.elements || [])
 );
 
 export const selectElementsByType = (type: string) => createSelector(
   selectAllElements,
-  (elements: Element[]) => elements.filter(element => element.type === type)
+  (elements: Element[]) => (elements || []).filter(element => element.type === type)
 );
 
 export const selectVisibleElements = createSelector(
   selectAllElements,
-  (elements: Element[]) => elements.filter(element => element.visible)
+  (elements: Element[]) => (elements || []).filter(element => element.visible)
 );
 
 // Statistics selectors
 export const selectPageStats = createSelector(
   selectCurrentPage,
-  (page: Page | null) => {
-    if (!page) return { sections: 0, elements: 0, visibleSections: 0, visibleElements: 0 };
+  (page: Page | null | undefined) => {
+    if (!page || !page.sections) return { sections: 0, elements: 0, visibleSections: 0, visibleElements: 0 };
 
-    const sections = page.sections;
-    const elements = sections.flatMap(s => s.elements);
+    const sections = page.sections || [];
+    const elements = sections.flatMap(s => s.elements || []);
 
     return {
       sections: sections.length,
@@ -130,7 +130,7 @@ export const selectPageVersions = createSelector(
 
 export const selectLatestVersion = createSelector(
   selectPageVersions,
-  (versions) => versions.length > 0 ? versions[versions.length - 1] : null
+  (versions) => (versions || []).length > 0 ? versions[versions.length - 1] : null
 );
 
 // Collaboration selectors
@@ -141,8 +141,9 @@ export const selectCollaborators = createSelector(
 
 export const selectActiveCollaborators = createSelector(
   selectCollaborators,
-  (collaborators) => collaborators.filter(c => {
+  (collaborators) => (collaborators || []).filter(c => {
+    if (!c || !c.lastActive) return false;
     const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000);
-    return c.lastActive > fiveMinutesAgo;
+    return new Date(c.lastActive) > fiveMinutesAgo;
   })
 );

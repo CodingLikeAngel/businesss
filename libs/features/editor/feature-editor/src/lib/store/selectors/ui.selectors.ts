@@ -24,27 +24,27 @@ export const selectNotificationState = createSelector(
 // Selection selectors
 export const selectSelectedElementId = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.selectedElementId
+  (state: EditorUIState) => state?.selectedElementId || null
 );
 
 export const selectSelectedSectionId = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.selectedSectionId
+  (state: EditorUIState) => state?.selectedSectionId || null
 );
 
 export const selectHoveredElementId = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.hoveredElementId
+  (state: EditorUIState) => state?.hoveredElementId || null
 );
 
 export const selectDraggedElementId = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.draggedElementId
+  (state: EditorUIState) => state?.draggedElementId || null
 );
 
 export const selectDraggedSectionId = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.draggedSectionId
+  (state: EditorUIState) => state?.draggedSectionId || null
 );
 
 export const selectIsDragging = createSelector(
@@ -56,92 +56,92 @@ export const selectIsDragging = createSelector(
 // Canvas selectors
 export const selectZoom = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.zoom
+  (state: EditorUIState) => state?.zoom || 1
 );
 
 export const selectCanvasSize = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.canvasSize
+  (state: EditorUIState) => state?.canvasSize || { width: 1200, height: 800 }
 );
 
 export const selectDevicePreview = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.devicePreview
+  (state: EditorUIState) => state?.devicePreview || 'desktop'
 );
 
 // Grid and guides selectors
 export const selectShowGrid = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.showGrid
+  (state: EditorUIState) => state?.showGrid || false
 );
 
 export const selectShowRulers = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.showRulers
+  (state: EditorUIState) => state?.showRulers || false
 );
 
 export const selectSnapToGrid = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.snapToGrid
+  (state: EditorUIState) => state?.snapToGrid || true
 );
 
 // Layout selectors
 export const selectSidebarOpen = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.sidebarOpen
+  (state: EditorUIState) => state?.sidebarOpen || false
 );
 
 export const selectToolbarVisible = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.toolbarVisible
+  (state: EditorUIState) => state?.toolbarVisible || false
 );
 
 // Context menu selectors
 export const selectContextMenu = createSelector(
   selectUIState,
-  (state: EditorUIState) => state.contextMenu
+  (state: EditorUIState) => state?.contextMenu || { visible: false, position: { x: 0, y: 0 }, targetId: '', targetType: 'canvas' }
 );
 
 export const selectContextMenuVisible = createSelector(
   selectContextMenu,
-  (contextMenu) => contextMenu.visible
+  (contextMenu) => contextMenu?.visible || false
 );
 
 // Modal selectors
 export const selectModalOpen = createSelector(
   selectModalState,
-  (state: ModalState) => state.isOpen
+  (state: ModalState) => state?.isOpen || false
 );
 
 export const selectModalType = createSelector(
   selectModalState,
-  (state: ModalState) => state.type
+  (state: ModalState) => state?.type || null
 );
 
 export const selectModalData = createSelector(
   selectModalState,
-  (state: ModalState) => state.data
+  (state: ModalState) => state?.data || null
 );
 
 export const selectModalSelectedItem = createSelector(
   selectModalState,
-  (state: ModalState) => state.selectedItem
+  (state: ModalState) => state?.selectedItem || null
 );
 
 // Notification selectors
 export const selectNotifications = createSelector(
   selectNotificationState,
-  (state: NotificationState) => state.notifications
+  (state: NotificationState) => state?.notifications || []
 );
 
 export const selectUnreadNotifications = createSelector(
   selectNotifications,
-  (notifications) => notifications.filter(n => !n.read)
+  (notifications) => (notifications || []).filter(n => n && !n.read)
 );
 
 export const selectUnreadNotificationCount = createSelector(
   selectUnreadNotifications,
-  (notifications) => notifications.length
+  (notifications) => (notifications || []).length
 );
 
 // Combined selectors for UI state

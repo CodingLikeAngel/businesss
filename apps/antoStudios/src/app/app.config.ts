@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withFetch()),
     provideRouter(appRoutes),
     provideStore(),
-    provideState({ name: 'editor', reducer: combinedEditorReducer }),
+    provideState({ name: 'editor', reducer: combinedEditorReducer as any }),
     provideEffects(editorEffects),
   ],
 };

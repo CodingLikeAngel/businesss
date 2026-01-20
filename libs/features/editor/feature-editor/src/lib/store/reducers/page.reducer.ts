@@ -320,7 +320,7 @@ export const pageReducer = createReducer(
           fromVersion,
           toVersion,
           timestamp: new Date(),
-          status: 'pending',
+          status: 'pending' as const,
         },
       ],
     },
@@ -333,7 +333,7 @@ export const pageReducer = createReducer(
       version: record.toVersion,
       lastMigrated: new Date(),
       migrationHistory: state.migration.migrationHistory.map(r =>
-        r.id === record.id ? { ...r, status: 'success', details: 'Migration completed successfully' } : r
+        r.id === record.id ? { ...r, status: 'success' as const, details: 'Migration completed successfully' } : r
       ),
     },
   })),
@@ -349,7 +349,7 @@ export const pageReducer = createReducer(
           r.id === pendingRecord.id 
             ? { 
                 ...r, 
-                status: 'failed', 
+                status: 'failed' as const, 
                 details: `Migration failed: ${error}` 
               } 
             : r
