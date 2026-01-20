@@ -27,20 +27,25 @@ export class PageEffects {
         PageActions.moveElement,
         PageActions.addSection,
         PageActions.deleteSection,
-        PageActions.loadPageSuccess
+        PageActions.loadPageSuccess,
+        PageActions.setCurrentPage
       ),
-      tap((action: any) => {
-        // Here we would typically get the whole state and save it
-        // For now, let's call VariantService to save what changed
-        console.log('Syncing Store -> VariantService due to action:', action.type);
-      }),
       withLatestFrom(this.store.select(PageSelectors.selectCurrentPage)),
       tap(([action, currentPage]) => {
         if (currentPage) {
-          // Sync sections to VariantService subjects
+          const vCurrentPageId = (this.variantService as any).currentPageSubject.value?.id;
+          
+          // Debug logs for better tracking
+          console.log(`Syncing Store -> VariantService [Action: ${action.type}] [Store: ${currentPage.id}] [VS: ${vCurrentPageId}]`);
+
+          // Sync sections
           (this.variantService as any).sectionsSubject.next(currentPage.sections as any);
           
-          // Trigger manual save
+          // If we switched pages in Store, switch in VariantService too
+          if (currentPage.id !== vCurrentPageId) {
+            (this.variantService as any).updatePage(currentPage.id, { sections: currentPage.sections });
+          }
+
           (this.variantService as any).saveToLocalStorage();
         }
       })

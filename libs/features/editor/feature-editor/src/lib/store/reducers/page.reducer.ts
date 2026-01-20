@@ -70,11 +70,20 @@ export const pageReducer = createReducer(
     return {
       ...state,
       currentPage: compatiblePage,
-      pages: [...state.pages, compatiblePage],
+      pages: state.pages.some(p => p.id === compatiblePage.id) 
+        ? state.pages.map(p => p.id === compatiblePage.id ? compatiblePage : p)
+        : [...state.pages, compatiblePage],
       loading: false,
       hasUnsavedChanges: false,
     };
   }),
+
+  // Set Pages
+  on(PageActions.setPages, (state, { pages }) => ({
+    ...state,
+    pages: [...pages],
+    currentPage: state.currentPage ? (pages.find(p => p.id === state.currentPage?.id) || state.currentPage) : pages[0] || null,
+  })),
 
   // Update Page
   on(PageActions.updatePage, (state, { pageId, changes }) => {

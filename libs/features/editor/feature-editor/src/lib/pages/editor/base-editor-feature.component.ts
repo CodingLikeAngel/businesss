@@ -7,7 +7,7 @@ import * as PageSelectors from '../../store/selectors/page.selectors';
 import { Page } from '../../models/editor.model';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Subscription, Observable } from 'rxjs';
+import { Subscription, Observable, take, Subject, takeUntil } from 'rxjs';
 import {
   VariantService,
   NavBarConfig,
@@ -35,9 +35,10 @@ import { PageSection } from '@negocio/shared-components';
 import { HistoryService } from '../../services/history.service';
 import { KeyboardService } from '../../services/keyboard.service';
 import { ResizeSectionCommand } from '../../services/commands';
-import { Store } from '@ngrx/store';
 import { AppState } from '../../store/state/app.state';
 import * as UIActions from '../../store/actions/ui.actions';
+import { Store } from '@ngrx/store';
+import { MoveElementCommand, ResizeElementCommand, StyleChangeCommand } from '../../services/commands';
 
 @Component({
   standalone: true,
@@ -57,6 +58,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
   private configSubs: Subscription[] = [];
   private editorStateSub?: Subscription;
   private modalStateSub?: Subscription;
+  protected destroy$ = new Subject<void>();
 
   componentVariants: { [key: string]: string } = {};
   globalVariant = 'default';
@@ -163,40 +165,58 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     
     // INITIAL LOAD: Sync VariantService data into NgRx Store
     this.syncVariantServiceToStore();
+
+    // LISTEN FOR EXTERNAL PAGE SWITCHES (from sidebar/VariantService)
+    this.variantService.currentPage$.pipe(takeUntil(this.destroy$)).subscribe(page => {
+      if (page) {
+        this.store.select(PageSelectors.selectCurrentPage).pipe(take(1)).subscribe(currentStorePage => {
+          if (!currentStorePage || currentStorePage.id !== page.id) {
+            console.log('🔄 Syncing VariantService -> Store (Page Switch Detected)');
+            this.store.dispatch(PageActions.setCurrentPage({ pageId: page.id }));
+          }
+        });
+      }
+    });
   }
 
   private syncVariantServiceToStore() {
-    const sections = (this.variantService as any).sectionsSubject.value;
-    const initialPage: Page = {
-      id: 'default-page',
-      name: 'Default Page',
-      slug: 'default-page',
-      sections: sections as any,
-      globalStyles: {
-        primaryColor: '#6366f1',
-        secondaryColor: '#f59e0b',
-        accentColor: '#10b981',
-        backgroundColor: '#ffffff',
-        textColor: '#111827',
-        fontFamily: 'Inter',
-        fontSize: { h1: '3.5rem', h2: '3rem', h3: '2.25rem', body: '1rem' },
-        spacing: { small: '0.5rem', medium: '1rem', large: '2rem' },
-        borderRadius: '0.5rem',
-        boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
-        customCSS: ''
-      },
-      metadata: { title: 'Langing Page', description: '', keywords: [], author: 'AI', customMeta: {} },
-      versions: [],
-      collaborators: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
-      published: false,
-      order: 0,
-      visibleInHeader: true,
-      visibleInFooter: true
-    };
-    
-    this.store.dispatch(PageActions.loadPageSuccess({ page: initialPage }));
+    this.store.select(PageSelectors.selectCurrentPage).pipe(take(1)).subscribe((existingPage: any) => {
+      if (existingPage) {
+        console.log('Store already has paging state, skipping sync from VariantService');
+        return;
+      }
+
+      console.log('Initializing Store from VariantService...');
+      const pages = (this.variantService as any).pagesSubject.value as Page[];
+      const currentPage = (this.variantService as any).currentPageSubject.value as Page;
+      
+      if (pages && pages.length > 0) {
+        this.store.dispatch(PageActions.setPages({ pages }));
+        if (currentPage) {
+          this.store.dispatch(PageActions.setCurrentPage({ pageId: currentPage.id }));
+        }
+      } else {
+        // Fallback to segments if no pages found (legacy)
+        const sections = (this.variantService as any).sectionsSubject.value;
+        const initialPage: Page = {
+          id: 'default-page',
+          name: 'Home',
+          slug: 'home',
+          sections: sections as any,
+          globalStyles: {} as any,
+          metadata: { title: 'Landing Page' } as any,
+          versions: [],
+          collaborators: [],
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          published: false,
+          order: 0,
+          visibleInHeader: true,
+          visibleInFooter: true
+        };
+        this.store.dispatch(PageActions.loadPageSuccess({ page: initialPage }));
+      }
+    });
   }
 
 
@@ -258,6 +278,8 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
     this.variantSub?.unsubscribe();
     this.configSubs.forEach((sub) => sub.unsubscribe());
     this.editorStateSub?.unsubscribe();
@@ -346,17 +368,11 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     if (section.elements) {
       const idx = section.elements.findIndex((e: any) => e.id === elementId);
       if (idx !== -1) {
-        const newEl = { ...section.elements[idx] };
-        newEl.styles = { 
-          ...(newEl.styles || {}), 
-          position: 'absolute', 
-          left: `${Math.round(relativeX)}px`, 
-          top: `${Math.round(relativeY)}px`,
-          zIndex: '10'
-        };
-        const newElements = [...section.elements];
-        newElements[idx] = newEl;
-        console.log('📍 Element repositioned in Store via Command');
+        const oldPos = section.elements[idx].position || { x: 0, y: 0 };
+        const newPos = { x: Math.round(relativeX), y: Math.round(relativeY) };
+        
+        const command = new MoveElementCommand(section.id, elementId, oldPos, newPos, this.store);
+        this.historyService.execute(command);
         return;
       }
     }
@@ -367,24 +383,34 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     if (fieldMatch) {
       const styleKey = fieldMatch + 'Styles';
       const currentStyles = section.content?.[styleKey] || {};
-      this.variantService.updateSectionInCurrentPage(section.id, {
-        content: {
-          ...section.content,
-          [styleKey]: {
-            ...currentStyles,
-            position: 'absolute',
-            left: `${Math.round(relativeX)}px`,
-            top: `${Math.round(relativeY)}px`,
-            zIndex: '10'
-          }
-        }
-      });
+      const oldStyles = { ...currentStyles };
+      const newStyles = {
+        ...currentStyles,
+        position: 'absolute',
+        left: `${Math.round(relativeX)}px`,
+        top: `${Math.round(relativeY)}px`,
+        zIndex: '10'
+      };
+
+      const command = new StyleChangeCommand('element', elementId, section.id, oldStyles, newStyles, this.store);
+      this.historyService.execute(command);
     }
   }
 
   onElementResized(bounds: any, elementId: string, section?: PageSection) {
     console.log('📐 Element resized:', elementId, bounds, section?.id);
-    // Logic handled by Resizable directives and store commands
+    if (!section) return;
+
+    if (section.elements) {
+      const idx = section.elements.findIndex((e: any) => e.id === elementId);
+      if (idx !== -1) {
+        const oldSize = section.elements[idx].size || { width: 100, height: 100 };
+        const newSize = { width: Math.round(bounds.width), height: Math.round(bounds.height) };
+        
+        const command = new ResizeElementCommand(section.id, elementId, oldSize, newSize, this.store);
+        this.historyService.execute(command);
+      }
+    }
   }
 
   onTabSelected(sectionId: string) {

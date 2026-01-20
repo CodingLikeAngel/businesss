@@ -17,6 +17,11 @@ export const loadPageFailure = createAction(
   props<{ error: string }>()
 );
 
+export const setPages = createAction(
+  '[Page] Set Pages',
+  props<{ pages: Page[] }>()
+);
+
 export const createPage = createAction(
   '[Page] Create Page',
   props<{ page: Partial<Page> }>()
