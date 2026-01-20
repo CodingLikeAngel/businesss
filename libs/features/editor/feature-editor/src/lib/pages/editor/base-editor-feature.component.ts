@@ -1,5 +1,7 @@
 import { Component, HostListener, OnDestroy, OnInit, Inject, PLATFORM_ID, TrackByFunction, inject } from '@angular/core';
-import { EditorService, CartService, ModalService } from '../../../index';
+import { EditorService } from '../../services/editor.service';
+import { CartService } from '../../services/cart.service';
+import { ModalService } from '../../services/modal.service';
 import * as PageActions from '../../store/actions/page.actions';
 import * as PageSelectors from '../../store/selectors/page.selectors';
 import { Page } from '../../models/editor.model';
