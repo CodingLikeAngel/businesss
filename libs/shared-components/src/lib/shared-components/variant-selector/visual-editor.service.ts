@@ -503,8 +503,9 @@ export class VisualEditorService {
   private setupDrag(element: HTMLElement, overlay: HTMLElement, config: DragResizeConfig) {
     let startX = 0;
     let startY = 0;
-    let startStyleLeft = 0;
-    let startStyleTop = 0;
+    let ghost: HTMLElement | null = null;
+    let ghostStartX = 0;
+    let ghostStartY = 0;
 
     const onMouseDown = (e: MouseEvent) => {
       // Only drag if element is already selected (first click just selects)
@@ -514,92 +515,115 @@ export class VisualEditorService {
       const target = e.target as HTMLElement;
       if (target.closest('button, input, a, select, textarea')) return;
 
+      e.preventDefault();
+      e.stopPropagation();
+
       this.isDragging = true;
       startX = e.clientX;
       startY = e.clientY;
 
-      const computedStyle = window.getComputedStyle(element);
-      const position = computedStyle.position;
-      
+      // Create Ghost Element
+      ghost = element.cloneNode(true) as HTMLElement;
       const rect = element.getBoundingClientRect();
-      const parentRect = (element.offsetParent as HTMLElement)?.getBoundingClientRect() || { left: 0, top: 0 };
-      const parentBorderLeft = parseInt(computedStyle.borderLeftWidth) || 0;
-      const parentBorderTop = parseInt(computedStyle.borderTopWidth) || 0;
-
-      if (position === 'static' || computedStyle.left === 'auto') {
-        startStyleLeft = rect.left - parentRect.left - parentBorderLeft;
-        startStyleTop = rect.top - parentRect.top - parentBorderTop;
-      } else {
-        startStyleLeft = parseInt(computedStyle.left) || 0;
-        startStyleTop = parseInt(computedStyle.top) || 0;
-      }
-
-      e.preventDefault();
-      e.stopPropagation(); // Stop event from bubbling up to parents
       
-      // Preserve fixed dimensions to prevent collapse when switching to absolute
-      const w = computedStyle.width;
-      const h = computedStyle.height;
-      this.renderer.setStyle(element, 'width', w);
-      this.renderer.setStyle(element, 'height', h);
-      this.renderer.setStyle(element, 'position', 'absolute');
-      this.renderer.setStyle(element, 'left', `${startStyleLeft}px`);
-      this.renderer.setStyle(element, 'top', `${startStyleTop}px`);
-      this.renderer.setStyle(element, 'margin', '0');
-      this.renderer.setStyle(element, 'transform', 'none');
-      this.renderer.addClass(element, 'is-moving');
+      // Style ghost to match exact screen position but fixed
+      this.renderer.addClass(ghost, 'visual-ghost-drag');
+      this.renderer.setStyle(ghost, 'position', 'fixed');
+      this.renderer.setStyle(ghost, 'left', `${rect.left}px`);
+      this.renderer.setStyle(ghost, 'top', `${rect.top}px`);
+      this.renderer.setStyle(ghost, 'width', `${rect.width}px`);
+      this.renderer.setStyle(ghost, 'height', `${rect.height}px`);
+      this.renderer.setStyle(ghost, 'margin', '0');
+      this.renderer.setStyle(ghost, 'z-index', '9999');
+      this.renderer.setStyle(ghost, 'opacity', '0.85');
+      this.renderer.setStyle(ghost, 'pointer-events', 'none');
+      this.renderer.setStyle(ghost, 'box-shadow', '0 15px 30px rgba(0,0,0,0.3)');
+      this.renderer.setStyle(ghost, 'transform', 'none');
+      
+      // Cleanup ghost directives/classes to avoid interference
+      ghost.removeAttribute('data-visual-editable');
+      ghost.classList.remove('visual-editable');
+      ghost.classList.remove('visual-selected');
+
+      this.renderer.appendChild(document.body, ghost);
+      
+      ghostStartX = rect.left;
+      ghostStartY = rect.top;
+
+      // Dim the original element
+      this.renderer.setStyle(element, 'opacity', '0.3');
+      
+      // Hide overlay during drag
+      this.renderer.setStyle(overlay, 'display', 'none');
     };
 
     const onMouseMove = (e: MouseEvent) => {
-      if (!this.isDragging) return;
+      if (!this.isDragging || !ghost) return;
 
       const deltaX = e.clientX - startX;
       const deltaY = e.clientY - startY;
 
-      let newX = startStyleLeft + deltaX;
-      let newY = startStyleTop + deltaY;
+      const newX = ghostStartX + deltaX;
+      const newY = ghostStartY + deltaY;
 
-      // Smart Alignment & Snapping
-      this.clearGuides();
-      const alignments = this.detectAlignment(element, newX, newY);
-      
-      if (alignments.x !== null) newX = alignments.x;
-      if (alignments.y !== null) newY = alignments.y;
-
-      // Snap to grid (if no alignment snap happened or optional)
-      if (config.grid && config.grid > 1 && alignments.x === null && alignments.y === null) {
-        newX = Math.round(newX / config.grid) * config.grid;
-        newY = Math.round(newY / config.grid) * config.grid;
-      }
-
-      this.renderer.setStyle(element, 'left', `${newX}px`);
-      this.renderer.setStyle(element, 'top', `${newY}px`);
-
-      // Use requestAnimationFrame for smoother overlay update
-      requestAnimationFrame(() => {
-        this.updateOverlayPosition(overlay, element);
-      });
+      this.renderer.setStyle(ghost, 'left', `${newX}px`);
+      this.renderer.setStyle(ghost, 'top', `${newY}px`);
     };
 
     const onMouseUp = () => {
-      if (this.isDragging) {
+      if (this.isDragging && ghost) {
         this.isDragging = false;
-        this.clearGuides();
-        this.renderer.removeClass(element, 'is-moving');
-        const rect = element.getBoundingClientRect();
+        
+        // Finalize position
+        const ghostRect = ghost.getBoundingClientRect();
+        
+        // Calculate relative position for the original element
+        const parent = element.offsetParent as HTMLElement || document.body;
+        const parentRect = parent.getBoundingClientRect();
+        const computedParent = window.getComputedStyle(parent);
+        const borderLeft = parseInt(computedParent.borderLeftWidth) || 0;
+        const borderTop = parseInt(computedParent.borderTopWidth) || 0;
+
+        let newLeft = ghostRect.left - parentRect.left - borderLeft;
+        let newTop = ghostRect.top - parentRect.top - borderTop;
+        
+        // Ensure scroll is accounted for if the parent is scrollable
+        if (parent !== document.body) {
+             newLeft += parent.scrollLeft;
+             newTop += parent.scrollTop;
+        }
+
+        // Apply new position and fixed dimensions to element
+        this.renderer.setStyle(element, 'position', 'absolute');
+        this.renderer.setStyle(element, 'left', `${newLeft}px`);
+        this.renderer.setStyle(element, 'top', `${newTop}px`);
+        this.renderer.setStyle(element, 'width', `${ghostRect.width}px`);
+        this.renderer.setStyle(element, 'height', `${ghostRect.height}px`);
+        this.renderer.setStyle(element, 'margin', '0');
+        this.renderer.setStyle(element, 'transform', 'none');
+        this.renderer.setStyle(element, 'opacity', '1');
+
+        // Cleanup
+        this.renderer.removeChild(document.body, ghost);
+        ghost = null;
+
+        // Restore overlay
+        this.renderer.setStyle(overlay, 'display', 'block');
+        this.updateOverlayPosition(overlay, element);
+
         this.elementMoved$.next({
           element,
-          bounds: {
-            x: rect.left,
-            y: rect.top,
-            width: rect.width,
-            height: rect.height
+          bounds: { 
+            x: ghostRect.left, 
+            y: ghostRect.top, 
+            width: ghostRect.width, 
+            height: ghostRect.height 
           }
         });
       }
     };
 
-    // Attach drag to the element itself to allow clicking through overlay
+    // Attach drag to the element itself
     this.overlayListeners.push(this.renderer.listen(element, 'mousedown', onMouseDown));
     this.overlayListeners.push(this.renderer.listen(document, 'mousemove', onMouseMove));
     this.overlayListeners.push(this.renderer.listen(document, 'mouseup', onMouseUp));
@@ -790,68 +814,68 @@ export class VisualEditorService {
       let newLeft = startLeft;
       let newTop = startTop;
 
-      // Calcular nuevas dimensiones según el handle
-      switch (this.resizeHandle) {
-        case 'right':
-          newWidth = startWidth + deltaX;
-          break;
-        case 'left':
-          newWidth = startWidth - deltaX;
-          // Use relative adjustment if possible to avoid jumping
-          this.renderer.setStyle(element, 'left', `${startStyleLeft + deltaX}px`);
-          break;
-        case 'bottom':
-          newHeight = startHeight + deltaY;
-          break;
-        case 'top':
-          newHeight = startHeight - deltaY;
-          this.renderer.setStyle(element, 'top', `${startStyleTop + deltaY}px`);
-          break;
-        case 'top-left':
-          newWidth = startWidth - deltaX;
-          newHeight = startHeight - deltaY;
-          this.renderer.setStyle(element, 'left', `${startStyleLeft + deltaX}px`);
-          this.renderer.setStyle(element, 'top', `${startStyleTop + deltaY}px`);
-          break;
-        case 'top-right':
-          newWidth = startWidth + deltaX;
-          newHeight = startHeight - deltaY;
-          this.renderer.setStyle(element, 'top', `${startStyleTop + deltaY}px`);
-          break;
-        case 'bottom-left':
-          newWidth = startWidth - deltaX;
-          newHeight = startHeight + deltaY;
-          this.renderer.setStyle(element, 'left', `${startStyleLeft + deltaX}px`);
-          break;
-        case 'bottom-right':
-          newWidth = startWidth + deltaX;
-          newHeight = startHeight + deltaY;
-          break;
+      // Calculate raw new dimensions based on mouse movement
+      let rawNewWidth = startWidth;
+      let rawNewHeight = startHeight;
+      
+      const handle = this.resizeHandle || '';
+
+      if (handle.includes('right')) {
+         rawNewWidth = startWidth + deltaX;
+      } else if (handle.includes('left')) {
+         rawNewWidth = startWidth - deltaX;
       }
 
+      if (handle.includes('bottom')) {
+         rawNewHeight = startHeight + deltaY;
+      } else if (handle.includes('top')) {
+         rawNewHeight = startHeight - deltaY;
+      }
 
-      // Aplicar restricciones
-      if (config.minWidth) newWidth = Math.max(newWidth, config.minWidth);
-      if (config.minHeight) newHeight = Math.max(newHeight, config.minHeight);
-      if (config.maxWidth) newWidth = Math.min(newWidth, config.maxWidth);
-      if (config.maxHeight) newHeight = Math.min(newHeight, config.maxHeight);
-
-      // Snap to grid
+      // Apply constraints to get FINAL dimensions first
+      let finalWidth = rawNewWidth;
+      let finalHeight = rawNewHeight;
+      
+      if (config.minWidth) finalWidth = Math.max(finalWidth, config.minWidth);
+      if (config.maxWidth) finalWidth = Math.min(finalWidth, config.maxWidth);
+      if (config.minHeight) finalHeight = Math.max(finalHeight, config.minHeight);
+      if (config.maxHeight) finalHeight = Math.min(finalHeight, config.maxHeight);
+      
+      // Snap to grid (optional, applies to dimensions)
       if (config.grid && config.grid > 1) {
-        newWidth = Math.round(newWidth / config.grid) * config.grid;
-        newHeight = Math.round(newHeight / config.grid) * config.grid;
+        finalWidth = Math.round(finalWidth / config.grid) * config.grid;
+        finalHeight = Math.round(finalHeight / config.grid) * config.grid;
       }
 
-      // Aplicar dimensiones
-      this.renderer.setStyle(element, 'width', `${newWidth}px`);
-      this.renderer.setStyle(element, 'height', `${newHeight}px`);
+      // Calculate effective delta (actual change after constraints)
+      const effectiveWDelta = finalWidth - startWidth;
+      const effectiveHDelta = finalHeight - startHeight;
 
-      // Actualizar overlay
-      // Actualizar overlay
+      // Apply dimensions
+      this.renderer.setStyle(element, 'width', `${finalWidth}px`);
+      this.renderer.setStyle(element, 'height', `${finalHeight}px`);
+
+      // Apply position compensation for Left/Top handles to anchor the opposite edge
+      if (handle.includes('left')) {
+          // If width grew, left must move left (negative). If width shrank, left must move right (positive).
+          const newLeft = startStyleLeft - effectiveWDelta;
+          this.renderer.setStyle(element, 'left', `${newLeft}px`);
+      }
+
+      if (handle.includes('top')) {
+          // If height grew, top must move up (negative). If height shrank, top must move down (positive).
+          const newTop = startStyleTop - effectiveHDelta;
+          this.renderer.setStyle(element, 'top', `${newTop}px`);
+      }
+
+
+
+      
+       // Actualizar overlay
       requestAnimationFrame(() => {
         this.updateOverlayPosition(overlay, element);
       });
-      this.updateDimensionLabel(overlay, newWidth, newHeight);
+      this.updateDimensionLabel(overlay, finalWidth, finalHeight);
     };
 
 
