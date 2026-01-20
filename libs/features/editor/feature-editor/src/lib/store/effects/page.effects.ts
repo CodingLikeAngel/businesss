@@ -38,15 +38,23 @@ export class PageEffects {
           // Debug logs for better tracking
           console.log(`Syncing Store -> VariantService [Action: ${action.type}] [Store: ${currentPage.id}] [VS: ${vCurrentPageId}]`);
 
-          // Sync sections
+          // Sync sections to the structure subject
           (this.variantService as any).sectionsSubject.next(currentPage.sections as any);
           
-          // If we switched pages in Store, switch in VariantService too
-          if (currentPage.id !== vCurrentPageId) {
-            (this.variantService as any).updatePage(currentPage.id, { sections: currentPage.sections });
-          }
+          // Check if sections are actually different from VS internal state to avoid infinite loops
+          const vsCurrentPage = (this.variantService as any).currentPageSubject.value;
+          const storeSectionsStr = JSON.stringify(currentPage.sections);
+          const vsSectionsStr = vsCurrentPage ? JSON.stringify(vsCurrentPage.sections) : '';
 
-          (this.variantService as any).saveToLocalStorage();
+          if (storeSectionsStr !== vsSectionsStr) {
+            console.log('📤 Transmitting Store changes to VariantService persistence layer');
+            (this.variantService as any).updatePage(currentPage.id, { 
+              sections: currentPage.sections,
+              globalStyles: currentPage.globalStyles,
+              metadata: currentPage.metadata
+            });
+            (this.variantService as any).saveToLocalStorage();
+          }
         }
       })
     ),

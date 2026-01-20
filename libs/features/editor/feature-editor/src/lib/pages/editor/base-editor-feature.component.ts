@@ -166,13 +166,25 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     // INITIAL LOAD: Sync VariantService data into NgRx Store
     this.syncVariantServiceToStore();
 
-    // LISTEN FOR EXTERNAL PAGE SWITCHES (from sidebar/VariantService)
+    // LISTEN FOR EXTERNAL PAGE SWITCHES AND UPDATES (from sidebar/VariantService)
     this.variantService.currentPage$.pipe(takeUntil(this.destroy$)).subscribe(page => {
       if (page) {
         this.store.select(PageSelectors.selectCurrentPage).pipe(take(1)).subscribe(currentStorePage => {
           if (!currentStorePage || currentStorePage.id !== page.id) {
-            console.log('🔄 Syncing VariantService -> Store (Page Switch Detected)');
-            this.store.dispatch(PageActions.setCurrentPage({ pageId: page.id }));
+            console.log('🔄 Syncing VariantService -> Store (Page Switch/Load Detected)');
+            this.store.dispatch(PageActions.loadPageSuccess({ page: page as any }));
+          } else {
+            // Same page, check if sections or content changed (e.g. added component from sidebar)
+            const storeSectionsStr = JSON.stringify(currentStorePage.sections);
+            const vsSectionsStr = JSON.stringify(page.sections);
+            
+            if (storeSectionsStr !== vsSectionsStr) {
+              console.log('🔄 Syncing VariantService -> Store (Sections/Content Update Detected)');
+              this.store.dispatch(PageActions.updatePage({ 
+                pageId: page.id, 
+                changes: { sections: page.sections as any } 
+              }));
+            }
           }
         });
       }
