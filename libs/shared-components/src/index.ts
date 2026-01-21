@@ -13,6 +13,7 @@ export * from './lib/shared-components/variant-selector/ui-state.service';
 // Visual Editor System
 export * from './lib/shared-components/variant-selector/variant-registry';
 export * from './lib/shared-components/variant-selector/visual-editor.service';
+export { SimpleVisualEditorService, SimpleEditableElement, DragState, ResizeState } from './services/simple-visual-editor.service';
 export * from './lib/shared-components/variant-selector/visual-editable.directive';
 export * from './lib/shared-components/variant-selector/enhanced-visual-editable.directive';
 export { VisualEditingConfig, VisualEditingEvent, DEFAULT_CONFIGS, PlatformInfo } from './lib/shared-components/variant-selector/enhanced-visual-editing.interfaces';

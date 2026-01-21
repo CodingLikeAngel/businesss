@@ -1,6 +1,7 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
+import { SimpleVisualEditorService } from '@negocio/shared-components';
 
 @Component({
   selector: 'lib-editor-draggable-box-section',
@@ -10,11 +11,12 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
     <section 
       [id]="section.id" 
       class="editor-section relative"
-      (click)="selectSection($event, section)">
+      style="min-height: 500px; position: relative; background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.1);">
       
       <!-- Draggable/Resizable Box -->
       <div 
         #editableBox
+        [id]="section.id + '_box'"
         [attr.data-visual-editable]="section.id"
         class="draggable-box"
         [style.position]="'absolute'"
@@ -22,16 +24,16 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
         [style.top.px]="boxTop"
         [style.width.px]="boxWidth"
         [style.height.px]="boxHeight"
-        [style.backgroundColor]="section.styles?.backgroundColor || '#ef4444'"
-        [style.border]="section.styles?.border || '2px solid #dc2626'"
-        [style.borderRadius]="section.styles?.borderRadius || '12px'"
-        [style.padding]="section.styles?.padding || '20px'"
-        [style.boxShadow]="section.styles?.boxShadow || '0 10px 30px rgba(0,0,0,0.3)'"
-        [style.cursor]="'move'">
+        [style.backgroundColor]="section.styles?.['backgroundColor'] || '#10b981'"
+        [style.border]="section.styles?.['border'] || '2px solid #059669'"
+        [style.borderRadius]="section.styles?.['borderRadius'] || '12px'"
+        [style.padding]="section.styles?.['padding'] || '20px'"
+        [style.boxShadow]="section.styles?.['boxShadow'] || '0 10px 30px rgba(0,0,0,0.3)'"
+        [style.zIndex]="10">
         
-        <div class="box-content text-white text-center">
+        <div class="box-content text-white text-center" style="pointer-events: none;">
           <h3 class="text-xl font-bold mb-2">{{ section.content?.['title'] || 'Draggable Box' }}</h3>
-          <p class="text-sm opacity-80">{{ section.content?.['description'] || 'Drag me around and resize!' }}</p>
+          <p class="text-sm opacity-80">{{ section.content?.['description'] || 'Click to select, then drag or resize!' }}</p>
         </div>
       </div>
     </section>
@@ -39,15 +41,6 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
   styles: [`
     :host {
       display: block;
-      min-height: 400px;
-      position: relative;
-    }
-
-    .editor-section {
-      min-height: 400px;
-      position: relative;
-      background: rgba(255,255,255,0.02);
-      border: 1px dashed rgba(255,255,255,0.1);
     }
 
     .draggable-box {
@@ -58,14 +51,12 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
     .draggable-box:hover {
       box-shadow: 0 15px 40px rgba(0,0,0,0.4) !important;
     }
-
-    .box-content {
-      pointer-events: none;
-    }
   `]
 })
 export class EditorDraggableBoxSectionComponent extends BaseEditorSectionComponent implements OnInit, AfterViewInit {
   @ViewChild('editableBox') editableBox!: ElementRef;
+  
+  private simpleEditor = inject(SimpleVisualEditorService);
 
   // Default position and size
   boxLeft = 50;
@@ -89,7 +80,8 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   }
 
   ngAfterViewInit() {
-    // The VisualEditorService will automatically detect elements with data-visual-editable
-    // and attach drag/resize handlers
+    // The SimpleVisualEditorService will automatically detect and register this element
+    console.log('📦 Draggable box initialized:', this.section.id);
   }
 }
+

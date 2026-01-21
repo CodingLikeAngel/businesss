@@ -5,8 +5,9 @@ import { RouterModule } from '@angular/router';
 import {
   UIModalComponent,
 } from '@negocio/ui-components';
-import { 
-  VisualEditorService
+import {
+  VisualEditorService,
+  SimpleVisualEditorService
 } from '@negocio/shared-components';
 import { EditorHeroSectionComponent } from '../components/hero/editor-hero-section.component';
 import { EditorFeaturesSectionComponent } from '../components/features/editor-features-section.component';
@@ -93,19 +94,21 @@ import { EditorDraggableBoxSectionComponent } from '../components/draggable-box/
 })
 
 export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent implements OnInit {
-
+  private simpleEditor = inject(SimpleVisualEditorService);
 
   override ngOnInit() {
     super.ngOnInit();
     this.editorService.updateEditorState({ isMobile: false });
-    this.visualEditorService.enableEditMode();
+    
+    // Use the new simple visual editor
+    this.simpleEditor.enableEditMode();
   }
 
   get currentMode() {
-    return this.visualEditorService.interactionMode;
+    return this.simpleEditor.getMode();
   }
 
-  setMode(mode: any) {
-    this.visualEditorService.setInteractionMode(mode);
+  setMode(mode: 'all' | 'move' | 'resize') {
+    this.simpleEditor.setMode(mode);
   }
 }
