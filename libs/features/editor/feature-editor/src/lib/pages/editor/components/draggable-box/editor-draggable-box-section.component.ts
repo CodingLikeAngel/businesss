@@ -24,16 +24,16 @@ import { SimpleVisualEditorService } from '@negocio/shared-components';
         [style.top.px]="boxTop"
         [style.width.px]="boxWidth"
         [style.height.px]="boxHeight"
-        [style.backgroundColor]="section.styles?.['backgroundColor'] || '#10b981'"
-        [style.border]="section.styles?.['border'] || '2px solid #059669'"
-        [style.borderRadius]="section.styles?.['borderRadius'] || '12px'"
-        [style.padding]="section.styles?.['padding'] || '20px'"
-        [style.boxShadow]="section.styles?.['boxShadow'] || '0 10px 30px rgba(0,0,0,0.3)'"
+        [style.backgroundColor]="section.styles['backgroundColor'] || '#10b981'"
+        [style.border]="section.styles['border'] || '2px solid #059669'"
+        [style.borderRadius]="section.styles['borderRadius'] || '12px'"
+        [style.padding]="section.styles['padding'] || '20px'"
+        [style.boxShadow]="section.styles['boxShadow'] || '0 10px 30px rgba(0,0,0,0.3)'"
         [style.zIndex]="10">
         
         <div class="box-content text-white text-center" style="pointer-events: none;">
-          <h3 class="text-xl font-bold mb-2">{{ section.content?.['title'] || 'Draggable Box' }}</h3>
-          <p class="text-sm opacity-80">{{ section.content?.['description'] || 'Click to select, then drag or resize!' }}</p>
+          <h3 class="text-xl font-bold mb-2">{{ section.content['title'] || 'Draggable Box' }}</h3>
+          <p class="text-sm opacity-80">{{ section.content['description'] || 'Click to select, then drag or resize!' }}</p>
         </div>
       </div>
     </section>

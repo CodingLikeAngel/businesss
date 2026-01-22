@@ -12,9 +12,19 @@ export interface DragState {
   isDragging: boolean;
   startX: number;
   startY: number;
-  elementStartX: number;
-  elementStartY: number;
+  // Local coordinates for element style
+  elementStartLocalX: number;
+  elementStartLocalY: number;
+  // Global coordinates for selection box
+  elementStartGlobalX: number;
+  elementStartGlobalY: number;
+  // Containment
+  minX: number;
+  inputMaxX: number; // Renamed to avoid confusion
+  minY: number;
+  inputMaxY: number;
 }
+
 
 export interface ResizeState {
   isResizing: boolean;
@@ -23,8 +33,9 @@ export interface ResizeState {
   startY: number;
   elementStartWidth: number;
   elementStartHeight: number;
-  elementStartX: number;
-  elementStartY: number;
+  // Local coordinates (style.left/top values)
+  elementStartLocalX: number;
+  elementStartLocalY: number;
 }
 
 @Injectable({
@@ -40,8 +51,14 @@ export class SimpleVisualEditorService {
     isDragging: false,
     startX: 0,
     startY: 0,
-    elementStartX: 0,
-    elementStartY: 0
+    elementStartLocalX: 0,
+    elementStartLocalY: 0,
+    elementStartGlobalX: 0,
+    elementStartGlobalY: 0,
+    minX: -Infinity,
+    inputMaxX: Infinity,
+    minY: -Infinity,
+    inputMaxY: Infinity
   };
 
   private resizeState: ResizeState = {
@@ -51,8 +68,8 @@ export class SimpleVisualEditorService {
     startY: 0,
     elementStartWidth: 0,
     elementStartHeight: 0,
-    elementStartX: 0,
-    elementStartY: 0
+    elementStartLocalX: 0,
+    elementStartLocalY: 0
   };
 
   public elementSelected$ = new Subject<SimpleEditableElement>();
@@ -120,7 +137,7 @@ export class SimpleVisualEditorService {
       }
       
       .simple-selection-box {
-        position: absolute;
+        position: fixed;
         border: 2px solid rgb(59, 130, 246);
         background: rgba(59, 130, 246, 0.1);
         pointer-events: none;
@@ -207,8 +224,9 @@ export class SimpleVisualEditorService {
     const bounds = this.selectedElement.getBoundingClientRect();
     this.selectionBox = this.renderer.createElement('div');
     this.renderer.addClass(this.selectionBox, 'simple-selection-box');
-    this.renderer.setStyle(this.selectionBox, 'left', `${bounds.left + window.scrollX}px`);
-    this.renderer.setStyle(this.selectionBox, 'top', `${bounds.top + window.scrollY}px`);
+    // With position: fixed, use viewport coordinates directly
+    this.renderer.setStyle(this.selectionBox, 'left', `${bounds.left}px`);
+    this.renderer.setStyle(this.selectionBox, 'top', `${bounds.top}px`);
     this.renderer.setStyle(this.selectionBox, 'width', `${bounds.width}px`);
     this.renderer.setStyle(this.selectionBox, 'height', `${bounds.height}px`);
     
@@ -279,16 +297,46 @@ export class SimpleVisualEditorService {
     if (!this.selectedElement) return;
     
     const bounds = this.selectedElement.getBoundingClientRect();
+    const parent = this.selectedElement.parentElement;
     
+    // Calculate containment
+    let minX = -Infinity;
+    let inputMaxX = Infinity;
+    let minY = -Infinity;
+    let inputMaxY = Infinity;
+    
+    if (parent) {
+      minX = 0;
+      minY = 0;
+      inputMaxX = parent.clientWidth - bounds.width;
+      inputMaxY = parent.clientHeight - bounds.height;
+    }
+    
+    // Use computed style for more accurate 'absolute' starting position
+    // offsetLeft can sometimes include parent borders or behave differently
+    const computed = window.getComputedStyle(this.selectedElement);
+    let startLocalX = parseFloat(computed.left);
+    let startLocalY = parseFloat(computed.top);
+
+    // Fallback if auto or invalid
+    if (isNaN(startLocalX)) startLocalX = this.selectedElement.offsetLeft;
+    if (isNaN(startLocalY)) startLocalY = this.selectedElement.offsetTop;
+
     this.dragState = {
       isDragging: true,
       startX: e.clientX,
       startY: e.clientY,
-      elementStartX: bounds.left,
-      elementStartY: bounds.top
+      elementStartLocalX: startLocalX,
+      elementStartLocalY: startLocalY,
+      elementStartGlobalX: bounds.left + window.scrollX,
+      elementStartGlobalY: bounds.top + window.scrollY,
+      minX,
+      inputMaxX,
+      minY,
+      inputMaxY
     };
     
-    console.log('🖱️ Drag started');
+    console.log('🖱️ Drag started', this.dragState);
     
     // Add global mouse listeners
     const moveListener = this.renderer.listen('document', 'mousemove', (e: MouseEvent) => {
@@ -308,18 +356,26 @@ export class SimpleVisualEditorService {
     const deltaX = e.clientX - this.dragState.startX;
     const deltaY = e.clientY - this.dragState.startY;
     
-    const newX = this.dragState.elementStartX + deltaX;
-    const newY = this.dragState.elementStartY + deltaY;
+    let newLocalX = this.dragState.elementStartLocalX + deltaX;
+    let newLocalY = this.dragState.elementStartLocalY + deltaY;
     
-    // Update element position
+    // Check containment (local coords)
+    if (newLocalX < this.dragState.minX) newLocalX = this.dragState.minX;
+    if (newLocalX > this.dragState.inputMaxX) newLocalX = this.dragState.inputMaxX;
+    
+    if (newLocalY < this.dragState.minY) newLocalY = this.dragState.minY;
+    if (newLocalY > this.dragState.inputMaxY) newLocalY = this.dragState.inputMaxY;
+    
+    // Update element position (Local)
     this.renderer.setStyle(this.selectedElement, 'position', 'absolute');
-    this.renderer.setStyle(this.selectedElement, 'left', `${newX}px`);
-    this.renderer.setStyle(this.selectedElement, 'top', `${newY}px`);
+    this.renderer.setStyle(this.selectedElement, 'left', `${newLocalX}px`);
+    this.renderer.setStyle(this.selectedElement, 'top', `${newLocalY}px`);
     
-    // Update selection box
+    // Update selection box using element's new viewport position
     if (this.selectionBox) {
-      this.renderer.setStyle(this.selectionBox, 'left', `${newX + window.scrollX}px`);
-      this.renderer.setStyle(this.selectionBox, 'top', `${newY + window.scrollY}px`);
+      const rect = this.selectedElement.getBoundingClientRect();
+      this.renderer.setStyle(this.selectionBox, 'left', `${rect.left}px`);
+      this.renderer.setStyle(this.selectionBox, 'top', `${rect.top}px`);
     }
   }
 
@@ -342,6 +398,15 @@ export class SimpleVisualEditorService {
     
     const bounds = this.selectedElement.getBoundingClientRect();
     
+    // Get local position from computed style
+    const computed = window.getComputedStyle(this.selectedElement);
+    let startLocalX = parseFloat(computed.left);
+    let startLocalY = parseFloat(computed.top);
+    
+    // Fallback if auto or invalid
+    if (isNaN(startLocalX)) startLocalX = this.selectedElement.offsetLeft;
+    if (isNaN(startLocalY)) startLocalY = this.selectedElement.offsetTop;
+    
     this.resizeState = {
       isResizing: true,
       handle,
@@ -349,11 +414,11 @@ export class SimpleVisualEditorService {
       startY: e.clientY,
       elementStartWidth: bounds.width,
       elementStartHeight: bounds.height,
-      elementStartX: bounds.left,
-      elementStartY: bounds.top
+      elementStartLocalX: startLocalX,
+      elementStartLocalY: startLocalY
     };
     
-    console.log(`📏 Resize started (${handle})`);
+    console.log(`📏 Resize started (${handle})`, this.resizeState);
     
     // Add global mouse listeners
     const moveListener = this.renderer.listen('document', 'mousemove', (e: MouseEvent) => {
@@ -375,8 +440,8 @@ export class SimpleVisualEditorService {
     
     let newWidth = this.resizeState.elementStartWidth;
     let newHeight = this.resizeState.elementStartHeight;
-    let newX = this.resizeState.elementStartX;
-    let newY = this.resizeState.elementStartY;
+    let newLocalX = this.resizeState.elementStartLocalX;
+    let newLocalY = this.resizeState.elementStartLocalY;
     
     const handle = this.resizeState.handle;
     
@@ -386,36 +451,38 @@ export class SimpleVisualEditorService {
     }
     if (handle.includes('w')) {
       newWidth = this.resizeState.elementStartWidth - deltaX;
-      newX = this.resizeState.elementStartX + deltaX;
+      newLocalX = this.resizeState.elementStartLocalX + deltaX;
     }
     if (handle.includes('s')) {
       newHeight = this.resizeState.elementStartHeight + deltaY;
     }
     if (handle.includes('n')) {
       newHeight = this.resizeState.elementStartHeight - deltaY;
-      newY = this.resizeState.elementStartY + deltaY;
+      newLocalY = this.resizeState.elementStartLocalY + deltaY;
     }
     
     // Apply minimum size
     newWidth = Math.max(50, newWidth);
     newHeight = Math.max(50, newHeight);
     
-    // Update element
+    // Update element dimensions
     this.renderer.setStyle(this.selectedElement, 'width', `${newWidth}px`);
     this.renderer.setStyle(this.selectedElement, 'height', `${newHeight}px`);
     
+    // Update position for west/north handles (using LOCAL coordinates)
     if (handle.includes('w') || handle.includes('n')) {
       this.renderer.setStyle(this.selectedElement, 'position', 'absolute');
-      this.renderer.setStyle(this.selectedElement, 'left', `${newX}px`);
-      this.renderer.setStyle(this.selectedElement, 'top', `${newY}px`);
+      this.renderer.setStyle(this.selectedElement, 'left', `${newLocalX}px`);
+      this.renderer.setStyle(this.selectedElement, 'top', `${newLocalY}px`);
     }
     
-    // Update selection box
+    // Update selection box using viewport coordinates (position: fixed)
     if (this.selectionBox) {
-      this.renderer.setStyle(this.selectionBox, 'width', `${newWidth}px`);
-      this.renderer.setStyle(this.selectionBox, 'height', `${newHeight}px`);
-      this.renderer.setStyle(this.selectionBox, 'left', `${newX + window.scrollX}px`);
-      this.renderer.setStyle(this.selectionBox, 'top', `${newY + window.scrollY}px`);
+      const rect = this.selectedElement.getBoundingClientRect();
+      this.renderer.setStyle(this.selectionBox, 'width', `${rect.width}px`);
+      this.renderer.setStyle(this.selectionBox, 'height', `${rect.height}px`);
+      this.renderer.setStyle(this.selectionBox, 'left', `${rect.left}px`);
+      this.renderer.setStyle(this.selectionBox, 'top', `${rect.top}px`);
     }
   }
 

@@ -173,11 +173,12 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
     const currentStyles = this.section.content['accordionStyles'] || {};
     const newStyles = {
       ...currentStyles,
-      position: 'relative', // or absolute, depending on layout mode
+      position: 'absolute',
       width: bounds.width + 'px',
       height: bounds.height + 'px',
-      // If using translate for movement (visual editor usually does):
-      transform: `translate(${bounds.x}px, ${bounds.y}px)`
+      left: bounds.x + 'px',
+      top: bounds.y + 'px',
+      transform: 'none' // Reset transform to prevent double offsetting
     };
     
     // Check if we effectively changed anything to avoid loops
@@ -200,10 +201,12 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
     const currentStyles = this.section.content['titleStyles'] || {};
     const newStyles = {
       ...currentStyles,
-      position: 'relative',
+      position: 'absolute',
       width: bounds.width + 'px',
-      // height might be auto for text
-      transform: `translate(${bounds.x}px, ${bounds.y}px)`
+      // height might be auto for text, but if resized we use it
+      left: bounds.x + 'px',
+      top: bounds.y + 'px',
+      transform: 'none'
     };
 
     if (JSON.stringify(currentStyles) !== JSON.stringify(newStyles)) {

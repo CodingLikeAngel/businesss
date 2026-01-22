@@ -471,19 +471,18 @@ export class VisualEditorService {
     if (!isPlatformBrowser(this.platformId)) return;
 
     const rect = element.getBoundingClientRect();
-    const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-
-    // Crear contenedor del overlay (no captura eventos para no bloquear menús)
+    
+    // Crear contenedor del overlay 
     const overlay = this.renderer.createElement('div');
     this.renderer.addClass(overlay, 'visual-edit-overlay');
-    this.renderer.setStyle(overlay, 'position', 'absolute');
-    this.renderer.setStyle(overlay, 'top', `${rect.top + scrollY}px`);
-    this.renderer.setStyle(overlay, 'left', `${rect.left + scrollX}px`);
+    // FIXED position to avoid scroll issues
+    this.renderer.setStyle(overlay, 'position', 'fixed');
+    this.renderer.setStyle(overlay, 'top', `${rect.top}px`);
+    this.renderer.setStyle(overlay, 'left', `${rect.left}px`);
     this.renderer.setStyle(overlay, 'width', `${rect.width}px`);
     this.renderer.setStyle(overlay, 'height', `${rect.height}px`);
     this.renderer.setStyle(overlay, 'pointer-events', 'none');
-    this.renderer.setStyle(overlay, 'z-index', '50'); // Keep it low enough to not block Sidebar/Modals
+    this.renderer.setStyle(overlay, 'z-index', '50');
 
     this.renderer.setAttribute(overlay, 'data-overlay', 'true');
 
@@ -498,7 +497,7 @@ export class VisualEditorService {
     this.renderer.setProperty(label, 'textContent', `${Math.round(rect.width)} × ${Math.round(rect.height)}`);
     this.renderer.appendChild(overlay, label);
 
-    // Crear handles de resize (ONLY if mode allows resize)
+    // Crear handles de resize
     const canResize = config.enableResize && (this._interactionMode === 'resize' || this._interactionMode === 'all');
     if (canResize && config.handles) {
       this.createResizeHandles(overlay, config.handles);
@@ -507,26 +506,27 @@ export class VisualEditorService {
     // Añadir al body
     this.renderer.appendChild(document.body, overlay);
 
-    // Setup drag si está habilitado
+    // Setup drag
     if (config.enableDrag) {
       this.setupDrag(element, overlay, config);
     }
 
-    // Setup resize si está habilitado
+    // Setup resize
     if (config.enableResize) {
       this.setupResize(element, overlay, config);
     }
 
-    // Sync overlay position if element moves or changes size (e.g. sidebar collapse)
-    if (typeof window !== 'undefined' && 'ResizeObserver' in window) {
-      const ro = new ResizeObserver(() => {
-        this.updateOverlayPosition(overlay, element);
-      });
-      ro.observe(element);
-      ro.observe(document.body); // Also observe body for global layout shifts
-      this.overlayListeners.push(() => ro.disconnect());
-    }
+    // Sync overlay position with high frequency loop
+    const syncLoop = () => {
+      if (!overlay.isConnected) return; 
+      this.updateOverlayPosition(overlay, element);
+      requestAnimationFrame(syncLoop);
+    };
+    requestAnimationFrame(syncLoop);
   }
+
+
+
 
   /**
    * Crea los handles de resize
@@ -595,6 +595,12 @@ export class VisualEditorService {
       // But we DO need to listen for move/up now
     };
 
+    // Boundaries for drag
+    let minX = -Infinity;
+    let minY = -Infinity;
+    let maxX = Infinity;
+    let maxY = Infinity;
+
     const startDrag = () => {
        this.isDragging = true;
 
@@ -602,6 +608,34 @@ export class VisualEditorService {
        ghost = element.cloneNode(true) as HTMLElement;
        const rect = element.getBoundingClientRect();
        
+       // Calculate boundaries if containment is set
+       if (config.containment) {
+           let containerEl: HTMLElement | null = null;
+           
+           if (typeof config.containment === 'string') {
+               if (config.containment === 'parent' || config.containment === 'container') {
+                  containerEl = element.parentElement;
+               } else if (config.containment === 'viewport') {
+                   minX = 0;
+                   minY = 0;
+                   maxX = window.innerWidth - rect.width;
+                   maxY = window.innerHeight - rect.height;
+               }
+           } else if (config.containment instanceof ElementRef) {
+               containerEl = config.containment.nativeElement;
+           }
+
+           if (containerEl) {
+               const cRect = containerEl.getBoundingClientRect();
+               minX = cRect.left;
+               minY = cRect.top;
+               maxX = cRect.right - rect.width;
+               maxY = cRect.bottom - rect.height;
+           }
+       } else {
+           minX = -Infinity; minY = -Infinity; maxX = Infinity; maxY = Infinity;
+       }
+
        // Style ghost to match exact screen position but fixed
        this.renderer.addClass(ghost, 'visual-ghost-drag');
        this.renderer.setStyle(ghost, 'position', 'fixed');
@@ -683,8 +717,14 @@ export class VisualEditorService {
       const deltaX = e.clientX - startX;
       const deltaY = e.clientY - startY;
 
-      const newX = ghostStartX + deltaX;
-      const newY = ghostStartY + deltaY;
+      let newX = ghostStartX + deltaX;
+      let newY = ghostStartY + deltaY;
+
+      // Apply strict containment
+      if (newX < minX) newX = minX;
+      if (newX > maxX) newX = maxX;
+      if (newY < minY) newY = minY;
+      if (newY > maxY) newY = maxY;
 
       this.renderer.setStyle(ghost, 'left', `${newX}px`);
       this.renderer.setStyle(ghost, 'top', `${newY}px`);
@@ -747,8 +787,8 @@ export class VisualEditorService {
         this.elementMoved$.next({
           element,
           bounds: { 
-            x: ghostRect.left,
-            y: ghostRect.top,
+            x: element.offsetLeft,
+            y: element.offsetTop,
             width: ghostRect.width, 
             height: ghostRect.height 
           }
@@ -1034,8 +1074,8 @@ export class VisualEditorService {
         this.elementResized$.next({
           element,
           bounds: {
-            x: rect.left,
-            y: rect.top,
+            x: element.offsetLeft,
+            y: element.offsetTop,
             width: rect.width,
             height: rect.height
           }
@@ -1054,16 +1094,20 @@ export class VisualEditorService {
    * Actualiza la posición del overlay
    */
   private updateOverlayPosition(overlay: HTMLElement, element: HTMLElement) {
-    if (!isPlatformBrowser(this.platformId)) return;
-
+    if (!element || !overlay) return;
+    
     const rect = element.getBoundingClientRect();
-    const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-
-    this.renderer.setStyle(overlay, 'top', `${rect.top + scrollY}px`);
-    this.renderer.setStyle(overlay, 'left', `${rect.left + scrollX}px`);
+    // With position: fixed, we use viewport coordinates directly without scroll offsets
+    this.renderer.setStyle(overlay, 'top', `${rect.top}px`);
+    this.renderer.setStyle(overlay, 'left', `${rect.left}px`);
     this.renderer.setStyle(overlay, 'width', `${rect.width}px`);
     this.renderer.setStyle(overlay, 'height', `${rect.height}px`);
+
+    // Update dimensions label
+    const label = overlay.querySelector('.visual-dimension-label');
+    if (label) {
+      label.textContent = `${Math.round(rect.width)} × ${Math.round(rect.height)}`;
+    }
   }
 
   /**
@@ -1335,6 +1379,11 @@ export class VisualEditorService {
   isInEditMode(): boolean {
     return this.isEditMode;
   }
+
+  /**
+   * Updates overlay position to match element
+   */
+
 
   /**
    * Limpieza al destruir el servicio
