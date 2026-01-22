@@ -57,6 +57,10 @@ export class UIAccordionComponent {
     const styles: Record<string, any> = {};
     const customStyles = this.customStyles();
     
+    // Set default values to prevent inheritance
+    styles['--accordion-bg'] = 'white';
+    styles['--accordion-color'] = '#333';
+    
     if (customStyles['backgroundColor']) {
       styles['--accordion-bg'] = customStyles['backgroundColor'];
       styles['--theme-bg'] = customStyles['backgroundColor'];

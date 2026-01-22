@@ -334,7 +334,7 @@ export class VariantSelectorComponent implements OnInit {
                       this.selectedElement.id.includes('_step_') ||
                       this.selectedElement.id.includes('_tab_');
 
-    const isTopLevelFieldMapper = ['title', 'subtitle', 'cta', 'form', 'contact', 'chart', 'header', 'footer', 'pricing', 'newsletter', 'steps', 'gallery', 'breadcrumbs', 'spinner'].includes(this.selectedElement.type);
+    const isTopLevelFieldMapper = ['title', 'subtitle', 'cta', 'form', 'contact', 'chart', 'header', 'footer', 'pricing', 'newsletter', 'steps', 'gallery', 'breadcrumbs', 'spinner', 'accordion'].includes(this.selectedElement.type);
 
     // 2. Apply updates to the source reference (crucial for items in arrays)
     if (content.title !== undefined) {
@@ -379,10 +379,12 @@ export class VariantSelectorComponent implements OnInit {
       // If editing a top-level property of the section (like section title), 
       // we need to tell the section specifically.
       if (!isListItem && isTopLevelFieldMapper && content) {
-        updates.content = {};
+        // Initialize with ALL existing content to prevent data loss
+        updates.content = { ...content };
+        
         const keys = ['title', 'subtitle', 'description', 'text', 'label', 'link', 'image'];
         keys.forEach(key => {
-          if (content[key] !== undefined) updates.content[key] = content[key];
+           if (content[key] !== undefined) updates.content[key] = content[key];
         });
         if (variant) updates.content.variant = variant;
         
@@ -393,15 +395,26 @@ export class VariantSelectorComponent implements OnInit {
           
           // CRITICAL FIX: For components that use section.styles as customStyles input, update section.styles
           // We only do this if the element type corresponds to a major section type, not a sub-element like title or card
-          const sectionTypes = ['hero', 'features', 'services', 'products', 'testimonials', 'pricing', 'promotions', 'faq', 'gallery', 'contact', 'bubble', 'features', 'stats', 'newsletter', 'steps', 'table', 'breadcrumbs', 'chip', 'spinner', 'chart', 'showcase', 'tabs', 'accordion', 'list', 'navBar', 'cta', 'team', 'blog'];
+          // Removed 'accordion' from this list to prevent coupling
+          const sectionTypes = ['hero', 'features', 'services', 'products', 'testimonials', 'pricing', 'promotions', 'faq', 'gallery', 'contact', 'bubble', 'features', 'stats', 'newsletter', 'steps', 'table', 'breadcrumbs', 'chip', 'spinner', 'chart', 'showcase', 'tabs', 'list', 'navBar', 'cta', 'team', 'blog'];
           
           if (sectionTypes.includes(this.selectedElement.type)) {
             updates.styles = styles;
             console.log(`🔧 Updating ${this.selectedElement.type} section.styles:`, styles);
             
             // Also ensure customStyles property matches styles for consistency if the component expects it
-            if (!updates.content) updates.content = {};
+            if (!updates.content) updates.content = {}; // This is redundant now but safe
             updates.content.customStyles = styles;
+          }
+
+          // Specifc handling for accordion inner component
+          if (this.selectedElement.type === 'accordion' && this.selectedElement.id && this.selectedElement.id.endsWith('_accordion')) {
+             // updates.content is already initialized above
+             updates.content.accordionStyles = { ...(content['accordionStyles'] || {}), ...styles };
+             // Do NOT update updates.styles (section styles)
+             
+             // Also ensure customStyles in content is sync (optional, but accordionStyles is preferred)
+             updates.content.customStyles = updates.content.accordionStyles;
           }
 
         }
@@ -478,7 +491,7 @@ export class VariantSelectorComponent implements OnInit {
       }
 
       // Trigger section update (this re-emits the whole section list to observers)
-      this.variantService.updateSection(sectionId, updates);
+      this.variantService.updateSectionInCurrentPage(sectionId, updates);
       
       if (variant && !isListItem) {
         this.variantService.setComponentVariant(sectionId, variant);

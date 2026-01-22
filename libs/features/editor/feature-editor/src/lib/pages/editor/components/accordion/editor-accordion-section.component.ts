@@ -149,9 +149,8 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
           console.log('Accordion element selected for editing');
           break;
         case 'moved':
-          this.updateAccordionPosition(event.bounds);
-          break;
         case 'resized':
+          this.updateAccordionStyles(event.bounds);
           break;
       }
     } else if (elementId === this.section.id + '_title') {
@@ -160,25 +159,72 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
           console.log('Title element selected for editing');
           break;
         case 'moved':
-          this.updateTitlePosition(event.bounds);
-          break;
         case 'resized':
+          this.updateTitleStyles(event.bounds);
           break;
       }
     }
   }
 
   /**
-   * Update accordion position in section data
+   * Update accordion position/size in section data
    */
-  private updateAccordionPosition(bounds: any): void {
-    console.log('Accordion position updated:', bounds);
+  private updateAccordionStyles(bounds: any): void {
+    const currentStyles = this.section.content['accordionStyles'] || {};
+    const newStyles = {
+      ...currentStyles,
+      position: 'relative', // or absolute, depending on layout mode
+      width: bounds.width + 'px',
+      height: bounds.height + 'px',
+      // If using translate for movement (visual editor usually does):
+      transform: `translate(${bounds.x}px, ${bounds.y}px)`
+    };
+    
+    // Check if we effectively changed anything to avoid loops
+    if (JSON.stringify(currentStyles) !== JSON.stringify(newStyles)) {
+       this.variantService.updateSectionInCurrentPage(this.section.id, {
+         content: {
+           ...this.section.content,
+           accordionStyles: newStyles,
+           // Keep customStyles in sync if needed, or rely solely on accordionStyles
+           customStyles: newStyles
+         }
+       });
+    }
   }
 
   /**
-   * Update title position in section data
+   * Update title position/size in section data
    */
-  private updateTitlePosition(bounds: any): void {
-    console.log('Title position updated:', bounds);
+  private updateTitleStyles(bounds: any): void {
+    const currentStyles = this.section.content['titleStyles'] || {};
+    const newStyles = {
+      ...currentStyles,
+      position: 'relative',
+      width: bounds.width + 'px',
+      // height might be auto for text
+      transform: `translate(${bounds.x}px, ${bounds.y}px)`
+    };
+
+    if (JSON.stringify(currentStyles) !== JSON.stringify(newStyles)) {
+       this.variantService.updateSectionInCurrentPage(this.section.id, {
+         content: {
+           ...this.section.content,
+           titleStyles: newStyles
+         }
+       });
+    }
+  }
+
+  /**
+   * Filter section styles to prevent color inheritance to child components
+   */
+  getSectionStyles(styles: any): any {
+    if (!styles) return {};
+    const filtered = { ...styles };
+    // Remove text color properties to prevent affecting child text
+    delete filtered['color'];
+    delete filtered['--theme-color'];
+    return filtered;
   }
 }
