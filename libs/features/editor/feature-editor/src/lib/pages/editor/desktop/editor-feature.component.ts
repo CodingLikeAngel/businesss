@@ -42,6 +42,7 @@ import { EditorButtonSectionComponent } from '../components/button/editor-button
 import { EditorImageSectionComponent } from '../components/image/editor-image-section.component';
 import { EditorSmartContainerSectionComponent } from '../components/smart-container/editor-smart-container-section.component';
 import { EditorDraggableBoxSectionComponent } from '../components/draggable-box/editor-draggable-box-section.component';
+import { EditorGenericSectionComponent } from '../components/generic/editor-generic-section.component';
 
 
 
@@ -87,7 +88,8 @@ import { EditorDraggableBoxSectionComponent } from '../components/draggable-box/
     EditorButtonSectionComponent,
     EditorImageSectionComponent,
     EditorSmartContainerSectionComponent,
-    EditorDraggableBoxSectionComponent
+    EditorDraggableBoxSectionComponent,
+    EditorGenericSectionComponent
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
