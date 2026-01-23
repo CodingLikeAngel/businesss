@@ -12,8 +12,6 @@ import {
   UICardComponent,
   UIInputComponent,
   UIChipComponent,
-  UISpinnerComponent,
-  UITableComponent,
   UIAccordionComponent
 } from '@negocio/ui-components';
 
@@ -30,8 +28,6 @@ import {
     UICardComponent,
     UIInputComponent,
     UIChipComponent,
-    UISpinnerComponent,
-    UITableComponent,
     UIAccordionComponent
   ],
   template: `

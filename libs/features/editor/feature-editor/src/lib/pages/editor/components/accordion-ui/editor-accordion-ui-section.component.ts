@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Input, ViewChildren, QueryList, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { BaseEditorFeatureComponent } from '../../base-editor-feature.component';
 import {
   EnhancedVisualEditableDirective,
   VisualEditingConfig
@@ -20,20 +20,27 @@ import {
   template: `
     <section
       #sectionElement
-      class="editor-accordion-ui-section relative w-full overflow-hidden"
-      [class.selected]="isActive"
-      [style]="getSectionStyles()"
+      class="editor-accordion-ui-section cursor-pointer py-12"
+      [class.is-selected]="selectedSectionId === section.id"
+      (click)="selectSection($event, section)"
       [enhancedVisualEditable]="getSectionConfig()"
-      [elementId]="section.id"
-      [sectionId]="section.id"
+      sectionId="{{section.id}}"
       (visualEvents)="handleSectionEvent($event)">
 
-      <lib-ui-components-accordion
-        [items]="section.content['items'] || [{ title: 'Accordion Item 1', content: 'Content 1' }, { title: 'Accordion Item 2', content: 'Content 2' }]"
-        [variant]="section.content['variant'] || 'default'"
-        [customStyles]="section.content['accordionStyles'] || {}"
-      >
-      </lib-ui-components-accordion>
+      <div class="container mx-auto px-6 max-w-3xl relative">
+        <lib-ui-components-accordion #accordionElement
+          [items]="section.content['items'] || [{ title: 'Accordion Item 1', content: 'Content 1' }, { title: 'Accordion Item 2', content: 'Content 2' }]"
+          [variant]="section.content['variant'] || getVariant(section.id)"
+          [customStyles]="section.content['accordionStyles'] || {}"
+          class="editor-element"
+          [class.is-selected]="selectedElementId === section.id + '_accordion'"
+          (click)="selectElement($event, getMergedElement(section.id, section.id + '_accordion', { content: section.content, styles: section.content['accordionStyles'] }, 'accordion'))"
+          [enhancedVisualEditable]="getAccordionConfig()"
+          elementId="{{section.id + '_accordion'}}"
+          sectionId="{{section.id}}"
+          (visualEvents)="handleAccordionEvent($event)">
+        </lib-ui-components-accordion>
+      </div>
 
     </section>
   `,
@@ -47,24 +54,67 @@ import {
     }
   `]
 })
-export class EditorAccordionUiSectionComponent extends EnhancedBaseEditorSectionComponent {
-  get isActive(): boolean {
-    return false;
+export class EditorAccordionUiSectionComponent extends BaseEditorFeatureComponent implements OnInit {
+  @Input() section: any;
+  @ViewChildren(EnhancedVisualEditableDirective) visualDirectives!: QueryList<EnhancedVisualEditableDirective>;
+  @ViewChildren('sectionElement') sectionRef!: QueryList<ElementRef>;
+
+  override ngOnInit() {
+    // Initialize component
   }
 
-  getSectionStyles(): any {
+  get selectedSectionId() {
+    return this.uiStateService.selectedSection?.id;
+  }
+
+  get selectedElementId() {
+    return this.uiStateService.selectedElement?.id;
+  }
+
+  override selectSection(event: Event, section: any) {
+    event.stopPropagation();
+    console.log('Selecting accordion UI section:', section.id);
+
+    const sectionCopy = {
+      ...section,
+      content: { ...(section.content || {}) },
+      styles: { ...(section.styles || {}) }
+    };
+
+    this.uiStateService.selectSection(sectionCopy);
+  }
+
+  override selectElement(event: Event, element: any) {
+    event.stopPropagation();
+
+    console.log('Selecting accordion element:', element);
+    this.uiStateService.selectElement(element);
+  }
+
+  getMergedElement(sectionId: string, elementId: string, element: any, type: string) {
     return {
-      'position': 'relative',
-      'min-height': '300px',
-      ...this.section.styles,
-      ...(this.section.customStyles || {})
+      id: elementId,
+      sectionId: sectionId,
+      type: type,
+      content: element.content,
+      styles: element.styles,
+      _original: element
     };
   }
 
   getSectionConfig(): VisualEditingConfig {
-    return this.createElementConfig('section', {
+    return {
+      type: 'section',
       enableDrag: false,
       enableResize: true,
+      mobileSupport: true,
+      interactions: {
+        touchEnabled: true,
+        multiSelect: false,
+        snapToGrid: 0 as any,
+        animationDuration: 300,
+        hapticFeedback: false
+      },
       constraints: {
         containment: 'parent',
         minDistance: { top: 0, right: 0, bottom: 0, left: 0 },
@@ -77,10 +127,42 @@ export class EditorAccordionUiSectionComponent extends EnhancedBaseEditorSection
         dimensionLabels: true,
         resizeHandles: true
       }
-    });
+    };
+  }
+
+  getAccordionConfig(): VisualEditingConfig {
+    return {
+      type: 'element',
+      enableDrag: false,
+      enableResize: true,
+      mobileSupport: true,
+      interactions: {
+        touchEnabled: true,
+        multiSelect: false,
+        snapToGrid: 0 as any,
+        animationDuration: 300,
+        hapticFeedback: false
+      },
+      constraints: {
+        containment: 'parent',
+        minDistance: { top: 0, right: 0, bottom: 0, left: 0 },
+        collisionDetection: false,
+        safeZones: []
+      },
+      styling: {
+        selectionOutline: '2px solid #3b82f6',
+        resizeHandles: true,
+        hoverEffects: true,
+        dimensionLabels: true
+      }
+    };
   }
 
   handleSectionEvent(event: any) {
-    this.handleVisualEvent(event, this.section.id);
+    // Handle section events
+  }
+
+  handleAccordionEvent(event: any) {
+    // Handle accordion events
   }
 }
