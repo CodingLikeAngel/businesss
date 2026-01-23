@@ -31,7 +31,8 @@ import {
     UIInputComponent,
     UIChipComponent,
     UISpinnerComponent,
-    UITableComponent
+    UITableComponent,
+    UIAccordionComponent
   ],
   template: `
     <section
@@ -98,7 +99,13 @@ import {
                 <p>{{ element.content.description || 'Card description...' }}</p>
               </div>
             </lib-ui-components-card>
-            
+
+            <lib-ui-components-accordion
+              *ngSwitchCase="'accordion'"
+              [variant]="element.content.variant || 'default'"
+              [items]="element.content.items || [{title:'Item 1', content:'Contenido 1'}, {title:'Item 2', content:'Contenido 2'}]">
+            </lib-ui-components-accordion>
+
             <!-- Fallback -->
             <div *ngSwitchDefault class="p-2 border border-dashed border-gray-400 opacity-50">
               Unknown: {{ element.type }}
