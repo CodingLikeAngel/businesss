@@ -568,6 +568,21 @@
       >
       </lib-editor-cta-section>
 
+      <lib-editor-generic-section
+        *ngSwitchCase="'generic'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-generic-section>
+
       <div
         *ngSwitchDefault
         class="editor-section cursor-pointer p-10 border border-dashed border-white/20 rounded-xl m-4 bg-white/5"

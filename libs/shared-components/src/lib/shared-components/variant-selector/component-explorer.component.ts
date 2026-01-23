@@ -229,6 +229,10 @@ interface SectionVariant {
                   <div *ngSwitchCase="'input'" class="p-4">
                     <lib-ui-components-input [variant]="$any(selectedVariant)" placeholder="Escribe algo..."></lib-ui-components-input>
                   </div>
+                  <div *ngSwitchCase="'generic'" class="p-4 flex flex-col items-center justify-center h-full min-h-[200px] text-center">
+                    <h2 class="text-white text-xl font-semibold mb-2">Librería de Componentes</h2>
+                    <p class="text-white/70 text-sm">Pulsa sobre un componente para previsualizarlo y añadirlo a tu lienzo.</p>
+                  </div>
                   <div *ngSwitchDefault class="preview-mockup default-mockup">
                     <div class="mock-content">
                        <p class="text-center text-white/50">Vista previa no disponible para este componente ({{ selectedComponent.type }})</p>
@@ -1130,6 +1134,14 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft', 'kingfisher', 'custom1', 'custom2'],
       description: 'Inputs de formulario editables',
       category: 'interactive'
+    },
+    {
+      type: 'generic',
+      label: 'Librería de Componentes',
+      icon: '📚',
+      variants: ['default'],
+      description: 'Pulsa sobre un componente para previsualizarlo y añadirlo a tu lienzo.',
+      category: 'content'
     }
   ];
 

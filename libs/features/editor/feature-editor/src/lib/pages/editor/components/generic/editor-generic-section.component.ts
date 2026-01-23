@@ -13,7 +13,8 @@ import {
   UIInputComponent,
   UIChipComponent,
   UISpinnerComponent,
-  UITableComponent
+  UITableComponent,
+  UIAccordionComponent
 } from '@negocio/ui-components';
 
 @Component({
@@ -33,7 +34,7 @@ import {
     UITableComponent
   ],
   template: `
-    <section 
+    <section
       #sectionElement
       class="editor-generic-section relative w-full overflow-hidden"
       [class.selected]="isActive"
@@ -42,9 +43,9 @@ import {
       [elementId]="section.id"
       [sectionId]="section.id"
       (visualEvents)="handleSectionEvent($event)">
-      
+
       <!-- Section Content (Optional Title/Background logic could go here) -->
-      
+
       <!-- Dynamic Elements -->
       <ng-container *ngFor="let element of section.elements; trackBy: trackByElementId">
         <div
@@ -108,8 +109,9 @@ import {
       </ng-container>
       
       <!-- Empty State -->
-      <div *ngIf="!section.elements?.length" class="flex items-center justify-center h-40 border-2 border-dashed border-white/10 rounded-lg m-4">
-        <p class="text-white/50">Drop components here</p>
+      <div *ngIf="!section.elements?.length" class="flex flex-col items-center justify-center h-40 border-2 border-dashed border-white/10 rounded-lg m-4 text-center">
+        <h2 class="text-white text-xl font-semibold mb-2">Librería de Componentes</h2>
+        <p class="text-white/70 text-sm">Pulsa sobre un componente para previsualizarlo y añadirlo a tu lienzo.</p>
       </div>
 
     </section>
