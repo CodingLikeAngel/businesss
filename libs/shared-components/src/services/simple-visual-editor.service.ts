@@ -297,30 +297,61 @@ export class SimpleVisualEditorService {
     if (!this.selectedElement) return;
     
     const bounds = this.selectedElement.getBoundingClientRect();
-    const parent = this.selectedElement.parentElement;
+    // containment
     
-    // Calculate containment
-    let minX = -Infinity;
-    let inputMaxX = Infinity;
-    let minY = -Infinity;
-    let inputMaxY = Infinity;
+    // Identify containment parent - Use direct parent for most reliable local positioning
+    let containmentParent = this.selectedElement.parentElement;
     
-    if (parent) {
-      minX = 0;
-      minY = 0;
-      inputMaxX = parent.clientWidth - bounds.width;
-      inputMaxY = parent.clientHeight - bounds.height;
+    // Force the containment parent to be the positioning context (offsetParent)
+    if (containmentParent && containmentParent !== document.body) {
+       const style = window.getComputedStyle(containmentParent);
+       if (style.position === 'static') {
+         this.renderer.setStyle(containmentParent, 'position', 'relative');
+       }
     }
     
-    // Use computed style for more accurate 'absolute' starting position
-    // offsetLeft can sometimes include parent borders or behave differently
-    const computed = window.getComputedStyle(this.selectedElement);
-    let startLocalX = parseFloat(computed.left);
-    let startLocalY = parseFloat(computed.top);
+    // Refresh offsetParent after potential style change
+    const container = (this.selectedElement.offsetParent as HTMLElement) || this.selectedElement.parentElement || document.body;
+    
+    // Calculate correct local position
+    let startLocalX = 0;
+    let startLocalY = 0;
+    
+    if (container) {
+      const containerRect = container.getBoundingClientRect();
+      const containerStyle = window.getComputedStyle(container);
+      const borderLeft = parseFloat(containerStyle.borderLeftWidth) || 0;
+      const borderTop = parseFloat(containerStyle.borderTopWidth) || 0;
+      
+      let scrollTop = container.scrollTop;
+      let scrollLeft = container.scrollLeft;
+      
+      if (container === document.body || container === document.documentElement) {
+         scrollTop = window.scrollY || document.documentElement.scrollTop;
+         scrollLeft = window.scrollX || document.documentElement.scrollLeft;
+      }
 
-    // Fallback if auto or invalid
-    if (isNaN(startLocalX)) startLocalX = this.selectedElement.offsetLeft;
-    if (isNaN(startLocalY)) startLocalY = this.selectedElement.offsetTop;
+      startLocalX = bounds.left - containerRect.left - borderLeft + scrollLeft;
+      startLocalY = bounds.top - containerRect.top - borderTop + scrollTop;
+    } else {
+      startLocalX = bounds.left;
+      startLocalY = bounds.top;
+    }
+    
+    // Containment: Block moving above/left of container, but allow unlimited bottom/right
+    // This allows the user to move "down" freely without hitting an artificial max height constraint.
+    let minX = 0;
+    let inputMaxX = Infinity;
+    let minY = 0;
+    let inputMaxY = Infinity;
+
+    if (container && container !== document.body) {
+         // If container is body, allow negative (off canvas)? No, restrict to viewport.
+         // Stick to simple 0 min.
+    } else {
+         minX = 0;
+         minY = 0;
+    }
 
     this.dragState = {
       isDragging: true,
@@ -397,15 +428,26 @@ export class SimpleVisualEditorService {
     if (!this.selectedElement) return;
     
     const bounds = this.selectedElement.getBoundingClientRect();
+    // Use offsetParent as the reference for absolute positioning
+    const container = (this.selectedElement.offsetParent as HTMLElement) || this.selectedElement.parentElement || document.body;
     
-    // Get local position from computed style
-    const computed = window.getComputedStyle(this.selectedElement);
-    let startLocalX = parseFloat(computed.left);
-    let startLocalY = parseFloat(computed.top);
+    // Calculate correct local position using bounding rects
+    // This works regardless of the element's current positioning scheme
+    let startLocalX = 0;
+    let startLocalY = 0;
     
-    // Fallback if auto or invalid
-    if (isNaN(startLocalX)) startLocalX = this.selectedElement.offsetLeft;
-    if (isNaN(startLocalY)) startLocalY = this.selectedElement.offsetTop;
+    if (container) {
+      const containerRect = container.getBoundingClientRect();
+      const containerStyle = window.getComputedStyle(container);
+      const borderLeft = parseFloat(containerStyle.borderLeftWidth) || 0;
+      const borderTop = parseFloat(containerStyle.borderTopWidth) || 0;
+      
+      startLocalX = bounds.left - containerRect.left - borderLeft + container.scrollLeft;
+      startLocalY = bounds.top - containerRect.top - borderTop + container.scrollTop;
+    } else {
+      startLocalX = bounds.left;
+      startLocalY = bounds.top;
+    }
     
     this.resizeState = {
       isResizing: true,
