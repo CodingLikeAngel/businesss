@@ -604,11 +604,22 @@ export class VisualEditorService {
     const startDrag = () => {
        this.isDragging = true;
 
+       // Force parent to be relative to stabilize positioning context
+       // This is the "robust" fix for "jumping to header"
+       const parent = element.parentElement;
+       if (parent && parent !== document.body) {
+           const style = window.getComputedStyle(parent);
+           if (style.position === 'static') {
+               this.renderer.setStyle(parent, 'position', 'relative');
+           }
+       }
+
        // Create Ghost Element
        ghost = element.cloneNode(true) as HTMLElement;
        const rect = element.getBoundingClientRect();
        
-       // Calculate boundaries if containment is set
+       // Calculate boundaries 
+       // We use GLOBAL coordinates for the ghost checks because ghost is fixed
        if (config.containment) {
            let containerEl: HTMLElement | null = null;
            
@@ -629,8 +640,10 @@ export class VisualEditorService {
                const cRect = containerEl.getBoundingClientRect();
                minX = cRect.left;
                minY = cRect.top;
-               maxX = cRect.right - rect.width;
-               maxY = cRect.bottom - rect.height;
+               // We ALLOW dragging down/right beyond container (unlimited)
+               // This fixes "no se puede bajar nunca"
+               maxX = Infinity; 
+               maxY = Infinity;
            }
        } else {
            minX = -Infinity; minY = -Infinity; maxX = Infinity; maxY = Infinity;
@@ -668,41 +681,19 @@ export class VisualEditorService {
     };
 
     const onMouseMove = (e: MouseEvent) => {
-      // Check if we started a potential drag (startX/Y set?) 
-      // Simplified check: we use the document listener which is always active? 
-      // NO, listeners are only added when setupDrag is called. The listeners below are permanent for the session.
-      // Actually, the listeners are persistent but we need state.
-      // For this refactor, we rely on 'startX' being valid which is tricky because mouseup clears it?
-      // Better: check if mouse is down? We need state 'isPossiblyDragging'.
-      
-      // Wait, the original code had simple state. Let's stick to simple but robust.
-      // We need a 'isMouseDown' flag or similar. 
-      // Actually we can check e.buttons === 1
+      // Check buttons to ensure drag state
       if ((e.buttons !== 1) && !this.isDragging) return;
 
       // START MODIFICATION: Threshold Logic
       if (!this.isDragging) {
-         // If buttons are pressed and we qualify for drag check
          if (Math.abs(e.clientX - startX) > this.dragThreshold || Math.abs(e.clientY - startY) > this.dragThreshold) {
-            // Check interaction mode again just in case
             if (this._interactionMode !== 'move' && this._interactionMode !== 'all') return;
-            
-            // Should also check if we are over the element? 
-            // The mouseDown happened on the element. So yes.
-             
-            // One tricky thing: startX/Y are local vars. They are 0 by default. 
-            // We need to know if mouseDown *happened on this element*.
-            // The previous code didn't handle "mouse down on A, drag over B".
-            // It relied on `startX` being set in `onMouseDown` scope. 
-            // BUT: onMouseMove is document-level. `startX` is consistent for this closure. 
-            
-            // We need a flag 'pendingDrag'.
+            // threshold crossed
          } else {
-            return; // Not moved enough
+            return; 
          }
       }
       
-      // If we are here, we are dragging or just crossed threshold
       if (!this.isDragging) {
          if (!hasCrossedThreshold && startX !== 0) {
             hasCrossedThreshold = true;
@@ -720,11 +711,11 @@ export class VisualEditorService {
       let newX = ghostStartX + deltaX;
       let newY = ghostStartY + deltaY;
 
-      // Apply strict containment
+      // Apply strict containment (GLOBAL coords)
+      // Only min bounds are strictly enforced to prevent going above/left
       if (newX < minX) newX = minX;
-      if (newX > maxX) newX = maxX;
       if (newY < minY) newY = minY;
-      if (newY > maxY) newY = maxY;
+      // Max bounds are unlimited (down/right) per user requirement
 
       this.renderer.setStyle(ghost, 'left', `${newX}px`);
       this.renderer.setStyle(ghost, 'top', `${newY}px`);
@@ -753,27 +744,34 @@ export class VisualEditorService {
         const ghostRect = ghost.getBoundingClientRect();
         
         // Calculate relative position for the original element
+        // Since we forced parent to be relative, offsetParent IS the parent.
         const parent = element.offsetParent as HTMLElement || document.body;
         const parentRect = parent.getBoundingClientRect();
         const computedParent = window.getComputedStyle(parent);
-        const borderLeft = parseInt(computedParent.borderLeftWidth) || 0;
-        const borderTop = parseInt(computedParent.borderTopWidth) || 0;
+        const borderLeft = parseFloat(computedParent.borderLeftWidth) || 0;
+        const borderTop = parseFloat(computedParent.borderTopWidth) || 0;
 
-        let newLeft = ghostRect.left - parentRect.left - borderLeft;
-        let newTop = ghostRect.top - parentRect.top - borderTop;
+        // Correct Scroll Handling
+        let scrollTop = parent.scrollTop;
+        let scrollLeft = parent.scrollLeft;
         
-        // Ensure scroll is accounted for if the parent is scrollable
-        if (parent !== document.body) {
-             newLeft += parent.scrollLeft;
-             newTop += parent.scrollTop;
+        if (parent === document.body || parent === document.documentElement) {
+           scrollTop = window.scrollY;
+           scrollLeft = window.scrollX;
         }
 
+        let newLeft = ghostRect.left - parentRect.left - borderLeft + scrollLeft;
+        let newTop = ghostRect.top - parentRect.top - borderTop + scrollTop;
+        
         // Apply new position and fixed dimensions to element
         this.renderer.setStyle(element, 'position', 'absolute');
         this.renderer.setStyle(element, 'left', `${newLeft}px`);
         this.renderer.setStyle(element, 'top', `${newTop}px`);
-        this.renderer.setStyle(element, 'width', `${ghostRect.width}px`);
-        this.renderer.setStyle(element, 'height', `${ghostRect.height}px`);
+        // We do NOT necessarily enforce width/height if we are just moving?
+        // But for consistency with ghost we do.
+        // Actually, if we are just moving, we might want to keep original size? 
+        // But ghost is same size. So it's fine.
+        
         this.renderer.setStyle(element, 'margin', '0');
         this.renderer.setStyle(element, 'transform', 'none');
         this.renderer.setStyle(element, 'opacity', '1');
