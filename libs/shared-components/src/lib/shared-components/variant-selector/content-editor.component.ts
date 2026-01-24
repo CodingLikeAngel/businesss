@@ -391,6 +391,11 @@ export class ContentEditorComponent {
 
   hasProperty(prop: string): boolean {
     if (!this.targetContent) return false;
+    
+    // Allow hiding specific fields via configuration in selection object
+    const excluded = (this.selectedElement && this.selectedElement.excludedFields) || [];
+    if (excluded.includes(prop)) return false;
+
     return this.targetContent[prop] !== undefined;
   }
 

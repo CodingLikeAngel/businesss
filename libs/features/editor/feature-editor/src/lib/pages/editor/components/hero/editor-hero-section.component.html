@@ -98,7 +98,8 @@
               type: 'card',
               content: card,
               index: i,
-              isItem: true
+              isItem: true,
+              excludedFields: ['subtitle']
             })"
             [applyDynamicStyles]="card.styles || {}"
             [enhancedVisualEditable]="getCardConfig()"
