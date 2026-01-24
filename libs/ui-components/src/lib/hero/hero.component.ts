@@ -214,6 +214,14 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
     return classes[this.variant()] || 'video-standard';
   });
 
+  fallbackBackground = computed(() => {
+    const custom = this.customStyles();
+    // Use custom background if available, otherwise a safe dark fallback
+    if (custom['--hero-bg']) return custom['--hero-bg'];
+    if (custom.backgroundColor) return custom.backgroundColor;
+    return '#111827'; // default dark gray
+  });
+
   inputClass = computed(() => `input--${this.variant()}`);
   formButtonClass = computed(() => `form-button--${this.variant()}`);
   scrollIconClass = computed(() => `scroll-icon--${this.variant()}`);

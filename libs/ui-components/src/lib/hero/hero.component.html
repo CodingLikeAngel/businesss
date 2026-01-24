@@ -9,6 +9,7 @@
   <!-- Background Video Container -->
   <div class="video-container" *ngIf="videoBackground()">
     <video
+      #bgVideo
       [src]="videoUrl()"
       [poster]="videoPoster()"
       [ngClass]="videoClass()"
@@ -16,10 +17,16 @@
       muted
       loop
       playsinline
-      preload="metadata"
-      loading="lazy"
+      webkit-playsinline
+      preload="auto"
+      onloadedmetadata="this.muted = true"
+      class="hero-video"
       aria-hidden="true">
+      <source [src]="videoUrl()" type="video/mp4">
+      Tu navegador no soporta video HTML5.
     </video>
+    <!-- Fallback gradient if video fails or loads slowly -->
+    <div class="video-fallback" [style.background]="fallbackBackground()"></div>
   </div>
 
   <!-- Background Overlay -->
