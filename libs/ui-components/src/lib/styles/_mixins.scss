@@ -962,89 +962,131 @@ $breakpoints: (
 }
 
 @mixin variant-mario {
-  @include unified-variant-base(
-    linear-gradient(135deg, #e53e3e, #3182ce, #d69e2e),
-    #ffffff,
-    #ffcc00,
-    #e53e3e
-  );
-  text-transform: uppercase;
-  letter-spacing: 1px;
   position: relative;
   overflow: hidden;
   font-family: 'Press Start 2P', 'Courier New', monospace;
-  font-size: 0.8em;
-  border-radius: 0;
-  box-shadow: 6px 6px 0 #000;
-  border: 4px solid #000;
-  background-image:
-    radial-gradient(circle at 25% 25%, rgba(255,255,255,0.3) 2px, transparent 2px),
-    radial-gradient(circle at 75% 75%, rgba(255,255,255,0.3) 2px, transparent 2px),
-    url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="20" cy="20" r="18" fill="none" stroke="%23ffcc00" stroke-width="2" opacity="0.1"/%3E%3C/svg%3E');
-  background-size: 20px 20px, 20px 20px, 40px 40px;
-  clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
+  font-size: 0.7em;
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 
-  // Mario coin shine effect
+  // Mario's iconic red hat shape - unique clip-path
+  clip-path: polygon(10% 0%, 90% 0%, 95% 15%, 100% 30%, 100% 85%, 95% 100%, 5% 100%, 0% 85%, 0% 30%, 5% 15%);
+
+  // Layered background with Mario theme
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(255,204,0,0.3) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(255,204,0,0.2) 0%, transparent 50%),
+    linear-gradient(135deg, #e53e3e 0%, #dc2626 30%, #b91c1c 70%, #991b1b 100%);
+  color: #ffffff;
+
+  // Mario mustache and hat details
   &::before {
     content: '';
     position: absolute;
     top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 204, 0, 0.6), rgba(255, 255, 255, 0.8), rgba(255, 204, 0, 0.6), transparent);
-    transition: left 0.5s ease;
+    left: 0;
+    right: 0;
+    height: 25%;
+    background: linear-gradient(90deg, #dc2626, #b91c1c, #dc2626);
+    clip-path: polygon(20% 0%, 80% 0%, 85% 50%, 80% 100%, 20% 100%, 15% 50%);
     z-index: 1;
   }
 
-  // Power star
+  // Animated coin effect
   &::after {
-    content: '⭐';
+    content: '🪙';
     position: absolute;
-    top: -15px;
-    right: -15px;
-    font-size: 1.5rem;
-    color: #ffcc00;
-    text-shadow: 0 0 10px #ffcc00, 0 0 20px #ffcc00;
-    animation: star-twinkle 2s infinite;
+    top: 50%;
+    right: -20px;
+    transform: translateY(-50%);
+    font-size: 1.8rem;
+    animation: mario-coin-spin 3s ease-in-out infinite;
     z-index: 2;
   }
 
-  // Mario mushroom cap effect
+  // Goomba shadow effect
   span::before {
     content: '';
     position: absolute;
-    top: -8px;
+    bottom: -8px;
     left: 50%;
     transform: translateX(-50%);
-    width: 60%;
-    height: 6px;
-    background: linear-gradient(90deg, #e53e3e, #ff6b6b, #e53e3e);
-    border-radius: 3px 3px 0 0;
-    z-index: 1;
+    width: 70%;
+    height: 8px;
+    background: radial-gradient(ellipse, rgba(0,0,0,0.4) 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+  }
+
+  // Fire flower particles
+  span::after {
+    content: '🔥';
+    position: absolute;
+    top: -10px;
+    left: -10px;
+    font-size: 1rem;
+    opacity: 0.8;
+    animation: mario-fire 2.5s ease-in-out infinite;
+    z-index: 2;
   }
 
   &:hover {
-    transform: translate(-4px, -4px) scale(1.05);
-    box-shadow: 8px 8px 0 #000, 0 0 20px rgba(229, 62, 62, 0.6), 0 0 30px rgba(255, 204, 0, 0.4);
-    background-image:
-      radial-gradient(circle at 25% 25%, rgba(255,255,255,0.5) 3px, transparent 3px),
-      radial-gradient(circle at 75% 75%, rgba(255,255,255,0.5) 3px, transparent 3px),
-      url('data:image/svg+xml,%3Csvg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="20" cy="20" r="18" fill="none" stroke="%23ffcc00" stroke-width="3" opacity="0.2"/%3E%3C/svg%3E');
-    &::before { left: 100%; }
+    // Jump animation
+    animation: mario-jump 0.6s ease-out;
+    box-shadow:
+      0 20px 40px rgba(229, 62, 62, 0.4),
+      0 0 30px rgba(255, 204, 0, 0.6),
+      inset 0 0 20px rgba(255, 255, 255, 0.1);
+
+    &::after {
+      animation: mario-coin-spin 1.5s ease-in-out infinite, mario-coin-bounce 1.5s ease-in-out infinite;
+    }
+
+    span::after {
+      animation: mario-fire 1.2s ease-in-out infinite;
+    }
   }
 
   &:active {
-    transform: translate(2px, 2px) scale(0.95);
-    box-shadow: 2px 2px 0 #000;
+    transform: scale(0.95) translateY(5px);
+    transition: transform 0.1s ease;
   }
 
-  // Text styling
+  // Text styling with pixel effect
   * {
     position: relative;
-    z-index: 2;
-    text-shadow: 2px 2px 0 rgba(0,0,0,0.5);
+    z-index: 3;
+    text-shadow:
+      2px 2px 0px rgba(0,0,0,0.8),
+      0 0 10px rgba(255, 204, 0, 0.5);
+    image-rendering: pixelated;
+    image-rendering: -moz-crisp-edges;
+    image-rendering: crisp-edges;
   }
+}
+
+@keyframes mario-jump {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-15px) scale(1.05); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes mario-coin-spin {
+  0%, 100% { transform: translateY(-50%) rotateY(0deg) scale(1); }
+  50% { transform: translateY(-50%) rotateY(180deg) scale(1.2); }
+}
+
+@keyframes mario-coin-bounce {
+  0%, 100% { right: -20px; }
+  50% { right: -5px; }
+}
+
+@keyframes mario-fire {
+  0%, 100% { opacity: 0.6; transform: scale(0.8) rotate(0deg); }
+  25% { opacity: 1; transform: scale(1.2) rotate(90deg); }
+  50% { opacity: 0.8; transform: scale(1) rotate(180deg); }
+  75% { opacity: 1; transform: scale(1.3) rotate(270deg); }
 }
 
 @keyframes star-twinkle {
@@ -2644,6 +2686,12 @@ $breakpoints: (
     &.#{$prefix}vintage { @include variant-vintage; }
     &.#{$prefix}corporate { @include variant-corporate; }
     &.#{$prefix}minimal { @include variant-minimal; }
+
+    // Ultra-Creative Variants with Unique Shapes
+    &.#{$prefix}crystal { @include variant-crystal; }
+    &.#{$prefix}gear { @include variant-gear; }
+    &.#{$prefix}star { @include variant-star; }
+    &.#{$prefix}hexagon { @include variant-hexagon; }
 }
 
 @mixin apply-variants-to-child($child, $prefix: 'variant-') {
@@ -2747,4 +2795,532 @@ $breakpoints: (
     &.#{$prefix}vintage #{$child} { @include variant-vintage; }
     &.#{$prefix}corporate #{$child} { @include variant-corporate; }
     &.#{$prefix}minimal #{$child} { @include variant-minimal; }
+
+    // Ultra-Creative Variants with Unique Shapes
+    &.#{$prefix}crystal #{$child} { @include variant-crystal; }
+    &.#{$prefix}gear #{$child} { @include variant-gear; }
+    &.#{$prefix}star #{$child} { @include variant-star; }
+    &.#{$prefix}hexagon #{$child} { @include variant-hexagon; }
+}
+
+// Ultra-Creative Variants with Unique Shapes and Effects
+
+@mixin variant-crystal {
+  position: relative;
+  overflow: hidden;
+  font-family: 'Cinzel', serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+
+  // Crystal geometric shape - unique faceted clip-path
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+
+  // Crystal gradient with light refraction effect
+  background:
+    linear-gradient(135deg, rgba(56, 189, 248, 0.9), rgba(147, 197, 253, 0.7), rgba(196, 181, 253, 0.8)),
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(255,255,255,0.3) 0%, transparent 50%);
+  color: #1e293b;
+
+  // Crystal facets and light rays
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.2) 45%, rgba(255,255,255,0.2) 55%, transparent 60%),
+      linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.15) 55%, transparent 60%);
+    z-index: 1;
+  }
+
+  // Floating crystal particles
+  &::after {
+    content: '💎';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    opacity: 0.6;
+    animation: crystal-float 3s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  // Prism light effect
+  span::before {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(56,189,248,0.6));
+    border-radius: 2px;
+    animation: prism-light 2s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  &:hover {
+    // Crystal transformation with light burst
+    animation: crystal-transform 0.8s ease-out;
+    box-shadow:
+      0 0 30px rgba(56, 189, 248, 0.8),
+      0 0 50px rgba(147, 197, 253, 0.6),
+      0 0 70px rgba(196, 181, 253, 0.4),
+      inset 0 0 20px rgba(255, 255, 255, 0.3);
+
+    &::after {
+      animation: crystal-float 1.5s ease-in-out infinite, crystal-shine 1.5s ease-in-out infinite;
+    }
+  }
+
+  &:active {
+    transform: scale(0.96) rotate(2deg);
+    filter: brightness(1.1);
+    transition: all 0.1s ease;
+  }
+
+  // Text with crystal refraction effect
+  * {
+    position: relative;
+    z-index: 3;
+    text-shadow:
+      0 0 10px rgba(56, 189, 248, 0.5),
+      1px 1px 2px rgba(0,0,0,0.3);
+    background: linear-gradient(45deg, rgba(255,255,255,0.8), rgba(56,189,248,0.4));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@mixin variant-gear {
+  position: relative;
+  overflow: hidden;
+  font-family: 'Orbitron', monospace;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+
+  // Mechanical gear shape - complex clip-path
+  clip-path: polygon(
+    50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
+  );
+
+  // Industrial metallic gradient
+  background:
+    linear-gradient(135deg, #374151 0%, #1f2937 50%, #111827 100%),
+    radial-gradient(circle at 50% 50%, rgba(156,163,175,0.3) 0%, transparent 70%);
+  color: #f9fafb;
+
+  // Gear teeth and mechanical details
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      repeating-conic-gradient(from 0deg, rgba(255,255,255,0.1) 0deg 10deg, transparent 10deg 36deg),
+      radial-gradient(circle at 50% 50%, rgba(75,85,99,0.2) 0%, transparent 50%);
+    z-index: 1;
+  }
+
+  // Rotating center mechanism
+  &::after {
+    content: '⚙️';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.5rem;
+    animation: gear-rotate 4s linear infinite;
+    z-index: 2;
+  }
+
+  // Steam/particle effects
+  span::before {
+    content: '';
+    position: absolute;
+    top: 20%;
+    left: -10px;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, rgba(255,255,255,0.8), rgba(156,163,175,0.4));
+    border-radius: 50%;
+    animation: steam-particles 2s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  span::after {
+    content: '';
+    position: absolute;
+    bottom: 20%;
+    right: -10px;
+    width: 6px;
+    height: 6px;
+    background: radial-gradient(circle, rgba(255,215,0,0.8), rgba(245,158,11,0.4));
+    border-radius: 50%;
+    animation: steam-particles 2.5s ease-in-out infinite reverse;
+    z-index: 2;
+  }
+
+  &:hover {
+    // Mechanical activation
+    animation: gear-engage 0.6s ease-out;
+    box-shadow:
+      0 0 30px rgba(156, 163, 175, 0.6),
+      0 0 50px rgba(75, 85, 99, 0.4),
+      inset 0 0 20px rgba(255, 255, 255, 0.1);
+
+    &::after {
+      animation: gear-rotate 2s linear infinite, gear-glow 2s ease-in-out infinite;
+    }
+
+    span::before,
+    span::after {
+      animation-duration: 1s;
+    }
+  }
+
+  &:active {
+    transform: scale(0.95);
+    filter: contrast(1.2);
+    transition: all 0.1s ease;
+  }
+
+  // Text with metallic effect
+  * {
+    position: relative;
+    z-index: 3;
+    text-shadow:
+      0 0 5px rgba(255, 255, 255, 0.5),
+      1px 1px 2px rgba(0,0,0,0.8);
+    background: linear-gradient(45deg, rgba(255,255,255,0.9), rgba(156,163,175,0.6));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@mixin variant-star {
+  position: relative;
+  overflow: hidden;
+  font-family: 'Bungee', cursive;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  // Perfect star shape - complex clip-path
+  clip-path: polygon(
+    50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%
+  );
+
+  // Cosmic star gradient
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255,215,0,0.9), rgba(245,158,11,0.7), rgba(217,119,6,0.8)),
+    conic-gradient(from 0deg at 50% 50%, #ffd700, #ffed4e, #ffd700, #f59e0b, #ffd700);
+  color: #1e293b;
+
+  // Star rays and sparkle effects
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background:
+      linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.3) 45%, rgba(255,255,255,0.3) 55%, transparent 60%),
+      linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.2) 45%, rgba(255,255,255,0.2) 55%, transparent 60%),
+      radial-gradient(circle at 50% 50%, rgba(255,255,255,0.4) 0%, transparent 70%);
+    z-index: 1;
+  }
+
+  // Twinkling star emoji
+  &::after {
+    content: '⭐';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    animation: star-twinkle 2s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  // Shooting star effect
+  span::before {
+    content: '';
+    position: absolute;
+    top: 30%;
+    right: -15px;
+    width: 3px;
+    height: 20px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0.9), rgba(255,215,0,0.6));
+    transform: rotate(45deg);
+    animation: shooting-star 3s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  // Comet tail
+  span::after {
+    content: '';
+    position: absolute;
+    top: 35%;
+    right: -10px;
+    width: 15px;
+    height: 2px;
+    background: linear-gradient(to left, rgba(255,255,255,0.8), transparent);
+    transform: rotate(45deg);
+    animation: comet-tail 3s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  &:hover {
+    // Star supernova effect
+    animation: star-supernova 0.8s ease-out;
+    box-shadow:
+      0 0 40px rgba(255, 215, 0, 0.9),
+      0 0 60px rgba(245, 158, 11, 0.7),
+      0 0 80px rgba(217, 119, 6, 0.5),
+      inset 0 0 25px rgba(255, 255, 255, 0.4);
+
+    &::after {
+      animation: star-twinkle 1s ease-in-out infinite, star-explode 1s ease-in-out infinite;
+    }
+
+    span::before,
+    span::after {
+      animation-duration: 1.5s;
+    }
+  }
+
+  &:active {
+    transform: scale(0.97) rotate(5deg);
+    filter: brightness(1.2);
+    transition: all 0.1s ease;
+  }
+
+  // Text with starlight effect
+  * {
+    position: relative;
+    z-index: 3;
+    text-shadow:
+      0 0 10px rgba(255, 215, 0, 0.8),
+      0 0 20px rgba(255, 215, 0, 0.4),
+      1px 1px 2px rgba(0,0,0,0.5);
+    background: linear-gradient(45deg, rgba(255,255,255,0.9), rgba(255,215,0,0.7));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+@mixin variant-hexagon {
+  position: relative;
+  overflow: hidden;
+  font-family: 'Righteous', cursive;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+
+  // Perfect hexagon shape
+  clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
+
+  // Honeycomb gradient
+  background:
+    linear-gradient(135deg, rgba(251,191,36,0.9), rgba(245,158,11,0.7), rgba(217,119,6,0.8)),
+    radial-gradient(circle at 50% 50%, rgba(255,255,255,0.3) 0%, transparent 70%);
+  color: #1e293b;
+
+  // Hexagonal grid pattern
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(0,0,0,0.1) 1px, transparent 1px),
+      radial-gradient(circle at 75% 75%, rgba(0,0,0,0.1) 1px, transparent 1px),
+      linear-gradient(60deg, rgba(255,255,255,0.1) 1px, transparent 1px),
+      linear-gradient(-60deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    z-index: 1;
+  }
+
+  // Bee emoji in center
+  &::after {
+    content: '🐝';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.8rem;
+    animation: bee-buzz 2s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  // Honey drip effect
+  span::before {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 12px;
+    background: radial-gradient(ellipse, rgba(251,191,36,0.9), rgba(245,158,11,0.7));
+    border-radius: 0 0 4px 4px;
+    animation: honey-drip 3s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  // Pollen particles
+  span::after {
+    content: '✨';
+    position: absolute;
+    top: 20%;
+    left: -10px;
+    font-size: 0.8rem;
+    opacity: 0.7;
+    animation: pollen-float 2.5s ease-in-out infinite;
+    z-index: 2;
+  }
+
+  &:hover {
+    // Honeycomb activation
+    animation: hexagon-wiggle 0.6s ease-out;
+    box-shadow:
+      0 0 30px rgba(251, 191, 36, 0.8),
+      0 0 50px rgba(245, 158, 11, 0.6),
+      inset 0 0 20px rgba(255, 255, 255, 0.3);
+
+    &::after {
+      animation: bee-buzz 1s ease-in-out infinite, bee-dance 1s ease-in-out infinite;
+    }
+
+    span::before {
+      animation: honey-drip 1.5s ease-in-out infinite;
+    }
+  }
+
+  &:active {
+    transform: scale(0.96) rotate(3deg);
+    filter: brightness(1.1);
+    transition: all 0.1s ease;
+  }
+
+  // Text with honeycomb effect
+  * {
+    position: relative;
+    z-index: 3;
+    text-shadow:
+      0 0 8px rgba(251, 191, 36, 0.6),
+      1px 1px 2px rgba(0,0,0,0.4);
+    background: linear-gradient(45deg, rgba(255,255,255,0.9), rgba(251,191,36,0.6));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+}
+
+// Animation keyframes for ultra-creative variants
+@keyframes crystal-transform {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.1) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes crystal-float {
+  0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  33% { transform: translate(-50%, -45%) scale(1.1) rotate(120deg); }
+  66% { transform: translate(-50%, -55%) scale(0.9) rotate(240deg); }
+}
+
+@keyframes crystal-shine {
+  0%, 100% { opacity: 0.6; filter: brightness(1); }
+  50% { opacity: 1; filter: brightness(1.5); }
+}
+
+@keyframes prism-light {
+  0%, 100% { opacity: 0.8; transform: translateX(-50%) scaleY(1); }
+  50% { opacity: 1; transform: translateX(-50%) scaleY(1.5); }
+}
+
+@keyframes gear-engage {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.05) rotate(10deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes gear-rotate {
+  from { transform: translate(-50%, -50%) rotate(0deg); }
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes gear-glow {
+  0%, 100% { filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); }
+  50% { filter: drop-shadow(0 0 15px rgba(255,255,255,0.8)) drop-shadow(0 0 25px rgba(156,163,175,0.6)); }
+}
+
+@keyframes steam-particles {
+  0%, 100% { opacity: 0; transform: scale(0.5); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes star-supernova {
+  0% { transform: scale(1) rotate(0deg); }
+  50% { transform: scale(1.15) rotate(10deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes star-explode {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.5); }
+}
+
+@keyframes shooting-star {
+  0%, 100% { opacity: 0; transform: translateX(0) translateY(0) rotate(45deg); }
+  50% { opacity: 1; transform: translateX(-20px) translateY(-10px) rotate(45deg); }
+}
+
+@keyframes comet-tail {
+  0%, 100% { opacity: 0; transform: translateX(0) rotate(45deg) scaleX(0); }
+  50% { opacity: 0.8; transform: translateX(-15px) rotate(45deg) scaleX(1); }
+}
+
+@keyframes hexagon-wiggle {
+  0%, 100% { transform: scale(1) rotate(0deg); }
+  25% { transform: scale(1.03) rotate(2deg); }
+  75% { transform: scale(1.03) rotate(-2deg); }
+}
+
+@keyframes bee-buzz {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.1); }
+}
+
+@keyframes bee-dance {
+  0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+  25% { transform: translate(-50%, -50%) rotate(10deg); }
+  75% { transform: translate(-50%, -50%) rotate(-10deg); }
+}
+
+@keyframes honey-drip {
+  0%, 100% { opacity: 0.8; transform: translateX(-50%) scaleY(1); }
+  50% { opacity: 1; transform: translateX(-50%) scaleY(1.3); }
+}
+
+@keyframes pollen-float {
+  0%, 100% { opacity: 0.5; transform: translateY(0) rotate(0deg); }
+  50% { opacity: 1; transform: translateY(-5px) rotate(180deg); }
 }
