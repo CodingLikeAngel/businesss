@@ -14,7 +14,8 @@ $unified-hover-scale: scale(1.02);
 $unified-active-scale: scale(0.98);
 
 // Import Google Fonts for gaming variants
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;600;800&family=Comic+Neue:wght@400;700&family=Righteous&family=Bungee&display=swap');
+// Import Google Fonts for all variants
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;600;800&family=Comic+Neue:wght@400;700&family=Righteous&family=Bungee&family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;800&family=Outfit:wght@300;400;700&display=swap');
 
 @mixin unified-variant-base($bg, $color, $accent, $glow-color) {
   --theme-bg: #{$bg};
@@ -79,77 +80,48 @@ $unified-active-scale: scale(0.98);
 }
 
 @mixin variant-glass {
-  @include unified-variant-base(
-    rgba(15, 23, 42, 0.8),
-    #ffffff,
-    #6366f1,
-    rgba(255, 255, 255, 0.25)
-  );
   position: relative;
   overflow: hidden;
-  --theme-backdrop: blur(20px);
-  backdrop-filter: var(--theme-backdrop);
-  -webkit-backdrop-filter: var(--theme-backdrop);
-  border-radius: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background-image:
-    linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%),
-    radial-gradient(circle at 30% 20%, rgba(99,102,241,0.2) 0%, transparent 50%),
-    radial-gradient(circle at 70% 80%, rgba(168,85,247,0.15) 0%, transparent 50%);
-  box-shadow:
-    0 8px 32px rgba(0, 0, 0, 0.12),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(25px) saturate(180%);
+  -webkit-backdrop-filter: blur(25px) saturate(180%);
+  border-radius: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  color: #fff;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.37),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
 
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(135deg,
-      rgba(255,255,255,0.1) 0%,
-      transparent 25%,
-      transparent 75%,
-      rgba(255,255,255,0.05) 100%
-    );
-    pointer-events: none;
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
+    top: -50%;
+    left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(circle, rgba(99,102,241,0.1) 0%, transparent 70%);
-    transform: translate(-50%, -50%);
-    animation: glass-shimmer 6s ease-in-out infinite;
+    background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+    transform: rotate(30deg);
     pointer-events: none;
+    transition: all 0.6s ease;
   }
 
   &:hover {
-    transform: translateY(-2px) scale(1.01);
-    box-shadow:
-      0 12px 40px rgba(0, 0, 0, 0.15),
-      0 0 20px rgba(99, 102, 241, 0.2),
-      inset 0 1px 0 rgba(255, 255, 255, 0.3),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.05);
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.07);
     border-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 
+      0 15px 45px 0 rgba(0, 0, 0, 0.45),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    
+    &::before {
+      transform: rotate(45deg) translate(5%, 5%);
+    }
   }
 
-  &:active {
-    transform: translateY(0) scale(0.99);
-  }
-
-  // Specific for interactive elements like selects or buttons
-  &.input, &.btn {
-    --theme-bg: rgba(0, 0, 0, 0.6);
-    --theme-border: 1px solid rgba(255, 255, 255, 0.15);
-    background-image: none;
-    &::after { display: none; }
+  // Content adjustment
+  p, span, h1, h2, h3, h4, h5, h6 {
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
   }
 }
 
@@ -159,67 +131,59 @@ $unified-active-scale: scale(0.98);
 }
 
 @mixin variant-neon {
-  @include unified-variant-base(
-    linear-gradient(135deg, #0f172a, #1e293b),
-    #00ff9d,
-    #00ff9d,
-    #00ff9d
-  );
   position: relative;
-  overflow: hidden;
-  border-radius: 0.75rem;
-  border: 2px solid #00ff9d;
-  background-image:
-    radial-gradient(circle at 20% 20%, rgba(0,255,157,0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255,0,255,0.1) 0%, transparent 50%),
-    linear-gradient(45deg, rgba(0,255,157,0.05) 25%, transparent 25%);
-  background-size: 30px 30px;
-  text-shadow: 0 0 10px rgba(0, 255, 157, 0.8), 0 0 20px rgba(0, 255, 157, 0.6);
-  box-shadow:
-    0 0 20px rgba(0, 255, 157, 0.4),
-    inset 0 0 20px rgba(0, 255, 157, 0.1);
-
-  &::before {
+  background: #050505;
+  color: #fff;
+  border-radius: 12px;
+  border: 2px solid #00f3ff;
+  box-shadow: 
+    0 0 10px rgba(0, 243, 255, 0.5),
+    0 0 20px rgba(0, 243, 255, 0.3),
+    inset 0 0 10px rgba(0, 243, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  
+  &::after {
     content: '';
     position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    background: linear-gradient(45deg,
-      #00ff9d, #ff00ff, #00ffff, #ffff00, #00ff9d
-    );
-    background-size: 400% 400%;
-    animation: neon-border 3s ease-in-out infinite;
-    border-radius: inherit;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 16px;
+    background: linear-gradient(45deg, #00f3ff, #ff00ff, #00f3ff);
+    background-size: 200% 200%;
     z-index: -1;
-  }
-
-  &::after {
-    content: '⚡';
-    position: absolute;
-    top: 50%;
-    right: -25px;
-    transform: translateY(-50%);
-    font-size: 1.5rem;
-    color: #ffff00;
-    text-shadow: 0 0 10px #ffff00;
-    animation: electric-spark 2s ease-in-out infinite;
+    opacity: 0.3;
+    filter: blur(12px);
+    animation: neon-flow 4s linear infinite;
   }
 
   &:hover {
-    transform: scale(1.02);
-    box-shadow:
-      0 0 30px rgba(0, 255, 157, 0.8),
-      0 0 50px rgba(255, 0, 255, 0.6),
-      inset 0 0 30px rgba(0, 255, 157, 0.2);
-    text-shadow: 0 0 15px rgba(0, 255, 157, 1), 0 0 30px rgba(0, 255, 157, 0.8);
+    transform: scale(1.05);
+    background: #0a0a0a;
+    border-color: #ff00ff;
+    box-shadow: 
+      0 0 20px rgba(255, 0, 255, 0.6),
+      0 0 40px rgba(255, 0, 255, 0.4),
+      inset 0 0 15px rgba(255, 0, 255, 0.2);
+    
+    &::after {
+      opacity: 0.6;
+      filter: blur(16px);
+    }
   }
 
-  &:active {
-    transform: scale(0.98);
-    animation: neon-pulse 0.1s ease-out;
+  // Text Neon Effect
+  * {
+    color: #fff !important;
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
   }
+}
+
+@keyframes neon-flow {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 @keyframes neon-border {
@@ -239,70 +203,58 @@ $unified-active-scale: scale(0.98);
 }
 
 @mixin variant-cyberpunk {
-  @include unified-variant-base(
-    linear-gradient(135deg, #1a1a2e, #16213e, #0f0f23),
-    #00ffcc,
-    #ff0055,
-    #00ffcc
-  );
   position: relative;
-  overflow: hidden;
-  --theme-clip: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
-  clip-path: var(--theme-clip);
-  font-family: 'Courier New', monospace;
-  text-transform: uppercase;
-  letter-spacing: 3px;
+  background: #fcee0a; // Iconic Cyberpunk Yellow
+  color: #000;
+  clip-path: polygon(0 0, 100% 0, 100% 80%, 90% 100%, 0 100%);
+  border: none;
+  font-family: 'Orbitron', sans-serif;
   font-weight: 900;
-  border: 2px solid #ff0055;
-  background-image:
-    repeating-linear-gradient(
-      90deg,
-      transparent,
-      transparent 2px,
-      rgba(255, 0, 85, 0.3) 2px,
-      rgba(255, 0, 85, 0.3) 4px
-    ),
-    linear-gradient(45deg, rgba(0,255,204,0.1) 25%, transparent 25%);
+  text-transform: uppercase;
+  padding: 1.5rem;
+  transition: all 0.2s ease;
+  box-shadow: 8px 8px 0px #000;
 
   &::before {
-    content: '';
+    content: 'AD-2077';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg,
-      transparent,
-      rgba(255, 238, 167, 0.4) 20%,
-      rgba(255, 0, 85, 0.4) 50%,
-      rgba(0, 255, 204, 0.4) 80%,
-      transparent
-    );
-    animation: cyber-scan 2s linear infinite;
+    top: 5px;
+    right: 15px;
+    font-size: 0.6rem;
+    letter-spacing: 2px;
+    opacity: 0.5;
   }
 
   &::after {
-    content: '01010101';
+    content: '';
     position: absolute;
-    bottom: 5px;
-    right: 5px;
-    font-size: 8px;
-    color: #00ffcc;
-    opacity: 0.7;
-    text-shadow: 0 0 5px #00ffcc;
-    animation: binary-flicker 1.5s step-end infinite;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: #000;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.3s ease;
   }
 
   &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 30px rgba(255, 0, 85, 0.8), 0 0 50px rgba(0, 255, 204, 0.6);
-    border-color: #00ffcc;
-    text-shadow: 0 0 10px #ff0055, 0 0 20px #ff0055;
+    transform: translate(-3px, -3px);
+    box-shadow: 11px 11px 0px #000;
+    background: #00ffcc; // Cyberpunk Cyan
+    color: #000;
+
+    &::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
   }
 
-  &:active {
-    transform: scale(0.98);
-    animation: glitch-burst 0.2s ease-out;
+  &.section {
+    background: #000;
+    color: #fcee0a;
+    border: 4px solid #fcee0a;
+    box-shadow: 15px 15px 0px rgba(252, 238, 10, 0.3);
   }
 }
 
@@ -325,17 +277,127 @@ $unified-active-scale: scale(0.98);
 }
 
 @mixin variant-retro {
-  --theme-bg: #fdf6e3;
-  --theme-color: #657b83;
-  --theme-border: 2px solid #b58900;
-  --theme-accent: #d33682;
-  --theme-shadow: 3px 3px 0px #b58900;
-  --theme-font: 'Courier New', monospace;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
-  font-family: var(--theme-font);
+  position: relative;
+  background: #fdf6e3;
+  color: #657b83;
+  border: 4px solid #b58900;
+  box-shadow: 8px 8px 0px #b58900;
+  font-family: 'Press Start 2P', cursive;
+  padding: 1.5rem;
+  transition: all 0.1s steps(2);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    right: 2px;
+    bottom: 2px;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    pointer-events: none;
+  }
+
+  &:hover {
+    transform: translate(-4px, -4px);
+    box-shadow: 12px 12px 0px #b58900;
+    color: #d33682;
+  }
+
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px #b58900;
+  }
+}
+
+@mixin variant-minimal {
+  background: transparent;
+  color: #1a1a1a;
+  border: 1px solid #e5e5e5;
+  border-radius: 4px;
+  padding: 1rem 2rem;
+  transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
+  letter-spacing: 1px;
+  font-weight: 300;
+  
+  &:hover {
+    border-color: #1a1a1a;
+    background: #1a1a1a;
+    color: #fff;
+    transform: translateY(-2px);
+  }
+}
+
+@mixin variant-luxury {
+  position: relative;
+  background: linear-gradient(135deg, #1c1c1c 0%, #000 100%);
+  color: #d4af37; // Gold
+  border: 1px solid #d4af37;
+  border-radius: 0;
+  padding: 1.5rem 3rem;
+  font-family: 'Cinzel', serif;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(212, 175, 55, 0.4),
+      transparent
+    );
+    transition: all 0.6s ease;
+  }
+
+  &:hover {
+    color: #fff;
+    background: #d4af37;
+    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3);
+    
+    &::before {
+      left: 150%;
+    }
+  }
+}
+
+@mixin variant-matrix {
+  background: #000;
+  color: #00ff41;
+  border: 1px solid #00ff41;
+  font-family: 'Courier New', monospace;
+  position: relative;
+  overflow: hidden;
+  text-shadow: 0 0 5px #00ff41;
+  box-shadow: 0 0 15px #00ff41;
+  
+  &::before {
+    content: '10110100101010110';
+    position: absolute;
+    top: 0;
+    left: 0;
+    font-size: 8px;
+    opacity: 0.1;
+    white-space: nowrap;
+    animation: matrix-rain 2s linear infinite;
+  }
+
+  &:hover {
+    background: rgba(0, 255, 65, 0.1);
+    transform: scale(1.02);
+  }
+}
+
+@keyframes matrix-rain {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100%); }
 }
 
 @mixin variant-dark {
@@ -346,21 +408,6 @@ $unified-active-scale: scale(0.98);
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
-}
-
-@mixin variant-matrix {
-  --theme-bg: #000;
-  --theme-color: #00ff41;
-  --theme-border: 1px solid #00ff41;
-  --theme-accent: #00ff41;
-  --theme-font: 'Courier New', monospace;
-  --theme-shadow: 0 0 15px #00ff41;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  font-family: var(--theme-font);
-  box-shadow: var(--theme-shadow);
-  text-shadow: 0 0 5px #00ff41;
 }
 
 @mixin variant-glitch {
@@ -1935,54 +1982,98 @@ $unified-active-scale: scale(0.98);
   to { transform: rotate(360deg) scale(1); }
 }
 
-@mixin variant-minimal {
-  @include unified-variant-base(
-    #ffffff,
-    #1e293b,
-    #3b82f6,
-    #e2e8f0
-  );
-  position: relative;
-  overflow: hidden;
-  --theme-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
-  box-shadow: var(--theme-shadow);
-  border-radius: 0.75rem;
+@mixin variant-corporate {
+  background: #f8fafc;
+  color: #1e293b;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
   font-family: 'Inter', sans-serif;
   font-weight: 500;
-  background-image: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(248,250,252,1) 100%);
-  border: 1px solid #e2e8f0;
-  transition: all 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+  
+  &:hover {
+    border-color: #3b82f6;
+    background: #fff;
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-2px);
+  }
+}
+
+@mixin variant-vaporwave {
+  background: linear-gradient(135deg, #ff71ce 0%, #01cdfe 100%);
+  color: #fff;
+  border: none;
+  font-family: 'Righteous', cursive;
+  text-shadow: 3px 3px 0px #05ffa1;
+  position: relative;
+  overflow: hidden;
+  clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
+  
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background-image: 
+      linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    opacity: 0.3;
+  }
+
+  &:hover {
+    transform: scale(1.05) rotate(-1deg);
+    text-shadow: 4px 4px 0px #b967ff;
+  }
+}
+
+@mixin variant-elegant {
+  --theme-bg: #fff;
+  --theme-color: #1a1a1a;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  font-family: 'Playfair Display', serif;
+  border: 1px solid #000;
+  padding: 1rem 2.5rem;
+  border-radius: 0;
+  letter-spacing: 2px;
+  position: relative;
+  transition: all 0.4s ease;
 
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(59,130,246,0.1), transparent);
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(59,130,246,0.05), transparent);
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    bottom: 5px;
+    border: 1px solid rgba(0,0,0,0.1);
+    pointer-events: none;
   }
 
   &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
-    border-color: #3b82f6;
-    background-image: linear-gradient(135deg, rgba(255,255,255,1) 0%, rgba(241,245,249,1) 100%);
+    background: #000;
+    color: #fff;
+    transform: translateY(-3px);
+    
+    &::before {
+      border-color: rgba(255,255,255,0.2);
+    }
   }
+}
 
-  &:active {
-    transform: translateY(0);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+@mixin variant-vintage {
+  background: #f4ece1;
+  color: #3d3b38;
+  border: 2px solid #3d3b38;
+  font-family: 'Georgia', serif;
+  box-shadow: 4px 4px 0px #3d3b38;
+  border-radius: 2px;
+  
+  &:hover {
+    background: #e6dfd1;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #3d3b38;
   }
 }
 
