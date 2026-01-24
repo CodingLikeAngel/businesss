@@ -1375,6 +1375,7 @@ export class VariantService {
     return this.chartConfigSubject.getValue();
   }
 
+
   setChartConfig(config: Partial<ChartConfig>): void {
     const current = this.chartConfigSubject.getValue();
     this.chartConfigSubject.next({ ...current, ...config });
