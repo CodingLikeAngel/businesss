@@ -32,8 +32,9 @@ Para que un componente se considere "completo", debe cumplir con:
 
 Estos son los bloques fundamentales de cualquier landing page.
 
-1.  **Hero Section** (`hero`)
-    - _Reto_: Manejo de imágenes de fondo, superposición de textos, botones dobles (CTA principal y secundario).
+1.  **[v] Hero Section** (`hero`)
+    - _Logros_: Edición individual de cards, resize libre, video background, sync robusto con Store.
+    - _Reto Solucionado_: Manejo de imágenes de fondo y sync de items.
 2.  **Cards / Grid** (`cards`) (A menudo usado para Servicios o Características)
     - _Reto_: Colecciones repetibles, alineación de rejilla, igualar alturas.
 3.  **Header & Footer**
@@ -84,6 +85,24 @@ Para cada componente, ejecutar esta rutina:
 
 ---
 
+## Lecciones Aprendidas & Nuevos Estándares (Post-Hero)
+
+1.  **Sincronización de Items de Lista**:
+
+    - Cuando se edita un item individual de una lista haciendo clic en el Canvas (no solo desde el panel), el cambio en `selectedElement` debe propagarse al array `items` del componente padre.
+    - **Patrón**: Implementar `ngDoCheck` en el componente Editor para detectar cambios en `uiStateService.selectedElement` y actualizar el array local + dispatch al Store.
+
+2.  **Limpieza del Panel**:
+
+    - Los items genéricos (como Cards) pueden heredar campos no deseados (ej. "Subtítulo").
+    - **Solución**: Pasar `{ excludedFields: ['subtitle'] }` en el método `selectElement` del template.
+
+3.  **Inicialización de Datos**:
+    - Nunca mutar `this.section.content` directamente en `ngAfterViewInit`.
+    - Si faltan datos (ej. `items` array), hacer dispatch de una actualización al Store (`variantService.updateSectionInCurrentPage`).
+
+---
+
 ## Siguiente Paso Inmediato
 
-Comenzar con la **Fase 1: Hero Section**. Es el componente más visual y crítico.
+Comenzar con la **Fase 2: Cards / Grid**. Aplicar el estándar de edición granular a las secciones de rejilla ("Features", "Services", etc.).
