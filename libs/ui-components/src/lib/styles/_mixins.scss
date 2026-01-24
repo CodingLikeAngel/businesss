@@ -146,7 +146,11 @@ $unified-active-scale: scale(0.98);
 
 // Robustness mixin for Editor Mode
 @mixin editor-robustness {
-  position: relative !important;
+  // Only force relative if we aren't using a specific positioning like sticky/fixed
+  &:not([class*='is-sticky']):not([class*='is-fixed']) {
+    position: relative !important;
+  }
+  
   box-sizing: border-box !important;
   min-height: 100px;
   
@@ -157,8 +161,8 @@ $unified-active-scale: scale(0.98);
   }
 
   // Prevent grid collapse if children are absolute
-  &.has-absolute-children {
-    display: block !important;
+  &.has-floating-children {
+    min-height: 500px !important;
   }
 }
 

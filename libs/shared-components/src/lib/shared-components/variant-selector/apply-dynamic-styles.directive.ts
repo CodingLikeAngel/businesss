@@ -75,8 +75,14 @@ export class ApplyDynamicStylesDirective implements OnChanges {
       const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
 
       if (value !== undefined && value !== null && value !== '') {
+        // Prevent sections from becoming absolute via style injection, which causes "disintegration"
+        if (cssKey === 'position' && (this.el.nativeElement.classList.contains('editor-section') || this.el.nativeElement.tagName === 'HEADER')) {
+            return;
+        }
+
         // Use setProperty for better compatibility with CSS variables and important flag
-        const priority = (cssKey === 'position' || cssKey === 'width' || cssKey === 'height' || cssKey === 'left' || cssKey === 'top') ? 'important' : '';
+        const isCritical = ['width', 'height', 'left', 'top'].includes(cssKey);
+        const priority = isCritical ? 'important' : '';
         
         this.el.nativeElement.style.setProperty(cssKey, value, priority);
 

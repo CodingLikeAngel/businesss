@@ -761,17 +761,12 @@ export class VisualEditorService {
         newLeft += parent.scrollLeft;
         newTop += parent.scrollTop;
 
-        // Apply new position and fixed dimensions to element
-        this.renderer.setStyle(element, 'position', 'absolute');
-        this.renderer.setStyle(element, 'left', `${Math.round(newLeft)}px`);
-        this.renderer.setStyle(element, 'top', `${Math.round(newTop)}px`);
-        this.renderer.setStyle(element, 'width', `${Math.round(ghostRect.width)}px`);
-        this.renderer.setStyle(element, 'height', `${Math.round(ghostRect.height)}px`);
+        // SMART POSITIONING: Service only emits the intent. 
+        // We do NOT modify the actual element style here because it conflicts with Angular Change Detection
+        // and causing "double jumps". The subscriber will handle persistence.
         
-        this.renderer.setStyle(element, 'margin', '0');
-        this.renderer.setStyle(element, 'transform', 'none');
+        // Restore opacity
         this.renderer.setStyle(element, 'opacity', '1');
-        this.renderer.setStyle(element, 'z-index', '100');
 
         // Robust cleanup
         cleanupGhost();
@@ -1298,37 +1293,38 @@ export class VisualEditorService {
         border-radius: 6px;
         box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2),
       .visual-selected {
-        outline: 2px solid #3b82f6 !important;
-        outline-offset: 2px !important;
-        box-shadow: 0 0 20px rgba(59, 130, 246, 0.4) !important;
-        z-index: 50 !important;
-        overflow: visible !important; /* Critical for handles */
-        transform: translateZ(0) !important; /* Stability */
+        outline: 3px solid #3b82f6 !important;
+        outline-offset: 4px !important;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.1), 0 0 30px rgba(59, 130, 246, 0.6) !important;
+        z-index: 10000 !important;
+        overflow: visible !important;
       }
 
-      /* Robust container handling */
+      /* Robust container handling: NEVER break sticky/fixed headers */
       .editor-section {
-        position: relative !important;
-        min-height: 100px !important;
+        box-sizing: border-box !important;
+        min-height: 50px !important;
         transition: none !important;
       }
-
-      .editor-section.is-selected {
-        outline: 4px solid rgba(99, 102, 241, 0.5) !important;
+      
+      .editor-section:not([class*="sticky"]):not([class*="fixed"]) {
+        position: relative !important;
       }
 
-      .visual-edit-overlay {
-        filter: drop-shadow(0 0 10px rgba(0,0,0,0.3));
-      }
-
-      .has-absolute-children {
-        height: auto !important;
+      .has-floating-children {
         min-height: 400px !important;
       }
 
-      /* Prevent variant backgrounds from hiding handles */
       [style*="background"] {
          overflow: visible !important;
+      }
+      
+      /* Block pointer events on overlay to allow clicking through */
+      .visual-edit-overlay {
+         pointer-events: none !important;
+      }
+      .visual-resize-handle {
+         pointer-events: all !important;
       }
     `);
 

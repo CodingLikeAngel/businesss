@@ -397,24 +397,51 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     console.log('📍 Element moved:', elementId, bounds, section?.id);
     if (!section) return;
 
-    // Unified correction: Both elements and sections are measured in Viewport space (getBoundingClientRect)
-    // to ensure they stay within the correct layout context.
-    const sectionEl = isPlatformBrowser(this.platformId) ? document.getElementById(section.id) : null;
-    const sectionRect = sectionEl?.getBoundingClientRect();
+    // COORDINATE ACCURACY ENGINE:
+    // We must find the actual positioning ancestor to ensure the 'left' and 'top' 
+    // values we save match the CSS context they will be rendered in.
+    const el = isPlatformBrowser(this.platformId) ? document.getElementById(elementId) : null;
+    let anchorRect: DOMRect | undefined;
     
-    // Bounds are now viewport coordinates (no scroll), matching getBoundingClientRect()
+    if (el) {
+        // Find the nearest positioned ancestor (absolute, relative, fixed, sticky)
+        let parent = el.parentElement;
+        while(parent && parent !== document.body) {
+            const style = window.getComputedStyle(parent);
+            if (style.position !== 'static') {
+                anchorRect = parent.getBoundingClientRect();
+                break;
+            }
+            parent = parent.parentElement;
+        }
+    }
+    
+    // Fallback to section if no intermediate anchor found
+    if (!anchorRect) {
+        const sectionEl = isPlatformBrowser(this.platformId) ? document.getElementById(section.id) : null;
+        anchorRect = sectionEl?.getBoundingClientRect() as DOMRect;
+    }
+
+    // Bounds are viewport coordinates (no scroll)
     const viewportX = bounds.x;
     const viewportY = bounds.y;
+
+    // SAFETY GUARD: Prevent moving the entire section as an absolute element 
+    // (which causes the whole page to "disintegrate").
+    // We also block moves if they contain 'header' or 'navbar' at the top level.
+    const isSection = elementId === section.id || elementId === 'navbar' || elementId.includes('global_');
+    if (isSection && (bounds.width > 500)) { // Sections are usually wide
+        console.warn('❌ Blocked top-level move for:', elementId);
+        return;
+    }
 
     let relativeX: number;
     let relativeY: number;
 
-    if (sectionRect) {
-      // Direct viewport subtraction is perfectly stable and unaffected by scroll
-      relativeX = viewportX - sectionRect.left;
-      relativeY = viewportY - sectionRect.top;
+    if (anchorRect) {
+      relativeX = viewportX - anchorRect.left;
+      relativeY = viewportY - anchorRect.top;
     } else {
-      // Fallback
       relativeX = viewportX;
       relativeY = viewportY;
     }
