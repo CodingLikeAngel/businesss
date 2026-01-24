@@ -1025,7 +1025,7 @@ export class DesignEditorComponent implements OnChanges {
   allVariants = ALL_VARIANTS;
   
   // Categorías de variantes
-  variantCategories: VariantCategory[] = ['Básicas', 'Modernas', 'Temáticas', 'Avanzadas', 'Premium'];
+  variantCategories: VariantCategory[] = ['Básicas', 'Modernas', 'Gaming', 'Ambientales', 'Técnicas', 'Creativas', 'Premium', 'Ultra-Creativas'];
   
   // Variantes rápidas (favoritas)
   quickVariants = ALL_VARIANTS.filter(v => 
