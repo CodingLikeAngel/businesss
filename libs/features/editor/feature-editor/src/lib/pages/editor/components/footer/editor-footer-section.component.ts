@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ApplyDynamicStylesDirective,
@@ -13,8 +13,7 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
 
 /**
  * Enhanced Editor Footer Section Component
- * Uses EnhancedBaseEditorSectionComponent and EnhancedVisualEditableDirective
- * for standardized visual editing with unified styling application
+ * Modernized for visual editing persistence and standardized store sync.
  */
 @Component({
   selector: 'lib-editor-footer-section',
@@ -27,73 +26,47 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
   ],
   templateUrl: './editor-footer-section.component.html'
 })
-export class EditorFooterSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
+export class EditorFooterSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit, DoCheck {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('footerElement', { static: true }) footerElement!: ElementRef;
 
+  ngDoCheck() {
+    // Sincronización básica del elemento footer si se edita desde el panel
+    const selected = this.uiStateService.selectedElement;
+    if (selected && selected.sectionId === this.section.id && selected.id === this.section.id + '_footer') {
+       // El ContentEditorComponent ya actualiza el objeto content via binding
+       // pero aquí podríamos forzar actualizaciones de propiedades anidadas si fuera necesario.
+    }
+  }
+
   ngAfterViewInit() {
-    // Apply standardized visual editing to elements
+    // Aplicar edición visual técnica
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
     this.applyElementVisualEditing(this.footerElement, this.section.id + '_footer');
   }
 
-  /**
-   * Get configuration for the section container
-   */
   getSectionConfig(): VisualEditingConfig {
     return this.createElementConfig('section', {
-      constraints: {
-        containment: 'parent',
-        minDistance: { top: 10, right: 10, bottom: 10, left: 10 },
-        collisionDetection: false,
-        safeZones: []
-      },
       styling: {
         selectionOutline: '2px solid #6366f1',
         hoverEffects: true,
-        dimensionLabels: true,
-        resizeHandles: true
-      },
-      interactions: {
-        touchEnabled: true,
-        multiSelect: false,
-        snapToGrid: 0,
-        animationDuration: 200,
-        hapticFeedback: false
+        resizeHandles: true,
+        dimensionLabels: true
       }
     });
   }
 
-  /**
-   * Get configuration for the footer element
-   */
   getFooterConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
-      interactions: {
-        snapToGrid: 5,
-        animationDuration: 150,
-        touchEnabled: this.platformInfo.isTouch,
-        multiSelect: true,
-        hapticFeedback: true
-      },
-      constraints: {
-        containment: 'parent',
-        collisionDetection: true,
-        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
-        safeZones: []
-      },
       styling: {
         selectionOutline: '2px solid #10b981',
         hoverEffects: !this.platformInfo.isMobile,
-        dimensionLabels: !this.platformInfo.isMobile,
-        resizeHandles: true
+        resizeHandles: true,
+        dimensionLabels: true
       }
     });
   }
 
-  /**
-   * Handle visual editing events
-   */
   handleSectionEvent(event: VisualEditingEvent): void {
     this.handleVisualEvent(event, this.section.id);
   }
@@ -102,28 +75,23 @@ export class EditorFooterSectionComponent extends EnhancedBaseEditorSectionCompo
     this.handleVisualEvent(event, this.section.id + '_footer');
   }
 
-  /**
-   * Custom event handling for footer-specific logic
-   */
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_footer') {
-      switch (event.type) {
-        case 'selected':
-          console.log('Footer element selected for editing');
-          break;
-        case 'moved':
-          this.updateFooterPosition(event.bounds);
-          break;
-        case 'resized':
-          break;
+    if (elementId === this.section.id + '_footer' || elementId === this.section.id) {
+      if (['moved', 'resized'].includes(event.type)) {
+        this.updateFooterStyles(event.bounds);
       }
     }
   }
 
-  /**
-   * Update footer position in section data
-   */
-  private updateFooterPosition(bounds: any): void {
-    console.log('Footer position updated:', bounds);
+  private updateFooterStyles(bounds: any): void {
+    const currentStyles = this.section.styles || {};
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      styles: {
+        ...currentStyles,
+        width: bounds.width + 'px',
+        height: bounds.height + 'px',
+        transform: `translate(${bounds.x}px, ${bounds.y}px)`
+      }
+    });
   }
 }

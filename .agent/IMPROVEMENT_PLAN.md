@@ -34,11 +34,10 @@ Estos son los bloques fundamentales de cualquier landing page.
 
 1.  **[v] Hero Section** (`hero`)
     - _Logros_: Edición individual de cards, resize libre, video background, sync robusto con Store.
-    - _Reto Solucionado_: Manejo de imágenes de fondo y sync de items.
-2.  **Cards / Grid** (`cards`) (A menudo usado para Servicios o Características)
-    - _Reto_: Colecciones repetibles, alineación de rejilla, igualar alturas.
-3.  **Header & Footer**
-    - _Reto_: Navegación, logos, links sociales. Son componentes globales.
+2.  **[v] Cards / Grid** (`cards`)
+    - _Logros_: Integración con `UICardAnimated` (Signals), edición granular de cada feature.
+3.  **[v] Header & Footer**
+    - _Logros_: Persistencia de estilos visuales, soporte para edición de contenidos básicos.
 
 ### 🌟 Fase 2: Marketing & Social (Prioridad Media)
 
