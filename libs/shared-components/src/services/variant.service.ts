@@ -1128,24 +1128,26 @@ export class VariantService {
       this.globalVariantSubject.next(variant);
       
       // Aplicar forzosamente a todos los configs base para asegurar consistencia
+      // IMPORTANT: We must create NEW objects for Angular Change Detection to pick it up immediately
       const update = { variant };
-      this.setHeaderConfig(update);
-      this.setFooterConfig(update);
-      this.setNavBarConfig(update);
-      this.setHeroConfig(update);
-      this.setBubbleConfig(update);
-      this.setCardConfig(update);
-      this.setTitleConfig(update);
+      
+      this.setHeaderConfig({ ...this.headerConfigSubject.value, ...update });
+      this.setFooterConfig({ ...this.footerConfigSubject.value, ...update });
+      this.setNavBarConfig({ ...this.navBarConfigSubject.value, ...update });
+      this.setHeroConfig({ ...this.heroConfigSubject.value, ...update });
+      this.setBubbleConfig({ ...this.bubbleConfigSubject.value, ...update });
+      this.setCardConfig({ ...this.cardConfigSubject.value, ...update });
+      this.setTitleConfig({ ...this.titleConfigSubject.value, ...update });
       
       // Aplicar también a las secciones específicas
-      this.setServiceCardsConfig(update);
-      this.setFaqConfig(update);
-      this.setPricingConfig(update);
-      this.setPromotionsConfig(update);
-      this.setGalleryConfig(update);
-      this.setProductsConfig(update);
-      this.setTestimonialsConfig(update);
-      this.setStatsConfig(update);
+      this.setServiceCardsConfig({ ...this.serviceCardsConfigSubject.value, ...update });
+      this.setFaqConfig({ ...this.faqConfigSubject.value, ...update });
+      this.setPricingConfig({ ...this.pricingConfigSubject.value, ...update });
+      this.setPromotionsConfig({ ...this.promotionsConfigSubject.value, ...update });
+      this.setGalleryConfig({ ...this.galleryConfigSubject.value, ...update });
+      this.setProductsConfig({ ...this.productsConfigSubject.value, ...update });
+      this.setTestimonialsConfig({ ...this.testimonialsConfigSubject.value, ...update });
+      this.setStatsConfig({ ...this.statsConfigSubject.value, ...update });
       
       this.saveToLocalStorage();
     }
