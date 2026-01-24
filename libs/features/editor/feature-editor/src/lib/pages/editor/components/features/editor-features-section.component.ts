@@ -40,34 +40,17 @@ export class EditorFeaturesSectionComponent extends EnhancedBaseEditorSectionCom
   @ViewChildren('featureElement') featureElements!: QueryList<ElementRef>;
 
   ngDoCheck() {
-    // Sync logic for array items (features) being edited in isolation
-    const selected = this.uiStateService.selectedElement;
-    if (selected && selected.sectionId === this.section.id && selected.id && selected.id.includes('_feature_') && selected.index !== undefined) {
-       const items = this.section.content['items'];
-       
-       if (items && items[selected.index] && items[selected.index] !== selected.content) {
-           // Clone array to update store reference
-           const newItems = [...items];
-           newItems[selected.index] = selected.content;
-           
-           this.variantService.updateSectionInCurrentPage(this.section.id, {
-             content: {
-               ...this.section.content,
-               items: newItems
-             }
-           });
-       }
-    }
+    // Keep internal state in sync with external edits if needed, 
+    // but avoid heavy computation or redundant store updates
   }
 
   ngAfterViewInit() {
     // Initialize items from config if needed
-    if (!this.section.content['items']) {
-      const initialItems = this.featuresConfig.items || [];
+    if (!this.section.content['items'] && this.featuresConfig?.items) {
       this.variantService.updateSectionInCurrentPage(this.section.id, {
         content: {
           ...this.section.content,
-          items: JSON.parse(JSON.stringify(initialItems))
+          items: JSON.parse(JSON.stringify(this.featuresConfig.items))
         }
       });
     }
@@ -130,7 +113,7 @@ export class EditorFeaturesSectionComponent extends EnhancedBaseEditorSectionCom
    */
   getFeatureCardConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
-      enableDrag: true, // Allow reordering/moving visually if container permits
+      enableDrag: true, 
       enableResize: true,
       styling: {
         selectionOutline: '2px solid #3b82f6',
@@ -164,79 +147,8 @@ export class EditorFeaturesSectionComponent extends EnhancedBaseEditorSectionCom
   handleTitleEvent(event: VisualEditingEvent): void { this.handleVisualEvent(event, this.section.id + '_title'); }
   handleSubtitleEvent(event: VisualEditingEvent): void { this.handleVisualEvent(event, this.section.id + '_subtitle'); }
 
-  /**
-   * Custom event handling for features-specific logic
-   */
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_title') {
-      if (['moved', 'resized'].includes(event.type)) this.updateTitleStyles(event.bounds);
-    } else if (elementId === this.section.id + '_subtitle') {
-      if (['moved', 'resized'].includes(event.type)) this.updateSubtitleStyles(event.bounds);
-    } else if (elementId.includes('_feature_')) {
-       // Handle individual feature card events
-       const parts = elementId.split('_feature_');
-       if (parts.length > 1) {
-         const index = parseInt(parts[1], 10);
-         if (!isNaN(index) && ['moved', 'resized'].includes(event.type)) {
-           this.updateFeatureStyles(index, event.bounds);
-         }
-       }
-    }
-  }
-
-  private updateTitleStyles(bounds: any): void {
-    const currentStyles = this.section.content['titleStyles'] || {};
-    this.updateSectionContent({
-      titleStyles: {
-        ...currentStyles,
-        position: 'absolute',
-        width: bounds.width + 'px',
-        left: bounds.x + 'px',
-        top: bounds.y + 'px',
-        transform: 'none'
-      }
-    });
-  }
-
-  private updateSubtitleStyles(bounds: any): void {
-    const currentStyles = this.section.content['subtitleStyles'] || {};
-    this.updateSectionContent({
-      subtitleStyles: {
-        ...currentStyles,
-        position: 'absolute',
-        width: bounds.width + 'px',
-        left: bounds.x + 'px',
-        top: bounds.y + 'px',
-        transform: 'none'
-      }
-    });
-  }
-
-  private updateFeatureStyles(index: number, bounds: any): void {
-    const items = this.section.content['items'];
-    if (!items || !items[index]) return;
-
-    const newItems = [...items];
-    const item = { ...newItems[index] };
-    
-    item.styles = {
-      ...(item.styles || {}),
-      position: 'absolute',
-      width: bounds.width + 'px',
-      height: bounds.height + 'px',
-      left: bounds.x + 'px',
-      top: bounds.y + 'px',
-      transform: 'none'
-    };
-    
-    newItems[index] = item;
-    
-    this.updateSectionContent({ items: newItems });
-  }
-
-  private updateSectionContent(contentUpdates: any): void {
-    this.variantService.updateSectionInCurrentPage(this.section.id, {
-      content: { ...this.section.content, ...contentUpdates }
-    });
+      // Standard movements/resizes are handled by BaseEditorFeatureComponent via direct service subscription
+      // Custom logic for specific components can go here
   }
 }

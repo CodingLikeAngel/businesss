@@ -1157,9 +1157,7 @@ export class VisualEditorService {
         cursor: move;
         box-sizing: border-box;
       }
-      .visual-editable:not(.editor-section) {
-        width: fit-content !important;
-      }
+      /* Removed restrictive width: fit-content that broke layouts */
       .visual-guide {
         position: absolute;
         background: #6366f1;

@@ -14,14 +14,13 @@ export class BoundaryConstraintService {
   constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
 
   /**
-   * Calculate available boundaries for an element
+   * Calculate available boundaries for an element in viewport coordinates
    */
   calculateBoundaries(element: HTMLElement, config: BoundaryConstraints): BoundaryRect {
     if (!isPlatformBrowser(this.platformId)) {
       return { top: 0, right: 0, bottom: 0, left: 0 };
     }
 
-    const elementRect = element.getBoundingClientRect();
     let boundaries: BoundaryRect;
 
     switch (config.containment) {
@@ -36,7 +35,11 @@ export class BoundaryConstraintService {
         break;
       default:
         // Custom ElementRef containment
-        boundaries = this.getCustomBoundaries(config.containment as ElementRef);
+        if (config.containment instanceof ElementRef) {
+          boundaries = this.getCustomBoundaries(config.containment);
+        } else {
+          boundaries = this.getViewportBoundaries();
+        }
         break;
     }
 
@@ -225,7 +228,6 @@ export class BoundaryConstraintService {
       return collision.suggestedResolution;
     }
 
-    // Default resolution: move group away from collision
     const overlap = collision.overlap;
     return {
       deltaX: overlap.x < groupBounds.centerX ? overlap.width : -overlap.width,
@@ -291,14 +293,8 @@ export class BoundaryConstraintService {
     bounds2: GroupBounds,
     overlap: { x: number; y: number; width: number; height: number }
   ): { deltaX: number; deltaY: number } {
-    const center1X = bounds1.centerX;
-    const center1Y = bounds1.centerY;
-    const center2X = bounds2.centerX;
-    const center2Y = bounds2.centerY;
-
-    const deltaX = center1X < center2X ? -overlap.width : overlap.width;
-    const deltaY = center1Y < center2Y ? -overlap.height : overlap.height;
-
+    const deltaX = bounds1.centerX < bounds2.centerX ? -overlap.width : overlap.width;
+    const deltaY = bounds1.centerY < bounds2.centerY ? -overlap.height : overlap.height;
     return { deltaX, deltaY };
   }
 
@@ -320,21 +316,7 @@ export class BoundaryConstraintService {
   }
 
   /**
-   * Get ElementGroupService instance (to avoid circular dependency)
-   */
-  private getElementGroupService(): any {
-    // This would be injected in a real implementation
-    // For now, we'll access it through a global or service locator pattern
-    try {
-      const injector = (window as any)['ngInjector'];
-      return injector?.get?.('ElementGroupService');
-    } catch {
-      return null;
-    }
-  }
-
-  /**
-   * Get parent element boundaries
+   * Get parent element boundaries in viewport coordinates
    */
   private getParentBoundaries(element: HTMLElement): BoundaryRect {
     const parent = element.parentElement;
@@ -343,14 +325,12 @@ export class BoundaryConstraintService {
     }
 
     const parentRect = parent.getBoundingClientRect();
-    const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
 
     return {
-      top: parentRect.top + scrollY,
-      right: parentRect.right + scrollX,
-      bottom: parentRect.bottom + scrollY,
-      left: parentRect.left + scrollX
+      top: parentRect.top,
+      right: parentRect.right,
+      bottom: parentRect.bottom,
+      left: parentRect.left
     };
   }
 
@@ -358,55 +338,46 @@ export class BoundaryConstraintService {
    * Get viewport boundaries
    */
   private getViewportBoundaries(): BoundaryRect {
-    const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
-
     return {
-      top: scrollY,
-      right: scrollX + window.innerWidth,
-      bottom: scrollY + window.innerHeight,
-      left: scrollX
+      top: 0,
+      right: window.innerWidth,
+      bottom: window.innerHeight,
+      left: 0
     };
   }
 
   /**
-   * Get container boundaries (closest container element)
+   * Get container boundaries in viewport coordinates
    */
   private getContainerBoundaries(element: HTMLElement): BoundaryRect {
-    // Find closest container (element with specific classes or data attributes)
-    let container = element.closest('.editor-container, .visual-editing-container, [data-container="true"]') as HTMLElement;
+    const container = element.closest('.editor-container, .visual-editing-container, [data-container="true"]') as HTMLElement;
 
     if (!container) {
-      // Fallback to parent
       return this.getParentBoundaries(element);
     }
 
     const containerRect = container.getBoundingClientRect();
-    const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
 
     return {
-      top: containerRect.top + scrollY,
-      right: containerRect.right + scrollX,
-      bottom: containerRect.bottom + scrollY,
-      left: containerRect.left + scrollX
+      top: containerRect.top,
+      right: containerRect.right,
+      bottom: containerRect.bottom,
+      left: containerRect.left
     };
   }
 
   /**
-   * Get custom element boundaries
+   * Get custom element boundaries in viewport coordinates
    */
   private getCustomBoundaries(elementRef: ElementRef): BoundaryRect {
     const element = elementRef.nativeElement;
     const rect = element.getBoundingClientRect();
-    const scrollX = window.pageXOffset || document.documentElement.scrollLeft;
-    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
 
     return {
-      top: rect.top + scrollY,
-      right: rect.right + scrollX,
-      bottom: rect.bottom + scrollY,
-      left: rect.left + scrollX
+      top: rect.top,
+      right: rect.right,
+      bottom: rect.bottom,
+      left: rect.left
     };
   }
 
@@ -430,9 +401,7 @@ export class BoundaryConstraintService {
 
     safeZones.forEach(zone => {
       if (zone.type === 'absolute') {
-        // Reduce boundaries to avoid safe zone
         if (zone.bounds.x < constrained.right && zone.bounds.x + zone.bounds.width > constrained.left) {
-          // Horizontal overlap - adjust vertical boundaries
           if (zone.bounds.y <= constrained.top) {
             constrained.top = Math.max(constrained.top, zone.bounds.y + zone.bounds.height);
           }
@@ -442,7 +411,6 @@ export class BoundaryConstraintService {
         }
 
         if (zone.bounds.y < constrained.bottom && zone.bounds.y + zone.bounds.height > constrained.top) {
-          // Vertical overlap - adjust horizontal boundaries
           if (zone.bounds.x <= constrained.left) {
             constrained.left = Math.max(constrained.left, zone.bounds.x + zone.bounds.width);
           }
