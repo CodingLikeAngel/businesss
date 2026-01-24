@@ -29,6 +29,7 @@ import { SectionStructureComponent } from './section-structure.component';
 import { ComponentExplorerComponent } from './component-explorer.component';
 import { ContentEditorComponent } from './content-editor.component';
 import { DesignEditorComponent } from './design-editor.component';
+import { PresetSelectorComponent } from './preset-selector.component';
 // import { TemplateSelectorComponent } from '../template-selector/template-selector.component';
 
 // Import services
@@ -50,7 +51,8 @@ import { ExportService } from './export.service';
     SectionStructureComponent,
     ComponentExplorerComponent,
     ContentEditorComponent,
-    DesignEditorComponent
+    DesignEditorComponent,
+    PresetSelectorComponent
   ],
   templateUrl: './variant-selector.component.html',
   styleUrl: './variant-selector.component.scss',

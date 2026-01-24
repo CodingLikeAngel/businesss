@@ -21,15 +21,17 @@
     "@angular/router": "~19.2.0",
     "@angular/ssr": "~19.2.0",
     "@negocio/source": "file:",
+    "@ngrx/effects": "^21.0.1",
+    "@ngrx/store": "^21.0.1",
     "@tailwindcss/postcss": "^4.0.17",
+    "@types/jszip": "^3.4.0",
     "chart.js": "^4.4.8",
     "express": "^4.21.2",
     "hammerjs": "^2.0.8",
+    "jszip": "^3.10.1",
     "rxjs": "~7.8.0",
     "tailwindcss": "^4.0.17",
-    "zone.js": "~0.15.0",
-    "@ngrx/store": "^21.0.1",
-    "@ngrx/effects": "^21.0.1"
+    "zone.js": "~0.15.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~19.2.0",

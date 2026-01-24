@@ -1,0 +1,11 @@
+<div class="preset-selector" *ngIf="!isCollapsed">
+  <h3 class="preset-title">📦 Presets de Diseño</h3>
+  <div class="preset-grid">
+    <button *ngFor="let p of presets" class="preset-card" (click)="applyPreset(p)">
+      <span class="preset-name">{{ p.name }}</span>
+    </button>
+  </div>
+  <button class="export-btn" (click)="exportCurrent()">
+    <span class="icon">💾</span> Exportar proyecto
+  </button>
+</div>
