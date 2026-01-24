@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { VariantService, FooterConfig, HeaderConfig, NavBarConfig, UiStateService, VisualEditorService } from '@negocio/shared-components';
+import { VariantService, FooterConfig, HeaderConfig, NavBarConfig, UiStateService, VisualEditorService, PageSection } from '@negocio/shared-components';
 import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
 
 @Component({
@@ -103,4 +103,94 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
     this.previewSize = size;
   }
 
+  /**
+   * Generates a virtual PageSection object for the global header.
+   * This allows using the standard Editor components in the layout shell.
+   */
+  get headerAsSection(): PageSection {
+    return {
+      id: 'global_header',
+      type: 'header',
+      label: 'Cabecera Global',
+      visible: true,
+      name: 'Global Header',
+      styles: this.headerConfig.customStyles as any || {},
+      content: {
+        title: this.headerConfig.title,
+        subtitle: this.headerConfig.subtitle,
+        navItems: this.headerConfig.navItems,
+        variant: this.headerConfig.variant,
+        align: this.headerConfig.align,
+        dark: this.headerConfig.dark
+      },
+      elements: [],
+      config: {},
+      customStyles: {},
+      animation: 'none',
+      layout: 'default'
+    };
+  }
+
+  /**
+   * Generates a virtual PageSection object for the global footer.
+   */
+  get footerAsSection(): PageSection {
+    return {
+      id: 'global_footer',
+      type: 'footer',
+      label: 'Pie de Página Global',
+      visible: true,
+      name: 'Global Footer',
+      styles: this.footerConfig.customStyles as any || {},
+      content: {
+        title: this.footerConfig.title,
+        description: this.footerConfig.description,
+        variant: this.footerConfig.variant,
+        dark: this.footerConfig.dark
+      },
+      elements: [],
+      config: {},
+      customStyles: {},
+      animation: 'none',
+      layout: 'default'
+    };
+  }
+
+  /**
+   * Handles events from the global header editor.
+   */
+  onGlobalHeaderEvent(bounds: any, elementId: string) {
+    const currentConfig = this.headerConfig;
+    const currentPage = this.variantService.getCurrentPage();
+    if (currentPage) {
+        // Log update if needed
+    }
+    
+    // Dispatch update to global header config
+    this.variantService.updateHeaderConfig({
+      ...currentConfig,
+      customStyles: {
+        ...(currentConfig.customStyles || {}),
+        width: bounds.width + 'px',
+        height: bounds.height + 'px',
+        transform: `translate(${bounds.x}px, ${bounds.y}px)`
+      }
+    });
+  }
+
+  /**
+   * Handles events from the global footer editor.
+   */
+  onGlobalFooterEvent(bounds: any, elementId: string) {
+    const currentConfig = this.footerConfig;
+    this.variantService.updateFooterConfig({
+      ...currentConfig,
+      customStyles: {
+        ...(currentConfig.customStyles || {}),
+        width: bounds.width + 'px',
+        height: bounds.height + 'px',
+        transform: `translate(${bounds.x}px, ${bounds.y}px)`
+      }
+    });
+  }
 }

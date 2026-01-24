@@ -112,19 +112,14 @@
 
           <div class="frame-content">
             <!-- Header -->
-            <div *ngIf="headerConfig.visible" 
-                 class="cursor-pointer editor-element"
-                 [class.is-selected]="uiStateService.selectedElement?._original === headerConfig"
-                 (click)="selectElement($event, { id: 'navbar', content: headerConfig, type: 'header', _original: headerConfig })">
-              <lib-ui-header
-                [variant]="getVariant('navbar')"
-                [align]="headerConfig.align"
-                [dark]="headerConfig.dark"
-                [title]="headerConfig.title"
-                [subtitle]="headerConfig.subtitle"
-                [navItems]="headerConfig.navItems"
-                [customStyles]="headerConfig.customStyles"
-              ></lib-ui-header>
+            <div *ngIf="headerConfig.visible">
+              <lib-editor-header-section
+                [section]="headerAsSection"
+                [componentVariants]="componentVariants"
+                [globalVariant]="globalVariant"
+                (elementMoved)="onGlobalHeaderEvent($event.bounds, $event.elementId)"
+                (elementResized)="onGlobalHeaderEvent($event.bounds, $event.elementId)">
+              </lib-editor-header-section>
             </div>
 
             <!-- Navbar / Tabs -->
@@ -146,24 +141,14 @@
             <router-outlet></router-outlet>
 
             <!-- Footer -->
-            <div *ngIf="footerConfig.visible"
-                 class="cursor-pointer editor-element"
-                 [class.is-selected]="uiStateService.selectedElement?._original === footerConfig"
-                 (click)="selectElement($event, { id: 'footer', content: footerConfig, type: 'footer', _original: footerConfig })">
-              <lib-ui-components-footer
-                [variant]="getVariant('footer')"
-                [dark]="footerConfig.dark"
-                [showParticles]="footerConfig.showParticles"
-                [title]="footerConfig.title"
-                [description]="footerConfig.description"
-                [exploreLinks]="footerConfig.exploreLinks"
-                [trendLinks]="footerConfig.trendLinks"
-                [socialIcons]="footerConfig.socialIcons"
-                [copyrightText]="footerConfig.copyrightText"
-                [customStyles]="footerConfig.customStyles"
-                (linkClicked)="onLinkClick($event)"
-                (socialClicked)="onSocialClick($event)"
-              ></lib-ui-components-footer>
+            <div *ngIf="footerConfig.visible">
+              <lib-editor-footer-section
+                [section]="footerAsSection"
+                [componentVariants]="componentVariants"
+                [globalVariant]="globalVariant"
+                (elementMoved)="onGlobalFooterEvent($event.bounds, $event.elementId)"
+                (elementResized)="onGlobalFooterEvent($event.bounds, $event.elementId)">
+              </lib-editor-footer-section>
             </div>
           </div>
         </div>

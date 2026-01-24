@@ -1344,6 +1344,24 @@ export class VariantService {
     };
   }
 
+  updateHeaderConfig(config: Partial<HeaderConfig>) {
+    const current = this.headerConfigSubject.value;
+    this.headerConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
+  }
+
+  updateFooterConfig(config: Partial<FooterConfig>) {
+    const current = this.footerConfigSubject.value;
+    this.footerConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
+  }
+
+  updateNavBarConfig(config: Partial<NavBarConfig>) {
+    const current = this.navBarConfigSubject.value;
+    this.navBarConfigSubject.next({ ...current, ...config });
+    this.saveToLocalStorage();
+  }
+
   // Persistence
   getCurrentFeaturesConfig(): FeaturesConfig {
     return this.featuresConfigSubject.getValue();

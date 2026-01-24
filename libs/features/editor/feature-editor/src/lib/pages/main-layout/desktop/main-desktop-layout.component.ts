@@ -8,16 +8,19 @@ import { VariantSelectorComponent, TemplateSelectorComponent } from '@negocio/sh
 import { CommonModule } from '@angular/common';
 import { MainLayoutBaseComponent } from '../main-layout-base.component';
 
+import { EditorHeaderSectionComponent } from '../../editor/components/header/editor-header-section.component';
+import { EditorFooterSectionComponent } from '../../editor/components/footer/editor-footer-section.component';
+
 @Component({
   selector: 'lib-main-desktop-layout',
   standalone: true,
   imports: [
     CommonModule,
     RouterModule,
-    UIHeaderComponent,
+    EditorHeaderSectionComponent,
     VariantSelectorComponent,
     TemplateSelectorComponent,
-    UIFooterComponent
+    EditorFooterSectionComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './main-desktop-layout.component.html',
