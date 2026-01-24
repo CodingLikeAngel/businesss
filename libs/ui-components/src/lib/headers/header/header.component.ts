@@ -31,7 +31,10 @@ export class UIHeaderComponent {
   variant = input<HeaderVariantType>('primary');
   align = input<'left' | 'center' | 'right'>('center');
   dark = input(false);
+  sticky = input(true);
+  logo = input<string | null>(null);
   navItems = input<{ label: string; href: string; active?: boolean }[]>([]);
+  ctaLabel = input<string | null>(null);
   customStyles = input<HeaderCustomStyles>({});
 
   isMenuOpen = false;
@@ -45,6 +48,7 @@ export class UIHeaderComponent {
     `variant-${this.variant()}`,
     `align-${this.align()}`,
     this.dark() ? 'dark' : '',
+    this.sticky() ? 'is-sticky' : '',
   ].filter(Boolean));
 
   headerStyles = computed(() => {

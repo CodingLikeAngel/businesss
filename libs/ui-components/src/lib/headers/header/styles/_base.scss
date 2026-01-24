@@ -25,198 +25,215 @@ $color-light: #ffffff;
 
 @layer base {
   .header {
-    background: var(--theme-bg, rgba(255, 255, 255, 0.9));
-    padding: 1.5rem;
-    border-radius: 0.5rem;
-    transition: background-color 300ms ease-in-out, box-shadow 300ms ease-in-out;
-    box-shadow: var(--theme-shadow, 0 2px 10px rgba(0, 0, 0, 0.1));
+    --header-height: 80px;
+    --nav-link-color: var(--theme-color, #1e293b);
+    --nav-link-hover: var(--theme-accent, #3b82f6);
+    
+    width: 100%;
+    min-height: var(--header-height);
+    display: flex;
+    align-items: center;
+    background: var(--theme-bg, rgba(255, 255, 255, 0.8));
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: shared.$unified-transition;
     position: relative;
-    z-index: 1010;
-    color: var(--theme-color, rgb(17, 24, 39));
-    border: var(--theme-border, none);
+    z-index: 1000;
+    padding: 0 var(--sp-4);
 
     @include shared.apply-all-variants('variant-');
-    
-    // CRITICAL: Force inline styles to override variant backgrounds
-    &[style*="background"] {
-      background: var(--theme-bg) !important;
-    }
-    
-    &[style*="background-color"] {
-      background-color: var(--theme-bg) !important;
+
+    &.is-sticky {
+      position: sticky;
+      top: 0;
+      box-shadow: var(--shadow-md);
     }
 
-    &[style*="color"] {
-      color: var(--theme-color) !important;
-      
-      h1, p, a {
-        color: var(--theme-color) !important;
-      }
-    }
-
-    /*
-    &[style][class*="header-"] {
-      // Logic removed to allow variants to apply.
-      // If custom variables are needed, they should be applied via specific class overrides or handled differently.
-    }
-    */
-
-    .header-content {
+    .header-container {
+      width: 100%;
+      max-width: 1400px;
+      margin: 0 auto;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      max-width: 1200px;
-      margin: 0 auto;
+      gap: var(--sp-6);
     }
 
-    .title-wrapper {
-      flex-grow: 1;
-    }
+    // Logo & Title
+    .logo-wrapper {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
 
-    h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      margin: 0;
-    }
+      .logo-img {
+        height: 40px;
+        width: auto;
+        object-fit: contain;
+      }
 
-    p {
-      font-size: 1rem;
-      margin: 0.5rem 0 0;
-      color: rgb(102, 102, 102);
-    }
-
-    &.align-left {
-      text-align: left;
-    }
-    &.align-center {
-      text-align: center;
-    }
-    &.align-right {
-      text-align: right;
-    }
-
-    /* Dark mode override logic moved to global theme variables or specific variant adjustments */
-    &.dark,
-    :where([data-theme="dark"]) & {
-      /* Only set defaults if no variant is active or if we want a specific dark fallback */
-      --header-bg: rgba(30, 30, 30, 0.9);
-      background: var(--theme-bg, var(--header-bg));
-      color: var(--theme-color, rgb(209, 213, 219));
-      box-shadow: var(--theme-shadow, 0 2px 10px rgba(0, 0, 0, 0.3));
-    }
-
-    .menu-toggle {
-      display: none;
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: 0.5rem;
-      z-index: 1101;
-
-      .hamburger-icon {
-        display: block;
-        width: 36px;
-        height: 28px;
-        position: relative;
-
-        .bar {
-          position: absolute;
-          width: 100%;
-          height: 5px;
-          background: var(--hamburger-color, rgb(0, 0, 0));
-          border-radius: 3px;
-          transition: all 300ms ease;
-
-          &.top {
-            top: 0;
-          }
-          &.middle {
-            top: 11px;
-          }
-          &.bottom {
-            top: 22px;
-          }
+      .text-logo {
+        h1 {
+          font-size: var(--fs-md);
+          font-weight: 800;
+          margin: 0;
+          letter-spacing: -0.5px;
+          line-height: 1;
         }
-
-        &.open {
-          .top {
-            transform: translateY(11px) rotate(45deg);
-          }
-          .middle {
-            opacity: 0;
-          }
-          .bottom {
-            transform: translateY(-11px) rotate(-45deg);
-          }
+        p {
+          font-size: var(--fs-xs);
+          margin: var(--sp-1) 0 0;
+          opacity: 0.7;
         }
       }
     }
 
-    /* Dark mode support for hamburger icon */
-    :where([data-theme="dark"]) & .menu-toggle .hamburger-icon .bar {
-      background: rgb(255, 255, 255);
+    // Navigation
+    .nav-desktop {
+      display: none;
+      @media (min-width: 1024px) {
+        display: block;
+      }
+
+      ul {
+        display: flex;
+        gap: var(--sp-8);
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+
+      .nav-link {
+        font-size: var(--fs-sm);
+        font-weight: 500;
+        color: var(--nav-link-color);
+        text-decoration: none;
+        position: relative;
+        padding: var(--sp-2) 0;
+        transition: color 0.3s ease;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 0;
+          height: 2px;
+          background: var(--nav-link-hover);
+          transition: width 0.3s ease;
+        }
+
+        &:hover {
+          color: var(--nav-link-hover);
+          &::after { width: 100%; }
+        }
+      }
+
+      li.active .nav-link {
+        color: var(--nav-link-hover);
+        &::after { width: 100%; }
+      }
     }
 
-    .nav {
-      ul {
+    // Actions & CTA
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-4);
+    }
+
+    .cta-button {
+      padding: 0.75rem 1.5rem;
+      border-radius: 99px;
+      font-weight: 600;
+      font-size: var(--fs-sm);
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+
+      &.primary {
+        background: var(--theme-accent, #3b82f6);
+        color: #fff;
+        box-shadow: 0 4px 14px 0 rgba(59, 130, 246, 0.39);
+        &:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(59, 130, 246, 0.23);
+        }
+      }
+    }
+
+    // Mobile Toggle
+    .menu-toggle {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--sp-2);
+      @media (min-width: 1024px) {
+        display: none;
+      }
+
+      .hamburger-icon {
+        width: 24px;
+        height: 18px;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        span {
+          width: 100%;
+          height: 2px;
+          background: var(--theme-color, #000);
+          transition: all 0.3s ease;
+        }
+
+        &.open span {
+          &:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+          &:nth-child(2) { opacity: 0; }
+          &:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+        }
+      }
+    }
+
+    // Mobile Menu Overlay
+    .mobile-menu {
+      position: fixed;
+      top: var(--header-height);
+      left: 0;
+      width: 100%;
+      height: calc(100vh - var(--header-height));
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(20px);
+      z-index: 999;
+      transform: translateX(100%);
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      padding: var(--sp-8);
+
+      &.is-open {
+        transform: translateX(0);
+      }
+
+      .nav-mobile ul {
         list-style: none;
         padding: 0;
         margin: 0;
         display: flex;
-        gap: 1.5rem;
-      }
+        flex-direction: column;
+        gap: var(--sp-6);
 
-      li.active a {
-        font-weight: 700;
-        border-bottom: 2px solid;
-      }
-
-      a {
-        text-decoration: none;
-        color: inherit;
-        font-size: 1rem;
-        transition: color 200ms ease;
+        a {
+          font-size: var(--fs-lg);
+          font-weight: 700;
+          color: #000;
+          text-decoration: none;
+        }
       }
     }
 
-    /* Media query para pantallas móviles */
-    @media (max-width: 768px) {
-      .menu-toggle {
-        display: block !important;
-        position: absolute;
-        top: 1rem;
-        right: 1rem;
-      }
-
-      .nav {
-        display: none;
-        &.open {
-          display: block;
-          position: absolute;
-          top: 100%;
-          left: 0;
-          right: 0;
-          background: rgba(255, 255, 255, 0.95);
-          padding: 1rem;
-          box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-          z-index: 1100;
-          ul {
-            flex-direction: column;
-            gap: 1rem;
-          }
-          a {
-            color: rgb(51, 51, 51) !important;
-          }
-        }
-      }
-
-      /* Dark mode support for mobile menu */
-      :where([data-theme="dark"]) & .nav.open {
-        background: rgba(30, 30, 30, 0.95);
-        a {
-          color: rgb(209, 213, 219) !important;
-        }
-      }
+    &.dark {
+      background: rgba(15, 23, 42, 0.9);
+      .mobile-menu { background: rgba(15, 23, 42, 0.98); }
+      .nav-mobile a { color: #fff; }
+      .hamburger-icon span { background: #fff; }
     }
   }
 }

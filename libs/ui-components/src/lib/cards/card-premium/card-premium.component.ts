@@ -68,15 +68,36 @@ export interface CardPremiumCustomStyles {
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div [ngClass]="hostClasses()" [ngStyle]="hostStyles()" [style.background]="safeGradient()">
-      <div class="icon">
-        <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path [attr.d]="safeIconPath()" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
-        </svg>
+    <div [ngClass]="hostClasses()" [ngStyle]="hostStyles()">
+      <div class="card-image-bg" *ngIf="config().image">
+        <img [src]="config().image" [alt]="safeTitle()" />
+        <div class="image-overlay"></div>
       </div>
-      <div class="content">
-        <h2>{{ safeTitle() }}</h2>
-        <p>{{ safeDescription() }}</p>
+      
+      <div class="card-badge" *ngIf="config().discount">
+        {{ config().discount }}
+      </div>
+
+      <div class="card-inner">
+        <div class="icon-box" *ngIf="config().icon">
+          <svg class="icon-svg" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path [attr.d]="safeIconPath()" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" />
+          </svg>
+        </div>
+        
+        <div class="card-content">
+          <h2 class="card-title">{{ safeTitle() }}</h2>
+          <p class="card-description">{{ safeDescription() }}</p>
+        </div>
+
+        <div class="card-footer" *ngIf="config().price">
+          <span class="price-tag">{{ config().price }}</span>
+          <button class="action-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
   `,

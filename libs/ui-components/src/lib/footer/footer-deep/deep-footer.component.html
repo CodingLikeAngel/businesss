@@ -1,574 +1,65 @@
 <footer class="footer" [ngClass]="theme()" [ngStyle]="deepFooterStyles()">
-  <!-- Unique Decorations per Theme -->
-  <ng-container *ngIf="theme() === 'theme-mario'">
-    <div class="footer-decoration pipe" style="bottom: 5%; left: 10%;"></div>
-    <div class="footer-decoration question-block" style="top: 15%; right: 15%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-zelda'">
-    <div class="footer-decoration triforce-glow" style="top: 10%; left: 20%;"></div>
-    <div class="footer-decoration heart-container" style="bottom: 10%; right: 20%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-rayman'">
-    <div class="footer-decoration lum-swirl" style="top: 5%; right: 10%;"></div>
-    <div class="footer-decoration electoon" style="bottom: 15%; left: 15%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-dragonball'">
-    <div class="footer-decoration dragonball-star" style="top: 12%; left: 8%;"></div>
-    <div class="footer-decoration ki-burst" style="bottom: 10%; right: 12%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-onepiece'">
-    <div class="footer-decoration treasure-chest" style="bottom: 10%; left: 15%;"></div>
-    <div class="footer-decoration jolly-roger" style="top: 15%; right: 10%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-supermeatboy'">
-    <div class="footer-decoration meat-splatter" style="top: 10%; left: 12%;"></div>
-    <div class="footer-decoration sawblade" style="bottom: 15%; right: 8%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-cyberpunk'">
-    <div class="footer-decoration hologram" style="top: 8%; left: 10%;"></div>
-    <div class="footer-decoration datastream" style="bottom: 12%; right: 15%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-vaporwave'">
-    <div class="footer-decoration retro-statue" style="top: 10%; left: 15%;"></div>
-    <div class="footer-decoration vhs-glitch" style="bottom: 10%; right: 10%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-retroarcade'">
-    <div class="footer-decoration pixel-sprite" style="top: 12%; left: 8%;"></div>
-    <div class="footer-decoration arcade-cabinet" style="bottom: 15%; right: 12%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-pixeladventure'">
-    <div class="footer-decoration crystal-shard" style="top: 10%; left: 10%;"></div>
-    <div class="footer-decoration floating-platform" style="bottom: 12%; right: 10%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-cosmicgalaxy'">
-    <div class="footer-decoration comet-trail" style="top: 8%; left: 15%;"></div>
-    <div class="footer-decoration black-hole" style="bottom: 10%; right: 8%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-steampunk'">
-    <div class="footer-decoration steam-valve" style="top: 15%; left: 12%;"></div>
-    <div class="footer-decoration clockwork" style="bottom: 10%; right: 15%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-tropicalisland'">
-    <div class="footer-decoration coconut-tree" style="top: 10%; left: 10%;"></div>
-    <div class="footer-decoration tiki-torch" style="bottom: 12%; right: 12%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-hauntedmansion'">
-    <div class="footer-decoration floating-candle" style="top: 12%; left: 8%;"></div>
-    <div class="footer-decoration creepy-portrait" style="bottom: 15%; right: 10%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-fantasykingdom'">
-    <div class="footer-decoration enchanted-sword" style="top: 10%; left: 15%;"></div>
-    <div class="footer-decoration castle-turret" style="bottom: 10%; right: 8%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-synthwave'">
-    <div class="footer-decoration neon-grid" style="top: 8%; left: 12%;"></div>
-    <div class="footer-decoration retro-car" style="bottom: 12%; right: 15%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-minimalistzen'">
-    <div class="footer-decoration zen-stone" style="top: 10%; left: 10%;"></div>
-    <div class="footer-decoration ripple-water" style="bottom: 10%; right: 10%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-underwaterabyss'">
-    <div class="footer-decoration glowing-jellyfish" style="top: 12%; left: 15%;"></div>
-    <div class="footer-decoration sunken-anchor" style="bottom: 10%; right: 12%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-desertoasis'">
-    <div class="footer-decoration palm-oasis" style="top: 10%; left: 8%;"></div>
-    <div class="footer-decoration desert-ruin" style="bottom: 15%; right: 10%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-glitchart'">
-    <div class="footer-decoration glitch-distortion" style="top: 8%; left: 12%;"></div>
-    <div class="footer-decoration rgb-split" style="bottom: 12%; right: 8%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-baroque'">
-    <div class="footer-decoration golden-candelabra" style="top: 10%; left: 15%;"></div>
-    <div class="footer-decoration velvet-curtain" style="bottom: 10%; right: 12%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-kawaii'">
-    <div class="footer-decoration sparkling-star" style="top: 12%; left: 10%;"></div>
-    <div class="footer-decoration fluffy-cloud" style="bottom: 15%; right: 10%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-spaceodyssey'">
-    <div class="footer-decoration orbiting-satellite" style="top: 10%; left: 8%;"></div>
-    <div class="footer-decoration star-cluster" style="bottom: 12%; right: 15%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-graffiti'">
-    <div class="footer-decoration spray-paint" style="top: 15%; left: 10%;"></div>
-    <div class="footer-decoration street-sign" style="bottom: 10%; right: 12%;"></div>
-  </ng-container>
-  <ng-container *ngIf="theme() === 'theme-artdeco'">
-    <div class="footer-decoration geometric-fan" style="top: 12%; left: 8%;"></div>
-    <div class="footer-decoration gilded-frame" style="bottom: 15%; right: 10%;"></div>
-  </ng-container>
+  <div class="footer-container">
+    <div class="footer-top">
+      <!-- Brand Section -->
+      <div class="footer-brand">
+        <h2 class="brand-title">Anto Studios</h2>
+        <p class="brand-description">Crafting premium digital experiences with cutting-edge technology and aesthetic excellence.</p>
+        <div class="social-links">
+          <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+        </div>
+      </div>
 
-  <!-- Dynamic Layouts -->
-  <ng-container [ngSwitch]="theme()">
-    <!-- Mario: Classic grid with interactive blocks -->
-    <div *ngSwitchCase="'theme-mario'" class="footer-grid grid-classic">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Super angel World</h2>
-        <p class="footer-text">Jump into adventure! © 2023 angel.</p>
+      <!-- Links Grid -->
+      <div class="footer-links-grid">
+        <div class="links-column">
+          <h3 class="column-title">Company</h3>
+          <ul>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Services</a></li>
+            <li><a href="#">Our Work</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div class="links-column">
+          <h3 class="column-title">Resources</h3>
+          <ul>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
       </div>
-      <div class="footer-section links-section">
-        <h3 class="footer-title">Power-Ups</h3>
-        <ul>
-          <li><a href="#">Levels</a></li>
-          <li><a href="#">Items</a></li>
-          <li><a href="#">Worlds</a></li>
-          <li><a href="#">Challenges</a></li>
-        </ul>
-      </div>
-      <div class="footer-section social-section">
-        <a href="#" class="social-button mario-coin"><i class="fas fa-coins"></i></a>
-        <a href="#" class="social-button mario-star"><i class="fas fa-star"></i></a>
-        <a href="#" class="social-button mario-mushroom"><i class="fas fa-mushroom"></i></a>
-      </div>
-      <div class="footer-section newsletter-section">
-        <h3 class="footer-title">Join the Quest</h3>
-        <form>
-          <input type="email" placeholder="Your Warp Pipe email" required>
-          <button type="submit">Goomba Stomp!</button>
+
+      <!-- Newsletter Section -->
+      <div class="footer-newsletter">
+        <h3 class="column-title">Join our Newsletter</h3>
+        <p>Get the latest updates and exclusive offers.</p>
+        <form class="newsletter-form">
+          <input type="email" placeholder="Email address" required>
+          <button type="submit">Subscribe</button>
         </form>
       </div>
     </div>
 
-    <!-- Zelda: Wide, mystical layout -->
-    <div *ngSwitchCase="'theme-zelda'" class="footer-grid grid-wide">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Hyrule Chronicles</h2>
-        <p class="footer-text">Embark on a legendary quest. © 2023 angel.</p>
-      </div>
-      <div class="footer-section links-section">
-        <h3 class="footer-title">Sacred Relics</h3>
-        <ul>
-          <li><a href="#">Dungeons</a></li>
-          <li><a href="#">Artifacts</a></li>
-          <li><a href="#">Temples</a></li>
-          <li><a href="#">Lore</a></li>
-        </ul>
-      </div>
-      <div class="footer-section social-section">
-        <a href="#" class="social-button zelda-rupee"><i class="fas fa-gem"></i></a>
-        <a href="#" class="social-button zelda-heart"><i class="fas fa-heart"></i></a>
+    <div class="footer-bottom">
+      <p class="copyright">&copy; 2026 Anto Studios. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Legal</a>
+        <a href="#">Cookie Policy</a>
       </div>
     </div>
+  </div>
 
-    <!-- Rayman: Playful, colorful layout -->
-    <div *ngSwitchCase="'theme-rayman'" class="footer-grid grid-playful">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Glade of Dreams</h2>
-        <p class="footer-text">Swing into fun! © 2023 angel.</p>
-      </div>
-      <div class="footer-section links-section">
-        <h3 class="footer-title">Lums to Collect</h3>
-        <ul>
-          <li><a href="#">Worlds</a></li>
-          <li><a href="#">Creatures</a></li>
-          <li><a href="#">Challenges</a></li>
-        </ul>
-      </div>
-      <div class="footer-section newsletter-section">
-        <h3 class="footer-title">Dreamy Updates</h3>
-        <form>
-          <input type="email" placeholder="Your bubbly email" required>
-          <button type="submit">Float Away!</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Dragon Ball Z: High-energy layout -->
-    <div *ngSwitchCase="'theme-dragonball'" class="footer-grid grid-energy">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Z Fighters HQ</h2>
-        <p class="footer-text">Power up your adventure! © 2023 angel.</p>
-      </div>
-      <div class="footer-section social-section">
-        <a href="#" class="social-button dragonball-spark"><i class="fas fa-bolt"></i></a>
-        <a href="#" class="social-button dragonball-star"><i class="fas fa-star"></i></a>
-      </div>
-      <div class="footer-section newsletter-section">
-        <h3 class="footer-title">Senzu News</h3>
-        <form>
-          <input type="email" placeholder="Your ki email" required>
-          <button type="submit">Kamehameha!</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- One Piece: Nautical, adventure layout -->
-    <div *ngSwitchCase="'theme-onepiece'" class="footer-grid grid-nautical">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Straw Hat Crew</h2>
-        <p class="footer-text">Sail for the One Piece! © 2023 angel.</p>
-        <div class="compass-rose"></div>
-      </div>
-      <div class="footer-section links-section">
-        <h3 class="footer-title">Logbook</h3>
-        <ul>
-          <li><a href="#">Islands</a></li>
-          <li><a href="#">Crew</a></li>
-          <li><a href="#">Treasures</a></li>
-          <li><a href="#">Battles</a></li>
-        </ul>
-      </div>
-      <div class="footer-section newsletter-section">
-        <h3 class="footer-title">Set Sail</h3>
-        <form>
-          <input type="email" placeholder="Your pirate email" required>
-          <button type="submit">Hoist the Sails!</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Super Meat Boy: Gritty, compact layout -->
-    <div *ngSwitchCase="'theme-supermeatboy'" class="footer-grid grid-gritty">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Meat Boy's Lair</h2>
-        <p class="footer-text">Run, jump, bleed! © 2023 angel.</p>
-      </div>
-      <div class="footer-section social-section">
-        <a href="#" class="social-button meat-blood"><i class="fas fa-tint"></i></a>
-        <a href="#" class="social-button meat-bandage"><i class="fas fa-band-aid"></i></a>
-      </div>
-    </div>
-
-    <!-- Cyberpunk: Sleek, futuristic layout -->
-    <div *ngSwitchCase="'theme-cyberpunk'" class="footer-grid grid-sleek">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Neon Nexus</h2>
-        <p class="footer-text">Jack into the future. © 2023 angel.</p>
-      </div>
-      <div class="footer-section links-section">
-        <h3 class="footer-title">Data Streams</h3>
-        <ul class="horizontal">
-          <li><a href="#">Tech</a></li>
-          <li><a href="#">Missions</a></li>
-          <li><a href="#">Implants</a></li>
-        </ul>
-      </div>
-      <div class="footer-section social-section">
-        <a href="#" class="social-button cyber-hack"><i class="fas fa-code"></i></a>
-        <a href="#" class="social-button cyber-drone"><i class="fas fa-robot"></i></a>
-      </div>
-    </div>
-
-    <!-- Vaporwave: Chill, retro layout -->
-    <div *ngSwitchCase="'theme-vaporwave'" class="footer-grid grid-chill">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Retro Dreams</h2>
-        <p class="footer-text">Vibe with the neon sunset. © 2023 angel.</p>
-      </div>
-      <div class="footer-section social-section">
-        <a href="#" class="social-button vapor-cassette"><i class="fas fa-tape"></i></a>
-        <a href="#" class="social-button vapor-tiktok"><i class="fab fa-tiktok"></i></a>
-      </div>
-      <div class="footer-section newsletter-section">
-        <h3 class="footer-title">Synth Updates</h3>
-        <form>
-          <input type="email" placeholder="Your chill email" required>
-          <button type="submit">Rewind!</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Retro Arcade: Pixelated, nostalgic layout -->
-    <div *ngSwitchCase="'theme-retroarcade'" class="footer-grid grid-pixel">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Arcade Alley</h2>
-        <p class="footer-text">Insert coin to continue! © 2023 angel.</p>
-      </div>
-      <div class="footer-section links-section">
-        <h3 class="footer-title">High Scores</h3>
-        <ul>
-          <li><a href="#">Games</a></li>
-          <li><a href="#">Leaderboards</a></li>
-          <li><a href="#">Tokens</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Pixel Adventure: Platformer-inspired layout -->
-    <div *ngSwitchCase="'theme-pixeladventure'" class="footer-grid grid-platformer">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Pixel Quest</h2>
-        <p class="footer-text">Explore 8-bit realms. © 2023 angel.</p>
-      </div>
-      <div class="footer-section social-section">
-        <a href="#" class="social-button pixel-gem"><i class="fas fa-gem"></i></a>
-        <a href="#" class="social-button pixel-key"><i class="fas fa-key"></i></a>
-      </div>
-      <div class="footer-section newsletter-section">
-        <h3 class="footer-title">Level Up</h3>
-        <form>
-          <input type="email" placeholder="Your pixel email" required>
-          <button type="submit">Jump In!</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Cosmic Galaxy: Expansive, starry layout -->
-    <div *ngSwitchCase="'theme-cosmicgalaxy'" class="footer-grid grid-starry">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Galactic Hub</h2>
-        <p class="footer-text">Explore the cosmos. © 2023 angel.</p>
-      </div>
-      <div class="footer-section links-section">
-        <h3 class="footer-title">Star Systems</h3>
-        <ul>
-          <li><a href="#">Planets</a></li>
-          <li><a href="#">Stars</a></li>
-          <li><a href="#">Galaxies</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Steampunk: Mechanical, intricate layout -->
-    <div *ngSwitchCase="'theme-steampunk'" class="footer-grid grid-mechanical">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Steamworks</h2>
-        <p class="footer-text">Craft your destiny. © 2023 angel.</p>
-      </div>
-      <div class="footer-section newsletter-section">
-        <h3 class="footer-title">Brass Bulletin</h3>
-        <form>
-          <input type="email" placeholder="Your steam email" required>
-          <button type="submit">Ignite!</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Tropical Island: Relaxed, vibrant layout -->
-    <div *ngSwitchCase="'theme-tropicalisland'" class="footer-grid grid-vibrant">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Island Paradise</h2>
-        <p class="footer-text">Relax under the palms. © 2023 angel.</p>
-      </div>
-      <div class="footer-section links-section">
-        <h3 class="footer-title">Tropical Trails</h3>
-        <ul>
-          <li><a href="#">Beaches</a></li>
-          <li><a href="#">Jungles</a></li>
-          <li><a href="#">Volcanoes</a></li>
-        </ul>
-      </div>
-      <div class="footer-section newsletter-section">
-        <h3 class="footer-title">Island Breeze</h3>
-        <form>
-          <input type="email" placeholder="Your island email" required>
-          <button type="submit">Dive In!</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Haunted Mansion: Eerie, spooky layout -->
-    <div *ngSwitchCase="'theme-hauntedmansion'" class="footer-grid grid-eerie">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Ghostly Manor</h2>
-        <p class="footer-text">Enter if you dare. © 2023 angel.</p>
-      </div>
-      <div class="footer-section social-section">
-        <a href="#" class="social-button ghost-flame"><i class="fas fa-fire"></i></a>
-        <a href="#" class="social-button ghost-skull"><i class="fas fa-skull"></i></a>
-      </div>
-    </div>
-
-    <!-- Fantasy Kingdom: Regal, majestic layout -->
-    <div *ngSwitchCase="'theme-fantasykingdom'" class="footer-grid grid-regal">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Royal Realm</h2>
-        <p class="footer-text">Rule with honor. © 2023 angel.</p>
-      </div>
-      <div class="footer-section links-section">
-        <h3 class="footer-title">Noble Quests</h3>
-        <ul>
-          <li><a href="#">Knights</a></li>
-          <li><a href="#">Castles</a></li>
-          <li><a href="#">Dragons</a></li>
-        </ul>
-      </div>
-      <div class="footer-section newsletter-section">
-        <h3 class="footer-title">Royal Decree</h3>
-        <form>
-          <input type="email" placeholder="Your noble email" required>
-          <button type="submit">Proclaim!</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Synthwave: Retro-futuristic layout -->
-    <div *ngSwitchCase="'theme-synthwave'" class="footer-grid grid-retrofuturistic">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Neon Horizon</h2>
-        <p class="footer-text">Cruise the digital waves. © 2023 angel.</p>
-      </div>
-      <div class="footer-section social-section">
-        <a href="#" class="social-button synth-grid"><i class="fas fa-th"></i></a>
-        <a href="#" class="social-button synth-car"><i class="fas fa-car"></i></a>
-      </div>
-    </div>
-
-    <!-- Minimalist Zen: Clean, simple layout -->
-    <div *ngSwitchCase="'theme-minimalistzen'" class="footer-grid grid-simple">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Zen Garden</h2>
-        <p class="footer-text">Find your peace. © 2023 angel.</p>
-      </div>
-    </div>
-
-    <!-- Underwater Abyss: Fluid, immersive layout -->
-    <div *ngSwitchCase="'theme-underwaterabyss'" class="footer-grid grid-fluid">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Deep Sea</h2>
-        <p class="footer-text">Dive into mystery. © 2023 angel.</p>
-      </div>
-      <div class="footer-section newsletter-section">
-        <h3 class="footer-title">Ocean Currents</h3>
-        <form>
-          <input type="email" placeholder="Your aquatic email" required>
-          <button type="submit">Submerge!</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Desert Oasis: Warm, inviting layout -->
-    <div *ngSwitchCase="'theme-desertoasis'" class="footer-grid grid-warm">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Oasis Haven</h2>
-        <p class="footer-text">Rest in the sands. © 2023 angel.</p>
-      </div>
-      <div class="footer-section links-section">
-        <h3 class="footer-title">Caravan Routes</h3>
-        <ul>
-          <li><a href="#">Dunes</a></li>
-          <li><a href="#">Ruins</a></li>
-          <li><a href="#">Markets</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Glitch Art: Chaotic, fragmented layout -->
-    <div *ngSwitchCase="'theme-glitchart'" class="footer-grid grid-chaotic">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Glitch Realm</h2>
-        <p class="footer-text">Error 404: Reality not found. © 2023 angel.</p>
-      </div>
-      <div class="footer-section social-section">
-        <a href="#" class="social-button glitch-error"><i class="fas fa-bug"></i></a>
-      </div>
-    </div>
-
-    <!-- Baroque: Ornate, luxurious layout -->
-    <div *ngSwitchCase="'theme-baroque'" class="footer-grid grid-ornate">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Grand Palace</h2>
-        <p class="footer-text">Bask in opulence. © 2023 angel.</p>
-      </div>
-      <div class="footer-section links-section">
-        <h3 class="footer-title">Courtly Affairs</h3>
-        <ul>
-          <li><a href="#">Banquets</a></li>
-          <li><a href="#">Galleries</a></li>
-          <li><a href="#">Masquerades</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Kawaii: Cute, bubbly layout -->
-    <div *ngSwitchCase="'theme-kawaii'" class="footer-grid grid-cute">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Candy Kingdom</h2>
-        <p class="footer-text">Sprinkle some joy! © 2023 angel.</p>
-      </div>
-      <div class="footer-section social-section">
-        <a href="#" class="social-button kawaii-heart"><i class="fas fa-heart"></i></a>
-        <a href="#" class="social-button kawaii-star"><i class="fas fa-star"></i></a>
-        <a href="#" class="social-button kawaii-tiktok"><i class="fab fa-tiktok"></i></a>
-      </div>
-      <div class="footer-section newsletter-section">
-        <h3 class="footer-title">Sweet Updates</h3>
-        <form>
-          <input type="email" placeholder="Your kawaii email" required>
-          <button type="submit">Sparkle!</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Space Odyssey: Vast, futuristic layout -->
-    <div *ngSwitchCase="'theme-spaceodyssey'" class="footer-grid grid-vast">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Star Command</h2>
-        <p class="footer-text">To infinity and beyond. © 2023 angel.</p>
-      </div>
-      <div class="footer-section newsletter-section">
-        <h3 class="footer-title">Cosmic Dispatch</h3>
-        <form>
-          <input type="email" placeholder="Your stellar email" required>
-          <button type="submit">Launch!</button>
-        </form>
-      </div>
-    </div>
-
-    <!-- Graffiti: Urban, rebellious layout -->
-    <div *ngSwitchCase="'theme-graffiti'" class="footer-grid grid-urban">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Street Vibes</h2>
-        <p class="footer-text">Tag your legacy. © 2023 angel.</p>
-      </div>
-      <div class="footer-section social-section">
-        <a href="#" class="social-button graffiti-spray"><i class="fas fa-spray-can"></i></a>
-        <a href="#" class="social-button graffiti-tag"><i class="fas fa-pen"></i></a>
-      </div>
-    </div>
-
-    <!-- Art Deco: Elegant, geometric layout -->
-    <div *ngSwitchCase="'theme-artdeco'" class="footer-grid grid-elegant">
-      <div class="footer-section main-section">
-        <h2 class="footer-title">Gatsby Hall</h2>
-        <p class="footer-text">Step into elegance. © 2023 angel.</p>
-      </div>
-      <div class="footer-section links-section">
-        <h3 class="footer-title">Golden Age</h3>
-        <ul>
-          <li><a href="#">Soirees</a></li>
-          <li><a href="#">Designs</a></li>
-          <li><a href="#">Luxury</a></li>
-        </ul>
-      </div>
-    </div>
-  </ng-container>
-
-  <!-- Copyright -->
-  <p class="copyright">
-    <ng-container [ngSwitch]="theme()">
-      <ng-container *ngSwitchCase="'theme-mario'">Super angel World</ng-container>
-      <ng-container *ngSwitchCase="'theme-zelda'">Hyrule Chronicles</ng-container>
-      <ng-container *ngSwitchCase="'theme-rayman'">Glade of Dreams</ng-container>
-      <ng-container *ngSwitchCase="'theme-dragonball'">Z Fighters HQ</ng-container>
-      <ng-container *ngSwitchCase="'theme-onepiece'">Straw Hat Crew</ng-container>
-      <ng-container *ngSwitchCase="'theme-supermeatboy'">Meat Boy's Lair</ng-container>
-      <ng-container *ngSwitchCase="'theme-cyberpunk'">Neon Nexus</ng-container>
-      <ng-container *ngSwitchCase="'theme-vaporwave'">Retro Dreams</ng-container>
-      <ng-container *ngSwitchCase="'theme-retroarcade'">Arcade Alley</ng-container>
-      <ng-container *ngSwitchCase="'theme-pixeladventure'">Pixel Quest</ng-container>
-      <ng-container *ngSwitchCase="'theme-cosmicgalaxy'">Galactic Hub</ng-container>
-      <ng-container *ngSwitchCase="'theme-steampunk'">Steamworks</ng-container>
-      <ng-container *ngSwitchCase="'theme-tropicalisland'">Island Paradise</ng-container>
-      <ng-container *ngSwitchCase="'theme-hauntedmansion'">Ghostly Manor</ng-container>
-      <ng-container *ngSwitchCase="'theme-fantasykingdom'">Royal Realm</ng-container>
-      <ng-container *ngSwitchCase="'theme-synthwave'">Neon Horizon</ng-container>
-      <ng-container *ngSwitchCase="'theme-minimalistzen'">Zen Garden</ng-container>
-      <ng-container *ngSwitchCase="'theme-underwaterabyss'">Deep Sea</ng-container>
-      <ng-container *ngSwitchCase="'theme-desertoasis'">Oasis Haven</ng-container>
-      <ng-container *ngSwitchCase="'theme-glitchart'">Glitch Realm</ng-container>
-      <ng-container *ngSwitchCase="'theme-baroque'">Grand Palace</ng-container>
-      <ng-container *ngSwitchCase="'theme-kawaii'">Candy Kingdom</ng-container>
-      <ng-container *ngSwitchCase="'theme-spaceodyssey'">Star Command</ng-container>
-      <ng-container *ngSwitchCase="'theme-graffiti'">Street Vibes</ng-container>
-      <ng-container *ngSwitchCase="'theme-artdeco'">Gatsby Hall</ng-container>
-      <ng-container *ngSwitchDefault>Default Theme</ng-container>
-    </ng-container>
-    and its logo are trademarks of their respective owners.
-  </p>
+  <!-- Decorative elements (keep them for flavor) -->
+  <div class="footer-decorations" aria-hidden="true">
+    <div class="glow-1"></div>
+    <div class="glow-2"></div>
+  </div>
 </footer>
 
 

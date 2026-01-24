@@ -5,13 +5,65 @@ $neon-pink: #ec4899;
 $dark-bg: #111827;
 $glass-border: rgba(255, 255, 255, 0.2);
 
+// UI Tokens & Design System
+:root {
+  // Typography Scale (Fluid)
+  --fs-xs: clamp(0.7rem, 0.6rem + 0.5vw, 0.8rem);
+  --fs-sm: clamp(0.8rem, 0.7rem + 0.5vw, 0.95rem);
+  --fs-base: clamp(1rem, 0.9rem + 0.5vw, 1.125rem);
+  --fs-md: clamp(1.25rem, 1.1rem + 0.8vw, 1.5rem);
+  --fs-lg: clamp(1.5rem, 1.3rem + 1vw, 2rem);
+  --fs-xl: clamp(2rem, 1.8rem + 1.5vw, 3rem);
+  --fs-2xl: clamp(2.5rem, 2.2rem + 2vw, 4.5rem);
+  
+  // Spacing Scale
+  --sp-1: 0.25rem;
+  --sp-2: 0.5rem;
+  --sp-3: 0.75rem;
+  --sp-4: 1rem;
+  --sp-6: 1.5rem;
+  --sp-8: 2rem;
+  --sp-12: 3rem;
+  --sp-16: 4rem;
+  
+  // Shadows
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+}
+
 // Unified Gaming Theme Variables
 $unified-border-radius: 0.75rem;
-$unified-transition: all 0.3s ease;
-$unified-font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$unified-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+$unified-font-family: 'Outfit', 'Inter', sans-serif;
 $unified-font-weight: 600;
 $unified-hover-scale: scale(1.02);
 $unified-active-scale: scale(0.98);
+
+// Modern Layout Utilities
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin glass-effect($blur: 20px, $opacity: 0.05) {
+  background: rgba(255, 255, 255, #{$opacity});
+  backdrop-filter: blur(#{$blur});
+  -webkit-backdrop-filter: blur(#{$blur});
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+@mixin section-padding {
+  padding-top: var(--sp-12);
+  padding-bottom: var(--sp-12);
+  
+  @media (min-width: 768px) {
+    padding-top: var(--sp-16);
+    padding-bottom: var(--sp-16);
+  }
+}
 
 // Import Google Fonts for gaming variants
 // Import Google Fonts for all variants

@@ -1,27 +1,54 @@
 <header [ngClass]="headerClasses()" [ngStyle]="headerStyles()">
-  <div class="header-content">
-    <div class="title-wrapper">
-      <h1>{{ title() }}</h1>
-      <p *ngIf="subtitle()">{{ subtitle() }}</p>
+  <div class="header-container">
+    <div class="header-left">
+      <div class="logo-wrapper" *ngIf="logo() || title()">
+        <img *ngIf="logo()" [src]="logo()" alt="Logo" class="logo-img" />
+        <div class="text-logo" *ngIf="!logo()">
+          <h1>{{ title() }}</h1>
+          <p *ngIf="subtitle()">{{ subtitle() }}</p>
+        </div>
+      </div>
     </div>
 
-    <button
-      class="menu-toggle"
-      (click)="toggleMenu()"
-      [attr.aria-expanded]="isMenuOpen"
-      aria-label="Toggle navigation menu"
-    >
-      <span class="hamburger-icon" [class.open]="isMenuOpen">
-        <span class="bar top"></span>
-        <span class="bar middle"></span>
-        <span class="bar bottom"></span>
-      </span>
-    </button>
+    <div class="header-center">
+      <nav class="nav-desktop">
+        <ul>
+          <li *ngFor="let item of navItems()" [class.active]="item.active">
+            <a [href]="item.href" class="nav-link">{{ item.label }}</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
 
-    <nav class="nav" [class.open]="isMenuOpen">
+    <div class="header-right">
+      <div class="actions" *ngIf="ctaLabel()">
+        <button class="cta-button primary">{{ ctaLabel() }}</button>
+      </div>
+
+      <button
+        class="menu-toggle"
+        (click)="toggleMenu()"
+        [attr.aria-expanded]="isMenuOpen"
+        aria-label="Toggle navigation menu"
+      >
+        <div class="hamburger-icon" [class.open]="isMenuOpen">
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-menu" [class.is-open]="isMenuOpen">
+    <nav class="nav-mobile">
       <ul>
         <li *ngFor="let item of navItems()" [class.active]="item.active">
-          <a [href]="item.href">{{ item.label }}</a>
+          <a [href]="item.href" (click)="isMenuOpen = false">{{ item.label }}</a>
+        </li>
+        <li *ngIf="ctaLabel()">
+          <button class="cta-button primary w-full">{{ ctaLabel() }}</button>
         </li>
       </ul>
     </nav>

@@ -8,256 +8,154 @@
   ==========================================================================
 */
 
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.6rem;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  cursor: pointer;
-  border: none;
-  position: relative;
-  transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-  overflow: hidden;
-  user-select: none;
-  z-index: 1;
+@layer base {
+  .btn {
+    --btn-padding: var(--sp-3) var(--sp-6);
+    --btn-font-size: var(--fs-sm);
+    --btn-radius: 8px;
+    --btn-bg: var(--theme-bg, #1e293b);
+    --btn-color: var(--theme-color, #fff);
+    --btn-accent: var(--theme-accent, #3b82f6);
+    
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--sp-2);
+    padding: var(--btn-padding);
+    font-size: var(--btn-font-size);
+    font-weight: 600;
+    color: var(--btn-color);
+    background: var(--btn-bg);
+    border-radius: var(--btn-radius);
+    border: 1px solid transparent;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: shared.$unified-transition;
+    user-select: none;
+    z-index: 1;
 
-  /* Default Size (MD) */
-  padding: 0.8rem 1.6rem;
-  font-size: 0.875rem;
-  border-radius: 0.5rem;
+    @include shared.apply-all-variants('btn-');
 
-  &::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    transition: all 0.3s ease;
-    z-index: -1;
-  }
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      
+      &::after {
+        opacity: 1;
+      }
+    }
 
-  &:active {
-    transform: scale(0.95);
-  }
+    &:active {
+      transform: translateY(0) scale(0.98);
+    }
 
-  &.btn-disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-    filter: grayscale(1);
-    pointer-events: none;
-  }
-}
+    &.btn-disabled, &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      filter: grayscale(1);
+    }
 
-/* 
-  ==========================================================================
-  SIZES
-  ==========================================================================
-*/
-
-.btn-sm {
-  padding: 0.5rem 1rem;
-  font-size: 0.75rem;
-  border-radius: 0.375rem;
-}
-
-.btn-lg {
-  padding: 1.2rem 2.4rem;
-  font-size: 1.125rem;
-  border-radius: 0.75rem;
-}
-
-/* 
-  ==========================================================================
-  VARIANTS (Thematic Designs)
-  ==========================================================================
-*/
-
-/* --- Nintendo / Mario Theme --- */
-.btn-mario {
-  background: linear-gradient(135deg, #e53e3e, #3182ce);
-  color: #fff;
-  border: 4px solid #000;
-  border-radius: 12px;
-  box-shadow: 4px 4px 0 #000;
-  font-family: 'Press Start 2P', 'Courier New', monospace;
-  font-size: 0.7rem;
-  font-weight: 400;
-  text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
-
-  &::before {
-    background: linear-gradient(to bottom, rgba(255,255,255,0.4) 0%, transparent 50%);
-  }
-
-  &:hover {
-    background: linear-gradient(135deg, #ff0000, #4a90e2);
-    transform: translate(-2px, -2px);
-    box-shadow: 6px 6px 0 #000, 0 0 15px rgba(229, 62, 62, 0.6);
-
-    &::after {
-      content: '⭐';
+    // Ripple effect
+    .ripple {
       position: absolute;
-      top: -10px;
-      right: -10px;
-      color: #ffd700;
-      font-size: 20px;
-      text-shadow: 0 0 10px #ffd700;
-      animation: star-pop 0.5s ease-out forwards;
+      background: rgba(255, 255, 255, 0.3);
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      transform: scale(0);
+      pointer-events: none;
+      z-index: 0;
+
+      &.active {
+        animation: ripple-effect 0.6s linear;
+      }
+    }
+
+    // Loading overlay
+    .loading-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: inherit;
+      z-index: 2;
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    .btn-content {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      z-index: 1;
+      
+      &.is-hidden {
+        opacity: 0;
+      }
+    }
+
+    .icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 1.25em;
+      height: 1.25em;
     }
   }
 
-  &:active {
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0 #000;
+  // Rounded variants
+  .btn-rounded-md { --btn-radius: 12px; }
+  .btn-rounded-full { --btn-radius: 99px; }
+
+  // Size variants
+  .btn-sm {
+    --btn-padding: var(--sp-2) var(--sp-4);
+    --btn-font-size: var(--fs-xs);
+  }
+
+  .btn-lg {
+    --btn-padding: var(--sp-4) var(--sp-8);
+    --btn-font-size: var(--fs-md);
   }
 }
 
-/* --- Ubisoft / Rayman Theme --- */
-.btn-rayman {
-  background: linear-gradient(135deg, #ff6b35, #f7931e, #00ff88);
-  color: #fff;
-  border-radius: 2rem;
-  box-shadow: 0 0 15px rgba(255, 107, 53, 0.4);
-  backdrop-filter: blur(4px);
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  font-family: 'Comic Neue', 'Comic Sans MS', cursive;
-  font-weight: 700;
-  text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
-
-  &.btn-sm { border-radius: 1rem; }
-  &.btn-lg { border-radius: 3rem; }
-
-  &:hover {
-    transform: translateY(-4px) scale(1.05);
-    box-shadow: 0 0 25px rgba(255, 107, 53, 0.6), 0 0 15px rgba(0, 255, 136, 0.4);
-    background: linear-gradient(135deg, #00ff88, #ff6b35, #f7931e);
+@keyframes ripple-effect {
+  to {
+    transform: scale(4);
+    opacity: 0;
   }
 }
 
-/* --- Rockstar Theme --- */
-.btn-rockstar {
-  background: linear-gradient(135deg, #000000, #1a1a1a);
-  color: #fff;
-  border-radius: 0;
-  padding: 1rem 2rem;
-  clip-path: polygon(0 0, 100% 0, 100% 80%, 90% 100%, 0 100%);
-  border-right: 6px solid #f9d71c;
-  font-family: 'Bungee', 'Impact', sans-serif;
-  letter-spacing: 2px;
-  font-weight: 400;
-  text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
-  box-shadow: 3px 3px 0 rgba(249, 215, 28, 0.3);
-
-  &:hover {
-    background: linear-gradient(135deg, #f9d71c, #fbbf24);
-    color: #000;
-    border-right-color: #000;
-    clip-path: polygon(0 0, 90% 0, 100% 20%, 100% 100%, 0 100%);
-    box-shadow: 5px 5px 0 rgba(249, 215, 28, 0.5), 0 0 20px rgba(249, 215, 28, 0.6);
-    text-shadow: none;
-  }
+@keyframes spin {
+  to { transform: rotate(360deg); }
 }
 
-/* --- Cyberpunk Theme --- */
-.btn-cyberpunk {
-  background: linear-gradient(135deg, #1a1a2e, #16213e);
-  color: #00ffcc;
-  border: 2px solid #00ffcc;
-  border-radius: 0;
-  text-shadow: 0 0 8px rgba(0, 255, 204, 0.8);
-  box-shadow: inset 0 0 10px rgba(0, 255, 204, 0.2), 0 0 10px rgba(0, 255, 204, 0.4);
-  font-family: 'Courier New', monospace;
-  font-weight: 400;
-  letter-spacing: 1px;
-
-  &::after {
-    content: '01010101';
-    position: absolute;
-    bottom: 2px;
-    right: 5px;
-    font-size: 6px;
-    color: #ff0055;
-    opacity: 0.7;
-  }
-
-  &:hover {
-    background: linear-gradient(135deg, #00ffcc, #00ffff);
-    color: #000;
-    box-shadow: 0 0 20px #00ffcc, 0 0 30px #00ffcc;
-    text-shadow: none;
-    animation: glitch-button 0.3s infinite;
-  }
-}
-
-/* --- Glass / Premium --- */
+// Special button theme adjustments
 .btn-glass {
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 0.75rem;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-
+  border-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  
   &:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.4);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    background: rgba(255, 255, 255, 0.1);
   }
 }
 
-/* 
-  ==========================================================================
-  ANIMATIONS
-  ==========================================================================
-*/
-
-@keyframes star-pop {
-  0% { transform: scale(0) rotate(0); opacity: 0; }
-  50% { transform: scale(1.5) rotate(180deg); opacity: 1; }
-  100% { transform: scale(1) rotate(360deg); opacity: 0.8; top: -20px; right: -20px; }
-}
-
-@keyframes glitch-button {
-  0% { transform: translate(1px, 1px); filter: hue-rotate(0deg); }
-  20% { transform: translate(-1px, -1px); filter: hue-rotate(90deg); }
-  40% { transform: translate(1px, -1px); filter: hue-rotate(180deg); }
-  60% { transform: translate(-1px, 1px); }
-  80% { transform: translate(1px, 1px); }
-  100% { transform: translate(0); }
-}
-
-/* 
-  ==========================================================================
-  MOBILE RESPONSIVENESS
-  ==========================================================================
-*/
-
-@media (max-width: 640px) {
-  .btn {
-    padding: 0.6rem 1.2rem;
-    font-size: 0.8rem;
-
-    &.btn-lg {
-      padding: 1rem 1.8rem;
-      font-size: 1rem;
-    }
-  }
-}
-
-@media (min-width: 1024px) {
-  .btn {
-    padding: 1rem 2rem;
-    font-size: 1rem;
-
-    &.btn-sm {
-      padding: 0.75rem 1.5rem;
-      font-size: 0.9rem;
-    }
-
-    &.btn-lg {
-      padding: 1.5rem 3rem;
-      font-size: 1.25rem;
-    }
+.btn-neon {
+  border-color: var(--btn-accent);
+  box-shadow: 0 0 10px rgba(var(--btn-accent), 0.3);
+  
+  &:hover {
+    box-shadow: 0 0 20px var(--btn-accent);
   }
 }

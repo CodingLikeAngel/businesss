@@ -147,14 +147,14 @@
   animation: fadeInUp 1s ease-out;
 
   .title {
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-size: var(--fs-2xl);
     font-weight: 900;
-    margin-bottom: 20px;
+    margin-bottom: var(--sp-4);
     letter-spacing: -0.03em;
   }
 
   .subtitle {
-    font-size: clamp(1.1rem, 2vw, 1.4rem);
+    font-size: var(--fs-base);
     color: #94a3b8;
     max-width: 700px;
     margin: 0 auto;

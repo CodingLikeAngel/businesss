@@ -12,9 +12,12 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  padding: var(--sp-12) var(--sp-4);
 
   /* Soporte para imagen de fondo del negocio */
   --business-bg-image: none;
+  --hero-title-size: var(--fs-2xl);
+  --hero-subtitle-size: var(--fs-lg);
 
   /* Aplicamos customStyles con mayor prioridad */
   &[class*="hero-section--"] {
@@ -629,9 +632,11 @@
 }
 
 .hero-title {
-  font-size: 2.5rem;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 700;
+  font-size: var(--hero-title-size);
+  font-family: shared.$unified-font-family;
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -2px;
   background: linear-gradient(to right, #00b4ff, #ff4500);
   -webkit-background-clip: text;
   background-clip: text;
@@ -653,9 +658,12 @@
 }
 
 .hero-subtitle {
-  margin-top: 1.5rem;
-  font-size: 1.125rem;
+  margin-top: var(--sp-6);
+  font-size: var(--hero-subtitle-size);
   color: #e5e7eb;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
   animation: fade-in-up 1s ease-in-out 0.2s forwards;
 }
 
