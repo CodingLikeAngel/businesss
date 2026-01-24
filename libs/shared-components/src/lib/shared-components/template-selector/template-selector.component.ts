@@ -271,86 +271,37 @@ export class TemplateSelectorComponent implements OnInit {
   }
 
   selectTemplate(template: BusinessTemplate) {
-    console.log('Template selected:', template.name);
+    console.log('Template selected:', template.name, 'with ID:', template.id);
     this.selectedTemplate = template;
     this.previewingTemplate = null; 
     
-    // Use the robust service to apply the template by ID
-    const blueprintId = this.mapCategoryToBlueprint(template.category);
-    
-    if (blueprintId) {
-        this.variantTemplateService.applyTemplate(blueprintId);
-    }
-    console.log('Template selected for application');
+    // Apply the FULL template object directly. 
+    // This is much more robust than mapping to blueprints.
+    this.variantService.applyTemplate(template);
+    console.log('Template applied via selectTemplate');
   }
 
-  // ...
-
-  previewTemplate(template: BusinessTemplate) {
-     // Preview logic temporarily disabled for stability
-     console.log('Preview feature coming soon');
-  }
-
-  // ...
-
-  isPreviewing(template: BusinessTemplate): boolean {
-    return this.previewingTemplate?.id === template.id;
-  }
-
-  // Helper to map UI categories to our hardcoded blueprints
-  public mapCategoryToBlueprint(category: string): string | null {
-      if (!category) return 'agency'; // Default fallback
-      const lower = category.toLowerCase();
-      
-      // DEPORTES / FITNESS
-      if (lower.includes('deportes') || lower.includes('fitness') || lower.includes('gym') || lower.includes('entrenador')) return 'fitness';
-      
-      // SALUD / MÉDICO
-      if (lower.includes('salud') || lower.includes('clinic') || lower.includes('médico') || lower.includes('dental') || lower.includes('farmacia')) return 'clinic';
-      
-      // CREATIVO / AGENCIA / TECH
-      if (lower.includes('diseño') || lower.includes('arte') || lower.includes('agency') || lower.includes('marketing') || lower.includes('creativo') || lower.includes('tech') || lower.includes('software')) return 'agency';
-      
-      // BELLEZA / MODA / ESTÉTICA
-      if (lower.includes('belleza') || lower.includes('moda') || lower.includes('estética') || lower.includes('peluquería') || lower.includes('spa') || lower.includes('maquillaje')) return 'clinic'; 
-      
-      // GASTRONOMÍA / RESTAURACIÓN
-      if (lower.includes('gastronomía') || lower.includes('restaurante') || lower.includes('bar') || lower.includes('café') || lower.includes('comida')) return 'agency';
-      
-      // RETAIL / TIENDA
-      if (lower.includes('retail') || lower.includes('tienda') || lower.includes('shop') || lower.includes('ecommerce')) return 'agency';
-      
-      // SERVICIOS / EDUCACIÓN / OTROS
-      if (lower.includes('servicios') || lower.includes('educación') || lower.includes('legal') || lower.includes('inmobiliaria')) return 'clinic';
-      
-      return 'agency'; // Safe default for unknown categories
-  }
+  // ... (keeping other methods for internal use if needed)
 
   async applyTemplate() {
     console.log('Apply template clicked');
     if (!this.selectedTemplate) {
-      console.log('No template selected');
       return;
     }
 
-    console.log('Applying template:', this.selectedTemplate.name);
     this.isApplying = true;
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Small delay for UI feedback
+      await new Promise(resolve => setTimeout(resolve, 300));
 
-      const blueprintId = this.mapCategoryToBlueprint(this.selectedTemplate.category);
-      if (blueprintId) {
-          (this.variantTemplateService as any).applyTemplate(blueprintId);
-      } else {
-          // Absolute fallback
-          (this.variantTemplateService as any).applyTemplate('agency');
-      }
-
+      // Re-apply to be sure
+      this.variantService.applyTemplate(this.selectedTemplate);
+      
       this.confirmed = true;
       this.closeDropdown();
       this.templateApplied.emit();
-      console.log('Template applied successfully');
+      console.log('Template selection confirmed and applied');
     } catch (error) {
       console.error('Error applying template:', error);
     } finally {
@@ -358,6 +309,15 @@ export class TemplateSelectorComponent implements OnInit {
     }
   }
 
+
+  previewTemplate(template: BusinessTemplate) {
+    this.previewingTemplate = template;
+    this.variantService.applyTemplate(template);
+  }
+
+  isPreviewing(template: BusinessTemplate): boolean {
+    return this.previewingTemplate?.id === template.id;
+  }
 
   cancelSelection() {
     this.selectedTemplate = null;

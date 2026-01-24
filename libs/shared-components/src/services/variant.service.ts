@@ -1546,89 +1546,49 @@ export class VariantService {
 
   // Apply template configuration
   applyTemplate(template: any) {
-    console.log('VariantService: Applying template:', template?.name || 'Unknown template');
+    if (!template) return;
+    
+    console.log('VariantService: Applying template:', template.name || template.id || 'Unknown');
 
-    // Check if this is a page template (has sections) or global config template
+    // 1. Structural Application: If it has sections, apply them to the current page
     if (template.sections) {
-      // This is a page template - apply to current page
-      console.log('Applying page template with sections');
+      console.log('VariantService: Applying sections structure');
       const currentPage = this.currentPageSubject.getValue();
       if (currentPage) {
         this.updatePage(currentPage.id, {
-          sections: template.sections,
+          sections: [...template.sections],
           globalStyles: template.globalStyles || {}
         });
       }
-    } else {
-      // This is a global config template - apply globally
-      // Apply all configurations from the template
-      if (template.header) {
-        console.log('Applying header config');
-        this.headerConfigSubject.next(template.header);
-      }
-      if (template.footer) {
-        console.log('Applying footer config');
-        this.footerConfigSubject.next(template.footer);
-      }
-      if (template.navBar) {
-        console.log('Applying navbar config');
-        this.navBarConfigSubject.next(template.navBar);
-      }
-      if (template.hero) {
-        console.log('Applying hero config');
-        this.heroConfigSubject.next(template.hero);
-      }
-      if (template.bubble) {
-        console.log('Applying bubble config');
-        this.bubbleConfigSubject.next(template.bubble);
-      }
-      if (template.card) {
-        console.log('Applying card config');
-        this.cardConfigSubject.next(template.card);
-      }
-      if (template.title) {
-        console.log('Applying title config');
-        this.titleConfigSubject.next(template.title);
-      }
-      if (template.serviceCards) {
-        console.log('Applying serviceCards config');
-        this.serviceCardsConfigSubject.next(template.serviceCards);
-      }
-      if (template.faq) {
-        console.log('Applying faq config');
-        this.faqConfigSubject.next(template.faq);
-      }
-      if (template.pricing) {
-        console.log('Applying pricing config');
-        this.pricingConfigSubject.next(template.pricing);
-      }
-      if (template.promotions) {
-        console.log('Applying promotions config');
-        this.promotionsConfigSubject.next(template.promotions);
-      }
-      if (template.gallery) {
-        console.log('Applying gallery config');
-        this.galleryConfigSubject.next(template.gallery);
-      }
-      if (template.products) {
-        console.log('Applying products config');
-        this.productsConfigSubject.next(template.products);
-      }
-      if (template.testimonials) {
-        console.log('Applying testimonials config');
-        this.testimonialsConfigSubject.next(template.testimonials);
-      }
-      if (template.globalVariant) {
-        console.log('Applying globalVariant:', template.globalVariant);
-        this.globalVariantSubject.next(template.globalVariant);
-      }
-      if (template.componentVariants) {
-        console.log('Applying componentVariants');
-        this.componentVariantsSubject.next(template.componentVariants);
-      }
+    }
+
+    // 2. Data/Config Application: Apply all component configurations
+    // This MUST run even if sections are present, to fill the components with correct data
+    if (template.header) this.setHeaderConfig(template.header);
+    if (template.footer) this.setFooterConfig(template.footer);
+    if (template.navBar) this.setNavBarConfig(template.navBar);
+    if (template.hero) this.setHeroConfig(template.hero);
+    if (template.bubble) this.setBubbleConfig(template.bubble);
+    if (template.card) this.setCardConfig(template.card);
+    if (template.title) this.setTitleConfig(template.title);
+    if (template.serviceCards) this.setServiceCardsConfig(template.serviceCards);
+    if (template.faq) this.setFaqConfig(template.faq);
+    if (template.pricing) this.setPricingConfig(template.pricing);
+    if (template.promotions) this.setPromotionsConfig(template.promotions);
+    if (template.gallery) this.setGalleryConfig(template.gallery);
+    if (template.products) this.setProductsConfig(template.products);
+    if (template.testimonials) this.setTestimonialsConfig(template.testimonials);
+    if (template.stats) this.setStatsConfig(template.stats);
+    
+    // 3. Variant Application
+    if (template.globalVariant) {
+      this.setGlobalVariant(template.globalVariant);
+    }
+    if (template.componentVariants) {
+      this.componentVariantsSubject.next({ ...template.componentVariants });
     }
 
     this.saveToLocalStorage();
-    console.log('Template application completed');
+    console.log('VariantService: Template application completed successfully');
   }
 }
