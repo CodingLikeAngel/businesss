@@ -72,13 +72,13 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
     throw new Error('Method not implemented.');
   }
 
-  callNow() {
+  override callNow() {
     console.log('Opening contact form or call action...');
     this.scrollToSection('contacto');
   }
 
 
-  onTabSelected(sectionId: string | Event) {
+  override onTabSelected(sectionId: string | Event) {
     const id = typeof sectionId === 'string' ? sectionId : (sectionId as any).target?.value || sectionId;
     if (typeof id === 'string') {
       this.scrollToSection(id);
@@ -96,7 +96,7 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
     }
   }
 
-  returnToEditor() {
+  override returnToEditor() {
     this.variantService.setBuilderStep('editor');
   }
 

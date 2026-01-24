@@ -312,9 +312,9 @@ export interface PageSection {
      tablet: { visible: boolean; styles: SectionStyles };
      desktop: { visible: boolean; styles: SectionStyles };
    };
-   locked?: boolean;
    zIndex?: number;
    order?: number;
+   isGlobal?: boolean;
  }
 
 export interface Page {

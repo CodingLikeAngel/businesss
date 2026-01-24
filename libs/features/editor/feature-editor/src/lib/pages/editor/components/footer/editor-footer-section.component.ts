@@ -81,13 +81,21 @@ export class EditorFooterSectionComponent extends EnhancedBaseEditorSectionCompo
 
   private updateFooterStyles(bounds: any): void {
     const currentStyles = this.section.styles || {};
-    this.variantService.updateSectionInCurrentPage(this.section.id, {
-      styles: {
-        ...currentStyles,
-        width: bounds.width + 'px',
-        height: bounds.height + 'px',
-        transform: `translate(${bounds.x}px, ${bounds.y}px)`
-      }
-    });
+    const styles = {
+      ...currentStyles,
+      width: bounds.width + 'px',
+      height: bounds.height + 'px',
+      transform: `translate(${bounds.x}px, ${bounds.y}px)`
+    };
+
+    if (this.section.id === 'global_footer') {
+      this.variantService.updateFooterConfig({
+        customStyles: styles
+      });
+    } else {
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        styles
+      });
+    }
   }
 }

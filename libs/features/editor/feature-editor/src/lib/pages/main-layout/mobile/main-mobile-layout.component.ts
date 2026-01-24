@@ -31,7 +31,7 @@ export class MainMobileLayoutComponent extends MainLayoutBaseComponent {
     this.activeTab = tab;
   }
 
-  returnToEditor() {
+  override returnToEditor() {
     this.variantService.setBuilderStep('editor');
   }
 }

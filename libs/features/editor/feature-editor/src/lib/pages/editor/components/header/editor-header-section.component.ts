@@ -37,13 +37,20 @@ export class EditorHeaderSectionComponent extends EnhancedBaseEditorSectionCompo
            const newItems = [...items];
            newItems[selected.index] = selected.content;
            
-           this.variantService.updateSectionInCurrentPage(this.section.id, {
-             content: {
+           if (this.section.id === 'global_header') {
+             this.variantService.updateHeaderConfig({
                ...this.section.content,
-               items: newItems,
                navItems: newItems
-             }
-           });
+             });
+           } else {
+             this.variantService.updateSectionInCurrentPage(this.section.id, {
+               content: {
+                 ...this.section.content,
+                 items: newItems,
+                 navItems: newItems
+               }
+             });
+           }
        }
     }
   }

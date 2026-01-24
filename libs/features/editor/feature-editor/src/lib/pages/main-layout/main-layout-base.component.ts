@@ -19,9 +19,9 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
   private variantSub?: Subscription;
   private stepSub?: Subscription;
 
-  // Cached virtual sections for editor support
-  private _headerAsSection: any = null;
-  private _footerAsSection: any = null;
+  // Cached virtual sections to ensure stable references for editor components
+  private _headerAsSection: PageSection | null = null;
+  private _footerAsSection: PageSection | null = null;
 
   protected uiStateService = inject(UiStateService);
   protected visualEditor = inject(VisualEditorService);
@@ -48,13 +48,11 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.variantService.headerConfig$.subscribe((config) => {
       this.headerConfig = config;
-      // Invalidate cache
-      this._headerAsSection = null;
+      this._headerAsSection = null; // Invalidate cache on config change
     });
     this.variantService.footerConfig$.subscribe((config) => {
       this.footerConfig = config;
-      // Invalidate cache
-      this._footerAsSection = null;
+      this._footerAsSection = null; // Invalidate cache on config change
     });
     this.navBarConfigSub = this.variantService.navBarConfig$.subscribe((config) => {
       this.navBarConfig = config;
@@ -105,7 +103,10 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
     this.previewSize = size;
   }
 
-  get headerAsSection(): any {
+  /**
+   * Returns a cached PageSection view of the global header.
+   */
+  get headerAsSection(): PageSection {
     if (!this._headerAsSection) {
       this._headerAsSection = {
         id: 'global_header',
@@ -133,7 +134,10 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
     return this._headerAsSection;
   }
 
-  get footerAsSection(): any {
+  /**
+   * Returns a cached PageSection view of the global footer.
+   */
+  get footerAsSection(): PageSection {
     if (!this._footerAsSection) {
       this._footerAsSection = {
         id: 'global_footer',
