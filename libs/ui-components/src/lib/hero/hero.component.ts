@@ -120,18 +120,17 @@ export class UIHeroSectionComponent implements AfterViewInit, OnDestroy {
     const styles: Record<string, any> = {};
     const customStyles = this.customStyles();
     
-    if (customStyles['backgroundColor']) {
-      styles['--hero-bg'] = customStyles['backgroundColor'];
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
+    const bgColor = customStyles['backgroundColor'] || customStyles['background'];
+    if (bgColor) {
+      styles['--hero-bg-color'] = bgColor;
+      styles['--theme-bg'] = bgColor;
+      styles['--component-bg'] = bgColor;
     }
     
     if (customStyles['color']) {
       styles['--hero-color'] = customStyles['color'];
       styles['--theme-color'] = customStyles['color'];
       styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
     }
     
     Object.keys(customStyles).forEach(key => {

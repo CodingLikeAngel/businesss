@@ -22,12 +22,21 @@
 
   /* Aplicamos customStyles con mayor prioridad */
   &[class*="hero-section--"] {
-    background-color: var(--theme-bg, var(--hero-bg, transparent)) !important;
+    // We use separate variables to allow clean overrides
+    --final-bg-color: var(--theme-bg, var(--hero-bg-color, transparent));
+    --final-bg-image: var(--theme-bg-image, var(--hero-bg-image, none));
+
+    background-color: var(--final-bg-color) !important;
+    background-image: var(--final-bg-image) !important;
+    background-size: cover;
+    background-position: center;
+    
     color: var(--theme-color, var(--hero-color, #ffffff)) !important;
     border: var(--hero-border, none) !important;
     box-shadow: var(--hero-shadow, none) !important;
+    
     &:hover {
-      background-color: var(--hero-hover-bg, var(--hero-bg, transparent)) !important;
+      background-color: var(--final-bg-color) !important;
       box-shadow: var(--hero-hover-shadow, var(--hero-shadow, none)) !important;
     }
     /* Imagen del negocio con opacidad baja para ser transparente */
@@ -35,12 +44,17 @@
     background-image: var(--business-bg-image, none) !important;
 
     // CRITICAL: Force inline styles to override variant backgrounds
-    &[style*='background'] {
-      background: var(--theme-bg) !important;
-    }
+    // CRITICAL: Use the computed final background color to ensure custom colors from editor work
+    background-color: var(--final-bg-color) !important;
+    background-image: var(--final-bg-image) !important;
+    background-blend-mode: overlay, normal;
 
     &[style*='background-color'] {
-      background-color: var(--theme-bg) !important;
+      // If we have an inline background-color, prioritize it and the variable
+      background-color: var(--theme-bg, var(--final-bg-color)) !important;
+      // If a custom color is set, we might want to reduce the impact of the variant image 
+      // if it's not a pattern to let the color be visible
+      background-blend-mode: multiply, normal;
     }
 
     &[style*='color'] {
@@ -210,110 +224,124 @@
 
 /* Variantes originales */
 .hero-section--primary {
-  --hero-bg: #3b82f6 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.1)"/></svg>') repeat !important;
+  --hero-bg-color: #3b82f6;
+  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="rgba(255,255,255,0.1)"/></svg>') !important;
   background-size: 50px 50px;
 }
-.hero-section--secondary { --hero-bg: linear-gradient(135deg, #6b7280, #374151) !important; --hero-color: #d1d5db !important; }
-.hero-section--outline { --hero-bg: #ffffff !important; color: #374151; border: 2px solid #d1d5db; }
-.hero-section--ghost { --hero-bg: rgba(255, 255, 255, 0.1) !important; backdrop-filter: blur(8px); }
+.hero-section--secondary { --hero-bg-image: linear-gradient(135deg, #6b7280, #374151); --hero-color: #d1d5db; }
+.hero-section--outline { --hero-bg-color: #ffffff; color: #374151; border: 2px solid #d1d5db; }
+.hero-section--ghost { --hero-bg-color: rgba(255, 255, 255, 0.1); backdrop-filter: blur(8px); }
 .hero-section--link {
-  --hero-bg: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0 100 C50 0, 50 100, 100 0" fill="none" stroke="#06b6d4" stroke-width="10"/></svg>') repeat, #1e90ff !important;
+  --hero-bg-color: #1e90ff;
+  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0 100 C50 0, 50 100, 100 0" fill="none" stroke="%2306b6d4" stroke-width="10"/></svg>');
   background-size: 100px 100px;
   color: #06b6d4;
 }
 .hero-section--neon {
-  --hero-bg: #00ced1 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q70 50 50 90 Q30 50 50 10" fill="#ff4500" opacity="0.2"/></svg>') repeat !important;
+  --hero-bg-color: #00ced1;
+  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q70 50 50 90 Q30 50 50 10" fill="%23ff4500" opacity="0.2"/></svg>');
   background-size: 80px 80px;
 }
 .hero-section--cyberpunk {
-  --hero-bg: #ff69b4 repeating-linear-gradient(45deg, rgba(50, 205, 50, 0.2) 0px, rgba(50, 205, 50, 0.2) 10px, transparent 10px, transparent 20px) !important;
+  --hero-bg-color: #ff69b4;
+  --hero-bg-image: repeating-linear-gradient(45deg, rgba(50, 205, 50, 0.2) 0px, rgba(50, 205, 50, 0.2) 10px, transparent 10px, transparent 20px);
 }
 .hero-section--gradient {
-  --hero-bg: repeating-conic-gradient(#ff0000 0deg 10deg, #ffffff 10deg 20deg, #0000ff 20deg 30deg) !important;
+  --hero-bg-image: repeating-conic-gradient(#ff0000 0deg 10deg, #ffffff 10deg 20deg, #0000ff 20deg 30deg);
 }
-.hero-section--glass { --hero-bg: rgba(255, 255, 255, 0.05) !important; backdrop-filter: blur(10px); }
+.hero-section--glass { --hero-bg-color: rgba(255, 255, 255, 0.05); backdrop-filter: blur(10px); }
 .hero-section--retro {
-  --hero-bg: #f472b6 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><rect x="5" y="5" width="10" height="10" fill="#60a5fa"/></svg>') repeat !important;
+  --hero-bg-color: #f472b6;
+  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><rect x="5" y="5" width="10" height="10" fill="%2360a5fa"/></svg>');
   background-size: 20px 20px;
 }
 .hero-section--pulse-gradient {
-  --hero-bg: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="#4682b4" opacity="0.3"/></svg>') repeat, #1e90ff !important;
+  --hero-bg-color: #1e90ff;
+  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="%234682b4" opacity="0.3"/></svg>');
   background-size: 60px 60px;
   animation: wave-flow 5s infinite;
 }
-.hero-section--holo { --hero-bg: radial-gradient(ellipse at top, #00d4ff 0%, rgba(0, 212, 255, 0.2) 100%) !important; }
+.hero-section--holo { --hero-bg-image: radial-gradient(ellipse at top, #00d4ff 0%, rgba(0, 212, 255, 0.2) 100%); }
 .hero-section--matrix {
-  --hero-bg: #2f2f2f url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="rgba(255,255,255,0.05)"/></svg>') repeat !important;
+  --hero-bg-color: #2f2f2f;
+  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="rgba(255,255,255,0.05)"/></svg>');
   background-size: 100px 100px;
   backdrop-filter: blur(5px);
 }
-.hero-section--quantum { --hero-bg: linear-gradient(45deg, #ff00cc, #00e5ff, #1e1b4b) !important; }
-.hero-section--cybernetic { --hero-bg: linear-gradient(135deg, #1e293b, #64748b) !important; }
+.hero-section--quantum { --hero-bg-image: linear-gradient(45deg, #ff00cc, #00e5ff, #1e1b4b); }
+.hero-section--cybernetic { --hero-bg-image: linear-gradient(135deg, #1e293b, #64748b); }
 .hero-section--danger {
-  --hero-bg: #dc2626 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,10 90,90 10,90" fill="rgba(153,27,27,0.2)"/></svg>') repeat !important;
+  --hero-bg-color: #dc2626;
+  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><polygon points="50,10 90,90 10,90" fill="rgba(153,27,27,0.2)"/></svg>');
   background-size: 40px 40px;
 }
-.hero-section--success { --hero-bg: linear-gradient(135deg, #22c55e, #15803d) !important; }
-.hero-section--nano { --hero-bg: radial-gradient(ellipse at top, #1e293b, #475569) !important; }
+.hero-section--success { --hero-bg-image: linear-gradient(135deg, #22c55e, #15803d); }
+.hero-section--nano { --hero-bg-image: radial-gradient(ellipse at top, #1e293b, #475569); }
 .hero-section--stellar {
-  --hero-bg: #1e1b4b url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="5" cy="5" r="1" fill="#ffffff"/></svg>') repeat !important;
+  --hero-bg-color: #1e1b4b;
+  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10"><circle cx="5" cy="5" r="1" fill="%23ffffff"/></svg>');
   background-size: 20px 20px;
 }
-.hero-section--phoenix { --hero-bg: linear-gradient(90deg, #f59e0b, #ef4444) !important; }
-.hero-section--galactic { --hero-bg: radial-gradient(ellipse at top, #0d0221, #2a0944, #5e2b97) !important; }
-.hero-section--orbitron { --hero-bg: #111827 !important; font-family: 'Orbitron', sans-serif; }
-.hero-section--cartoon { --hero-bg: linear-gradient(45deg, #facc15, #f87171) !important; }
-.hero-section--luma { --hero-bg: radial-gradient(circle, #e5e7eb, #d1d5db) !important; color: #1f2937; }
-.hero-section--platform { --hero-bg: linear-gradient(135deg, #4b5563, #1f2937) !important; }
-.hero-section--hero { --hero-bg: linear-gradient(90deg, #3b82f6, #9333ea) !important; }
+.hero-section--phoenix { --hero-bg-image: linear-gradient(90deg, #f59e0b, #ef4444); }
+.hero-section--galactic { --hero-bg-image: radial-gradient(ellipse at top, #0d0221, #2a0944, #5e2b97); }
+.hero-section--orbitron { --hero-bg-color: #111827; font-family: 'Orbitron', sans-serif; }
+.hero-section--cartoon { --hero-bg-image: linear-gradient(45deg, #facc15, #f87171); }
+.hero-section--luma { --hero-bg-image: radial-gradient(circle, #e5e7eb, #d1d5db); color: #1f2937; }
+.hero-section--platform { --hero-bg-image: linear-gradient(135deg, #4b5563, #1f2937); }
+.hero-section--hero { --hero-bg-image: linear-gradient(90deg, #3b82f6, #9333ea); }
 .hero-section--coin {
-  --hero-bg: #ffd700 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="#ffa500" opacity="0.3"/></svg>') repeat !important;
+  --hero-bg-color: #ffd700;
+  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="20" fill="%23ffa500" opacity="0.3"/></svg>');
   background-size: 50px 50px;
 }
-.hero-section--cloud { --hero-bg: linear-gradient(135deg, #e2e8f0, #94a3b8) !important; color: #1f2937; }
-.hero-section--fire { --hero-bg: linear-gradient(90deg, #f87171, #dc2626) !important; }
+.hero-section--cloud { --hero-bg-image: linear-gradient(135deg, #e2e8f0, #94a3b8); color: #1f2937; }
+.hero-section--fire { --hero-bg-image: linear-gradient(90deg, #f87171, #dc2626); }
 .hero-section--water {
-  --hero-bg: #06b6d4 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0 50 C25 25, 75 75, 100 50" fill="none" stroke="#0ea5e9" stroke-width="5"/></svg>') repeat !important;
+  --hero-bg-color: #06b6d4;
+  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M0 50 C25 25, 75 75, 100 50" fill="none" stroke="%230ea5e9" stroke-width="5"/></svg>');
   background-size: 100px 100px;
 }
-.hero-section--leaf { --hero-bg: linear-gradient(90deg, #10b981, #4ade80) !important; }
-.hero-section--amber-glow { --hero-bg: radial-gradient(ellipse at top, #d97706, #b45309) !important; }
-.hero-section--minimal-white { --hero-bg: #ffffff !important; color: #1f2937; }
-.hero-section--hex-teal { --hero-bg: #0d9488 !important; }
-.hero-section--purple-edge { --hero-bg: #6b21a8 !important; }
-.hero-section--rose-radial { --hero-bg: radial-gradient(circle, #f43f5e, #be123c) !important; }
+.hero-section--leaf { --hero-bg-image: linear-gradient(90deg, #10b981, #4ade80); }
+.hero-section--amber-glow { --hero-bg-image: radial-gradient(ellipse at top, #d97706, #b45309); }
+.hero-section--minimal-white { --hero-bg-color: #ffffff; color: #1f2937; }
+.hero-section--hex-teal { --hero-bg-color: #0d9488; }
+.hero-section--purple-edge { --hero-bg-color: #6b21a8; }
+.hero-section--rose-radial { --hero-bg-image: radial-gradient(circle, #f43f5e, #be123c); }
 .hero-section--yellow-pulse {
-  --hero-bg: #eab308 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="rgba(255,255,255,0.1)"/></svg>') repeat !important;
+  --hero-bg-color: #eab308;
+  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="rgba(255,255,255,0.1)"/></svg>');
   background-size: 50px 50px;
   animation: pulse 2s infinite;
 }
-.hero-section--green-inset { --hero-bg: #15803d !important; box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); }
-.hero-section--blue-skew { --hero-bg: #1d4ed8 !important; transform: skewY(-2deg); }
-.hero-section--orange-dash { --hero-bg: #ea580c !important; }
-.hero-section--indigo-dots { --hero-bg: #4f46e5 !important; background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 10px 10px; }
-.hero-section--bubble { --hero-bg: radial-gradient(circle, #60a5fa, #1e40af) !important; }
-.hero-section--electoon { --hero-bg: linear-gradient(135deg, #facc15, #eab308) !important; animation: pulse 1.5s infinite; }
-.hero-section--jungle { --hero-bg: linear-gradient(90deg, #166534, #4ade80) !important; }
-.hero-section--joycon { --hero-bg: linear-gradient(45deg, #f87171, #60a5fa) !important; }
-.hero-section--neomorph { --hero-bg: #e5e7eb !important; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.5); color: #1f2937; }
+.hero-section--green-inset { --hero-bg-color: #15803d; box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); }
+.hero-section--blue-skew { --hero-bg-color: #1d4ed8; transform: skewY(-2deg); }
+.hero-section--orange-dash { --hero-bg-color: #ea580c; }
+.hero-section--indigo-dots { --hero-bg-color: #4f46e5; --hero-bg-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 10px 10px; }
+.hero-section--bubble { --hero-bg-image: radial-gradient(circle, #60a5fa, #1e40af); }
+.hero-section--electoon { --hero-bg-image: linear-gradient(135deg, #facc15, #eab308); animation: pulse 1.5s infinite; }
+.hero-section--jungle { --hero-bg-image: linear-gradient(90deg, #166534, #4ade80); }
+.hero-section--joycon { --hero-bg-image: linear-gradient(45deg, #f87171, #60a5fa); }
+.hero-section--neomorph { --hero-bg-color: #e5e7eb; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.5); color: #1f2937; }
 .hero-section--glitch {
-  --hero-bg: #0f172a url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="0" y="0" width="100" height="10" fill="rgba(255,255,255,0.05)"/></svg>') repeat !important;
+  --hero-bg-color: #0f172a;
+  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="0" y="0" width="100" height="10" fill="rgba(255,255,255,0.05)"/></svg>');
   background-size: 100px 10px;
   animation: glitch 1.5s infinite;
 }
-.hero-section--portal { --hero-bg: radial-gradient(circle, #8b5cf6, #1e1b4b) !important; }
-.hero-section--senderismo { --hero-bg: radial-gradient(ellipse at top, #1a3d2e 0%, #3d6d4f 100%) !important; }
+.hero-section--portal { --hero-bg-image: radial-gradient(circle, #8b5cf6, #1e1b4b); }
+.hero-section--senderismo { --hero-bg-image: radial-gradient(ellipse at top, #1a3d2e 0%, #3d6d4f 100%); }
 .hero-section--pesca {
-  --hero-bg: #00ced1 url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q70 50 50 90 Q30 50 50 10" fill="#ff4500" opacity="0.2"/></svg>') repeat !important;
+  --hero-bg-color: #00ced1;
+  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 10 Q70 50 50 90 Q30 50 50 10" fill="%23ff4500" opacity="0.2"/></svg>');
   background-size: 80px 80px;
 }
-.hero-section--micologia { --hero-bg: radial-gradient(ellipse at top, #2e1a3d 0%, #4f2a6d 100%) !important; }
-.hero-section--caza { --hero-bg: radial-gradient(ellipse at top, #3a2f0b 0%, #8a6e2f 100%) !important; }
-.hero-section--gastronomia { --hero-bg: radial-gradient(ellipse at top, #4a2c0f 0%, #a66d2f 100%) !important; }
-.hero-section--empleo { --hero-bg: radial-gradient(ellipse at top, #1e1b4b 0%, #4b3e8a 100%) !important; }
-.hero-section--ocio-cultura { --hero-bg: radial-gradient(ellipse at top, #2f1a3d 0%, #6d3e8a 100%) !important; }
-.hero-section--noticias { --hero-bg: radial-gradient(ellipse at top, #1a3d3d 0%, #3d6d6d 100%) !important; }
-.hero-section--default { --hero-bg: radial-gradient(ellipse at top, #1e1b4b 0%, #0a0a14 100%) !important; }
+.hero-section--micologia { --hero-bg-image: radial-gradient(ellipse at top, #2e1a3d 0%, #4f2a6d 100%); }
+.hero-section--caza { --hero-bg-image: radial-gradient(ellipse at top, #3a2f0b 0%, #8a6e2f 100%); }
+.hero-section--gastronomia { --hero-bg-image: radial-gradient(ellipse at top, #4a2c0f 0%, #a66d2f 100%); }
+.hero-section--empleo { --hero-bg-image: radial-gradient(ellipse at top, #1e1b4b 0%, #4b3e8a 100%); }
+.hero-section--ocio-cultura { --hero-bg-image: radial-gradient(ellipse at top, #2f1a3d 0%, #6d3e8a 100%); }
+.hero-section--noticias { --hero-bg-image: radial-gradient(ellipse at top, #1a3d3d 0%, #3d6d6d 100%); }
+.hero-section--default { --hero-bg-image: radial-gradient(ellipse at top, #1e1b4b 0%, #0a0a14 100%); }
 
 
 /* Specific overrides for complex variants not fully covered by generic tokens */
@@ -354,7 +382,7 @@
 */
 
 .hero-section--mario {
-  --hero-bg: #e60012 !important;
+  --hero-bg: #e60012;
   --hero-color: #fff;
   background-image: radial-gradient(#ffffff 2px, transparent 2px);
   background-size: 40px 40px;

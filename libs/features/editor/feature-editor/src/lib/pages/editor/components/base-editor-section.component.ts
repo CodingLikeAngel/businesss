@@ -43,6 +43,9 @@ export abstract class BaseEditorSectionComponent {
   }
 
   getVariant(sectionId: string): string {
+    if (this.section?.content?.['variant']) {
+      return this.section.content['variant'];
+    }
     return this.componentVariants[sectionId] || this.globalVariant;
   }
 

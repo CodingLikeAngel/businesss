@@ -170,13 +170,14 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
    */
   getHeroStyles(): any {
     const styles: Record<string, any> = {};
-    const customStyles = this.section.customStyles || {};
+    const customStyles = this.section.styles || {};
     
-    if (customStyles['backgroundColor']) {
-      styles['--hero-bg'] = customStyles['backgroundColor'];
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
+    const bgColor = customStyles['backgroundColor'] || customStyles['background'];
+    if (bgColor) {
+      styles['--hero-bg-color'] = bgColor;
+      styles['--theme-bg'] = bgColor;
+      styles['--component-bg'] = bgColor;
+      styles['background-color'] = bgColor;
     }
     
     if (customStyles['color']) {
@@ -186,6 +187,7 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
       styles['color'] = customStyles['color'];
     }
     
+    // Copy all other styles (position, dimensions, etc)
     Object.keys(customStyles).forEach(key => {
       if (key !== 'backgroundColor' && key !== 'color') {
         styles[key] = customStyles[key];
