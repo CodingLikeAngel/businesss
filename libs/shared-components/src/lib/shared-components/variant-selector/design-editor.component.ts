@@ -349,6 +349,71 @@ interface PropertyConfig {
             </div>
           </div>
 
+          <!-- Posición & Capas -->
+          <div class="property-group" *ngIf="hasProperty('position') || hasProperty('zIndex') || hasProperty('overflow')">
+            <div class="group-header" (click)="toggleGroup('positioning')">
+              <span class="icon">📍</span>
+              <h4>Posición & Capas</h4>
+              <span class="toggle-icon">{{ groupStates['positioning'] ? '▼' : '▶' }}</span>
+            </div>
+            <div class="group-content" *ngIf="groupStates['positioning']">
+              
+              <div class="grid-2">
+                <div class="property-item" *ngIf="hasProperty('position')">
+                  <label>Posición</label>
+                  <select 
+                    class="select-input"
+                    [ngModel]="getStyleValue('position')" 
+                    (ngModelChange)="updateStyle('position', $event)"
+                  >
+                    <option value="static">Static</option>
+                    <option value="relative">Relative</option>
+                    <option value="absolute">Absolute</option>
+                    <option value="fixed">Fixed</option>
+                    <option value="sticky">Sticky</option>
+                  </select>
+                </div>
+
+                <div class="property-item" *ngIf="hasProperty('zIndex')">
+                  <label>Z-Index</label>
+                  <input 
+                    type="number" 
+                    class="text-input"
+                    [ngModel]="getStyleValue('zIndex')" 
+                    (ngModelChange)="updateStyle('zIndex', $event)"
+                    placeholder="auto"
+                  >
+                </div>
+              </div>
+
+              <div class="property-item" *ngIf="hasProperty('top') || hasProperty('left')">
+                <label>Coordenadas (Top / Right / Bottom / Left)</label>
+                <div class="grid-2" style="grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 0.5rem;">
+                  <input type="text" class="text-input" [ngModel]="getStyleValue('top')" (ngModelChange)="updateStyle('top', $event)" placeholder="Top">
+                  <input type="text" class="text-input" [ngModel]="getStyleValue('right')" (ngModelChange)="updateStyle('right', $event)" placeholder="Right">
+                </div>
+                <div class="grid-2" style="grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                  <input type="text" class="text-input" [ngModel]="getStyleValue('bottom')" (ngModelChange)="updateStyle('bottom', $event)" placeholder="Bottom">
+                  <input type="text" class="text-input" [ngModel]="getStyleValue('left')" (ngModelChange)="updateStyle('left', $event)" placeholder="Left">
+                </div>
+              </div>
+
+              <div class="property-item" *ngIf="hasProperty('overflow')">
+                <label>Overflow (Desbordamiento)</label>
+                <select 
+                  class="select-input"
+                  [ngModel]="getStyleValue('overflow')" 
+                  (ngModelChange)="updateStyle('overflow', $event)"
+                >
+                  <option value="visible">Visible</option>
+                  <option value="hidden">Oculto (Hidden)</option>
+                  <option value="scroll">Scroll</option>
+                  <option value="auto">Auto</option>
+                </select>
+              </div>
+
+            </div>
+
           <!-- Bordes -->
           <div class="property-group" *ngIf="hasProperty('border') || hasProperty('borderRadius')">
             <div class="group-header" (click)="toggleGroup('borders')">
@@ -975,7 +1040,8 @@ export class DesignEditorComponent implements OnChanges {
     spacing: false,
     borders: false,
     background: false,
-    flexbox: false
+    flexbox: false,
+    positioning: false
   };
 
   // Propiedades editables del componente actual

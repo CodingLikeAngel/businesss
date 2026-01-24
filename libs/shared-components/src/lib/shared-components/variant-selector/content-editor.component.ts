@@ -30,39 +30,39 @@ import { FormsModule } from '@angular/forms';
       <div class="editor-body" *ngIf="selectedSection || selectedElement">
         
         <!-- SECTION 1: TEXT FIELDS -->
-        <section class="edit-group">
+        <section class="edit-group" *ngIf="shouldShowTextFields">
             <div class="group-title">
                 <span class="dot"></span>
                 <h4>Campos Principales</h4>
             </div>
 
-            <div class="form-v2" *ngIf="targetContent">
+            <div class="form-v2">
                 <!-- Title Field -->
-                <div class="input-v2" *ngIf="targetContent.title !== undefined">
+                <div class="input-v2" *ngIf="hasProperty('title')">
                     <label>Título principal</label>
                     <input type="text" 
                            class="text-v2" 
-                           [(ngModel)]="targetContent.title" 
-                           (ngModelChange)="onContentChange()" 
+                           [ngModel]="targetContent.title" 
+                           (ngModelChange)="updateProperty('title', $event)" 
                            placeholder="Ingresa un título impactante...">
                 </div>
 
                 <!-- Subtitle / Value Field -->
-                <div class="input-v2 mt-3" *ngIf="targetContent.subtitle !== undefined">
+                <div class="input-v2 mt-3" *ngIf="hasProperty('subtitle')">
                     <label>Subtítulo o Valor</label>
                     <input type="text" 
                            class="text-v2" 
-                           [(ngModel)]="targetContent.subtitle" 
-                           (ngModelChange)="onContentChange()" 
+                           [ngModel]="targetContent.subtitle" 
+                           (ngModelChange)="updateProperty('subtitle', $event)" 
                            placeholder="Información secundaria...">
                 </div>
 
                 <!-- Description / Text Field -->
-                <div class="input-v2 mt-3" *ngIf="targetContent.description !== undefined || targetContent.text !== undefined">
+                <div class="input-v2 mt-3" *ngIf="hasProperty('description') || hasProperty('text')">
                     <label>Cuerpo del Mensaje</label>
                     <textarea class="textarea-v2" 
-                               [(ngModel)]="targetDescription" 
-                               (ngModelChange)="onContentChange()" 
+                               [ngModel]="targetDescription" 
+                               (ngModelChange)="updateProperty(targetContent.description !== undefined ? 'description' : 'text', $event)" 
                                rows="4" 
                                placeholder="Escribe aquí el contenido detallado..."></textarea>
                 </div>
@@ -70,26 +70,26 @@ import { FormsModule } from '@angular/forms';
         </section>
 
         <!-- SECTION 2: ACTIONS & LINKS -->
-        <section class="edit-group" *ngIf="targetContent && (targetContent.label !== undefined || targetContent.link !== undefined)">
+        <section class="edit-group" *ngIf="shouldShowActions">
             <div class="group-title">
                 <span class="dot"></span>
                 <h4>Llamada a la Acción</h4>
             </div>
             
             <div class="grid-2">
-                <div class="input-v2" *ngIf="targetContent.label !== undefined">
+                <div class="input-v2" *ngIf="hasProperty('label')">
                     <label>Texto del Botón</label>
-                    <input type="text" class="text-v2" [(ngModel)]="targetContent.label" (ngModelChange)="onContentChange()" placeholder="Ej: Comprar ahora">
+                    <input type="text" class="text-v2" [ngModel]="targetContent.label" (ngModelChange)="updateProperty('label', $event)" placeholder="Ej: Comprar ahora">
                 </div>
-                <div class="input-v2" *ngIf="targetContent.link !== undefined">
+                <div class="input-v2" *ngIf="hasProperty('link')">
                     <label>URL de Destino</label>
-                    <input type="text" class="text-v2" [(ngModel)]="targetContent.link" (ngModelChange)="onContentChange()" placeholder="https://...">
+                    <input type="text" class="text-v2" [ngModel]="targetContent.link" (ngModelChange)="updateProperty('link', $event)" placeholder="https://...">
                 </div>
             </div>
         </section>
 
         <!-- SECTION 3: MEDIA -->
-        <section class="edit-group" *ngIf="targetContent && targetContent.image !== undefined">
+        <section class="edit-group" *ngIf="shouldShowMedia">
             <div class="group-title">
                 <span class="dot"></span>
                 <h4>Media & Multimedia</h4>
@@ -97,7 +97,7 @@ import { FormsModule } from '@angular/forms';
             <div class="input-v2">
                 <label>URL de Imagen o Recurso</label>
                 <div class="media-input-wrapper">
-                    <input type="text" class="text-v2" [(ngModel)]="targetContent.image" (ngModelChange)="onContentChange()" placeholder="https://...">
+                    <input type="text" class="text-v2" [ngModel]="targetContent.image" (ngModelChange)="updateProperty('image', $event)" placeholder="https://...">
                     <div class="media-preview-v2" *ngIf="targetContent.image">
                         <img [src]="targetContent.image" alt="Preview">
                     </div>
@@ -106,32 +106,38 @@ import { FormsModule } from '@angular/forms';
         </section>
 
         <!-- SECTION 4: ITERABLES / LIST ITEMS -->
-        <section class="edit-group" *ngIf="selectedSection?.content?.items">
+        <section class="edit-group" *ngIf="shouldShowItems">
             <div class="group-title space-between">
                 <div class="flex-row">
                     <span class="dot"></span>
-                    <h4>Colección de Elementos</h4>
+                    <h4>{{ isAccordion ? 'Items del Acordeón' : 'Colección de Elementos' }}</h4>
                 </div>
-                <button class="add-btn-v2" (click)="addItem(selectedSection.content.items)">
+                <button class="add-btn-v2" (click)="addItem()">
                     <span class="plus">+</span> AÑADIR
                 </button>
             </div>
 
             <div class="items-v2-container">
-                <div *ngFor="let item of selectedSection.content.items; let i = index" class="item-v2-card">
+                <div *ngFor="let item of targetContent.items; let i = index" class="item-v2-card">
                     <div class="item-v2-header">
                         <span class="index">#{{ i + 1 }}</span>
                         <div class="item-actions">
-                            <button class="icon-btn-v2" (click)="removeItem(selectedSection.content.items, i)">🗑️</button>
+                            <button class="icon-btn-v2" (click)="removeItem(i)">🗑️</button>
                         </div>
                     </div>
                     <div class="item-v2-body">
-                        <input type="text" class="item-input-v2" [(ngModel)]="item.title" (ngModelChange)="onContentChange()" placeholder="Título del item...">
-                        <textarea class="item-textarea-v2" [(ngModel)]="item.description" (ngModelChange)="onContentChange()" rows="2" placeholder="Descripción breve..."></textarea>
+                        <!-- Generic Title -->
+                        <input type="text" class="item-input-v2" [ngModel]="item.title" (ngModelChange)="updateItemProperty(i, 'title', $event)" placeholder="Título del item...">
+                        
+                        <!-- Description/Text -->
+                        <textarea *ngIf="item.description !== undefined && !isAccordion" class="item-textarea-v2" [ngModel]="item.description" (ngModelChange)="updateItemProperty(i, 'description', $event)" rows="2" placeholder="Descripción breve..."></textarea>
+                        
+                        <!-- Content (Specific for Accordion) -->
+                        <textarea *ngIf="isAccordion || item.content !== undefined" class="item-textarea-v2" [ngModel]="item.content" (ngModelChange)="updateItemProperty(i, 'content', $event)" rows="4" placeholder="Contenido del acordeón..."></textarea>
                     </div>
                 </div>
                 
-                <div *ngIf="selectedSection.content.items?.length === 0" class="empty-list-v2">
+                <div *ngIf="!targetContent.items || targetContent.items.length === 0" class="empty-list-v2">
                     <p>La lista está vacía. Añade tu primer elemento.</p>
                 </div>
             </div>
@@ -354,29 +360,131 @@ export class ContentEditorComponent {
     }
   }
 
+  get componentType(): string {
+    if (this.selectedElement) return this.selectedElement.type || 'element';
+    if (this.selectedSection) return this.selectedSection.type || 'section';
+    return '';
+  }
+
+  get isAccordion(): boolean {
+    const type = this.componentType;
+    const id = this.selectedElement?.id || this.selectedSection?.id || '';
+    return type === 'accordion' || type.includes('accordion') || id.includes('accordion');
+  }
+
+  hasProperty(prop: string): boolean {
+    if (!this.targetContent) return false;
+    return this.targetContent[prop] !== undefined;
+  }
+
+  get shouldShowTextFields(): boolean {
+    // Accordion shouldn't show main text fields if it doesn't have them explicitly
+    if (this.isAccordion && !this.hasProperty('title') && !this.hasProperty('subtitle')) return false;
+    
+    return this.hasProperty('title') || 
+           this.hasProperty('subtitle') || 
+           this.hasProperty('description') || 
+           this.hasProperty('text');
+  }
+
+  get shouldShowActions(): boolean {
+    return this.hasProperty('label') || this.hasProperty('link') || this.hasProperty('cta');
+  }
+
+  get shouldShowMedia(): boolean {
+    return this.hasProperty('image') || this.hasProperty('imageUrl') || this.hasProperty('icon');
+  }
+
+  get shouldShowItems(): boolean {
+    // Always show items for accordion, even if empty
+    if (this.isAccordion) return true;
+    // Otherwise check if items array exists
+    return this.targetContent && Array.isArray(this.targetContent.items);
+  }
+
+  // HELPER TO UPDATE ANY PROPERTY SAFELY
+  updateProperty(key: string, value: any) {
+    if (!this.targetContent) return;
+
+    // Clone the entire content object to break immutability
+    const newContent = { ...this.targetContent };
+    
+    // Update the specific key
+    newContent[key] = value;
+    
+    // Push the update back to the main state holder
+    this.pushContentUpdate(newContent);
+  }
+
+  // HELPER TO UPDATE NESTED ITEMS SAFELY
+  updateItemProperty(index: number, key: string, value: any) {
+    if (!this.targetContent?.items) return;
+
+    // Clone items array and the specific item
+    const newItems = [...this.targetContent.items];
+    newItems[index] = { ...newItems[index], [key]: value };
+    
+    // Update content with new items array
+    const newContent = { ...this.targetContent, items: newItems };
+    
+    this.pushContentUpdate(newContent);
+  }
+
+  // CORE UPDATE LOGIC
+  private pushContentUpdate(newContent: any) {
+    if (this.selectedSection) {
+        this.selectedSection.content = newContent;
+    } else if (this.selectedElement) {
+        this.selectedElement.content = newContent;
+    }
+    
+    // Emit notification to parent components
+    this.onContentChange();
+  }
+
   onContentChange() {
+    this.emitContentUpdate();
+  }
+
+  private emitContentUpdate() {
     this.contentChanged.emit();
   }
 
-  addItem(items: any[]) {
-    if (!items) return;
+  addItem() {
+    const currentItems = this.targetContent?.items ? [...this.targetContent.items] : [];
     
-    // Create a generic item based on existing ones or a default one
-    const newItem = items.length > 0 
-      ? JSON.parse(JSON.stringify(items[0]))
-      : { title: 'Nuevo Elemento', description: 'Descripción de ejemplo', icon: 'star' };
-      
-    if (newItem.id) {
-       newItem.id = `item_${new Date().getTime()}`;
+    let newItem;
+    if (currentItems.length > 0) {
+      newItem = JSON.parse(JSON.stringify(currentItems[0]));
+      if (typeof newItem.title === 'string') newItem.title = 'Nuevo Elemento';
+      if (typeof newItem.description === 'string') newItem.description = 'Descripción...';
+      if (typeof newItem.content === 'string') newItem.content = 'Contenido...';
+    } else {
+      if (this.isAccordion) {
+        newItem = { title: 'Nuevo Item', content: 'Contenido del acordeón...' };
+      } else {
+        newItem = { title: 'Nuevo Elemento', description: 'Descripción de ejemplo', icon: 'star' };
+      }
     }
+
+    if (newItem.id) newItem.id = `item_${new Date().getTime()}`;
     
-    items.push(newItem);
-    this.onContentChange();
+    currentItems.push(newItem);
+    
+    // Clone content and assign new items
+    const newContent = { ...(this.targetContent || {}), items: currentItems };
+    this.pushContentUpdate(newContent);
   }
 
-  removeItem(items: any[], index: number) {
-    if (!items || items.length <= index) return;
-    items.splice(index, 1);
-    this.onContentChange();
+  removeItem(index: number) {
+    if (!this.targetContent?.items) return;
+    
+    const currentItems = [...this.targetContent.items];
+    if (currentItems.length <= index) return;
+    
+    currentItems.splice(index, 1);
+    
+    const newContent = { ...this.targetContent, items: currentItems };
+    this.pushContentUpdate(newContent);
   }
 }

@@ -43,45 +43,19 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
 
   ngAfterViewInit() {
     // Initialize items from section content if not provided via input
-    if (!this.items || this.items.length === 0) {
-      this.items = this.section.content['items'] || [];
+    if (!this.section.content['items']) {
+      this.section.content['items'] = this.items.length > 0 ? this.items : [
+        { title: 'Item 1', content: 'Contenido del item 1' },
+        { title: 'Item 2', content: 'Contenido del item 2' }
+      ];
     }
+    
     // Apply standardized visual editing to elements
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
     this.applyElementVisualEditing(this.accordionElement, this.section.id + '_accordion');
     if (this.titleElement) {
       this.applyElementVisualEditing(this.titleElement, this.section.id + '_title');
     }
-  }
-
-  /** Add a new accordion item */
-  addItem() {
-    this.items.push({ title: 'New Item', content: 'Content...' });
-    this.emitItemsChange();
-  }
-
-  /** Remove an accordion item by index */
-  removeItem(index: number) {
-    if (index >= 0 && index < this.items.length) {
-      this.items.splice(index, 1);
-      this.emitItemsChange();
-    }
-  }
-
-  /** Update an existing item */
-  updateItem(index: number, changes: Partial<{ title: string; content: string }>) {
-    if (index >= 0 && index < this.items.length) {
-      this.items[index] = { ...this.items[index], ...changes };
-      this.emitItemsChange();
-    }
-  }
-
-  private emitItemsChange() {
-    // Update section content for persistence
-    this.section.content['items'] = this.items;
-    this.itemsChanged.emit(this.items);
-    // Trigger visual editing update if needed
-    this.applyElementVisualEditing(this.accordionElement, this.section.id + '_accordion');
   }
 
   /**

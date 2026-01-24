@@ -91,7 +91,14 @@ export const EDITABLE_PROPERTIES: ComponentEditableProperties = {
     'minWidth',
     'minHeight',
     'maxWidth',
-    'maxHeight'
+    'maxHeight',
+    'zIndex',
+    'position',
+    'top',
+    'bottom',
+    'left',
+    'right',
+    'overflow'
   ],
   button: [
     'fontSize',
