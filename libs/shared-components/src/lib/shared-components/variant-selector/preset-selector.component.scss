@@ -1,9 +1,9 @@
 /* Preset selector styling */
 .preset-selector {
-  padding: 1rem;
+  padding: 0 1rem 1rem 1rem;
   background: var(--bg-sidebar);
   border-top: 1px solid var(--glass-border);
-  margin-top: 1rem;
+  /* margin-top: 1rem; removed to sit flush */
 }
 
 .preset-title {

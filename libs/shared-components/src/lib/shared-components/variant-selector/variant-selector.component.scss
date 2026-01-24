@@ -92,10 +92,14 @@
   border-right: 1px solid var(--glass-border);
   display: flex;
   flex-direction: column;
-  padding-top: 72px;
+  padding-top: 64px;
   padding-bottom: 1.5rem;
   flex-shrink: 0;
   z-index: 90;
+  overflow-y: auto;
+  
+  &::-webkit-scrollbar { width: 0px; }
+  scrollbar-width: none; /* Hide scrollbar for cleaner look */
 
   .dock-top, .dock-contextual, .dock-bottom {
     display: flex;
