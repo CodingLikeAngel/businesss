@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   TestimonialsConfig,
@@ -12,8 +12,6 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
 
 /**
  * Enhanced Editor Testimonials Section Component
- * Uses EnhancedBaseEditorSectionComponent and EnhancedVisualEditableDirective
- * for standardized visual editing with unified styling application
  */
 @Component({
   selector: 'lib-editor-testimonials-section',
@@ -26,75 +24,69 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
   ],
   templateUrl: './editor-testimonials-section.component.html'
 })
-export class EditorTestimonialsSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
+export class EditorTestimonialsSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit, DoCheck {
   @Input() testimonialsConfig!: TestimonialsConfig;
 
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('testimonialsElement', { static: true }) testimonialsElement!: ElementRef;
 
+  ngDoCheck() {
+    // Sincronización de testimonios individuales si se editan desde el panel (como lista)
+    const selected = this.uiStateService.selectedElement;
+    if (selected && selected.sectionId === this.section.id && selected.isItem && selected.index !== undefined) {
+       const items = this.section.content['items'];
+       if (items && items[selected.index] && items[selected.index] !== selected.content) {
+           const newItems = [...items];
+           newItems[selected.index] = selected.content;
+           
+           this.variantService.updateSectionInCurrentPage(this.section.id, {
+             content: {
+               ...this.section.content,
+               items: newItems
+             }
+           });
+       }
+    }
+  }
+
   ngAfterViewInit() {
-    // Apply standardized visual editing to elements
+    // Inicializar items si no existen
+    if (!this.section.content['items'] && this.testimonialsConfig?.items) {
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        content: {
+          ...this.section.content,
+          items: JSON.parse(JSON.stringify(this.testimonialsConfig.items))
+        }
+      });
+    }
+
+    // Aplicar edición visual básica
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
     this.applyElementVisualEditing(this.testimonialsElement, this.section.id + '_testimonials');
   }
 
-  /**
-   * Get configuration for the section container
-   */
   getSectionConfig(): VisualEditingConfig {
     return this.createElementConfig('section', {
-      constraints: {
-        containment: 'parent',
-        minDistance: { top: 10, right: 10, bottom: 10, left: 10 },
-        collisionDetection: false,
-        safeZones: []
-      },
       styling: {
         selectionOutline: '2px solid #6366f1',
         hoverEffects: true,
-        dimensionLabels: true,
-        resizeHandles: true
-      },
-      interactions: {
-        touchEnabled: true,
-        multiSelect: false,
-        snapToGrid: 0,
-        animationDuration: 200,
-        hapticFeedback: false
-      }
+        resizeHandles: true,
+        dimensionLabels: true
+      } as any
     });
   }
 
-  /**
-   * Get configuration for the testimonials element
-   */
   getTestimonialsConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
-      interactions: {
-        snapToGrid: 5,
-        animationDuration: 150,
-        touchEnabled: this.platformInfo.isTouch,
-        multiSelect: true,
-        hapticFeedback: true
-      },
-      constraints: {
-        containment: 'parent',
-        collisionDetection: true,
-        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
-        safeZones: []
-      },
       styling: {
         selectionOutline: '2px solid #10b981',
         hoverEffects: !this.platformInfo.isMobile,
-        dimensionLabels: !this.platformInfo.isMobile,
-        resizeHandles: true
-      }
+        resizeHandles: true,
+        dimensionLabels: true
+      } as any
     });
   }
 
-  /**
-   * Handle visual editing events
-   */
   handleSectionEvent(event: VisualEditingEvent): void {
     this.handleVisualEvent(event, this.section.id);
   }
@@ -103,28 +95,23 @@ export class EditorTestimonialsSectionComponent extends EnhancedBaseEditorSectio
     this.handleVisualEvent(event, this.section.id + '_testimonials');
   }
 
-  /**
-   * Custom event handling for testimonials-specific logic
-   */
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_testimonials') {
-      switch (event.type) {
-        case 'selected':
-          console.log('Testimonials element selected for editing');
-          break;
-        case 'moved':
-          this.updateTestimonialsPosition(event.bounds);
-          break;
-        case 'resized':
-          break;
+    if (elementId === this.section.id + '_testimonials' || elementId === this.section.id) {
+      if (['moved', 'resized'].includes(event.type)) {
+        this.updateTestimonialStyles(event.bounds);
       }
     }
   }
 
-  /**
-   * Update testimonials position in section data
-   */
-  private updateTestimonialsPosition(bounds: any): void {
-    console.log('Testimonials position updated:', bounds);
+  private updateTestimonialStyles(bounds: any): void {
+    const currentStyles = this.section.styles || {};
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      styles: {
+        ...currentStyles,
+        width: bounds.width + 'px',
+        height: bounds.height + 'px',
+        transform: `translate(${bounds.x}px, ${bounds.y}px)`
+      }
+    });
   }
 }

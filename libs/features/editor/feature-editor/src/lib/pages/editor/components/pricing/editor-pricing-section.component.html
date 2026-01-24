@@ -1,24 +1,55 @@
 <!-- DESKTOP PRICING -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer"
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer py-4"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [enhancedVisualEditable]="createElementConfig('section')"
-  elementId="{{section.id}}"
-  (visualEvents)="handleVisualEvent($event, section.id)">
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-  <lib-ui-pricing-table-section
-    [title]="section.content['title'] || 'Planes y Precios'"
-    [subtitle]="section.content['subtitle'] || 'Elige el plan perfecto para ti.'"
-    [variant]="getVariant(section.id)"
-    [customStyles]="section.styles || {}"
-    [applyDynamicStyles]="section.styles"
-    [columns]="pricingConfig.columns"
-    [rows]="pricingConfig.rows">
-  </lib-ui-pricing-table-section>
+  <div #pricingElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_pricing'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_pricing', section.content, 'pricing'))"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getPricingConfig()"
+       elementId="{{section.id + '_pricing'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handlePricingEvent($event)">
+    <lib-ui-pricing-table-section
+      [title]="section.content['title'] || 'Planes y Precios'"
+      [subtitle]="section.content['subtitle'] || 'Elige el plan que mejor se adapte a ti.'"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-ui-pricing-table-section>
+  </div>
 </div>
 
-<!-- MOBILE PRICING (Optional or Placeholder if missing in original) -->
-<div *ngIf="isMobile" class="p-4 text-center text-white/50 border border-dashed border-white/20 rounded-xl m-4">
-  La sección de Precios se edita mejor en escritorio.
+<!-- MOBILE PRICING -->
+<div *ngIf="isMobile" #sectionElement
+  class="editor-section cursor-pointer py-2 p-2"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <div #pricingElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_pricing'"
+       (click)="selectElement($event, { id: section.id + '_pricing', content: section.content, type: 'pricing' })"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getPricingConfig()"
+       elementId="{{section.id + '_pricing'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handlePricingEvent($event)">
+    <lib-ui-pricing-table-section
+      [title]="section.content['title'] || 'Planes y Precios'"
+      [subtitle]="section.content['subtitle'] || 'Elige el plan que mejor se adapte a ti.'"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-ui-pricing-table-section>
+  </div>
 </div>

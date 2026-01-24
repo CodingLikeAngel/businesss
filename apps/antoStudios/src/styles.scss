@@ -1,5 +1,5 @@
 @use "tailwindcss";
-@import "../../../libs/shared-components/src/lib/shared-components/variant-selector/visual-editor.scss";
+@use "../../../libs/shared-components/src/lib/shared-components/variant-selector/visual-editor.scss" as visual;
 
 // Tipografías
 @theme {

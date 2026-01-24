@@ -22,7 +22,7 @@
       [variant]="getVariant(section.id)"
       [customStyles]="section.styles || {}"
       [applyDynamicStyles]="section.styles"
-      [testimonials]="testimonialsConfig.items">
+      [testimonials]="section.content['items'] || testimonialsConfig.items">
     </lib-ui-testimonials-section>
   </div>
 </div>
@@ -51,7 +51,7 @@
       [variant]="getVariant(section.id)"
       [customStyles]="section.styles || {}"
       [applyDynamicStyles]="section.styles"
-      [testimonials]="testimonialsConfig.items">
+      [testimonials]="section.content['items'] || testimonialsConfig.items">
     </lib-ui-testimonials-section>
   </div>
 </div>

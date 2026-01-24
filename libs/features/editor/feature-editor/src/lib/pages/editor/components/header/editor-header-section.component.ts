@@ -13,7 +13,6 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
 
 /**
  * Enhanced Editor Header Section Component
- * Modernized to support granular store sync and list editing for nav items.
  */
 @Component({
   selector: 'lib-editor-header-section',
@@ -31,7 +30,6 @@ export class EditorHeaderSectionComponent extends EnhancedBaseEditorSectionCompo
   @ViewChild('headerElement', { static: true }) headerElement!: ElementRef;
 
   ngDoCheck() {
-    // Sincronización de items de navegación si se llegaran a seleccionar (vía panel)
     const selected = this.uiStateService.selectedElement;
     if (selected && selected.sectionId === this.section.id && selected.isItem && selected.index !== undefined) {
        const items = this.section.content['items'];
@@ -43,7 +41,7 @@ export class EditorHeaderSectionComponent extends EnhancedBaseEditorSectionCompo
              content: {
                ...this.section.content,
                items: newItems,
-               navItems: newItems // Mantener sincronizada la propiedad original del Header
+               navItems: newItems
              }
            });
        }
@@ -51,7 +49,6 @@ export class EditorHeaderSectionComponent extends EnhancedBaseEditorSectionCompo
   }
 
   ngAfterViewInit() {
-    // Estandarizar navItems -> items para soporte de listas en el panel
     if (!this.section.content['items'] && this.section.content['navItems']) {
       this.variantService.updateSectionInCurrentPage(this.section.id, {
         content: {
@@ -61,7 +58,6 @@ export class EditorHeaderSectionComponent extends EnhancedBaseEditorSectionCompo
       });
     }
 
-    // Aplicar edición visual técnica
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
     this.applyElementVisualEditing(this.headerElement, this.section.id + '_header');
   }
@@ -73,7 +69,7 @@ export class EditorHeaderSectionComponent extends EnhancedBaseEditorSectionCompo
         hoverEffects: true,
         resizeHandles: true,
         dimensionLabels: true
-      }
+      } as any
     });
   }
 
@@ -84,7 +80,7 @@ export class EditorHeaderSectionComponent extends EnhancedBaseEditorSectionCompo
         hoverEffects: !this.platformInfo.isMobile,
         resizeHandles: true,
         dimensionLabels: true
-      }
+      } as any
     });
   }
 

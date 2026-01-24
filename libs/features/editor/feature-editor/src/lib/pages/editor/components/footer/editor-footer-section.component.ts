@@ -13,7 +13,6 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
 
 /**
  * Enhanced Editor Footer Section Component
- * Modernized for visual editing persistence and standardized store sync.
  */
 @Component({
   selector: 'lib-editor-footer-section',
@@ -31,16 +30,13 @@ export class EditorFooterSectionComponent extends EnhancedBaseEditorSectionCompo
   @ViewChild('footerElement', { static: true }) footerElement!: ElementRef;
 
   ngDoCheck() {
-    // Sincronización básica del elemento footer si se edita desde el panel
     const selected = this.uiStateService.selectedElement;
     if (selected && selected.sectionId === this.section.id && selected.id === this.section.id + '_footer') {
-       // El ContentEditorComponent ya actualiza el objeto content via binding
-       // pero aquí podríamos forzar actualizaciones de propiedades anidadas si fuera necesario.
+       // Sync logic
     }
   }
 
   ngAfterViewInit() {
-    // Aplicar edición visual técnica
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
     this.applyElementVisualEditing(this.footerElement, this.section.id + '_footer');
   }
@@ -52,7 +48,7 @@ export class EditorFooterSectionComponent extends EnhancedBaseEditorSectionCompo
         hoverEffects: true,
         resizeHandles: true,
         dimensionLabels: true
-      }
+      } as any
     });
   }
 
@@ -63,7 +59,7 @@ export class EditorFooterSectionComponent extends EnhancedBaseEditorSectionCompo
         hoverEffects: !this.platformInfo.isMobile,
         resizeHandles: true,
         dimensionLabels: true
-      }
+      } as any
     });
   }
 
