@@ -388,10 +388,12 @@ export class ContentEditorComponent {
   }
 
   get shouldShowActions(): boolean {
+    if (this.isAccordion) return false;
     return this.hasProperty('label') || this.hasProperty('link') || this.hasProperty('cta');
   }
 
   get shouldShowMedia(): boolean {
+    if (this.isAccordion) return false;
     return this.hasProperty('image') || this.hasProperty('imageUrl') || this.hasProperty('icon');
   }
 

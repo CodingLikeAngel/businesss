@@ -35,6 +35,7 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('accordionElement', { static: true }) accordionElement!: ElementRef;
   @ViewChild('titleElement', { static: false }) titleElement?: ElementRef;
+  @ViewChild('descElement', { static: false }) descElement?: ElementRef;
 
   /** Items for the accordion */
   @Input() items: { title: string; content: string }[] = [];
@@ -56,6 +57,107 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
     if (this.titleElement) {
       this.applyElementVisualEditing(this.titleElement, this.section.id + '_title');
     }
+    if (this.descElement) {
+      this.applyElementVisualEditing(this.descElement, this.section.id + '_desc');
+    }
+  }
+
+  // ...
+
+  /**
+   * Get configuration for the description element
+   */
+  getDescConfig(): VisualEditingConfig {
+    return this.createElementConfig('element', {
+      interactions: {
+        snapToGrid: 5,
+        animationDuration: 150,
+        touchEnabled: this.platformInfo.isTouch,
+        multiSelect: true,
+        hapticFeedback: true
+      },
+      constraints: {
+        containment: 'parent',
+        collisionDetection: true,
+        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
+        safeZones: []
+      },
+      styling: {
+        selectionOutline: '2px solid #10b981',
+        hoverEffects: !this.platformInfo.isMobile,
+        dimensionLabels: !this.platformInfo.isMobile,
+        resizeHandles: true
+      }
+    });
+  }
+
+  handleDescEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id + '_desc');
+  }
+
+  protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
+    if (elementId === this.section.id + '_accordion') {
+      switch (event.type) {
+        case 'selected':
+          console.log('Accordion element selected for editing');
+          break;
+        case 'moved':
+        case 'resized':
+          this.updateAccordionStyles(event.bounds);
+          break;
+      }
+    } else if (elementId === this.section.id + '_title') {
+      switch (event.type) {
+        case 'selected':
+          console.log('Title element selected for editing');
+          break;
+        case 'moved':
+        case 'resized':
+          this.updateTitleStyles(event.bounds);
+          break;
+      }
+    } else if (elementId === this.section.id + '_desc') {
+      switch (event.type) {
+        case 'moved':
+        case 'resized':
+          this.updateDescStyles(event.bounds);
+          break;
+      }
+    }
+  }
+
+  private updateDescStyles(bounds: any): void {
+    const currentStyles = this.section.content['descStyles'] || {};
+    const newStyles = {
+      ...currentStyles,
+      position: 'absolute',
+      width: bounds.width + 'px',
+      left: bounds.x + 'px',
+      top: bounds.y + 'px',
+      transform: 'none'
+    };
+
+    if (JSON.stringify(currentStyles) !== JSON.stringify(newStyles)) {
+       this.variantService.updateSectionInCurrentPage(this.section.id, {
+         content: {
+           ...this.section.content,
+           descStyles: newStyles
+         }
+       });
+    }
+  }
+
+  // HANDLERS FOR VISUAL EVENTS
+  handleSectionEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id);
+  }
+
+  handleAccordionEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id + '_accordion');
+  }
+
+  handleTitleEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id + '_title');
   }
 
   /**
@@ -142,44 +244,8 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
   /**
    * Handle visual editing events
    */
-  handleSectionEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id);
-  }
+  // End of duplications
 
-  handleAccordionEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_accordion');
-  }
-
-  handleTitleEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_title');
-  }
-
-  /**
-   * Custom event handling for accordion-specific logic
-   */
-  protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_accordion') {
-      switch (event.type) {
-        case 'selected':
-          console.log('Accordion element selected for editing');
-          break;
-        case 'moved':
-        case 'resized':
-          this.updateAccordionStyles(event.bounds);
-          break;
-      }
-    } else if (elementId === this.section.id + '_title') {
-      switch (event.type) {
-        case 'selected':
-          console.log('Title element selected for editing');
-          break;
-        case 'moved':
-        case 'resized':
-          this.updateTitleStyles(event.bounds);
-          break;
-      }
-    }
-  }
 
   /**
    * Update accordion position/size in section data
