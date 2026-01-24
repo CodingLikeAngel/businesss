@@ -341,7 +341,9 @@ export class ContentEditorComponent {
   @Output() contentChanged = new EventEmitter<void>();
 
   get targetContent() {
-    return this.selectedSection?._original?.content || this.selectedSection?.content || this.selectedElement?._original?.content || this.selectedElement?.content;
+    // Prioritize mutable content (editing state) over original content (store state)
+    // allowing immediate UI updates when modifying nested arrays like items
+    return this.selectedSection?.content || this.selectedSection?._original?.content || this.selectedElement?.content || this.selectedElement?._original?.content;
   }
 
   get targetDescription(): string {
