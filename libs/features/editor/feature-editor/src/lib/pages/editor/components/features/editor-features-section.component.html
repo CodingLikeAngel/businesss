@@ -2,6 +2,7 @@
 <div *ngIf="!isMobile" #sectionElement
   class="editor-section cursor-pointer p-12"
   [class.is-selected]="selectedSectionId === section.id"
+  [class.has-floating-children]="$any(section).hasFloatingChildren"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="getSectionConfig()"
@@ -40,7 +41,7 @@
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div *ngFor="let feat of section.content['items']; let i = index"
+      <div *ngFor="let feat of section.content['items']; let i = index; trackBy: trackByItem"
            #featureElement
            class="editor-element"
            [class.is-selected]="selectedElementId === section.id + '_feature_' + i"
@@ -76,6 +77,7 @@
 <!-- MOBILE FEATURES -->
 <div *ngIf="isMobile" class="editor-section cursor-pointer p-6"
   [class.is-selected]="selectedSectionId === section.id"
+  [class.has-floating-children]="$any(section).hasFloatingChildren"
   (click)="selectSection($event, section)">
   
   <div class="text-center mb-8">
@@ -87,7 +89,7 @@
   </div>
 
   <div class="space-y-4">
-    <div *ngFor="let feat of section.content['items']; let i = index" 
+    <div *ngFor="let feat of section.content['items']; let i = index; trackBy: trackByItem" 
          class="editor-element"
          [class.is-selected]="selectedElementId === section.id + '_feature_' + i"
          (click)="selectElement($event, {
@@ -99,7 +101,8 @@
              index: i,
              isItem: true,
              excludedFields: ['subtitle']
-         })">
+         })"
+         [applyDynamicStyles]="feat.styles || {}">
       <lib-ui-components-card-animated
         [icon]="feat.icon"
         [title]="feat.title"

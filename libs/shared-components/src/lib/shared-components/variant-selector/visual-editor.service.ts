@@ -783,8 +783,8 @@ export class VisualEditorService {
         this.elementMoved$.next({
           element,
           bounds: { 
-            x: Math.round(newLeft),
-            y: Math.round(newTop),
+            x: Math.round(ghostRect.left),
+            y: Math.round(ghostRect.top),
             width: Math.round(ghostRect.width), 
             height: Math.round(ghostRect.height) 
           }

@@ -40,8 +40,11 @@ export class EditorFeaturesSectionComponent extends EnhancedBaseEditorSectionCom
   @ViewChildren('featureElement') featureElements!: QueryList<ElementRef>;
 
   ngDoCheck() {
-    // Keep internal state in sync with external edits if needed, 
-    // but avoid heavy computation or redundant store updates
+    // Standard Angular check
+  }
+
+  trackByItem(index: number, item: any): string {
+    return (item && (item.id || item.title)) || index.toString();
   }
 
   ngAfterViewInit() {
@@ -149,6 +152,5 @@ export class EditorFeaturesSectionComponent extends EnhancedBaseEditorSectionCom
 
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
       // Standard movements/resizes are handled by BaseEditorFeatureComponent via direct service subscription
-      // Custom logic for specific components can go here
   }
 }

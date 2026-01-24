@@ -7,7 +7,7 @@ import * as PageSelectors from '../../store/selectors/page.selectors';
 import { Page } from '../../models/editor.model';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Subscription, Observable, take, Subject, takeUntil } from 'rxjs';
+import { Subscription, Observable, take, Subject, takeUntil, map } from 'rxjs';
 import {
   VariantService,
   NavBarConfig,
@@ -163,7 +163,12 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     });
 
     // UNIFY WITH STORE: Use selectors for sections
-    this.sections$ = this.store.select(PageSelectors.selectCurrentPageSections) as Observable<any[]>;
+    this.sections$ = this.store.select(PageSelectors.selectCurrentPageSections).pipe(
+      map((sections: any[]) => sections.map(s => ({
+        ...s,
+        hasFloatingChildren: this.checkFloatingChildren(s)
+      })))
+    );
     
     // INITIAL LOAD: Sync VariantService data into NgRx Store
     this.syncVariantServiceToStore();
@@ -392,28 +397,26 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     console.log('📍 Element moved:', elementId, bounds, section?.id);
     if (!section) return;
 
-    // Get the actual DOM element to find its coordinate system (offsetParent)
-    const el = isPlatformBrowser(this.platformId) ? document.getElementById(elementId) : null;
-    const offsetParent = el?.offsetParent as HTMLElement;
-    const parentRect = offsetParent?.getBoundingClientRect();
+    // Unified correction: Both elements and sections are measured in Viewport space (getBoundingClientRect)
+    // to ensure they stay within the correct layout context.
+    const sectionEl = isPlatformBrowser(this.platformId) ? document.getElementById(section.id) : null;
+    const sectionRect = sectionEl?.getBoundingClientRect();
     
-    // Calculate coordinates relative to the parent that will position it
-    let relativeX = bounds.x;
-    let relativeY = bounds.y;
+    // Bounds are now viewport coordinates (no scroll), matching getBoundingClientRect()
+    const viewportX = bounds.x;
+    const viewportY = bounds.y;
 
-    if (parentRect) {
-      const computedStyle = isPlatformBrowser(this.platformId) ? window.getComputedStyle(offsetParent) : null;
-      const borderLeft = computedStyle ? parseInt(computedStyle.borderLeftWidth) || 0 : 0;
-      const borderTop = computedStyle ? parseInt(computedStyle.borderTopWidth) || 0 : 0;
-      
-      relativeX = bounds.x - parentRect.left - borderLeft;
-      relativeY = bounds.y - parentRect.top - borderTop;
+    let relativeX: number;
+    let relativeY: number;
+
+    if (sectionRect) {
+      // Direct viewport subtraction is perfectly stable and unaffected by scroll
+      relativeX = viewportX - sectionRect.left;
+      relativeY = viewportY - sectionRect.top;
     } else {
-      // Fallback to section-relative if no offsetParent found
-      const sectionElement = isPlatformBrowser(this.platformId) ? document.getElementById(section.id) : null;
-      const sectionRect = sectionElement?.getBoundingClientRect();
-      relativeX = sectionRect ? bounds.x - sectionRect.left : bounds.x;
-      relativeY = sectionRect ? bounds.y - sectionRect.top : bounds.y;
+      // Fallback
+      relativeX = viewportX;
+      relativeY = viewportY;
     }
 
     // 1. Persist position if element exists in section.elements
@@ -448,30 +451,51 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
       this.historyService.execute(command);
     }
 
-    // 3. Handle card items in arrays (e.g. Hero cards, feature cards)
-    if (elementId.includes('_card_')) {
-      const parts = elementId.split('_card_');
-      const index = parseInt(parts[1], 10);
-      const items = section.content['items'] || [];
+    // 3. Handle card items in arrays (Generic list items: Features, Stats, Services, etc)
+    const listPatterns = ['_card_', '_feature_', '_stat_', '_service_', '_product_', '_step_', '_item_'];
+    const matchedPattern = listPatterns.find(p => elementId.includes(p));
+    
+    if (matchedPattern) {
+      const parts = elementId.split(matchedPattern);
+      const index = parseInt(parts[parts.length - 1], 10);
+      
+      // Try to find the items array in section content
+      // Some components use 'items', others 'premiumCards', 'navigationCards', etc.
+      let listKey = 'items';
+      if (!section.content[listKey]) {
+          // Detect key based on context if not 'items'
+          if (section.type === 'hero') listKey = 'navigationCards';
+          else if (section.type === 'promotions') listKey = 'premiumCards';
+      }
+      
+      const items = section.content[listKey] || [];
       
       if (!isNaN(index) && items[index]) {
         const item = items[index];
         const oldStyles = { ...(item.styles || {}) };
+        
+        // COORDINATE SANITIZATION: Prevent components from "disintegrating" off-screen
+        // If relative coordinates are extremely large, cap them to section bounds
+        const safeLeft = Math.max(-500, Math.min(5000, Math.round(relativeX)));
+        const safeTop = Math.max(-500, Math.min(10000, Math.round(relativeY)));
+
         const newStyles = {
           ...oldStyles,
           position: 'absolute',
-          left: `${Math.round(relativeX)}px`,
-          top: `${Math.round(relativeY)}px`,
-          zIndex: '10',
+          left: `${safeLeft}px`,
+          top: `${safeTop}px`,
+          zIndex: '100',
           width: bounds.width + 'px',
-          height: bounds.height + 'px'
+          height: bounds.height + 'px',
+          margin: '0',
+          transform: 'none'
         };
 
         // Create deep copy of items to avoid mutation
         const newItems = [...items];
         newItems[index] = { ...item, styles: newStyles };
 
-        const command = new StyleChangeCommand('section', section.id, null, section.content, { ...section.content, items: newItems }, this.store);
+        const command = new StyleChangeCommand('section', section.id, null, section.content, { ...section.content, [listKey]: newItems }, this.store);
         this.historyService.execute(command);
       }
     }
@@ -508,5 +532,17 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
     }
+  }
+
+  private checkFloatingChildren(section: PageSection): boolean {
+    if (!section.content) return false;
+    
+    // Check main title/subtitle
+    if (section.content['titleStyles']?.position === 'absolute') return true;
+    if (section.content['subtitleStyles']?.position === 'absolute') return true;
+    
+    // Check items
+    const items = section.content['items'] || section.content['navigationCards'] || section.content['premiumCards'] || [];
+    return items.some((item: any) => item.styles?.position === 'absolute');
   }
 }
