@@ -84,11 +84,24 @@ export class UIAccordionComponent {
     return styles;
   });
 
+  // Estado interno para manejar múltiples items abiertos
+  private openItems = signal(new Set<number>());
+
+  // Computed para saber si un item está expandido
+  isItemExpanded(index: number, expandedFromInput?: boolean): boolean {
+    if (this.singleExpand()) {
+      return this.expandedIndex() === index;
+    }
+    // Si viene expandido por defecto en el input y no hemos interactuado aún, lo respetamos
+    // Pero para simplificar, usaremos nuestro set interno como fuente de verdad
+    return this.openItems().has(index);
+  }
+
   // Clases calculadas con computed basadas en señales
   accordionClasses = computed(() => {
     const classes = [
       'accordion-container',
-      `variant-${this.variant()}`, // Changed from accordion-variant to match SCSS
+      `variant-${this.variant()}`, 
       `accordion-rounded-${this.rounded()}`,
       `accordion-${this.size()}`,
       this.dark() ? 'dark' : '',
@@ -107,7 +120,7 @@ export class UIAccordionComponent {
 
   contentClasses = computed(() => {
     const classes = [
-      'accordion-content',
+      'accordion-content-wrapper', // Wrapper para animación
       `content-${this.size()}`,
       this.dark() ? 'dark' : '',
     ];
@@ -116,15 +129,17 @@ export class UIAccordionComponent {
 
   toggleItem(index: number) {
     if (this.singleExpand()) {
-      this.expandedIndex.set(this.expandedIndex() === index ? -1 : index);
+      this.expandedIndex.update(current => current === index ? -1 : index);
     } else {
-      const currentItems = this.items();
-      const updatedItems = currentItems.map((item, i) => ({
-        ...item,
-        expanded: i === index ? !item.expanded : item.expanded,
-      }));
-      // Actualizamos los items manualmente ya que input no es writable
-      console.log('Items actualizados:', updatedItems);
+      this.openItems.update(set => {
+        const newSet = new Set(set);
+        if (newSet.has(index)) {
+          newSet.delete(index);
+        } else {
+          newSet.add(index);
+        }
+        return newSet;
+      });
     }
   }
 }

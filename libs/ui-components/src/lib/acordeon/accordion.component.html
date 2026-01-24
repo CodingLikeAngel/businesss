@@ -1,19 +1,31 @@
 <div [ngClass]="accordionClasses()" [ngStyle]="accordionStyles()" role="region" aria-label="Accordion">
-  <div *ngFor="let item of items(); let i = index" class="accordion-item">
+  <div *ngFor="let item of items(); let i = index" 
+       class="accordion-item" 
+       [class.is-expanded]="isItemExpanded(i, item.expanded)">
+    
     <button
       [class]="headerClasses()"
       (click)="toggleItem(i)"
-      [attr.aria-expanded]="singleExpand() ? expandedIndex() === i : item.expanded"
+      [attr.aria-expanded]="isItemExpanded(i, item.expanded)"
       [attr.aria-controls]="'accordion-content-' + i"
     >
-      {{ item.title }}
+      <span class="header-title">{{ item.title }}</span>
+      
+      <span class="header-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </span>
     </button>
+
     <div
       [class]="contentClasses()"
       [id]="'accordion-content-' + i"
-      [hidden]="singleExpand() ? expandedIndex() !== i : !item.expanded"
+      [class.is-open]="isItemExpanded(i, item.expanded)"
     >
-      {{ item.content }}
+        <div class="accordion-content-inner">
+             {{ item.content }}
+        </div>
     </div>
   </div>
 </div>
