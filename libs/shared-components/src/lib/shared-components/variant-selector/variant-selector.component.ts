@@ -372,7 +372,11 @@ export class VariantSelectorComponent implements OnInit {
 
 
     // 3. Handle observer notification and parent updates
-    if (this.selectedElement['sectionId']) {
+    const isGlobal = this.selectedElement.isGlobal || 
+                     (this.selectedElement.sectionId && this.selectedElement.sectionId.startsWith('global_')) ||
+                     ['navbar', 'header', 'footer', 'global_header', 'global_footer', 'global_navbar'].includes(this.selectedElement.id);
+
+    if (this.selectedElement['sectionId'] && !isGlobal) {
       const sectionId = this.selectedElement['sectionId'];
       const updates: any = {};
       
@@ -511,7 +515,10 @@ export class VariantSelectorComponent implements OnInit {
       else if (source.changeDetectorRef?.markForCheck) source.changeDetectorRef.markForCheck();
     }
 
-    const isGlobalElement = ['navbar', 'header', 'footer'].includes(this.selectedElement.id) || this.selectedElement.isGlobal;
+    const isGlobalElement = ['navbar', 'header', 'footer'].includes(this.selectedElement.id) || 
+                            this.selectedElement.isGlobal || 
+                            (this.selectedElement.sectionId && this.selectedElement.sectionId.startsWith('global_'));
+                            
     if (isGlobalElement) {
       // Merge element styles into customStyles for the config
       const configWithStyles = {
@@ -519,11 +526,15 @@ export class VariantSelectorComponent implements OnInit {
         customStyles: { ...(source.customStyles || {}), ...(source.styles || {}) }
       };
       
-      console.log(`🌍 Updating global ${this.selectedElement.type} config with styles:`, configWithStyles.customStyles);
+      console.log(`🌍 Updating global ${this.selectedElement.type} config:`, configWithStyles);
       
-      if (this.selectedElement.type === 'header') this.variantService.setHeaderConfig(configWithStyles);
-      else if (this.selectedElement.type === 'footer') this.variantService.setFooterConfig(configWithStyles);
-      else if (this.selectedElement.type === 'navbar') this.variantService.setNavBarConfig(configWithStyles);
+      if (this.selectedElement.type === 'header' || this.selectedElement.sectionId === 'global_header') {
+        this.variantService.updateHeaderConfig(configWithStyles);
+      } else if (this.selectedElement.type === 'footer' || this.selectedElement.sectionId === 'global_footer') {
+        this.variantService.updateFooterConfig(configWithStyles);
+      } else if (this.selectedElement.type === 'navbar' || this.selectedElement.sectionId === 'global_navbar') {
+        this.variantService.updateNavBarConfig(configWithStyles);
+      }
     }
   }
 
@@ -533,9 +544,9 @@ export class VariantSelectorComponent implements OnInit {
     const styles = this.selectedSection.styles;
 
     switch (type) {
-      case 'header': this.variantService.setHeaderConfig({ ...content, customStyles: styles }); break;
-      case 'footer': this.variantService.setFooterConfig({ ...content, customStyles: styles }); break;
-      case 'navBar': this.variantService.setNavBarConfig({ ...content, customStyles: styles }); break;
+      case 'header': this.variantService.updateHeaderConfig({ ...content, customStyles: styles }); break;
+      case 'footer': this.variantService.updateFooterConfig({ ...content, customStyles: styles }); break;
+      case 'navBar': this.variantService.updateNavBarConfig({ ...content, customStyles: styles }); break;
       case 'hero': this.variantService.setHeroConfig({ ...content, customStyles: styles }); break;
       case 'bubble': this.variantService.setBubbleConfig({ ...content, customStyles: styles }); break;
       case 'card': this.variantService.setCardConfig({ ...content, customStyles: styles }); break;

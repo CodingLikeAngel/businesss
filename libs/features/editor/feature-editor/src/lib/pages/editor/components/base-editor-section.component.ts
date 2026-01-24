@@ -67,6 +67,7 @@ export abstract class BaseEditorSectionComponent {
       sectionId: sectionId,
       ...item,
       _original: item,
+      isGlobal: this.section?.isGlobal,
       type
     };
   }

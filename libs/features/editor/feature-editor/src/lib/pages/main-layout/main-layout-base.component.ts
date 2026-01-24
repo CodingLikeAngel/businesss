@@ -48,11 +48,29 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.variantService.headerConfig$.subscribe((config) => {
       this.headerConfig = config;
-      this._headerAsSection = null; // Invalidate cache on config change
+      if (this._headerAsSection) {
+        this._headerAsSection.styles = config.customStyles as any || {};
+        this._headerAsSection.content = {
+          title: config.title,
+          subtitle: config.subtitle,
+          navItems: config.navItems,
+          variant: config.variant,
+          align: config.align,
+          dark: config.dark
+        };
+      }
     });
     this.variantService.footerConfig$.subscribe((config) => {
       this.footerConfig = config;
-      this._footerAsSection = null; // Invalidate cache on config change
+      if (this._footerAsSection) {
+        this._footerAsSection.styles = config.customStyles as any || {};
+        this._footerAsSection.content = {
+          title: config.title,
+          description: config.description,
+          variant: config.variant,
+          dark: config.dark
+        };
+      }
     });
     this.navBarConfigSub = this.variantService.navBarConfig$.subscribe((config) => {
       this.navBarConfig = config;
@@ -116,20 +134,27 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
         isGlobal: true,
         name: 'Global Header',
         styles: this.headerConfig.customStyles as any || {},
-        content: {
-          title: this.headerConfig.title,
-          subtitle: this.headerConfig.subtitle,
-          navItems: this.headerConfig.navItems,
-          variant: this.headerConfig.variant,
-          align: this.headerConfig.align,
-          dark: this.headerConfig.dark
-        },
-        elements: [],
+        content: this.headerConfig as any,
+        elements: [
+          {
+            id: 'global_header_header',
+            type: 'header',
+            content: this.headerConfig,
+            styles: this.headerConfig.customStyles || {}
+          }
+        ],
         config: {},
         customStyles: {},
         animation: 'none',
         layout: 'default'
       };
+    } else {
+      this._headerAsSection.content = this.headerConfig as any;
+      this._headerAsSection.styles = this.headerConfig.customStyles as any || {};
+      if (this._headerAsSection.elements?.[0]) {
+        this._headerAsSection.elements[0].content = this.headerConfig;
+        this._headerAsSection.elements[0].styles = this.headerConfig.customStyles || {};
+      }
     }
     return this._headerAsSection;
   }
@@ -147,18 +172,27 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
         isGlobal: true,
         name: 'Global Footer',
         styles: this.footerConfig.customStyles as any || {},
-        content: {
-          title: this.footerConfig.title,
-          description: this.footerConfig.description,
-          variant: this.footerConfig.variant,
-          dark: this.footerConfig.dark
-        },
-        elements: [],
+        content: this.footerConfig as any,
+        elements: [
+          {
+            id: 'global_footer_footer',
+            type: 'footer',
+            content: this.footerConfig,
+            styles: this.footerConfig.customStyles || {}
+          }
+        ],
         config: {},
         customStyles: {},
         animation: 'none',
         layout: 'default'
       };
+    } else {
+      this._footerAsSection.content = this.footerConfig as any;
+      this._footerAsSection.styles = this.footerConfig.customStyles as any || {};
+      if (this._footerAsSection.elements?.[0]) {
+        this._footerAsSection.elements[0].content = this.footerConfig;
+        this._footerAsSection.elements[0].styles = this.footerConfig.customStyles || {};
+      }
     }
     return this._footerAsSection;
   }

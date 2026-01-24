@@ -953,9 +953,22 @@ export class VariantService {
     const newConfig = { ...current, ...config };
     this.headerConfigSubject.next(newConfig);
     
-    // Sync variant with componentVariants to ensure view updates
     if (config.variant) {
       this.setComponentVariant('navbar', config.variant);
+    }
+    this.saveToLocalStorage();
+  }
+
+  updateHeaderConfig(changes: Partial<HeaderConfig>) {
+    const current = this.headerConfigSubject.getValue();
+    const updated = {
+      ...current,
+      ...changes,
+      customStyles: { ...(current.customStyles || {}), ...(changes.customStyles || {}) }
+    };
+    this.headerConfigSubject.next(updated);
+    if (changes.variant) {
+      this.setComponentVariant('navbar', changes.variant);
     }
     this.saveToLocalStorage();
   }
@@ -974,6 +987,20 @@ export class VariantService {
     this.saveToLocalStorage();
   }
 
+  updateFooterConfig(changes: Partial<FooterConfig>) {
+    const current = this.footerConfigSubject.getValue();
+    const updated = {
+      ...current,
+      ...changes,
+      customStyles: { ...(current.customStyles || {}), ...(changes.customStyles || {}) }
+    };
+    this.footerConfigSubject.next(updated);
+    if (changes.variant) {
+      this.setComponentVariant('footer', changes.variant);
+    }
+    this.saveToLocalStorage();
+  }
+
   setNavBarConfig(config: Partial<NavBarConfig>) {
     const current = this.navBarConfigSubject.getValue();
     if (config.variant && !this.isValidVariant(config.variant)) {
@@ -983,6 +1010,20 @@ export class VariantService {
 
     if (config.variant) {
       this.setComponentVariant('navbar', config.variant);
+    }
+    this.saveToLocalStorage();
+  }
+
+  updateNavBarConfig(changes: Partial<NavBarConfig>) {
+    const current = this.navBarConfigSubject.getValue();
+    const updated = {
+      ...current,
+      ...changes,
+      customStyles: { ...(current.customStyles || {}), ...(changes.customStyles || {}) }
+    };
+    this.navBarConfigSubject.next(updated);
+    if (changes.variant) {
+      this.setComponentVariant('navbar', changes.variant);
     }
     this.saveToLocalStorage();
   }
@@ -1344,23 +1385,7 @@ export class VariantService {
     };
   }
 
-  updateHeaderConfig(config: Partial<HeaderConfig>) {
-    const current = this.headerConfigSubject.value;
-    this.headerConfigSubject.next({ ...current, ...config });
-    this.saveToLocalStorage();
-  }
 
-  updateFooterConfig(config: Partial<FooterConfig>) {
-    const current = this.footerConfigSubject.value;
-    this.footerConfigSubject.next({ ...current, ...config });
-    this.saveToLocalStorage();
-  }
-
-  updateNavBarConfig(config: Partial<NavBarConfig>) {
-    const current = this.navBarConfigSubject.value;
-    this.navBarConfigSubject.next({ ...current, ...config });
-    this.saveToLocalStorage();
-  }
 
   // Persistence
   getCurrentFeaturesConfig(): FeaturesConfig {
