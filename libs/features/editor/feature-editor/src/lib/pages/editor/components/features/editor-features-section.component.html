@@ -30,24 +30,35 @@
            [class.is-selected]="selectedElementId === section.id + '_subtitle'"
            (click)="selectElement($event, getMergedElement(section.id, section.id + '_subtitle', section.content, 'subtitle'))"
            [applyDynamicStyles]="section.content['subtitleStyles']"
-           [enhancedVisualEditable]="getFeaturesConfig()"
+           [enhancedVisualEditable]="getSubtitleConfig()"
            elementId="{{section.id + '_subtitle'}}"
            sectionId="{{section.id}}"
-           (visualEvents)="handleFeaturesEvent($event)">
+           (visualEvents)="handleSubtitleEvent($event)">
           {{ section.content['subtitle'] || 'Descubre cómo podemos ayudarte.' }}
         </p>
       </div>
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div *ngFor="let feat of featuresConfig.items; let i = index"
+      <div *ngFor="let feat of section.content['items']; let i = index"
+           #featureElement
            class="editor-element"
-           [class.is-selected]="uiStateService.selectedElement?._original === feat"
-           (click)="selectElement($event, getMergedElement(section.id, section.id + '_feature_' + i, feat, 'feature'))"
-           [enhancedVisualEditable]="getFeaturesConfig()"
+           [class.is-selected]="selectedElementId === section.id + '_feature_' + i"
+           (click)="selectElement($event, {
+             id: section.id + '_feature_' + i,
+             elementId: section.id + '_feature_' + i,
+             sectionId: section.id,
+             type: 'feature',
+             content: feat,
+             index: i,
+             isItem: true,
+             excludedFields: ['subtitle']
+           })"
+           [applyDynamicStyles]="feat.styles || {}"
+           [enhancedVisualEditable]="getFeatureCardConfig()"
            elementId="{{section.id + '_feature_' + i}}"
            sectionId="{{section.id}}"
-           (visualEvents)="handleFeaturesEvent($event)">
+           (visualEvents)="handleFeatureCardEvent($event, i)">
         <lib-ui-components-card-animated
           [icon]="feat.icon"
           [title]="feat.title"
@@ -76,10 +87,19 @@
   </div>
 
   <div class="space-y-4">
-    <div *ngFor="let feat of featuresConfig.items" 
+    <div *ngFor="let feat of section.content['items']; let i = index" 
          class="editor-element"
-         [class.is-selected]="uiStateService.selectedElement?._original === feat"
-         (click)="selectElement($event, feat)">
+         [class.is-selected]="selectedElementId === section.id + '_feature_' + i"
+         (click)="selectElement($event, {
+             id: section.id + '_feature_' + i,
+             elementId: section.id + '_feature_' + i,
+             sectionId: section.id,
+             type: 'feature',
+             content: feat,
+             index: i,
+             isItem: true,
+             excludedFields: ['subtitle']
+         })">
       <lib-ui-components-card-animated
         [icon]="feat.icon"
         [title]="feat.title"
