@@ -749,44 +749,8 @@ export class VariantService {
       title: 'Nuestras Características',
       subtitle: 'Lo que nos hace diferentes'
     }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_stats', type: 'stats', label: 'Métricas (Stats)', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_bubble', type: 'bubble', label: 'Efecto Burbujas', visible: true, name: '', styles: {}, content: {}, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_services', type: 'services', label: 'Servicios', visible: true, name: '', styles: {}, content: {
-      title: 'Nuestros Servicios',
-      subtitle: 'Soluciones a tu medida'
-    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_products', type: 'products', label: 'Módulos/Productos', visible: true, name: '', styles: {}, content: {
-      title: 'Nuestros Módulos',
-      subtitle: 'Descubre nuestra selección premium'
-    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_testimonials', type: 'testimonials', label: 'Testimonios', visible: true, name: '', styles: {}, content: {
-      title: 'Lo que Dicen Nuestros Clientes'
-    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_pricing', type: 'pricing', label: 'Tablas de Precio', visible: true, name: '', styles: {}, content: {
-      title: 'Planes y Precios'
-    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_promotions', type: 'promotions', label: 'Promociones', visible: true, name: '', styles: {}, content: {
-      title: 'Ofertas Exclusivas'
-    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_faq', type: 'faq', label: 'Preguntas Frecuentes', visible: true, name: '', styles: {}, content: {
-      title: 'Preguntas Frecuentes'
-    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_gallery', type: 'gallery', label: 'Galería', visible: true, name: '', styles: {}, content: {
-      title: 'Nuestra Galería'
-    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
     { id: 'sec_contact', type: 'contact', label: 'Contacto y Formulario', visible: true, name: '', styles: {}, content: {
       title: 'Solicita tu Demo Personalizada'
-    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_cta', type: 'hero', label: 'Llamada a la Acción', visible: true, name: '', styles: {}, content: {
-      title: '¿Listo para empezar?',
-      subtitle: 'Únete a miles de usuarios que ya están mejorando sus procesos.',
-      ctaLabel: 'Empezar ahora',
-      variant: 'neon'
-    }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
-    { id: 'sec_chart', type: 'chart', label: 'Dashboard de Datos', visible: true, name: '', styles: {}, content: {
-      title: 'Rendimiento en tiempo real',
-      chartType: 'line',
-      variant: 'glass'
     }, elements: [], config: {}, customStyles: {}, animation: 'none', layout: 'default' },
   ]);
   sections$ = this.sectionsSubject.asObservable();
