@@ -16,8 +16,10 @@ import {
   UIModalComponent,
   UICardRutasComponent,
   BubbleAnimationComponent,
-  BubbleConfig as BubbleAnimationConfig,
   UIFooterComponent,
+  UIStatsLibSectionComponent,
+  StatItem,
+  UIAccordionComponent
 } from '@negocio/ui-components';
 import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
 
@@ -39,9 +41,11 @@ import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, 
     BubbleAnimationComponent,
     UITitleComponent,
     UIFooterComponent,
+    UIStatsLibSectionComponent,
+    UIAccordionComponent
   ],
   templateUrl: './home-feature.component.html',
-  styles: [/* Existing styles unchanged */],
+  styleUrl: './home-feature.component.scss',
 })
 export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   isMobile = false;
@@ -59,6 +63,13 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   heroConfig: HeroConfig;
   footerConfig: FooterConfig;
   bubbleConfig: BubbleConfig;
+
+  barberStats: StatItem[] = [
+    { icon: '✂️', label: 'Cortes Master', value: '15k+', description: 'Estilos perfeccionados', progress: 95, trend: 'up' },
+    { icon: '💈', label: 'Tradición', value: '12', description: 'Años al servicio', trend: 'stable' },
+    { icon: '⭐', label: 'Valoración', value: '4.9', description: 'Media de 5k reseñas', progress: 98, trend: 'up' },
+    { icon: '🥤', label: 'Whiskeys', value: '2k', description: 'Cortesia de la casa', progress: 100 }
+  ];
 
   faqItems: AccordionItem[] = [
     {

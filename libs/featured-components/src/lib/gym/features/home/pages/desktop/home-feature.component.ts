@@ -20,6 +20,9 @@ import {
   UIFooterComponent,
   UIStatsLibSectionComponent,
   StatItem,
+  UIStepsSectionComponent,
+  UIAccordionComponent,
+  UIChartComponent
 } from '@negocio/ui-components';
 import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
 
@@ -42,9 +45,13 @@ import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, 
     BubbleAnimationComponent,
     UITitleComponent,
     UIFooterComponent,
+    UIStatsLibSectionComponent,
+    UIStepsSectionComponent,
+    UIAccordionComponent,
+    UIChartComponent
   ],
   templateUrl: './home-feature.component.html',
-  styles: [/* Existing styles unchanged */],
+  styleUrl: './home-feature.component.scss',
 })
 export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   isMobile = false;
@@ -192,52 +199,22 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   ];
 
   gymStats: StatItem[] = [
-    {
-      icon: '💪',
-      label: 'Miembros Activos',
-      value: '1,200+',
-      description: 'Personas entrenando diariamente',
-      progress: 85,
-      trend: 'up',
-      trendValue: '+15%',
-      unit: '',
-    },
-    {
-      icon: '🏋️',
-      label: 'Clases Semanales',
-      value: '50+',
-      description: 'Variedad de entrenamientos',
-      progress: 90,
-      trend: 'up',
-      trendValue: '+5%',
-      unit: '',
-    },
-    {
-      icon: '⭐',
-      label: 'Satisfacción',
-      value: '4.9/5',
-      description: 'Calificación promedio',
-      progress: 98,
-      trend: 'stable',
-      trendValue: '0%',
-      unit: '',
-    },
-    {
-      icon: '🏆',
-      label: 'Años de Experiencia',
-      value: '10+',
-      description: 'Comprometidos con tu salud',
-      progress: 100,
-      trend: 'stable',
-      trendValue: '0%',
-      unit: '',
-    },
+    { icon: '💪', label: 'Fuerza Total', value: '1.2M', description: 'Kilos levantados este mes', progress: 85, trend: 'up' },
+    { icon: '🔥', label: 'Calorías', value: '450k', description: 'Quemadas por socios', progress: 92, trend: 'up' },
+    { icon: '👥', label: 'Comunidad', value: '5k+', description: 'Socios activos', trend: 'stable' },
+    { icon: '🏆', label: 'Podios', value: '120', description: 'Medallas en CrossFit', progress: 100 }
   ];
 
-  trackByProductId: TrackByFunction<{ name: string; image: string; description: string; price: string }> = (
-    index: number,
-    product: { name: string; image: string; description: string; price: string }
-  ) => product.name;
+  gymSteps = [
+    { title: 'Evaluación', description: 'Medimos tu nivel actual y objetivos de salud.', icon: '⚖️', state: 'completed' },
+    { title: 'Planificación', description: 'Diseñamos tu rutina personalizada de entrenamiento.', icon: '📋', state: 'current' },
+    { title: 'Transformación', description: 'Ejecutamos el plan y escalamos tus límites.', icon: '⚡', state: 'pending' }
+  ];
+
+  gymFaq: AccordionItem[] = [
+    { title: '¿Ofrecéis pases de un día?', content: '¡Claro! Ven a probar nuestras instalaciones por solo 10€.' },
+    { title: '¿Hay clases colectivas?', content: 'Todas nuestras suscripciones incluyen acceso ilimitado a Yoga, HIIT y CrossFit.' }
+  ];
 
   constructor(@Inject(PLATFORM_ID) private platformId: object, private variantService: VariantService) {
     this.navBarConfig = this.variantService.getCurrentNavBarConfig();

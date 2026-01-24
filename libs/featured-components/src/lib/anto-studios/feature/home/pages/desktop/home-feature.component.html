@@ -1,5 +1,6 @@
 <router-outlet></router-outlet>
 
+<!-- HERO SECTION -->
 <section id="hero" class="relative z-20">
   <lib-ui-hero-section
     [variant]="getVariant('hero')"
@@ -18,59 +19,49 @@
   ></lib-ui-hero-section>
 </section>
 
-<section id="search" class="relative z-20 py-8 bg-gradient-to-r from-purple-900 via-blue-900 to-indigo-900">
-  <div class="container mx-auto px-6 max-w-4xl">
-    <div class="text-center mb-6">
-      <lib-ui-components-title
-        [level]="'h3'"
-        [text]="'Buscar Servicios y Productos'"
+<!-- STATS SECTION (New!) -->
+<section id="stats" class="relative z-20">
+  <lib-ui-components-stats-section
+    [title]="'Nuestro Impacto'"
+    [subtitle]="'Resultados tangibles para marcas ambiciosas.'"
+    [variant]="getVariant('stats')"
+    [stats]="agencyStats"
+  ></lib-ui-components-stats-section>
+</section>
+
+<!-- SHOWCASE SECTION (New!) -->
+<section id="showcase" class="relative z-20 py-16">
+  <div class="container mx-auto px-6">
+    <lib-ui-components-title
+        [level]="'h2'"
+        [text]="'Universo de Diseños'"
         [variant]="getVariant('title')"
         [align]="'center'"
-      ></lib-ui-components-title>
-    </div>
-    <div class="flex justify-center">
-      <div class="relative w-full max-w-md">
-        <input
-          type="text"
-          placeholder="Buscar..."
-          class="w-full px-4 py-3 rounded-full border-2 border-neon-blue bg-black/50 text-white placeholder-gray-400 focus:outline-none focus:border-cyan-400 transition-all duration-300 backdrop-blur-sm"
-          [(ngModel)]="searchQuery"
-          (input)="onSearchInput($event)"
-        />
-        <button
-          class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-neon-blue text-black px-4 py-1 rounded-full hover:bg-cyan-400 transition-colors duration-300"
-          (click)="performSearch()"
-        >
-          Buscar
-        </button>
-      </div>
-    </div>
-    <div *ngIf="searchResults.length > 0" class="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <div
-        *ngFor="let result of searchResults"
-        class="bg-black/70 backdrop-blur-sm p-4 rounded-lg border border-neon-blue/50 hover:border-cyan-400 transition-all duration-300 cursor-pointer"
-        (click)="selectSearchResult(result)"
-      >
-        <h4 class="text-neon-blue font-semibold">{{ result.name }}</h4>
-        <p class="text-gray-300 text-sm">{{ result.description }}</p>
-      </div>
-    </div>
+        class="mb-12"
+    ></lib-ui-components-title>
+    <lib-ui-gaming-variants-showcase></lib-ui-gaming-variants-showcase>
   </div>
 </section>
 
-<lib-bubble-animation
-  [variant]="getVariant('bubble')"
-  [config]="bubbleConfig"
-></lib-bubble-animation>
+<!-- PROCESS STEPS (New!) -->
+<section id="process" class="relative z-20 bg-slate-900/50 backdrop-blur-xl py-20">
+  <lib-ui-steps-section
+    [title]="'El Método Anto'"
+    [subtitle]="'Un camino diseñado para el éxito.'"
+    [steps]="agencySteps"
+    [variant]="'timeline'"
+  ></lib-ui-steps-section>
+</section>
 
-<section id="servicios" class="relative z-20 py-12">
+<!-- SERVICES SECTION -->
+<section id="servicios" class="relative z-20 py-20">
   <div class="container mx-auto px-6 max-w-7xl">
     <lib-ui-components-title
       [level]="titleConfig.level"
       [text]="titleConfig.text"
       [variant]="getVariant('title')"
       [align]="titleConfig.align"
-      class="mb-8"
+      class="mb-12"
     ></lib-ui-components-title>
     <lib-ui-components-card-rutas
       [items]="serviceCardsConfig.items"
@@ -81,135 +72,92 @@
   </div>
 </section>
 
-<section id="productos" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <div class="backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(113,255,219,0.5)] border-2 border-neon-blue">
+<!-- SEARCH SECTION -->
+<section id="search" class="relative z-20 py-12 bg-gradient-to-r from-blue-900 via-indigo-900 to-purple-900">
+  <div class="container mx-auto px-6 max-w-4xl">
+    <div class="text-center mb-8">
       <lib-ui-components-title
-        [level]="titleConfig.level"
-        [text]="'Nuestros Módulos'"
+        [level]="'h3'"
+        [text]="'Explora nuestra librería'"
         [variant]="getVariant('title')"
-        [align]="titleConfig.align"
-        class="mb-4"
+        [align]="'center'"
       ></lib-ui-components-title>
-      <lib-ui-components-title
-        [level]="'h5'"
-        [text]="'Descubre nuestra selección premium de módulos para tu web, diseñados para escalar tu negocio con eficiencia'"
-        [variant]="getVariant('title')"
-        [align]="titleConfig.align"
-        class="mb-6"
-      ></lib-ui-components-title>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ng-container *ngFor="let product of productsConfig.items; let i = index; trackBy: trackByProductId">
-          <lib-ui-components-card-animated
-            *ngIf="i % 2 === 0 && i !== 2"
-            [title]="product.name"
-            [description]="product.description"
-            [image]="product.image"
-            [variant]="getVariant('product-3d')"
-            [animation]="'bounce'"
-            [borderColor]="'#22d3ee'"
-            [backgroundColor]="'rgba(47, 79, 79, 0.9)'"
-            (addToCart)="addToCart(product)"
-            (viewDetails)="openServiceModal(product)"
-          ></lib-ui-components-card-animated>
-          <lib-ui-components-card
-          *ngIf="i % 2 === 0 && i !== 0"
-          [title]="product.name"
-          [image]="'1029.png'"
-          [description]="product.description"
-          [variant]="getVariant('default')"
-          [animation]="'fade'"
-          [size]="'wide'"
-
-        ></lib-ui-components-card>
-          <lib-card-products
-            *ngIf="i % 2 !== 0"
-            [product]="product"
-            [variant]="getVariant('title')"
-          ></lib-card-products>
-        </ng-container>
-        <ng-template *ngIf="!productsConfig.items?.length">
-          <p class="text-white text-center">No hay módulos disponibles en este momento.</p>
-        </ng-template>
+    </div>
+    <div class="flex justify-center">
+      <div class="relative w-full max-w-md">
+        <input
+          type="text"
+          placeholder="¿Qué estás buscando?..."
+          class="w-full px-6 py-4 rounded-full border-2 border-cyan-400 bg-black/60 text-white placeholder-gray-400 focus:outline-none focus:ring-4 focus:ring-cyan-400/20 transition-all duration-300"
+          [(ngModel)]="searchQuery"
+          (input)="onSearchInput($event)"
+        />
       </div>
     </div>
   </div>
 </section>
 
-<section id="testimonios" class="relative z-20 py-12">
+<!-- PRODUCTS SECTION -->
+<section id="productos" class="relative z-20 py-20">
   <div class="container mx-auto px-6 max-w-7xl">
+    <div class="glass-panel p-12">
+      <lib-ui-components-title
+        [level]="'h2'"
+        [text]="'Herramientas Pro'"
+        [variant]="getVariant('title')"
+        [align]="'center'"
+        class="mb-12"
+      ></lib-ui-components-title>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+        <ng-container *ngFor="let product of productsConfig.items; let i = index">
+          <lib-ui-components-card-animated
+            [title]="product.name"
+            [description]="product.description"
+            [image]="product.image"
+            [variant]="getVariant('product-3d')"
+            [animation]="'zoom'"
+          ></lib-ui-components-card-animated>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonios" class="relative z-20 py-20 bg-black/20">
     <lib-ui-testimonials-section
-      [title]="'Lo que Dicen Nuestros Clientes'"
-      [subtitle]="'Historias reales de éxito.'"
+      [title]="'Ecos de Éxito'"
+      [subtitle]="'Lo que dicen quienes ya transformaron su presencia digital.'"
       [variant]="getVariant('title')"
       [testimonials]="testimonials"
     ></lib-ui-testimonials-section>
-  </div>
 </section>
 
-<section id="precios" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-ui-pricing-table-section
-      [variant]="getVariant('pricing')"
-      [columns]="pricingConfig.columns"
-      [rows]="pricingConfig.rows"
-    ></lib-ui-pricing-table-section>
-  </div>
-</section>
-
-<section id="promociones" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-promotions-section
-        [variant]="getVariant('promotions')"
-        [items]="promotionsConfig.premiumCards"
-      ></lib-promotions-section>
-  </div>
-</section>
-
-<section id="faq" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-ui-faq-section
-      [variant]="getVariant('faq')"
-      [items]="faqConfig.items"
-    ></lib-ui-faq-section>
-  </div>
-</section>
-
-<section id="galeria" class="relative z-20 py-12">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-ui-components-gallery-section
-      [variant]="getVariant('gallery')"
-      [images]="galleryConfig.images"
-    ></lib-ui-components-gallery-section>
-  </div>
-</section>
-
-<section id="contacto" class="relative z-20 py-16 mb-16">
-  <div class="container mx-auto px-6 max-w-7xl py-16">
-    <lib-ui-components-title
-      [level]="titleConfig.level"
-      [text]="'Solicita tu Demo Personalizada'"
-      [variant]="getVariant('title')"
-      [align]="titleConfig.align"
-      class="mb-8"
-    ></lib-ui-components-title>
+<!-- CONTACT & FORM -->
+<section id="contacto" class="relative z-20 py-24 bg-gradient-to-b from-transparent to-black">
+  <div class="container mx-auto px-6 max-w-4xl">
+    <div class="text-center mb-16">
+        <lib-ui-components-title
+            [text]="'¿Listo para escalar?'"
+            [variant]="getVariant('title')"
+            [align]="'center'"
+        ></lib-ui-components-title>
+        <p class="text-dim mt-4">Solicita una auditoría estratégica sin compromiso.</p>
+    </div>
     <lib-reservation-form
       [variant]="getVariant('form')"
     ></lib-reservation-form>
   </div>
 </section>
 
+<lib-bubble-animation [variant]="getVariant('bubble')" [config]="bubbleConfig"></lib-bubble-animation>
+
 <lib-ui-components-modal
   [isOpen]="modalOpen"
   [variant]="'glass'"
-  [rounded]="'md'"
   [size]="'lg'"
-  [title]="selectedService?.serviceName || 'Detalles del Servicio'"
-  [content]="selectedService?.description || 'Selecciona un servicio para ver más detalles.'"
+  [title]="selectedService?.serviceName || 'Detalles'"
+  [content]="selectedService?.description"
   (modalOnClose)="closeModal()"
 ></lib-ui-components-modal>
-
-<!-- <lib-chat-component></lib-chat-component> -->
-
-
-

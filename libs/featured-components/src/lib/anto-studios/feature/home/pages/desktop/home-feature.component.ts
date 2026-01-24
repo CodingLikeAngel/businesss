@@ -16,7 +16,12 @@ import {
   UIFaqSectionComponent,
   UIGallerySectionComponent,
   UIPricingTableSectionComponent,
-  PromotionsSectionComponent
+  PromotionsSectionComponent,
+  UIStatsLibSectionComponent,
+  UIStepsSectionComponent,
+  UIGamingVariantsShowcaseComponent,
+  StatItem,
+  Step
 } from '@negocio/ui-components';
 import { ReservationFormComponent } from '../../components/reservation-form/reservation-form.component';
 import { Product } from '@negocio/shared-components';
@@ -26,7 +31,7 @@ import { Product } from '@negocio/shared-components';
   selector: 'lib-home-desktop-feature',
   standalone: true,
   templateUrl: './home-feature.component.html',
-  styles: [/* Existing styles unchanged */],
+  styleUrl: './home-feature.component.scss',
   imports: [
     CommonModule,
     RouterModule,
@@ -44,7 +49,10 @@ import { Product } from '@negocio/shared-components';
     UiCardProductsComponent,
     UITestimonialsSectionComponent,
     UICardAnimatedComponent,
-    UICardComponent
+    UICardComponent,
+    UIStatsLibSectionComponent,
+    UIStepsSectionComponent,
+    UIGamingVariantsShowcaseComponent
   ],
 })
 export class HomeDesktopFeatureComponent extends BaseHomeFeatureComponent implements OnInit {
@@ -55,8 +63,22 @@ export class HomeDesktopFeatureComponent extends BaseHomeFeatureComponent implem
 
   override ngOnInit() {
     super.ngOnInit();
-    this.isMobile = false; // Desktop-specific default
+    this.isMobile = false;
   }
+
+  // Data for new sections
+  agencyStats: StatItem[] = [
+    { icon: '🏆', label: 'Premios', value: '42', description: 'Reconocimientos internacionales', trend: 'up', trendValue: '+3' },
+    { icon: '🌟', label: 'Satisfacción', value: '99%', description: 'NPS de nuestros clientes', progress: 99, trend: 'stable' },
+    { icon: '🎨', label: 'Proyectos', value: '500+', description: 'Diseños completados', trend: 'up', trendValue: '+12%' },
+    { icon: '💡', label: 'Ideas', value: '1.2k', description: 'Conceptos generados', progress: 85 }
+  ];
+
+  agencySteps: Step[] = [
+    { title: 'Inmersión', description: 'Buceamos en el ADN de tu marca para entender tus objetivos.', icon: '🔍', state: 'completed' },
+    { title: 'Conceptualización', description: 'Creamos la base estratégica y visual de tu proyecto.', icon: '💡', state: 'current' },
+    { title: 'Despliegue', description: 'Lanzamos tu visión al mundo con la máxima calidad.', icon: '🚀', state: 'pending' }
+  ];
 
   onSearchInput(event: any) {
     this.performSearch();
