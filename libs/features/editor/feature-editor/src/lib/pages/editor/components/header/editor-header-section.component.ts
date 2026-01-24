@@ -102,13 +102,21 @@ export class EditorHeaderSectionComponent extends EnhancedBaseEditorSectionCompo
 
   private updateHeaderStyles(bounds: any): void {
     const currentStyles = this.section.styles || {};
-    this.variantService.updateSectionInCurrentPage(this.section.id, {
-      styles: {
-        ...currentStyles,
-        width: bounds.width + 'px',
-        height: bounds.height + 'px',
-        transform: `translate(${bounds.x}px, ${bounds.y}px)`
-      }
-    });
+    const styles = {
+      ...currentStyles,
+      width: bounds.width + 'px',
+      height: bounds.height + 'px',
+      transform: `translate(${bounds.x}px, ${bounds.y}px)`
+    };
+
+    if (this.section.id === 'global_header') {
+      this.variantService.updateHeaderConfig({
+        customStyles: styles
+      });
+    } else {
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        styles
+      });
+    }
   }
 }

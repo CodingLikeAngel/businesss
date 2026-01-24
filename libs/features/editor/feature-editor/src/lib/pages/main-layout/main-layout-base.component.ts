@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VariantService, FooterConfig, HeaderConfig, NavBarConfig, UiStateService, VisualEditorService, PageSection } from '@negocio/shared-components';
-import { CardVariant, footerVariants, bubbleVariants, cardRutasVariants, titleVariants, variants } from '@negocio/ui-components';
 
 @Component({
   template: '' // Clase abstracta, no necesita template
@@ -20,12 +19,14 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
   private variantSub?: Subscription;
   private stepSub?: Subscription;
 
+  // Cached virtual sections for editor support
+  private _headerAsSection: any = null;
+  private _footerAsSection: any = null;
+
   protected uiStateService = inject(UiStateService);
   protected visualEditor = inject(VisualEditorService);
 
   constructor(protected variantService: VariantService, protected router: Router) {
-
-    
     this.headerConfig = this.variantService.getCurrentHeaderConfig();
     this.footerConfig = this.variantService.getCurrentFooterConfig();
     this.navBarConfig = this.variantService.getCurrentNavBarConfig();
@@ -47,9 +48,13 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.variantService.headerConfig$.subscribe((config) => {
       this.headerConfig = config;
+      // Invalidate cache
+      this._headerAsSection = null;
     });
     this.variantService.footerConfig$.subscribe((config) => {
       this.footerConfig = config;
+      // Invalidate cache
+      this._footerAsSection = null;
     });
     this.navBarConfigSub = this.variantService.navBarConfig$.subscribe((config) => {
       this.navBarConfig = config;
@@ -71,7 +76,6 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
   }
 
   onSocialClick(href: string) {
-    console.log(`Social media clicked: ${href}`);
     window.open(href, '_blank');
   }
 
@@ -83,19 +87,17 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
     if (event) {
       event.stopPropagation();
     }
-    console.log('Selecting global element:', element);
     this.uiStateService.selectElement(element);
   }
 
   onWorkspaceClick(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    // Only deselect if clicking the workspace background directly or non-editable areas
     if (target.classList.contains('canvas-area') || 
         target.classList.contains('canvas-wrapper') || 
         target.classList.contains('frame-content')) {
-      console.log('Deselecting via workspace click');
       this.visualEditor.deselectElement();
       this.uiStateService.selectElement(null);
+      this.uiStateService.selectSection(null);
     }
   }
 
@@ -103,70 +105,62 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
     this.previewSize = size;
   }
 
-  /**
-   * Generates a virtual PageSection object for the global header.
-   * This allows using the standard Editor components in the layout shell.
-   */
-  get headerAsSection(): PageSection {
-    return {
-      id: 'global_header',
-      type: 'header',
-      label: 'Cabecera Global',
-      visible: true,
-      name: 'Global Header',
-      styles: this.headerConfig.customStyles as any || {},
-      content: {
-        title: this.headerConfig.title,
-        subtitle: this.headerConfig.subtitle,
-        navItems: this.headerConfig.navItems,
-        variant: this.headerConfig.variant,
-        align: this.headerConfig.align,
-        dark: this.headerConfig.dark
-      },
-      elements: [],
-      config: {},
-      customStyles: {},
-      animation: 'none',
-      layout: 'default'
-    };
+  get headerAsSection(): any {
+    if (!this._headerAsSection) {
+      this._headerAsSection = {
+        id: 'global_header',
+        type: 'header',
+        label: 'Cabecera Global',
+        visible: true,
+        isGlobal: true,
+        name: 'Global Header',
+        styles: this.headerConfig.customStyles as any || {},
+        content: {
+          title: this.headerConfig.title,
+          subtitle: this.headerConfig.subtitle,
+          navItems: this.headerConfig.navItems,
+          variant: this.headerConfig.variant,
+          align: this.headerConfig.align,
+          dark: this.headerConfig.dark
+        },
+        elements: [],
+        config: {},
+        customStyles: {},
+        animation: 'none',
+        layout: 'default'
+      };
+    }
+    return this._headerAsSection;
   }
 
-  /**
-   * Generates a virtual PageSection object for the global footer.
-   */
-  get footerAsSection(): PageSection {
-    return {
-      id: 'global_footer',
-      type: 'footer',
-      label: 'Pie de Página Global',
-      visible: true,
-      name: 'Global Footer',
-      styles: this.footerConfig.customStyles as any || {},
-      content: {
-        title: this.footerConfig.title,
-        description: this.footerConfig.description,
-        variant: this.footerConfig.variant,
-        dark: this.footerConfig.dark
-      },
-      elements: [],
-      config: {},
-      customStyles: {},
-      animation: 'none',
-      layout: 'default'
-    };
+  get footerAsSection(): any {
+    if (!this._footerAsSection) {
+      this._footerAsSection = {
+        id: 'global_footer',
+        type: 'footer',
+        label: 'Pie de Página Global',
+        visible: true,
+        isGlobal: true,
+        name: 'Global Footer',
+        styles: this.footerConfig.customStyles as any || {},
+        content: {
+          title: this.footerConfig.title,
+          description: this.footerConfig.description,
+          variant: this.footerConfig.variant,
+          dark: this.footerConfig.dark
+        },
+        elements: [],
+        config: {},
+        customStyles: {},
+        animation: 'none',
+        layout: 'default'
+      };
+    }
+    return this._footerAsSection;
   }
 
-  /**
-   * Handles events from the global header editor.
-   */
   onGlobalHeaderEvent(bounds: any, elementId: string) {
     const currentConfig = this.headerConfig;
-    const currentPage = this.variantService.getCurrentPage();
-    if (currentPage) {
-        // Log update if needed
-    }
-    
-    // Dispatch update to global header config
     this.variantService.updateHeaderConfig({
       ...currentConfig,
       customStyles: {
@@ -178,9 +172,6 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
     });
   }
 
-  /**
-   * Handles events from the global footer editor.
-   */
   onGlobalFooterEvent(bounds: any, elementId: string) {
     const currentConfig = this.footerConfig;
     this.variantService.updateFooterConfig({
@@ -192,5 +183,19 @@ export abstract class MainLayoutBaseComponent implements OnInit, OnDestroy {
         transform: `translate(${bounds.x}px, ${bounds.y}px)`
       }
     });
+  }
+
+  returnToEditor() {
+    this.variantService.setBuilderStep('editor');
+  }
+
+  callNow() {
+    console.log('Publishing...');
+  }
+
+  onTabSelected(tab: any) {
+    if (tab && tab.id) {
+      this.onLinkClick(tab.id);
+    }
   }
 }
