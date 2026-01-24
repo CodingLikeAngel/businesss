@@ -75,16 +75,31 @@ export class ApplyDynamicStylesDirective implements OnChanges {
       const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
 
       if (value !== undefined && value !== null && value !== '') {
-        // Prevent sections from becoming absolute via style injection, which causes "disintegration"
-        if (cssKey === 'position' && (this.el.nativeElement.classList.contains('editor-section') || this.el.nativeElement.tagName === 'HEADER')) {
-            return;
+        // ROBUSTNESS ENGINE: Prevent top-level containers from "disintegrating" by blocking position injection.
+        const el = this.el.nativeElement;
+        const isHeaderFooter = el.tagName === 'HEADER' || el.tagName === 'FOOTER' || el.classList.contains('header') || el.classList.contains('footer') || el.id.includes('header') || el.id.includes('navbar');
+        const isSection = el.classList.contains('editor-section') || el.classList.contains('hero-section') || el.classList.contains('testimonials-container') || el.classList.contains('pricing-container') || el.classList.contains('stats-container');
+        
+        // Final safety check for any element that already has layout-critical positioning
+        const computedStyle = window.getComputedStyle(el);
+        const isStickyFixed = computedStyle.position === 'sticky' || computedStyle.position === 'fixed';
+        
+        const isProtectedContainer = isHeaderFooter || isSection || isStickyFixed;
+
+        // Block positioning attributes for containers to keep them in the normal flow
+        if (isProtectedContainer && (cssKey === 'position' || cssKey === 'top' || cssKey === 'left' || cssKey === 'right' || cssKey === 'bottom')) {
+            // Special exception: allow 'top: 0' for sticky headers if explicitly 0
+            if (isHeaderFooter && cssKey === 'top' && (value === '0px' || value === '0')) {
+                 // Allow top: 0
+            } else {
+                return;
+            }
         }
 
-        // Use setProperty for better compatibility with CSS variables and important flag
-        const isCritical = ['width', 'height', 'left', 'top'].includes(cssKey);
+        const isCritical = ['width', 'height', 'left', 'top', 'position'].includes(cssKey);
         const priority = isCritical ? 'important' : '';
         
-        this.el.nativeElement.style.setProperty(cssKey, value, priority);
+        el.style.setProperty(cssKey, value, priority);
 
         // Fix: Auto-map to theme variables for components using the variant system
         if (key === 'backgroundColor') {

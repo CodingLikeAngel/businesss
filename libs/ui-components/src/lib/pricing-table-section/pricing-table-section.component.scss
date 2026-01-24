@@ -7,6 +7,7 @@
 */
 
 .pricing-container {
+  @include shared.editor-robustness;
   @include shared.apply-all-variants('pricing--');
 
   // CRITICAL: Force inline styles to override variant backgrounds

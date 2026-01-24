@@ -1289,6 +1289,19 @@ export class VariantService {
     const currentPage = this.currentPageSubject.getValue();
     if (!currentPage) return;
 
+    // ROBUSTNESS: Sanitize structural components to prevent "disintegration"
+    const isStructural = sectionId.toLowerCase().includes('header') || sectionId.toLowerCase().includes('footer') || sectionId.startsWith('global_');
+    
+    if (isStructural && changes.styles) {
+       const cleanStyles = { ...changes.styles };
+       delete cleanStyles['position'];
+       delete cleanStyles['top'];
+       delete cleanStyles['left'];
+       delete cleanStyles['right'];
+       delete cleanStyles['bottom'];
+       changes.styles = cleanStyles;
+    }
+
     const updatedSections = currentPage.sections.map(section =>
       section.id === sectionId ? { ...section, ...changes } : section
     );
@@ -1441,6 +1454,44 @@ export class VariantService {
     } else {
       console.warn(`VariantService: Element ${elementId} not found for style update`);
     }
+  }
+
+  /**
+   * Resets all layout-related styles for a section
+   * Use this to recover when items are lost or layout is broken
+   */
+  resetSectionLayout(sectionId: string) {
+    const currentPage = this.currentPageSubject.value;
+    if (!currentPage) return;
+
+    const newSections = currentPage.sections.map(section => {
+      if (section.id === sectionId) {
+        const content = { ...(section.content || {}) };
+        
+        // Remove style objects from content (titleStyles, subtitleStyles, etc)
+        Object.keys(content).forEach(key => {
+          if (key.endsWith('Styles')) content[key] = {};
+        });
+
+        // Reset list items styles
+        const listKeys = ['items', 'navigationCards', 'premiumCards', 'images', 'testimonials'];
+        listKeys.forEach(lk => {
+          if (content[lk] && Array.isArray(content[lk])) {
+            content[lk] = content[lk].map((i: any) => ({ ...i, styles: {} }));
+          }
+        });
+
+        return {
+          ...section,
+          styles: {}, // Clear main section styles
+          content
+        };
+      }
+      return section;
+    });
+
+    this.updatePage(currentPage.id, { sections: newSections });
+    console.log(`🛡️ Reset layout for section: ${sectionId}`);
   }
 
   private loadFromLocalStorage() {

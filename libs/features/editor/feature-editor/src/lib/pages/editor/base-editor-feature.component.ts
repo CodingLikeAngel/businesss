@@ -428,10 +428,15 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
 
     // SAFETY GUARD: Prevent moving the entire section as an absolute element 
     // (which causes the whole page to "disintegrate").
-    // We also block moves if they contain 'header' or 'navbar' at the top level.
-    const isSection = elementId === section.id || elementId === 'navbar' || elementId.includes('global_');
-    if (isSection && (bounds.width > 500)) { // Sections are usually wide
-        console.warn('❌ Blocked top-level move for:', elementId);
+    // We strictly block moves if the ID matches the section, OR if it's a global structural part.
+    const isSectionMove = elementId === section.id || 
+                          elementId.toLowerCase().includes('header') || 
+                          elementId.toLowerCase().includes('footer') ||
+                          elementId.toLowerCase().includes('navbar') ||
+                          elementId.startsWith('global_');
+
+    if (isSectionMove) {
+        console.warn('❌ Blocked structural move to prevent layout disintegration:', elementId);
         return;
     }
 

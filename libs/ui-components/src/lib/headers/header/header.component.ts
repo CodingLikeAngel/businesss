@@ -71,8 +71,11 @@ export class UIHeaderComponent {
     }
     
     // Copy any other custom styles
+    // ROBUSTNESS: Explicitly filter out keys that can break the header's sticky flow
+    const blockedKeys = ['position', 'top', 'left', 'right', 'bottom'];
+    
     Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
+      if (key !== 'backgroundColor' && key !== 'color' && !blockedKeys.includes(key)) {
         styles[key] = customStyles[key];
       }
     });

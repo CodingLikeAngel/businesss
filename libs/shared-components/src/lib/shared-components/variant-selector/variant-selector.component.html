@@ -132,6 +132,20 @@
                         <p>Generar bundle de producción</p>
                     </div>
                 </button>
+                <button class="action-v2-btn secondary" (click)="exportAsHtml()">
+                    <span class="icon">🌍</span> 
+                    <div class="txt">
+                        <strong>Descargar Vista</strong>
+                        <p>Generar archivo HTML estático</p>
+                    </div>
+                </button>
+                <button class="action-v2-btn" (click)="resetLayout()" *ngIf="selectedSection">
+                    <span class="icon">♻️</span> 
+                    <div class="txt">
+                        <strong>Arreglar Sección</strong>
+                        <p>Recuperar layout original</p>
+                    </div>
+                </button>
                 <button class="action-v2-btn danger" (click)="resetConfiguration()">
                     <span class="icon">⚠️</span> 
                     <div class="txt">

@@ -471,21 +471,26 @@ export class VisualEditorService {
   private createEditOverlay(element: HTMLElement, config: DragResizeConfig) {
     if (!isPlatformBrowser(this.platformId)) return;
 
-    const rect = element.getBoundingClientRect();
-    
+    // ROBUSTNESS REVOLUTION: The overlay now lives INSIDE the section's coordinate space.
+    // This makes it immune to global translates, scales, or sticky jumps.
+    const section = element.closest('.editor-section, header, .header, footer') as HTMLElement || document.body;
+    const sectionRect = section.getBoundingClientRect();
+    const scrollX = section.scrollLeft;
+    const scrollY = section.scrollTop;
+
     // Crear contenedor del overlay 
     const overlay = this.renderer.createElement('div');
     this.renderer.addClass(overlay, 'visual-edit-overlay');
-    // FIXED position to avoid scroll issues
-    this.renderer.setStyle(overlay, 'position', 'fixed');
-    this.renderer.setStyle(overlay, 'top', `${rect.top}px`);
-    this.renderer.setStyle(overlay, 'left', `${rect.left}px`);
-    this.renderer.setStyle(overlay, 'width', `${rect.width}px`);
-    this.renderer.setStyle(overlay, 'height', `${rect.height}px`);
+    
+    // ABSOLUTE position relative to the section anchor
+    this.renderer.setStyle(overlay, 'position', 'absolute');
     this.renderer.setStyle(overlay, 'pointer-events', 'none');
-    this.renderer.setStyle(overlay, 'z-index', '50');
-
+    this.renderer.setStyle(overlay, 'z-index', '10000');
+    
+    this.updateOverlayPosition(overlay, element);
+    
     this.renderer.setAttribute(overlay, 'data-overlay', 'true');
+    this.renderer.setAttribute(overlay, 'data-host-id', section.id);
 
     // Crear borde de selección
     const border = this.renderer.createElement('div');
@@ -495,7 +500,7 @@ export class VisualEditorService {
     // Crear label con dimensiones
     const label = this.renderer.createElement('div');
     this.renderer.addClass(label, 'visual-dimension-label');
-    this.renderer.setProperty(label, 'textContent', `${Math.round(rect.width)} × ${Math.round(rect.height)}`);
+    this.renderer.setProperty(label, 'textContent', `${Math.round(element.offsetWidth)} × ${Math.round(element.offsetHeight)}`);
     this.renderer.appendChild(overlay, label);
 
     // Crear handles de resize
@@ -504,8 +509,8 @@ export class VisualEditorService {
       this.createResizeHandles(overlay, config.handles);
     }
 
-    // Añadir al body
-    this.renderer.appendChild(document.body, overlay);
+    // Añadir al host (Section) para estabilidad de coordenadas
+    this.renderer.appendChild(section, overlay);
 
     // Setup drag
     if (config.enableDrag) {
@@ -578,8 +583,17 @@ export class VisualEditorService {
       // Check mode
       if (this._interactionMode !== 'move' && this._interactionMode !== 'all') return;
 
-      // Only drag if element is already selected (first click just selects)
-      if (this.activeElement !== element) return;
+      // SHIELD: Prevent dragging whole sections (the main cause of 'disintegration')
+      const el = element;
+      const isHeaderFooter = el.tagName === 'HEADER' || el.tagName === 'FOOTER' || el.classList.contains('header') || el.classList.contains('footer') || el.id.includes('header') || el.id.includes('navbar');
+      const isSection = el.classList.contains('editor-section') || el.classList.contains('hero-section') || el.classList.contains('testimonials-container') || el.classList.contains('pricing-container') || el.classList.contains('stats-container');
+      
+      // If it's a section, we strictly block drag to preserve document flow
+      if (isHeaderFooter || isSection) {
+           console.warn('🛡️ Drag blocked: Container elements must remain in flow.', element.id);
+           this.renderer.setStyle(overlay, 'cursor', 'not-allowed');
+           return;
+      }
       
       // Don't drag if clicking buttons or inputs inside
       const target = e.target as HTMLElement;
@@ -1086,17 +1100,24 @@ export class VisualEditorService {
   private updateOverlayPosition(overlay: HTMLElement, element: HTMLElement) {
     if (!element || !overlay) return;
     
-    const rect = element.getBoundingClientRect();
-    // With position: fixed, we use viewport coordinates directly without scroll offsets
-    this.renderer.setStyle(overlay, 'top', `${rect.top}px`);
-    this.renderer.setStyle(overlay, 'left', `${rect.left}px`);
-    this.renderer.setStyle(overlay, 'width', `${rect.width}px`);
-    this.renderer.setStyle(overlay, 'height', `${rect.height}px`);
+    const section = overlay.parentElement || document.body;
+    const sRect = section.getBoundingClientRect();
+    const eRect = element.getBoundingClientRect();
+    
+    // MATH: Element Viewport - Section Viewport = Element Relative to Section
+    // We add section scroll in case the section itself is scrollable (rare but possible)
+    const top = (eRect.top - sRect.top) + section.scrollTop;
+    const left = (eRect.left - sRect.left) + section.scrollLeft;
+
+    this.renderer.setStyle(overlay, 'top', `${top}px`);
+    this.renderer.setStyle(overlay, 'left', `${left}px`);
+    this.renderer.setStyle(overlay, 'width', `${eRect.width}px`);
+    this.renderer.setStyle(overlay, 'height', `${eRect.height}px`);
 
     // Update dimensions label
     const label = overlay.querySelector('.visual-dimension-label');
     if (label) {
-      label.textContent = `${Math.round(rect.width)} × ${Math.round(rect.height)}`;
+      label.textContent = `${Math.round(eRect.width)} × ${Math.round(eRect.height)}`;
     }
   }
 
@@ -1291,40 +1312,45 @@ export class VisualEditorService {
         border: 2px solid #8b5cf6;
         background: rgba(139, 92, 246, 0.1);
         border-radius: 6px;
-        box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2),
+        box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2);
+      }
+
       .visual-selected {
         outline: 3px solid #3b82f6 !important;
         outline-offset: 4px !important;
-        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.1), 0 0 30px rgba(59, 130, 246, 0.6) !important;
+        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.05), 0 0 30px rgba(59, 130, 246, 0.6) !important;
         z-index: 10000 !important;
         overflow: visible !important;
       }
 
-      /* Robust container handling: NEVER break sticky/fixed headers */
-      .editor-section {
-        box-sizing: border-box !important;
-        min-height: 50px !important;
-        transition: none !important;
-      }
-      
-      .editor-section:not([class*="sticky"]):not([class*="fixed"]) {
-        position: relative !important;
+      /* Robust container handling: ONLY for canvas content to avoid breaking the editor shell */
+      .frame-content header, 
+      .frame-content .header, 
+      .frame-content .hero-section,
+      .frame-content .navbar,
+      .frame-content [id*="navbar"] {
+        position: sticky !important;
+        top: 0 !important;
+        z-index: 100 !important; /* High enough for content, but under editor controls */
+        transform: none !important;
+        left: 0 !important;
+        width: 100% !important;
       }
 
       .has-floating-children {
-        min-height: 400px !important;
+        min-height: 600px !important;
       }
 
       [style*="background"] {
          overflow: visible !important;
       }
       
-      /* Block pointer events on overlay to allow clicking through */
       .visual-edit-overlay {
          pointer-events: none !important;
       }
       .visual-resize-handle {
          pointer-events: all !important;
+         z-index: 10001 !important;
       }
     `);
 

@@ -11,6 +11,7 @@
   overflow: hidden;
   position: relative;
   min-height: 600px;
+  @include shared.editor-robustness;
 
   @include shared.apply-all-variants('testimonials--');
   @include shared.apply-variants-to-child('.testimonial-card', 'testimonials--');

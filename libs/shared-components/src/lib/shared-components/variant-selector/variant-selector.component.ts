@@ -259,6 +259,17 @@ export class VariantSelectorComponent implements OnInit {
     this.exportService.exportProject();
   }
 
+  exportAsHtml() {
+    this.exportService.exportAsHtml();
+  }
+
+  resetLayout() {
+    if (this.selectedSection) {
+        this.variantService.resetSectionLayout(this.selectedSection.id);
+        this.onStyleChanged();
+    }
+  }
+
   saveAsCustomTemplate() {
     this.templateService.saveAsCustomTemplate();
   }
