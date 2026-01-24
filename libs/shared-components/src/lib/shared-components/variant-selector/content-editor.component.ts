@@ -94,12 +94,27 @@ import { FormsModule } from '@angular/forms';
                 <span class="dot"></span>
                 <h4>Media & Multimedia</h4>
             </div>
-            <div class="input-v2">
-                <label>URL de Imagen o Recurso</label>
+            <div class="input-v2" *ngIf="hasProperty('image') || hasProperty('imageUrl')">
+                <label>URL de Imagen</label>
                 <div class="media-input-wrapper">
-                    <input type="text" class="text-v2" [ngModel]="targetContent.image" (ngModelChange)="updateProperty('image', $event)" placeholder="https://...">
-                    <div class="media-preview-v2" *ngIf="targetContent.image">
-                        <img [src]="targetContent.image" alt="Preview">
+                    <input type="text" class="text-v2" [ngModel]="targetContent.image || targetContent.imageUrl" (ngModelChange)="updateProperty(hasProperty('image') ? 'image' : 'imageUrl', $event)" placeholder="https://...">
+                    <div class="media-preview-v2" *ngIf="targetContent.image || targetContent.imageUrl">
+                        <img [src]="targetContent.image || targetContent.imageUrl" alt="Preview">
+                    </div>
+                </div>
+            </div>
+
+            <div class="input-v2 mt-3" *ngIf="hasProperty('videoUrl')">
+                <label>URL de Video (MP4/WebM)</label>
+                <input type="text" class="text-v2" [ngModel]="targetContent.videoUrl" (ngModelChange)="updateProperty('videoUrl', $event)" placeholder="https://...mp4">
+            </div>
+
+            <div class="input-v2 mt-3" *ngIf="hasProperty('videoPoster')">
+                <label>Imagen Poster (Previsualización)</label>
+                <div class="media-input-wrapper">
+                    <input type="text" class="text-v2" [ngModel]="targetContent.videoPoster" (ngModelChange)="updateProperty('videoPoster', $event)" placeholder="https://...">
+                    <div class="media-preview-v2" *ngIf="targetContent.videoPoster">
+                        <img [src]="targetContent.videoPoster" alt="Poster Preview">
                     </div>
                 </div>
             </div>
@@ -400,7 +415,11 @@ export class ContentEditorComponent {
 
   get shouldShowMedia(): boolean {
     if (this.isAccordion) return false;
-    return this.hasProperty('image') || this.hasProperty('imageUrl') || this.hasProperty('icon');
+    return this.hasProperty('image') || 
+           this.hasProperty('imageUrl') || 
+           this.hasProperty('icon') || 
+           this.hasProperty('videoUrl') || 
+           this.hasProperty('videoPoster');
   }
 
   get shouldShowItems(): boolean {

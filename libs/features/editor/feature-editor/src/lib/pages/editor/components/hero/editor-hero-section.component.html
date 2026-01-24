@@ -10,10 +10,10 @@
   (visualEvents)="handleSectionEvent($event)">
 
   <!-- Background Video Container -->
-  <div class="video-container" *ngIf="heroConfig.videoBackground">
+  <div class="video-container" *ngIf="section.content['videoBackground'] !== false && (section.content['videoUrl'] || heroConfig.videoUrl)">
     <video
-      [src]="heroConfig.videoUrl"
-      [poster]="heroConfig.videoPoster"
+      [src]="section.content['videoUrl'] || heroConfig.videoUrl"
+      [poster]="section.content['videoPoster'] || heroConfig.videoPoster"
       [ngClass]="getVideoClass()"
       autoplay muted loop playsinline
     ></video>

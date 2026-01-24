@@ -197,6 +197,83 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
   handleSubtitleEvent(event: VisualEditingEvent): void { this.handleVisualEvent(event, this.section.id + '_subtitle'); }
   handleCtaEvent(event: VisualEditingEvent): void { this.handleVisualEvent(event, this.section.id + '_cta'); }
 
+  /**
+   * Custom event handling for hero-specific logic
+   */
+  protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
+    if (elementId === this.section.id + '_title') {
+      switch (event.type) {
+        case 'moved':
+        case 'resized':
+          this.updateTitleStyles(event.bounds);
+          break;
+      }
+    } else if (elementId === this.section.id + '_subtitle') {
+      switch (event.type) {
+        case 'moved':
+        case 'resized':
+          this.updateSubtitleStyles(event.bounds);
+          break;
+      }
+    } else if (elementId === this.section.id + '_cta') {
+      switch (event.type) {
+        case 'moved':
+        case 'resized':
+          this.updateCtaStyles(event.bounds);
+          break;
+      }
+    }
+  }
+
+  private updateTitleStyles(bounds: any): void {
+    const currentStyles = this.section.content['titleStyles'] || {};
+    const newStyles = {
+      ...currentStyles,
+      position: 'absolute', // Ensure absolute positioning for visual editing
+      width: bounds.width + 'px',
+      left: bounds.x + 'px',
+      top: bounds.y + 'px',
+      transform: 'none'
+    };
+    this.updateSectionContent({ titleStyles: newStyles });
+  }
+
+  private updateSubtitleStyles(bounds: any): void {
+    const currentStyles = this.section.content['subtitleStyles'] || {};
+    const newStyles = {
+      ...currentStyles,
+      position: 'absolute',
+      width: bounds.width + 'px',
+      left: bounds.x + 'px',
+      top: bounds.y + 'px',
+      transform: 'none'
+    };
+    this.updateSectionContent({ subtitleStyles: newStyles });
+  }
+
+  private updateCtaStyles(bounds: any): void {
+    const currentStyles = this.section.content['ctaStyles'] || {};
+    const newStyles = {
+      ...currentStyles,
+      position: 'absolute',
+      width: bounds.width + 'px',
+      height: bounds.height + 'px',
+      left: bounds.x + 'px',
+      top: bounds.y + 'px',
+      transform: 'none'
+    };
+    this.updateSectionContent({ ctaStyles: newStyles });
+  }
+
+  private updateSectionContent(contentUpdates: any): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: {
+        ...this.section.content,
+        ...contentUpdates
+      }
+    });
+  }
+
   private initMatrixEffect(): void {
     if (!this.matrixCanvas) return;
     const canvas = this.matrixCanvas.nativeElement;
