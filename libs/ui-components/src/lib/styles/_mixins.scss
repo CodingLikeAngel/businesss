@@ -2591,69 +2591,42 @@ $breakpoints: (
     &.#{$prefix}secondary { @include variant-secondary; }
     &.#{$prefix}outline { @include variant-outline; }
     &.#{$prefix}ghost { @include variant-ghost; }
-    &.#{$prefix}glass { @include variant-glass; }
+    &.#{$prefix}link { @include variant-link; }
     &.#{$prefix}neon { @include variant-neon; }
     &.#{$prefix}cyberpunk { @include variant-cyberpunk; }
-    &.#{$prefix}retro { @include variant-retro; }
-    &.#{$prefix}dark { @include variant-dark; }
-    &.#{$prefix}matrix { @include variant-matrix; }
-    &.#{$prefix}glitch { @include variant-glitch; }
-    &.#{$prefix}portal { @include variant-portal; }
-    &.#{$prefix}super-meat-boy { @include variant-super-meat-boy; }
-    &.#{$prefix}bioshock { @include variant-bioshock; }
-    &.#{$prefix}joycon { @include variant-joycon; }
-    &.#{$prefix}jungle { @include variant-jungle; }
-    &.#{$prefix}neomorph { @include variant-neomorph; }
-    &.#{$prefix}electoon { @include variant-electoon; }
-    &.#{$prefix}holo { @include variant-holo; }
-    &.#{$prefix}quantum { @include variant-quantum; }
-    &.#{$prefix}river { @include variant-river; }
-    &.#{$prefix}ice { @include variant-ice; }
-    &.#{$prefix}metal { @include variant-metal; }
-    &.#{$prefix}energy { @include variant-energy; }
-    &.#{$prefix}void { @include variant-void; }
-    &.#{$prefix}cosmic { @include variant-cosmic; }
-    &.#{$prefix}arcade { @include variant-arcade; }
-    &.#{$prefix}pixel { @include variant-pixel; }
-    &.#{$prefix}chaos { @include variant-chaos; }
-    &.#{$prefix}vortex { @include variant-vortex; }
-    &.#{$prefix}stone { @include variant-stone; }
-    &.#{$prefix}donkeykong { @include variant-donkeykong; }
-    &.#{$prefix}supermeatboy { @include variant-supermeatboy; }
-    &.#{$prefix}aqua { @include variant-aqua; }
-    &.#{$prefix}vaporwave { @include variant-vaporwave; }
-    &.#{$prefix}aurora { @include variant-aurora; }
-    &.#{$prefix}trailblazer { @include variant-trailblazer; }
-      
-    // Premium Gaming Themes
-    &.#{$prefix}mario { @include variant-mario; }
-    &.#{$prefix}zelda { @include variant-zelda; }
-    &.#{$prefix}kirby { @include variant-kirby; }
-    &.#{$prefix}rayman { @include variant-rayman; }
-    &.#{$prefix}lum { @include variant-lum; }
-    &.#{$prefix}phoenix { @include variant-phoenix; }
-    &.#{$prefix}galactic { @include variant-galactic; }
-    &.#{$prefix}orbitron { @include variant-orbitron; }
-    &.#{$prefix}cartoon { @include variant-cartoon; }
-    &.#{$prefix}luma { @include variant-luma; }
-    &.#{$prefix}coin { @include variant-coin; }
-    &.#{$prefix}fire { @include variant-fire; }
-    &.#{$prefix}water { @include variant-water; }
-    &.#{$prefix}leaf { @include variant-leaf; }
-    &.#{$prefix}link { @include variant-link; }
     &.#{$prefix}gradient { @include variant-gradient; }
+    &.#{$prefix}glass { @include variant-glass; }
+    &.#{$prefix}retro { @include variant-retro; }
     &.#{$prefix}pulse-gradient { @include variant-pulse-gradient; }
+    &.#{$prefix}holo { @include variant-holo; }
+    &.#{$prefix}matrix { @include variant-matrix; }
+    &.#{$prefix}quantum { @include variant-quantum; }
     &.#{$prefix}cybernetic { @include variant-cybernetic; }
     &.#{$prefix}danger { @include variant-danger; }
     &.#{$prefix}success { @include variant-success; }
     &.#{$prefix}nano { @include variant-nano; }
     &.#{$prefix}stellar { @include variant-stellar; }
+    &.#{$prefix}phoenix { @include variant-phoenix; }
+    &.#{$prefix}galactic { @include variant-galactic; }
+    &.#{$prefix}orbitron { @include variant-orbitron; }
+    &.#{$prefix}cartoon { @include variant-cartoon; }
+    &.#{$prefix}luma { @include variant-luma; }
     &.#{$prefix}platform { @include variant-platform; }
     &.#{$prefix}hero { @include variant-hero; }
+    &.#{$prefix}coin { @include variant-coin; }
     &.#{$prefix}cloud { @include variant-cloud; }
-    &.#{$prefix}plasma { @include variant-plasma; }
+    &.#{$prefix}fire { @include variant-fire; }
+    &.#{$prefix}water { @include variant-water; }
+    &.#{$prefix}leaf { @include variant-leaf; }
     &.#{$prefix}amber-glow { @include variant-amber-glow; }
     &.#{$prefix}minimal-white { @include variant-minimal-white; }
+    &.#{$prefix}mario { @include variant-mario; }
+    &.#{$prefix}zelda { @include variant-zelda; }
+    &.#{$prefix}kirby { @include variant-kirby; }
+    &.#{$prefix}rayman { @include variant-rayman; }
+    &.#{$prefix}lum { @include variant-lum; }
+    &.#{$prefix}river { @include variant-river; }
+    &.#{$prefix}minimal { @include variant-minimal; }
     &.#{$prefix}hex-teal { @include variant-hex-teal; }
     &.#{$prefix}purple-edge { @include variant-purple-edge; }
     &.#{$prefix}rose-radial { @include variant-rose-radial; }
@@ -2669,8 +2642,8 @@ $breakpoints: (
     &.#{$prefix}neomorph { @include variant-neomorph; }
     &.#{$prefix}glitch { @include variant-glitch; }
     &.#{$prefix}portal { @include variant-portal; }
-    
-    // New Gaming-Inspired Variants
+    &.#{$prefix}bioshock { @include variant-bioshock; }
+    &.#{$prefix}super-meat-boy { @include variant-super-meat-boy; }
     &.#{$prefix}pokemon { @include variant-pokemon; }
     &.#{$prefix}animal-crossing { @include variant-animal-crossing; }
     &.#{$prefix}assassins-creed { @include variant-assassins-creed; }
@@ -2681,13 +2654,53 @@ $breakpoints: (
     &.#{$prefix}overwatch { @include variant-overwatch; }
     &.#{$prefix}minecraft { @include variant-minecraft; }
     &.#{$prefix}fortnite { @include variant-fortnite; }
+    &.#{$prefix}ice { @include variant-ice; }
+    &.#{$prefix}metal { @include variant-metal; }
+    &.#{$prefix}energy { @include variant-energy; }
+    &.#{$prefix}void { @include variant-void; }
+    &.#{$prefix}cosmic { @include variant-cosmic; }
+    &.#{$prefix}plasma { @include variant-plasma; }
+    &.#{$prefix}arcade { @include variant-arcade; }
+    &.#{$prefix}pixel { @include variant-pixel; }
+    &.#{$prefix}chaos { @include variant-chaos; }
+    &.#{$prefix}vortex { @include variant-vortex; }
+    &.#{$prefix}stone { @include variant-stone; }
+    &.#{$prefix}donkeykong { @include variant-donkeykong; }
+    &.#{$prefix}supermeatboy { @include variant-supermeatboy; }
+    &.#{$prefix}aqua { @include variant-aqua; }
+    &.#{$prefix}vaporwave { @include variant-vaporwave; }
+    &.#{$prefix}aurora { @include variant-aurora; }
+    &.#{$prefix}trailblazer { @include variant-trailblazer; }
     &.#{$prefix}elegant { @include variant-elegant; }
-    &.#{$prefix}luxury { @include variant-luxury; }
     &.#{$prefix}vintage { @include variant-vintage; }
-    &.#{$prefix}corporate { @include variant-corporate; }
-    &.#{$prefix}minimal { @include variant-minimal; }
-
-    // Ultra-Creative Variants with Unique Shapes
+    &.#{$prefix}luxury { @include variant-luxury; }
+    &.#{$prefix}rockstar { @include variant-rockstar; }
+    &.#{$prefix}ubisoft { @include variant-ubisoft; }
+    &.#{$prefix}morphing-blob { @include variant-morphing-blob; }
+    &.#{$prefix}liquid-metal { @include variant-liquid-metal; }
+    &.#{$prefix}crystal-prism { @include variant-crystal-prism; }
+    &.#{$prefix}neural-network { @include variant-neural-network; }
+    &.#{$prefix}quantum-field { @include variant-quantum-field; }
+    &.#{$prefix}holographic-matrix { @include variant-holographic-matrix; }
+    &.#{$prefix}plasma-storm { @include variant-plasma-storm; }
+    &.#{$prefix}cyber-circuit { @include variant-cyber-circuit; }
+    &.#{$prefix}organic-growth { @include variant-organic-growth; }
+    &.#{$prefix}fractal-dimension { @include variant-fractal-dimension; }
+    &.#{$prefix}time-warp { @include variant-time-warp; }
+    &.#{$prefix}dimensional-shift { @include variant-dimensional-shift; }
+    &.#{$prefix}nano-swarm { @include variant-nano-swarm; }
+    &.#{$prefix}energy-web { @include variant-energy-web; }
+    &.#{$prefix}void-portal { @include variant-void-portal; }
+    &.#{$prefix}cosmic-dust { @include variant-cosmic-dust; }
+    &.#{$prefix}stellar-nova { @include variant-stellar-nova; }
+    &.#{$prefix}aurora-borealis { @include variant-aurora-borealis; }
+    &.#{$prefix}lava-flow { @include variant-lava-flow; }
+    &.#{$prefix}ice-crystal { @include variant-ice-crystal; }
+    &.#{$prefix}thunder-storm { @include variant-thunder-storm; }
+    &.#{$prefix}water-ripple { @include variant-water-ripple; }
+    &.#{$prefix}black-hole { @include variant-black-hole; }
+    &.#{$prefix}wormhole { @include variant-wormhole; }
+    &.#{$prefix}dna-helix { @include variant-dna-helix; }
     &.#{$prefix}crystal { @include variant-crystal; }
     &.#{$prefix}gear { @include variant-gear; }
     &.#{$prefix}star { @include variant-star; }
@@ -3324,3 +3337,560 @@ $breakpoints: (
   0%, 100% { opacity: 0.5; transform: translateY(0) rotate(0deg); }
   50% { opacity: 1; transform: translateY(-5px) rotate(180deg); }
 }
+
+// Ultra-Creative Scientific Variants
+@mixin variant-morphing-blob {
+  position: relative;
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  border-radius: 50%;
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  clip-path: circle(50% at 50% 50%);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 40%, rgba(255,255,255,0.3) 0%, transparent 50%);
+    border-radius: 50%;
+    animation: blob-morph 4s ease-in-out infinite;
+  }
+
+  &:hover {
+    animation: blob-pulse 0.6s ease-out;
+    box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
+  }
+}
+
+@mixin variant-neural-network {
+  position: relative;
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+  background: #0f172a;
+  color: #00ff88;
+  border: 1px solid #00ff88;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      radial-gradient(circle at 25% 25%, rgba(0,255,136,0.1) 2px, transparent 2px),
+      radial-gradient(circle at 75% 75%, rgba(0,255,136,0.1) 2px, transparent 2px),
+      radial-gradient(circle at 50% 50%, rgba(0,255,136,0.1) 2px, transparent 2px);
+    background-size: 30px 30px;
+    animation: neural-pulse 2s ease-in-out infinite;
+  }
+
+  &:hover {
+    box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
+  }
+}
+
+@mixin variant-quantum-field {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(45deg, #1e1b4b, #312e81);
+  color: #a5b4fc;
+  border: 1px solid #6366f1;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: conic-gradient(from 0deg, transparent, rgba(99, 102, 241, 0.3), transparent);
+    animation: quantum-spin 3s linear infinite;
+  }
+
+  &:hover {
+    box-shadow: 0 0 25px rgba(99, 102, 241, 0.8);
+  }
+}
+
+@mixin variant-dna-helix {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border-radius: 25px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%),
+      linear-gradient(-45deg, rgba(255,255,255,0.1) 25%, transparent 25%);
+    background-size: 20px 20px;
+    animation: dna-twist 2s linear infinite;
+  }
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+  }
+}
+
+// Natural Variants
+@mixin variant-lava-flow {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #dc2626 0%, #b91c1c 50%, #7f1d1d 100%);
+  color: #fed7aa;
+  border-radius: 15px;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+      transparent 30%,
+      rgba(255,255,255,0.2) 50%,
+      transparent 70%
+    );
+    animation: lava-flow 2s ease-in-out infinite;
+  }
+
+  &:hover {
+    box-shadow: 0 0 30px rgba(220, 38, 38, 0.8);
+    animation: lava-erupt 0.5s ease-out;
+  }
+}
+
+@mixin variant-ice-crystal {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+  color: #0c4a6e;
+  border: 2px solid #7dd3fc;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg,
+      transparent 40%,
+      rgba(255,255,255,0.6) 45%,
+      rgba(255,255,255,0.6) 55%,
+      transparent 60%
+    );
+    animation: ice-shine 3s ease-in-out infinite;
+  }
+
+  &:hover {
+    box-shadow: 0 0 25px rgba(125, 211, 252, 0.8);
+  }
+}
+
+@mixin variant-thunder-storm {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+  color: #fbbf24;
+  border: 2px solid #f59e0b;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 30% 20%, rgba(251, 191, 36, 0.3) 0%, transparent 50%);
+    animation: lightning-flash 1.5s ease-in-out infinite;
+  }
+
+  &::after {
+    content: '⚡';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    animation: thunder-bolt 2s ease-in-out infinite;
+  }
+
+  &:hover {
+    box-shadow: 0 0 30px rgba(245, 158, 11, 0.8);
+  }
+}
+
+@mixin variant-water-ripple {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+  color: white;
+  border-radius: 50%;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    transform: translate(-50%, -50%);
+    animation: water-ripple 2s ease-out infinite;
+  }
+
+  &:hover {
+    box-shadow: 0 0 25px rgba(14, 165, 233, 0.8);
+  }
+}
+
+// Cosmic Variants
+@mixin variant-black-hole {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle, #000000 0%, #1f2937 70%, #374151 100%);
+  color: #fbbf24;
+  border: 3px solid #f59e0b;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, #fbbf24 0%, #f59e0b 50%, transparent 100%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: black-hole-suck 3s ease-in-out infinite;
+  }
+
+  &:hover {
+    box-shadow: 0 0 40px rgba(245, 158, 11, 0.9);
+  }
+}
+
+@mixin variant-wormhole {
+  position: relative;
+  overflow: hidden;
+  background: conic-gradient(from 0deg, #7c3aed, #a855f7, #ec4899, #7c3aed);
+  color: white;
+  border-radius: 50%;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(0,0,0,0.8) 100%);
+    animation: wormhole-twist 2s linear infinite;
+  }
+
+  &:hover {
+    animation: wormhole-portal 0.5s ease-out;
+    box-shadow: 0 0 30px rgba(124, 58, 237, 0.8);
+  }
+}
+
+@mixin variant-stellar-nova {
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(circle, #fbbf24 0%, #f59e0b 30%, #d97706 70%, #92400e 100%);
+  color: white;
+  border-radius: 50%;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(251,191,36,0.7) 50%, transparent 100%);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    animation: nova-explosion 2s ease-in-out infinite;
+  }
+
+  &:hover {
+    box-shadow: 0 0 40px rgba(251, 191, 36, 1);
+    animation: nova-burst 0.6s ease-out;
+  }
+}
+
+@mixin variant-cosmic-dust {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+  color: #e879f9;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      radial-gradient(circle at 20% 80%, rgba(232, 121, 249, 0.3) 1px, transparent 1px),
+      radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.3) 1px, transparent 1px),
+      radial-gradient(circle at 40% 40%, rgba(196, 181, 253, 0.3) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: cosmic-drift 4s ease-in-out infinite;
+  }
+
+  &:hover {
+    box-shadow: 0 0 25px rgba(232, 121, 249, 0.8);
+  }
+}
+
+// Animation keyframes for ultra-creative variants
+@keyframes blob-morph {
+  0%, 100% { border-radius: 50%; }
+  25% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+  50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+  75% { border-radius: 50% 40% 60% 30% / 40% 70% 50% 40%; }
+}
+
+@keyframes blob-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+@keyframes neural-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes quantum-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes dna-twist {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(360deg); }
+}
+
+@keyframes lava-flow {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+
+@keyframes lava-erupt {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05) translateY(-5px); }
+  100% { transform: scale(1); }
+}
+
+@keyframes ice-shine {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes lightning-flash {
+  0%, 100% { opacity: 0.2; }
+  10%, 30%, 50%, 70%, 90% { opacity: 0.8; }
+}
+
+@keyframes thunder-bolt {
+  0%, 100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  50% { transform: translate(-50%, -50%) scale(1.2) rotate(180deg); }
+}
+
+@keyframes water-ripple {
+  0% { width: 0; height: 0; opacity: 1; }
+  100% { width: 200px; height: 200px; opacity: 0; }
+}
+
+@keyframes black-hole-suck {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.5); }
+}
+
+@keyframes wormhole-twist {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+@keyframes wormhole-portal {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1) rotate(10deg); }
+  100% { transform: scale(1); }
+}
+
+@keyframes nova-explosion {
+  0% { width: 0; height: 0; opacity: 1; }
+  100% { width: 150px; height: 150px; opacity: 0; }
+}
+
+@keyframes nova-burst {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+@keyframes cosmic-drift {
+  0%, 100% { transform: translate(0, 0) rotate(0deg); }
+  33% { transform: translate(10px, -5px) rotate(120deg); }
+  66% { transform: translate(-5px, 10px) rotate(240deg); }
+}
+
+// Missing Variants Additions
+@mixin variant-ubisoft {
+  @include unified-variant-base(
+    linear-gradient(135deg, #0070d2, #003087),
+    #ffffff,
+    #0070d2,
+    #0070d2
+  );
+  border-radius: 0.5rem;
+}
+
+@mixin variant-rockstar {
+  background: #000;
+  color: #f9d71c;
+  border: 4px solid #f9d71c;
+  font-family: 'Inter', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  box-shadow: 10px 10px 0px rgba(249, 215, 28, 0.3);
+}
+
+@mixin variant-liquid-metal {
+  background: linear-gradient(135deg, #e2e8f0, #94a3b8);
+  color: #1e293b;
+  border: 1px solid rgba(255,255,255,0.5);
+  box-shadow: 0 0 20px rgba(255,255,255,0.4);
+  filter: contrast(1.1) brightness(1.1);
+  position: relative;
+  overflow: hidden;
+  &::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: -50%; width: 200%; height: 200%;
+    background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
+    animation: liquid-sway 10s infinite linear;
+  }
+}
+
+@mixin variant-crystal-prism {
+  @include variant-glass;
+  border-color: rgba(255,255,255,0.6);
+  box-shadow: 0 0 30px rgba(255,255,255,0.2), inset 0 0 15px rgba(255,255,255,0.2);
+}
+
+@mixin variant-holographic-matrix {
+  @include variant-matrix;
+  background: rgba(0,255,65,0.05);
+  border-color: #00ff41;
+  animation: holo-flicker 2s infinite;
+}
+
+@mixin variant-plasma-storm {
+  background: radial-gradient(circle, #4f46e5, #7c3aed, #000);
+  color: #fff;
+  border: none;
+  animation: plasma-pulse 4s infinite;
+}
+
+@mixin variant-cyber-circuit {
+  @include variant-cyberpunk;
+  background: #111;
+  color: #0ff;
+  border: 2px solid #0ff;
+}
+
+@mixin variant-organic-growth {
+  background: linear-gradient(135deg, #065f46, #059669);
+  color: #ecfdf5;
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+}
+
+@mixin variant-fractal-dimension {
+  background: #000;
+  color: #fff;
+  border: 1px solid #6366f1;
+  box-shadow: 0 0 20px #6366f1;
+}
+
+@mixin variant-time-warp {
+  background: conic-gradient(from 0deg, #1e1b4b, #312e81, #1e1b4b);
+  color: #fff;
+  animation: rotate 10s infinite linear;
+}
+
+@mixin variant-dimensional-shift {
+  @include variant-portal;
+  transform: skewX(-5deg);
+}
+
+@mixin variant-nano-swarm {
+  @include variant-nano;
+  opacity: 0.9;
+}
+
+@mixin variant-energy-web {
+  @include variant-energy;
+  background-image: radial-gradient(#fbbf24 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+@mixin variant-void-portal {
+  @include variant-void;
+  box-shadow: 0 0 50px #000;
+}
+
+@mixin variant-aurora-borealis {
+  background: linear-gradient(135deg, #10b981, #6366f1, #ec4899);
+  background-size: 200% 200%;
+  animation: aurora-flow 5s infinite linear;
+  color: #fff;
+}
+
+@keyframes liquid-sway {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+@keyframes holo-flicker {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes plasma-pulse {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.3); }
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes aurora-flow {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+

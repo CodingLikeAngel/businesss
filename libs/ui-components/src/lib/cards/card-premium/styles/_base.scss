@@ -9,8 +9,6 @@
   ==========================================================================
 */
 
-@use '../../../styles/mixins' as shared;
-
 .card-container {
     position: relative;
     border-radius: var(--p-radius-lg);
@@ -200,7 +198,8 @@
     @media (hover: none) {
         &:active {
             transform: scale(0.98);
-            background: color.adjust(var(--p-primary), $lightness: -5%);
+            background: var(--p-primary);
+            filter: brightness(0.9);
         }
     }
 }
