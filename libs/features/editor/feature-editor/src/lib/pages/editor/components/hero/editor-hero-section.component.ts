@@ -1,16 +1,17 @@
-import { Component, Input, ElementRef, ViewChild, AfterViewInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, ViewChildren, QueryList, AfterViewInit, OnDestroy, Inject, PLATFORM_ID, DoCheck } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   HeroConfig,
   ApplyDynamicStylesDirective,
-  EnhancedVisualEditableDirective
+  EnhancedVisualEditableDirective,
+  VisualEditingConfig, 
+  VisualEditingEvent
 } from '@negocio/shared-components';
 import {
   UITitleComponent,
   UICardAnimatedComponent
 } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
-import { VisualEditingConfig, VisualEditingEvent } from '@negocio/shared-components';
 
 /**
  * Enhanced Editor Hero Section Component
@@ -30,11 +31,12 @@ import { VisualEditingConfig, VisualEditingEvent } from '@negocio/shared-compone
   templateUrl: './editor-hero-section.component.html',
   styleUrls: ['./editor-hero-section.component.scss']
 })
-export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit, OnDestroy {
+export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit, OnDestroy, DoCheck {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('titleElement', { static: true }) titleElement!: ElementRef;
   @ViewChild('subtitleElement', { static: true }) subtitleElement!: ElementRef;
   @ViewChild('ctaElement', { static: true }) ctaElement!: ElementRef;
+  @ViewChildren('cardElement') cardElements!: QueryList<ElementRef>;
   @ViewChild('matrixCanvas') matrixCanvas?: ElementRef<HTMLCanvasElement>;
 
   @Input() heroConfig!: HeroConfig;
@@ -43,16 +45,81 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
   activeCarouselIndex = 0;
   activeRetroIndex = 0;
 
+  ngDoCheck() {
+    // Sync logic for array items (cards) being edited in isolation
+    const selected = this.uiStateService.selectedElement;
+    if (selected && selected.sectionId === this.section.id && selected.id && selected.id.indexOf('_card_') !== -1 && selected.index !== undefined) {
+       const items = this.section.content['items'];
+       
+       // Safety check
+       if (!items || !items[selected.index]) return;
+
+       // Check if content differs (reference check is usually enough if editor creates new objects)
+       if (items[selected.index] !== selected.content) {
+           // Avoid mutating read-only array from store
+           // Create a new array copy
+           const newItems = [...items];
+           newItems[selected.index] = selected.content;
+           
+           // Dispatch update to store instead of mutating local property
+           // This complies with NgRx immutability and fixes TypeError
+           this.variantService.updateSectionInCurrentPage(this.section.id, {
+             content: {
+               ...this.section.content,
+               items: newItems,
+               navigationCards: newItems
+             }
+           });
+       }
+    }
+  }
+
   ngAfterViewInit() {
-    // Apply standardized visual editing to elements
+    // Standardize content: map navigationCards to 'items' for generic editor support
+    if (!this.section.content['items']) {
+      const initialCards = this.heroConfig.navigationCards || [];
+      
+      // Dispatch update to store to initialize items
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        content: {
+          ...this.section.content,
+          items: JSON.parse(JSON.stringify(initialCards)),
+          navigationCards: this.section.content['navigationCards'] ? undefined : JSON.parse(JSON.stringify(initialCards))
+        }
+      });
+    }
+
+    // Apply standardized visual editing to static elements
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
     this.applyElementVisualEditing(this.titleElement, this.section.id + '_title');
     this.applyElementVisualEditing(this.subtitleElement, this.section.id + '_subtitle');
     this.applyElementVisualEditing(this.ctaElement, this.section.id + '_cta');
 
+    // Apply to dynamic cards
+    this.applyCardsEditing();
+    this.cardElements.changes.subscribe(() => this.applyCardsEditing());
+
     if (this.isBrowser && this.getLayout() === 'matrix' && this.matrixCanvas) {
       this.initMatrixEffect();
     }
+  }
+
+  private applyCardsEditing() {
+    if (!this.cardElements) return;
+    this.cardElements.forEach((cardRef: ElementRef, index: number) => {
+      this.applyElementVisualEditing(
+        cardRef, 
+        `${this.section.id}_card_${index}`, 
+        { 
+          styling: { 
+            selectionOutline: '2px solid #3b82f6', 
+            resizeHandles: true,
+            hoverEffects: true,
+            dimensionLabels: true
+          }
+        }
+      );
+    });
   }
 
   override ngOnDestroy() {
@@ -188,6 +255,18 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
   getTitleConfig(): VisualEditingConfig { return this.createElementConfig('element', { styling: { selectionOutline: '2px solid #10b981', hoverEffects: !this.platformInfo.isMobile, resizeHandles: true, dimensionLabels: true } }); }
   getSubtitleConfig(): VisualEditingConfig { return this.createElementConfig('element', { styling: { selectionOutline: '2px solid #f59e0b', hoverEffects: !this.platformInfo.isMobile, resizeHandles: true, dimensionLabels: true } }); }
   getCtaConfig(): VisualEditingConfig { return this.createElementConfig('element', { styling: { selectionOutline: '2px solid #ef4444', hoverEffects: !this.platformInfo.isMobile, resizeHandles: true, dimensionLabels: true } }); }
+  getCardConfig(): VisualEditingConfig { 
+    return this.createElementConfig('element', { 
+      enableDrag: true, 
+      enableResize: true, 
+      styling: { 
+        selectionOutline: '2px solid #3b82f6', 
+        hoverEffects: !this.platformInfo.isMobile, 
+        resizeHandles: true, 
+        dimensionLabels: true 
+      } 
+    }); 
+  }
 
   /**
    * Handle visual editing events
@@ -221,6 +300,20 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
         case 'resized':
           this.updateCtaStyles(event.bounds);
           break;
+      }
+    } else if (elementId.includes('_card_')) {
+      // Dynamic card handling
+      const parts = elementId.split('_card_');
+      if (parts.length > 1) {
+        const index = parseInt(parts[1], 10);
+        if (!isNaN(index)) {
+           switch (event.type) {
+            case 'moved':
+            case 'resized':
+              this.updateCardStyles(index, event.bounds);
+              break;
+          }
+        }
       }
     }
   }
@@ -265,6 +358,33 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
     this.updateSectionContent({ ctaStyles: newStyles });
   }
 
+  private updateCardStyles(index: number, bounds: any): void {
+    let cards = this.section.content['items'];
+    if (!cards || index >= cards.length) return;
+    
+    // Check if cards is basically empty or inherited properties are missing
+    
+    const newCards = [...cards];
+    const cardToUpdate = { ...newCards[index] };
+    
+    const currentStyles = cardToUpdate.styles || {};
+    const newStyles = {
+      ...currentStyles,
+      position: 'absolute',
+      width: bounds.width + 'px',
+      height: bounds.height + 'px',
+      left: bounds.x + 'px',
+      top: bounds.y + 'px',
+      transform: 'none'
+    };
+    
+    cardToUpdate.styles = newStyles;
+    newCards[index] = cardToUpdate;
+    
+    // Update items mostly
+    this.updateSectionContent({ items: newCards, navigationCards: newCards });
+  }
+
   private updateSectionContent(contentUpdates: any): void {
     this.variantService.updateSectionInCurrentPage(this.section.id, {
       content: {
@@ -307,4 +427,3 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
     this.matrixInterval = setInterval(draw, 33);
   }
 }
-
