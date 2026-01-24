@@ -345,11 +345,12 @@ export class VisualEditorService {
     // Añadir atributo data para identificación
     this.renderer.setAttribute(element, 'data-visual-editable', 'true');
 
-    // Hacer el elemento posicionable si no lo es
-    const position = window.getComputedStyle(element).position;
-    if (position === 'static') {
+    // Hacer el elemento posicionable si no lo es, pero solo si es necesario
+    const currentStyle = window.getComputedStyle(element);
+    if (currentStyle.position === 'static') {
       this.renderer.setStyle(element, 'position', 'relative');
     }
+    this.renderer.setStyle(element, 'box-sizing', 'border-box');
 
     // Click para seleccionar
     const clickListener = this.renderer.listen(element, 'click', (e: MouseEvent) => {
@@ -743,39 +744,36 @@ export class VisualEditorService {
         // Finalize position
         const ghostRect = ghost.getBoundingClientRect();
         
-        // Calculate relative position for the original element
-        // Since we forced parent to be relative, offsetParent IS the parent.
-        const parent = element.offsetParent as HTMLElement || document.body;
+        // Find suitable anchor for coordinates
+        // We prefer the section parent to keep things scoped
+        const parent = element.closest('.editor-section, .editor-container') as HTMLElement || element.offsetParent as HTMLElement || document.body;
         const parentRect = parent.getBoundingClientRect();
         const computedParent = window.getComputedStyle(parent);
         const borderLeft = parseFloat(computedParent.borderLeftWidth) || 0;
         const borderTop = parseFloat(computedParent.borderTopWidth) || 0;
 
-        // Correct Scroll Handling
-        let scrollTop = parent.scrollTop;
-        let scrollLeft = parent.scrollLeft;
+        // Calculate position relative to the anchor
+        // We use viewport coordinates everywhere for the math to remain robust
+        let newLeft = ghostRect.left - parentRect.left - borderLeft;
+        let newTop = ghostRect.top - parentRect.top - borderTop;
         
-        if (parent === document.body || parent === document.documentElement) {
-           scrollTop = window.scrollY;
-           scrollLeft = window.scrollX;
-        }
+        // If parent is scrolled, adjust accordingly
+        newLeft += parent.scrollLeft;
+        newTop += parent.scrollTop;
 
-        let newLeft = ghostRect.left - parentRect.left - borderLeft + scrollLeft;
-        let newTop = ghostRect.top - parentRect.top - borderTop + scrollTop;
-        
         // Apply new position and fixed dimensions to element
         this.renderer.setStyle(element, 'position', 'absolute');
-        this.renderer.setStyle(element, 'left', `${newLeft}px`);
-        this.renderer.setStyle(element, 'top', `${newTop}px`);
-        // We do NOT necessarily enforce width/height if we are just moving?
-        // But for consistency with ghost we do.
-        // Actually, if we are just moving, we might want to keep original size? 
-        // But ghost is same size. So it's fine.
+        this.renderer.setStyle(element, 'left', `${Math.round(newLeft)}px`);
+        this.renderer.setStyle(element, 'top', `${Math.round(newTop)}px`);
+        this.renderer.setStyle(element, 'width', `${Math.round(ghostRect.width)}px`);
+        this.renderer.setStyle(element, 'height', `${Math.round(ghostRect.height)}px`);
         
         this.renderer.setStyle(element, 'margin', '0');
         this.renderer.setStyle(element, 'transform', 'none');
         this.renderer.setStyle(element, 'opacity', '1');
+        this.renderer.setStyle(element, 'z-index', '100');
 
+        // Robust cleanup
         cleanupGhost();
 
         // Restore overlay
@@ -785,14 +783,13 @@ export class VisualEditorService {
         this.elementMoved$.next({
           element,
           bounds: { 
-            x: element.offsetLeft,
-            y: element.offsetTop,
-            width: ghostRect.width, 
-            height: ghostRect.height 
+            x: Math.round(newLeft),
+            y: Math.round(newTop),
+            width: Math.round(ghostRect.width), 
+            height: Math.round(ghostRect.height) 
           }
         });
       } else {
-        // Just in case we didn't drag but ghost exists (rare)
         cleanupGhost();
         this.renderer.setStyle(element, 'opacity', '1');
         this.renderer.setStyle(overlay, 'display', 'block');
@@ -1300,41 +1297,38 @@ export class VisualEditorService {
         background: rgba(139, 92, 246, 0.1);
         border-radius: 6px;
         box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2),
-                    0 0 20px rgba(139, 92, 246, 0.3);
-        animation: group-pulse 2s ease-in-out infinite;
+      .visual-selected {
+        outline: 2px solid #3b82f6 !important;
+        outline-offset: 2px !important;
+        box-shadow: 0 0 20px rgba(59, 130, 246, 0.4) !important;
+        z-index: 50 !important;
+        overflow: visible !important; /* Critical for handles */
+        transform: translateZ(0) !important; /* Stability */
       }
 
-      .group-selection-border {
-        border: 2px solid #8b5cf6 !important;
-        border-radius: 6px;
-        box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2),
-                    0 0 20px rgba(139, 92, 246, 0.3);
-        animation: group-pulse 2s ease-in-out infinite;
+      /* Robust container handling */
+      .editor-section {
+        position: relative !important;
+        min-height: 100px !important;
+        transition: none !important;
       }
 
-      .group-label {
-        background: #8b5cf6 !important;
-        color: white !important;
-        box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4) !important;
+      .editor-section.is-selected {
+        outline: 4px solid rgba(99, 102, 241, 0.5) !important;
       }
 
-      .group-resize-handle {
-        border-color: #8b5cf6 !important;
+      .visual-edit-overlay {
+        filter: drop-shadow(0 0 10px rgba(0,0,0,0.3));
       }
 
-      .group-resize-handle:hover {
-        background: #8b5cf6 !important;
+      .has-absolute-children {
+        height: auto !important;
+        min-height: 400px !important;
       }
 
-      @keyframes group-pulse {
-        0%, 100% {
-          box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.2),
-                      0 0 20px rgba(139, 92, 246, 0.3);
-        }
-        50% {
-          box-shadow: 0 0 0 1px rgba(139, 92, 246, 0.4),
-                      0 0 30px rgba(139, 92, 246, 0.5);
-        }
+      /* Prevent variant backgrounds from hiding handles */
+      [style*="background"] {
+         overflow: visible !important;
       }
     `);
 

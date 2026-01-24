@@ -83,10 +83,12 @@ export class UICardAnimatedComponent {
     const styles: Record<string, any> = {};
     const customStyles = this.customStyles();
     
+    // Default robustness
+    styles['box-sizing'] = 'border-box';
+    
     if (customStyles['backgroundColor']) {
       styles['--theme-bg'] = customStyles['backgroundColor'];
       styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
       styles['background-color'] = customStyles['backgroundColor'];
       styles['--background-color'] = customStyles['backgroundColor'];
     }
@@ -100,7 +102,8 @@ export class UICardAnimatedComponent {
     
     Object.keys(customStyles).forEach(key => {
       if (key !== 'backgroundColor' && key !== 'color' && key !== 'card' && key !== 'host') {
-        styles[key] = customStyles[key];
+        const cssKey = key.startsWith('--') ? key : key.replace(/([A-Z])/g, '-$1').toLowerCase();
+        styles[cssKey] = customStyles[key];
       }
     });
     

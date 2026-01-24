@@ -65,6 +65,7 @@
   overflow: hidden;
   position: relative;
   @include shared.texture-noise;
+  @include shared.editor-robustness;
 
   &::before {
     content: '';
@@ -139,7 +140,7 @@
   max-width: 1400px;
   margin: 0 auto;
   position: relative;
-  z-index: 1;
+  z-index: 10;
 }
 
 .header-content {

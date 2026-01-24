@@ -144,6 +144,24 @@ $unified-active-scale: scale(0.98);
   }
 }
 
+// Robustness mixin for Editor Mode
+@mixin editor-robustness {
+  position: relative !important;
+  box-sizing: border-box !important;
+  min-height: 100px;
+  
+  // Stabilize children coordinates
+  &.editor-section {
+    transform: none !important;
+    overflow: visible !important; // Critical for handles
+  }
+
+  // Prevent grid collapse if children are absolute
+  &.has-absolute-children {
+    display: block !important;
+  }
+}
+
 // Import Google Fonts for gaming variants
 // Import Google Fonts for all variants
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Orbitron:wght@400;600;800&family=Comic+Neue:wght@400;700&family=Righteous&family=Bungee&family=Cinzel:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;600;800&family=Outfit:wght@300;400;700&display=swap');

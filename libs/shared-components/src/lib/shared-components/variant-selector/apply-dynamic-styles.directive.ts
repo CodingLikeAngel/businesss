@@ -75,22 +75,28 @@ export class ApplyDynamicStylesDirective implements OnChanges {
       const cssKey = key.replace(/([A-Z])/g, '-$1').toLowerCase();
 
       if (value !== undefined && value !== null && value !== '') {
-        this.renderer.setStyle(this.el.nativeElement, cssKey, value);
+        // Use setProperty for better compatibility with CSS variables and important flag
+        const priority = (cssKey === 'position' || cssKey === 'width' || cssKey === 'height' || cssKey === 'left' || cssKey === 'top') ? 'important' : '';
+        
+        this.el.nativeElement.style.setProperty(cssKey, value, priority);
 
         // Fix: Auto-map to theme variables for components using the variant system
         if (key === 'backgroundColor') {
-          this.renderer.setStyle(this.el.nativeElement, '--theme-bg', value);
+          this.el.nativeElement.style.setProperty('--theme-bg', value, 'important');
+          this.el.nativeElement.style.setProperty('--background-color', value, 'important');
         } else if (key === 'color') {
-          this.renderer.setStyle(this.el.nativeElement, '--theme-color', value);
+          this.el.nativeElement.style.setProperty('--theme-color', value, 'important');
+          this.el.nativeElement.style.setProperty('--text-color', value, 'important');
+          this.el.nativeElement.style.setProperty('-webkit-text-fill-color', value, 'important');
         } else if (key === 'boxShadow') {
-          this.renderer.setStyle(this.el.nativeElement, '--theme-shadow', value);
+          this.el.nativeElement.style.setProperty('--theme-shadow', value, 'important');
         } else if (key === 'borderColor') {
-           // Some components use border shorthand, but we can try setting specific var
-           this.renderer.setStyle(this.el.nativeElement, '--theme-border-color', value);
-           // If the variant uses --theme-border shorthand, this might not be enough,
-           // but often border-color is sufficient if border-width/style are defined.
+           this.el.nativeElement.style.setProperty('--theme-border-color', value, 'important');
+           this.el.nativeElement.style.setProperty('--border-color', value, 'important');
         } else if (key === 'borderRadius') {
-           this.renderer.setStyle(this.el.nativeElement, '--theme-radius', value);
+           this.el.nativeElement.style.setProperty('--theme-radius', value, 'important');
+        } else if (key === 'fontSize') {
+           this.el.nativeElement.style.setProperty('--theme-fs', value, 'important');
         }
 
         // console.log(`✅ Applied style: ${cssKey} = ${value}`);
@@ -98,11 +104,21 @@ export class ApplyDynamicStylesDirective implements OnChanges {
         this.renderer.removeStyle(this.el.nativeElement, cssKey);
 
         // Remove mapped vars
-        if (key === 'backgroundColor') this.renderer.removeStyle(this.el.nativeElement, '--theme-bg');
-        if (key === 'color') this.renderer.removeStyle(this.el.nativeElement, '--theme-color');
-        if (key === 'boxShadow') this.renderer.removeStyle(this.el.nativeElement, '--theme-shadow');
+        if (key === 'backgroundColor') {
+           this.el.nativeElement.style.removeProperty('--theme-bg');
+           this.el.nativeElement.style.removeProperty('--background-color');
+        }
+        if (key === 'color') {
+           this.el.nativeElement.style.removeProperty('--theme-color');
+           this.el.nativeElement.style.removeProperty('--text-color');
+        }
       }
     });
+
+    // Forced robustness for editor elements
+    if (this.el.nativeElement.classList.contains('editor-element')) {
+       this.el.nativeElement.style.setProperty('box-sizing', 'border-box', 'important');
+    }
   }
 
   private applyAutoCorrections(originalStyles: any, report: any): any {
