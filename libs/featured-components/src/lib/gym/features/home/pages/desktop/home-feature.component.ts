@@ -22,7 +22,8 @@ import {
   StatItem,
   UIStepsSectionComponent,
   UIAccordionComponent,
-  UIChartComponent
+  UIChartComponent,
+  ChartData
 } from '@negocio/ui-components';
 import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
 
@@ -206,15 +207,28 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   ];
 
   gymSteps = [
-    { title: 'Evaluación', description: 'Medimos tu nivel actual y objetivos de salud.', icon: '⚖️', state: 'completed' },
-    { title: 'Planificación', description: 'Diseñamos tu rutina personalizada de entrenamiento.', icon: '📋', state: 'current' },
-    { title: 'Transformación', description: 'Ejecutamos el plan y escalamos tus límites.', icon: '⚡', state: 'pending' }
+    { title: 'Evaluación', description: 'Medimos tu nivel actual y objetivos de salud.', icon: '⚖️', state: 'completed' as const },
+    { title: 'Planificación', description: 'Diseñamos tu rutina personalizada de entrenamiento.', icon: '📋', state: 'current' as const },
+    { title: 'Transformación', description: 'Ejecutamos el plan y escalamos tus límites.', icon: '⚡', state: 'pending' as const }
   ];
 
   gymFaq: AccordionItem[] = [
     { title: '¿Ofrecéis pases de un día?', content: '¡Claro! Ven a probar nuestras instalaciones por solo 10€.' },
     { title: '¿Hay clases colectivas?', content: 'Todas nuestras suscripciones incluyen acceso ilimitado a Yoga, HIIT y CrossFit.' }
   ];
+
+  chartData: ChartData = {
+    labels: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'],
+    datasets: [
+      {
+        label: 'Rendimiento',
+        data: [65, 59, 80, 81, 56, 55],
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: 'rgba(75, 192, 192, 1)',
+        borderWidth: 1
+      }
+    ]
+  };
 
   constructor(@Inject(PLATFORM_ID) private platformId: object, private variantService: VariantService) {
     this.navBarConfig = this.variantService.getCurrentNavBarConfig();
