@@ -1,25 +1,16 @@
-<div #sectionElement class="editor-section cursor-pointer py-4"
+<div #sectionElement class="editor-section cursor-pointer"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="getSectionConfig()"
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
-    <div #headerElement class="editor-element"
-         [class.is-selected]="selectedElementId === section.id + '_header'"
-         (click)="selectElement($event, getMergedElement(section.id, section.id + '_header', section.content, 'header'))"
-         [applyDynamicStyles]="section.styles"
-         [enhancedVisualEditable]="getHeaderConfig()"
-         elementId="{{section.id + '_header'}}"
-         sectionId="{{section.id}}"
-         (visualEvents)="handleHeaderEvent($event)">
-      <lib-ui-header
-        [variant]="$any(section.content['variant'] || getVariant(section.id))"
-        [title]="section.content['title'] || 'Encabezado'"
-        [subtitle]="section.content['subtitle'] || ''"
-        [navItems]="section.content['navItems'] || []"
-        [customStyles]="section.styles || {}"
-        [applyDynamicStyles]="section.styles || {}"
-      ></lib-ui-header>
-    </div>
+    
+    <lib-ui-header
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [title]="section.content['title'] || 'Encabezado'"
+      [subtitle]="section.content['subtitle'] || ''"
+      [navItems]="section.content['navItems'] || []"
+      [customStyles]="section.styles || {}"
+    ></lib-ui-header>
 </div>

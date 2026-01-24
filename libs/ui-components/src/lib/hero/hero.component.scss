@@ -12,7 +12,8 @@
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  padding: var(--sp-12) var(--sp-4);
+  padding: 140px var(--sp-4);
+  @include shared.texture-noise;
 
   /* Soporte para imagen de fondo del negocio */
   --business-bg-image: none;

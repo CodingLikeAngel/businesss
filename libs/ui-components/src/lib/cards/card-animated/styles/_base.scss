@@ -17,11 +17,14 @@
 
   /* Estilos base */
   position: relative;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  backdrop-filter: var(--theme-backdrop, blur(4px));
+  border-radius: 24px;
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+  backdrop-filter: var(--theme-backdrop, blur(20px));
+  -webkit-backdrop-filter: var(--theme-backdrop, blur(20px));
   overflow: hidden;
 
+  @include shared.premium-card;
+  @include shared.texture-noise;
   @include shared.apply-all-variants('card-animated--');
 
   // CRITICAL: Force inline styles to override variant backgrounds

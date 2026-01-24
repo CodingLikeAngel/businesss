@@ -27,7 +27,6 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
 })
 export class EditorHeaderSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit, DoCheck {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
-  @ViewChild('headerElement', { static: true }) headerElement!: ElementRef;
 
   ngDoCheck() {
     const selected = this.uiStateService.selectedElement;
@@ -76,7 +75,6 @@ export class EditorHeaderSectionComponent extends EnhancedBaseEditorSectionCompo
     }
 
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
-    this.applyElementVisualEditing(this.headerElement, this.section.id + '_header');
   }
 
   getSectionConfig(): VisualEditingConfig {
@@ -105,13 +103,9 @@ export class EditorHeaderSectionComponent extends EnhancedBaseEditorSectionCompo
     this.handleVisualEvent(event, this.section.id);
   }
 
-  handleHeaderEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_header');
-  }
-
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    // Let parent (MainLayoutBaseComponent) handle global header events
-    // or BaseEditorFeatureComponent handle local header section events
+    // Let parent (MainLayoutBaseComponent or BaseEditorFeatureComponent) 
+    // handle the persistence to avoid loops.
   }
 
   private updateHeaderStyles(bounds: any): void {

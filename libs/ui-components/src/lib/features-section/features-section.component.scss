@@ -58,24 +58,25 @@
 }
 
 .features-container {
-  padding: 100px 20px;
+  padding: 120px 20px;
   background-color: var(--theme-bg, #0d1117);
   color: var(--theme-color, white);
   font-family: var(--theme-font, 'Outfit', sans-serif);
   overflow: hidden;
   position: relative;
+  @include shared.texture-noise;
 
   &::before {
     content: '';
     position: absolute;
-    top: -10%;
-    left: -10%;
-    width: 40%;
-    height: 40%;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
-    filter: blur(80px);
+    top: -15%;
+    left: -15%;
+    width: 50%;
+    height: 50%;
+    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+    filter: blur(100px);
     pointer-events: none;
-    animation: pulseGlow 4s ease-in-out infinite;
+    animation: pulseGlow 6s ease-in-out infinite;
   }
 
   &::after {

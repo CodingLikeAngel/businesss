@@ -33,20 +33,23 @@ $color-light: #ffffff;
     min-height: var(--header-height);
     display: flex;
     align-items: center;
-    background: var(--theme-bg, rgba(255, 255, 255, 0.8));
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    transition: shared.$unified-transition;
+    background: var(--theme-bg, rgba(15, 23, 42, 0.4));
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     position: relative;
     z-index: 1000;
     padding: 0 var(--sp-4);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
 
+    @include shared.texture-noise;
     @include shared.apply-all-variants('variant-');
 
     &.is-sticky {
       position: sticky;
       top: 0;
-      box-shadow: var(--shadow-md);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+      background: var(--theme-bg, rgba(15, 23, 42, 0.8));
     }
 
     .header-container {

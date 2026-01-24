@@ -23,23 +23,26 @@
     gap: var(--sp-2);
     padding: var(--btn-padding);
     font-size: var(--btn-font-size);
-    font-weight: 600;
+    font-weight: 700;
     color: var(--btn-color);
     background: var(--btn-bg);
     border-radius: var(--btn-radius);
-    border: 1px solid transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    transition: shared.$unified-transition;
+    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     user-select: none;
     z-index: 1;
+    letter-spacing: 0.02em;
 
     @include shared.apply-all-variants('btn-');
+    @include shared.shimmer-effect;
 
     &:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-lg);
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: var(--shadow-premium);
+      border-color: rgba(255, 255, 255, 0.3);
       
       &::after {
         opacity: 1;
@@ -47,7 +50,8 @@
     }
 
     &:active {
-      transform: translateY(0) scale(0.98);
+      transform: translateY(-1px) scale(0.98);
+      transition: all 0.1s;
     }
 
     &.btn-disabled, &:disabled {
