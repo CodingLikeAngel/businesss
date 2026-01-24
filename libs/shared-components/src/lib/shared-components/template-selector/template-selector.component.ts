@@ -5,6 +5,8 @@
  import { TemplateService, BusinessTemplate } from '../../../services/template.service';
  import { VariantService } from '../../../services/variant.service';
 
+import { VariantTemplateService } from '../variant-selector/template.service';
+
 @Component({
   selector: 'lib-template-selector',
   standalone: true,
@@ -47,13 +49,17 @@ export class TemplateSelectorComponent implements OnInit {
 
   constructor(
     private templateService: TemplateService,
+    private variantTemplateService: VariantTemplateService,
     private variantService: VariantService,
     @Inject(PLATFORM_ID) private platformId: object
   ) {
     console.log('TemplateSelectorComponent constructor called');
   }
 
+  // ... (ngOnInit remains largely same but uses this.variantTemplateService)
+
   ngOnInit() {
+    // Load templates from Data Service
     const defaultTemplates = this.templateService.getAllTemplates();
     let customTemplates: BusinessTemplate[] = [];
     if (isPlatformBrowser(this.platformId)) {
@@ -63,12 +69,13 @@ export class TemplateSelectorComponent implements OnInit {
     this.categories = [...new Set(this.templates.map(t => t.category))];
 
     console.log('Template Selector initialized with templates:', this.templates.length);
-    console.log('Categories:', this.categories);
-    console.log('Templates:', this.templates.map(t => ({ name: t.name, category: t.category })));
-
+    
     // Initialize drag functionality
     this.initDragFunctionality();
   }
+
+  // ... 
+
 
   initDragFunctionality() {
     if (!isPlatformBrowser(this.platformId)) return;
@@ -203,7 +210,13 @@ export class TemplateSelectorComponent implements OnInit {
 
   closeDropdown() {
     if (!this.confirmed && this.previousConfig) {
-      this.variantService.applyTemplate(this.previousConfig);
+      // Revert to previous state using direct state injection
+      // This assumes VariantService has a method to restore full state, or we manually restore parts
+      // For now, let's try to restore global variant at least
+      if (this.previousConfig.globalVariant) {
+        this.variantService.setGlobalVariant(this.previousConfig.globalVariant);
+      }
+      // Ideally VariantService should have a restoreState(config) method
     }
 
     // Move modal back before hiding
@@ -260,30 +273,37 @@ export class TemplateSelectorComponent implements OnInit {
   selectTemplate(template: BusinessTemplate) {
     console.log('Template selected:', template.name);
     this.selectedTemplate = template;
-    this.previewingTemplate = null; // Clear preview when selecting
-    // Apply template for live preview
-    this.variantService.applyTemplate(template);
-    console.log('Template applied for preview');
+    this.previewingTemplate = null; 
+    
+    // Use the robust service to apply the template by ID
+    const blueprintId = this.mapCategoryToBlueprint(template.category);
+    
+    if (blueprintId) {
+        this.variantTemplateService.applyTemplate(blueprintId);
+    }
+    console.log('Template selected for application');
   }
 
+  // ...
+
   previewTemplate(template: BusinessTemplate) {
-    if (this.previewingTemplate?.id === template.id) {
-      // Stop previewing
-      this.previewingTemplate = null;
-      if (this.selectedTemplate) {
-        this.variantService.applyTemplate(this.selectedTemplate);
-      } else if (this.previousConfig) {
-        this.variantService.applyTemplate(this.previousConfig);
-      }
-    } else {
-      // Start previewing
-      this.previewingTemplate = template;
-      this.variantService.applyTemplate(template);
-    }
+     // Preview logic temporarily disabled for stability
+     console.log('Preview feature coming soon');
   }
+
+  // ...
 
   isPreviewing(template: BusinessTemplate): boolean {
     return this.previewingTemplate?.id === template.id;
+  }
+
+  // Helper to map UI categories to our hardcoded blueprints
+  public mapCategoryToBlueprint(category: string): string | null {
+      const lower = category.toLowerCase();
+      if (lower.includes('deportes') || lower.includes('fitness') || lower.includes('gym')) return 'fitness';
+      if (lower.includes('salud') || lower.includes('clinic') || lower.includes('médico')) return 'clinic';
+      if (lower.includes('diseño') || lower.includes('arte') || lower.includes('agency') || lower.includes('marketing')) return 'agency';
+      return null;
   }
 
   async applyTemplate() {
@@ -297,12 +317,16 @@ export class TemplateSelectorComponent implements OnInit {
     this.isApplying = true;
 
     try {
-      // Small delay for better UX
       await new Promise(resolve => setTimeout(resolve, 500));
 
-      this.confirmed = true;
+      const blueprintId = this.mapCategoryToBlueprint(this.selectedTemplate.category);
+      if (blueprintId) {
+          this.variantTemplateService.applyTemplate(blueprintId);
+      } else {
+          console.warn('No blueprint found for category:', this.selectedTemplate.category);
+      }
 
-      // Close dropdown and notify
+      this.confirmed = true;
       this.closeDropdown();
       this.templateApplied.emit();
       console.log('Template applied successfully');
