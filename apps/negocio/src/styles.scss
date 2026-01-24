@@ -1,2 +1,94 @@
-/* You can add global styles to this file, and also import other style files */
-/* You can add global styles to this file, and also import other style files */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+  // Brand Colors (Elite)
+  --p-primary: #6366f1;
+  --p-primary-glare: rgba(99, 102, 241, 0.4);
+  --p-accent: #f43f5e;
+  --p-accent-glare: rgba(244, 63, 94, 0.4);
+  --p-dark: #0f172a;
+  --p-darker: #020617;
+  --p-light: #f8fafc;
+
+  // UI Tokens
+  --p-glass-bg: rgba(255, 255, 255, 0.03);
+  --p-glass-border: rgba(255, 255, 255, 0.08);
+  --p-blur: 12px;
+  --p-radius-sm: 8px;
+  --p-radius-md: 16px;
+  --p-radius-lg: 24px;
+  
+  // Transitions
+  --p-transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  --p-transition-med: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--p-darker);
+  color: var(--p-light);
+  margin: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Outfit', sans-serif;
+  letter-spacing: -0.02em;
+}
+
+// Global Luxury Classes
+.glass-panel {
+  background: var(--p-glass-bg);
+  backdrop-filter: blur(var(--p-blur));
+  border: 1px solid var(--p-glass-border);
+  border-radius: var(--p-radius-md);
+}
+
+.premium-gradient-text {
+  background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.5) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.glow-hover {
+  transition: var(--p-transition-med);
+  &:hover {
+    box-shadow: 0 0 30px var(--p-primary-glare);
+    border-color: var(--p-primary);
+  }
+}
+
+// Layout Utils
+.section-premium {
+  padding: 8rem 0;
+  position: relative;
+}
+
+.container-premium {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+// Animations
+@keyframes floating {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-floating {
+  animation: floating 3s ease-in-out infinite;
+}
+
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: var(--p-transition-slow);
+  &.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
