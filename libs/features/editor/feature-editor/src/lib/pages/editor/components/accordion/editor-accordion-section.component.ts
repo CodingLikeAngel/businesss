@@ -1,5 +1,6 @@
-import { Component, Input, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   ApplyDynamicStylesDirective,
   EnhancedVisualEditableDirective,
@@ -22,6 +23,7 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     UIAccordionComponent,
     UITitleComponent,
     ApplyDynamicStylesDirective,
@@ -34,13 +36,52 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
   @ViewChild('accordionElement', { static: true }) accordionElement!: ElementRef;
   @ViewChild('titleElement', { static: false }) titleElement?: ElementRef;
 
+  /** Items for the accordion */
+  @Input() items: { title: string; content: string }[] = [];
+  /** Emit when items change */
+  @Output() itemsChanged = new EventEmitter<any[]>();
+
   ngAfterViewInit() {
+    // Initialize items from section content if not provided via input
+    if (!this.items || this.items.length === 0) {
+      this.items = this.section.content['items'] || [];
+    }
     // Apply standardized visual editing to elements
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
     this.applyElementVisualEditing(this.accordionElement, this.section.id + '_accordion');
     if (this.titleElement) {
       this.applyElementVisualEditing(this.titleElement, this.section.id + '_title');
     }
+  }
+
+  /** Add a new accordion item */
+  addItem() {
+    this.items.push({ title: 'New Item', content: 'Content...' });
+    this.emitItemsChange();
+  }
+
+  /** Remove an accordion item by index */
+  removeItem(index: number) {
+    if (index >= 0 && index < this.items.length) {
+      this.items.splice(index, 1);
+      this.emitItemsChange();
+    }
+  }
+
+  /** Update an existing item */
+  updateItem(index: number, changes: Partial<{ title: string; content: string }>) {
+    if (index >= 0 && index < this.items.length) {
+      this.items[index] = { ...this.items[index], ...changes };
+      this.emitItemsChange();
+    }
+  }
+
+  private emitItemsChange() {
+    // Update section content for persistence
+    this.section.content['items'] = this.items;
+    this.itemsChanged.emit(this.items);
+    // Trigger visual editing update if needed
+    this.applyElementVisualEditing(this.accordionElement, this.section.id + '_accordion');
   }
 
   /**

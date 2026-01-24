@@ -24,19 +24,28 @@
       (visualEvents)="handleTitleEvent($event)">
     </lib-ui-components-title>
 
-    <lib-ui-components-accordion #accordionElement
-      [items]="section.content['items'] || [{ title: 'Accordion Item 1', content: 'Content 1' }, { title: 'Accordion Item 2', content: 'Content 2' }]"
-      [variant]="section.content['variant'] || getVariant(section.id)"
-      [customStyles]="section.content['accordionStyles'] || {}"
-      class="editor-element"
-      [class.is-selected]="selectedElementId === section.id + '_accordion'"
-      (click)="selectElement($event, getMergedElement(section.id, section.id + '_accordion', { content: section.content, styles: section.content['accordionStyles'] }, 'accordion'))"
-      [applyDynamicStyles]="section.content['accordionStyles']"
-      [enhancedVisualEditable]="getAccordionConfig()"
-      elementId="{{section.id + '_accordion'}}"
-      sectionId="{{section.id}}"
-      (visualEvents)="handleAccordionEvent($event)">
-    </lib-ui-components-accordion>
+<!-- Accordion Controls -->
+<div class="accordion-controls mb-4 flex items-center gap-2">
+  <button (click)="addItem()" class="btn-add-modern">Add Item</button>
+</div>
+<div *ngFor="let item of items; let i = index" class="item-edit mb-2 flex flex-col gap-1">
+  <input [(ngModel)]="item.title" placeholder="Title" class="input-title" (ngModelChange)="updateItem(i, { title: $event })" />
+  <textarea [(ngModel)]="item.content" placeholder="Content" class="input-content" rows="2" (ngModelChange)="updateItem(i, { content: $event })"></textarea>
+  <button (click)="removeItem(i)" class="btn-remove-modern">Remove</button>
+</div>
+<lib-ui-components-accordion #accordionElement
+  [items]="items"
+  [variant]="section.content['variant'] || getVariant(section.id)"
+  [customStyles]="section.content['accordionStyles'] || {}"
+  class="editor-element"
+  [class.is-selected]="selectedElementId === section.id + '_accordion'"
+  (click)="selectElement($event, getMergedElement(section.id, section.id + '_accordion', { content: section.content, styles: section.content['accordionStyles'] }, 'accordion'))"
+  [applyDynamicStyles]="section.content['accordionStyles']"
+  [enhancedVisualEditable]="getAccordionConfig()"
+  elementId="{{section.id + '_accordion'}}"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleAccordionEvent($event)">
+</lib-ui-components-accordion>
   </div>
 </div>
 

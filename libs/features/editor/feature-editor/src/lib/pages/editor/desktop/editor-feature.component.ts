@@ -24,7 +24,6 @@ import { EditorBubbleSectionComponent } from '../components/bubble/editor-bubble
 import { EditorHeaderSectionComponent } from '../components/header/editor-header-section.component';
 import { EditorFooterSectionComponent } from '../components/footer/editor-footer-section.component';
 import { EditorAccordionSectionComponent } from '../components/accordion/editor-accordion-section.component';
-import { EditorAccordionUiSectionComponent } from '../components/accordion-ui/editor-accordion-ui-section.component';
 import { EditorListSectionComponent } from '../components/list/editor-list-section.component';
 import { EditorNewsletterSectionComponent } from '../components/newsletter/editor-newsletter-section.component';
 import { EditorStepsSectionComponent } from '../components/steps/editor-steps-section.component';
@@ -72,7 +71,6 @@ import { EditorGenericSectionComponent } from '../components/generic/editor-gene
     EditorHeaderSectionComponent,
     EditorFooterSectionComponent,
     EditorAccordionSectionComponent,
-    EditorAccordionUiSectionComponent,
     EditorListSectionComponent,
     EditorNewsletterSectionComponent,
     EditorStepsSectionComponent,

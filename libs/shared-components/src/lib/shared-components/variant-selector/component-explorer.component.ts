@@ -187,9 +187,6 @@ interface SectionVariant {
                   <div *ngSwitchCase="'accordion'" class="p-4">
                     <lib-ui-components-accordion [variant]="selectedVariant" [items]="[{title:'Item 1', content:'Detalle 1'}, {title:'Item 2', content:'Detalle 2'}]"></lib-ui-components-accordion>
                   </div>
-                  <div *ngSwitchCase="'accordion-ui'" class="p-4">
-                    <lib-ui-components-accordion [variant]="selectedVariant" [items]="[{title:'Item 1', content:'Detalle 1'}, {title:'Item 2', content:'Detalle 2'}]"></lib-ui-components-accordion>
-                  </div>
                   <div *ngSwitchCase="'button'" class="flex gap-4 justify-center items-center h-full min-h-[200px]">
                     <lib-ui-components-button [variant]="selectedVariant">Botón</lib-ui-components-button>
                   </div>
@@ -984,14 +981,6 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '↕️',
       variants: ['default', 'glass', 'neon', 'minimal', 'mario', 'rayman', 'rockstar', 'cyberpunk'],
       description: 'Lista de elementos expandibles',
-      category: 'interactive'
-    },
-    {
-      type: 'accordion-ui',
-      label: 'Acordeón UI',
-      icon: '↕️',
-      variants: ['default', 'glass', 'neon', 'minimal', 'mario', 'rayman', 'rockstar', 'cyberpunk'],
-      description: 'Componente UI de acordeón independiente',
       category: 'interactive'
     },
     {
