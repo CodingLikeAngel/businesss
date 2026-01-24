@@ -1,26 +1,59 @@
-<div #sectionElement class="editor-section cursor-pointer py-12"
-  [id]="section.id"
+<!-- DESKTOP NEWSLETTER -->
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
-  [ngClass]="'newsletter-section--' + getVariant(section.id)"
   [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="getSectionConfig()"
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
-    <div #newsletterElement class="container mx-auto px-6 max-w-4xl editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_newsletter'"
-       (click)="selectElement($event, getMergedElement(section.id, section.id + '_newsletter', section.content, 'newsletter'))"
+
+  <div #newsletterElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_newsletter_wrapper'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_newsletter_wrapper', section.content, 'newsletter'))"
        [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getNewsletterConfig()"
-       elementId="{{section.id + '_newsletter'}}"
+       [enhancedVisualEditable]="getNewsletterWrapperConfig()"
+       elementId="{{section.id + '_newsletter_wrapper'}}"
        sectionId="{{section.id}}"
-       (visualEvents)="handleNewsletterEvent($event)">
-       <lib-ui-newsletter-section
-         [variant]="section.content['variant'] || getVariant(section.id)"
-         [title]="section.content['title'] || 'Suscríbete a nuestro boletín'"
-         [description]="section.content['description'] || 'Recibe las últimas noticias y actualizaciones directamente en tu bandeja de entrada.'"
-         [customStyles]="section.styles || {}"
-         [applyDynamicStyles]="section.styles"
-       ></lib-ui-newsletter-section>
-    </div>
+       (visualEvents)="handleNewsletterWrapperEvent($event)">
+    <lib-ui-newsletter-section
+      [title]="section.content['title'] || 'Suscríbete a nuestra Newsletter'"
+      [description]="section.content['description'] || 'Las mejores ofertas en tu email'"
+      [buttonText]="section.content['buttonText'] || 'Suscribirse'"
+      [placeholder]="section.content['placeholder'] || 'email@ejemplo.com'"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-ui-newsletter-section>
+  </div>
+</div>
+
+<!-- MOBILE NEWSLETTER -->
+<div *ngIf="isMobile" #sectionElement
+  class="editor-section cursor-pointer py-2"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <div #newsletterElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_newsletter_wrapper'"
+       (click)="selectElement($event, { id: section.id + '_newsletter_wrapper', content: section.content, type: 'newsletter' })"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getNewsletterWrapperConfig()"
+       elementId="{{section.id + '_newsletter_wrapper'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleNewsletterWrapperEvent($event)">
+    <lib-ui-newsletter-section
+      [title]="section.content['title'] || 'Suscríbete a nuestra Newsletter'"
+      [description]="section.content['description'] || 'Las mejores ofertas en tu email'"
+      [buttonText]="section.content['buttonText'] || 'Suscribirse'"
+      [placeholder]="section.content['placeholder'] || 'email@ejemplo.com'"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-ui-newsletter-section>
+  </div>
 </div>

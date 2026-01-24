@@ -9,20 +9,20 @@
   (visualEvents)="handleSectionEvent($event)">
 
   <div #statsElement class="editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_stats'"
-       (click)="selectElement($event, getMergedElement(section.id, section.id + '_stats', section.content, 'stats'))"
+       [class.is-selected]="selectedElementId === section.id + '_stats_wrapper'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_stats_wrapper', section.content, 'stats'))"
        [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getStatsConfig()"
-       elementId="{{section.id + '_stats'}}"
+       [enhancedVisualEditable]="getStatsWrapperConfig()"
+       elementId="{{section.id + '_stats_wrapper'}}"
        sectionId="{{section.id}}"
-       (visualEvents)="handleStatsEvent($event)">
+       (visualEvents)="handleStatsWrapperEvent($event)">
     <lib-ui-components-stats-section
-      [title]="section.content['title'] || 'Resultados que Hablan por Sí Solos'"
-      [subtitle]="section.content['subtitle'] || 'Indicadores clave de rendimiento.'"
-      [variant]="getVariant(section.id)"
+      [title]="section.content['title'] || 'Nuestras Métricas'"
+      [subtitle]="section.content['subtitle'] || 'Indicadores clave'"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [stats]="section.content['items'] || statsConfig.items"
       [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles"
-      [stats]="statsConfig.items"
+      [applyDynamicStyles]="section.styles || {}"
     ></lib-ui-components-stats-section>
   </div>
 </div>
@@ -38,20 +38,20 @@
   (visualEvents)="handleSectionEvent($event)">
 
   <div #statsElement class="editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_stats'"
-       (click)="selectElement($event, { id: section.id + '_stats', content: section.content, type: 'stats' })"
+       [class.is-selected]="selectedElementId === section.id + '_stats_wrapper'"
+       (click)="selectElement($event, { id: section.id + '_stats_wrapper', content: section.content, type: 'stats' })"
        [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getStatsConfig()"
-       elementId="{{section.id + '_stats'}}"
+       [enhancedVisualEditable]="getStatsWrapperConfig()"
+       elementId="{{section.id + '_stats_wrapper'}}"
        sectionId="{{section.id}}"
-       (visualEvents)="handleStatsEvent($event)">
+       (visualEvents)="handleStatsWrapperEvent($event)">
     <lib-ui-components-stats-section
-      [title]="section.content['title'] || 'Resultados que Hablan por Sí Solos'"
-      [subtitle]="section.content['subtitle'] || 'Indicadores clave de rendimiento.'"
-      [variant]="getVariant(section.id)"
+      [title]="section.content['title'] || 'Nuestras Métricas'"
+      [subtitle]="section.content['subtitle'] || 'Indicadores clave'"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [stats]="section.content['items'] || statsConfig.items"
       [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles"
-      [stats]="statsConfig.items"
+      [applyDynamicStyles]="section.styles || {}"
     ></lib-ui-components-stats-section>
   </div>
 </div>

@@ -8,200 +8,54 @@
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
   <div class="container mx-auto px-6 max-w-6xl">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 text-white">
       <!-- Contact Form -->
-      <div #contactElement class="editor-element"
-           [class.is-selected]="selectedElementId === section.id + '_form'"
-           (click)="selectElement($event, getMergedElement(section.id, section.id + '_form', section.content, 'form'))"
-           [applyDynamicStyles]="section.content['formStyles']"
-           [enhancedVisualEditable]="getContactConfig()"
-           elementId="{{section.id + '_form'}}"
+      <div #contactFormElement class="editor-element"
+           [class.is-selected]="selectedElementId === section.id + '_form_wrapper'"
+           (click)="selectElement($event, getMergedElement(section.id, section.id + '_form_wrapper', section.content, 'contact_form'))"
+           [applyDynamicStyles]="section.styles"
+           [enhancedVisualEditable]="getFormWrapperConfig()"
+           elementId="{{section.id + '_form_wrapper'}}"
            sectionId="{{section.id}}"
-           (visualEvents)="handleContactEvent($event)">
-        <lib-ui-components-title
-          [level]="section.content['level'] || titleConfig.level"
-          [text]="section.content['title'] || 'Contáctanos'"
-          [variant]="getVariant(section.id)"
-          [align]="'left'"
-          class="mb-8"
-        ></lib-ui-components-title>
+           (visualEvents)="handleFormWrapperEvent($event)">
+        
+        <h2 class="text-4xl font-bold mb-6">{{ section.content['title'] || '¡Contáctanos!' }}</h2>
+        <p class="text-lg text-white/70 mb-10">{{ section.content['subtitle'] || 'Cuéntanos tu proyecto y te ayudaremos a hacerlo realidad.' }}</p>
 
-        <form class="contact-form" [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate>
-          <!-- Personal Information Fieldset -->
-          <fieldset class="form-fieldset">
-            <legend class="fieldset-legend">Información Personal</legend>
-
-            <div class="form-group">
-              <label for="name" class="form-label">Nombre completo *</label>
-              <input
-                id="name"
-                type="text"
-                formControlName="name"
-                class="form-input"
-                [class.error]="contactForm.get('name')?.invalid && contactForm.get('name')?.touched"
-                [class.success]="contactForm.get('name')?.valid && contactForm.get('name')?.touched"
-                placeholder="Tu nombre completo"
-                aria-describedby="name-error"
-                required>
-              <div class="validation-feedback" *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
-                <span id="name-error" class="error-message">El nombre es obligatorio</span>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="email" class="form-label">Correo electrónico *</label>
-              <input
-                id="email"
-                type="email"
-                formControlName="email"
-                class="form-input"
-                [class.error]="contactForm.get('email')?.invalid && contactForm.get('email')?.touched"
-                [class.success]="contactForm.get('email')?.valid && contactForm.get('email')?.touched"
-                placeholder="tu@email.com"
-                aria-describedby="email-error"
-                required>
-              <div class="validation-feedback" *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
-                <span id="email-error" class="error-message">
-                  <span *ngIf="contactForm.get('email')?.errors?.['required']">El correo electrónico es obligatorio</span>
-                  <span *ngIf="contactForm.get('email')?.errors?.['email']">Ingresa un correo electrónico válido</span>
-                </span>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="phone" class="form-label">Teléfono</label>
-              <input
-                id="phone"
-                type="tel"
-                formControlName="phone"
-                class="form-input"
-                [class.error]="contactForm.get('phone')?.invalid && contactForm.get('phone')?.touched"
-                [class.success]="contactForm.get('phone')?.valid && contactForm.get('phone')?.touched"
-                placeholder="+34 600 000 000"
-                aria-describedby="phone-error">
-              <div class="validation-feedback" *ngIf="contactForm.get('phone')?.invalid && contactForm.get('phone')?.touched">
-                <span id="phone-error" class="error-message">Ingresa un número de teléfono válido</span>
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- Contact Preferences Fieldset -->
-          <fieldset class="form-fieldset">
-            <legend class="fieldset-legend">Método de Contacto Preferido</legend>
-
-            <div class="contact-methods">
-              <label class="contact-method" *ngFor="let method of contactMethods">
-                <input
-                  type="radio"
-                  formControlName="contactMethod"
-                  [value]="method.value"
-                  class="contact-radio">
-                <span class="method-icon">{{ method.icon }}</span>
-                <span class="method-label">{{ method.label }}</span>
-              </label>
-            </div>
-          </fieldset>
-
-          <!-- Message Fieldset -->
-          <fieldset class="form-fieldset">
-            <legend class="fieldset-legend">Mensaje</legend>
-
-            <div class="form-group">
-              <label for="subject" class="form-label">Asunto</label>
-              <input
-                id="subject"
-                type="text"
-                formControlName="subject"
-                class="form-input"
-                placeholder="¿En qué podemos ayudarte?">
-            </div>
-
-            <div class="form-group">
-              <label for="message" class="form-label">Mensaje *</label>
-              <textarea
-                id="message"
-                formControlName="message"
-                class="form-textarea"
-                [class.error]="contactForm.get('message')?.invalid && contactForm.get('message')?.touched"
-                [class.success]="contactForm.get('message')?.valid && contactForm.get('message')?.touched"
-                placeholder="Describe tu consulta o solicitud..."
-                rows="5"
-                aria-describedby="message-error"
-                required></textarea>
-              <div class="validation-feedback" *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched">
-                <span id="message-error" class="error-message">El mensaje es obligatorio</span>
-              </div>
-            </div>
-          </fieldset>
-
-          <!-- Submit Button -->
-          <div class="form-actions">
-            <button
-              type="submit"
-              class="submit-button"
-              [disabled]="contactForm.invalid || isSubmitting"
-              [class.loading]="isSubmitting">
-              <span class="button-text" *ngIf="!isSubmitting">Enviar Mensaje</span>
-              <span class="button-text" *ngIf="isSubmitting">Enviando...</span>
-              <div class="loading-spinner" *ngIf="isSubmitting"></div>
-            </button>
+        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
+          <div class="form-group">
+            <input type="text" formControlName="name" placeholder="Nombre completo" class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 focus:border-indigo-500 transition-colors">
           </div>
-
-          <!-- Success Message -->
-          <div class="success-message" *ngIf="showSuccess" @fadeInOut>
-            <div class="success-icon">✓</div>
-            <h3>¡Mensaje enviado!</h3>
-            <p>Gracias por contactarnos. Te responderemos lo antes posible.</p>
+          <div class="form-group">
+            <input type="email" formControlName="email" placeholder="Correo electrónico" class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 focus:border-indigo-500 transition-colors">
           </div>
+          <div class="form-group">
+            <textarea formControlName="message" placeholder="¿En qué podemos ayudarte?" rows="5" class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 focus:border-indigo-500 transition-colors"></textarea>
+          </div>
+          <button type="submit" [disabled]="contactForm.invalid || isSubmitting" class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 py-4 rounded-xl font-bold transition-all transform active:scale-95 shadow-xl">
+             {{ isSubmitting ? 'Enviando...' : 'Enviar Mensaje' }}
+          </button>
         </form>
       </div>
 
-      <!-- Contact Info & Map -->
-      <div class="contact-info-section">
-        <div class="editor-element"
-             [class.is-selected]="selectedElementId === section.id + '_info'"
-             (click)="selectElement($event, getMergedElement(section.id, section.id + '_info', section.content, 'info'))"
-             [applyDynamicStyles]="section.content['infoStyles']"
-             [enhancedVisualEditable]="getContactConfig()"
-             elementId="{{section.id + '_info'}}"
-             sectionId="{{section.id}}"
-             (visualEvents)="handleContactEvent($event)">
-          <lib-ui-components-title
-            [level]="'h3'"
-            [text]="section.content['infoTitle'] || 'Información de Contacto'"
-            [variant]="getVariant(section.id)"
-            [align]="'left'"
-            class="mb-6"
-          ></lib-ui-components-title>
-
-          <div class="contact-info">
-            <div class="info-item" *ngFor="let info of contactInfo">
-              <div class="info-icon">{{ info.icon }}</div>
-              <div class="info-content">
-                <h4>{{ info.title }}</h4>
-                <p>{{ info.value }}</p>
-                <a *ngIf="info.link" [href]="info.link" class="info-link">{{ info.linkText }}</a>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Map Section -->
-        <div class="map-container editor-element mt-8"
-             [class.is-selected]="selectedElementId === section.id + '_map'"
-             (click)="selectElement($event, getMergedElement(section.id, section.id + '_map', section.content, 'map'))"
-             [applyDynamicStyles]="section.content['mapStyles']"
-             [enhancedVisualEditable]="getContactConfig()"
-             elementId="{{section.id + '_map'}}"
-             sectionId="{{section.id}}"
-             (visualEvents)="handleContactEvent($event)">
-          <div class="map-placeholder">
-            <div class="map-marker" *ngFor="let marker of mapMarkers">
-              <div class="marker-icon">{{ marker.icon }}</div>
-              <div class="marker-info">
-                <h4>{{ marker.title }}</h4>
-                <p>{{ marker.address }}</p>
-              </div>
+      <!-- Contact Info Section -->
+      <div #contactInfoElement class="editor-element"
+           [class.is-selected]="selectedElementId === section.id + '_info_wrapper'"
+           (click)="selectElement($event, getMergedElement(section.id, section.id + '_info_wrapper', section.content, 'contact_info'))"
+           [applyDynamicStyles]="section.styles"
+           [enhancedVisualEditable]="getInfoWrapperConfig()"
+           elementId="{{section.id + '_info_wrapper'}}"
+           sectionId="{{section.id}}"
+           (visualEvents)="handleInfoWrapperEvent($event)">
+        
+        <h3 class="text-2xl font-bold mb-8">{{ section.content['infoTitle'] || 'Información de Contacto' }}</h3>
+        
+        <div class="flex flex-col gap-8">
+          <div *ngFor="let info of section.content['contactItems']; let i = index" class="flex items-start gap-6 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors cursor-pointer group">
+            <div class="text-3xl p-4 rounded-xl bg-indigo-500/10 group-hover:scale-110 transition-transform">{{ info.icon }}</div>
+            <div>
+              <h4 class="font-bold text-lg mb-1">{{ info.title }}</h4>
+              <p class="text-white/60">{{ info.value }}</p>
             </div>
           </div>
         </div>
@@ -211,179 +65,26 @@
 </section>
 
 <!-- MOBILE CONTACT -->
-<section *ngIf="isMobile" [id]="section.id"
-  class="relative z-20 py-10 cursor-pointer editor-section contact-section"
+<section *ngIf="isMobile" #sectionElement
+  class="relative z-20 py-10 cursor-pointer editor-section contact-section text-white"
   [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)">
-  <div class="container mx-auto px-4">
-    <lib-ui-components-title
-      [level]="'h2'"
-      [text]="section.content['title'] || 'Contáctanos'"
-      [variant]="getVariant(section.id)"
-      [align]="'center'"
-      class="mb-8 editor-element"
-      [class.is-selected]="selectedElementId === section.id + '_title'"
-      (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
-    ></lib-ui-components-title>
-
-    <!-- Contact Form Mobile -->
-    <div class="editor-element mb-8"
-         [class.is-selected]="selectedElementId === section.id + '_form'"
-         (click)="selectElement($event, { id: section.id + '_form', type: 'form' })">
-      <form class="contact-form" [formGroup]="contactForm" (ngSubmit)="onSubmit()" novalidate>
-        <!-- Personal Information Fieldset -->
-        <fieldset class="form-fieldset">
-          <legend class="fieldset-legend">Información Personal</legend>
-
-          <div class="form-group">
-            <label for="name-mobile" class="form-label">Nombre completo *</label>
-            <input
-              id="name-mobile"
-              type="text"
-              formControlName="name"
-              class="form-input"
-              [class.error]="contactForm.get('name')?.invalid && contactForm.get('name')?.touched"
-              [class.success]="contactForm.get('name')?.valid && contactForm.get('name')?.touched"
-              placeholder="Tu nombre completo"
-              required>
-            <div class="validation-feedback" *ngIf="contactForm.get('name')?.invalid && contactForm.get('name')?.touched">
-              <span class="error-message">El nombre es obligatorio</span>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="email-mobile" class="form-label">Correo electrónico *</label>
-            <input
-              id="email-mobile"
-              type="email"
-              formControlName="email"
-              class="form-input"
-              [class.error]="contactForm.get('email')?.invalid && contactForm.get('email')?.touched"
-              [class.success]="contactForm.get('email')?.valid && contactForm.get('email')?.touched"
-              placeholder="tu@email.com"
-              required>
-            <div class="validation-feedback" *ngIf="contactForm.get('email')?.invalid && contactForm.get('email')?.touched">
-              <span class="error-message">
-                <span *ngIf="contactForm.get('email')?.errors?.['required']">El correo electrónico es obligatorio</span>
-                <span *ngIf="contactForm.get('email')?.errors?.['email']">Ingresa un correo electrónico válido</span>
-              </span>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label for="phone-mobile" class="form-label">Teléfono</label>
-            <input
-              id="phone-mobile"
-              type="tel"
-              formControlName="phone"
-              class="form-input"
-              placeholder="+34 600 000 000">
-          </div>
-        </fieldset>
-
-        <!-- Contact Preferences Fieldset -->
-        <fieldset class="form-fieldset">
-          <legend class="fieldset-legend">Método de Contacto Preferido</legend>
-
-          <div class="contact-methods">
-            <label class="contact-method" *ngFor="let method of contactMethods">
-              <input
-                type="radio"
-                formControlName="contactMethod"
-                [value]="method.value"
-                class="contact-radio">
-              <span class="method-icon">{{ method.icon }}</span>
-              <span class="method-label">{{ method.label }}</span>
-            </label>
-          </div>
-        </fieldset>
-
-        <!-- Message Fieldset -->
-        <fieldset class="form-fieldset">
-          <legend class="fieldset-legend">Mensaje</legend>
-
-          <div class="form-group">
-            <label for="subject-mobile" class="form-label">Asunto</label>
-            <input
-              id="subject-mobile"
-              type="text"
-              formControlName="subject"
-              class="form-input"
-              placeholder="¿En qué podemos ayudarte?">
-          </div>
-
-          <div class="form-group">
-            <label for="message-mobile" class="form-label">Mensaje *</label>
-            <textarea
-              id="message-mobile"
-              formControlName="message"
-              class="form-textarea"
-              [class.error]="contactForm.get('message')?.invalid && contactForm.get('message')?.touched"
-              [class.success]="contactForm.get('message')?.valid && contactForm.get('message')?.touched"
-              placeholder="Describe tu consulta..."
-              rows="4"
-              required></textarea>
-            <div class="validation-feedback" *ngIf="contactForm.get('message')?.invalid && contactForm.get('message')?.touched">
-              <span class="error-message">El mensaje es obligatorio</span>
-            </div>
-          </div>
-        </fieldset>
-
-        <!-- Submit Button -->
-        <div class="form-actions">
-          <button
-            type="submit"
-            class="submit-button"
-            [disabled]="contactForm.invalid || isSubmitting"
-            [class.loading]="isSubmitting">
-            <span class="button-text" *ngIf="!isSubmitting">Enviar Mensaje</span>
-            <span class="button-text" *ngIf="isSubmitting">Enviando...</span>
-            <div class="loading-spinner" *ngIf="isSubmitting"></div>
-          </button>
-        </div>
-
-        <!-- Success Message -->
-        <div class="success-message" *ngIf="showSuccess" @fadeInOut>
-          <div class="success-icon">✓</div>
-          <h3>¡Mensaje enviado!</h3>
-          <p>Gracias por contactarnos. Te responderemos lo antes posible.</p>
-        </div>
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+  
+  <div class="px-6">
+    <div #contactFormElement class="editor-element mb-12"
+         [class.is-selected]="selectedElementId === section.id + '_form_wrapper'"
+         (click)="selectElement($event, { id: section.id + '_form_wrapper', type: 'contact_form' })">
+      <h2 class="text-3xl font-bold mb-4">{{ section.content['title'] || '¡Contáctanos!' }}</h2>
+      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+        <input type="text" formControlName="name" placeholder="Nombre" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3">
+        <input type="email" formControlName="email" placeholder="Email" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3">
+        <textarea formControlName="message" placeholder="Mensaje" rows="4" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3"></textarea>
+        <button type="submit" class="w-full bg-indigo-600 py-3 rounded-lg font-bold">Enviar</button>
       </form>
-    </div>
-
-    <!-- Contact Info Mobile -->
-    <div class="contact-info-section">
-      <lib-ui-components-title
-        [level]="'h3'"
-        [text]="section.content['infoTitle'] || 'Información de Contacto'"
-        [variant]="getVariant(section.id)"
-        [align]="'center'"
-        class="mb-6"
-      ></lib-ui-components-title>
-
-      <div class="contact-info">
-        <div class="info-item" *ngFor="let info of contactInfo">
-          <div class="info-icon">{{ info.icon }}</div>
-          <div class="info-content">
-            <h4>{{ info.title }}</h4>
-            <p>{{ info.value }}</p>
-            <a *ngIf="info.link" [href]="info.link" class="info-link">{{ info.linkText }}</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- Map Section Mobile -->
-      <div class="map-container mt-8">
-        <div class="map-placeholder">
-          <div class="map-marker" *ngFor="let marker of mapMarkers">
-            <div class="marker-icon">{{ marker.icon }}</div>
-            <div class="marker-info">
-              <h4>{{ marker.title }}</h4>
-              <p>{{ marker.address }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
     </div>
   </div>
 </section>

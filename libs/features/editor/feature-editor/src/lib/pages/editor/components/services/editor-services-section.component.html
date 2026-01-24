@@ -1,27 +1,57 @@
 <!-- DESKTOP SERVICES -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer"
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
-  [enhancedVisualEditable]="createElementConfig('section')"
-  elementId="{{section.id}}"
-  (visualEvents)="handleVisualEvent($event, section.id)">
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-  <lib-service-section
-    [variant]="getVariant(section.id)"
-    [customStyles]="section.styles || {}"
-    [applyDynamicStyles]="section.styles">
-  </lib-service-section>
+  <div #servicesElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_services_wrapper'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_services_wrapper', section.content, 'services'))"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getServicesWrapperConfig()"
+       elementId="{{section.id + '_services_wrapper'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleServicesWrapperEvent($event)">
+    <lib-service-section
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [title]="section.content['title'] || 'Nuestros Servicios'"
+      [subtitle]="section.content['subtitle'] || 'Descubre todo lo que ofrecemos'"
+      [items]="section.content['items'] || serviceCardsConfig.items"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-service-section>
+  </div>
 </div>
 
 <!-- MOBILE SERVICES -->
-<div *ngIf="isMobile" class="editor-section cursor-pointer"
+<div *ngIf="isMobile" #sectionElement
+  class="editor-section cursor-pointer py-2"
   [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)">
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
 
-  <lib-service-section
-    [variant]="getVariant(section.id)"
-    [customStyles]="section.styles || {}"
-    [applyDynamicStyles]="section.styles">
-  </lib-service-section>
+  <div #servicesElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_services_wrapper'"
+       (click)="selectElement($event, { id: section.id + '_services_wrapper', content: section.content, type: 'services' })"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getServicesWrapperConfig()"
+       elementId="{{section.id + '_services_wrapper'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleServicesWrapperEvent($event)">
+    <lib-service-section
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [title]="section.content['title'] || 'Nuestros Servicios'"
+      [subtitle]="section.content['subtitle'] || 'Descubre todo lo que ofrecemos'"
+      [items]="section.content['items'] || serviceCardsConfig.items"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-service-section>
+  </div>
 </div>

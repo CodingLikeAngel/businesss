@@ -1,6 +1,6 @@
 <!-- DESKTOP CTA -->
 <div *ngIf="!isMobile" #sectionElement
-  class="editor-section cursor-pointer py-20 px-6 backdrop-blur-md bg-white/5 border-y border-white/5"
+  class="editor-section cursor-pointer py-16"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
@@ -8,54 +8,40 @@
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
 
-  <div class="container mx-auto max-w-4xl text-center">
-    <div #titleElement class="editor-element mb-6"
-       [class.is-selected]="selectedElementId === section.id + '_title'"
-       (click)="selectElement($event, getMergedElement(section.id, section.id + '_title', section.content, 'title'))"
-       [applyDynamicStyles]="section.content['titleStyles']"
-       [enhancedVisualEditable]="getTitleConfig()"
-       elementId="{{section.id + '_title'}}"
-       sectionId="{{section.id}}"
-       (visualEvents)="handleTitleEvent($event)">
-      <h2 class="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4">
-        {{ section.content['title'] || '¿Listo para el siguiente nivel?' }}
-      </h2>
-    </div>
-
-    <div #ctaElement class="editor-element mb-10"
-       [class.is-selected]="selectedElementId === section.id + '_subtitle'"
-       (click)="selectElement($event, getMergedElement(section.id, section.id + '_subtitle', section.content, 'subtitle'))"
-       [applyDynamicStyles]="section.content['subtitleStyles']"
-       [enhancedVisualEditable]="getCtaConfig()"
-       elementId="{{section.id + '_subtitle'}}"
-       sectionId="{{section.id}}"
-       (visualEvents)="handleCtaEvent($event)">
-      <p class="text-xl text-white/70 max-w-2xl mx-auto">
-        {{ section.content['subtitle'] || 'Únete a nosotros y transforma tu negocio hoy mismo.' }}
-      </p>
-    </div>
-
-    <div #buttonElement class="editor-element inline-block"
+  <div #ctaElement class="editor-element"
        [class.is-selected]="selectedElementId === section.id + '_cta'"
        (click)="selectElement($event, getMergedElement(section.id, section.id + '_cta', section.content, 'cta'))"
-       [applyDynamicStyles]="section.content['ctaStyles']"
-       [enhancedVisualEditable]="getButtonConfig()"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getCtaConfig()"
        elementId="{{section.id + '_cta'}}"
        sectionId="{{section.id}}"
-       (visualEvents)="handleButtonEvent($event)">
-      <lib-ui-components-button
-        [variant]="section.content['variant'] || getVariant(section.id)"
-        [size]="'lg'"
-      >
-        {{ section.content['ctaLabel'] || 'Empezar ahora' }}
-      </lib-ui-components-button>
+       (visualEvents)="handleCtaEvent($event)">
+    
+    <div class="cta-container text-center max-w-4xl mx-auto p-12 rounded-3xl bg-gradient-to-br from-indigo-600 to-purple-700 text-white shadow-2xl overflow-hidden relative">
+      <div class="relative z-10">
+        <h2 class="text-4xl font-bold mb-6">{{ section.content['title'] || '¿Listo para impulsar tu negocio?' }}</h2>
+        <p class="text-xl opacity-90 mb-10">{{ section.content['subtitle'] || 'Únete a cientos de empresas que ya están creciendo con nosotros.' }}</p>
+        
+        <div class="flex justify-center gap-4">
+          <lib-ui-components-button 
+            [variant]="'secondary'" 
+            size="lg"
+          >
+            {{ section.content['ctaLabel'] || 'Empezar ahora' }}
+          </lib-ui-components-button>
+        </div>
+      </div>
+      
+      <!-- Decorative background elements -->
+      <div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-64 h-64 bg-black/10 rounded-full blur-3xl"></div>
     </div>
   </div>
 </div>
 
 <!-- MOBILE CTA -->
 <div *ngIf="isMobile" #sectionElement
-  class="editor-section cursor-pointer py-12 px-4"
+  class="editor-section cursor-pointer py-8 px-4"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
@@ -63,46 +49,20 @@
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
 
-  <div class="container mx-auto max-w-4xl text-center">
-    <div #titleElement class="editor-element mb-6"
-       [class.is-selected]="selectedElementId === section.id + '_title'"
-       (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })"
-       [applyDynamicStyles]="section.content['titleStyles']"
-       [enhancedVisualEditable]="getTitleConfig()"
-       elementId="{{section.id + '_title'}}"
-       sectionId="{{section.id}}"
-       (visualEvents)="handleTitleEvent($event)">
-      <h2 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-emerald-400 mb-4">
-        {{ section.content['title'] || '¿Listo para el siguiente nivel?' }}
-      </h2>
-    </div>
-
-    <div #ctaElement class="editor-element mb-8"
-       [class.is-selected]="selectedElementId === section.id + '_subtitle'"
-       (click)="selectElement($event, { id: section.id + '_subtitle', content: section.content, type: 'subtitle' })"
-       [applyDynamicStyles]="section.content['subtitleStyles']"
-       [enhancedVisualEditable]="getCtaConfig()"
-       elementId="{{section.id + '_subtitle'}}"
-       sectionId="{{section.id}}"
-       (visualEvents)="handleCtaEvent($event)">
-      <p class="text-lg text-white/70 max-w-2xl mx-auto">
-        {{ section.content['subtitle'] || 'Únete a nosotros y transforma tu negocio hoy mismo.' }}
-      </p>
-    </div>
-
-    <div #buttonElement class="editor-element inline-block"
+  <div #ctaElement class="editor-element"
        [class.is-selected]="selectedElementId === section.id + '_cta'"
        (click)="selectElement($event, { id: section.id + '_cta', content: section.content, type: 'cta' })"
-       [applyDynamicStyles]="section.content['ctaStyles']"
-       [enhancedVisualEditable]="getButtonConfig()"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getCtaConfig()"
        elementId="{{section.id + '_cta'}}"
        sectionId="{{section.id}}"
-       (visualEvents)="handleButtonEvent($event)">
-      <lib-ui-components-button
-        [variant]="section.content['variant'] || getVariant(section.id)"
-        [size]="'md'"
-      >
-        {{ section.content['ctaLabel'] || 'Empezar ahora' }}
+       (visualEvents)="handleCtaEvent($event)">
+    
+    <div class="p-8 rounded-2xl bg-indigo-600 text-white text-center">
+      <h2 class="text-2xl font-bold mb-4">{{ section.content['title'] || '¡Empieza ya!' }}</h2>
+      <p class="mb-8 opacity-80">{{ section.content['subtitle'] || 'Tu éxito comienza aquí.' }}</p>
+      <lib-ui-components-button [variant]="'secondary'" class="w-full">
+        {{ section.content['ctaLabel'] || 'Empezar' }}
       </lib-ui-components-button>
     </div>
   </div>

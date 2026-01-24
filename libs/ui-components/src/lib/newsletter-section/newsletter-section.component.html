@@ -1,23 +1,23 @@
-<div [ngClass]="['newsletter-section', 'variant-' + variant]" [ngStyle]="newsletterStyles">
+<div [ngClass]="['newsletter-section', 'variant-' + variant()]" [ngStyle]="newsletterStyles()">
   <div class="content">
     <div class="text-content">
-      <h2>{{ title }}</h2>
-      <p>{{ description }}</p>
+      <h2>{{ title() }}</h2>
+      <p>{{ description() }}</p>
     </div>
     <div class="form-container">
       <div class="input-wrapper">
         <lib-ui-components-input
           [type]="'email'"
-          [placeholder]="placeholder"
+          [placeholder]="placeholder()"
           [(ngModel)]="email"
-          [variant]="variant">
+          [variant]="$any(variant())">
         </lib-ui-components-input>
       </div>
       <lib-ui-components-button
-        [variant]="variant === 'default' ? 'primary' : variant"
+        [variant]="variant() === 'default' ? 'primary' : $any(variant())"
         [disabled]="isSubmitting"
         (buttonClick)="onSubmit()">
-        {{ isSubmitting ? '...' : buttonText }}
+        {{ isSubmitting ? '...' : buttonText() }}
       </lib-ui-components-button>
     </div>
     <div class="success-msg" *ngIf="successMessage">
@@ -25,6 +25,3 @@
     </div>
   </div>
 </div>
-
-
-

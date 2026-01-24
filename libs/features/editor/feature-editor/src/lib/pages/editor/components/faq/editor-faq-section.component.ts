@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FaqConfig,
@@ -14,8 +14,7 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
 
 /**
  * Enhanced Editor FAQ Section Component
- * Uses EnhancedBaseEditorSectionComponent and EnhancedVisualEditableDirective
- * for standardized visual editing with unified styling application
+ * Modernized for granular store synchronization and visual editing.
  */
 @Component({
   selector: 'lib-editor-faq-section',
@@ -28,157 +27,94 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
   ],
   templateUrl: './editor-faq-section.component.html'
 })
-export class EditorFaqSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
+export class EditorFaqSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit, DoCheck {
   @Input() faqConfig!: FaqConfig;
+
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('faqElement', { static: true }) faqElement!: ElementRef;
-  @ViewChild('titleElement', { static: false }) titleElement?: ElementRef;
 
-  ngAfterViewInit() {
-    // Apply standardized visual editing to elements
-    this.applySectionVisualEditing(this.sectionElement, this.section.id);
-    this.applyElementVisualEditing(this.faqElement, this.section.id + '_faq');
-    if (this.titleElement) {
-      this.applyElementVisualEditing(this.titleElement, this.section.id + '_title');
+  ngDoCheck() {
+    // Sincronización de items individuales (preguntas) si se editan desde el panel lateral
+    const selected = this.uiStateService.selectedElement;
+    if (selected && selected.sectionId === this.section.id && selected.isItem && selected.index !== undefined) {
+       const items = this.section.content['items'];
+       if (items && items[selected.index] && items[selected.index] !== selected.content) {
+           const newItems = [...items];
+           newItems[selected.index] = selected.content;
+           
+           this.variantService.updateSectionInCurrentPage(this.section.id, {
+             content: {
+               ...this.section.content,
+               items: newItems
+             }
+           });
+       }
     }
   }
 
-  /**
-   * Get configuration for the section container
-   */
+  ngAfterViewInit() {
+    // Inicializar items si no existen en el store (migración)
+    if (!this.section.content['items'] && this.faqConfig?.items) {
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        content: {
+          ...this.section.content,
+          items: JSON.parse(JSON.stringify(this.faqConfig.items))
+        }
+      });
+    }
+
+    // Aplicar edición visual técnica
+    this.applySectionVisualEditing(this.sectionElement, this.section.id);
+    this.applyElementVisualEditing(this.faqElement, this.section.id + '_faq_wrapper');
+  }
+
   getSectionConfig(): VisualEditingConfig {
     return this.createElementConfig('section', {
-      constraints: {
-        containment: 'parent',
-        minDistance: { top: 10, right: 10, bottom: 10, left: 10 },
-        collisionDetection: false,
-        safeZones: []
-      },
       styling: {
         selectionOutline: '2px solid #6366f1',
         hoverEffects: true,
-        dimensionLabels: true,
-        resizeHandles: true
-      },
-      interactions: {
-        touchEnabled: true,
-        multiSelect: false,
-        snapToGrid: 0,
-        animationDuration: 200,
-        hapticFeedback: false
-      }
+        resizeHandles: true,
+        dimensionLabels: true
+      } as any
     });
   }
 
-  /**
-   * Get configuration for the FAQ element
-   */
-  getFaqConfig(): VisualEditingConfig {
+  getFaqWrapperConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
-      interactions: {
-        snapToGrid: 5,
-        animationDuration: 150,
-        touchEnabled: this.platformInfo.isTouch,
-        multiSelect: true,
-        hapticFeedback: true
-      },
-      constraints: {
-        containment: 'parent',
-        collisionDetection: true,
-        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
-        safeZones: []
-      },
       styling: {
         selectionOutline: '2px solid #10b981',
         hoverEffects: !this.platformInfo.isMobile,
-        dimensionLabels: !this.platformInfo.isMobile,
-        resizeHandles: true
-      }
+        resizeHandles: true,
+        dimensionLabels: true
+      } as any
     });
   }
 
-  /**
-   * Get configuration for the title element
-   */
-  getTitleConfig(): VisualEditingConfig {
-    return this.createElementConfig('element', {
-      interactions: {
-        snapToGrid: 5,
-        animationDuration: 150,
-        touchEnabled: this.platformInfo.isTouch,
-        multiSelect: true,
-        hapticFeedback: true
-      },
-      constraints: {
-        containment: 'parent',
-        collisionDetection: true,
-        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
-        safeZones: []
-      },
-      styling: {
-        selectionOutline: '2px solid #10b981',
-        hoverEffects: !this.platformInfo.isMobile,
-        dimensionLabels: !this.platformInfo.isMobile,
-        resizeHandles: true
-      }
-    });
-  }
-
-  /**
-   * Handle visual editing events
-   */
   handleSectionEvent(event: VisualEditingEvent): void {
     this.handleVisualEvent(event, this.section.id);
   }
 
-  handleFaqEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_faq');
+  handleFaqWrapperEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id + '_faq_wrapper');
   }
 
-  handleTitleEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_title');
-  }
-
-  /**
-   * Custom event handling for FAQ-specific logic
-   */
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_faq') {
-      switch (event.type) {
-        case 'selected':
-          console.log('FAQ element selected for editing');
-          break;
-        case 'moved':
-          this.updateFaqPosition(event.bounds);
-          break;
-        case 'resized':
-          break;
-      }
-    } else if (elementId === this.section.id + '_title') {
-      switch (event.type) {
-        case 'selected':
-          console.log('Title element selected for editing');
-          break;
-        case 'moved':
-          this.updateTitlePosition(event.bounds);
-          break;
-        case 'resized':
-          break;
+    if (elementId === this.section.id || elementId === this.section.id + '_faq_wrapper') {
+      if (['moved', 'resized'].includes(event.type)) {
+        this.updateFaqStyles(event.bounds);
       }
     }
   }
 
-  /**
-   * Update FAQ position in section data
-   */
-  private updateFaqPosition(bounds: any): void {
-    console.log('FAQ position updated:', bounds);
-  }
-
-  /**
-   * Update title position in section data
-   */
-  private updateTitlePosition(bounds: any): void {
-    console.log('Title position updated:', bounds);
+  private updateFaqStyles(bounds: any): void {
+    const currentStyles = this.section.styles || {};
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      styles: {
+        ...currentStyles,
+        width: bounds.width + 'px',
+        height: bounds.height + 'px',
+        transform: `translate(${bounds.x}px, ${bounds.y}px)`
+      }
+    });
   }
 }

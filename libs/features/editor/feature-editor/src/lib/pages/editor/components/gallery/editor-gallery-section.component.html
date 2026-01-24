@@ -9,19 +9,21 @@
   (visualEvents)="handleSectionEvent($event)">
 
   <div #galleryElement class="editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_gallery'"
-       (click)="selectElement($event, getMergedElement(section.id, section.id + '_gallery', section.content, 'gallery'))"
+       [class.is-selected]="selectedElementId === section.id + '_gallery_wrapper'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_gallery_wrapper', section.content, 'gallery'))"
        [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getGalleryConfig()"
-       elementId="{{section.id + '_gallery'}}"
+       [enhancedVisualEditable]="getGalleryWrapperConfig()"
+       elementId="{{section.id + '_gallery_wrapper'}}"
        sectionId="{{section.id}}"
-       (visualEvents)="handleGalleryEvent($event)">
-    <lib-ui-components-ui-gallery
-      [images]="galleryConfig.images"
-      [variant]="getVariant(section.id)"
+       (visualEvents)="handleGalleryWrapperEvent($event)">
+    <lib-ui-components-gallery-section
+      [title]="section.content['title'] || 'Galería de Proyectos'"
+      [subtitle]="section.content['subtitle'] || 'Nuestro trabajo reciente'"
+      [images]="section.content['items'] || galleryConfig.images"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
       [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles">
-    </lib-ui-components-ui-gallery>
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-ui-components-gallery-section>
   </div>
 </div>
 
@@ -36,18 +38,20 @@
   (visualEvents)="handleSectionEvent($event)">
 
   <div #galleryElement class="editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_gallery'"
-       (click)="selectElement($event, { id: section.id + '_gallery', content: section.content, type: 'gallery' })"
+       [class.is-selected]="selectedElementId === section.id + '_gallery_wrapper'"
+       (click)="selectElement($event, { id: section.id + '_gallery_wrapper', content: section.content, type: 'gallery' })"
        [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getGalleryConfig()"
-       elementId="{{section.id + '_gallery'}}"
+       [enhancedVisualEditable]="getGalleryWrapperConfig()"
+       elementId="{{section.id + '_gallery_wrapper'}}"
        sectionId="{{section.id}}"
-       (visualEvents)="handleGalleryEvent($event)">
-    <lib-ui-components-ui-gallery
-      [images]="galleryConfig.images"
-      [variant]="getVariant(section.id)"
+       (visualEvents)="handleGalleryWrapperEvent($event)">
+    <lib-ui-components-gallery-section
+      [title]="section.content['title'] || 'Galería de Proyectos'"
+      [subtitle]="section.content['subtitle'] || 'Nuestro trabajo reciente'"
+      [images]="section.content['items'] || galleryConfig.images"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
       [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles">
-    </lib-ui-components-ui-gallery>
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-ui-components-gallery-section>
   </div>
 </div>

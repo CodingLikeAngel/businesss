@@ -1,8 +1,17 @@
-import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Output, ViewEncapsulation, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { CustomStyles } from '../models/custom-styles.interface';
 import { UICardComponent } from '../cards/card/card.component';
+
+export interface ServiceItem {
+  title: string;
+  description: string;
+  image: string;
+  tooltip?: string;
+  styles?: { [key: string]: string };
+  chips?: { label: string; value: string }[];
+}
 
 @Component({
   selector: 'lib-service-section',
@@ -13,36 +22,13 @@ import { UICardComponent } from '../cards/card/card.component';
   encapsulation: ViewEncapsulation.None
 })
 export class ServiceSectionComponent {
-  @Input() variant: string = 'default';
-  @Input() customStyles: CustomStyles = {};
-  @Output() reserve = new EventEmitter<void>();
-
-  get componentStyles() {
-    const styles: Record<string, any> = {};
-
-    if (this.customStyles['backgroundColor']) {
-      styles['--theme-bg'] = this.customStyles['backgroundColor'];
-      styles['--component-bg'] = this.customStyles['backgroundColor'];
-      styles['background'] = this.customStyles['backgroundColor'];
-      styles['background-color'] = this.customStyles['backgroundColor'];
-    }
-
-    if (this.customStyles['color']) {
-      styles['--theme-color'] = this.customStyles['color'];
-      styles['--component-text'] = this.customStyles['color'];
-      styles['color'] = this.customStyles['color'];
-    }
-
-    Object.keys(this.customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = this.customStyles[key];
-      }
-    });
-
-    return styles;
-  }
-
-  services = [
+  variant = input<string>('default');
+  customStyles = input<CustomStyles>({});
+  
+  title = input<string>('Nuestros Servicios');
+  subtitle = input<string>('Descubre todos nuestros servicios de belleza y cuidado personal.');
+  
+  items = input<ServiceItem[]>([
     {
       title: 'Corte Hombre',
       description: 'Cortes modernos y clásicos adaptados a tu personalidad.',
@@ -58,7 +44,7 @@ export class ServiceSectionComponent {
     {
       title: 'Corte Mujer',
       description: 'Personaliza tu estilo con cortes únicos.',
-       image: "https://dummyimage.com/200x300/000/fff&text=Hola+León2",
+      image: "https://dummyimage.com/200x300/000/fff&text=Hola+León2",
       tooltip: 'Personaliza tu estilo con cortes únicos.',
       styles: {},
       chips: [
@@ -70,7 +56,7 @@ export class ServiceSectionComponent {
     {
       title: 'Manicura',
       description: 'Diseños que destacan en cualquier aventura.',
-       image: "https://dummyimage.com/200x300/000/fff&text=Hola+León3",
+      image: "https://dummyimage.com/200x300/000/fff&text=Hola+León3",
       tooltip: 'Diseños que destacan en cualquier ocasión.',
       styles: {},
       chips: [
@@ -79,14 +65,37 @@ export class ServiceSectionComponent {
         { label: 'Arte', value: 'arte' },
       ],
     },
-  ];
+  ]);
 
-  // Función para manejar el evento de reserva
+  @Output() reserve = new EventEmitter<void>();
+
+  componentStyles = computed(() => {
+    const styles: Record<string, any> = {};
+    const config = this.customStyles();
+
+    if (config['backgroundColor']) {
+      styles['--theme-bg'] = config['backgroundColor'];
+      styles['--component-bg'] = config['backgroundColor'];
+      styles['background'] = config['backgroundColor'];
+      styles['background-color'] = config['backgroundColor'];
+    }
+
+    if (config['color']) {
+      styles['--theme-color'] = config['color'];
+      styles['--component-text'] = config['color'];
+      styles['color'] = config['color'];
+    }
+
+    Object.keys(config).forEach(key => {
+      if (key !== 'backgroundColor' && key !== 'color') {
+        styles[key] = config[key];
+      }
+    });
+
+    return styles;
+  });
+
   onReserve(): void {
     this.reserve.emit();
-  }
-
-  filterService(category: string) {
-    console.log(`Filtrando por: ${category}`);
   }
 }

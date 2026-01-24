@@ -11,7 +11,7 @@
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-          <div *ngFor="let config of premiumCardConfigs; let i = index" class="promo-item relative group">
+          <div *ngFor="let config of defaultItems(); let i = index" class="promo-item relative group">
             <div class="absolute -top-6 left-1/2 -translate-x-1/2 z-30 transition-transform group-hover:scale-110">
               <lib-ui-components-chip
                 [variant]="variant()"

@@ -1,6 +1,6 @@
 <!-- DESKTOP FAQ -->
 <div *ngIf="!isMobile" #sectionElement
-  class="editor-section cursor-pointer"
+  class="editor-section cursor-pointer py-4"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
@@ -8,26 +8,28 @@
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
 
-  <lib-ui-faq-section #faqElement
-    [title]="section.content['title'] || 'Preguntas Frecuentes'"
-    [subtitle]="section.content['subtitle'] || 'Resolvemos tus dudas principales.'"
-    [variant]="getVariant(section.id)"
-    [customStyles]="section.styles || {}"
-    [applyDynamicStyles]="section.styles"
-    [items]="faqConfig.items"
-    class="editor-element"
-    [class.is-selected]="selectedElementId === section.id + '_faq'"
-    (click)="selectElement($event, getMergedElement(section.id, section.id + '_faq', section.content, 'faq'))"
-    [enhancedVisualEditable]="getFaqConfig()"
-    elementId="{{section.id + '_faq'}}"
-    sectionId="{{section.id}}"
-    (visualEvents)="handleFaqEvent($event)">
-  </lib-ui-faq-section>
+  <div #faqElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_faq_wrapper'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_faq_wrapper', section.content, 'faq'))"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getFaqWrapperConfig()"
+       elementId="{{section.id + '_faq_wrapper'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleFaqWrapperEvent($event)">
+    <lib-ui-faq-section
+      [title]="section.content['title'] || 'Preguntas Frecuentes'"
+      [subtitle]="section.content['subtitle'] || 'Respondemos tus dudas'"
+      [items]="section.content['items'] || faqConfig.items"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-ui-faq-section>
+  </div>
 </div>
 
 <!-- MOBILE FAQ -->
 <div *ngIf="isMobile" #sectionElement
-  class="editor-section cursor-pointer p-4"
+  class="editor-section cursor-pointer py-2 p-2"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
@@ -35,19 +37,21 @@
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
 
-  <lib-ui-faq-section #faqElement
-    [title]="section.content['title'] || 'Preguntas Frecuentes'"
-    [subtitle]="section.content['subtitle'] || 'Resolvemos tus dudas principales.'"
-    [variant]="getVariant(section.id)"
-    [customStyles]="section.styles || {}"
-    [applyDynamicStyles]="section.styles"
-    [items]="faqConfig.items"
-    class="editor-element"
-    [class.is-selected]="selectedElementId === section.id + '_faq'"
-    (click)="selectElement($event, { id: section.id + '_faq', content: section.content, type: 'faq' })"
-    [enhancedVisualEditable]="getFaqConfig()"
-    elementId="{{section.id + '_faq'}}"
-    sectionId="{{section.id}}"
-    (visualEvents)="handleFaqEvent($event)">
-  </lib-ui-faq-section>
+  <div #faqElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_faq_wrapper'"
+       (click)="selectElement($event, { id: section.id + '_faq_wrapper', content: section.content, type: 'faq' })"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getFaqWrapperConfig()"
+       elementId="{{section.id + '_faq_wrapper'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handleFaqWrapperEvent($event)">
+    <lib-ui-faq-section
+      [title]="section.content['title'] || 'Preguntas Frecuentes'"
+      [subtitle]="section.content['subtitle'] || 'Respondemos tus dudas'"
+      [items]="section.content['items'] || faqConfig.items"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-ui-faq-section>
+  </div>
 </div>

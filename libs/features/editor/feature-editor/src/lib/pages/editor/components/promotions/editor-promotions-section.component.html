@@ -1,44 +1,6 @@
 <!-- DESKTOP PROMOTIONS -->
-<section *ngIf="!isMobile" #sectionElement [id]="section.id"
-  class="relative z-20 py-20 cursor-pointer editor-section"
-  [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)"
-  [applyDynamicStyles]="section.styles"
-  [enhancedVisualEditable]="getSectionConfig()"
-  sectionId="{{section.id}}"
-  (visualEvents)="handleSectionEvent($event)">
-
-  <div #promotionsElement class="container mx-auto px-6 max-w-7xl editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_promotions'"
-       (click)="selectElement($event, getMergedElement(section.id, section.id + '_promotions', section.content, 'promotions'))"
-       [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getPromotionsConfig()"
-       elementId="{{section.id + '_promotions'}}"
-       sectionId="{{section.id}}"
-       (visualEvents)="handlePromotionsEvent($event)">
-    <div class="text-center mb-16">
-      <h2 class="text-5xl font-extrabold mb-6">
-        {{ section.content['title'] || promotionsConfig.title || 'Ofertas Especiales' }}
-      </h2>
-      <p class="text-xl text-white/60 max-w-2xl mx-auto">
-        {{ section.content['subtitle'] || promotionsConfig.description || 'Descubre nuestras promociones exclusivas y ahorra.' }}
-      </p>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-      <div *ngFor="let promo of promotionsConfig.premiumCards; let i = index">
-        <lib-ui-components-card-premium
-          [variant]="$any(promo.variant || getVariant(section.id))"
-          [config]="promo"
-          [applyDynamicStyles]="promo.styles || {}"
-        ></lib-ui-components-card-premium>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- MOBILE PROMOTIONS -->
-<div *ngIf="isMobile" #sectionElement class="p-4 text-center text-white/50 border border-dashed border-white/20 rounded-xl m-4 editor-section cursor-pointer"
+<div *ngIf="!isMobile" #sectionElement
+  class="editor-section cursor-pointer py-4"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
@@ -47,13 +9,49 @@
   (visualEvents)="handleSectionEvent($event)">
 
   <div #promotionsElement class="editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_promotions'"
-       (click)="selectElement($event, { id: section.id + '_promotions', content: section.content, type: 'promotions' })"
+       [class.is-selected]="selectedElementId === section.id + '_promotions_wrapper'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_promotions_wrapper', section.content, 'promotions'))"
        [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getPromotionsConfig()"
-       elementId="{{section.id + '_promotions'}}"
+       [enhancedVisualEditable]="getPromotionsWrapperConfig()"
+       elementId="{{section.id + '_promotions_wrapper'}}"
        sectionId="{{section.id}}"
-       (visualEvents)="handlePromotionsEvent($event)">
-    La sección de Promociones se edita mejor en escritorio.
+       (visualEvents)="handlePromotionsWrapperEvent($event)">
+    <lib-promotions-section
+      [title]="section.content['title'] || 'Ofertas Especiales'"
+      [description]="section.content['description'] || 'Ahorra en tus tratamientos favoritos'"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [items]="section.content['items'] || promotionsConfig.premiumCards"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-promotions-section>
+  </div>
+</div>
+
+<!-- MOBILE PROMOTIONS -->
+<div *ngIf="isMobile" #sectionElement
+  class="editor-section cursor-pointer py-2 p-2"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <div #promotionsElement class="editor-element"
+       [class.is-selected]="selectedElementId === section.id + '_promotions_wrapper'"
+       (click)="selectElement($event, { id: section.id + '_promotions_wrapper', content: section.content, type: 'promotions' })"
+       [applyDynamicStyles]="section.styles"
+       [enhancedVisualEditable]="getPromotionsWrapperConfig()"
+       elementId="{{section.id + '_promotions_wrapper'}}"
+       sectionId="{{section.id}}"
+       (visualEvents)="handlePromotionsWrapperEvent($event)">
+    <lib-promotions-section
+      [title]="section.content['title'] || 'Ofertas Especiales'"
+      [description]="section.content['description'] || 'Ahorra en tus tratamientos favoritos'"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [items]="section.content['items'] || promotionsConfig.premiumCards"
+      [customStyles]="section.styles || {}"
+      [applyDynamicStyles]="section.styles || {}"
+    ></lib-promotions-section>
   </div>
 </div>

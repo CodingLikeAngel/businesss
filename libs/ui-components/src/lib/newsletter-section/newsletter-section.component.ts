@@ -1,5 +1,4 @@
-
-import { Component, Input, Output, EventEmitter, ViewEncapsulation } from '@angular/core';
+import { Component, Output, EventEmitter, ViewEncapsulation, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UIInputComponent } from '../forms/input/input.component';
@@ -24,55 +23,40 @@ export interface NewsletterCustomStyles {
   encapsulation: ViewEncapsulation.None
 })
 export class UINewsletterSectionComponent {
-  @Input() title = 'Suscríbete a nuestra Newsletter';
-  @Input() description = 'Recibe las últimas noticias y ofertas especiales directamente en tu bandeja de entrada.';
-  @Input() placeholder = 'Tu correo electrónico';
-  @Input() buttonText = 'Suscribirse';
-  @Input() variant = 'primary';
-  @Input() customStyles: NewsletterCustomStyles = {};
+  title = input('Suscríbete a nuestra Newsletter');
+  description = input('Recibe las últimas noticias y ofertas especiales directamente en tu bandeja de entrada.');
+  placeholder = input('Tu correo electrónico');
+  buttonText = input('Suscribirse');
+  variant = input('primary');
+  customStyles = input<NewsletterCustomStyles>({});
 
   @Output() subscribe = new EventEmitter<string>();
 
-  get newsletterStyles() {
+  newsletterStyles = computed(() => {
     const styles: Record<string, any> = {};
+    const config = this.customStyles();
 
-    if (this.customStyles['backgroundColor']) {
-      styles['--theme-bg'] = this.customStyles['backgroundColor'];
-      styles['--component-bg'] = this.customStyles['backgroundColor'];
-      styles['background'] = this.customStyles['backgroundColor'];
-      styles['background-color'] = this.customStyles['backgroundColor'];
+    if (config['backgroundColor']) {
+      styles['--theme-bg'] = config['backgroundColor'];
+      styles['--component-bg'] = config['backgroundColor'];
+      styles['background'] = config['backgroundColor'];
+      styles['background-color'] = config['backgroundColor'];
     }
 
-    if (this.customStyles['color']) {
-      styles['--theme-color'] = this.customStyles['color'];
-      styles['--component-text'] = this.customStyles['color'];
-      styles['color'] = this.customStyles['color'];
+    if (config['color']) {
+      styles['--theme-color'] = config['color'];
+      styles['--component-text'] = config['color'];
+      styles['color'] = config['color'];
     }
 
-    if (this.customStyles['--theme-bg']) {
-      styles['--theme-bg'] = this.customStyles['--theme-bg'];
-    }
-
-    if (this.customStyles['--theme-color']) {
-      styles['--theme-color'] = this.customStyles['--theme-color'];
-    }
-
-    if (this.customStyles['--component-bg']) {
-      styles['--component-bg'] = this.customStyles['--component-bg'];
-    }
-
-    if (this.customStyles['--component-text']) {
-      styles['--component-text'] = this.customStyles['--component-text'];
-    }
-
-    Object.keys(this.customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color' && key !== '--theme-bg' && key !== '--theme-color' && key !== '--component-bg' && key !== '--component-text') {
-        styles[key] = this.customStyles[key];
+    Object.keys(config).forEach(key => {
+      if (!['backgroundColor', 'color'].includes(key)) {
+        styles[key] = config[key];
       }
     });
 
     return styles;
-  }
+  });
 
   email = '';
   isSubmitting = false;
@@ -91,4 +75,3 @@ export class UINewsletterSectionComponent {
     }, 1000);
   }
 }
-

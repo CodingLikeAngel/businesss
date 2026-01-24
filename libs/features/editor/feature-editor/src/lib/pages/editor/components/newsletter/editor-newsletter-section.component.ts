@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, inject } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ApplyDynamicStylesDirective,
@@ -10,12 +10,10 @@ import {
   UINewsletterSectionComponent
 } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
-import { StyleValidationService } from '../../../../services/style-validation.service';
 
 /**
  * Enhanced Editor Newsletter Section Component
- * Uses EnhancedBaseEditorSectionComponent and EnhancedVisualEditableDirective
- * for standardized visual editing with unified styling application
+ * Standardized for granular store sync and visual editing.
  */
 @Component({
   selector: 'lib-editor-newsletter-section',
@@ -28,111 +26,67 @@ import { StyleValidationService } from '../../../../services/style-validation.se
   ],
   templateUrl: './editor-newsletter-section.component.html'
 })
-export class EditorNewsletterSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
+export class EditorNewsletterSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit, DoCheck {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('newsletterElement', { static: true }) newsletterElement!: ElementRef;
-  @ViewChild(ApplyDynamicStylesDirective) stylesDirective?: ApplyDynamicStylesDirective;
 
-  private validationService = inject(StyleValidationService);
-
-  ngAfterViewInit() {
-    // Apply standardized visual editing to elements
-    this.applySectionVisualEditing(this.sectionElement, this.section.id);
-    this.applyElementVisualEditing(this.newsletterElement, this.section.id + '_newsletter');
-
-    // Enable style validation
-    if (this.stylesDirective) {
-      this.stylesDirective.setValidationService(this.validationService);
-    }
+  ngDoCheck() {
+    // Sincronización básica de contenido si se edita desde el panel lateral
   }
 
-  /**
-   * Get configuration for the section container
-   */
+  ngAfterViewInit() {
+    // Aplicar edición visual técnica
+    this.applySectionVisualEditing(this.sectionElement, this.section.id);
+    this.applyElementVisualEditing(this.newsletterElement, this.section.id + '_newsletter_wrapper');
+  }
+
   getSectionConfig(): VisualEditingConfig {
     return this.createElementConfig('section', {
-      constraints: {
-        containment: 'parent',
-        minDistance: { top: 10, right: 10, bottom: 10, left: 10 },
-        collisionDetection: false,
-        safeZones: []
-      },
       styling: {
         selectionOutline: '2px solid #6366f1',
         hoverEffects: true,
-        dimensionLabels: true,
-        resizeHandles: true
-      },
-      interactions: {
-        touchEnabled: true,
-        multiSelect: false,
-        snapToGrid: 0,
-        animationDuration: 200,
-        hapticFeedback: false
-      }
+        resizeHandles: true,
+        dimensionLabels: true
+      } as any
     });
   }
 
-  /**
-   * Get configuration for the newsletter element
-   */
-  getNewsletterConfig(): VisualEditingConfig {
+  getNewsletterWrapperConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
-      interactions: {
-        snapToGrid: 5,
-        animationDuration: 150,
-        touchEnabled: this.platformInfo.isTouch,
-        multiSelect: true,
-        hapticFeedback: true
-      },
-      constraints: {
-        containment: 'parent',
-        collisionDetection: true,
-        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
-        safeZones: []
-      },
       styling: {
         selectionOutline: '2px solid #10b981',
         hoverEffects: !this.platformInfo.isMobile,
-        dimensionLabels: !this.platformInfo.isMobile,
-        resizeHandles: true
-      }
+        resizeHandles: true,
+        dimensionLabels: true
+      } as any
     });
   }
 
-  /**
-   * Handle visual editing events
-   */
   handleSectionEvent(event: VisualEditingEvent): void {
     this.handleVisualEvent(event, this.section.id);
   }
 
-  handleNewsletterEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_newsletter');
+  handleNewsletterWrapperEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id + '_newsletter_wrapper');
   }
 
-  /**
-   * Custom event handling for newsletter-specific logic
-   */
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_newsletter') {
-      switch (event.type) {
-        case 'selected':
-          console.log('Newsletter element selected for editing');
-          break;
-        case 'moved':
-          this.updateNewsletterPosition(event.bounds);
-          break;
-        case 'resized':
-          break;
+    if (elementId === this.section.id || elementId === this.section.id + '_newsletter_wrapper') {
+      if (['moved', 'resized'].includes(event.type)) {
+        this.updateNewsletterStyles(event.bounds);
       }
     }
   }
 
-  /**
-   * Update newsletter position in section data
-   */
-  private updateNewsletterPosition(bounds: any): void {
-    console.log('Newsletter position updated:', bounds);
+  private updateNewsletterStyles(bounds: any): void {
+    const currentStyles = this.section.styles || {};
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      styles: {
+        ...currentStyles,
+        width: bounds.width + 'px',
+        height: bounds.height + 'px',
+        transform: `translate(${bounds.x}px, ${bounds.y}px)`
+      }
+    });
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   StatsConfig,
@@ -14,8 +14,7 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
 
 /**
  * Enhanced Editor Stats Section Component
- * Uses EnhancedBaseEditorSectionComponent and EnhancedVisualEditableDirective
- * for standardized visual editing with unified styling application
+ * Modernized for granular store synchronization and visual editing persistence.
  */
 @Component({
   selector: 'lib-editor-stats-section',
@@ -28,105 +27,94 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
   ],
   templateUrl: './editor-stats-section.component.html'
 })
-export class EditorStatsSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
+export class EditorStatsSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit, DoCheck {
   @Input() statsConfig!: StatsConfig;
 
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('statsElement', { static: true }) statsElement!: ElementRef;
 
-  ngAfterViewInit() {
-    // Apply standardized visual editing to elements
-    this.applySectionVisualEditing(this.sectionElement, this.section.id);
-    this.applyElementVisualEditing(this.statsElement, this.section.id + '_stats');
+  ngDoCheck() {
+    // Sincronización de items individuales (métricas) si se editan desde el panel lateral
+    const selected = this.uiStateService.selectedElement;
+    if (selected && selected.sectionId === this.section.id && selected.isItem && selected.index !== undefined) {
+       const items = this.section.content['items'];
+       if (items && items[selected.index] && items[selected.index] !== selected.content) {
+           const newItems = [...items];
+           newItems[selected.index] = selected.content;
+           
+           this.variantService.updateSectionInCurrentPage(this.section.id, {
+             content: {
+               ...this.section.content,
+               items: newItems
+             }
+           });
+       }
+    }
   }
 
-  /**
-   * Get configuration for the section container
-   */
+  ngAfterViewInit() {
+    // Inicializar items si no existen en el store (migración)
+    if (!this.section.content['items'] && this.statsConfig?.items) {
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        content: {
+          ...this.section.content,
+          items: JSON.parse(JSON.stringify(this.statsConfig.items))
+        }
+      });
+    }
+
+    // Aplicar edición visual técnica
+    this.applySectionVisualEditing(this.sectionElement, this.section.id);
+    this.applyElementVisualEditing(this.statsElement, this.section.id + '_stats_wrapper');
+  }
+
   getSectionConfig(): VisualEditingConfig {
     return this.createElementConfig('section', {
-      constraints: {
-        containment: 'parent',
-        minDistance: { top: 10, right: 10, bottom: 10, left: 10 },
-        collisionDetection: false,
-        safeZones: []
-      },
       styling: {
         selectionOutline: '2px solid #6366f1',
         hoverEffects: true,
-        dimensionLabels: true,
-        resizeHandles: true
-      },
-      interactions: {
-        touchEnabled: true,
-        multiSelect: false,
-        snapToGrid: 0,
-        animationDuration: 200,
-        hapticFeedback: false
-      }
+        resizeHandles: true,
+        dimensionLabels: true
+      } as any
     });
   }
 
-  /**
-   * Get configuration for the stats element
-   */
-  getStatsConfig(): VisualEditingConfig {
+  getStatsWrapperConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
-      interactions: {
-        snapToGrid: 5,
-        animationDuration: 150,
-        touchEnabled: this.platformInfo.isTouch,
-        multiSelect: true,
-        hapticFeedback: true
-      },
-      constraints: {
-        containment: 'parent',
-        collisionDetection: true,
-        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
-        safeZones: []
-      },
       styling: {
         selectionOutline: '2px solid #10b981',
         hoverEffects: !this.platformInfo.isMobile,
-        dimensionLabels: !this.platformInfo.isMobile,
-        resizeHandles: true
-      }
+        resizeHandles: true,
+        dimensionLabels: true
+      } as any
     });
   }
 
-  /**
-   * Handle visual editing events
-   */
   handleSectionEvent(event: VisualEditingEvent): void {
     this.handleVisualEvent(event, this.section.id);
   }
 
-  handleStatsEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_stats');
+  handleStatsWrapperEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id + '_stats_wrapper');
   }
 
-  /**
-   * Custom event handling for stats-specific logic
-   */
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_stats') {
-      switch (event.type) {
-        case 'selected':
-          console.log('Stats element selected for editing');
-          break;
-        case 'moved':
-          this.updateStatsPosition(event.bounds);
-          break;
-        case 'resized':
-          break;
+    if (elementId === this.section.id || elementId === this.section.id + '_stats_wrapper') {
+      if (['moved', 'resized'].includes(event.type)) {
+        this.updateStatsStyles(event.bounds);
       }
     }
   }
 
-  /**
-   * Update stats position in section data
-   */
-  private updateStatsPosition(bounds: any): void {
-    console.log('Stats position updated:', bounds);
+  private updateStatsStyles(bounds: any): void {
+    const currentStyles = this.section.styles || {};
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      styles: {
+        ...currentStyles,
+        width: bounds.width + 'px',
+        height: bounds.height + 'px',
+        transform: `translate(${bounds.x}px, ${bounds.y}px)`
+      }
+    });
   }
 }

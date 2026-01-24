@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, input, computed, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   UICardPremiumComponent,
@@ -24,10 +24,10 @@ import { CustomStyles } from '../models/custom-styles.interface';
 export class PromotionsSectionComponent implements OnInit {
   title = input('Ofertas Especiales');
   description = input('Descubre nuestras promociones exclusivas y ahorra en tus tratamientos favoritos.');
-  variant = input('default'); // Changed to simple input to match standard pattern
+  variant = input('default'); 
   
-  // Keep Input decorator for backward compatibility if needed, but standard pattern uses signals 'input()'
-  @Input() premiumCardConfigs: CardPremiumConfig[] = [];
+  // Standard pattern uses signals 'input()'
+  items = input<CardPremiumConfig[]>([]);
   
   // Standard pattern styles
   customStyles = input<CustomStyles>({});
@@ -60,7 +60,11 @@ export class PromotionsSectionComponent implements OnInit {
 
   containerClasses = computed(() => `promotions-wrapper promotions--${this.variant()}`);
 
-  ngOnInit(): void {
+  // Internal signal for default cards if items is empty
+  defaultItems = computed(() => {
+    const provided = this.items();
+    if (provided && provided.length > 0) return provided;
+
     const defaultCard: CardPremiumConfig = {
       title: 'Promoción',
       description: 'Descripción de la oferta especial.',
@@ -71,12 +75,14 @@ export class PromotionsSectionComponent implements OnInit {
       tooltip: '¡Ahorra con este combo especial!'
     };
 
-    if (!Array.isArray(this.premiumCardConfigs) || this.premiumCardConfigs.length === 0) {
-      this.premiumCardConfigs = [
-        { ...defaultCard, title: 'Combo Relax', discount: '-25%' },
-        { ...defaultCard, title: 'Manicura Pro', discount: 'OFERTA', price: '19.99€' },
-        { ...defaultCard, title: 'Tinte & Corte', discount: 'NUEVO', price: '45.00€' }
-      ];
-    }
+    return [
+      { ...defaultCard, title: 'Combo Relax', discount: '-25%' },
+      { ...defaultCard, title: 'Manicura Pro', discount: 'OFERTA', price: '19.99€' },
+      { ...defaultCard, title: 'Tinte & Corte', discount: 'NUEVO', price: '45.00€' }
+    ];
+  });
+
+  ngOnInit(): void {
+    // No longer strictly needed but kept for safety
   }
 }

@@ -9,20 +9,20 @@
   (visualEvents)="handleSectionEvent($event)">
 
   <div #productsElement class="editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_products'"
-       (click)="selectElement($event, getMergedElement(section.id, section.id + '_products', section.content, 'products'))"
+       [class.is-selected]="selectedElementId === section.id + '_products_wrapper'"
+       (click)="selectElement($event, getMergedElement(section.id, section.id + '_products_wrapper', section.content, 'products'))"
        [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getProductsConfig()"
-       elementId="{{section.id + '_products'}}"
+       [enhancedVisualEditable]="getProductsWrapperConfig()"
+       elementId="{{section.id + '_products_wrapper'}}"
        sectionId="{{section.id}}"
-       (visualEvents)="handleProductsEvent($event)">
+       (visualEvents)="handleProductsWrapperEvent($event)">
     <lib-products-section
       [title]="section.content['title'] || 'Nuestros Productos'"
-      [subtitle]="section.content['subtitle'] || 'Descubre nuestra selección premium'"
-      [variant]="getVariant(section.id)"
+      [subtitle]="section.content['subtitle'] || 'Nuestra mejor selección'"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [products]="section.content['items'] || productsConfig.items"
       [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles"
-      [products]="productsConfig.items"
+      [applyDynamicStyles]="section.styles || {}"
     ></lib-products-section>
   </div>
 </div>
@@ -38,20 +38,20 @@
   (visualEvents)="handleSectionEvent($event)">
 
   <div #productsElement class="editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_products'"
-       (click)="selectElement($event, { id: section.id + '_products', content: section.content, type: 'products' })"
+       [class.is-selected]="selectedElementId === section.id + '_products_wrapper'"
+       (click)="selectElement($event, { id: section.id + '_products_wrapper', content: section.content, type: 'products' })"
        [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getProductsConfig()"
-       elementId="{{section.id + '_products'}}"
+       [enhancedVisualEditable]="getProductsWrapperConfig()"
+       elementId="{{section.id + '_products_wrapper'}}"
        sectionId="{{section.id}}"
-       (visualEvents)="handleProductsEvent($event)">
+       (visualEvents)="handleProductsWrapperEvent($event)">
     <lib-products-section
       [title]="section.content['title'] || 'Nuestros Productos'"
-      [subtitle]="section.content['subtitle'] || 'Descubre nuestra selección premium'"
-      [variant]="getVariant(section.id)"
+      [subtitle]="section.content['subtitle'] || 'Nuestra mejor selección'"
+      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [products]="section.content['items'] || productsConfig.items"
       [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles"
-      [products]="productsConfig.items"
+      [applyDynamicStyles]="section.styles || {}"
     ></lib-products-section>
   </div>
 </div>

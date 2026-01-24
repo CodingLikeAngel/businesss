@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ElementRef, ViewChild, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, OnInit, ElementRef, ViewChild, AfterViewInit, Inject, PLATFORM_ID, DoCheck } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
@@ -8,19 +8,19 @@ import {
   VisualEditingConfig,
   VisualEditingEvent
 } from '@negocio/shared-components';
-import {
-  UITitleComponent
-} from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
+/**
+ * Enhanced Editor Contact Section Component
+ * Modernized for granular store synchronization and visual editing.
+ */
 @Component({
   selector: 'lib-editor-contact-section',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    UITitleComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective
   ],
@@ -39,11 +39,11 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     ])
   ]
 })
-export class EditorContactSectionComponent extends EnhancedBaseEditorSectionComponent implements OnInit, AfterViewInit {
+export class EditorContactSectionComponent extends EnhancedBaseEditorSectionComponent implements OnInit, AfterViewInit, DoCheck {
   @Input() titleConfig!: TitleConfig;
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
-  @ViewChild('contactElement', { static: true }) contactElement!: ElementRef;
-  @ViewChild('titleElement', { static: false }) titleElement?: ElementRef;
+  @ViewChild('contactFormElement', { static: true }) contactFormElement!: ElementRef;
+  @ViewChild('contactInfoElement', { static: true }) contactInfoElement!: ElementRef;
 
   contactForm!: FormGroup;
   isSubmitting = false;
@@ -53,50 +53,6 @@ export class EditorContactSectionComponent extends EnhancedBaseEditorSectionComp
     { value: 'email', label: 'Correo electrónico', icon: '📧' },
     { value: 'phone', label: 'Teléfono', icon: '📞' },
     { value: 'whatsapp', label: 'WhatsApp', icon: '💬' }
-  ];
-
-  contactInfo = [
-    {
-      icon: '📧',
-      title: 'Email',
-      value: 'info@empresa.com',
-      link: 'mailto:info@empresa.com',
-      linkText: 'Enviar email'
-    },
-    {
-      icon: '📞',
-      title: 'Teléfono',
-      value: '+34 900 123 456',
-      link: 'tel:+34900123456',
-      linkText: 'Llamar ahora'
-    },
-    {
-      icon: '📍',
-      title: 'Dirección',
-      value: 'Calle Principal 123, Ciudad, País',
-      link: 'https://maps.google.com',
-      linkText: 'Ver en mapa'
-    },
-    {
-      icon: '🕒',
-      title: 'Horario',
-      value: 'Lun-Vie: 9:00-18:00',
-      link: null,
-      linkText: null
-    }
-  ];
-
-  mapMarkers = [
-    {
-      icon: '📍',
-      title: 'Oficina Principal',
-      address: 'Calle Principal 123, Ciudad'
-    },
-    {
-      icon: '🏢',
-      title: 'Sucursal Centro',
-      address: 'Plaza Mayor 45, Ciudad'
-    }
   ];
 
   constructor(
@@ -111,13 +67,44 @@ export class EditorContactSectionComponent extends EnhancedBaseEditorSectionComp
     this.initForm();
   }
 
-  ngAfterViewInit() {
-    // Apply standardized visual editing to elements
-    this.applySectionVisualEditing(this.sectionElement, this.section.id);
-    this.applyElementVisualEditing(this.contactElement, this.section.id + '_contact');
-    if (this.titleElement) {
-      this.applyElementVisualEditing(this.titleElement, this.section.id + '_title');
+  ngDoCheck() {
+    // Sincronización de items (info items) si se editan desde el panel lateral
+    const selected = this.uiStateService.selectedElement;
+    if (selected && selected.sectionId === this.section.id && selected.isItem && selected.index !== undefined) {
+       const items = this.section.content['contactItems'];
+       if (items && items[selected.index] && items[selected.index] !== selected.content) {
+           const newItems = [...items];
+           newItems[selected.index] = selected.content;
+           
+           this.variantService.updateSectionInCurrentPage(this.section.id, {
+             content: {
+               ...this.section.content,
+               contactItems: newItems
+             }
+           });
+       }
     }
+  }
+
+  ngAfterViewInit() {
+    // Inicializar contact items si no existen
+    if (!this.section.content['contactItems']) {
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        content: {
+          ...this.section.content,
+          contactItems: [
+            { icon: '📧', title: 'Email', value: 'info@empresa.com', link: 'mailto:info@empresa.com', linkText: 'Enviar email' },
+            { icon: '📞', title: 'Teléfono', value: '+34 900 123 456', link: 'tel:+34900123456', linkText: 'Llamar ahora' },
+            { icon: '📍', title: 'Dirección', value: 'Calle Principal 123, Ciudad', link: 'https://maps.google.com', linkText: 'Ver en mapa' }
+          ]
+        }
+      });
+    }
+
+    // Aplicar edición visual técnica
+    this.applySectionVisualEditing(this.sectionElement, this.section.id);
+    this.applyElementVisualEditing(this.contactFormElement, this.section.id + '_form_wrapper');
+    this.applyElementVisualEditing(this.contactInfoElement, this.section.id + '_info_wrapper');
   }
 
   private initForm() {
@@ -134,165 +121,76 @@ export class EditorContactSectionComponent extends EnhancedBaseEditorSectionComp
   onSubmit() {
     if (this.contactForm.valid) {
       this.isSubmitting = true;
-
-      // Simulate API call
       setTimeout(() => {
         this.isSubmitting = false;
         this.showSuccess = true;
-
-        // Reset form
         this.contactForm.reset();
         this.contactForm.patchValue({ contactMethod: 'email' });
-
-        // Hide success message after 5 seconds
-        setTimeout(() => {
-          this.showSuccess = false;
-        }, 5000);
+        setTimeout(() => this.showSuccess = false, 5000);
       }, 2000);
-    } else {
-      // Mark all fields as touched to show validation errors
-      Object.keys(this.contactForm.controls).forEach(key => {
-        this.contactForm.get(key)?.markAsTouched();
-      });
     }
   }
 
-  /**
-   * Get configuration for the section container
-   */
   getSectionConfig(): VisualEditingConfig {
     return this.createElementConfig('section', {
-      constraints: {
-        containment: 'parent',
-        minDistance: { top: 10, right: 10, bottom: 10, left: 10 },
-        collisionDetection: false,
-        safeZones: []
-      },
       styling: {
         selectionOutline: '2px solid #6366f1',
         hoverEffects: true,
-        dimensionLabels: true,
-        resizeHandles: true
-      },
-      interactions: {
-        touchEnabled: true,
-        multiSelect: false,
-        snapToGrid: 0,
-        animationDuration: 200,
-        hapticFeedback: false
-      }
+        resizeHandles: true,
+        dimensionLabels: true
+      } as any
     });
   }
 
-  /**
-   * Get configuration for the contact element
-   */
-  getContactConfig(): VisualEditingConfig {
+  getFormWrapperConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
-      interactions: {
-        snapToGrid: 5,
-        animationDuration: 150,
-        touchEnabled: this.platformInfo.isTouch,
-        multiSelect: true,
-        hapticFeedback: true
-      },
-      constraints: {
-        containment: 'parent',
-        collisionDetection: true,
-        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
-        safeZones: []
-      },
       styling: {
         selectionOutline: '2px solid #10b981',
         hoverEffects: !this.platformInfo.isMobile,
-        dimensionLabels: !this.platformInfo.isMobile,
-        resizeHandles: true
-      }
+        resizeHandles: true,
+        dimensionLabels: true
+      } as any
     });
   }
 
-  /**
-   * Get configuration for the title element
-   */
-  getTitleConfig(): VisualEditingConfig {
+  getInfoWrapperConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
-      interactions: {
-        snapToGrid: 5,
-        animationDuration: 150,
-        touchEnabled: this.platformInfo.isTouch,
-        multiSelect: true,
-        hapticFeedback: true
-      },
-      constraints: {
-        containment: 'parent',
-        collisionDetection: true,
-        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
-        safeZones: []
-      },
       styling: {
         selectionOutline: '2px solid #10b981',
         hoverEffects: !this.platformInfo.isMobile,
-        dimensionLabels: !this.platformInfo.isMobile,
-        resizeHandles: true
-      }
+        resizeHandles: true,
+        dimensionLabels: true
+      } as any
     });
   }
 
-  /**
-   * Handle visual editing events
-   */
   handleSectionEvent(event: VisualEditingEvent): void {
     this.handleVisualEvent(event, this.section.id);
   }
 
-  handleContactEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_contact');
+  handleFormWrapperEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id + '_form_wrapper');
   }
 
-  handleTitleEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_title');
+  handleInfoWrapperEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id + '_info_wrapper');
   }
 
-  /**
-   * Custom event handling for contact-specific logic
-   */
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_contact') {
-      switch (event.type) {
-        case 'selected':
-          console.log('Contact element selected for editing');
-          break;
-        case 'moved':
-          this.updateContactPosition(event.bounds);
-          break;
-        case 'resized':
-          break;
-      }
-    } else if (elementId === this.section.id + '_title') {
-      switch (event.type) {
-        case 'selected':
-          console.log('Title element selected for editing');
-          break;
-        case 'moved':
-          this.updateTitlePosition(event.bounds);
-          break;
-        case 'resized':
-          break;
-      }
+    if (['moved', 'resized'].includes(event.type)) {
+      this.updateContactStyles(event.bounds, elementId);
     }
   }
 
-  /**
-   * Update contact position in section data
-   */
-  private updateContactPosition(bounds: any): void {
-    console.log('Contact position updated:', bounds);
-  }
-
-  /**
-   * Update title position in section data
-   */
-  private updateTitlePosition(bounds: any): void {
-    console.log('Title position updated:', bounds);
+  private updateContactStyles(bounds: any, elementId: string): void {
+    const currentStyles = this.section.styles || {};
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      styles: {
+        ...currentStyles,
+        width: bounds.width + 'px',
+        height: bounds.height + 'px',
+        transform: `translate(${bounds.x}px, ${bounds.y}px)`
+      }
+    });
   }
 }
