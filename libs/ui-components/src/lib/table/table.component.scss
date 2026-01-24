@@ -18,19 +18,67 @@
     }
 }
 
+// Enhanced Responsive Design System
+// Mobile-first approach with comprehensive breakpoints
+
 // Mobile responsiveness: Hide table and show cards on small screens
-@media (max-width: 768px) {
+@media (max-width: 639px) {
     table {
         display: none;
     }
     .mobile-cards {
         display: block;
     }
+    
+    // Mobile-specific table enhancements
+    .table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
 }
 
-@media (min-width: 769px) {
+// Tablet optimization
+@media (min-width: 640px) and (max-width: 1023px) {
+    table {
+        display: none;
+    }
+    .mobile-cards {
+        display: block;
+    }
+    
+    // Tablet-specific card layout
+    .mobile-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+    
+    .pricing-card {
+        min-width: 280px;
+    }
+}
+
+// Desktop view
+@media (min-width: 1024px) {
     .mobile-cards {
         display: none;
+    }
+    
+    // Desktop table enhancements
+    table {
+        display: table;
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+    
+    // Enhanced hover effects for desktop
+    .table-row:hover {
+        background: rgba(255, 215, 0, 0.08);
+        
+        .table-cell {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
     }
 }
 
@@ -51,10 +99,26 @@
     animation: fadeInUp 0.5s ease-out forwards;
     opacity: 0;
     transform: translateY(20px);
+    
+    // Responsive card sizing
+    min-width: 240px;
+    
+    @media (min-width: 640px) {
+        min-width: 280px;
+    }
 
     &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        @media (hover: hover) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+    }
+    
+    // Mobile tap effect
+    @media (hover: none) {
+        &:active {
+            transform: scale(0.98);
+        }
     }
 
     .card-header {
@@ -62,11 +126,17 @@
         justify-content: space-between;
         align-items: center;
         margin-bottom: 1rem;
+        flex-wrap: wrap;
+        gap: 0.5rem;
 
         h3 {
             margin: 0;
-            font-size: 1.25rem;
+            font-size: 1rem;
             font-weight: bold;
+            
+            @media (min-width: 640px) {
+                font-size: 1.25rem;
+            }
         }
     }
 
@@ -80,6 +150,11 @@
                 display: block;
                 font-weight: 600;
                 color: var(--theme-color, #333);
+                font-size: 0.875rem;
+                
+                @media (min-width: 640px) {
+                    font-size: 0.95rem;
+                }
             }
         }
     }

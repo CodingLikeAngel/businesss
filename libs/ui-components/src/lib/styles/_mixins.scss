@@ -144,6 +144,199 @@ $unified-active-scale: scale(0.98);
   }
 }
 
+// Responsive Breakpoints System
+$breakpoints: (
+  'sm': 640px,
+  'md': 768px,
+  'lg': 1024px,
+  'xl': 1280px,
+  '2xl': 1536px
+);
+
+// Responsive mixin for consistent breakpoints
+@mixin responsive($property, $values) {
+  @each $breakpoint, $value in $values {
+    @if $breakpoint == 'default' {
+      #{$property}: $value;
+    } @else {
+      @media (min-width: map-get($breakpoints, $breakpoint)) {
+        #{$property}: $value;
+      }
+    }
+  }
+}
+
+// Mobile-first responsive typography
+@mixin responsive-typography {
+  font-size: var(--fs-sm);
+  
+  @media (min-width: map-get($breakpoints, 'md')) {
+    font-size: var(--fs-base);
+  }
+  
+  @media (min-width: map-get($breakpoints, 'lg')) {
+    font-size: var(--fs-md);
+  }
+}
+
+// Touch target mixin for mobile devices
+@mixin touch-target {
+  min-width: 48px;
+  min-height: 48px;
+  
+  @media (hover: hover) and (pointer: fine) {
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+
+// Responsive spacing mixin
+@mixin responsive-spacing($property, $mobile, $tablet: null, $desktop: null) {
+  #{$property}: $mobile;
+  
+  @if $tablet {
+    @media (min-width: map-get($breakpoints, 'md')) {
+      #{$property}: $tablet;
+    }
+  }
+  
+  @if $desktop {
+    @media (min-width: map-get($breakpoints, 'lg')) {
+      #{$property}: $desktop;
+    }
+  }
+}
+
+// Mobile-only styles
+@mixin mobile-only {
+  @media (max-width: calc(map-get($breakpoints, 'md') - 1px)) {
+    @content;
+  }
+}
+
+// Tablet-only styles
+@mixin tablet-only {
+  @media (min-width: map-get($breakpoints, 'md')) and (max-width: calc(map-get($breakpoints, 'lg') - 1px)) {
+    @content;
+  }
+}
+
+// Desktop-only styles
+@mixin desktop-only {
+  @media (min-width: map-get($breakpoints, 'lg')) {
+    @content;
+  }
+}
+
+// Responsive container mixin
+@mixin responsive-container {
+  width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  margin-left: auto;
+  margin-right: auto;
+  
+  @media (min-width: map-get($breakpoints, 'sm')) {
+    max-width: 640px;
+  }
+  
+  @media (min-width: map-get($breakpoints, 'md')) {
+    max-width: 768px;
+  }
+  
+  @media (min-width: map-get($breakpoints, 'lg')) {
+    max-width: 1024px;
+  }
+  
+  @media (min-width: map-get($breakpoints, 'xl')) {
+    max-width: 1280px;
+  }
+}
+
+// Mobile navigation patterns
+@mixin mobile-nav-pattern {
+  @media (max-width: calc(map-get($breakpoints, 'md') - 1px)) {
+    .nav-desktop {
+      display: none;
+    }
+    
+    .nav-mobile {
+      display: flex;
+    }
+    
+    .mobile-menu {
+      display: none;
+      
+      &.active {
+        display: flex;
+      }
+    }
+  }
+  
+  @media (min-width: map-get($breakpoints, 'md')) {
+    .nav-desktop {
+      display: flex;
+    }
+    
+    .nav-mobile {
+      display: none;
+    }
+  }
+}
+
+// Responsive grid system
+@mixin responsive-grid($columns-mobile: 1, $columns-tablet: 2, $columns-desktop: 3) {
+  display: grid;
+  grid-template-columns: repeat($columns-mobile, 1fr);
+  gap: 1rem;
+  
+  @media (min-width: map-get($breakpoints, 'md')) {
+    grid-template-columns: repeat($columns-tablet, 1fr);
+  }
+  
+  @media (min-width: map-get($breakpoints, 'lg')) {
+    grid-template-columns: repeat($columns-desktop, 1fr);
+  }
+}
+
+// Performance-optimized animations for mobile
+@mixin mobile-optimized-animation {
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+    transition: none;
+  }
+  
+  @media (max-width: calc(map-get($breakpoints, 'md') - 1px)) {
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    transform: translateZ(0);
+  }
+}
+
+// Accessibility-focused responsive design
+@mixin accessible-responsive {
+  // Base mobile styles
+  outline: none;
+  
+  &:focus-visible {
+    outline: 2px solid var(--theme-accent);
+    outline-offset: 2px;
+  }
+  
+  @media (hover: hover) {
+    &:hover {
+      // Desktop hover effects
+    }
+  }
+  
+  @media (hover: none) {
+    &:active {
+      // Mobile tap effects
+      transform: scale(0.98);
+    }
+  }
+}
+
 // Robustness mixin for Editor Mode
 @mixin editor-robustness {
   // Only force relative if we aren't using a specific positioning like sticky/fixed
