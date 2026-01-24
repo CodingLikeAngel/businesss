@@ -93,7 +93,7 @@ export class ApplyDynamicStylesDirective implements OnChanges {
            this.renderer.setStyle(this.el.nativeElement, '--theme-radius', value);
         }
 
-        console.log(`✅ Applied style: ${cssKey} = ${value}`);
+        // console.log(`✅ Applied style: ${cssKey} = ${value}`);
       } else {
         this.renderer.removeStyle(this.el.nativeElement, cssKey);
 
@@ -114,7 +114,7 @@ export class ApplyDynamicStylesDirective implements OnChanges {
         const autoSuggestion = result.suggestions.find((s: { autoApply: any; }) => s.autoApply) || result.suggestions[0];
         if (autoSuggestion && autoSuggestion.confidence > 0.7) { // Only auto-apply high confidence corrections
           correctedStyles[result.property] = autoSuggestion.value;
-          console.log(`🔧 Auto-corrected ${result.property}: ${result.value} → ${autoSuggestion.value}`);
+          // console.log(`🔧 Auto-corrected ${result.property}: ${result.value} → ${autoSuggestion.value}`);
         }
       }
     });

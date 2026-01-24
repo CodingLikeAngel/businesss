@@ -48,7 +48,7 @@ import { FormsModule } from '@angular/forms';
                 </div>
 
                 <!-- Subtitle / Value Field -->
-                <div class="input-v2 mt-3" *ngIf="hasProperty('subtitle')">
+                <div class="input-v2 mt-3" *ngIf="hasProperty('subtitle') && !isAccordion">
                     <label>Subtítulo o Valor</label>
                     <input type="text" 
                            class="text-v2" 
@@ -379,7 +379,11 @@ export class ContentEditorComponent {
 
   get shouldShowTextFields(): boolean {
     // Accordion shouldn't show main text fields if it doesn't have them explicitly
-    if (this.isAccordion && !this.hasProperty('title') && !this.hasProperty('subtitle')) return false;
+    if (this.isAccordion) {
+        // For accordion, we typically only support Title and maybe Description. Subtitle is not standard.
+        // We ensure we check if 'title' exists, but we can be strict about hiding subtitle.
+        return this.hasProperty('title') || this.hasProperty('text') || this.hasProperty('description');
+    }
     
     return this.hasProperty('title') || 
            this.hasProperty('subtitle') || 
