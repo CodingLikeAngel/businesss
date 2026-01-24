@@ -338,6 +338,23 @@ export class VariantService {
   constructor() {
     this.loadFromLocalStorage();
   }
+
+  /** Devuelve la configuración completa del editor (para exportar). */
+  getFullConfig(): any {
+    return {
+      pageTitle: this.headerConfigSubject.value.title || 'Mi sitio Anto Studios',
+      globalVariant: {
+        theme: this.globalVariantSubject.value,
+        styles: {} // Aquí se podrían añadir estilos globales computados
+      },
+      sections: this.sectionsSubject.value || [],
+      header: this.headerConfigSubject.value,
+      footer: this.footerConfigSubject.value,
+      pages: this.pagesSubject.value,
+      assets: [] // Placeholder para futuros assets
+    };
+  }
+
   // Existing BehaviorSubjects
   private headerConfigSubject = new BehaviorSubject<HeaderConfig>({
     variant: 'glass',
@@ -1340,27 +1357,6 @@ export class VariantService {
   }
 
   // Get full configuration state (useful for snapshots/backups)
-  getFullConfig() {
-    return {
-      header: this.headerConfigSubject.getValue(),
-      footer: this.footerConfigSubject.getValue(),
-      navBar: this.navBarConfigSubject.getValue(),
-      hero: this.heroConfigSubject.getValue(),
-      bubble: this.bubbleConfigSubject.getValue(),
-      card: this.cardConfigSubject.getValue(),
-      title: this.titleConfigSubject.getValue(),
-      serviceCards: this.serviceCardsConfigSubject.getValue(),
-      faq: this.faqConfigSubject.getValue(),
-      pricing: this.pricingConfigSubject.getValue(),
-      promotions: this.promotionsConfigSubject.getValue(),
-      gallery: this.galleryConfigSubject.getValue(),
-      products: this.productsConfigSubject.getValue(),
-      testimonials: this.testimonialsConfigSubject.getValue(),
-      globalVariant: this.globalVariantSubject.getValue(),
-      componentVariants: this.componentVariantsSubject.getValue(),
-      sections: this.sectionsSubject.getValue(),
-    };
-  }
 
 
 

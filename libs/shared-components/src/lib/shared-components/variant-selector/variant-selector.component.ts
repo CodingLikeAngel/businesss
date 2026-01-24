@@ -30,6 +30,7 @@ import { ComponentExplorerComponent } from './component-explorer.component';
 import { ContentEditorComponent } from './content-editor.component';
 import { DesignEditorComponent } from './design-editor.component';
 import { PresetSelectorComponent } from './preset-selector.component';
+import { ExportPanelComponent } from './export-panel.component';
 // import { TemplateSelectorComponent } from '../template-selector/template-selector.component';
 
 // Import services
@@ -52,7 +53,8 @@ import { ExportService } from './export.service';
     ComponentExplorerComponent,
     ContentEditorComponent,
     DesignEditorComponent,
-    PresetSelectorComponent
+    PresetSelectorComponent,
+    ExportPanelComponent
   ],
   templateUrl: './variant-selector.component.html',
   styleUrl: './variant-selector.component.scss',
