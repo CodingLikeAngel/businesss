@@ -19,9 +19,10 @@ export class PresetSelectorComponent {
   @Input() isCollapsed = false;
 
   presets = [
-    { id: 'agency', name: 'Agencia', variant: 'glass' },
-    { id: 'clinic', name: 'Clínica', variant: 'neon' },
-    { id: 'fitness', name: 'Fitness', variant: 'cyberpunk' },
+    { name: 'Prestige Corporate', id: 'prestige', variant: 'glass' },
+    { name: 'Quantum Fitness', id: 'fitness', variant: 'neon' },
+    { name: 'Midnight Agency', id: 'agency', variant: 'cyberpunk' },
+    { name: 'Vogue Boutique', id: 'boutique', variant: 'minimal' }
   ];
 
   constructor(

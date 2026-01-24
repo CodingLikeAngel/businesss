@@ -6,8 +6,8 @@
           <span class="logo-dot"></span>
        </div>
        <div class="brand-text" *ngIf="!isCollapsed">
-          <h1>NEON</h1>
-          <span class="version">v2.0 PREVIEW</span>
+          <h1>ANTO</h1>
+          <span class="version">STUDIOS v2.0</span>
        </div>
     </div>
     <button class="toggle-v2-btn" (click)="toggleCollapse.emit()">
@@ -54,15 +54,14 @@
     </div>
   </nav>
 
-  <!-- Panel de exportación -->
-  <lib-export-panel></lib-export-panel>
-
   <!-- Main Panel Area -->
   <main class="sidebar-v2-panel" *ngIf="!isCollapsed">
     <div class="panel-inner-v2">
       
       <!-- PAGES PANEL -->
       <section class="panel-v2" *ngIf="activeTab === 'pages'">
+        <lib-preset-selector></lib-preset-selector>
+        <div class="panel-divider"></div>
         <lib-page-management (pageSelected)="setActiveTab('structure')"></lib-page-management>
       </section>
 
@@ -160,6 +159,9 @@
         </div>
       </section>
       
+      <div class="panel-sticky-footer">
+        <lib-export-panel></lib-export-panel>
+      </div>
     </div>
   </main>
 </div>

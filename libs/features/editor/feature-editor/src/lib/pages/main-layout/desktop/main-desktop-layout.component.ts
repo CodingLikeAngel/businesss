@@ -28,14 +28,14 @@ import { EditorFooterSectionComponent } from '../../editor/components/footer/edi
 })
 export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
   isSidebarCollapsed = false;
-  sidebarWidth = 450;
+  sidebarWidth = 400;
   isResizing = false;
 
   @HostListener('window:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {
     if (!this.isResizing) return;
     const newWidth = event.clientX;
-    if (newWidth >= 300 && newWidth <= 800) {
+    if (newWidth >= 360 && newWidth <= 800) {
       this.sidebarWidth = newWidth;
     }
   }

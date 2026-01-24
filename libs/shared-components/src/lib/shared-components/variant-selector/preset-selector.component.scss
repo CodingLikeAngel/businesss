@@ -1,58 +1,56 @@
 /* Preset selector styling */
 .preset-selector {
-  padding: 0 1rem 1rem 1rem;
-  background: var(--bg-sidebar);
-  border-top: 1px solid var(--glass-border);
-  /* margin-top: 1rem; removed to sit flush */
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .preset-title {
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: var(--text-main);
-  margin-bottom: 0.5rem;
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin: 0;
 }
 
 .preset-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
 }
 
 .preset-card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 8px;
-  padding: 0.5rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  padding: 0.75rem 0.5rem;
   color: var(--text-main);
   font-size: 0.8rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   text-align: center;
-}
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
 
-.preset-card:hover {
-  background: rgba(255,255,255,0.08);
-  border-color: var(--accent);
+  &:hover {
+    background: rgba(99, 102, 241, 0.1);
+    border-color: rgba(99, 102, 241, 0.4);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+
+  &::before {
+    content: '🎨';
+    font-size: 1.2rem;
+    margin-bottom: 2px;
+  }
 }
 
 .export-btn {
-  width: 100%;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 0.6rem;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  transition: background 0.2s ease;
-}
-
-.export-btn:hover {
-  background: var(--accent-glow);
+  display: none; /* Removed as it's now in the sticky footer */
 }

@@ -198,6 +198,53 @@
       gap: 0.75rem;
       cursor: pointer;
 
+      .ui-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+
+    &.variant--glass {
+        .input-wrapper {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: var(--p-radius-sm);
+            transition: var(--p-transition-med);
+            
+            &:focus-within {
+                border-color: var(--p-primary);
+                background: rgba(255,255,255,0.05);
+                box-shadow: 0 0 15px var(--p-primary-glare);
+            }
+        }
+
+        input, select, textarea {
+            background: transparent;
+            border: none;
+            color: white;
+            padding: 0.75rem 1rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            width: 100%;
+            outline: none;
+            
+            &::placeholder { color: var(--p-dim); }
+        }
+
+        select {
+            cursor: pointer;
+            option { background: var(--p-darker); color: white; }
+        }
+    }
+}
+
+.input-label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: var(--p-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+}
       .input[type="checkbox"] {
         width: 20px;
         height: 20px;

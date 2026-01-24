@@ -1,26 +1,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
 :root {
-  // Brand Colors (Elite)
+  // Brand Colors (Elite Spectrum)
   --p-primary: #6366f1;
   --p-primary-glare: rgba(99, 102, 241, 0.4);
   --p-accent: #f43f5e;
   --p-accent-glare: rgba(244, 63, 94, 0.4);
+  --p-cyan: #06b6d4;
+  --p-purple: #a855f7;
+  
+  // Neutral Spectrum
   --p-dark: #0f172a;
   --p-darker: #020617;
+  --p-black: #000000;
   --p-light: #f8fafc;
+  --p-dim: #64748b;
 
-  // UI Tokens
+  // UI Semantic Tokens
+  --sidebar-w: 380px;
+  --dock-w: 72px;
+  
+  // Glass Design System
   --p-glass-bg: rgba(255, 255, 255, 0.03);
   --p-glass-border: rgba(255, 255, 255, 0.08);
-  --p-blur: 12px;
-  --p-radius-sm: 8px;
-  --p-radius-md: 16px;
-  --p-radius-lg: 24px;
+  --p-glass-heavy: rgba(15, 23, 42, 0.8);
+  --p-blur: 16px;
+  
+  // Radius System
+  --p-radius-xs: 6px;
+  --p-radius-sm: 12px;
+  --p-radius-md: 20px;
+  --p-radius-lg: 32px;
+  --p-radius-full: 9999px;
+  
+  // Elevation & Shadows
+  --p-shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --p-shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --p-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --p-shadow-glow: 0 0 20px var(--p-primary-glare);
   
   // Transitions
-  --p-transition-slow: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-  --p-transition-med: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --p-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --p-transition-slow: all 0.6s var(--p-ease);
+  --p-transition-med: all 0.3s var(--p-ease);
+  --p-transition-fast: all 0.15s var(--p-ease);
 }
 
 body {
@@ -30,19 +53,23 @@ body {
   margin: 0;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 h1, h2, h3, h4, h5, h6 {
   font-family: 'Outfit', sans-serif;
   letter-spacing: -0.02em;
+  margin: 0;
 }
 
-// Global Luxury Classes
+// PREMIUM UTILITY CLASSES
 .glass-panel {
   background: var(--p-glass-bg);
   backdrop-filter: blur(var(--p-blur));
   border: 1px solid var(--p-glass-border);
   border-radius: var(--p-radius-md);
+  position: relative;
+  overflow: hidden;
 }
 
 .premium-gradient-text {
@@ -50,45 +77,66 @@ h1, h2, h3, h4, h5, h6 {
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
+  display: inline-block;
 }
 
 .glow-hover {
   transition: var(--p-transition-med);
   &:hover {
-    box-shadow: 0 0 30px var(--p-primary-glare);
+    box-shadow: var(--p-shadow-glow);
     border-color: var(--p-primary);
+    transform: translateY(-1px);
   }
 }
 
-// Layout Utils
 .section-premium {
-  padding: 8rem 0;
+  padding: 10rem 0;
   position: relative;
+  @media (max-width: 768px) {
+    padding: 6rem 0;
+  }
 }
 
 .container-premium {
-  max-width: 1280px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 2.5rem;
 }
 
-// Animations
+// ANIMATIONS
 @keyframes floating {
-  0% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
-  100% { transform: translateY(0px); }
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
 }
 
 .animate-floating {
-  animation: floating 3s ease-in-out infinite;
+  animation: floating 4s ease-in-out infinite;
 }
 
 .reveal-on-scroll {
   opacity: 0;
-  transform: translateY(20px);
+  transform: translateY(30px);
   transition: var(--p-transition-slow);
   &.visible {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+// SCROLLBARS
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--p-glass-border);
+  border-radius: 10px;
+  &:hover {
+    background: var(--p-dim);
   }
 }
