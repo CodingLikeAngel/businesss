@@ -1318,20 +1318,28 @@ export class VisualEditorService {
       .visual-selected {
         outline: 3px solid #3b82f6 !important;
         outline-offset: 4px !important;
-        box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.05), 0 0 30px rgba(59, 130, 246, 0.6) !important;
+        box-shadow: 0 0 30px rgba(59, 130, 246, 0.6) !important;
         z-index: 10000 !important;
         overflow: visible !important;
       }
 
-      /* Robust container handling: ONLY for canvas content to avoid breaking the editor shell */
-      .frame-content header, 
-      .frame-content .header, 
-      .frame-content .hero-section,
-      .frame-content .navbar,
-      .frame-content [id*="navbar"] {
+      /* GLOBAL ROBUSTNESS: Sections must stay in relative flow by default */
+      .builder-shell .frame-content .editor-section {
+        position: relative !important;
+        box-sizing: border-box !important;
+        min-height: 50px !important;
+        transform: none !important;
+        transition: none !important;
+      }
+
+      /* STICKY LOCK: Only for canvas content to avoid breaking the editor shell controls */
+      .builder-shell .frame-content header, 
+      .builder-shell .frame-content .header, 
+      .builder-shell .frame-content .navbar,
+      .builder-shell .frame-content [id*="navbar"] {
         position: sticky !important;
         top: 0 !important;
-        z-index: 100 !important; /* High enough for content, but under editor controls */
+        z-index: 100 !important;
         transform: none !important;
         left: 0 !important;
         width: 100% !important;

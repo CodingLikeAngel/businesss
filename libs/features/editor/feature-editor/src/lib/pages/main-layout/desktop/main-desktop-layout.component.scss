@@ -202,6 +202,10 @@
 
   &::-webkit-scrollbar { width: 8px; }
   &::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
+  
+  /* Create stacking context to prevent internal z-index: 10000 from leaking to sidebars */
+  isolation: isolate;
+  z-index: 1;
 }
 
 .canvas-wrapper {
