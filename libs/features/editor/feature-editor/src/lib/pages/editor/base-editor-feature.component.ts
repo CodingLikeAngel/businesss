@@ -286,6 +286,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.onResize();
+    this.visualEditorService.enableEditMode();
   }
 
   selectSection(event: Event, section: any) {
@@ -458,6 +459,34 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
 
       const command = new StyleChangeCommand('element', elementId, section.id, oldStyles, newStyles, this.store);
       this.historyService.execute(command);
+    }
+
+    // 3. Handle card items in arrays (e.g. Hero cards, feature cards)
+    if (elementId.includes('_card_')) {
+      const parts = elementId.split('_card_');
+      const index = parseInt(parts[1], 10);
+      const items = section.content['items'] || [];
+      
+      if (!isNaN(index) && items[index]) {
+        const item = items[index];
+        const oldStyles = { ...(item.styles || {}) };
+        const newStyles = {
+          ...oldStyles,
+          position: 'absolute',
+          left: `${Math.round(relativeX)}px`,
+          top: `${Math.round(relativeY)}px`,
+          zIndex: '10',
+          width: bounds.width + 'px',
+          height: bounds.height + 'px'
+        };
+
+        // Create deep copy of items to avoid mutation
+        const newItems = [...items];
+        newItems[index] = { ...item, styles: newStyles };
+
+        const command = new StyleChangeCommand('section', section.id, null, section.content, { ...section.content, items: newItems }, this.store);
+        this.historyService.execute(command);
+      }
     }
   }
 

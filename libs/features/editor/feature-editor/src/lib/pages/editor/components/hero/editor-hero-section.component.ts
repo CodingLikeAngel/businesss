@@ -76,18 +76,21 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
 
   ngAfterViewInit() {
     // Standardize content: map navigationCards to 'items' for generic editor support
-    if (!this.section.content['items']) {
-      const initialCards = this.heroConfig.navigationCards || [];
-      
-      // Dispatch update to store to initialize items
-      this.variantService.updateSectionInCurrentPage(this.section.id, {
-        content: {
-          ...this.section.content,
-          items: JSON.parse(JSON.stringify(initialCards)),
-          navigationCards: this.section.content['navigationCards'] ? undefined : JSON.parse(JSON.stringify(initialCards))
-        }
-      });
-    }
+    // Wrapped in setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
+    setTimeout(() => {
+      if (!this.section.content['items']) {
+        const initialCards = this.heroConfig.navigationCards || [];
+        
+        // Dispatch update to store to initialize items
+        this.variantService.updateSectionInCurrentPage(this.section.id, {
+          content: {
+            ...this.section.content,
+            items: JSON.parse(JSON.stringify(initialCards)),
+            navigationCards: this.section.content['navigationCards'] ? undefined : JSON.parse(JSON.stringify(initialCards))
+          }
+        });
+      }
+    });
 
     // Apply standardized visual editing to static elements
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
@@ -280,42 +283,14 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
    * Custom event handling for hero-specific logic
    */
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
+    // Let parent (BaseEditorFeatureComponent) handle these events
+    // to avoid double updates with the global state (Store)
+    
+    /* 
     if (elementId === this.section.id + '_title') {
-      switch (event.type) {
-        case 'moved':
-        case 'resized':
-          this.updateTitleStyles(event.bounds);
-          break;
-      }
-    } else if (elementId === this.section.id + '_subtitle') {
-      switch (event.type) {
-        case 'moved':
-        case 'resized':
-          this.updateSubtitleStyles(event.bounds);
-          break;
-      }
-    } else if (elementId === this.section.id + '_cta') {
-      switch (event.type) {
-        case 'moved':
-        case 'resized':
-          this.updateCtaStyles(event.bounds);
-          break;
-      }
-    } else if (elementId.includes('_card_')) {
-      // Dynamic card handling
-      const parts = elementId.split('_card_');
-      if (parts.length > 1) {
-        const index = parseInt(parts[1], 10);
-        if (!isNaN(index)) {
-           switch (event.type) {
-            case 'moved':
-            case 'resized':
-              this.updateCardStyles(index, event.bounds);
-              break;
-          }
-        }
-      }
+      // ...
     }
+    */
   }
 
   private updateTitleStyles(bounds: any): void {

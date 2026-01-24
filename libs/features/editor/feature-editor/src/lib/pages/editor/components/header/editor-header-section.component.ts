@@ -56,13 +56,23 @@ export class EditorHeaderSectionComponent extends EnhancedBaseEditorSectionCompo
   }
 
   ngAfterViewInit() {
+    // Standardize content for editing
     if (!this.section.content['items'] && this.section.content['navItems']) {
-      this.variantService.updateSectionInCurrentPage(this.section.id, {
-        content: {
+      const items = JSON.parse(JSON.stringify(this.section.content['navItems']));
+      
+      if (this.section.id === 'global_header') {
+        this.variantService.updateHeaderConfig({
           ...this.section.content,
-          items: JSON.parse(JSON.stringify(this.section.content['navItems']))
-        }
-      });
+          navItems: items
+        });
+      } else {
+        this.variantService.updateSectionInCurrentPage(this.section.id, {
+          content: {
+            ...this.section.content,
+            items: items
+          }
+        });
+      }
     }
 
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
@@ -100,11 +110,8 @@ export class EditorHeaderSectionComponent extends EnhancedBaseEditorSectionCompo
   }
 
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_header' || elementId === this.section.id) {
-      if (['moved', 'resized'].includes(event.type)) {
-        this.updateHeaderStyles(event.bounds);
-      }
-    }
+    // Let parent (MainLayoutBaseComponent) handle global header events
+    // or BaseEditorFeatureComponent handle local header section events
   }
 
   private updateHeaderStyles(bounds: any): void {

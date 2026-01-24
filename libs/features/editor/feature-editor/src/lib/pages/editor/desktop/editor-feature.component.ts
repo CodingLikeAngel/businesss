@@ -96,21 +96,17 @@ import { EditorGenericSectionComponent } from '../components/generic/editor-gene
 })
 
 export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent implements OnInit {
-  private simpleEditor = inject(SimpleVisualEditorService);
 
   override ngOnInit() {
     super.ngOnInit();
     this.editorService.updateEditorState({ isMobile: false });
-    
-    // Use the new simple visual editor
-    this.simpleEditor.enableEditMode();
   }
 
   get currentMode() {
-    return this.simpleEditor.getMode();
+    return this.visualEditorService.interactionMode;
   }
 
   setMode(mode: 'all' | 'move' | 'resize') {
-    this.simpleEditor.setMode(mode);
+    this.visualEditorService.setInteractionMode(mode);
   }
 }
