@@ -278,6 +278,7 @@ export class VisualEditorService {
     this.addGlobalStyles();
     this.updateGlobalCursor();
     this.setupKeyboardShortcuts();
+    this.setupMarqueeSelection();
     
     // Scan for editable elements after a short delay to ensure DOM is ready
     setTimeout(() => {
@@ -390,6 +391,118 @@ export class VisualEditorService {
         //   this.selectAll();
         // }
       });
+  }
+
+  /**
+   * Setup marquee selection (Shift+Drag to select multiple elements)
+   */
+  private setupMarqueeSelection(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    let marquee: HTMLElement | null = null;
+    let startX = 0;
+    let startY = 0;
+    let isMarqueeActive = false;
+
+    const onMouseDown = (e: MouseEvent) => {
+      // Only activate with Shift key
+      if (!e.shiftKey || !this.isEditMode) return;
+      
+      // Don't start marquee if clicking on an element
+      const target = e.target as HTMLElement;
+      if (target.classList.contains('visual-editable') || 
+          target.closest('.visual-editable')) {
+        return;
+      }
+
+      isMarqueeActive = true;
+      startX = e.clientX;
+      startY = e.clientY;
+
+      // Create marquee element
+      marquee = this.renderer.createElement('div');
+      this.renderer.addClass(marquee, 'marquee-selection');
+      this.renderer.setStyle(marquee, 'position', 'fixed');
+      this.renderer.setStyle(marquee, 'border', '2px dashed #6366f1');
+      this.renderer.setStyle(marquee, 'background', 'rgba(99, 102, 241, 0.1)');
+      this.renderer.setStyle(marquee, 'left', `${startX}px`);
+      this.renderer.setStyle(marquee, 'top', `${startY}px`);
+      this.renderer.setStyle(marquee, 'width', '0px');
+      this.renderer.setStyle(marquee, 'height', '0px');
+      this.renderer.setStyle(marquee, 'z-index', '10001');
+      this.renderer.setStyle(marquee, 'pointer-events', 'none');
+      this.renderer.appendChild(document.body, marquee);
+
+      e.preventDefault();
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      if (!isMarqueeActive || !marquee) return;
+
+      const currentX = e.clientX;
+      const currentY = e.clientY;
+
+      const width = Math.abs(currentX - startX);
+      const height = Math.abs(currentY - startY);
+      const left = Math.min(currentX, startX);
+      const top = Math.min(currentY, startY);
+
+      this.renderer.setStyle(marquee, 'left', `${left}px`);
+      this.renderer.setStyle(marquee, 'top', `${top}px`);
+      this.renderer.setStyle(marquee, 'width', `${width}px`);
+      this.renderer.setStyle(marquee, 'height', `${height}px`);
+    };
+
+    const onMouseUp = () => {
+      if (!isMarqueeActive || !marquee) return;
+
+      const marqueeRect = marquee.getBoundingClientRect();
+      const selectedElements: HTMLElement[] = [];
+
+      // Check which elements intersect with marquee
+      this.registeredElements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (this.rectsIntersect(marqueeRect, rect)) {
+          selectedElements.push(el);
+        }
+      });
+
+      // Select all intersecting elements
+      if (selectedElements.length > 0) {
+        this.selectMultiple(selectedElements);
+        console.log(`📦 Marquee selected ${selectedElements.length} elements`);
+      }
+
+      // Cleanup
+      if (marquee && marquee.parentNode) {
+        marquee.parentNode.removeChild(marquee);
+      }
+      marquee = null;
+      isMarqueeActive = false;
+    };
+
+    // Attach listeners
+    fromEvent<MouseEvent>(document, 'mousedown')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(onMouseDown);
+
+    fromEvent<MouseEvent>(document, 'mousemove')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(onMouseMove);
+
+    fromEvent<MouseEvent>(document, 'mouseup')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(onMouseUp);
+  }
+
+  /**
+   * Check if two rectangles intersect
+   */
+  private rectsIntersect(r1: DOMRect, r2: DOMRect): boolean {
+    return !(r1.right < r2.left || 
+             r1.left > r2.right || 
+             r1.bottom < r2.top || 
+             r1.top > r2.bottom);
   }
 
   /**
