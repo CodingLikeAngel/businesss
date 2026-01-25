@@ -1,258 +1,135 @@
-# Plan de Implementación: Componentes Editables en el Editor
+# Plan de Implementación: Arquitectura Dual de Componentes (Secciones vs Atoms)
 
 ## 📋 Objetivo
 
-Hacer que todos los componentes de la librería UI sean completamente editables en el editor visual, con soporte para:
+Evolucionar la librería de componentes del editor hacia un sistema de **dos pestañas**:
 
-- ✅ Custom styles (backgroundColor, color, etc.)
-- ✅ Variant selection
-- ✅ Property editing en tiempo real
-- ✅ Visual feedback
+1.  **UI Components (Atoms/Molecules)**: Componentes individuales como Botones, Títulos, Chips, etc.
+2.  **Wrapped Sections (Organisms)**: Secciones completas pre-armadas como Heros, Servicios o Galerías.
 
-## 🎯 Estado Actual
-
-### ✅ Componentes YA Implementados (Con Editor Wrapper)
-
-Estos componentes ya tienen su wrapper en `libs/features/editor/feature-editor/src/lib/pages/editor/components/`:
-
-1. ✅ **accordion** - Editor wrapper completo
-2. ✅ **breadcrumbs** - Editor wrapper completo
-3. ✅ **bubble** - Editor wrapper completo
-4. ✅ **chart** - Editor wrapper completo
-5. ✅ **chip** - Editor wrapper completo
-6. ✅ **contact** - Editor wrapper completo
-7. ✅ **cta** - Editor wrapper completo
-8. ✅ **faq** - Editor wrapper completo
-9. ✅ **features** - Editor wrapper completo
-10. ✅ **footer** - Editor wrapper completo
-11. ✅ **gallery** - Editor wrapper completo
-12. ✅ **header** - Editor wrapper completo
-13. ✅ **hero** - Editor wrapper completo
-14. ✅ **list** - Editor wrapper completo
-15. ✅ **newsletter** - Editor wrapper completo
-16. ✅ **pricing** - Editor wrapper completo
-17. ✅ **products** - Editor wrapper completo
-18. ✅ **promotions** - Editor wrapper completo
-19. ✅ **services** - Editor wrapper completo
-20. ✅ **showcase** - Editor wrapper completo
-21. ✅ **spinner** - Editor wrapper completo
-22. ✅ **stats** - Editor wrapper completo
-23. ✅ **steps** - Editor wrapper completo
-24. ✅ **table** - Editor wrapper completo
-25. ✅ **tabs** - Editor wrapper completo
-26. ✅ **testimonials** - Editor wrapper completo
-
-### ❌ Componentes FALTANTES (Sin Editor Wrapper)
-
-Estos componentes existen en `libs/ui-components/src/lib/` pero NO tienen wrapper de editor:
-
-1. ❌ **button** - Falta wrapper
-2. ❌ **image** - Falta wrapper
-3. ❌ **modal** - Falta wrapper (solo se usa como overlay, no como sección)
-4. ❌ **card** (genérico) - Falta wrapper
-5. ❌ **card-rutas** - Falta wrapper
-6. ❌ **card-premium** - Falta wrapper
-7. ❌ **tooltip** - Falta wrapper (componente auxiliar)
-8. ❌ **title** - Falta wrapper
-9. ❌ **input** - Falta wrapper
-10. ❌ **date-time-picker** - Falta wrapper
+Además, asegurar que el **100% de la librería de UI** en `libs/ui-components/` tenga un wrapper de editor funcional.
 
 ---
 
-## 📝 Plan de Implementación por Fases
+## �️ Nueva Arquitectura de la Librería
 
-### **FASE 1: Componentes de Alta Prioridad** (Día 1-2)
+### 1. Tab: UI Components (Atoms)
 
-#### 1.1 Button Component
+Componentes de grano fino diseñados para ser usados individualmente o insertados en contenedores genéricos.
 
-**Archivo**: `libs/features/editor/feature-editor/src/lib/pages/editor/components/button/editor-button-section.component.ts`
+- **Mapeo**: `lib-ui-components-[name]`
+- **Comportamiento**: Se añaden como secciones de componente único o elementos dentro de un `smart-container`.
+
+### 2. Tab: Wrapped Sections (Organisms)
+
+Composiciones complejas que ocupan un bloque completo de la página.
+
+- **Mapeo**: `lib-editor-[name]-section`
+- **Comportamiento**: Secciones full-width con placeholders y configuración temática completa.
+
+---
+
+## 🎯 Estado de Mapeo Completo
+
+### ✅ SECCIONES (Organismos) - YA Implementadas
+
+1.  **hero** - Full section
+2.  **features** - Grid de características
+3.  **stats** - Contadores y métricas
+4.  **services** - Listado de servicios
+5.  **pricing** - Tablas de precios
+6.  **promotions** - Banners de oferta
+7.  **testimonials** - Carrusel de opiniones
+8.  **gallery** - Grid de imágenes
+9.  **contact** - Formulario completo + Mapa
+10. **header** - Navegación global
+11. **footer** - Pie de página global
+12. **newsletter** - Captación de leads
+13. **steps** - Proceso / Timeline
+14. **showcase** - Muestra destacada
+15. **faq** - Preguntas frecuentes
+
+### 🛠️ UI COMPONENTS (Atoms) - En Proceso / Faltantes
+
+| Componente           | Estado Editor   | Priority |
+| :------------------- | :-------------- | :------- |
+| **button**           | ✅ Wrapper Base | High     |
+| **title**            | ✅ Wrapper Base | High     |
+| **image**            | ✅ Wrapper Base | High     |
+| **chip**             | ✅ Wrapper Base | Medium   |
+| **spinner**          | ✅ Wrapper Base | Low      |
+| **breadcrumbs**      | ✅ Wrapper Base | Medium   |
+| **card (Generic)**   | ✅ Wrapper Base | High     |
+| **input**            | ✅ Wrapper Base | High     |
+| **accordion**        | ✅ Wrapper Base | Medium   |
+| **tabs**             | ✅ Wrapper Base | Medium   |
+| **card-animated**    | ❌ Faltante     | High     |
+| **card-premium**     | ❌ Faltante     | High     |
+| **card-rutas**       | ❌ Faltante     | Medium   |
+| **card-products**    | ❌ Faltante     | High     |
+| **date-time-picker** | ❌ Faltante     | Medium   |
+| **tooltip**          | ❌ Faltante     | Low      |
+| **modal**            | ❌ Faltante     | Medium   |
+| **chart**            | ✅ Wrapper Base | Medium   |
+
+---
+
+## 📝 Plan de Acción Inmediato
+
+### FASE 1: Interfaz del Explorador (Dual-Tab)
+
+**Archivo**: `libs/shared-components/src/lib/shared-components/variant-selector/component-explorer.component.ts`
+
+- [ ] Añadir selector de pestañas (Tabs: SECCIONES | COMPONENTES).
+- [ ] Implementar propiedad `libraryType` en el modelo `SectionVariant`.
+- [ ] Filtrar la cuadrícula según la pestaña activa.
+- [ ] Mejorar la categorización secundaria (Contenido, Comercio, etc.).
+
+### FASE 2: Completar Wrappers Atomizados
+
+Crear los wrappers faltantes para que todos los elementos UI sean editables:
+
+1.  **EditorCardAnimatedSection**
+2.  **EditorCardPremiumSection**
+3.  **EditorCardRutasSection**
+4.  **EditorModalSection** (Permitir editar el contenido del modal como una sección)
+
+### FASE 3: Enriquecer Property Editing
+
+Asegurar que los componentes atomizados tengan todos sus inputs mapeados en el editor:
+
+- Botones: Iconos leading/trailing, tamaños, estados de carga.
+- Títulos: Alineación fluid, gradientes temáticos.
+- Cards: Configuración de sombra, bordes y hover-effects.
+
+---
+
+## � Formato del Modelo en el Explorador
+
+Para soportar las dos pestañas, el objeto de configuración en `component-explorer.component.ts` debe ampliarse:
 
 ```typescript
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { UIButtonComponent } from '@negocio/ui-components';
-import { ApplyDynamicStylesDirective, VisualEditableDirective } from '@negocio/shared-components';
-import { BaseEditorSectionComponent } from '../base-editor-section.component';
-
-@Component({
-  selector: 'lib-editor-button-section',
-  standalone: true,
-  imports: [CommonModule, UIButtonComponent, ApplyDynamicStylesDirective, VisualEditableDirective],
-  template: `
-    <div *ngIf="!isMobile" class="editor-section cursor-pointer py-8" [class.is-selected]="selectedSectionId === section.id" (click)="selectSection($event, section)" [applyDynamicStyles]="section.styles" [visualEditable]="true" visualType="section">
-      <div class="container mx-auto px-6 max-w-7xl flex justify-center">
-        <lib-ui-components-button [variant]="getVariant(section.id)" [size]="section.content['size'] || 'md'" [rounded]="section.content['rounded'] || 'md'" [customStyles]="section.customStyles" class="editor-element" [class.is-selected]="selectedElementId === section.id + '_button'" (click)="selectElement($event, { id: section.id + '_button', sectionId: section.id, content: section.content, type: 'button' })" [visualEditable]="true" visualType="element">
-          {{ section.content['label'] || 'Button' }}
-        </lib-ui-components-button>
-      </div>
-    </div>
-  `,
-})
-export class EditorButtonSectionComponent extends BaseEditorSectionComponent {
-  @Input() override section: any;
+{
+  type: 'button',
+  label: 'Botón UI',
+  icon: '🔘',
+  variants: ['primary', 'glass', 'neon'],
+  category: 'interactive',
+  libraryType: 'component' // <--- NUEVO: Distingue pestaña
 }
 ```
 
-**HTML Template**: `editor-button-section.component.html`
+---
 
-#### 1.2 Title Component
+## 📊 Checklist de Calidad por Componente
 
-**Similar al Button**, pero usando `UITitleComponent`
-
-#### 1.3 Image Component
-
-**Similar**, pero con preview de imagen y upload
+- [ ] Soporta herencia de ADN Global (Architectural Bridge).
+- [ ] Editable visualmente (Drag/Resize si aplica).
+- [ ] Inputs mapeados en el panel lateral.
+- [ ] Preview funcional en el carrusel de variantes.
+- [ ] Responsive design nativo integrado.
 
 ---
 
-### **FASE 2: Componentes de Tarjetas** (Día 3)
-
-#### 2.1 Card (Genérico)
-
-#### 2.2 Card Rutas
-
-#### 2.3 Card Premium
-
-Todos siguiendo el mismo patrón de wrapper.
-
----
-
-### **FASE 3: Componentes de Formulario** (Día 4)
-
-#### 3.1 Input Component
-
-#### 3.2 Date-Time-Picker Component
-
----
-
-### **FASE 4: Componentes Auxiliares** (Día 5)
-
-#### 4.1 Tooltip Component
-
-#### 4.2 Modal Component (como sección editable)
-
----
-
-## 🔧 Patrón Estándar para Crear Wrappers
-
-### Estructura de Archivos
-
-```
-libs/features/editor/feature-editor/src/lib/pages/editor/components/
-└── [component-name]/
-    ├── editor-[component-name]-section.component.ts
-    └── editor-[component-name]-section.component.html
-```
-
-### Template TypeScript Base
-
-```typescript
-import { Component, Input } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { UI[ComponentName]Component } from '@negocio/ui-components';
-import {
-  ApplyDynamicStylesDirective,
-  VisualEditableDirective
-} from '@negocio/shared-components';
-import { BaseEditorSectionComponent } from '../base-editor-section.component';
-
-@Component({
-  selector: 'lib-editor-[component-name]-section',
-  standalone: true,
-  imports: [
-    CommonModule,
-    UI[ComponentName]Component,
-    ApplyDynamicStylesDirective,
-    VisualEditableDirective
-  ],
-  templateUrl: './editor-[component-name]-section.component.html'
-})
-export class Editor[ComponentName]SectionComponent extends BaseEditorSectionComponent {
-  @Input() override section: any;
-}
-```
-
-### Template HTML Base
-
-```html
-<!-- DESKTOP -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer py-12" [class.is-selected]="selectedSectionId === section.id" (click)="selectSection($event, section)" [applyDynamicStyles]="section.styles" [visualEditable]="true" visualType="section" (visualResized)="onSectionResized($event)">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-ui-[component-selector] [variant]="getVariant(section.id)" [customStyles]="section.customStyles" [applyDynamicStyles]="section.styles" class="editor-element" [class.is-selected]="selectedElementId === section.id + '_element'" (click)="selectElement($event, getMergedElement(section.id, section.id + '_element', section.content, 'element'))" [visualEditable]="true" visualType="element"> </lib-ui-[component-selector]>
-  </div>
-</div>
-
-<!-- MOBILE -->
-<div *ngIf="isMobile" class="editor-section cursor-pointer py-8 p-4" [class.is-selected]="selectedSectionId === section.id" (click)="selectSection($event, section)">
-  <!-- Similar pero simplificado -->
-</div>
-```
-
----
-
-## 📊 Checklist de Verificación
-
-Para cada componente nuevo, verificar:
-
-- [ ] ✅ Componente UI tiene `customStyles` input
-- [ ] ✅ Componente UI tiene `variant` input
-- [ ] ✅ Componente UI usa `computed()` para estilos
-- [ ] ✅ SCSS tiene `@include shared.apply-all-variants()`
-- [ ] ✅ SCSS tiene overrides `!important` para custom styles
-- [ ] ✅ Wrapper de editor creado
-- [ ] ✅ Wrapper usa `ApplyDynamicStylesDirective`
-- [ ] ✅ Wrapper usa `VisualEditableDirective`
-- [ ] ✅ Wrapper extiende `BaseEditorSectionComponent`
-- [ ] ✅ Template tiene versión desktop y mobile
-- [ ] ✅ Componente añadido a `component-explorer.component.ts`
-- [ ] ✅ Componente añadido al switch en `editor-feature.component.html`
-
----
-
-## 🚀 Comandos Útiles
-
-### Generar nuevo wrapper de editor
-
-```bash
-npx nx g @schematics/angular:component editor-[name]-section --project=feature-editor --path=libs/features/editor/feature-editor/src/lib/pages/editor/components/[name] --export --skip-tests --style=none --inline-template=false
-```
-
-### Compilar y verificar
-
-```bash
-npx nx build ui-components
-npx nx build feature-editor
-npx nx serve antoStudios
-```
-
----
-
-## 📅 Estimación de Tiempo
-
-- **Fase 1** (Button, Title, Image): 4-6 horas
-- **Fase 2** (Cards): 3-4 horas
-- **Fase 3** (Forms): 3-4 horas
-- **Fase 4** (Auxiliares): 2-3 horas
-
-**Total estimado**: 12-17 horas de trabajo
-
----
-
-## 🎯 Próximos Pasos INMEDIATOS
-
-1. **Crear wrapper para Button** (más simple, buen punto de partida)
-2. **Crear wrapper para Title** (muy usado)
-3. **Crear wrapper para Image** (visual, importante)
-4. **Actualizar component-explorer** para incluir estos componentes
-5. **Actualizar editor-feature.component.html** con los nuevos `*ngSwitchCase`
-
----
-
-## 📝 Notas Importantes
-
-- Todos los componentes UI ya tienen la estructura de custom styles
-- El patrón está bien establecido (header, footer, accordion)
-- Solo falta crear los wrappers de editor
-- La mayoría del trabajo es copy-paste y ajuste de nombres
-
-**Guardado**: `EDITOR_COMPONENTS_IMPLEMENTATION_PLAN.md`
+**Última actualización**: 25 Ene 2026
+**Responsable**: Antigravity AI

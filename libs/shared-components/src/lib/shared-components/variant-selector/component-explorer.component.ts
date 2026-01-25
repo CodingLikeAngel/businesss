@@ -43,6 +43,7 @@ interface SectionVariant {
   variants: string[];
   description: string;
   category: string;
+  libraryType: 'section' | 'component'; // 'section' for organisms, 'component' for atoms/molecules
 }
 
 @Component({
@@ -90,6 +91,26 @@ interface SectionVariant {
         <p class="subtitle-v2">Pulsa sobre un componente para previsualizarlo y añadirlo a tu lienzo.</p>
       </header>
 
+      <!-- Dual Tab Sidebar / Header -->
+      <div class="library-tabs-container">
+        <button 
+          class="library-tab" 
+          [class.active]="selectedLibraryType === 'section'"
+          (click)="selectLibraryType('section')">
+          <span class="tab-icon">🏗️</span>
+          <span>Secciones</span>
+          <div class="tab-indicator"></div>
+        </button>
+        <button 
+          class="library-tab" 
+          [class.active]="selectedLibraryType === 'component'"
+          (click)="selectLibraryType('component')">
+          <span class="tab-icon">🧩</span>
+          <span>Componentes UI</span>
+          <div class="tab-indicator"></div>
+        </button>
+      </div>
+
       <!-- Category Navigation -->
       <nav class="category-nav-v2">
         <button
@@ -125,6 +146,12 @@ interface SectionVariant {
             </div>
             <div class="comp-select-indicator" aria-hidden="true"></div>
           </div>
+        </div>
+        
+        <!-- Empty Results Message -->
+        <div *ngIf="filteredComponents.length === 0" class="empty-results">
+           <div class="empty-icon">📂</div>
+           <p>No se encontraron items en esta categoría para el tipo de librería seleccionado.</p>
         </div>
       </div>
 
@@ -272,8 +299,76 @@ interface SectionVariant {
       display: flex;
       flex-direction: column;
       height: 100%;
-      gap: 2rem;
+      gap: 1.5rem;
       padding: 1.5rem;
+    }
+
+    .library-tabs-container {
+      display: flex;
+      background: var(--surface);
+      border-radius: 1rem;
+      padding: 0.4rem;
+      border: 1px solid var(--border);
+      position: relative;
+      margin-bottom: 0.5rem;
+    }
+
+    .library-tab {
+      flex: 1;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 1;
+
+      .tab-icon {
+        font-size: 1.2rem;
+      }
+
+      &:hover {
+        color: var(--text-primary);
+        background: rgba(255,255,255,0.05);
+      }
+
+      &.active {
+        color: white;
+        background: var(--accent-color);
+        box-shadow: var(--accent-glow);
+        transform: translateY(-2px);
+      }
+    }
+
+    .empty-results {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 2rem;
+      background: rgba(255,255,255,0.02);
+      border-radius: 1.5rem;
+      border: 1px dashed var(--border);
+      margin-top: 1rem;
+      
+      .empty-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.3;
+      }
+
+      p {
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        max-width: 250px;
+        margin: 0 auto;
+      }
     }
 
     .explorer-header {
@@ -810,14 +905,15 @@ export class ComponentExplorerComponent implements OnInit {
   ];
 
   availableComponents: SectionVariant[] = [
-    // --- CONTENT SECTIONS ---
+    // --- WRAPPED SECTIONS (Organisms) ---
     {
       type: 'hero',
       label: 'Portada Hero',
       icon: '🚀',
       variants: ['glass', 'neon', 'cyberpunk', 'minimal', 'mario', 'rayman', 'rockstar'],
       description: 'Sección principal con título, subtítulo y llamada a la acción',
-      category: 'content'
+      category: 'content',
+      libraryType: 'section'
     },
     {
       type: 'cta',
@@ -825,7 +921,8 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '📢',
       variants: ['glass', 'neon', 'cyberpunk', 'minimal', 'mario'],
       description: 'Sección enfocada en convertir usuarios con un botón destacado',
-      category: 'content'
+      category: 'content',
+      libraryType: 'section'
     },
     {
       type: 'contact',
@@ -833,7 +930,8 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '📬',
       variants: ['default', 'glass', 'neon', 'minimal'],
       description: 'Formulario de reserva o contacto para tus clientes',
-      category: 'content'
+      category: 'content',
+      libraryType: 'section'
     },
     {
       type: 'header',
@@ -841,7 +939,8 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '🏳️',
       variants: ['primary', 'outline', 'glass', 'neon', 'cyberpunk', 'mario', 'rayman', 'rockstar'],
       description: 'Barra de navegación principal (Global)',
-      category: 'content'
+      category: 'content',
+      libraryType: 'section'
     },
     {
       type: 'footer',
@@ -849,7 +948,8 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '🦶',
       variants: ['primary', 'glass', 'neon', 'cyberpunk', 'mario', 'rayman', 'rockstar', 'ice', 'metal', 'energy', 'void'],
       description: 'Sección inferior con enlaces y redes sociales (Global)',
-      category: 'content'
+      category: 'content',
+      libraryType: 'section'
     },
     {
       type: 'faq',
@@ -857,7 +957,8 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '❓',
       variants: ['glass', 'accordion', 'minimal', 'neon', 'cyberpunk'],
       description: 'Sección de preguntas y respuestas con acordeón',
-      category: 'content'
+      category: 'content',
+      libraryType: 'section'
     },
     {
       type: 'features',
@@ -865,7 +966,8 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '✨',
       variants: ['glass', 'cards', 'icons', 'minimal', 'neon', 'cyberpunk'],
       description: 'Lista de características y beneficios clave',
-      category: 'content'
+      category: 'content',
+      libraryType: 'section'
     },
     {
       type: 'gallery',
@@ -873,7 +975,8 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '🖼️',
       variants: ['glass', 'grid', 'masonry', 'carousel', 'neon', 'cyberpunk'],
       description: 'Galería de imágenes y trabajos',
-      category: 'content'
+      category: 'content',
+      libraryType: 'section'
     },
     {
       type: 'stats',
@@ -881,7 +984,8 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '📊',
       variants: ['glass', 'cards', 'numbers', 'minimal', 'neon'],
       description: 'Métricas, contadores y números importantes',
-      category: 'content'
+      category: 'content',
+      libraryType: 'section'
     },
     {
       type: 'steps',
@@ -889,7 +993,8 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '👣',
       variants: ['default', 'glass', 'neon', 'vertical', 'horizontal'],
       description: 'Guía paso a paso o línea de tiempo',
-      category: 'content'
+      category: 'content',
+      libraryType: 'section'
     },
     {
       type: 'showcase',
@@ -897,7 +1002,8 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '💎',
       variants: ['default', 'glass', 'neon', 'interactive'],
       description: 'Muestra destacada de productos o servicios',
-      category: 'content'
+      category: 'content',
+      libraryType: 'section'
     },
     {
       type: 'testimonials',
@@ -905,17 +1011,17 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '⭐',
       variants: ['glass', 'cards', 'carousel', 'minimal', 'neon', 'cyberpunk'],
       description: 'Opiniones de clientes satisfechos',
-      category: 'content'
+      category: 'content',
+      libraryType: 'section'
     },
-
-    // --- COMMERCE SECTIONS ---
     {
       type: 'services',
       label: 'Servicios',
       icon: '🛠️',
       variants: ['glass', 'cards', 'grid', 'minimal', 'neon', 'cyberpunk'],
       description: 'Muestra los servicios ofrecidos con iconos y descripciones',
-      category: 'commerce'
+      category: 'commerce',
+      libraryType: 'section'
     },
     {
       type: 'pricing',
@@ -923,7 +1029,8 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '💰',
       variants: ['glass', 'cards', 'table', 'minimal', 'neon', 'cyberpunk'],
       description: 'Tabla de precios y planes disponibles',
-      category: 'commerce'
+      category: 'commerce',
+      libraryType: 'section'
     },
     {
       type: 'promotions',
@@ -931,7 +1038,8 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '🎁',
       variants: ['glass', 'cards', 'banner', 'minimal', 'neon'],
       description: 'Ofertas especiales y descuentos',
-      category: 'commerce'
+      category: 'commerce',
+      libraryType: 'section'
     },
     {
       type: 'newsletter',
@@ -939,7 +1047,8 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '📧',
       variants: ['default', 'glass', 'neon', 'minimal'],
       description: 'Suscripción a boletín de noticias',
-      category: 'commerce'
+      category: 'commerce',
+      libraryType: 'section'
     },
     {
       type: 'products',
@@ -947,169 +1056,19 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '🛍️',
       variants: ['glass', 'grid', 'list', 'minimal', 'neon'],
       description: 'Muestra de productos con información detallada',
-      category: 'commerce'
+      category: 'commerce',
+      libraryType: 'section'
     },
 
-    // --- INTERACTIVE & UI ELEMENTS ---
-    {
-      type: 'contact',
-      label: 'Contacto',
-      icon: '📞',
-      variants: ['glass', 'form', 'cards', 'minimal', 'neon', 'cyberpunk'],
-      description: 'Formulario de contacto e información de ubicación',
-      category: 'interactive'
-    },
-    {
-      type: 'bubble',
-      label: 'Efecto Burbujas',
-      icon: '🫧',
-      variants: ['glass', 'neon', 'cyberpunk', 'minimal'],
-      description: 'Animación de fondo con burbujas interactivas',
-      category: 'interactive'
-    },
-    {
-      type: 'tabs',
-      label: 'Pestañas (Tabs)',
-      icon: '📑',
-      variants: ['default', 'glass', 'neon', 'pills', 'underline', 'mario', 'cyberpunk'],
-      description: 'Navegación por pestañas para organizar contenido',
-      category: 'interactive'
-    },
-    {
-      type: 'accordion',
-      label: 'Acordeón',
-      icon: '↕️',
-      variants: ['default', 'glass', 'neon', 'minimal', 'mario', 'rayman', 'rockstar', 'cyberpunk'],
-      description: 'Lista de elementos expandibles',
-      category: 'interactive'
-    },
-    {
-      type: 'chart',
-      label: 'Gráficos y Datos',
-      icon: '📈',
-      variants: ['primary', 'secondary', 'glass', 'neon', 'cyberpunk'],
-      description: 'Visualización de datos con gráficos interactivos (Barras, Líneas, etc.)',
-      category: 'content'
-    },
-    {
-      type: 'list',
-      label: 'Lista de Items',
-      icon: '📋',
-      variants: ['default', 'glass', 'neon', 'minimal'],
-      description: 'Lista simple de elementos con viñetas personalizadas',
-      category: 'content'
-    },
-    {
-      type: 'modal',
-      label: 'Modal / Popup',
-      icon: '🔲',
-      variants: ['default', 'glass', 'neon', 'cyberpunk'],
-      description: 'Ventana emergente para contenido adicional',
-      category: 'interactive'
-    },
-    {
-      type: 'tooltip',
-      label: 'Tooltip',
-      icon: '💬',
-      variants: ['default', 'glass', 'neon', 'cyberpunk'],
-      description: 'Mensaje emergente al pasar el cursor',
-      category: 'interactive'
-    },
+    // --- UI COMPONENTS (Atoms) ---
     {
       type: 'button',
-      label: 'Botones UI',
+      label: 'Botón UI',
       icon: '🔘',
       variants: ['primary', 'secondary', 'outline', 'ghost', 'link', 'glass', 'neon', 'cyberpunk', 'mario'],
       description: 'Botones interactivos con múltiples estilos',
-      category: 'interactive'
-    },
-    {
-      type: 'chip',
-      label: 'Chips / Tags',
-      icon: '🏷️',
-      variants: ['default', 'outline', 'solid', 'glass', 'neon'],
-      description: 'Etiquetas compactas para categorías o filtros',
-      category: 'interactive'
-    },
-    {
-      type: 'spinner',
-      label: 'Loading Spinners',
-      icon: '⏳',
-      variants: ['default', 'circle', 'dots', 'bars', 'neon', 'glass'],
-      description: 'Indicadores de carga animados',
-      category: 'interactive'
-    },
-    {
-      type: 'breadcrumbs',
-      label: 'Breadcrumbs',
-      icon: '🗺️',
-      variants: ['default', 'slash', 'arrow', 'glass', 'neon'],
-      description: 'Navegación de migas de pan',
-      category: 'interactive'
-    },
-    {
-      type: 'card-animated',
-      label: 'Tarjeta Animada',
-      icon: '🃏',
-      variants: ['glass', 'neon', 'cyberpunk', 'mario', 'rayman', 'hover-scale'],
-      description: 'Tarjeta con efectos de animación avanzados',
-      category: 'content'
-    },
-    {
-      type: 'card-product',
-      label: 'Tarjeta Producto',
-      icon: '🛍️',
-      variants: ['default', 'glass', 'neon', 'minimal'],
-      description: 'Tarjeta específica para mostrar productos',
-      category: 'commerce'
-    },
-    {
-      type: 'card-testimonial',
-      label: 'Tarjeta Testimonio',
-      icon: '💬',
-      variants: ['default', 'glass', 'neon', 'quote', 'bubble'],
-      description: 'Tarjeta para mostrar reseñas de clientes',
-      category: 'social'
-    },
-    {
-      type: 'image',
-      label: 'Imagen Avanzada',
-      icon: '🖼️',
-      variants: ['default', 'rounded', 'circle', 'thumbnail', 'glass', 'neon', 'hover-zoom'],
-      description: 'Componente de imagen con efectos y lazy loading',
-      category: 'content'
-    },
-    {
-      type: 'smart-container',
-      label: 'Contenedor Inteligente',
-      icon: '📦',
-      variants: ['default', 'glass', 'neon', 'minimal'],
-      description: 'Bloque genérico completamente configurable para construir layouts personalizados',
-      category: 'content'
-    },
-    {
-      type: 'draggable-box',
-      label: 'Caja Arrastrable',
-      icon: '🎯',
-      variants: ['default', 'glass', 'neon', 'minimal'],
-      description: 'Elemento de prueba completamente arrastrable y redimensionable',
-      category: 'interactive'
-    },
-    {
-      type: 'table',
-      label: 'Tabla de Datos',
-      icon: '▦',
-      variants: ['default', 'striped', 'bordered', 'hover', 'glass', 'neon'],
-      description: 'Presentación tabular de datos',
-      category: 'content'
-    },
-    {
-      type: 'forms',
-      label: 'Elementos de Formulario',
-      icon: '📝',
-      variants: ['default', 'filled', 'outlined', 'glass', 'neon', 'floating'],
-      description: 'Inputs, selects y checkboxes estilizados',
-      category: 'interactive'
+      category: 'interactive',
+      libraryType: 'component'
     },
     {
       type: 'title',
@@ -1117,7 +1076,26 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '📜',
       variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft'],
       description: 'Títulos editables con nivel (h1-h6), alineación y animación',
-      category: 'content'
+      category: 'content',
+      libraryType: 'component'
+    },
+    {
+      type: 'image',
+      label: 'Imagen Avanzada',
+      icon: '🖼️',
+      variants: ['default', 'rounded', 'circle', 'thumbnail', 'glass', 'neon', 'hover-zoom'],
+      description: 'Componente de imagen con efectos y lazy loading',
+      category: 'content',
+      libraryType: 'component'
+    },
+    {
+      type: 'chip',
+      label: 'Chips / Tags',
+      icon: '🏷️',
+      variants: ['default', 'outline', 'solid', 'glass', 'neon'],
+      description: 'Etiquetas compactas para categorías o filtros',
+      category: 'interactive',
+      libraryType: 'component'
     },
     {
       type: 'card',
@@ -1125,7 +1103,35 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '🃏',
       variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft'],
       description: 'Tarjetas genéricas editables',
-      category: 'content'
+      category: 'content',
+      libraryType: 'component'
+    },
+    {
+      type: 'card-animated',
+      label: 'Tarjeta Animada',
+      icon: '🃏',
+      variants: ['glass', 'neon', 'cyberpunk', 'mario', 'rayman', 'hover-scale'],
+      description: 'Tarjeta con efectos de animación avanzados',
+      category: 'content',
+      libraryType: 'component'
+    },
+    {
+      type: 'card-product',
+      label: 'Tarjeta Producto',
+      icon: '🛍️',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Tarjeta específica para mostrar productos',
+      category: 'commerce',
+      libraryType: 'component'
+    },
+    {
+      type: 'card-testimonial',
+      label: 'Tarjeta Testimonio',
+      icon: '💬',
+      variants: ['default', 'glass', 'neon', 'quote', 'bubble'],
+      description: 'Tarjeta para mostrar reseñas de clientes',
+      category: 'social',
+      libraryType: 'component'
     },
     {
       type: 'input',
@@ -1133,15 +1139,107 @@ export class ComponentExplorerComponent implements OnInit {
       icon: '📝',
       variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft', 'kingfisher', 'custom1', 'custom2'],
       description: 'Inputs de formulario editables',
-      category: 'interactive'
+      category: 'interactive',
+      libraryType: 'component'
     },
     {
-      type: 'generic',
-      label: 'Librería de Componentes',
-      icon: '📚',
-      variants: ['default'],
-      description: 'Pulsa sobre un componente para previsualizarlo y añadirlo a tu lienzo.',
-      category: 'content'
+      type: 'spinner',
+      label: 'Loading Spinners',
+      icon: '⏳',
+      variants: ['default', 'circle', 'dots', 'bars', 'neon', 'glass'],
+      description: 'Indicadores de carga animados',
+      category: 'interactive',
+      libraryType: 'component'
+    },
+    {
+      type: 'breadcrumbs',
+      label: 'Breadcrumbs',
+      icon: '🗺️',
+      variants: ['default', 'slash', 'arrow', 'glass', 'neon'],
+      description: 'Navegación de migas de pan',
+      category: 'interactive',
+      libraryType: 'component'
+    },
+    {
+       type: 'accordion',
+       label: 'Acordeón UI',
+       icon: '↕️',
+       variants: ['default', 'glass', 'neon', 'minimal'],
+       description: 'Lista de elementos expandibles atomizada',
+       category: 'interactive',
+       libraryType: 'component'
+    },
+    {
+       type: 'tabs',
+       label: 'Pestañas UI',
+       icon: '📑',
+       variants: ['default', 'glass', 'neon', 'pills'],
+       description: 'Navegación por pestañas atomizada',
+       category: 'interactive',
+       libraryType: 'component'
+    },
+    {
+       type: 'list',
+       label: 'Lista de Items',
+       icon: '📋',
+       variants: ['default', 'glass', 'neon', 'minimal'],
+       description: 'Lista simple de elementos atomizada',
+       category: 'content',
+       libraryType: 'component'
+    },
+    {
+       type: 'table',
+       label: 'Tabla de Datos',
+       icon: '▦',
+       variants: ['default', 'striped', 'bordered', 'hover', 'glass', 'neon'],
+       description: 'Presentación tabular de datos atomizada',
+       category: 'content',
+       libraryType: 'component'
+    },
+    {
+       type: 'chart',
+       label: 'Gráfico UI',
+       icon: '📈',
+       variants: ['primary', 'secondary', 'glass', 'neon', 'cyberpunk'],
+       description: 'Visualización de datos atomizada',
+       category: 'content',
+       libraryType: 'component'
+    },
+    {
+       type: 'bubble',
+       label: 'Efecto Burbujas',
+       icon: '🫧',
+       variants: ['glass', 'neon', 'cyberpunk', 'minimal'],
+       description: 'Animación de fondo interactiva (Como Sección)',
+       category: 'interactive',
+       libraryType: 'section'
+    },
+    {
+       type: 'smart-container',
+       label: 'Contenedor Inteligente',
+       icon: '📦',
+       variants: ['default', 'glass', 'neon', 'minimal'],
+       description: 'Bloque genérico para layouts personalizados',
+       category: 'content',
+       libraryType: 'section'
+    },
+    {
+       type: 'draggable-box',
+       label: 'Caja Arrastrable',
+       icon: '🎯',
+       variants: ['default', 'glass', 'neon', 'minimal'],
+       description: 'Elemento sandbox para pruebas de posición',
+       category: 'interactive',
+       libraryType: 'component'
+    },
+    {
+       type: 'generic',
+       label: 'Librería de Componentes',
+       icon: '📚',
+       variants: ['default'],
+       description: 'Sección de ayuda y navegación de la librería',
+       category: 'content',
+       libraryType: 'section'
     }
   ];
 
@@ -1149,6 +1247,8 @@ export class ComponentExplorerComponent implements OnInit {
   @Output() componentSelected = new EventEmitter<{ component: SectionVariant; variant: string }>();
 
   constructor(private variantService: VariantService) {}
+
+  selectedLibraryType: 'section' | 'component' = 'section';
 
   ngOnInit() {
     // Initialize with first variant
@@ -1158,10 +1258,17 @@ export class ComponentExplorerComponent implements OnInit {
   }
 
   get filteredComponents(): SectionVariant[] {
-    if (this.selectedCategory === 'all') {
-      return this.availableComponents;
-    }
-    return this.availableComponents.filter(comp => comp.category === this.selectedCategory);
+    return this.availableComponents.filter(comp => {
+      const matchesType = comp.libraryType === this.selectedLibraryType;
+      const matchesCategory = this.selectedCategory === 'all' || comp.category === this.selectedCategory;
+      return matchesType && matchesCategory;
+    });
+  }
+
+  selectLibraryType(type: 'section' | 'component') {
+    this.selectedLibraryType = type;
+    this.selectedComponent = null;
+    // We keep category selection to allow persistent filtering across tabs
   }
 
   selectCategory(categoryId: string) {
