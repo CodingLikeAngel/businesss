@@ -299,20 +299,20 @@
 .hero-section--purple-edge { --hero-bg-color: #6b21a8; }
 .hero-section--rose-radial { --hero-bg-image: radial-gradient(circle, #f43f5e, #be123c); }
 .hero-section--yellow-pulse {
-  --hero-bg-color: #eab308;
-  --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="rgba(255,255,255,0.1)"/></svg>');
+  --theme-bg: #eab308;
+  --theme-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="rgba(255,255,255,0.1)"/></svg>');
   background-size: 50px 50px;
   animation: pulse 2s infinite;
 }
-.hero-section--green-inset { --hero-bg-color: #15803d; box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); }
-.hero-section--blue-skew { --hero-bg-color: #1d4ed8; transform: skewY(-2deg); }
-.hero-section--orange-dash { --hero-bg-color: #ea580c; }
-.hero-section--indigo-dots { --hero-bg-color: #4f46e5; --hero-bg-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 10px 10px; }
-.hero-section--bubble { --hero-bg-image: radial-gradient(circle, #60a5fa, #1e40af); }
-.hero-section--electoon { --hero-bg-image: linear-gradient(135deg, #facc15, #eab308); animation: pulse 1.5s infinite; }
-.hero-section--jungle { --hero-bg-image: linear-gradient(90deg, #166534, #4ade80); }
-.hero-section--joycon { --hero-bg-image: linear-gradient(45deg, #f87171, #60a5fa); }
-.hero-section--neomorph { --hero-bg-color: #e5e7eb; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.5); --hero-color: #1f2937; }
+.hero-section--green-inset { --theme-bg: #15803d; box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); }
+.hero-section--blue-skew { --theme-bg: #1d4ed8; transform: skewY(-2deg); }
+.hero-section--orange-dash { --theme-bg: #ea580c; }
+.hero-section--indigo-dots { --theme-bg: #4f46e5; --theme-bg-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 10px 10px; }
+.hero-section--bubble { --theme-bg-image: radial-gradient(circle, #60a5fa, #1e40af); }
+.hero-section--electoon { --theme-bg-image: linear-gradient(135deg, #facc15, #eab308); animation: pulse 1.5s infinite; }
+.hero-section--jungle { --theme-bg-image: linear-gradient(90deg, #166534, #4ade80); }
+.hero-section--joycon { --theme-bg-image: linear-gradient(45deg, #f87171, #60a5fa); }
+.hero-section--neomorph { --theme-bg: #e5e7eb; box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1), -5px -5px 15px rgba(255, 255, 255, 0.5); --theme-color: #1f2937; }
 .hero-section--glitch {
   --hero-bg-color: #0f172a;
   --hero-bg-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect x="0" y="0" width="100" height="10" fill="rgba(255,255,255,0.05)"/></svg>');
@@ -430,8 +430,8 @@
 }
 
 .hero-section--rockstar {
-  --hero-bg: #000 !important;
-  --hero-color: #fff;
+  --theme-bg: #000 !important;
+  --theme-color: #fff;
   
   &::before {
     background-image: url('https://www.transparenttextures.com/patterns/asfalt-dark.png');
@@ -465,8 +465,8 @@
 }
 
 .hero-section--cyberpunk {
-  --hero-bg: #050510 !important;
-  --hero-color: #00ffcc;
+  --theme-bg: #050510 !important;
+  --theme-color: #00ffcc;
   
   .hero-title {
     font-size: 4.5rem;
