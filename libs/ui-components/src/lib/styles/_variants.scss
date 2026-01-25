@@ -395,27 +395,34 @@
 
 @mixin variant-luxury {
 
-  position: relative;
-  background: linear-gradient(135deg, #1c1c1c 0%, #000 100%);
+  --theme-bg: #000;
+  --theme-color: #d4af37;
+  
+  background: #000;
   color: #d4af37;
   border: 1px solid #d4af37;
-  padding: 1rem 2rem;
   font-family: 'Cinzel', serif;
   text-transform: uppercase;
   letter-spacing: 3px;
+  padding: 1.2rem 2.5rem;
+  position: relative;
   overflow: hidden;
-  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: 0.6s;
+    top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
+    animation: shimmer-fast 3s infinite;
   }
+
+  &:hover {
+    background: #d4af37;
+    color: #000;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+  }
+
+}
 
   &:hover {
     color: #fff;
@@ -1024,29 +1031,32 @@
 }
 
 @mixin variant-galactic {
-  @include unified-variant-base(
-    linear-gradient(135deg, #1e1b4b, #312e81, #4c1d95),
-    #ffffff,
-    #a5b4fc,
-    #6366f1
-  );
-  border-radius: 1.25rem;
-  font-family: 'Righteous', 'serif';
-  font-weight: 500;
+
+  --theme-bg: linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4c1d95 100%);
+  --theme-color: #fff;
+  
+  background: var(--theme-bg);
   position: relative;
   overflow: hidden;
+  border: 1px solid rgba(165, 180, 252, 0.3);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(30, 27, 75, 0.5);
 
   &::before {
-    content: '🌌';
+    content: '';
     position: absolute;
-    top: 50%;
-    left: -25px;
-    transform: translateY(-50%);
-    font-size: 1.5rem;
-    color: #a5b4fc;
-    text-shadow: 0 0 15px #a5b4fc;
-    animation: galaxy-orbit 4s linear infinite;
+    inset: 0;
+    background: radial-gradient(circle at 20% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(192, 38, 211, 0.15) 0%, transparent 50%);
+    animation: pulse 4s ease-in-out infinite alternate;
   }
+
+  &:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(30, 27, 75, 0.6), 0 0 20px rgba(165, 180, 252, 0.3);
+  }
+
+}
 
   &::after {
     content: '';
@@ -1071,30 +1081,42 @@
 }
 
 @mixin variant-orbitron {
-  @include unified-variant-base(
-    linear-gradient(135deg, #0f172a, #1e293b),
-    #00ffff,
-    #ffffff,
-    #00ffff
-  );
-  border-radius: 0.5rem;
-  font-family: 'Orbitron', 'Courier New', monospace;
-  font-weight: 600;
+
+  --theme-bg: #0f172a;
+  --theme-color: #00ffff;
+  
+  background: var(--theme-bg);
+  font-family: 'Orbitron', sans-serif;
   text-transform: uppercase;
   letter-spacing: 2px;
+  border: 2px solid #00ffff;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.2);
   position: relative;
-  overflow: hidden;
+  padding: 1rem 2rem;
 
   &::before {
-    content: '⚛️';
+    content: '';
     position: absolute;
-    top: -12px;
-    right: -12px;
-    font-size: 1.3rem;
-    color: #00ffff;
-    text-shadow: 0 0 10px #00ffff;
-    animation: orbitron-electron 2s linear infinite;
+    top: 0; left: 0; width: 10px; height: 10px;
+    border-top: 2px solid #00ffff;
+    border-left: 2px solid #00ffff;
   }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0; right: 0; width: 10px; height: 10px;
+    border-bottom: 2px solid #00ffff;
+    border-right: 2px solid #00ffff;
+  }
+
+  &:hover {
+    background: #1e293b;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    text-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
+  }
+
+}
 
   &::after {
     content: '';
@@ -1235,34 +1257,37 @@
 
 @mixin variant-danger {
 
-  --theme-bg: #ef4444;
-  background: var(--theme-bg);
+  background: #ef4444;
   color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.4);
-  transition: all 0.3s;
-
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
   &:hover {
-    animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both;
-    filter: brightness(1.1);
+    background: #dc2626;
+    box-shadow: 0 4px 10px rgba(239, 68, 68, 0.3);
   }
+
+}
+
+}
 
 }
 
 @mixin variant-success {
 
-  --theme-bg: #10b981;
-  background: var(--theme-bg);
+  background: #10b981;
   color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.4);
-  transition: all 0.3s;
-
+  border-radius: 6px;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
   &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.5);
-    filter: brightness(1.1);
+    background: #059669;
+    box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
   }
+
+}
+
+}
 
 }
 
@@ -1276,12 +1301,33 @@
 }
 
 @mixin variant-stellar {
-  --theme-bg: linear-gradient(45deg, #1e293b, #06b6d4);
-  --theme-color: #ffffff;
-  --theme-border: none;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
+
+  --theme-bg: #0f172a;
+  background: #0f172a;
+  color: #fff;
+  border-radius: 50px;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: 
+      radial-gradient(1px 1px at 20px 30px, #fff, rgba(0,0,0,0)),
+      radial-gradient(1.5px 1.5px at 100px 150px, #fff, rgba(0,0,0,0)),
+      radial-gradient(1px 1px at 250px 50px, #fff, rgba(0,0,0,0));
+    background-size: 300px 300px;
+    animation: pulse 4s infinite;
+  }
+
+  &:hover {
+    background: #1e293b;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(255,255,255,0.1);
+  }
+
 }
 
 @mixin variant-platform {
@@ -1312,24 +1358,60 @@
 }
 
 @mixin variant-plasma {
-  --theme-bg: #0f0f23;
-  --theme-color: #00ffff;
-  --theme-border: 1px solid #00ffff;
-  --theme-shadow: 0 0 20px #00ffff;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
+
+  --theme-bg: #000;
+  --theme-color: #fff;
+  
+  background: #000;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 255, 255, 0.5);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background: conic-gradient(from 0deg, #0ef, #f0f, #0ef);
+    animation: rotate 4s linear infinite;
+    opacity: 0.3;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    background: #000;
+    border-radius: inherit;
+    z-index: -1;
+  }
+
+  &:hover {
+    box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+    &::before { opacity: 0.6; }
+  }
+
+  * { position: relative; z-index: 1; }
+
 }
 
 @mixin variant-default {
-  --theme-bg: #1f2937;
-  --theme-color: #f3f4f6;
-  --theme-border: 1px solid #374151;
-  --theme-accent: #3b82f6;
+
+  --theme-bg: #fff;
+  --theme-color: #1f2937;
+  --theme-border: 1px solid #e5e7eb;
+  
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+  }
+
 }
 
 @mixin variant-river {
@@ -1381,15 +1463,22 @@
 }
 
 @mixin variant-void {
-  --theme-bg: linear-gradient(135deg, rgba(30, 41, 59, 0.9), rgba(17, 24, 39, 0.9));
-  --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(76, 29, 149, 0.5);
-  --theme-accent: #6d28d9;
-  --theme-shadow: 0 0 15px #6d28d9;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
+
+  --theme-bg: #050505;
+  --theme-color: #a5b4fc;
+  
+  background: #050505;
+  color: #a5b4fc;
+  border: 1px solid #1e1b4b;
+  box-shadow: inset 0 0 20px rgba(76, 29, 149, 0.2);
+  transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &:hover {
+    color: #fff;
+    box-shadow: inset 0 0 40px rgba(76, 29, 149, 0.4), 0 0 20px rgba(0,0,0,1);
+    transform: scale(0.98);
+  }
+
 }
 
 @mixin variant-cosmic {
@@ -1501,27 +1590,43 @@
 }
 
 @mixin variant-vaporwave {
-  --theme-bg: linear-gradient(135deg, rgba(255, 0, 255, 0.2), rgba(0, 255, 255, 0.2));
-  --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(255, 0, 255, 0.5);
-  --theme-accent: #00ffff;
-  --theme-shadow: 0 0 15px #00ffff;
+
+  --theme-bg: linear-gradient(135deg, #ff71ce 0%, #01cdfe 100%);
+  --theme-color: #fff;
+  
   background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
+  border: none;
+  font-family: 'Righteous', cursive;
+  text-shadow: 2px 2px 0px #05ffa1;
+  padding: 1rem 2rem;
+  clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
+  transition: all 0.3s ease;
+
+  &:hover {
+    filter: hue-rotate(45deg);
+    transform: scale(1.05) skewX(-2deg);
+    text-shadow: 3px 3px 0px #b967ff;
+  }
+
 }
 
 @mixin variant-aurora {
-  --theme-bg: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(16, 185, 129, 0.2));
-  --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(56, 189, 248, 0.5);
-  --theme-accent: #10b981;
-  --theme-shadow: 0 0 15px #10b981;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
+
+  --theme-bg: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
+  background: linear-gradient(270deg, #00f2fe, #4facfe, #00f2fe);
+  background-size: 400% 400%;
+  animation: gradient-shift 10s ease infinite;
+  color: #fff;
+  border: none;
+  border-radius: 30px;
+  box-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
+  transition: all 0.3s;
+
+  &:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(79, 172, 254, 0.6);
+  }
+
 }
 
 @mixin variant-trailblazer {
@@ -1737,25 +1842,35 @@
 }
 
 @mixin variant-pokemon {
-  --theme-bg: linear-gradient(135deg, #ff0000 0%, #ffffff 50%);
-  --theme-color: #1e293b;
-  --theme-border: 3px solid #1e293b;
-  --theme-accent: #ffcc00;
-  --theme-shadow: 0 4px 0 #1e293b;
-  --theme-pattern: url('data:image/svg+xml,%3Csvg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"%3E%3Ccircle cx="10" cy="10" r="8" fill="%23ffffff" stroke="%231e293b" stroke-width="2"/%3E%3Cpath d="M10 2v16M2 10h16" stroke="%231e293b" stroke-width="2"/%3E%3C/svg%3E');
-  
-  background: var(--theme-bg);
-  background-image: var(--theme-pattern);
-  background-size: 20px 20px;
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
-  border-radius: 50%;
-  
+
+  position: relative;
+  background: linear-gradient(to bottom, #ee1515 50%, #ffffff 50%);
+  color: #333;
+  border: 4px solid #333;
+  border-radius: 12px;
+  padding: 1.5rem 2rem;
+  font-weight: 800;
+  overflow: visible;
+
   &:hover {
-    transform: scale(1.05);
-    box-shadow: 0 6px 0 #1e293b;
+    transform: rotate(2deg) scale(1.05);
   }
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 25px;
+    height: 25px;
+    background: white;
+    border: 4px solid #333;
+    border-radius: 50%;
+    z-index: 2;
+  }
+
+}
 }
 
 @mixin variant-animal-crossing {
@@ -1888,24 +2003,29 @@
 }
 
 @mixin variant-minecraft {
-  --theme-bg: #7b5e38;
-  --theme-color: #ffffff;
-  --theme-border: 3px solid #4a3a22;
-  --theme-accent: #4a3a22;
-  --theme-shadow: 2px 2px 0 #4a3a22, 4px 4px 0 rgba(0, 0, 0, 0.2);
-  --theme-pattern: url('data:image/svg+xml,%3Csvg width="10" height="10" viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg"%3E%3Crect width="2" height="2" fill="%238b7355"/%3E%3Crect x="4" width="2" height="2" fill="%238b7355"/%3E%3Crect x="8" width="2" height="2" fill="%238b7355"/%3E%3Crect y="4" width="2" height="2" fill="%238b7355"/%3E%3Crect x="6" y="4" width="2" height="2" fill="%238b7355"/%3E%3Crect y="8" width="2" height="2" fill="%238b7355"/%3E%3C/svg%3E');
+
+  --theme-bg: #3c3c3c;
+  --theme-color: #fff;
   
-  background: var(--theme-bg);
-  background-image: var(--theme-pattern);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
-  font-family: 'Minecraft', sans-serif;
-  
-  &:active {
-    transform: translateY(2px);
-    box-shadow: 1px 1px 0 #4a3a22;
+  background: #3c3c3c;
+  color: #fff;
+  image-rendering: pixelated;
+  border: 4px solid #000;
+  box-shadow: inset -4px -4px 0px 0px rgba(0,0,0,0.5), inset 4px 4px 0px 0px rgba(255,255,255,0.2);
+  font-family: 'Press Start 2P', cursive;
+  padding: 1rem;
+  border-radius: 0;
+
+  &:hover {
+    background: #4a4a4a;
+    transform: scale(1.05);
   }
+
+  &:active {
+    box-shadow: inset 4px 4px 0px 0px rgba(0,0,0,0.5);
+  }
+
+}
 }
 
 @mixin variant-fortnite {
@@ -1929,41 +2049,57 @@
 }
 
 @mixin variant-elegant {
-  --theme-bg: radial-gradient(circle at center, #2c3e50, #1a1a1a);
-  --theme-color: #f5f5f0;
-  --theme-border: 1px solid rgba(212, 175, 55, 0.3);
-  --theme-accent: #d4af37;
-  --theme-shadow: 0 4px 15px rgba(0,0,0,0.6);
+
+  --theme-bg: #fff;
+  --theme-color: #1a1a1a;
+  
   background: var(--theme-bg);
   color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
   font-family: 'Playfair Display', serif;
+  border: 1px solid #1a1a1a;
+  padding: 1rem 3rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+  &:hover {
+    background: #1a1a1a;
+    color: #fff;
+    letter-spacing: 6px;
+  }
+
 }
 
 @mixin variant-luxury {
 
-  position: relative;
-  background: linear-gradient(135deg, #1c1c1c 0%, #000 100%);
+  --theme-bg: #000;
+  --theme-color: #d4af37;
+  
+  background: #000;
   color: #d4af37;
   border: 1px solid #d4af37;
-  padding: 1rem 2rem;
   font-family: 'Cinzel', serif;
   text-transform: uppercase;
   letter-spacing: 3px;
+  padding: 1.2rem 2.5rem;
+  position: relative;
   overflow: hidden;
-  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: -100%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: 0.6s;
+    top: 0; left: -100%; width: 50%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
+    animation: shimmer-fast 3s infinite;
   }
+
+  &:hover {
+    background: #d4af37;
+    color: #000;
+    box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
+  }
+
+}
 
   &:hover {
     color: #fff;
@@ -1978,28 +2114,57 @@
 }
 
 @mixin variant-vintage {
-  --theme-bg: #4e342e;
-  --theme-color: #deb887;
-  --theme-border: 2px solid #3e2723;
-  --theme-accent: #d84315;
-  --theme-shadow: 4px 4px 0px #3e2723;
+
+  --theme-bg: #f4ece1;
+  --theme-color: #3d3b38;
+  
   background: var(--theme-bg);
   color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
-  font-family: 'Courier New', monospace;
+  border: 2px solid #3d3b38;
+  font-family: 'Georgia', serif;
+  box-shadow: 4px 4px 0px #3d3b38;
+  padding: 0.8rem 1.6rem;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3e%3cfilter id='noiseFilter'%3e%3cfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3e%3c/filter%3e%3crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3e%3c/svg%3e");
+    opacity: 0.05;
+    pointer-events: none;
+  }
+
+  &:hover {
+    background: #e9e0d2;
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0px #3d3b38;
+  }
+
 }
 
 @mixin variant-corporate {
-  --theme-bg: #1e3a8a;
-  --theme-color: #ffffff;
-  --theme-border: 1px solid #1e40af;
-  --theme-accent: #3b82f6;
-  --theme-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+  --theme-bg: #fff;
+  --theme-color: #1e3a8a;
+  --theme-border: 1px solid #e2e8f0;
+  
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: #3b82f6;
+    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-1px);
+  }
+
 }
 
 @mixin variant-rockstar {
@@ -2075,43 +2240,50 @@
 }
 
 @mixin variant-corporate {
-  background: #f8fafc;
-  color: #1e293b;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  font-family: 'Inter', sans-serif;
-  font-weight: 500;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-  transition: all 0.3s ease;
+
+  --theme-bg: #fff;
+  --theme-color: #1e3a8a;
+  --theme-border: 1px solid #e2e8f0;
   
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: var(--theme-border);
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  transition: all 0.2s ease;
+
   &:hover {
     border-color: #3b82f6;
-    background: #fff;
     box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
-    transform: translateY(-2px);
+    transform: translateY(-1px);
   }
+
+}
 }
 
 @mixin variant-vaporwave {
-  background: linear-gradient(135deg, #ff71ce 0%, #01cdfe 100%);
-  color: #fff;
+
+  --theme-bg: linear-gradient(135deg, #ff71ce 0%, #01cdfe 100%);
+  --theme-color: #fff;
+  
+  background: var(--theme-bg);
   border: none;
   font-family: 'Righteous', cursive;
-  text-shadow: 3px 3px 0px #05ffa1;
-  position: relative;
-  overflow: hidden;
-  clip-path: polygon(10% 0%, 100% 0%, 90% 100%, 0% 100%);
-  
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background-image: 
-      linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px);
-    background-size: 20px 20px;
-    opacity: 0.3;
+  text-shadow: 2px 2px 0px #05ffa1;
+  padding: 1rem 2rem;
+  clip-path: polygon(5% 0%, 100% 0%, 95% 100%, 0% 100%);
+  transition: all 0.3s ease;
+
+  &:hover {
+    filter: hue-rotate(45deg);
+    transform: scale(1.05) skewX(-2deg);
+    text-shadow: 3px 3px 0px #b967ff;
   }
+
+}
 
   &:hover {
     transform: scale(1.05) rotate(-1deg);
@@ -2120,28 +2292,26 @@
 }
 
 @mixin variant-elegant {
+
   --theme-bg: #fff;
   --theme-color: #1a1a1a;
+  
   background: var(--theme-bg);
   color: var(--theme-color);
   font-family: 'Playfair Display', serif;
-  border: 1px solid #000;
-  padding: 1rem 2.5rem;
-  border-radius: 0;
-  letter-spacing: 2px;
-  position: relative;
-  transition: all 0.4s ease;
+  border: 1px solid #1a1a1a;
+  padding: 1rem 3rem;
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    right: 5px;
-    bottom: 5px;
-    border: 1px solid rgba(0,0,0,0.1);
-    pointer-events: none;
+  &:hover {
+    background: #1a1a1a;
+    color: #fff;
+    letter-spacing: 6px;
   }
+
+}
 
   &:hover {
     background: #000;
@@ -2155,18 +2325,34 @@
 }
 
 @mixin variant-vintage {
-  background: #f4ece1;
-  color: #3d3b38;
+
+  --theme-bg: #f4ece1;
+  --theme-color: #3d3b38;
+  
+  background: var(--theme-bg);
+  color: var(--theme-color);
   border: 2px solid #3d3b38;
   font-family: 'Georgia', serif;
   box-shadow: 4px 4px 0px #3d3b38;
-  border-radius: 2px;
-  
+  padding: 0.8rem 1.6rem;
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3e%3cfilter id='noiseFilter'%3e%3cfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3e%3c/filter%3e%3crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3e%3c/svg%3e");
+    opacity: 0.05;
+    pointer-events: none;
+  }
+
   &:hover {
-    background: #e6dfd1;
+    background: #e9e0d2;
     transform: translate(-2px, -2px);
     box-shadow: 6px 6px 0px #3d3b38;
   }
+
+}
 }
 
 @mixin variant-crystal {
