@@ -11,7 +11,15 @@
   min-height: 80vh;
   position: relative;
   overflow: hidden;
-  color: #ffffff;
+  
+  // Design System Bridge
+  background-color: var(--theme-bg, #111827);
+  background-image: var(--theme-bg-image, none);
+  color: var(--theme-color, #ffffff);
+  font-family: var(--theme-font, shared.$unified-font-family);
+  border: var(--theme-border, none);
+  box-shadow: var(--theme-shadow, none);
+
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -20,10 +28,35 @@
   background-position: center;
   background-repeat: no-repeat;
   transition: all 0.5s ease;
+  @include shared.texture-noise;
 
   &.is-selected {
     outline: 3px solid #6366f1;
     z-index: 50;
+  }
+
+  // Apply all variants
+  @include shared.apply-all-variants('hero-section--');
+
+  // CRITICAL: Force manual styles from Editor only if style attribute is present
+  &[style*='background'] {
+      background-color: var(--theme-bg) !important;
+      background-image: var(--theme-bg-image, none) !important;
+      background-blend-mode: overlay, normal;
+  }
+
+  &[style*='color'] {
+      color: var(--theme-color) !important;
+
+      .hero-title {
+        color: var(--theme-color) !important;
+        -webkit-text-fill-color: var(--theme-color) !important;
+        background: none !important;
+      }
+
+      .hero-subtitle {
+        color: var(--theme-color) !important;
+      }
   }
 }
 
@@ -61,9 +94,22 @@
   margin-left: auto;
   margin-right: auto;
   transition: transform 0.3s ease;
+  
+  font-size: 4rem;
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--theme-color, white);
+  background: var(--hero-title-gradient, linear-gradient(to right, #00b4ff, #ff4500));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 
   &.is-selected {
     transform: scale(1.02);
+  }
+  
+  @media (max-width: 768px) {
+    font-size: 2.5rem;
   }
 }
 
@@ -72,7 +118,7 @@
   width: fit-content;
   margin-left: auto;
   margin-right: auto;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--theme-color, rgba(255, 255, 255, 0.9));
 }
 
 .cta-button {
@@ -81,6 +127,9 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(90deg, #00b4ff, #ff4500);
+  color: white;
+  border: none;
 
   &:hover {
     transform: translateY(-2px);
@@ -158,20 +207,3 @@
   }
 }
 
-/* Variants (Mirroring UI Components) */
-.hero-section--matrix {
-  background: #000;
-  .hero-title {
-    -webkit-text-stroke: 1px #0f0;
-  }
-}
-.hero-section--glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-}
-.hero-section--cyberpunk {
-  background: #050510;
-  .hero-title {
-    text-shadow: 4px 4px 0 #ff0055, -4px -4px 0 #00e5ff;
-  }
-}

@@ -265,13 +265,24 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
     console.log(`Producto añadido al carrito: ${product.name}`);
   }
 
-  getVariant(componentId: string): CardVariant {
+  getVariant(componentId: string): any {
     const variant = this.componentVariants[componentId] || this.globalVariant;
     const validVariants = [
-      'default', 'cyberpunk', 'jungle', 'enchanted', 'mystic', 'ancient', 'twilight', 'frosty', 'desert',
-      'candy', 'oceanic', 'fiery', 'primary', 'secondary', 'neon', 'matrix', 'stellar', 'retro', 'phoenix',
-      'aqua', 'plasma', 'cosmic', 'vaporwave', 'aurora'
+      'default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass',
+      'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano',
+      'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud',
+      'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum',
+      'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew',
+      'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal',
+      'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs',
+      'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void',
+      'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua',
+      'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft', 'morphing-blob',
+      'liquid-metal', 'crystal-prism', 'neural-network', 'quantum-field', 'holographic-matrix', 'plasma-storm',
+      'cyber-circuit', 'organic-growth', 'fractal-dimension', 'time-warp', 'dimensional-shift', 'nano-swarm',
+      'energy-web', 'void-portal', 'cosmic-dust', 'stellar-nova', 'aurora-borealis', 'lava-flow', 'ice-crystal',
+      'thunder-storm', 'water-ripple', 'black-hole', 'wormhole', 'dna-helix', 'crystal', 'gear', 'star', 'hexagon'
     ];
-    return validVariants.includes(variant) ? (variant as CardVariant) : 'default';
+    return validVariants.includes(variant) ? variant : 'default';
   }
 }

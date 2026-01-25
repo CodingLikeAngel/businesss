@@ -42,7 +42,7 @@ export abstract class BaseEditorSectionComponent {
     return this.uiStateService.selectedElement?.id;
   }
 
-  getVariant(sectionId: string): string {
+  getVariant(sectionId: string): any {
     if (this.section?.content?.['variant']) {
       return this.section.content['variant'];
     }
