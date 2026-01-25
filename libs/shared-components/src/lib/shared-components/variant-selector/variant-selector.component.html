@@ -56,112 +56,117 @@
 
   <!-- Main Panel Area -->
   <main class="sidebar-v2-panel" *ngIf="!isCollapsed">
-    <div class="panel-inner-v2">
-      
-      <!-- PAGES PANEL -->
-      <section class="panel-v2" *ngIf="activeTab === 'pages'">
-        <lib-preset-selector></lib-preset-selector>
-        <div class="panel-divider"></div>
-        <lib-page-management (pageSelected)="setActiveTab('structure')"></lib-page-management>
-      </section>
+    <!-- Scrollable Content Area -->
+    <div class="panel-scroll-area">
+      <div class="panel-inner-v2">
+        
+        <!-- PAGES PANEL -->
+        <section class="panel-v2" *ngIf="activeTab === 'pages'">
+          <lib-preset-selector></lib-preset-selector>
+          <div class="panel-divider"></div>
+          <lib-page-management (pageSelected)="setActiveTab('structure')"></lib-page-management>
+        </section>
 
-      <!-- STRUCTURE PANEL -->
-      <section class="panel-v2" *ngIf="activeTab === 'structure'">
-        <lib-section-structure
-          (sectionSelected)="onSectionSelected($event)"
-          (addSection)="setActiveTab('explorer')"
-        ></lib-section-structure>
-      </section>
+        <!-- STRUCTURE PANEL -->
+        <section class="panel-v2" *ngIf="activeTab === 'structure'">
+          <lib-section-structure
+            (sectionSelected)="onSectionSelected($event)"
+            (addSection)="setActiveTab('explorer')"
+          ></lib-section-structure>
+        </section>
 
-      <!-- EXPLORER PANEL -->
-      <section class="panel-v2" *ngIf="activeTab === 'explorer'">
-        <lib-component-explorer
-          (componentSelected)="onComponentSelected($event)"
-        ></lib-component-explorer>
-      </section>
+        <!-- EXPLORER PANEL -->
+        <section class="panel-v2" *ngIf="activeTab === 'explorer'">
+          <lib-component-explorer
+            (componentSelected)="onComponentSelected($event)"
+          ></lib-component-explorer>
+        </section>
 
-      <!-- CONTENT PANEL -->
-      <section class="panel-v2" *ngIf="activeTab === 'content'">
-        <lib-content-editor
-          [selectedSection]="selectedSection"
-          [selectedElement]="selectedElement"
-          (contentChanged)="onContentChanged()"
-        ></lib-content-editor>
-      </section>
+        <!-- CONTENT PANEL -->
+        <section class="panel-v2" *ngIf="activeTab === 'content'">
+          <lib-content-editor
+            [selectedSection]="selectedSection"
+            [selectedElement]="selectedElement"
+            (contentChanged)="onContentChanged()"
+          ></lib-content-editor>
+        </section>
 
-      <!-- DESIGN PANEL -->
-      <section class="panel-v2" *ngIf="activeTab === 'design'">
-        <lib-design-editor
-          [selectedSection]="selectedSection"
-          [selectedElement]="selectedElement"
-          (styleChanged)="onStyleChanged()"
-          (variantApplied)="onVariantApplied($event)"
-        ></lib-design-editor>
-      </section>
+        <!-- DESIGN PANEL -->
+        <section class="panel-v2" *ngIf="activeTab === 'design'">
+          <lib-design-editor
+            [selectedSection]="selectedSection"
+            [selectedElement]="selectedElement"
+            (styleChanged)="onStyleChanged()"
+            (variantApplied)="onVariantApplied($event)"
+          ></lib-design-editor>
+        </section>
 
-      <!-- GENERAL PANEL -->
-      <section class="panel-v2" *ngIf="activeTab === 'general'">
-        <header class="panel-v2-header">
-            <h2>Preferencias Globais</h2>
-            <p>Configura el ADN visual de todo tu proyecto.</p>
-        </header>
+        <!-- GENERAL PANEL -->
+        <section class="panel-v2" *ngIf="activeTab === 'general'">
+          <header class="panel-v2-header">
+              <h2>Preferencias Globais</h2>
+              <p>Configura el ADN visual de todo tu proyecto.</p>
+          </header>
 
-        <div class="settings-v2-list">
-            <div class="setting-v2-card">
-                <label>TEMA PREDETERMINADO</label>
-                <div class="custom-select-v2">
-                    <lib-ui-components-input
-                        type="select"
-                        [options]="variantOptions"
-                        [(ngModel)]="globalVariant"
-                        (ngModelChange)="onGlobalVariantChange()"
-                    ></lib-ui-components-input>
-                </div>
-            </div>
+          <div class="settings-v2-list">
+              <div class="setting-v2-card">
+                  <label>TEMA PREDETERMINADO</label>
+                  <div class="custom-select-v2">
+                      <lib-ui-components-input
+                          type="select"
+                          [options]="variantOptions"
+                          [(ngModel)]="globalVariant"
+                          (ngModelChange)="onGlobalVariantChange()"
+                      ></lib-ui-components-input>
+                  </div>
+              </div>
 
-            <div class="actions-v2-group">
-                <button class="action-v2-btn" (click)="saveAsCustomTemplate()">
-                    <span class="icon">💾</span> 
-                    <div class="txt">
-                        <strong>Guardar Plantilla</strong>
-                        <p>Convierte este diseño en preset</p>
-                    </div>
-                </button>
-                <button class="action-v2-btn primary" (click)="exportProject()">
-                    <span class="icon">🚀</span> 
-                    <div class="txt">
-                        <strong>Exportar Código</strong>
-                        <p>Generar bundle de producción</p>
-                    </div>
-                </button>
-                <button class="action-v2-btn secondary" (click)="exportAsHtml()">
-                    <span class="icon">🌍</span> 
-                    <div class="txt">
-                        <strong>Descargar Vista</strong>
-                        <p>Generar archivo HTML estático</p>
-                    </div>
-                </button>
-                <button class="action-v2-btn" (click)="resetLayout()" *ngIf="selectedSection">
-                    <span class="icon">♻️</span> 
-                    <div class="txt">
-                        <strong>Arreglar Sección</strong>
-                        <p>Recuperar layout original</p>
-                    </div>
-                </button>
-                <button class="action-v2-btn danger" (click)="resetConfiguration()">
-                    <span class="icon">⚠️</span> 
-                    <div class="txt">
-                        <strong>Reiniciar Proyecto</strong>
-                        <p>Borrar todo el contenido</p>
-                    </div>
-                </button>
-            </div>
-        </div>
-      </section>
-      
-      <div class="panel-sticky-footer" [class.hidden]="activeTab === 'general'">
-        <lib-export-panel></lib-export-panel>
+              <div class="actions-v2-group">
+                  <button class="action-v2-btn" (click)="saveAsCustomTemplate()">
+                      <span class="icon">💾</span> 
+                      <div class="txt">
+                          <strong>Guardar Plantilla</strong>
+                          <p>Convierte este diseño en preset</p>
+                      </div>
+                  </button>
+                  <button class="action-v2-btn primary" (click)="exportProject()">
+                      <span class="icon">🚀</span> 
+                      <div class="txt">
+                          <strong>Exportar Código</strong>
+                          <p>Generar bundle de producción</p>
+                      </div>
+                  </button>
+                  <button class="action-v2-btn secondary" (click)="exportAsHtml()">
+                      <span class="icon">🌍</span> 
+                      <div class="txt">
+                          <strong>Descargar Vista</strong>
+                          <p>Generar archivo HTML estático</p>
+                      </div>
+                  </button>
+                  <button class="action-v2-btn" (click)="resetLayout()" *ngIf="selectedSection">
+                      <span class="icon">♻️</span> 
+                      <div class="txt">
+                          <strong>Arreglar Sección</strong>
+                          <p>Recuperar layout original</p>
+                      </div>
+                  </button>
+                  <button class="action-v2-btn danger" (click)="resetConfiguration()">
+                      <span class="icon">⚠️</span> 
+                      <div class="txt">
+                          <strong>Reiniciar Proyecto</strong>
+                          <p>Borrar todo el contenido</p>
+                      </div>
+                  </button>
+              </div>
+          </div>
+        </section>
+        
       </div>
+    </div>
+
+    <!-- Fixed Footer -->
+    <div class="panel-sticky-footer" [class.hidden]="activeTab === 'general'">
+      <lib-export-panel></lib-export-panel>
     </div>
   </main>
 </div>
