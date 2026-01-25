@@ -111,7 +111,6 @@
   border-radius: var(--theme-radius);
   &:hover { background: rgba(0,0,0,0.05); }
 @mixin variant-glass {
-
   --theme-bg: rgba(255, 255, 255, 0.05);
   --theme-color: #ffffff;
   --theme-accent: #ffffff;
@@ -147,43 +146,19 @@
     background: rgba(255, 255, 255, 0.1);
     border-color: rgba(255, 255, 255, 0.4) !important;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  }
-
-  * {
-    text-shadow: 0 4px 8px rgba(0,0,0,0.5);
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.1) 0%,
-      transparent 50%,
-      rgba(255, 255, 255, 0.05) 100%
-    );
-    pointer-events: none;
-  }
-
-  &:hover {
-    transform: translateY(-8px);
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.4) !important;
-    box-shadow: 
-      0 25px 50px -12px rgba(0, 0, 0, 0.5),
-      inset 0 0 20px rgba(255, 255, 255, 0.1);
     
     &::before {
       transform: rotate(45deg) translate(10%, 10%);
     }
+  }
 
   p, span, h1, h2, h3, h4, h5, h6 {
     text-shadow: 0 4px 8px rgba(0,0,0,0.5);
     letter-spacing: 0.5px;
   }
-@mixin variant-neon {
+}
 
+@mixin variant-neon {
   --theme-bg: #050505;
   --theme-color: #ffffff;
   --theme-accent: #00f3ff;
@@ -217,22 +192,19 @@
     transform: scale(1.03) translateY(-2px);
     border-color: #ff00ff !important;
     box-shadow: 0 0 30px rgba(255, 0, 255, 0.6);
-  }
-
-  &:hover {
-    transform: scale(1.03) translateY(-2px);
-    border-color: #ff00ff !important;
-    box-shadow: 0 0 30px rgba(255, 0, 255, 0.6);
     
     &::before {
       opacity: 0.8;
       filter: blur(15px);
     }
+  }
 
   * {
     color: #fff !important;
     text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
   }
+}
+
 @mixin variant-cyberpunk {
 
   --theme-bg: #fcee0a;
