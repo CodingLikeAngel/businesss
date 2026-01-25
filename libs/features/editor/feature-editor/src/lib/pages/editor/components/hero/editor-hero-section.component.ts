@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, ViewChild, ViewChildren, QueryList, AfterViewInit, OnDestroy, Inject, PLATFORM_ID, DoCheck } from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, ViewChildren, QueryList, AfterViewInit, OnDestroy, Inject, PLATFORM_ID, DoCheck, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   HeroConfig,
@@ -31,7 +31,7 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
   templateUrl: './editor-hero-section.component.html',
   styleUrls: ['./editor-hero-section.component.scss']
 })
-export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit, OnDestroy, DoCheck {
+export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit, OnDestroy, DoCheck, OnChanges {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('titleElement', { static: true }) titleElement!: ElementRef;
   @ViewChild('subtitleElement', { static: true }) subtitleElement!: ElementRef;
@@ -40,6 +40,12 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
   @ViewChild('matrixCanvas') matrixCanvas?: ElementRef<HTMLCanvasElement>;
 
   @Input() heroConfig!: HeroConfig;
+
+  ngOnChanges(changes: any) {
+    if (changes.globalVariant || changes.heroConfig || changes.section) {
+      this.refreshHeroState();
+    }
+  }
 
   private matrixInterval: any;
   activeCarouselIndex = 0;
@@ -102,9 +108,26 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
     this.applyCardsEditing();
     this.cardElements.changes.subscribe(() => this.applyCardsEditing());
 
-    if (this.isBrowser && this.getLayout() === 'matrix' && this.matrixCanvas) {
-      this.initMatrixEffect();
+    if (this.isBrowser) {
+       this.refreshHeroState();
     }
+  }
+
+  private refreshHeroState() {
+     if (!this.isBrowser) return;
+     
+     // Handle Matrix effect transitions
+     const layout = this.getLayout();
+     if (layout === 'matrix') {
+       if (!this.matrixInterval && this.matrixCanvas) {
+         this.initMatrixEffect();
+       }
+     } else {
+       if (this.matrixInterval) {
+         clearInterval(this.matrixInterval);
+         this.matrixInterval = null;
+       }
+     }
   }
 
   private applyCardsEditing() {
@@ -162,7 +185,29 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
    * Get section classes
    */
   getHeroClasses(): string[] {
-    return ['hero-section', `hero-section--${this.getVariant(this.section.id)}`];
+    const variant = this.getVariant(this.section.id);
+    return ['hero-section', `hero-section--${variant}`];
+  }
+
+  override getVariant(sectionId: string): any {
+    // 1. Individual override in componentVariants map (highest priority for manual selection)
+    if (this.componentVariants[sectionId] && this.componentVariants[sectionId] !== 'default') {
+      return this.componentVariants[sectionId];
+    }
+    
+    // 2. Content override in section object
+    const contentVariant = this.section?.content?.['variant'];
+    if (contentVariant && contentVariant !== 'default') {
+      return contentVariant;
+    }
+    
+    // 3. Fallback to Hero specific config variant (set by global DNA selector)
+    if (this.heroConfig?.variant && this.heroConfig.variant !== 'default') {
+      return this.heroConfig.variant;
+    }
+    
+    // 4. Ultimate fallback to project global variant
+    return this.globalVariant || 'default';
   }
 
   /**

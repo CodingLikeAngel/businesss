@@ -47,7 +47,11 @@ export abstract class BaseEditorSectionComponent {
     if (contentVariant && contentVariant !== 'default') {
       return contentVariant;
     }
-    return this.componentVariants[sectionId] || this.globalVariant;
+    const componentVariant = this.componentVariants[sectionId];
+    if (componentVariant && componentVariant !== 'default') {
+      return componentVariant;
+    }
+    return this.globalVariant || 'default';
   }
 
   selectSection(event: Event, section: PageSection) {
