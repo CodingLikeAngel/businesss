@@ -1,56 +1,201 @@
-<lib-ui-components-nav-bar [variant]="getVariant('navBar')" [navLinks]="navBarConfig.navLinks" [customStyles]="navBarConfig.customStyles" (linkClicked)="scrollToSection($event)"></lib-ui-components-nav-bar>
+<router-outlet></router-outlet>
 
-<lib-ui-hero-section
-  [variant]="getVariant('hero')"
-  [title]="heroConfig.title"
-  [subtitle]="heroConfig.subtitle"
-  [showCta]="heroConfig.showCta"
-  [ctaLabel]="heroConfig.ctaLabel"
-  [showScrollIcon]="heroConfig.showScrollIcon"
-  [videoBackground]="heroConfig.videoBackground"
-  [videoUrl]="heroConfig.videoUrl"
-  [videoPoster]="heroConfig.videoPoster"
-  [navigationCards]="heroConfig.navigationCards"
-  [carouselItems]="heroConfig.carouselItems"
-  [customStyles]="heroConfig.customStyles"
-  (sectionSelected)="scrollToSection($event)"
-></lib-ui-hero-section>
-
-<lib-ui-components-title [variant]="getVariant('title')">Nuestros Servicios</lib-ui-components-title>
-
-<div class="services-grid">
-  <lib-ui-components-card-rutas
-    *ngFor="let service of serviceCards"
-    [items]="[service]"
-    [variant]="getVariant('card')"
-    [isMobile]="false"
-  ></lib-ui-components-card-rutas>
+<!-- NAVIGATION -->
+<div class="relative z-30">
+  <lib-ui-components-nav-bar
+    [variant]="getVariant('navBar')"
+    [navLinks]="navBarConfig.navLinks"
+    [customStyles]="navBarConfig.customStyles"
+    (linkClicked)="scrollToSection($event)"
+  ></lib-ui-components-nav-bar>
 </div>
 
-<lib-ui-components-title [variant]="getVariant('title')">Productos Destacados</lib-ui-components-title>
+<!-- HERO SECTION -->
+<section id="hero" class="relative z-20">
+  <lib-ui-hero-section
+    [variant]="getVariant('hero')"
+    [title]="heroConfig.title"
+    [subtitle]="heroConfig.subtitle"
+    [showCta]="heroConfig.showCta"
+    [ctaLabel]="heroConfig.ctaLabel"
+    [showScrollIcon]="heroConfig.showScrollIcon"
+    [videoBackground]="heroConfig.videoBackground"
+    [videoUrl]="heroConfig.videoUrl"
+    [videoPoster]="heroConfig.videoPoster"
+    [navigationCards]="heroConfig.navigationCards"
+    [carouselItems]="heroConfig.carouselItems"
+    [customStyles]="heroConfig.customStyles"
+    (sectionSelected)="scrollToSection($event)"
+  ></lib-ui-hero-section>
+</section>
 
-<div class="products-grid">
-  <div class="product-card" *ngFor="let product of products; trackBy: trackByProductId">
-    <img [src]="product.image" [alt]="product.name" class="product-image" />
-    <h3>{{ product.name }}</h3>
-    <p>{{ product.description }}</p>
-    <p class="price">{{ product.price }}</p>
-    <button (click)="addToCart(product)" class="add-to-cart">Añadir al carrito</button>
+<!-- STATS SECTION -->
+<section id="stats" class="relative z-20 py-16 bg-slate-50">
+  <lib-ui-components-stats-section
+    [title]="'Líderes en el Mercado'"
+    [subtitle]="'Resultados que hablan por sí mismos.'"
+    [variant]="'cards'"
+    [stats]="realEstateStats"
+  ></lib-ui-components-stats-section>
+</section>
+
+<!-- FEATURES (WHY US) -->
+<section id="features" class="relative z-20 py-24 bg-white">
+  <div class="container mx-auto px-6">
+    <lib-ui-features-section
+      [title]="'Experiencia Inmobiliaria'"
+      [subtitle]="'Redefiniendo el estándar de servicio en bienes raíces.'"
+      [features]="realEstateFeatures"
+      [variant]="'cards'"
+    ></lib-ui-features-section>
   </div>
-</div>
+</section>
 
-<lib-faq-section [faqItems]="faqItems" [variant]="getVariant('faq')"></lib-faq-section>
+<!-- SERVICES -->
+<section id="servicios" class="relative z-20 py-20 bg-gray-50">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <lib-ui-components-title
+      level="h2"
+      text="Nuestros Servicios"
+      [variant]="getVariant('title')"
+      align="center"
+      class="mb-16"
+    ></lib-ui-components-title>
+    
+    <lib-ui-components-card-rutas
+      [items]="serviceCards"
+      [variant]="getVariant('card')"
+      [backgroundColor]="'rgba(255, 255, 255, 1)'"
+      [isMobile]="false"
+    ></lib-ui-components-card-rutas>
+  </div>
+</section>
 
-<lib-pricing-section [priceColumns]="priceColumns" [priceRows]="priceRows" [variant]="getVariant('pricing')"></lib-pricing-section>
+<!-- EXCLUSIVE LISTINGS (PROMOTIONS) -->
+<section id="propiedades" class="relative z-20 py-24 bg-white">
+  <div class="container mx-auto px-6 max-w-7xl">
+     <lib-promotions-section 
+        [variant]="'banner'" 
+        [items]="premiumCardConfigs"
+        [title]="'Propiedades Exclusivas'"
+        [description]="'Oportunidades únicas seleccionadas por nuestros expertos.'"
+     ></lib-promotions-section>
+  </div>
+</section>
 
-<lib-gallery-section [images]="allGalleryConfigs[0].images" [variant]="getVariant('gallery')"></lib-gallery-section>
+<!-- LATEST PROPERTIES (PRODUCTS GRID) -->
+<section id="catalogo" class="relative z-20 py-24 bg-gray-50">
+    <lib-products-section
+        [title]="'Recién Llegados'"
+        [subtitle]="'Explora las últimas incorporaciones a nuestra cartera.'"
+        [products]="products"
+        [variant]="'minimal'"
+    ></lib-products-section>
+</section>
 
-<lib-promotions-section [premiumCardConfigs]="premiumCardConfigs" [variant]="getVariant('promotions')"></lib-promotions-section>
+<!-- SERVICE PACKAGES (PRICING) -->
+<section id="tarifas" class="relative z-20 py-20 bg-white">
+  <div class="container mx-auto px-6 max-w-5xl">
+    <lib-ui-components-title
+      level="h2"
+      text="Planes de Venta"
+      [variant]="getVariant('title')"
+      align="center"
+      class="mb-12"
+    ></lib-ui-components-title>
+    <div class="p-8 border border-gray-100 rounded-3xl shadow-lg bg-white">
+        <lib-ui-pricing-table-section 
+            [variant]="'minimal'" 
+            [columns]="priceColumns" 
+            [rows]="priceRows"
+        ></lib-ui-pricing-table-section>
+    </div>
+  </div>
+</section>
 
-<lib-reservation-form [variant]="getVariant('reservation')"></lib-reservation-form>
+<!-- TESTIMONIALS -->
+<section id="testimonios" class="relative z-20 py-24 bg-slate-900 text-white">
+    <lib-ui-testimonials-section
+      [title]="'Historias de Éxito'"
+      [subtitle]="'Familias felices en sus nuevos hogares.'"
+      [variant]="'glass'"
+      [testimonials]="realEstateTestimonials"
+    ></lib-ui-testimonials-section>
+</section>
 
+<!-- GALLERY -->
+<section id="galeria" class="relative z-20 py-20 bg-white">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <lib-ui-components-title
+      level="h2"
+      text="Interiores de Ensueño"
+      [variant]="getVariant('title')"
+      align="center"
+      class="mb-12"
+    ></lib-ui-components-title>
+    <lib-ui-components-gallery-section 
+        [variant]="'carousel'" 
+        [images]="allGalleryConfigs[0].images"
+    ></lib-ui-components-gallery-section>
+  </div>
+</section>
 
-<lib-ui-components-modal [isOpen]="modalOpen" [variant]="'glass'" [rounded]="'md'" [size]="'lg'" [title]="selectedService?.serviceName || 'Detalles del Servicio'" [content]="selectedService?.description || 'Selecciona un servicio para ver más detalles.'" (modalOnClose)="closeModal()"></lib-ui-components-modal>
+<!-- FAQ -->
+<section id="faq" class="relative z-20 py-20 bg-gray-50">
+  <div class="container mx-auto px-6 max-w-4xl">
+    <lib-ui-faq-section 
+        [variant]="'cloud'" 
+        [items]="faqItems"
+    ></lib-ui-faq-section>
+  </div>
+</section>
+
+<!-- CONTACT FORM -->
+<section id="contacto" class="relative z-20 py-24 bg-white">
+  <div class="container mx-auto px-6 max-w-4xl">
+    <div class="p-12 bg-gray-50 rounded-3xl border border-gray-200">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-serif text-slate-800 mb-4">Agenda una Visita</h2>
+            <p class="text-slate-600">Déjanos tus datos y un agente te contactará en menos de 24h.</p>
+        </div>
+        <lib-reservation-form [variant]="'default'"></lib-reservation-form>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="relative z-20 py-16 bg-slate-800 text-white">
+    <lib-ui-newsletter-section
+        [title]="'Market Report'"
+        [description]="'Recibe análisis de mercado y oportunidades de inversión mensualmente.'"
+        [variant]="'glass'"
+    ></lib-ui-newsletter-section>
+</section>
+
+<!-- FOOTER -->
+<lib-ui-components-footer
+  [variant]="getVariant('footer')"
+  [title]="footerConfig.title"
+  [description]="footerConfig.description"
+  [exploreLinks]="footerConfig.exploreLinks"
+  [trendLinks]="footerConfig.trendLinks"
+  [socialIcons]="footerConfig.socialIcons"
+  [copyrightText]="footerConfig.copyrightText"
+  [showParticles]="footerConfig.showParticles"
+  [dark]="footerConfig.dark"
+  [customStyles]="footerConfig.customStyles"
+  (linkClicked)="scrollToSection($event)"
+  (socialClicked)="onSocialClick($event)"
+></lib-ui-components-footer>
+
+<lib-ui-components-modal
+  [isOpen]="modalOpen"
+  [variant]="'glass'"
+  [size]="'lg'"
+  [title]="selectedService?.serviceName || 'Detalles'"
+  [content]="selectedService?.description"
+  (modalOnClose)="closeModal()"
+></lib-ui-components-modal>
 
 <lib-bubble-animation [config]="bubbleConfig" [variant]="getVariant('bubble')"></lib-bubble-animation>
 
