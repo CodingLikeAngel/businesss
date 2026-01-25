@@ -19,9 +19,13 @@ import {
   UIFooterComponent,
   UIStatsLibSectionComponent,
   StatItem,
-  UIAccordionComponent
+  UIAccordionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent,
+  PromotionsSectionComponent,
+  ProductsSectionComponent
 } from '@negocio/ui-components';
-import { GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
+import { ReservationFormComponent } from '@negocio/featured-components';
 
 @Component({
   selector: 'lib-home-feature',
@@ -32,9 +36,10 @@ import { GallerySectionComponent, PricingSectionComponent, PromotionsSectionComp
     UINavBarComponent,
     UIHeroSectionComponent,
     ReservationFormComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
+    UIPricingTableSectionComponent,
+    UIGallerySectionComponent,
     PromotionsSectionComponent,
+    ProductsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,

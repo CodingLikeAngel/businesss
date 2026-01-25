@@ -65,29 +65,12 @@
 
 <!-- PRODUCTS -->
 <section id="productos" class="py-24 relative z-10">
-  <div class="container mx-auto px-6">
-    <lib-ui-components-title
-      level="h2"
-      text="Boutique del Caballero"
-      [variant]="getVariant('title')"
-      align="center"
-      class="mb-16"
-    ></lib-ui-components-title>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
-      <div *ngFor="let product of products" class="glass-panel p-8 group hover:border-accent transition-all duration-500">
-        <div class="overflow-hidden rounded-lg mb-6">
-            <img [src]="product.image" [alt]="product.name" class="w-full h-56 object-cover group-hover:scale-110 transition-transform duration-700" />
-        </div>
-        <h3 class="text-2xl font-bold text-white mb-2">{{ product.name }}</h3>
-        <p class="text-dim mb-6">{{ product.description }}</p>
-        <div class="flex justify-between items-center">
-            <span class="text-2xl font-black text-cyan-400">{{ product.price }}</span>
-            <button class="px-6 py-2 bg-white/10 hover:bg-white text-white hover:text-black rounded-full transition-colors font-bold uppercase text-xs tracking-widest">Añadir</button>
-        </div>
-      </div>
-    </div>
-  </div>
+    <lib-products-section
+        [title]="'Boutique del Caballero'"
+        [subtitle]="'Herramientas y cuidado personal de primer nivel.'"
+        [products]="products"
+        [variant]="'glass'"
+    ></lib-products-section>
 </section>
 
 <!-- PROMOTIONS -->
@@ -95,12 +78,12 @@
   <div class="container mx-auto px-6">
       <lib-promotions-section
         [variant]="'glass'"
-        [premiumCardConfigs]="premiumCardConfigs"
+        [items]="premiumCardConfigs"
       ></lib-promotions-section>
   </div>
 </section>
 
-<!-- ACCORDION FAQ (New & Improved!) -->
+<!-- ACCORDION FAQ -->
 <section id="faq" class="relative z-20 py-20">
   <div class="container mx-auto px-6 max-w-4xl">
     <div class="text-center mb-12">
@@ -121,14 +104,21 @@
 <!-- GALLERY -->
 <section id="galeria" class="relative z-20 py-20 bg-black/20">
   <div class="container mx-auto px-6">
-    <lib-gallery-section [variant]="getVariant('gallery')" [images]="allGalleryConfigs[0].images"></lib-gallery-section>
+    <lib-ui-components-gallery-section 
+        [variant]="getVariant('gallery')" 
+        [images]="allGalleryConfigs[0].images"
+    ></lib-ui-components-gallery-section>
   </div>
 </section>
 
 <!-- PRICING TABLE -->
 <section id="precios" class="relative z-20 py-20">
   <div class="container mx-auto px-6 max-w-7xl">
-    <lib-pricing-section [variant]="getVariant('pricing')" [priceColumns]="priceColumns" [priceRows]="priceRows"></lib-pricing-section>
+    <lib-ui-pricing-table-section 
+        [variant]="getVariant('pricing')" 
+        [columns]="priceColumns" 
+        [rows]="priceRows"
+    ></lib-ui-pricing-table-section>
   </div>
 </section>
 

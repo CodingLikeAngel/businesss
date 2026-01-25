@@ -46,8 +46,6 @@ import { ReservationFormComponent } from '@negocio/featured-components';
     UIStatsLibSectionComponent,
     UIFeaturesSectionComponent,
     UITestimonialsSectionComponent,
-    UINewsletterSectionComponent,
-    ProductsSectionComponent,
     PromotionsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,

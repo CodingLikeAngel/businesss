@@ -18,8 +18,18 @@ import {
   BubbleAnimationComponent,
   BubbleConfig as BubbleAnimationConfig,
   UIFooterComponent,
+  UIStatsLibSectionComponent,
+  StatItem,
+  UIFeaturesSectionComponent,
+  UITestimonialsSectionComponent,
+  UINewsletterSectionComponent,
+  ProductsSectionComponent,
+  PromotionsSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent
 } from '@negocio/ui-components';
-import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
+import { ReservationFormComponent } from '@negocio/featured-components';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
@@ -31,15 +41,12 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     UINavBarComponent,
     UIHeroSectionComponent,
     ReservationFormComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
     PromotionsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,
     UITitleComponent,
-    UIFooterComponent,
+    UIFooterComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home-feature.component.html',
@@ -129,43 +136,94 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
 
   serviceCards: any[] = [
     {
-      routeName: 'Corte de Hombre',
-      imageUrl: '/retro-stars.png',
-      difficulty: 'Duración: 30 min',
-      rating: 4.8,
-      reviews: 150,
-      duration: 0.5,
-      distance: 0,
-      ascent: 0,
-      description: 'Un corte fresco y personalizado para un look moderno.',
-      features: ['Corte con tijera', 'Lavado incluido'],
-      link: '#forms',
-    },
-    {
-      routeName: 'Tinte Vibrante',
-      imageUrl: '/1029.png',
-      difficulty: 'Duración: 2 horas',
+      routeName: 'Recetas Médicas',
+      imageUrl: 'https://images.unsplash.com/photo-1585435557343-3b092031a831?auto=format&fit=crop&q=80',
+      difficulty: 'Gestión Rápida',
       rating: 4.9,
-      reviews: 89,
-      duration: 2,
+      reviews: 500,
+      duration: 0,
       distance: 0,
       ascent: 0,
-      description: 'Colores vibrantes con productos de alta calidad.',
-      features: ['Tinte sin amoníaco', 'Tratamiento protector'],
+      description: 'Surtimos tus recetas con precisión y rapidez.',
+      features: ['Envío a domicilio', 'Recordatorios'],
       link: '#forms',
     },
     {
-      routeName: 'Manicura Artística',
-      imageUrl: '/1090.png',
-      difficulty: 'Duración: 1 hora',
-      rating: 4.7,
-      reviews: 120,
-      duration: 1,
+      routeName: 'Consulta Farmacéutica',
+      imageUrl: 'https://images.unsplash.com/photo-1631549916768-4119b2d3f962?auto=format&fit=crop&q=80',
+      difficulty: 'Asesoría',
+      rating: 4.8,
+      reviews: 300,
+      duration: 0,
       distance: 0,
       ascent: 0,
-      description: 'Diseños únicos para tus uñas con acabados duraderos.',
-      features: ['Esmalte gel', 'Decoración personalizada'],
+      description: 'Resuelve tus dudas sobre medicamentos con expertos.',
+      features: ['Atención personalizada', 'Revisión de interacciones'],
       link: '#forms',
+    },
+    {
+      routeName: 'Dermocosmética',
+      imageUrl: 'https://images.unsplash.com/photo-1556228720-19875a6c3843?auto=format&fit=crop&q=80',
+      difficulty: 'Cuidado de Piel',
+      rating: 4.7,
+      reviews: 200,
+      duration: 0,
+      distance: 0,
+      ascent: 0,
+      description: 'Productos de alta gama para el cuidado de tu piel.',
+      features: ['Análisis de piel', 'Marcas premium'],
+      link: '#forms',
+    },
+  ];
+
+  pharmacyStats: StatItem[] = [
+    { label: 'Medicamentos Disponibles', value: '5000+', icon: '💊' },
+    { label: 'Clientes Satisfechos', value: '10k+', icon: '😊' },
+    { label: 'Expertos Farmacéuticos', value: '15', icon: '👨‍⚕️' },
+    { label: 'Años de Experiencia', value: '30', icon: '🏥' },
+  ];
+
+  pharmacyFeatures = [
+    {
+      title: 'Entrega Express',
+      description: 'Medicamentos en la puerta de tu casa en menos de 2 horas.',
+      icon: '🚚',
+    },
+    {
+      title: 'Atención 24h',
+      description: 'Siempre abiertos para tus emergencias de salud.',
+      icon: '🕒',
+    },
+    {
+      title: 'App Móvil',
+      description: 'Gestiona tus pedidos y recordatorios desde tu celular.',
+      icon: '📱',
+    },
+    {
+      title: 'Programa de Lealtad',
+      description: 'Acumula puntos y obtén descuentos en productos seleccionados.',
+      icon: '💳',
+    },
+  ];
+
+  pharmacyTestimonials = [
+    {
+      author: 'Marta S.',
+      role: 'Cliente Frecuente',
+      quote: 'Siempre encuentro lo que necesito y el personal es muy amable.',
+      avatar: 'https://i.pravatar.cc/150?u=marta',
+    },
+    {
+      author: 'Jorge L.',
+      role: 'Paciente Crónico',
+      quote: 'El servicio de entrega a domicilio me ha facilitado la vida.',
+      avatar: 'https://i.pravatar.cc/150?u=jorge',
+    },
+    {
+      author: 'Ana P.',
+      role: 'Madre de Familia',
+      quote: 'Excelente asesoría en productos para mi bebé. Muy recomendados.',
+      avatar: 'https://i.pravatar.cc/150?u=ana',
     },
   ];
 
