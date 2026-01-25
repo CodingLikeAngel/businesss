@@ -119,6 +119,27 @@ export const variants = [
     'water-ripple',
     'black-hole',
     'wormhole',
-    'dna-helix'
+    'dna-helix',
+    // New Ultra-Modern Variants
+    'neon-glow',
+    'cyber-grid',
+    'quantum-leap',
+    'hologram',
+    'plasma-wave',
+    'neural-link',
+    'fractal-maze',
+    'time-portal',
+    'dimension-gate',
+    'energy-storm',
+    'galaxy-spiral',
+    'cyber-nebula',
+    'quantum-entanglement',
+    'holo-projection',
+    'plasma-core',
+    'neural-web',
+    'fractal-reality',
+    'chrono-shift',
+    'void-dimension',
+    'cosmic-storm'
   ] as const;
   

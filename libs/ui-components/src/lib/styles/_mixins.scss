@@ -3976,8 +3976,696 @@ $breakpoints: (
   to { transform: rotate(360deg); }
 }
 
-@keyframes aurora-flow {
+// ============================================================================
+// 🌌 NEW ULTRA-MODERN VARIANTS - Latest Cutting-Edge Effects
+// ============================================================================
+
+/// ✨ Neon Glow Variant
+/// Intense neon glow effect
+@mixin variant-neon-glow {
+  position: relative;
+  background: linear-gradient(135deg, #ff0080 0%, #00ff80 100%);
+  color: white;
+  border: 2px solid #ff0080;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  box-shadow: 0 0 20px rgba(255, 0, 128, 0.6), 0 0 40px rgba(255, 0, 128, 0.4);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 0 30px rgba(255, 0, 128, 0.8), 0 0 60px rgba(255, 0, 128, 0.6);
+  }
+}
+
+/// 🔗 Cyber Grid Variant
+/// Digital grid pattern
+@mixin variant-cyber-grid {
+  position: relative;
+  background: linear-gradient(135deg, #000000 0%, #1a1a1a 100%);
+  color: #00ff88;
+  border: 2px solid #00ff88;
+  border-radius: 0.5rem;
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+  transition: all 0.3s ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image:
+      linear-gradient(rgba(0, 255, 136, 0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 255, 136, 0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+  }
+
+  &:hover {
+    box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
+    transform: translateY(-2px);
+  }
+}
+
+/// ⚛️ Quantum Leap Variant
+/// Quantum-inspired leap effect
+@mixin variant-quantum-leap {
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: 2px solid #667eea;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px) rotate(2deg);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+  }
+}
+
+/// 📺 Hologram Variant
+/// Holographic projection effect
+@mixin variant-hologram {
+  position: relative;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(255, 0, 255, 0.8));
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.5rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 255, 255, 0.5);
+  }
+}
+
+/// 🌊 Plasma Wave Variant
+/// Flowing plasma wave
+@mixin variant-plasma-wave {
+  position: relative;
+  background: linear-gradient(45deg, #ff1744, #ff9800, #ffeb3b, #4caf50, #2196f3);
+  background-size: 400% 400%;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  animation: gradient-shift 3s ease infinite;
+  box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(255, 23, 68, 0.5);
+  }
+}
+
+/// 🧠 Neural Link Variant
+/// Neural network connection
+@mixin variant-neural-link {
+  position: relative;
+  background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+  color: white;
+  border: 2px solid #8b5cf6;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
+  }
+}
+
+/// 🌌 Fractal Maze Variant
+/// Complex fractal pattern
+@mixin variant-fractal-maze {
+  position: relative;
+  background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+  background-size: 400% 400%;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  animation: gradient-shift 4s ease infinite;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+  }
+}
+
+/// ⏰ Time Portal Variant
+/// Time travel portal effect
+@mixin variant-time-portal {
+  position: relative;
+  background: conic-gradient(from 0deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+  color: white;
+  border: 3px solid #ff0000;
+  border-radius: 50%;
+  font-weight: 700;
+  box-shadow: 0 0 30px rgba(255, 0, 0, 0.5);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px) rotate(45deg);
+    box-shadow: 0 0 50px rgba(255, 0, 0, 0.7);
+  }
+}
+
+/// 🌌 Dimension Gate Variant
+/// Interdimensional gateway
+@mixin variant-dimension-gate {
+  position: relative;
+  background: linear-gradient(135deg, #000000 0%, #4c1d95 50%, #7c3aed 100%);
+  color: white;
+  border: 2px solid #7c3aed;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(124, 58, 237, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px) perspective(500px) rotateX(5deg);
+    box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5);
+  }
+}
+
+/// ⚡ Energy Storm Variant
+/// Electric energy storm
+@mixin variant-energy-storm {
+  position: relative;
+  background: linear-gradient(135deg, #ffff00 0%, #ffeb3b 100%);
+  color: #333;
+  border: 2px solid #ffff00;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  box-shadow: 0 0 20px rgba(255, 255, 0, 0.4);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 30px rgba(255, 255, 0, 0.6);
+  }
+}
+
+/// 🌌 Galaxy Spiral Variant
+/// Spiral galaxy effect
+@mixin variant-galaxy-spiral {
+  position: relative;
+  background: radial-gradient(circle at center, #4c1d95 0%, #7c3aed 50%, #a855f7 100%);
+  color: white;
+  border: 1px solid rgba(168, 85, 247, 0.5);
+  border-radius: 50%;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(76, 29, 149, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 0 8px 25px rgba(76, 29, 149, 0.5);
+  }
+}
+
+/// 🌫️ Cyber Nebula Variant
+/// Cyberpunk nebula cloud
+@mixin variant-cyber-nebula {
+  position: relative;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  color: #e879f9;
+  border: 1px solid #e879f9;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(232, 121, 249, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(232, 121, 249, 0.5);
+  }
+}
+
+/// ⚛️ Quantum Entanglement Variant
+/// Quantum entanglement visualization
+@mixin variant-quantum-entanglement {
+  position: relative;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: 2px solid #667eea;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+  }
+}
+
+/// 📽️ Holo Projection Variant
+/// Holographic projection
+@mixin variant-holo-projection {
+  position: relative;
+  background: linear-gradient(135deg, rgba(0, 255, 255, 0.8), rgba(255, 0, 255, 0.8));
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.5rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 255, 255, 0.5);
+  }
+}
+
+/// 🔥 Plasma Core Variant
+/// Intense plasma core
+@mixin variant-plasma-core {
+  position: relative;
+  background: radial-gradient(circle, #ff1744 0%, #ff9800 50%, #ffeb3b 100%);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-weight: 700;
+  box-shadow: 0 0 30px rgba(255, 23, 68, 0.5);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 0 50px rgba(255, 23, 68, 0.8);
+  }
+}
+
+/// 🕸️ Neural Web Variant
+/// Neural network web
+@mixin variant-neural-web {
+  position: relative;
+  background: linear-gradient(135deg, #8b5cf6 0%, #06b6d4 100%);
+  color: white;
+  border: 2px solid #8b5cf6;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(139, 92, 246, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
+  }
+}
+
+/// 🌌 Fractal Reality Variant
+/// Fractal reality distortion
+@mixin variant-fractal-reality {
+  position: relative;
+  background: linear-gradient(45deg, #667eea, #764ba2, #f093fb, #f5576c);
+  background-size: 400% 400%;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  animation: gradient-shift 4s ease infinite;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+  }
+}
+
+/// ⏰ Chrono Shift Variant
+/// Time shift effect
+@mixin variant-chrono-shift {
+  position: relative;
+  background: linear-gradient(135deg, #9c27b0 0%, #673ab7 100%);
+  color: white;
+  border: 2px solid #9c27b0;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  box-shadow: 0 4px 15px rgba(156, 39, 176, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px) rotate(2deg);
+    box-shadow: 0 8px 25px rgba(156, 39, 176, 0.5);
+  }
+}
+
+/// 🕳️ Void Dimension Variant
+/// Void dimension portal
+@mixin variant-void-dimension {
+  position: relative;
+  background: radial-gradient(circle, #000000 0%, #1a1a2e 70%, #16213e 100%);
+  color: white;
+  border: 3px solid #8b5cf6;
+  border-radius: 50%;
+  font-weight: 700;
+  box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-3px) scale(1.1);
+    box-shadow: 0 0 60px rgba(139, 92, 246, 0.8);
+  }
+}
+
+/// 🌪️ Cosmic Storm Variant
+/// Cosmic energy storm
+@mixin variant-cosmic-storm {
+  position: relative;
+  background: linear-gradient(45deg, #ff1744, #ff9800, #2196f3, #4caf50);
+  background-size: 400% 400%;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-weight: 700;
+  animation: gradient-shift 3s ease infinite;
+  box-shadow: 0 4px 15px rgba(255, 23, 68, 0.3);
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(255, 23, 68, 0.5);
+  }
+}
+
+// ============================================================================
+// 🎨 VARIANT APPLICATORS - Apply All Variants
+// ============================================================================
+
+@mixin apply-all-variants($prefix: 'variant-') {
+  // Basic Variants
+  &.#{$prefix}default { @include variant-default; }
+  &.#{$prefix}primary { @include variant-primary; }
+  &.#{$prefix}secondary { @include variant-secondary; }
+  &.#{$prefix}outline { @include variant-outline; }
+  &.#{$prefix}ghost { @include variant-ghost; }
+  &.#{$prefix}link { @include variant-link; }
+  &.#{$prefix}neon { @include variant-neon; }
+  &.#{$prefix}cyberpunk { @include variant-cyberpunk; }
+  &.#{$prefix}gradient { @include variant-gradient; }
+  &.#{$prefix}glass { @include variant-glass; }
+  &.#{$prefix}retro { @include variant-retro; }
+  &.#{$prefix}pulse-gradient { @include variant-pulse-gradient; }
+  &.#{$prefix}holo { @include variant-holo; }
+  &.#{$prefix}matrix { @include variant-matrix; }
+  &.#{$prefix}quantum { @include variant-quantum; }
+  &.#{$prefix}cybernetic { @include variant-cybernetic; }
+  &.#{$prefix}danger { @include variant-danger; }
+  &.#{$prefix}success { @include variant-success; }
+  &.#{$prefix}nano { @include variant-nano; }
+  &.#{$prefix}stellar { @include variant-stellar; }
+  &.#{$prefix}phoenix { @include variant-phoenix; }
+  &.#{$prefix}galactic { @include variant-galactic; }
+  &.#{$prefix}orbitron { @include variant-orbitron; }
+  &.#{$prefix}cartoon { @include variant-cartoon; }
+  &.#{$prefix}luma { @include variant-luma; }
+  &.#{$prefix}platform { @include variant-platform; }
+  &.#{$prefix}hero { @include variant-hero; }
+  &.#{$prefix}coin { @include variant-coin; }
+  &.#{$prefix}cloud { @include variant-cloud; }
+  &.#{$prefix}fire { @include variant-fire; }
+  &.#{$prefix}water { @include variant-water; }
+  &.#{$prefix}leaf { @include variant-leaf; }
+  &.#{$prefix}amber-glow { @include variant-amber-glow; }
+  &.#{$prefix}minimal-white { @include variant-minimal-white; }
+  &.#{$prefix}mario { @include variant-mario; }
+  &.#{$prefix}zelda { @include variant-zelda; }
+  &.#{$prefix}kirby { @include variant-kirby; }
+  &.#{$prefix}rayman { @include variant-rayman; }
+  &.#{$prefix}lum { @include variant-lum; }
+  &.#{$prefix}river { @include variant-river; }
+  &.#{$prefix}minimal { @include variant-minimal; }
+  &.#{$prefix}hex-teal { @include variant-hex-teal; }
+  &.#{$prefix}purple-edge { @include variant-purple-edge; }
+  &.#{$prefix}rose-radial { @include variant-rose-radial; }
+  &.#{$prefix}yellow-pulse { @include variant-yellow-pulse; }
+  &.#{$prefix}green-inset { @include variant-green-inset; }
+  &.#{$prefix}blue-skew { @include variant-blue-skew; }
+  &.#{$prefix}orange-dash { @include variant-orange-dash; }
+  &.#{$prefix}indigo-dots { @include variant-indigo-dots; }
+  &.#{$prefix}bubble { @include variant-bubble; }
+  &.#{$prefix}electoon { @include variant-electoon; }
+  &.#{$prefix}jungle { @include variant-jungle; }
+  &.#{$prefix}joycon { @include variant-joycon; }
+  &.#{$prefix}neomorph { @include variant-neomorph; }
+  &.#{$prefix}glitch { @include variant-glitch; }
+  &.#{$prefix}portal { @include variant-portal; }
+  &.#{$prefix}bioshock { @include variant-bioshock; }
+  &.#{$prefix}super-meat-boy { @include variant-super-meat-boy; }
+  &.#{$prefix}pokemon { @include variant-pokemon; }
+  &.#{$prefix}animal-crossing { @include variant-animal-crossing; }
+  &.#{$prefix}assassins-creed { @include variant-assassins-creed; }
+  &.#{$prefix}far-cry { @include variant-far-cry; }
+  &.#{$prefix}watch-dogs { @include variant-watch-dogs; }
+  &.#{$prefix}bioshock-enhanced { @include variant-bioshock-enhanced; }
+  &.#{$prefix}lol { @include variant-lol; }
+  &.#{$prefix}overwatch { @include variant-overwatch; }
+  &.#{$prefix}minecraft { @include variant-minecraft; }
+  &.#{$prefix}fortnite { @include variant-fortnite; }
+  &.#{$prefix}ice { @include variant-ice; }
+  &.#{$prefix}metal { @include variant-metal; }
+  &.#{$prefix}energy { @include variant-energy; }
+  &.#{$prefix}void { @include variant-void; }
+  &.#{$prefix}cosmic { @include variant-cosmic; }
+  &.#{$prefix}plasma { @include variant-plasma; }
+  &.#{$prefix}arcade { @include variant-arcade; }
+  &.#{$prefix}pixel { @include variant-pixel; }
+  &.#{$prefix}chaos { @include variant-chaos; }
+  &.#{$prefix}vortex { @include variant-vortex; }
+  &.#{$prefix}stone { @include variant-stone; }
+  &.#{$prefix}donkeykong { @include variant-donkeykong; }
+  &.#{$prefix}supermeatboy { @include variant-supermeatboy; }
+  &.#{$prefix}aqua { @include variant-aqua; }
+  &.#{$prefix}vaporwave { @include variant-vaporwave; }
+  &.#{$prefix}aurora { @include variant-aurora; }
+  &.#{$prefix}trailblazer { @include variant-trailblazer; }
+  &.#{$prefix}elegant { @include variant-elegant; }
+  &.#{$prefix}vintage { @include variant-vintage; }
+  &.#{$prefix}luxury { @include variant-luxury; }
+  &.#{$prefix}rockstar { @include variant-rockstar; }
+  &.#{$prefix}ubisoft { @include variant-ubisoft; }
+  &.#{$prefix}morphing-blob { @include variant-morphing-blob; }
+  &.#{$prefix}liquid-metal { @include variant-liquid-metal; }
+  &.#{$prefix}crystal-prism { @include variant-crystal-prism; }
+  &.#{$prefix}neural-network { @include variant-neural-network; }
+  &.#{$prefix}quantum-field { @include variant-quantum-field; }
+  &.#{$prefix}holographic-matrix { @include variant-holographic-matrix; }
+  &.#{$prefix}plasma-storm { @include variant-plasma-storm; }
+  &.#{$prefix}cyber-circuit { @include variant-cyber-circuit; }
+  &.#{$prefix}organic-growth { @include variant-organic-growth; }
+  &.#{$prefix}fractal-dimension { @include variant-fractal-dimension; }
+  &.#{$prefix}time-warp { @include variant-time-warp; }
+  &.#{$prefix}dimensional-shift { @include variant-dimensional-shift; }
+  &.#{$prefix}nano-swarm { @include variant-nano-swarm; }
+  &.#{$prefix}energy-web { @include variant-energy-web; }
+  &.#{$prefix}void-portal { @include variant-void-portal; }
+  &.#{$prefix}cosmic-dust { @include variant-cosmic-dust; }
+  &.#{$prefix}stellar-nova { @include variant-stellar-nova; }
+  &.#{$prefix}aurora-borealis { @include variant-aurora-borealis; }
+  &.#{$prefix}lava-flow { @include variant-lava-flow; }
+  &.#{$prefix}ice-crystal { @include variant-ice-crystal; }
+  &.#{$prefix}thunder-storm { @include variant-thunder-storm; }
+  &.#{$prefix}water-ripple { @include variant-water-ripple; }
+  &.#{$prefix}black-hole { @include variant-black-hole; }
+  &.#{$prefix}wormhole { @include variant-wormhole; }
+  &.#{$prefix}dna-helix { @include variant-dna-helix; }
+  &.#{$prefix}crystal { @include variant-crystal; }
+  &.#{$prefix}gear { @include variant-gear; }
+  &.#{$prefix}star { @include variant-star; }
+  &.#{$prefix}hexagon { @include variant-hexagon; }
+
+  // New Ultra-Modern Variants
+  &.#{$prefix}neon-glow { @include variant-neon-glow; }
+  &.#{$prefix}cyber-grid { @include variant-cyber-grid; }
+  &.#{$prefix}quantum-leap { @include variant-quantum-leap; }
+  &.#{$prefix}hologram { @include variant-hologram; }
+  &.#{$prefix}plasma-wave { @include variant-plasma-wave; }
+  &.#{$prefix}neural-link { @include variant-neural-link; }
+  &.#{$prefix}fractal-maze { @include variant-fractal-maze; }
+  &.#{$prefix}time-portal { @include variant-time-portal; }
+  &.#{$prefix}dimension-gate { @include variant-dimension-gate; }
+  &.#{$prefix}energy-storm { @include variant-energy-storm; }
+  &.#{$prefix}galaxy-spiral { @include variant-galaxy-spiral; }
+  &.#{$prefix}cyber-nebula { @include variant-cyber-nebula; }
+  &.#{$prefix}quantum-entanglement { @include variant-quantum-entanglement; }
+  &.#{$prefix}holo-projection { @include variant-holo-projection; }
+  &.#{$prefix}plasma-core { @include variant-plasma-core; }
+  &.#{$prefix}neural-web { @include variant-neural-web; }
+  &.#{$prefix}fractal-reality { @include variant-fractal-reality; }
+  &.#{$prefix}chrono-shift { @include variant-chrono-shift; }
+  &.#{$prefix}void-dimension { @include variant-void-dimension; }
+  &.#{$prefix}cosmic-storm { @include variant-cosmic-storm; }
+}
+
+/// 🎯 Apply Variants to Child Elements
+/// Applies variant styles to specific child elements within a component
+/// @param {String} $child - CSS selector for the child element
+/// @param {String} $prefix - Variant prefix (default: 'variant-')
+@mixin apply-variants-to-child($child, $prefix: 'variant-') {
+  // Basic Variants
+  &.#{$prefix}default #{$child} { @include variant-default; }
+  &.#{$prefix}primary #{$child} { @include variant-primary; }
+  &.#{$prefix}secondary #{$child} { @include variant-secondary; }
+  &.#{$prefix}outline #{$child} { @include variant-outline; }
+  &.#{$prefix}ghost #{$child} { @include variant-ghost; }
+  &.#{$prefix}glass #{$child} { @include variant-glass; }
+  &.#{$prefix}neon #{$child} { @include variant-neon; }
+  &.#{$prefix}cyberpunk #{$child} { @include variant-cyberpunk; }
+  &.#{$prefix}retro #{$child} { @include variant-retro; }
+  &.#{$prefix}dark #{$child} { @include variant-dark; }
+  &.#{$prefix}matrix #{$child} { @include variant-matrix; }
+  &.#{$prefix}glitch #{$child} { @include variant-glitch; }
+  &.#{$prefix}portal #{$child} { @include variant-portal; }
+  &.#{$prefix}super-meat-boy #{$child} { @include variant-super-meat-boy; }
+  &.#{$prefix}bioshock #{$child} { @include variant-bioshock; }
+  &.#{$prefix}joycon #{$child} { @include variant-joycon; }
+  &.#{$prefix}jungle #{$child} { @include variant-jungle; }
+  &.#{$prefix}neomorph #{$child} { @include variant-neomorph; }
+  &.#{$prefix}electoon #{$child} { @include variant-electoon; }
+  &.#{$prefix}holo #{$child} { @include variant-holo; }
+  &.#{$prefix}quantum #{$child} { @include variant-quantum; }
+  &.#{$prefix}river #{$child} { @include variant-river; }
+  &.#{$prefix}ice #{$child} { @include variant-ice; }
+  &.#{$prefix}metal #{$child} { @include variant-metal; }
+  &.#{$prefix}energy #{$child} { @include variant-energy; }
+  &.#{$prefix}void #{$child} { @include variant-void; }
+  &.#{$prefix}cosmic #{$child} { @include variant-cosmic; }
+  &.#{$prefix}arcade #{$child} { @include variant-arcade; }
+  &.#{$prefix}pixel #{$child} { @include variant-pixel; }
+  &.#{$prefix}chaos #{$child} { @include variant-chaos; }
+  &.#{$prefix}vortex #{$child} { @include variant-vortex; }
+  &.#{$prefix}stone #{$child} { @include variant-stone; }
+  &.#{$prefix}donkeykong #{$child} { @include variant-donkeykong; }
+  &.#{$prefix}supermeatboy #{$child} { @include variant-supermeatboy; }
+  &.#{$prefix}aqua #{$child} { @include variant-aqua; }
+  &.#{$prefix}vaporwave #{$child} { @include variant-vaporwave; }
+  &.#{$prefix}aurora #{$child} { @include variant-aurora; }
+  &.#{$prefix}trailblazer #{$child} { @include variant-trailblazer; }
+
+  // Premium Gaming Themes
+  &.#{$prefix}mario #{$child} { @include variant-mario; }
+  &.#{$prefix}zelda #{$child} { @include variant-zelda; }
+  &.#{$prefix}kirby #{$child} { @include variant-kirby; }
+  &.#{$prefix}rayman #{$child} { @include variant-rayman; }
+  &.#{$prefix}lum #{$child} { @include variant-lum; }
+  &.#{$prefix}phoenix #{$child} { @include variant-phoenix; }
+  &.#{$prefix}galactic #{$child} { @include variant-galactic; }
+  &.#{$prefix}orbitron #{$child} { @include variant-orbitron; }
+  &.#{$prefix}cartoon #{$child} { @include variant-cartoon; }
+  &.#{$prefix}luma #{$child} { @include variant-luma; }
+  &.#{$prefix}coin #{$child} { @include variant-coin; }
+  &.#{$prefix}fire #{$child} { @include variant-fire; }
+  &.#{$prefix}water #{$child} { @include variant-water; }
+  &.#{$prefix}leaf #{$child} { @include variant-leaf; }
+  &.#{$prefix}link #{$child} { @include variant-link; }
+  &.#{$prefix}gradient #{$child} { @include variant-gradient; }
+  &.#{$prefix}pulse-gradient #{$child} { @include variant-pulse-gradient; }
+  &.#{$prefix}cybernetic #{$child} { @include variant-cybernetic; }
+  &.#{$prefix}danger #{$child} { @include variant-danger; }
+  &.#{$prefix}success #{$child} { @include variant-success; }
+  &.#{$prefix}nano #{$child} { @include variant-nano; }
+  &.#{$prefix}stellar #{$child} { @include variant-stellar; }
+  &.#{$prefix}platform #{$child} { @include variant-platform; }
+  &.#{$prefix}hero #{$child} { @include variant-hero; }
+  &.#{$prefix}cloud #{$child} { @include variant-cloud; }
+  &.#{$prefix}plasma #{$child} { @include variant-plasma; }
+  &.#{$prefix}amber-glow #{$child} { @include variant-amber-glow; }
+  &.#{$prefix}minimal-white #{$child} { @include variant-minimal-white; }
+  &.#{$prefix}hex-teal #{$child} { @include variant-hex-teal; }
+  &.#{$prefix}purple-edge #{$child} { @include variant-purple-edge; }
+  &.#{$prefix}rose-radial #{$child} { @include variant-rose-radial; }
+  &.#{$prefix}yellow-pulse #{$child} { @include variant-yellow-pulse; }
+  &.#{$prefix}green-inset #{$child} { @include variant-green-inset; }
+  &.#{$prefix}blue-skew #{$child} { @include variant-blue-skew; }
+  &.#{$prefix}orange-dash #{$child} { @include variant-orange-dash; }
+  &.#{$prefix}indigo-dots #{$child} { @include variant-indigo-dots; }
+  &.#{$prefix}bubble #{$child} { @include variant-bubble; }
+  &.#{$prefix}electoon #{$child} { @include variant-electoon; }
+  &.#{$prefix}jungle #{$child} { @include variant-jungle; }
+  &.#{$prefix}joycon #{$child} { @include variant-joycon; }
+  &.#{$prefix}neomorph #{$child} { @include variant-neomorph; }
+  &.#{$prefix}glitch #{$child} { @include variant-glitch; }
+  &.#{$prefix}portal #{$child} { @include variant-portal; }
+
+  // New Gaming-Inspired Variants
+  &.#{$prefix}pokemon #{$child} { @include variant-pokemon; }
+  &.#{$prefix}animal-crossing #{$child} { @include variant-animal-crossing; }
+  &.#{$prefix}assassins-creed #{$child} { @include variant-assassins-creed; }
+  &.#{$prefix}far-cry #{$child} { @include variant-far-cry; }
+  &.#{$prefix}watch-dogs #{$child} { @include variant-watch-dogs; }
+  &.#{$prefix}bioshock-enhanced #{$child} { @include variant-bioshock-enhanced; }
+  &.#{$prefix}lol #{$child} { @include variant-lol; }
+  &.#{$prefix}overwatch #{$child} { @include variant-overwatch; }
+  &.#{$prefix}minecraft #{$child} { @include variant-minecraft; }
+  &.#{$prefix}fortnite #{$child} { @include variant-fortnite; }
+  &.#{$prefix}elegant #{$child} { @include variant-elegant; }
+  &.#{$prefix}luxury #{$child} { @include variant-luxury; }
+  &.#{$prefix}vintage #{$child} { @include variant-vintage; }
+  &.#{$prefix}corporate #{$child} { @include variant-corporate; }
+  &.#{$prefix}minimal #{$child} { @include variant-minimal; }
+
+  // Ultra-Creative Variants with Unique Shapes
+  &.#{$prefix}crystal #{$child} { @include variant-crystal; }
+  &.#{$prefix}gear #{$child} { @include variant-gear; }
+  &.#{$prefix}star #{$child} { @include variant-star; }
+  &.#{$prefix}hexagon #{$child} { @include variant-hexagon; }
+
+  // New Ultra-Modern Variants
+  &.#{$prefix}neon-glow #{$child} { @include variant-neon-glow; }
+  &.#{$prefix}cyber-grid #{$child} { @include variant-cyber-grid; }
+  &.#{$prefix}quantum-leap #{$child} { @include variant-quantum-leap; }
+  &.#{$prefix}hologram #{$child} { @include variant-hologram; }
+  &.#{$prefix}plasma-wave #{$child} { @include variant-plasma-wave; }
+  &.#{$prefix}neural-link #{$child} { @include variant-neural-link; }
+  &.#{$prefix}fractal-maze #{$child} { @include variant-fractal-maze; }
+  &.#{$prefix}time-portal #{$child} { @include variant-time-portal; }
+  &.#{$prefix}dimension-gate #{$child} { @include variant-dimension-gate; }
+  &.#{$prefix}energy-storm #{$child} { @include variant-energy-storm; }
+  &.#{$prefix}galaxy-spiral #{$child} { @include variant-galaxy-spiral; }
+  &.#{$prefix}cyber-nebula #{$child} { @include variant-cyber-nebula; }
+  &.#{$prefix}quantum-entanglement #{$child} { @include variant-quantum-entanglement; }
+  &.#{$prefix}holo-projection #{$child} { @include variant-holo-projection; }
+  &.#{$prefix}plasma-core #{$child} { @include variant-plasma-core; }
+  &.#{$prefix}neural-web #{$child} { @include variant-neural-web; }
+  &.#{$prefix}fractal-reality #{$child} { @include variant-fractal-reality; }
+  &.#{$prefix}chrono-shift #{$child} { @include variant-chrono-shift; }
+  &.#{$prefix}void-dimension #{$child} { @include variant-void-dimension; }
+  &.#{$prefix}cosmic-storm #{$child} { @include variant-cosmic-storm; }
+}
+
+// ============================================================================
+// 🎬 ANIMATIONS - Keyframe Definitions
+// ============================================================================
+
+/// 🌈 Animated gradient shifting
+@keyframes gradient-shift {
   0% { background-position: 0% 50%; }
-  100% { background-position: 100% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/// 📺 Glitch line animation
+@keyframes glitch-line {
+  0%, 100% { transform: translateX(0); }
+  10% { transform: translateX(-2px); }
+  20% { transform: translateX(2px); }
+  30% { transform: translateX(-1px); }
+  40% { transform: translateX(1px); }
+  50% { transform: translateX(0); }
 }
 
