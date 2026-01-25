@@ -4,23 +4,30 @@ import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VariantService, NavBarConfig, HeroConfig, FooterConfig, BubbleConfig } from '@negocio/shared-components';
 import {
+  UIStatsLibSectionComponent,
+  UIFeaturesSectionComponent,
+  UITestimonialsSectionComponent,
+  UINewsletterSectionComponent,
+  ProductsSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent,
+  UIHeroSectionComponent,
+  PromotionsSectionComponent,
+  UINavBarComponent,
+  UICardRutasComponent,
+  BubbleAnimationComponent,
+  UITitleComponent,
+  UIFooterComponent,
+  UIModalComponent,
+  StatItem,
   CardVariant,
   AccordionItem,
   TableColumn,
   TableRow,
-  GalleryImage,
-  UITitleComponent,
-  CardPremiumConfig,
-  UIModalComponent,
-  UICardRutasComponent,
-  BubbleAnimationComponent,
-  BubbleConfig as BubbleAnimationConfig,
-  UIFooterComponent,
-  UIStatsLibSectionComponent,
-  StatItem,
+  CardPremiumConfig
 } from '@negocio/ui-components';
-import { UINavBarComponent } from '@negocio/ui-components';
-import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
+import { ReservationFormComponent } from '@negocio/featured-components';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
@@ -31,9 +38,9 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     RouterModule,
     UINavBarComponent,
     ReservationFormComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
+    UIFaqSectionComponent,
+    UIPricingTableSectionComponent,
+    UIGallerySectionComponent,
     PromotionsSectionComponent,
     UIStatsLibSectionComponent,
     UIModalComponent,
@@ -41,10 +48,23 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     BubbleAnimationComponent,
     UITitleComponent,
     UIFooterComponent,
+    UIFeaturesSectionComponent,
+    UITestimonialsSectionComponent,
+    UINewsletterSectionComponent,
+    ProductsSectionComponent,
+    UIHeroSectionComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home-feature.component.html',
-  styles: [/* Existing styles unchanged */],
+  styles: [`
+    .text-dim { color: rgba(255, 255, 255, 0.6); }
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 2rem;
+    }
+  `],
 })
 export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   isMobile = false;
@@ -83,10 +103,57 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   ];
 
   priceRows: TableRow[] = [
-    { dish: 'Pasta Carbonara', description: 'Pasta fresca con salsa cremosa', price: '12€' },
-    { dish: 'Risotto de Setas', description: 'Arroz cremoso con setas del bosque', price: '15€' },
-    { dish: 'Tiramisú', description: 'Postre italiano clásico', price: '8€' },
+    { dish: 'Tataki de Atún Rojo', description: 'Con costra de sésamo y reducción de soja cítrica', price: '24€' },
+    { dish: 'Solomillo de Ternera', description: 'A la brasa con puré de boletus y trufa negra', price: '28€' },
+    { dish: 'Arroz de Marisco', description: 'Caldoso con gambas de Denia y base de azafrán', price: '22€' },
+    { dish: 'Burrata Trufada', description: 'Tomates cherry confitados y pesto de albahaca', price: '18€' },
+    { dish: 'Coulant de Chocolate', description: 'Corazón fundente con helado de vainilla Bourbon', price: '9€' },
   ];
+
+  restaurantFeatures = [
+    {
+      title: 'Producto de Km 0',
+      description: 'Seleccionamos los mejores ingredientes de proveedores locales cada mañana.',
+      icon: '🌿'
+    },
+    {
+      title: 'Bodega Exclusiva',
+      description: 'Más de 100 referencias nacionales e internacionales seleccionadas por nuestro sumiller.',
+      icon: '🍷'
+    },
+    {
+      title: 'Cocina de Autor',
+      description: 'Platos tradicionales reinterpretados con técnicas de vanguardia por nuestro equipo.',
+      icon: '🎨'
+    },
+    {
+      title: 'Ambiente Único',
+      description: 'Un espacio diseñado para que cada cena sea una experiencia sensorial completa.',
+      icon: '🏺'
+    }
+  ];
+
+  restaurantTestimonials = [
+    {
+      author: 'Elena Sanz',
+      role: 'Crítica Gastronómica',
+      quote: 'Una explosión de sabores. El equilibrio entre vanguardia y tradición es exquisito.',
+      avatar: 'https://i.pravatar.cc/150?u=elena'
+    },
+    {
+      author: 'Marc Torres',
+      role: 'Cliente Habitual',
+      quote: 'El mejor solomillo que he probado en la ciudad. El servicio es impecable y la bodega sorprendente.',
+      avatar: 'https://i.pravatar.cc/150?u=marc'
+    },
+    {
+      author: 'Sofia Vicens',
+      role: 'Influencer Lifestyle',
+      quote: 'El local más instagrameable. Pero lo mejor no es la luz, es el sabor de su tataki.',
+      avatar: 'https://i.pravatar.cc/150?u=sofia'
+    }
+  ];
+
 
   premiumCardConfigs: CardPremiumConfig[] = [
     {

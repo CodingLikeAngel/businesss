@@ -1,141 +1,169 @@
 <router-outlet></router-outlet>
 
+<!-- NAVIGATION -->
 <div class="relative z-30">
   <lib-ui-components-nav-bar
     [variant]="getVariant('navbar')"
-    [logoText]="navBarConfig.logoText"
-    [showMobileMenu]="navBarConfig.showMobileMenu"
-    [isFixed]="navBarConfig.isFixed"
     [navLinks]="navBarConfig.navLinks"
     [customStyles]="navBarConfig.customStyles"
     (linkClicked)="scrollToSection($event)"
   ></lib-ui-components-nav-bar>
 </div>
 
+<!-- HERO SECTION -->
 <section id="hero" class="relative z-20">
   <lib-ui-hero-section
     [variant]="getVariant('hero')"
     [title]="heroConfig.title"
     [subtitle]="heroConfig.subtitle"
-    [showCta]="heroConfig.showCta"
-    [ctaLabel]="heroConfig.ctaLabel"
-    [showScrollIcon]="heroConfig.showScrollIcon"
-    [videoBackground]="heroConfig.videoBackground"
-    [videoUrl]="heroConfig.videoUrl"
-    [videoPoster]="heroConfig.videoPoster"
-    [navigationCards]="heroConfig.navigationCards"
-    [carouselItems]="heroConfig.carouselItems"
     [customStyles]="heroConfig.customStyles"
     (sectionSelected)="scrollToSection($event)"
   ></lib-ui-hero-section>
 </section>
 
-<lib-bubble-animation
-  [variant]="getVariant('bubble')"
-  [config]="bubbleConfig"
-></lib-bubble-animation>
+<!-- STATS SECTION -->
+<section id="stats" class="relative z-20 py-16 bg-slate-900/10">
+  <lib-ui-components-stats-section
+    [title]="'Bienestar en Cifras'"
+    [subtitle]="'Resultados reales en relajación y cuidado personal.'"
+    [variant]="'glass'"
+    [stats]="spaStats"
+  ></lib-ui-components-stats-section>
+</section>
 
-<section id="servicios" class="relative z-20 py-12">
+<!-- FEATURES (WHY US) -->
+<section id="features" class="relative z-20 py-24">
+  <div class="container mx-auto px-6">
+    <lib-ui-features-section
+      [title]="'Santuario de Paz'"
+      [subtitle]="'Un espacio diseñado para reconectar cuerpo y mente.'"
+      [features]="spaFeatures"
+      [variant]="'cards'"
+    ></lib-ui-features-section>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="servicios" class="relative z-20 py-20 bg-white/50">
   <div class="container mx-auto px-6 max-w-7xl">
     <lib-ui-components-title
       level="h2"
-      text="Nuestros Servicios"
+      text="Rituales de Belleza"
       [variant]="getVariant('title')"
-      animation="slide"
       align="center"
-      class="mb-8"
+      class="mb-16"
     ></lib-ui-components-title>
-    <div class="flex justify-center py-12">
-      <lib-ui-components-card-rutas
-        [items]="serviceCards"
-        [variant]="getVariant('card')"
-        [backgroundColor]="'rgba(255,255,255,0.1)'"
-        [textColor]="'#FACC15'"
-        [accentColor]="'#FF1E56'"
-        [isMobile]="false"
-      ></lib-ui-components-card-rutas>
-    </div>
+    
+    <lib-ui-components-card-rutas
+      [items]="serviceCards"
+      [variant]="getVariant('card')"
+      [backgroundColor]="'rgba(255, 255, 255, 0.8)'"
+      [isMobile]="false"
+    ></lib-ui-components-card-rutas>
   </div>
 </section>
 
-<section id="faq" class="relative z-20">
+<!-- PROMOTIONS -->
+<section id="promociones" class="relative z-20 py-24">
   <div class="container mx-auto px-6 max-w-7xl">
-    <div class="rounded-2xl">
-      <lib-faq-section [variant]="getVariant('faq')" [faqItems]="faqItems"></lib-faq-section>
-    </div>
+     <lib-promotions-section 
+        [variant]="'banner'" 
+        [items]="premiumCardConfigs"
+        [title]="'Experiencias Exclusivas'"
+     ></lib-promotions-section>
   </div>
 </section>
 
-<section id="precios" class="relative z-20">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-pricing-section [variant]="getVariant('pricing')" [priceColumns]="priceColumns" [priceRows]="priceRows"></lib-pricing-section>
-  </div>
-</section>
-
-<section id="promociones" class="relative z-20">
-  <div class="container mx-auto px-6 max-w-7xl flex justify-center">
-    <div class="max-w-5xl">
-      <lib-promotions-section
-        [selectedVariant]="getVariant('promotions')"
-        [variant]="getVariant('promotions')"
-        [premiumCardConfigs]="premiumCardConfigs"
-      ></lib-promotions-section>
-    </div>
-  </div>
-</section>
-
-<section id="galeria" class="relative z-20">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <lib-gallery-section [variant]="getVariant('gallery')" [images]="allGalleryConfigs[0].images"></lib-gallery-section>
-  </div>
-</section>
-
-<section id="forms" class="relative z-20">
-  <div class="container mx-auto px-6 max-w-7xl">
-    <div class="p-8 rounded-2xl">
-      <lib-reservation-form [variant]="getVariant('form')"></lib-reservation-form>
-    </div>
-  </div>
-</section>
-
-<section id="productos" class="mb-16 relative z-10">
-  <div class="backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(255,30,86,0.3)] overflow-hidden">
-    <div class="particle-layer absolute inset-0 z-0"></div>
+<!-- PRICING TABLE -->
+<section id="precios" class="relative z-20 py-20 bg-stone-50/50 backdrop-blur-md">
+  <div class="container mx-auto px-6 max-w-5xl">
     <lib-ui-components-title
       level="h2"
-      text="Nuestros Productos"
+      text="Menú de Tratamientos"
       [variant]="getVariant('title')"
-      animation="slide"
       align="center"
-      class="mb-8"
+      class="mb-12"
     ></lib-ui-components-title>
-    <p class="text-white text-lg mb-8 text-center max-w-2xl mx-auto animate-fade-in">
-      Descubre nuestra selección premium de productos para el cabello, diseñados para realzar tu estilo con calidad y sostenibilidad.
-    </p>
-    <div class="relative" role="region" aria-labelledby="productos-heading">
-      <ng-container *ngIf="products?.length; else noProducts">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div *ngFor="let product of products; trackBy: trackByProductId" class="product-card relative bg-[rgba(255,255,255,0.1)] rounded-xl p-6 transform hover:scale-105 hover:shadow-[0_0_20px_rgba(255,30,86,0.7)] transition-all duration-500">
-            <img [src]="product.image" [alt]="product.name" class="w-full h-48 object-cover rounded-lg mb-4" loading="lazy" />
-            <h3 class="text-xl font-semibold text-[#FACC15] mb-2">{{ product.name }}</h3>
-            <p class="text-white mb-4">{{ product.description }}</p>
-            <p class="text-[#FF1E56] font-bold">{{ product.price }}</p>
-            <button
-              (click)="addToCart(product)"
-              class="mt-4 px-4 py-2 bg-gradient-to-r from-[#FF1E56] to-[#FACC15] text-white rounded-full hover:shadow-[0_0_15px_rgba(255,30,86,1)] transition-all duration-300"
-            >
-              Comprar Ahora
-            </button>
-          </div>
+    <div class="glass-panel p-8">
+        <lib-ui-pricing-table-section 
+            [variant]="'minimal'" 
+            [columns]="priceColumns" 
+            [rows]="priceRows"
+        ></lib-ui-pricing-table-section>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonios" class="relative z-20 py-24">
+    <lib-ui-testimonials-section
+      [title]="'Voces de Calma'"
+      [subtitle]="'Lo que sienten quienes nos visitan.'"
+      [variant]="'default'"
+      [testimonials]="spaTestimonials"
+    ></lib-ui-testimonials-section>
+</section>
+
+<!-- GALLERY -->
+<section id="galeria" class="relative z-20 py-20 bg-stone-100/30">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <lib-ui-components-title
+      level="h2"
+      text="Nuestros Espacios"
+      [variant]="getVariant('title')"
+      align="center"
+      class="mb-12"
+    ></lib-ui-components-title>
+    <lib-ui-components-gallery-section 
+        [variant]="'carousel'" 
+        [images]="allGalleryConfigs[0].images"
+    ></lib-ui-components-gallery-section>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="relative z-20 py-20">
+  <div class="container mx-auto px-6 max-w-4xl">
+    <lib-ui-faq-section 
+        [variant]="'accordion'" 
+        [items]="faqItems"
+    ></lib-ui-faq-section>
+  </div>
+</section>
+
+<!-- BOOKING FORM -->
+<section id="forms" class="relative z-20 py-24 bg-gradient-to-b from-transparent to-stone-200">
+  <div class="container mx-auto px-6 max-w-4xl">
+    <div class="glass-panel p-12">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-serif text-gray-800 mb-4">Reserva tu Momento</h2>
+            <p class="text-gray-600">El primer paso hacia tu bienestar empieza aquí.</p>
         </div>
-      </ng-container>
-      <ng-template #noProducts>
-        <p class="text-white text-center">No hay productos disponibles en este momento.</p>
-      </ng-template>
+        <lib-reservation-form [variant]="'default'"></lib-reservation-form>
     </div>
   </div>
 </section>
 
+<!-- PRODUCTS -->
+<section id="productos" class="relative z-20 py-24">
+    <lib-products-section
+        [title]="'Cosmética Natural'"
+        [subtitle]="'Lleva la experiencia del spa a tu hogar.'"
+        [products]="products"
+        [variant]="'default'"
+    ></lib-products-section>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="relative z-20 py-16 bg-teal-700/80 text-white">
+    <lib-ui-newsletter-section
+        [title]="'Club Bienestar'"
+        [description]="'Consejos de salud, eventos de yoga y promociones para suscriptores.'"
+        [variant]="'glass'"
+    ></lib-ui-newsletter-section>
+</section>
+
+<!-- FOOTER -->
 <lib-ui-components-footer
   [variant]="getVariant('footer')"
   [title]="footerConfig.title"
@@ -151,16 +179,13 @@
   (socialClicked)="onSocialClick($event)"
 ></lib-ui-components-footer>
 
+<lib-bubble-animation [config]="bubbleConfig" [variant]="getVariant('bubble')"></lib-bubble-animation>
+
 <lib-ui-components-modal
   [isOpen]="modalOpen"
   [variant]="'glass'"
-  [rounded]="'md'"
   [size]="'lg'"
-  [dark]="false"
-  [title]="selectedService?.serviceName || 'Detalles del Servicio'"
-  [content]="selectedService?.description || 'Selecciona un servicio para ver más detalles.'"
+  [title]="selectedService?.serviceName || 'Detalles'"
+  [content]="selectedService?.description"
   (modalOnClose)="closeModal()"
 ></lib-ui-components-modal>
-
-
-

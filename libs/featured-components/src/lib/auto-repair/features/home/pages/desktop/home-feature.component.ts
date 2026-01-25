@@ -4,22 +4,28 @@ import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VariantService, NavBarConfig, HeroConfig, FooterConfig, BubbleConfig } from '@negocio/shared-components';
 import {
-  UINavBarComponent,
+  UIStatsLibSectionComponent,
+  UIFeaturesSectionComponent,
+  UITestimonialsSectionComponent,
+  UINewsletterSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent,
   UIHeroSectionComponent,
+  PromotionsSectionComponent,
+  UINavBarComponent,
+  UICardRutasComponent,
+  BubbleAnimationComponent,
+  UITitleComponent,
+  UIFooterComponent,
+  UIModalComponent,
   CardVariant,
   AccordionItem,
   TableColumn,
   TableRow,
-  GalleryImage,
-  UITitleComponent,
-  CardPremiumConfig,
-  UIModalComponent,
-  UICardRutasComponent,
-  BubbleAnimationComponent,
-  BubbleConfig as BubbleAnimationConfig,
-  UIFooterComponent,
+  CardPremiumConfig
 } from '@negocio/ui-components';
-import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
+import { ReservationFormComponent } from '@negocio/featured-components';
 
 @Component({
   selector: 'lib-home-feature',
@@ -30,16 +36,30 @@ import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, 
     UINavBarComponent,
     UIHeroSectionComponent,
     ReservationFormComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
+    UIFaqSectionComponent,
+    UIPricingTableSectionComponent,
+    UIGallerySectionComponent,
     PromotionsSectionComponent,
     BubbleAnimationComponent,
     UITitleComponent,
     UICardRutasComponent,
+    UIFooterComponent,
+    UIStatsLibSectionComponent,
+    UIFeaturesSectionComponent,
+    UITestimonialsSectionComponent,
+    UINewsletterSectionComponent,
+    UIModalComponent
   ],
   templateUrl: './home-feature.component.html',
-  styles: [/* Existing styles unchanged */],
+  styles: [`
+    .text-dim { color: rgba(255, 255, 255, 0.6); }
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 2rem;
+    }
+  `],
 })
 export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   isMobile = false;
@@ -78,38 +98,91 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   ];
 
   priceRows: TableRow[] = [
-    { service: 'Cambio de Aceite', description: 'Aceite sintético y filtro', price: '40€' },
-    { service: 'Revisión General', description: 'Chequeo completo del vehículo', price: '80€' },
-    { service: 'Cambio de Frenos', description: 'Pastillas y discos delanteros', price: '150€' },
+    { service: 'Cambio de Aceite', description: 'Aceite sintético 5W30 + Filtro de aceite', price: '65€' },
+    { service: 'Carga de Aire', description: 'Recarga de gas refrigerante R134a', price: '50€' },
+    { service: 'Revisión Pre-ITV', description: 'Inspección de 40 puntos de seguridad', price: '45€' },
+    { service: 'Diagnosis Ecu', description: 'Lectura de fallos y borrado de códigos', price: '30€' },
+    { service: 'Pastillas Freno', description: 'Sustitución eje delantero (Mano de obra)', price: '60€' },
+  ];
+
+  repairStats = [
+    { label: 'Vehículos Reparados', value: '15,000+', icon: '🚗' },
+    { label: 'Años de Experiencia', value: '25', icon: '🛠️' },
+    { label: 'Clientes Satisfechos', value: '98%', icon: '⭐' },
+    { label: 'Equipo de Expertos', value: '12', icon: '👥' },
+  ];
+
+  repairFeatures = [
+    {
+      title: 'Técnicos Certificados',
+      description: 'Nuestro equipo cuenta con certificaciones oficiales de las principales marcas del mercado.',
+      icon: '📜'
+    },
+    {
+      title: 'Recambios Originales',
+      description: 'Solo utilizamos piezas originales o de calidad equivalente para asegurar la longevidad de tu coche.',
+      icon: '💎'
+    },
+    {
+      title: 'Presupuesto Cerrado',
+      description: 'Sin sorpresas en la factura final. Te informamos de cada gasto antes de empezar.',
+      icon: '💰'
+    },
+    {
+      title: 'Garantía Total',
+      description: 'Ofrecemos 12 meses de garantía en todas nuestras reparaciones y piezas instaladas.',
+      icon: '🛡️'
+    }
+  ];
+
+  repairTestimonials = [
+    {
+      author: 'Carlos Ruiz',
+      role: 'Cliente Particular',
+      quote: 'Llevo mi coche aquí desde hace 5 años y nunca me han fallado. Honestidad y profesionalidad pura.',
+      avatar: 'https://i.pravatar.cc/150?u=carlos'
+    },
+    {
+      author: 'Marta Jiménez',
+      role: 'Empresaria',
+      quote: 'Gestionan la flota de mi empresa. Rapidez increíble y precios muy competitivos.',
+      avatar: 'https://i.pravatar.cc/150?u=marta'
+    },
+    {
+      author: 'Juan Pérez',
+      role: 'Conductor Profesional',
+      quote: 'Los mejores diagnosticando averías eléctricas que nadie más sabía arreglar.',
+      avatar: 'https://i.pravatar.cc/150?u=juan'
+    }
   ];
 
   premiumCardConfigs: CardPremiumConfig[] = [
     {
-      title: 'Diagnóstico Completo',
-      description: 'Análisis computarizado de todos los sistemas.',
-      image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3',
-      price: '50€',
-      discount: '-10%',
+      title: 'Mantenimiento Gold',
+      description: 'Cambio de todos los filtros, aceite premium y revisión de 50 puntos.',
+      image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?auto=format&fit=crop&q=80',
+      price: '180€',
+      discount: '-15%',
       icon: 'heroStar',
-      tooltip: '¡Detecta problemas antes!',
+      tooltip: 'Nuestro servicio más completo para tu coche.',
     },
     {
-      title: 'Mantenimiento Anual',
-      description: 'Paquete completo de mantenimiento preventivo.',
-      image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000',
-      price: '200€',
+      title: 'Pulido de Faros',
+      description: 'Recupera la visibilidad y estética de tus faros como el primer día.',
+      image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?auto=format&fit=crop&q=80',
+      price: '40€',
       discount: 'Oferta',
       icon: 'heroStar',
-      tooltip: 'Ahorra en reparaciones futuras.',
+      tooltip: 'Mejora la seguridad en conducción nocturna.',
     },
     {
-      title: 'Reparación de Motor',
-      description: 'Servicio especializado para motores.',
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64',
-      price: '300€',
-      discount: 'Novedad',
+      title: 'Limpieza de Motor',
+      description: 'Limpieza profesional de motor con vapor y protección de componentes.',
+      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?auto=format&fit=crop&q=80',
+      price: '60€',
+      discount: 'Nuevo',
       icon: 'heroStar',
-      tooltip: 'Expertos en motores.',
+      tooltip: 'Evita el desgaste por suciedad acumulada.',
     },
   ];
 

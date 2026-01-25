@@ -18,11 +18,17 @@ import {
   BubbleAnimationComponent,
   BubbleConfig as BubbleAnimationConfig,
   UIFooterComponent,
+  UIStatsLibSectionComponent,
+  UIFeaturesSectionComponent,
+  UITestimonialsSectionComponent,
+  UINewsletterSectionComponent,
+  ProductsSectionComponent,
+  PromotionsSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent
 } from '@negocio/ui-components';
-import { UINavBarComponent as LibUINavBarComponent } from '@negocio/ui-components';
-import { UIHeroSectionComponent as LibUIHeroSectionComponent } from '@negocio/ui-components';
-
-import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
+import { ReservationFormComponent } from '@negocio/featured-components';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
@@ -31,18 +37,23 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   imports: [
     CommonModule,
     RouterModule,
-    LibUINavBarComponent,
-    LibUIHeroSectionComponent,
     UINavBarComponent,
+    UIHeroSectionComponent,
     ReservationFormComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
+    UIFaqSectionComponent,
+    UIPricingTableSectionComponent,
+    UIGallerySectionComponent,
+    UIStatsLibSectionComponent,
+    UIFeaturesSectionComponent,
+    UITestimonialsSectionComponent,
+    UINewsletterSectionComponent,
+    ProductsSectionComponent,
     PromotionsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,
     UITitleComponent,
+    UIFooterComponent,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './home-feature.component.html',
@@ -85,89 +96,140 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   ];
 
   priceRows: TableRow[] = [
-    { service: 'Visita Guiada', description: 'Visita a la propiedad con un agente', price: 'Gratis' },
-    { service: 'Evaluación', description: 'Evaluación de la propiedad', price: '100€' },
-    { service: 'Contrato', description: 'Firma de contrato y trámites', price: '200€' },
+    { service: 'Valoración Silver', description: 'Tasación básica y reporte de mercado', price: 'Gratis' },
+    { service: 'Pack Gold Venta', description: 'Fotos HD, Tour Virtual 360°, Publicación Premium', price: '1.5%' },
+    { service: 'Gestión Platinum', description: 'Staging, Asesoría Legal, Gestión de Visitas VIP', price: '2.5%' },
+  ];
+
+  realEstateStats = [
+    { label: 'Propiedades Vendidas', value: '500+', icon: '🔑' },
+    { label: 'Clientes Satisfechos', value: '98%', icon: '😊' },
+    { label: 'Años de Experiencia', value: '25', icon: '🏛️' },
+    { label: 'Valor Gestionado', value: '120M€', icon: '💰' },
+  ];
+
+  realEstateFeatures = [
+    {
+      title: 'Cartera Exclusiva',
+      description: 'Acceso a propiedades off-market que no encontrarás en portales públicos.',
+      icon: '💎'
+    },
+    {
+      title: 'Tecnología Inmersiva',
+      description: 'Tours virtuales 3D y drones para mostrar cada rincón de tu futuro hogar.',
+      icon: '🕶️'
+    },
+    {
+      title: 'Asesoría Integral',
+      description: 'Te acompañamos desde la búsqueda hasta la firma ante notario y la entrega de llaves.',
+      icon: '🤝'
+    },
+    {
+      title: 'Inversión Inteligente',
+      description: 'Análisis de rentabilidad y plusvalía para inversores exigentes.',
+      icon: '📈'
+    }
+  ];
+
+  realEstateTestimonials = [
+    {
+      author: 'Familia Rodríguez',
+      role: 'Compradores Primeriza',
+      quote: 'Gracias por la paciencia y por encontrarnos la casa de nuestros sueños. ¡Insuperables!',
+      avatar: 'https://i.pravatar.cc/150?u=rodriguez'
+    },
+    {
+      author: 'Carlos M.',
+      role: 'Inversionista',
+      quote: 'Su conocimiento del mercado local me ha hecho ganar un 20% más de rentabilidad.',
+      avatar: 'https://i.pravatar.cc/150?u=carlosm'
+    },
+    {
+      author: 'Sofía L.',
+      role: 'Vendedora',
+      quote: 'Vendieron mi ático en tiempo récord y al precio que yo quería. Profesionales 100%.',
+      avatar: 'https://i.pravatar.cc/150?u=sofia'
+    }
   ];
 
   premiumCardConfigs: CardPremiumConfig[] = [
     {
-      title: 'Casa de Lujo',
-      description: 'Casa de lujo con piscina y jardín.',
-      image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3',
-      price: '500,000€',
-      discount: '-5%',
+      title: 'Villa Moderna',
+      description: 'Diseño vanguardista con vistas infinitas al mar.',
+      image: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&q=80',
+      price: '1.2M€',
+      discount: 'Exclusiva',
       icon: 'heroStar',
-      tooltip: '¡Oportunidad única!',
+      tooltip: 'Lujo sin compromisos.',
     },
     {
-      title: 'Apartamento Céntrico',
-      description: 'Apartamento en el centro de la ciudad.',
-      image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000',
-      price: '300,000€',
-      discount: 'Oferta',
+      title: 'Penthouse Urbano',
+      description: 'El cielo de la ciudad a tus pies. Terraza privada.',
+      image: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&q=80',
+      price: '850k€',
+      discount: 'Nuevo',
       icon: 'heroStar',
-      tooltip: 'Ubicación privilegiada.',
+      tooltip: 'Vive en las alturas.',
     },
     {
-      title: 'Chalet con Vista',
-      description: 'Chalet con vista al mar.',
-      image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64',
-      price: '600,000€',
-      discount: 'Novedad',
+      title: 'Finca Rústica',
+      description: 'Paz y naturaleza a solo 20 min de la ciudad.',
+      image: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?auto=format&fit=crop&q=80',
+      price: '600k€',
+      discount: 'Oportunidad',
       icon: 'heroStar',
-      tooltip: 'Vista espectacular.',
+      tooltip: 'Tu refugio personal.',
     },
   ];
 
   allGalleryConfigs = [
     {
       images: [
-        { src: '/1029.png', alt: 'Propiedad 1' },
-        { src: '/1090.png', alt: 'Propiedad 2' },
-        { src: '/retro-stars.png', alt: 'Propiedad 3' },
+        { src: 'https://images.unsplash.com/photo-1600596542815-37a9a2111692?auto=format&fit=crop&q=80', alt: 'Salón de Lujo' },
+        { src: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&q=80', alt: 'Piscina Infinity' },
+        { src: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&q=80', alt: 'Cocina Gourmet' },
       ],
     },
   ];
 
   serviceCards: any[] = [
     {
-      routeName: 'Visita Guiada',
-      imageUrl: '/retro-stars.png',
-      difficulty: 'Duración: 1 hora',
-      rating: 4.8,
-      reviews: 400,
-      duration: 1,
-      distance: 0,
-      ascent: 0,
-      description: 'Visita a la propiedad con un agente especializado.',
-      features: ['Asesoramiento', 'Información detallada'],
-      link: '#forms',
-    },
-    {
-      routeName: 'Evaluación',
-      imageUrl: '/1029.png',
-      difficulty: 'Duración: 2 horas',
+      routeName: 'Compra',
+      imageUrl: 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?auto=format&fit=crop&q=80',
+      difficulty: 'Proceso Guiado',
       rating: 4.9,
-      reviews: 350,
-      duration: 2,
+      reviews: 500,
+      duration: 0,
       distance: 0,
       ascent: 0,
-      description: 'Evaluación completa de la propiedad.',
-      features: ['Informe detallado', 'Recomendaciones'],
+      description: 'Encuentra tu hogar ideal con nuestra selección exclusiva.',
+      features: ['Búsqueda personalizada', 'Financiación'],
       link: '#forms',
     },
     {
-      routeName: 'Contrato',
-      imageUrl: '/1090.png',
-      difficulty: 'Duración: 3 horas',
-      rating: 4.7,
-      reviews: 280,
-      duration: 3,
+      routeName: 'Venta',
+      imageUrl: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?auto=format&fit=crop&q=80',
+      difficulty: 'Máximo Valor',
+      rating: 4.8,
+      reviews: 300,
+      duration: 0,
       distance: 0,
       ascent: 0,
-      description: 'Firma de contrato y trámites legales.',
-      features: ['Asesoramiento legal', 'Trámites incluidos'],
+      description: 'Obtén el mejor precio por tu propiedad con nuestro marketing.',
+      features: ['Valoración gratuita', 'Home Staging'],
+      link: '#forms',
+    },
+    {
+      routeName: 'Alquiler',
+      imageUrl: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&q=80',
+      difficulty: 'Gestión Total',
+      rating: 4.7,
+      reviews: 400,
+      duration: 0,
+      distance: 0,
+      ascent: 0,
+      description: 'Gestión de alquileres segura y rentable para propietarios.',
+      features: ['Seguro de impago', 'Mantenimiento'],
       link: '#forms',
     },
   ];

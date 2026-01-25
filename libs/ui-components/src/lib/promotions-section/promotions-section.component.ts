@@ -5,7 +5,7 @@ import {
   UIChipComponent,
   UITooltipComponent,
 } from '../../index';
-import { CardPremiumConfig } from '@negocio/shared-components';
+import { CardPremiumConfig } from '../cards/card-premium/card-premium.component';
 import { CustomStyles } from '../models/custom-styles.interface';
 
 @Component({

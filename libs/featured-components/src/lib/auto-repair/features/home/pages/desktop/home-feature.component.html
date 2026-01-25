@@ -1,56 +1,190 @@
-<lib-ui-components-nav-bar
-  [variant]="getVariant('navBar')"
-  [navLinks]="navBarConfig.navLinks"
-  [customStyles]="navBarConfig.customStyles"
-></lib-ui-components-nav-bar>
- 
-<lib-ui-hero-section
-  [variant]="getVariant('hero')"
-  [title]="heroConfig.title"
-  [subtitle]="heroConfig.subtitle"
-  [showCta]="heroConfig.showCta"
-  [ctaLabel]="heroConfig.ctaLabel"
-  [showScrollIcon]="heroConfig.showScrollIcon"
-  [videoBackground]="heroConfig.videoBackground"
-  [videoUrl]="heroConfig.videoUrl"
-  [videoPoster]="heroConfig.videoPoster"
-  [navigationCards]="heroConfig.navigationCards"
-  [carouselItems]="heroConfig.carouselItems"
-  [customStyles]="heroConfig.customStyles"
-></lib-ui-hero-section>
+<router-outlet></router-outlet>
 
-<lib-ui-components-title [variant]="getVariant('title')">Nuestros Servicios</lib-ui-components-title>
-
-<div class="services-grid">
-  <lib-ui-components-card-rutas
-    [items]="serviceCards"
-    [variant]="getVariant('card')"
-  ></lib-ui-components-card-rutas>
+<!-- NAVIGATION -->
+<div class="relative z-30">
+  <lib-ui-components-nav-bar
+    [variant]="getVariant('navBar')"
+    [navLinks]="navBarConfig.navLinks"
+    [customStyles]="navBarConfig.customStyles"
+    (linkClicked)="scrollToSection($event)"
+  ></lib-ui-components-nav-bar>
 </div>
 
-<lib-ui-components-title [variant]="getVariant('title')">Productos Destacados</lib-ui-components-title>
+<!-- HERO SECTION -->
+<section id="hero" class="relative z-20">
+  <lib-ui-hero-section
+    [variant]="getVariant('hero')"
+    [title]="heroConfig.title"
+    [subtitle]="heroConfig.subtitle"
+    [showCta]="heroConfig.showCta"
+    [ctaLabel]="heroConfig.ctaLabel"
+    [showScrollIcon]="heroConfig.showScrollIcon"
+    [videoBackground]="heroConfig.videoBackground"
+    [videoUrl]="heroConfig.videoUrl"
+    [videoPoster]="heroConfig.videoPoster"
+    [navigationCards]="heroConfig.navigationCards"
+    [carouselItems]="heroConfig.carouselItems"
+    [customStyles]="heroConfig.customStyles"
+    (sectionSelected)="scrollToSection($event)"
+  ></lib-ui-hero-section>
+</section>
 
-<div class="products-grid">
-  <div class="product-card" *ngFor="let product of products; trackBy: trackByProductId">
-    <img [src]="product.image" [alt]="product.name" class="product-image" />
-    <h3>{{ product.name }}</h3>
-    <p>{{ product.description }}</p>
-    <p class="price">{{ product.price }}</p>
-    <button (click)="addToCart(product)" class="add-to-cart">Añadir al carrito</button>
+<!-- STATS SECTION -->
+<section id="stats" class="relative z-20 py-16 bg-slate-900/30">
+  <lib-ui-components-stats-section
+    [title]="'Confianza Mecánica'"
+    [subtitle]="'Décadas cuidando de la seguridad de tu familia en la carretera.'"
+    [variant]="'glass'"
+    [stats]="repairStats"
+  ></lib-ui-components-stats-section>
+</section>
+
+<!-- WHY US (FEATURES) -->
+<section id="features" class="relative z-20 py-24">
+  <div class="container mx-auto px-6">
+    <lib-ui-features-section
+      [title]="'¿Por qué elegirnos?'"
+      [subtitle]="'Calidad, transparencia y rapidez en cada intervención.'"
+      [features]="repairFeatures"
+      [variant]="'cards'"
+    ></lib-ui-features-section>
   </div>
-</div>
+</section>
 
-<lib-faq-section [faqItems]="faqItems" [variant]="getVariant('faq')"></lib-faq-section>
+<!-- SERVICES -->
+<section id="servicios" class="relative z-20 py-20 bg-black/40">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <lib-ui-components-title
+      level="h2"
+      text="Servicios Especializados"
+      [variant]="getVariant('title')"
+      align="center"
+      class="mb-16"
+    ></lib-ui-components-title>
+    
+    <lib-ui-components-card-rutas
+      [items]="serviceCards"
+      [variant]="getVariant('card')"
+      [backgroundColor]="'rgba(30, 41, 59, 0.5)'"
+      [isMobile]="false"
+    ></lib-ui-components-card-rutas>
+  </div>
+</section>
 
-<lib-pricing-section [priceColumns]="priceColumns" [priceRows]="priceRows" [variant]="getVariant('pricing')"></lib-pricing-section>
+<!-- PROMOTIONS -->
+<section id="promociones" class="relative z-20 py-24">
+  <div class="container mx-auto px-6 max-w-7xl">
+     <lib-promotions-section 
+        [variant]="'banner'" 
+        [items]="premiumCardConfigs"
+        [title]="'Ofertas de Temporada'"
+     ></lib-promotions-section>
+  </div>
+</section>
 
-<lib-gallery-section [images]="allGalleryConfigs[0].images" [variant]="getVariant('gallery')"></lib-gallery-section>
+<!-- PRICING TABLE -->
+<section id="tarifas" class="relative z-20 py-20 bg-slate-900/50 backdrop-blur-md">
+  <div class="container mx-auto px-6 max-w-5xl">
+    <lib-ui-components-title
+      level="h2"
+      text="Tarifas Transparentes"
+      [variant]="getVariant('title')"
+      align="center"
+      class="mb-12"
+    ></lib-ui-components-title>
+    <div class="glass-panel p-8">
+        <lib-ui-pricing-table-section 
+            [variant]="'table'" 
+            [columns]="priceColumns" 
+            [rows]="priceRows"
+        ></lib-ui-pricing-table-section>
+    </div>
+  </div>
+</section>
 
-<lib-promotions-section [premiumCardConfigs]="premiumCardConfigs" [variant]="getVariant('promotions')"></lib-promotions-section>
+<!-- TESTIMONIALS -->
+<section id="testimonios" class="relative z-20 py-24">
+    <lib-ui-testimonials-section
+      [title]="'Lo que dicen nuestros conductores'"
+      [subtitle]="'Cientos de clientes confían su seguridad en nuestras manos.'"
+      [variant]="'neon'"
+      [testimonials]="repairTestimonials"
+    ></lib-ui-testimonials-section>
+</section>
 
-<lib-reservation-form [variant]="getVariant('reservation')"></lib-reservation-form>
+<!-- GALLERY -->
+<section id="taller" class="relative z-20 py-20 bg-black/20">
+  <div class="container mx-auto px-6 max-w-7xl">
+    <lib-ui-components-title
+      level="h2"
+      text="Nuestras Instalaciones"
+      [variant]="getVariant('title')"
+      align="center"
+      class="mb-12"
+    ></lib-ui-components-title>
+    <lib-ui-components-gallery-section 
+        [variant]="'masonry'" 
+        [images]="allGalleryConfigs[0].images"
+    ></lib-ui-components-gallery-section>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="relative z-20 py-20">
+  <div class="container mx-auto px-6 max-w-4xl">
+    <lib-ui-faq-section 
+        [variant]="'accordion'" 
+        [items]="faqItems"
+    ></lib-ui-faq-section>
+  </div>
+</section>
+
+<!-- BOOKING FORM -->
+<section id="reserva" class="relative z-20 py-24 bg-gradient-to-b from-transparent to-slate-950">
+  <div class="container mx-auto px-6 max-w-4xl">
+    <div class="glass-panel p-12">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-white mb-4">Reserva tu Cita Online</h2>
+            <p class="text-dim">Selecciona el día y hora que mejor te venga y nosotros nos encargamos del resto.</p>
+        </div>
+        <lib-reservation-form [variant]="'neon'"></lib-reservation-form>
+    </div>
+  </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="relative z-20 py-16 bg-indigo-600">
+    <lib-ui-newsletter-section
+        [title]="'Mantén tu coche al día'"
+        [description]="'Recibe consejos de mantenimiento y avisos de promociones exclusivas.'"
+        [variant]="'glass'"
+    ></lib-ui-newsletter-section>
+</section>
+<lib-ui-components-footer
+  [variant]="getVariant('footer')"
+  [title]="footerConfig.title"
+  [description]="footerConfig.description"
+  [exploreLinks]="footerConfig.exploreLinks"
+  [trendLinks]="footerConfig.trendLinks"
+  [socialIcons]="footerConfig.socialIcons"
+  [copyrightText]="footerConfig.copyrightText"
+  [showParticles]="footerConfig.showParticles"
+  [dark]="footerConfig.dark"
+  [customStyles]="footerConfig.customStyles"
+  (linkClicked)="scrollToSection($event)"
+  (socialClicked)="onSocialClick($event)"
+></lib-ui-components-footer>
 
 <lib-bubble-animation [config]="bubbleConfig" [variant]="getVariant('bubble')"></lib-bubble-animation>
+
+<lib-ui-components-modal
+  [isOpen]="modalOpen"
+  [variant]="'glass'"
+  [size]="'lg'"
+  [title]="selectedService?.serviceName || 'Detalles'"
+  [content]="selectedService?.description"
+  (modalOnClose)="closeModal()"
+></lib-ui-components-modal>
 
 
 

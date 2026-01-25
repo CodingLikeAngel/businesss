@@ -4,27 +4,29 @@ import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VariantService, NavBarConfig, HeroConfig, FooterConfig, BubbleConfig } from '@negocio/shared-components';
 import {
-  UINavBarComponent,
+  UIStatsLibSectionComponent,
+  UIFeaturesSectionComponent,
+  UITestimonialsSectionComponent,
+  UINewsletterSectionComponent,
+  ProductsSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent,
   UIHeroSectionComponent,
+  PromotionsSectionComponent,
+  UINavBarComponent,
+  UICardRutasComponent,
+  BubbleAnimationComponent,
+  UITitleComponent,
+  UIFooterComponent,
+  UIModalComponent,
   CardVariant,
   AccordionItem,
   TableColumn,
   TableRow,
-  GalleryImage,
-  UITitleComponent,
-  CardPremiumConfig,
-  UIModalComponent,
-  UICardRutasComponent,
-  BubbleAnimationComponent,
-  BubbleConfig as BubbleAnimationConfig,
-  UIFooterComponent,
+  CardPremiumConfig
 } from '@negocio/ui-components';
-import { FaqSectionComponent } from '../../components/faq-section/faq-section.component';
-import { GallerySectionComponent } from '../../components/gallery-section/gallery-section.component';
-import { PricingSectionComponent } from '../../components/pricing-section/pricing-section.component';
-import { PromotionsSectionComponent } from '../../components/promotions-section/promotions-section.component';
-import { ReservationFormComponent } from '../../components/reservation-form/reservation-form.component';
-import { ServiceSectionComponent } from '../../components/service-section/service-section.component';
+import { ReservationFormComponent } from '@negocio/featured-components';
 
 @Component({
   selector: 'lib-home-feature',
@@ -35,18 +37,31 @@ import { ServiceSectionComponent } from '../../components/service-section/servic
     UINavBarComponent,
     UIHeroSectionComponent,
     ReservationFormComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
+    UIFaqSectionComponent,
+    UIPricingTableSectionComponent,
+    UIGallerySectionComponent,
     PromotionsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,
     UITitleComponent,
     UIFooterComponent,
+    UIStatsLibSectionComponent,
+    UIFeaturesSectionComponent,
+    UITestimonialsSectionComponent,
+    UINewsletterSectionComponent,
+    ProductsSectionComponent
   ],
   templateUrl: './home-feature.component.html',
-  styles: [/* Existing styles unchanged */],
+  styles: [`
+    .text-dim { color: rgba(255, 255, 255, 0.6); }
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 2rem;
+    }
+  `],
 })
 export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   isMobile = false;
@@ -67,13 +82,13 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
 
   faqItems: AccordionItem[] = [
     {
-      title: '¿Cuánto tiempo dura una cita?',
-      content: 'Depende del servicio. Un corte hombre toma 30 minutos, un tinte hasta 2 horas.',
+      title: '¿Necesito llevar algo especial?',
+      content: 'Nosotros proporcionamos albornoz, toallas y zapatillas. Solo necesitas traer tu traje de baño.',
       expanded: false,
     },
     {
-      title: '¿Puedo cancelar mi reserva?',
-      content: 'Sí, hasta 24 horas antes sin costo. Contáctanos para gestionar.',
+      title: '¿Con cuánta antelación debo llegar?',
+      content: 'Recomendamos llegar 15 minutos antes de tu cita para completar el formulario de bienestar y relajarte.',
       expanded: false,
     },
   ];
@@ -85,111 +100,164 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   ];
 
   priceRows: TableRow[] = [
-    { service: 'Corte Hombre', description: 'Corte personalizado', price: '15€' },
-    { service: 'Corte Mujer', description: 'Estilo a medida', price: '25€' },
-    { service: 'Manicura', description: 'Diseño básico o personalizado', price: '20€' },
+    { service: 'Masaje Sueco', description: '60 min. de relajación profunda con aceites esenciales', price: '65€' },
+    { service: 'Circuito Hidrotermal', description: 'Acceso a sauna, baño turco y piscinas térmicas', price: '45€' },
+    { service: 'Ritual Facial Oro', description: 'Tratamiento rejuvenecedor con partículas de oro 24k', price: '120€' },
+    { service: 'Exfoliación de Sal Marina', description: 'Renovación celular completa con sales del Mar Muerto', price: '55€' },
+    { service: 'Reflexología Podal', description: 'Técnica milenaria para el equilibrio energético', price: '50€' },
+  ];
+
+  spaStats = [
+    { label: 'Rituales Realizados', value: '10,000+', icon: '💆' },
+    { label: 'Especialistas', value: '15', icon: '🤲' },
+    { label: 'Puntuación Cliente', value: '4.9/5', icon: '⭐' },
+    { label: 'Años de Serenidad', value: '12', icon: '🕊️' },
+  ];
+
+  spaFeatures = [
+    {
+      title: 'Aceites Orgánicos',
+      description: 'Utilizamos exclusivamente extractos naturales y aceites esenciales de primera presión en frío.',
+      icon: '🌿'
+    },
+    {
+      title: 'Cabinas Insonorizadas',
+      description: 'Espacios diseñados para el silencio absoluto y la desconexión total del mundo exterior.',
+      icon: '🔇'
+    },
+    {
+      title: 'Terapeutas Certificados',
+      description: 'Nuestro equipo domina técnicas milenarias combinadas con la tecnología más avanzada.',
+      icon: '🧘'
+    },
+    {
+      title: 'Atención Holística',
+      description: 'Tratamos cuerpo, mente y espíritu como un todo unido en perfecta armonía.',
+      icon: '☯️'
+    }
+  ];
+
+  spaTestimonials = [
+    {
+      author: 'Laura Méndez',
+      role: 'Directiva de Finanzas',
+      quote: 'Mi refugio semanal. Logran que desconecte el teléfono y la mente en cuestión de minutos.',
+      avatar: 'https://i.pravatar.cc/150?u=laura'
+    },
+    {
+      author: 'Roberto Gómez',
+      role: 'Atleta Profesional',
+      quote: 'Sus masajes deportivos son clave para mi recuperación. Conocimiento técnico excepcional.',
+      avatar: 'https://i.pravatar.cc/150?u=roberto'
+    },
+    {
+      author: 'Carmen Vega',
+      role: 'Emprendedora',
+      quote: 'El circuito de aguas es el mejor que he probado en todo el país. La higiene y el trato son de 10.',
+      avatar: 'https://i.pravatar.cc/150?u=carmen'
+    }
   ];
 
   premiumCardConfigs: CardPremiumConfig[] = [
     {
-      title: 'Combo Corte + Tinte',
-      description: 'Corte personalizado y tinte vibrante.',
-      image: 'https://images.unsplash.com/photo-1608245447191-7b8af1f3c211',
-      price: '50€',
-      discount: '-20%',
+      title: 'Día de Lujo Total',
+      description: 'Circuito completo, masaje de 90 min y cena gourmet.',
+      image: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80',
+      price: '210€',
+      discount: '-10%',
       icon: 'heroStar',
-      tooltip: '¡Ahorra con este combo especial!',
+      tooltip: 'La experiencia definitiva de bienestar.',
     },
     {
-      title: 'Manicura Premium',
-      description: 'Diseño de larga duración con arte.',
-      image: 'https://images.unsplash.com/photo-1595876722061-d5c962e7de31',
-      price: '30€',
+      title: 'Escapada en Pareja',
+      description: 'Masaje dual en cabina VIP con champán y frutas.',
+      image: 'https://images.unsplash.com/photo-1544161515-4ae6ce6db87e?auto=format&fit=crop&q=80',
+      price: '150€',
       discount: 'Oferta',
       icon: 'heroStar',
-      tooltip: 'Manicura de larga duración.',
+      tooltip: 'Regala un momento inolvidable.',
     },
     {
-      title: 'Tratamiento Capilar',
-      description: 'Hidratación profunda para tu cabello.',
-      image: 'https://images.unsplash.com/photo-1580618672591-eb180b1a973f',
-      price: '35€',
-      discount: 'Novedad',
+      title: 'Ritual Detox',
+      description: 'Tratamiento corporal con algas y envoltura térmica.',
+      image: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc2069?auto=format&fit=crop&q=80',
+      price: '85€',
+      discount: 'Nuevo',
       icon: 'heroStar',
-      tooltip: 'Revitaliza tu cabello hoy.',
+      tooltip: 'Elimina toxinas y renueva tu energía.',
     },
   ];
 
   allGalleryConfigs = [
     {
       images: [
-        { src: '/1029.png', alt: 'Salón 1' },
-        { src: '/1090.png', alt: 'Corte 1' },
-        { src: '/retro-stars.png', alt: 'Manicura 1' },
+        { src: 'https://images.unsplash.com/photo-1544161515-4ae6ce6db87e?auto=format&fit=crop&q=80', alt: 'Piscina Spa' },
+        { src: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&q=80', alt: 'Masaje' },
+        { src: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&q=80', alt: 'Relajación' },
       ],
     },
   ];
 
   serviceCards: any[] = [
     {
-      routeName: 'Corte de Hombre',
-      imageUrl: '/retro-stars.png',
-      difficulty: 'Duración: 30 min',
-      rating: 4.8,
-      reviews: 150,
-      duration: 0.5,
-      distance: 0,
-      ascent: 0,
-      description: 'Un corte fresco y personalizado para un look moderno.',
-      features: ['Corte con tijera', 'Lavado incluido'],
-      link: '#forms',
-    },
-    {
-      routeName: 'Tinte Vibrante',
-      imageUrl: '/1029.png',
-      difficulty: 'Duración: 2 horas',
+      routeName: 'Masajes Ancestrales',
+      imageUrl: 'https://images.unsplash.com/photo-1515377905703-c4788e51af15?auto=format&fit=crop&q=80',
+      difficulty: 'Duración: 60-90 min',
       rating: 4.9,
-      reviews: 89,
-      duration: 2,
+      reviews: 450,
+      duration: 1.5,
       distance: 0,
       ascent: 0,
-      description: 'Colores vibrantes con productos de alta calidad.',
-      features: ['Tinte sin amoníaco', 'Tratamiento protector'],
-      link: '#forms',
+      description: 'Técnicas orientales y occidentales para liberar tensiones profundas.',
+      features: ['Aceites bio', 'Música zen'],
+      link: '#reserva',
     },
     {
-      routeName: 'Manicura Artística',
-      imageUrl: '/1090.png',
-      difficulty: 'Duración: 1 hora',
-      rating: 4.7,
-      reviews: 120,
-      duration: 1,
+      routeName: 'Belleza Facial',
+      imageUrl: 'https://images.unsplash.com/photo-1512290923902-8a9f81dc2069?auto=format&fit=crop&q=80',
+      difficulty: 'Duración: 45 min',
+      rating: 4.8,
+      reviews: 320,
+      duration: 0.75,
       distance: 0,
       ascent: 0,
-      description: 'Diseños únicos para tus uñas con acabados duraderos.',
-      features: ['Esmalte gel', 'Decoración personalizada'],
-      link: '#forms',
+      description: 'Tratamientos rejuvenecedores con cosmética de alta gama.',
+      features: ['Análisis dérmico', 'Mascarilla VIP'],
+      link: '#reserva',
+    },
+    {
+      routeName: 'Circuito Spa',
+      imageUrl: 'https://images.unsplash.com/photo-1544161515-4ae6ce6db87e?auto=format&fit=crop&q=80',
+      difficulty: 'Duración: Ilimitada',
+      rating: 5.0,
+      reviews: 580,
+      duration: 3,
+      distance: 0,
+      ascent: 0,
+      description: 'El poder del agua para renovar tu salud y vitalidad.',
+      features: ['Sauna finlandesa', 'Jacuzzi'],
+      link: '#reserva',
     },
   ];
 
   products = [
     {
-      name: 'Tinte Neón',
-      image: '/1029.png',
-      description: 'Colores vibrantes de larga duración, sin amoníaco.',
+      name: 'Aceite de Lavanda',
+      image: 'https://images.unsplash.com/photo-1608245447191-7b8af1f3c211?auto=format&fit=crop&q=80',
+      description: 'Esencia pura para relajación nocturna.',
       price: '25€',
     },
     {
-      name: 'Champú Hidratante',
-      image: '/1029.png',
-      description: 'Nutre y fortalece tu cabello con ingredientes naturales.',
-      price: '18€',
+      name: 'Sales del Himalaya',
+      image: 'https://images.unsplash.com/photo-1595876722061-d5c962e7de31?auto=format&fit=crop&q=80',
+      description: 'Sales minerales para un baño desintoxicante.',
+      price: '15€',
     },
     {
-      name: 'Plancha Profesional',
-      image: '/1029.png',
-      description: 'Tecnología iónica para un alisado perfecto.',
-      price: '80€',
+      name: 'Crema Hidratante Bio',
+      image: 'https://images.unsplash.com/photo-1580618672591-eb180b1a973f?auto=format&fit=crop&q=80',
+      description: 'Nutrición profunda con base de aloe vera.',
+      price: '35€',
     },
   ];
 
