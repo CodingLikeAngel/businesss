@@ -1,6 +1,8 @@
 .export-panel {
   padding: 0;
   margin: 0;
+  position: relative;
+  z-index: 1000;
 
   .export-btn {
     width: 100%;

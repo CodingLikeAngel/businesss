@@ -238,8 +238,11 @@
     background: linear-gradient(to top, var(--bg-sidebar) 70%, transparent);
     padding: 1.5rem;
     z-index: 100;
-    backdrop-filter: blur(10px);
     border-top: 1px solid var(--glass-border);
+    
+    &.hidden {
+      display: none;
+    }
   }
 }
 
