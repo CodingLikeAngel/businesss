@@ -4,6 +4,7 @@ import { Subject, fromEvent } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ElementGroupService } from './element-group.service';
 import { ElementGroup, MultiSelectionState } from './enhanced-visual-editing.interfaces';
+import { UndoRedoService } from '../../services/undo-redo.service';
 
 export type InteractionMode = 'select' | 'move' | 'resize' | 'all';
 
@@ -104,7 +105,8 @@ export class VisualEditorService {
   constructor(
     private rendererFactory: RendererFactory2,
     @Inject(PLATFORM_ID) private platformId: Object,
-    private elementGroupService: ElementGroupService
+    private elementGroupService: ElementGroupService,
+    private undoRedoService: UndoRedoService
   ) {
     this.renderer = this.rendererFactory.createRenderer(null, null);
 
@@ -275,6 +277,7 @@ export class VisualEditorService {
     this.isEditMode = true;
     this.addGlobalStyles();
     this.updateGlobalCursor();
+    this.setupKeyboardShortcuts();
     
     // Scan for editable elements after a short delay to ensure DOM is ready
     setTimeout(() => {
@@ -324,6 +327,234 @@ export class VisualEditorService {
     this.isEditMode = false;
     this.deselectElement();
     this.removeGlobalStyles();
+    this.destroy$.next();
+  }
+
+  /**
+   * Setup keyboard shortcuts for the visual editor
+   */
+  private setupKeyboardShortcuts(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    fromEvent<KeyboardEvent>(document, 'keydown')
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(e => {
+        if (!this.isEditMode) return;
+
+        // Ignore if typing in input/textarea
+        const target = e.target as HTMLElement;
+        if (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable) {
+          return;
+        }
+
+        // Delete/Backspace - Delete element
+        if ((e.key === 'Delete' || e.key === 'Backspace') && this.activeElement) {
+          e.preventDefault();
+          this.deleteElement();
+        }
+
+        // Escape - Deselect
+        if (e.key === 'Escape') {
+          this.deselectElement();
+        }
+
+        // Arrow keys - Nudge element
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key) && this.activeElement) {
+          e.preventDefault();
+          const step = e.shiftKey ? 10 : 1;
+          this.nudgeElement(e.key, step);
+        }
+
+        // Ctrl+Z - Undo
+        if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
+          e.preventDefault();
+          this.undo();
+        }
+
+        // Ctrl+Shift+Z or Ctrl+Y - Redo
+        if (((e.ctrlKey || e.metaKey) && e.key === 'z' && e.shiftKey) || 
+            ((e.ctrlKey || e.metaKey) && e.key === 'y')) {
+          e.preventDefault();
+          this.redo();
+        }
+
+        // Ctrl+D - Duplicate
+        if ((e.ctrlKey || e.metaKey) && e.key === 'd' && this.activeElement) {
+          e.preventDefault();
+          this.duplicateElement();
+        }
+
+        // Ctrl+A - Select all (future enhancement)
+        // if ((e.ctrlKey || e.metaKey) && e.key === 'a') {
+        //   e.preventDefault();
+        //   this.selectAll();
+        // }
+      });
+  }
+
+  /**
+   * Nudge the active element in a direction
+   */
+  private nudgeElement(direction: string, step: number): void {
+    if (!this.activeElement) return;
+
+    const rect = this.activeElement.getBoundingClientRect();
+    const parent = this.activeElement.offsetParent as HTMLElement || document.body;
+    const parentRect = parent.getBoundingClientRect();
+
+    let newLeft = rect.left - parentRect.left;
+    let newTop = rect.top - parentRect.top;
+
+    switch (direction) {
+      case 'ArrowUp':
+        newTop -= step;
+        break;
+      case 'ArrowDown':
+        newTop += step;
+        break;
+      case 'ArrowLeft':
+        newLeft -= step;
+        break;
+      case 'ArrowRight':
+        newLeft += step;
+        break;
+    }
+
+    // Apply position
+    this.renderer.setStyle(this.activeElement, 'position', 'absolute');
+    this.renderer.setStyle(this.activeElement, 'left', `${newLeft}px`);
+    this.renderer.setStyle(this.activeElement, 'top', `${newTop}px`);
+
+    // Save state for undo
+    this.saveElementState('Nudged element');
+
+    // Emit event
+    this.elementMoved$.next({
+      element: this.activeElement,
+      bounds: {
+        x: rect.left,
+        y: rect.top,
+        width: rect.width,
+        height: rect.height
+      }
+    });
+  }
+
+  /**
+   * Delete the active element
+   */
+  private deleteElement(): void {
+    if (!this.activeElement) return;
+
+    // Save state before deletion for undo
+    this.saveElementState('Deleted element');
+
+    // Remove element
+    const parent = this.activeElement.parentElement;
+    if (parent) {
+      parent.removeChild(this.activeElement);
+    }
+
+    this.deselectElement();
+  }
+
+  /**
+   * Duplicate the active element
+   */
+  private duplicateElement(): void {
+    if (!this.activeElement) return;
+
+    const clone = this.activeElement.cloneNode(true) as HTMLElement;
+    
+    // Offset the clone slightly
+    const rect = this.activeElement.getBoundingClientRect();
+    this.renderer.setStyle(clone, 'position', 'absolute');
+    this.renderer.setStyle(clone, 'left', `${this.activeElement.offsetLeft + 20}px`);
+    this.renderer.setStyle(clone, 'top', `${this.activeElement.offsetTop + 20}px`);
+
+    // Insert after original
+    const parent = this.activeElement.parentElement;
+    if (parent) {
+      parent.insertBefore(clone, this.activeElement.nextSibling);
+    }
+
+    // Save state
+    this.saveElementState('Duplicated element');
+
+    // Select the clone
+    this.selectElement(clone, this.defaultConfig);
+  }
+
+  /**
+   * Undo last action
+   */
+  public undo(): void {
+    const state = this.undoRedoService.undo();
+    if (state) {
+      this.restoreElementState(state);
+      console.log('↩️ Undo:', state.description || 'Unknown action');
+    }
+  }
+
+  /**
+   * Redo last undone action
+   */
+  public redo(): void {
+    const state = this.undoRedoService.redo();
+    if (state) {
+      this.restoreElementState(state);
+      console.log('↪️ Redo:', state.description || 'Unknown action');
+    }
+  }
+
+  /**
+   * Save current element state for undo/redo
+   */
+  private saveElementState(description: string): void {
+    if (!this.activeElement) return;
+
+    const state = {
+      elementId: this.activeElement.id,
+      description,
+      position: {
+        left: this.activeElement.style.left,
+        top: this.activeElement.style.top
+      },
+      size: {
+        width: this.activeElement.style.width,
+        height: this.activeElement.style.height
+      },
+      innerHTML: this.activeElement.innerHTML
+    };
+
+    this.undoRedoService.push(state);
+  }
+
+  /**
+   * Restore element state from undo/redo
+   */
+  private restoreElementState(state: any): void {
+    if (!state || !state.elementId) return;
+
+    const element = document.getElementById(state.elementId);
+    if (!element) return;
+
+    // Restore position
+    if (state.position) {
+      if (state.position.left) this.renderer.setStyle(element, 'left', state.position.left);
+      if (state.position.top) this.renderer.setStyle(element, 'top', state.position.top);
+    }
+
+    // Restore size
+    if (state.size) {
+      if (state.size.width) this.renderer.setStyle(element, 'width', state.size.width);
+      if (state.size.height) this.renderer.setStyle(element, 'height', state.size.height);
+    }
+
+    // Restore content if needed
+    if (state.innerHTML) {
+      this.renderer.setProperty(element, 'innerHTML', state.innerHTML);
+    }
   }
 
   /**
