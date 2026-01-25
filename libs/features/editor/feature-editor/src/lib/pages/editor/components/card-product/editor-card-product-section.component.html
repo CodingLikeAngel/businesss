@@ -1,0 +1,25 @@
+<div #sectionElement
+  class="editor-section cursor-pointer py-12"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleVisualEvent($event, section.id)">
+
+  <div class="container mx-auto px-6 max-w-sm">
+    <lib-card-products #cardElement
+      [product]="section.content['product'] || { name: 'Producto Pro', price: '$99', image: 'https://via.placeholder.com/300', description: 'Características premium e impacto visual.' }"
+      [variant]="$any(getVariant(section.id))"
+      [customStyles]="section.customStyles"
+      [applyDynamicStyles]="section.styles"
+      class="editor-element"
+      [class.is-selected]="selectedElementId === section.id + '_product_card'"
+      (click)="selectElement($event, getMergedElement(section.id, section.id + '_product_card', section.content, 'card-product'))"
+      [enhancedVisualEditable]="getElementConfig()"
+      elementId="{{section.id + '_product_card'}}"
+      sectionId="{{section.id}}"
+      (visualEvents)="handleVisualEvent($event, section.id + '_product_card')">
+    </lib-card-products>
+  </div>
+</div>

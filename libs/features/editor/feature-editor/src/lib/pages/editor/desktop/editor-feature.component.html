@@ -290,9 +290,41 @@
       >
       </lib-editor-accordion-section>
 
+      <!-- UI ACCORDION (Atom) -->
+      <lib-editor-accordion-section
+        *ngSwitchCase="'ui-accordion'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-accordion-section>
+
       <!-- LIST -->
       <lib-editor-list-section
         *ngSwitchCase="'list'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-list-section>
+
+      <!-- UI LIST (Atom) -->
+      <lib-editor-list-section
+        *ngSwitchCase="'ui-list'"
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
@@ -354,9 +386,41 @@
       >
       </lib-editor-table-section>
 
+      <!-- UI TABLE (Atom) -->
+      <lib-editor-table-section
+        *ngSwitchCase="'ui-table'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-table-section>
+
       <!-- TABS -->
       <lib-editor-tabs-section
         *ngSwitchCase="'tabs'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-tabs-section>
+
+      <!-- UI TABS (Atom) -->
+      <lib-editor-tabs-section
+        *ngSwitchCase="'ui-tabs'"
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
@@ -386,9 +450,41 @@
       >
       </lib-editor-breadcrumbs-section>
 
+      <!-- UI BREADCRUMBS (Atom) -->
+      <lib-editor-breadcrumbs-section
+        *ngSwitchCase="'ui-breadcrumbs'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-breadcrumbs-section>
+
       <!-- CHIP -->
       <lib-editor-chip-section
         *ngSwitchCase="'chip'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-chip-section>
+
+      <!-- UI CHIP (Atom) -->
+      <lib-editor-chip-section
+        *ngSwitchCase="'ui-chip'"
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
@@ -418,9 +514,41 @@
       >
       </lib-editor-spinner-section>
 
+      <!-- UI SPINNER (Atom) -->
+      <lib-editor-spinner-section
+        *ngSwitchCase="'ui-spinner'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-spinner-section>
+
       <!-- TITLE -->
       <lib-editor-title-section
         *ngSwitchCase="'title'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-title-section>
+
+      <!-- UI TITLE (Atom) -->
+      <lib-editor-title-section
+        *ngSwitchCase="'ui-title'"
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
@@ -450,9 +578,89 @@
       >
       </lib-editor-card-section>
 
+      <!-- UI CARD (Atom) -->
+      <lib-editor-card-section
+        *ngSwitchCase="'ui-card'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-card-section>
+
+      <!-- UI CARD ANIMATED (Atom) -->
+      <lib-editor-card-animated-section
+        *ngSwitchCase="'ui-card-animated'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-card-animated-section>
+
+      <!-- UI CARD PRODUCT (Atom) -->
+      <lib-editor-card-product-section
+        *ngSwitchCase="'ui-card-product'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-card-product-section>
+
+      <!-- UI CARD TESTIMONIAL (Atom) -->
+      <lib-editor-card-testimonial-section
+        *ngSwitchCase="'ui-card-testimonial'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-card-testimonial-section>
+
       <!-- INPUT -->
       <lib-editor-input-section
         *ngSwitchCase="'input'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-input-section>
+
+      <!-- UI INPUT (Atom) -->
+      <lib-editor-input-section
+        *ngSwitchCase="'ui-input'"
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
@@ -482,9 +690,41 @@
       >
       </lib-editor-button-section>
 
+      <!-- UI BUTTON (Atom) -->
+      <lib-editor-button-section
+        *ngSwitchCase="'ui-button'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-button-section>
+
       <!-- IMAGE -->
       <lib-editor-image-section
         *ngSwitchCase="'image'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-image-section>
+
+      <!-- UI IMAGE (Atom) -->
+      <lib-editor-image-section
+        *ngSwitchCase="'ui-image'"
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
@@ -522,6 +762,23 @@
       <!-- CHART -->
       <lib-editor-chart-section
         *ngSwitchCase="'chart'"
+        [section]="section"
+        [chartConfig]="chartConfig"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-chart-section>
+
+      <!-- UI CHART (Atom) -->
+      <lib-editor-chart-section
+        *ngSwitchCase="'ui-chart'"
         [section]="section"
         [chartConfig]="chartConfig"
         [componentVariants]="componentVariants"

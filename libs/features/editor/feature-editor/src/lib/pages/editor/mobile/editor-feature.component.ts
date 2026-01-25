@@ -29,6 +29,17 @@ import { EditorCtaSectionComponent } from '../components/cta/editor-cta-section.
 import { EditorShowcaseSectionComponent } from '../components/showcase/editor-showcase-section.component';
 import { EditorSpinnerSectionComponent } from '../components/spinner/editor-spinner-section.component';
 import { EditorChipSectionComponent } from '../components/chip/editor-chip-section.component';
+import { EditorTitleSectionComponent } from '../components/title/editor-title-section.component';
+import { EditorCardSectionComponent } from '../components/card/editor-card-section.component';
+import { EditorCardAnimatedSectionComponent } from '../components/card-animated/editor-card-animated-section.component';
+import { EditorCardProductSectionComponent } from '../components/card-product/editor-card-product-section.component';
+import { EditorCardTestimonialSectionComponent } from '../components/card-testimonial/editor-card-testimonial-section.component';
+import { EditorInputSectionComponent } from '../components/input/editor-input-section.component';
+import { EditorButtonSectionComponent } from '../components/button/editor-button-section.component';
+import { EditorImageSectionComponent } from '../components/image/editor-image-section.component';
+import { EditorSmartContainerSectionComponent } from '../components/smart-container/editor-smart-container-section.component';
+import { EditorDraggableBoxSectionComponent } from '../components/draggable-box/editor-draggable-box-section.component';
+import { EditorGenericSectionComponent } from '../components/generic/editor-generic-section.component';
 
 @Component({
   selector: 'lib-editor-mobile-feature',
@@ -63,7 +74,18 @@ import { EditorChipSectionComponent } from '../components/chip/editor-chip-secti
     EditorCtaSectionComponent,
     EditorShowcaseSectionComponent,
     EditorSpinnerSectionComponent,
-    EditorChipSectionComponent
+    EditorChipSectionComponent,
+    EditorTitleSectionComponent,
+    EditorCardSectionComponent,
+    EditorCardAnimatedSectionComponent,
+    EditorCardProductSectionComponent,
+    EditorCardTestimonialSectionComponent,
+    EditorInputSectionComponent,
+    EditorButtonSectionComponent,
+    EditorImageSectionComponent,
+    EditorSmartContainerSectionComponent,
+    EditorDraggableBoxSectionComponent,
+    EditorGenericSectionComponent
   ],
 })
 export class EditorMobileFeatureComponent extends BaseEditorFeatureComponent implements OnInit {

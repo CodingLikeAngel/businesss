@@ -1,0 +1,38 @@
+<div #sectionElement
+  class="editor-section cursor-pointer py-12"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleVisualEvent($event, section.id)">
+
+  <div class="container mx-auto px-6 max-w-lg">
+    <!-- Testimonial card uses generic card with specialized content structure -->
+    <lib-ui-components-card #cardElement
+      [title]="section.content['author'] || 'Nombre del Cliente'"
+      [description]="section.content['quote'] || 'Este servicio ha transformado mi negocio por completo. ¡Altamente recomendado!'"
+      [variant]="$any(getVariant(section.id))"
+      [customStyles]="section.customStyles"
+      [applyDynamicStyles]="section.styles"
+      class="editor-element"
+      [class.is-selected]="selectedElementId === section.id + '_testimonial_card'"
+      (click)="selectElement($event, getMergedElement(section.id, section.id + '_testimonial_card', section.content, 'card-testimonial'))"
+      [enhancedVisualEditable]="getElementConfig()"
+      elementId="{{section.id + '_testimonial_card'}}"
+      sectionId="{{section.id}}"
+      (visualEvents)="handleVisualEvent($event, section.id + '_testimonial_card')">
+      
+      <div class="mt-4 flex items-center gap-3">
+         <div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold">
+            {{ (section.content['author'] || 'A')[0] }}
+         </div>
+         <div>
+            <div class="text-xs uppercase tracking-widest text-indigo-400 font-bold">
+               {{ section.content['role'] || 'CEO @ Empresa' }}
+            </div>
+         </div>
+      </div>
+    </lib-ui-components-card>
+  </div>
+</div>

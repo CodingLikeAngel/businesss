@@ -1062,7 +1062,7 @@ export class ComponentExplorerComponent implements OnInit {
 
     // --- UI COMPONENTS (Atoms) ---
     {
-      type: 'button',
+      type: 'ui-button',
       label: 'Botón UI',
       icon: '🔘',
       variants: ['primary', 'secondary', 'outline', 'ghost', 'link', 'glass', 'neon', 'cyberpunk', 'mario'],
@@ -1071,7 +1071,7 @@ export class ComponentExplorerComponent implements OnInit {
       libraryType: 'component'
     },
     {
-      type: 'title',
+      type: 'ui-title',
       label: 'Título',
       icon: '📜',
       variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft'],
@@ -1080,7 +1080,7 @@ export class ComponentExplorerComponent implements OnInit {
       libraryType: 'component'
     },
     {
-      type: 'image',
+      type: 'ui-image',
       label: 'Imagen Avanzada',
       icon: '🖼️',
       variants: ['default', 'rounded', 'circle', 'thumbnail', 'glass', 'neon', 'hover-zoom'],
@@ -1089,7 +1089,7 @@ export class ComponentExplorerComponent implements OnInit {
       libraryType: 'component'
     },
     {
-      type: 'chip',
+      type: 'ui-chip',
       label: 'Chips / Tags',
       icon: '🏷️',
       variants: ['default', 'outline', 'solid', 'glass', 'neon'],
@@ -1098,7 +1098,7 @@ export class ComponentExplorerComponent implements OnInit {
       libraryType: 'component'
     },
     {
-      type: 'card',
+      type: 'ui-card',
       label: 'Tarjeta Genérica',
       icon: '🃏',
       variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft'],
@@ -1107,7 +1107,7 @@ export class ComponentExplorerComponent implements OnInit {
       libraryType: 'component'
     },
     {
-      type: 'card-animated',
+      type: 'ui-card-animated',
       label: 'Tarjeta Animada',
       icon: '🃏',
       variants: ['glass', 'neon', 'cyberpunk', 'mario', 'rayman', 'hover-scale'],
@@ -1116,7 +1116,7 @@ export class ComponentExplorerComponent implements OnInit {
       libraryType: 'component'
     },
     {
-      type: 'card-product',
+      type: 'ui-card-product',
       label: 'Tarjeta Producto',
       icon: '🛍️',
       variants: ['default', 'glass', 'neon', 'minimal'],
@@ -1125,7 +1125,7 @@ export class ComponentExplorerComponent implements OnInit {
       libraryType: 'component'
     },
     {
-      type: 'card-testimonial',
+      type: 'ui-card-testimonial',
       label: 'Tarjeta Testimonio',
       icon: '💬',
       variants: ['default', 'glass', 'neon', 'quote', 'bubble'],
@@ -1134,7 +1134,7 @@ export class ComponentExplorerComponent implements OnInit {
       libraryType: 'component'
     },
     {
-      type: 'input',
+      type: 'ui-input',
       label: 'Input de Formulario',
       icon: '📝',
       variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft', 'kingfisher', 'custom1', 'custom2'],
@@ -1143,7 +1143,7 @@ export class ComponentExplorerComponent implements OnInit {
       libraryType: 'component'
     },
     {
-      type: 'spinner',
+      type: 'ui-spinner',
       label: 'Loading Spinners',
       icon: '⏳',
       variants: ['default', 'circle', 'dots', 'bars', 'neon', 'glass'],
@@ -1152,7 +1152,7 @@ export class ComponentExplorerComponent implements OnInit {
       libraryType: 'component'
     },
     {
-      type: 'breadcrumbs',
+      type: 'ui-breadcrumbs',
       label: 'Breadcrumbs',
       icon: '🗺️',
       variants: ['default', 'slash', 'arrow', 'glass', 'neon'],
@@ -1161,7 +1161,7 @@ export class ComponentExplorerComponent implements OnInit {
       libraryType: 'component'
     },
     {
-       type: 'accordion',
+       type: 'ui-accordion',
        label: 'Acordeón UI',
        icon: '↕️',
        variants: ['default', 'glass', 'neon', 'minimal'],
@@ -1170,7 +1170,7 @@ export class ComponentExplorerComponent implements OnInit {
        libraryType: 'component'
     },
     {
-       type: 'tabs',
+       type: 'ui-tabs',
        label: 'Pestañas UI',
        icon: '📑',
        variants: ['default', 'glass', 'neon', 'pills'],
@@ -1179,7 +1179,7 @@ export class ComponentExplorerComponent implements OnInit {
        libraryType: 'component'
     },
     {
-       type: 'list',
+       type: 'ui-list',
        label: 'Lista de Items',
        icon: '📋',
        variants: ['default', 'glass', 'neon', 'minimal'],
@@ -1188,7 +1188,7 @@ export class ComponentExplorerComponent implements OnInit {
        libraryType: 'component'
     },
     {
-       type: 'table',
+       type: 'ui-table',
        label: 'Tabla de Datos',
        icon: '▦',
        variants: ['default', 'striped', 'bordered', 'hover', 'glass', 'neon'],
@@ -1197,7 +1197,7 @@ export class ComponentExplorerComponent implements OnInit {
        libraryType: 'component'
     },
     {
-       type: 'chart',
+       type: 'ui-chart',
        label: 'Gráfico UI',
        icon: '📈',
        variants: ['primary', 'secondary', 'glass', 'neon', 'cyberpunk'],

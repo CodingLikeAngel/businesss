@@ -37,6 +37,9 @@ import { EditorSpinnerSectionComponent } from '../components/spinner/editor-spin
 import { EditorChipSectionComponent } from '../components/chip/editor-chip-section.component';
 import { EditorTitleSectionComponent } from '../components/title/editor-title-section.component';
 import { EditorCardSectionComponent } from '../components/card/editor-card-section.component';
+import { EditorCardAnimatedSectionComponent } from '../components/card-animated/editor-card-animated-section.component';
+import { EditorCardProductSectionComponent } from '../components/card-product/editor-card-product-section.component';
+import { EditorCardTestimonialSectionComponent } from '../components/card-testimonial/editor-card-testimonial-section.component';
 import { EditorInputSectionComponent } from '../components/input/editor-input-section.component';
 import { EditorButtonSectionComponent } from '../components/button/editor-button-section.component';
 import { EditorImageSectionComponent } from '../components/image/editor-image-section.component';
@@ -84,6 +87,9 @@ import { EditorGenericSectionComponent } from '../components/generic/editor-gene
     EditorChipSectionComponent,
     EditorTitleSectionComponent,
     EditorCardSectionComponent,
+    EditorCardAnimatedSectionComponent,
+    EditorCardProductSectionComponent,
+    EditorCardTestimonialSectionComponent,
     EditorInputSectionComponent,
     EditorButtonSectionComponent,
     EditorImageSectionComponent,

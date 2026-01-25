@@ -1,0 +1,27 @@
+<div #sectionElement
+  class="editor-section cursor-pointer py-12"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleVisualEvent($event, section.id)">
+
+  <div class="container mx-auto px-6 max-w-lg">
+    <lib-ui-components-card-animated #cardElement
+      [title]="section.content['title'] || 'Tarjeta Animada'"
+      [description]="section.content['description'] || 'Descripción con efectos dinámicos'"
+      [image]="section.content['image'] || 'https://via.placeholder.com/400x300'"
+      [variant]="$any(getVariant(section.id))"
+      [customStyles]="section.customStyles"
+      [applyDynamicStyles]="section.styles"
+      class="editor-element"
+      [class.is-selected]="selectedElementId === section.id + '_animated_card'"
+      (click)="selectElement($event, getMergedElement(section.id, section.id + '_animated_card', section.content, 'card-animated'))"
+      [enhancedVisualEditable]="getElementConfig()"
+      elementId="{{section.id + '_animated_card'}}"
+      sectionId="{{section.id}}"
+      (visualEvents)="handleVisualEvent($event, section.id + '_animated_card')">
+    </lib-ui-components-card-animated>
+  </div>
+</div>

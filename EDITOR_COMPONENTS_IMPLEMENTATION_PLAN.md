@@ -63,10 +63,11 @@ Composiciones complejas que ocupan un bloque completo de la página.
 | **input**            | ✅ Wrapper Base | High     |
 | **accordion**        | ✅ Wrapper Base | Medium   |
 | **tabs**             | ✅ Wrapper Base | Medium   |
-| **card-animated**    | ❌ Faltante     | High     |
-| **card-premium**     | ❌ Faltante     | High     |
-| **card-rutas**       | ❌ Faltante     | Medium   |
-| **card-products**    | ❌ Faltante     | High     |
+| **card-animated**    | ✅ Implementado | High     |
+| **card-product**     | ✅ Implementado | High     |
+| **card-testimonial** | ✅ Implementado | High     |
+| **card-premium**     | 🛠️ En Proceso   | High     |
+| **card-rutas**       | 🛠️ En Proceso   | Medium   |
 | **date-time-picker** | ❌ Faltante     | Medium   |
 | **tooltip**          | ❌ Faltante     | Low      |
 | **modal**            | ❌ Faltante     | Medium   |
