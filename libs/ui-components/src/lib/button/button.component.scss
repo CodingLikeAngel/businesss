@@ -3,8 +3,18 @@
 
 .btn {
   @include shared.apply-all-variants('btn-');
+  
+  // Architectural foundation from bridge tokens
+  border-radius: var(--theme-items-radius, var(--theme-radius));
+  border: var(--theme-border, 1px solid transparent);
+  box-shadow: var(--theme-shadow);
+  transform: skew(var(--theme-skew));
+  font-family: var(--theme-font);
+  padding: 0.75rem 1.5rem;
+  
   position: relative;
   overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   // CRITICAL: Force inline styles to override variant backgrounds
   &[style*='background'] {

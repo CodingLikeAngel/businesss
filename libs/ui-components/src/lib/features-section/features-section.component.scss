@@ -58,7 +58,7 @@
 }
 
 .features-container {
-  padding: 120px 20px;
+  padding: var(--theme-padding) 20px;
   background-color: var(--theme-bg, #0d1117);
   color: var(--theme-color, white);
   font-family: var(--theme-font, 'Outfit', sans-serif);
@@ -67,6 +67,13 @@
   @include shared.texture-noise;
   @include shared.editor-robustness;
 
+  @include shared.apply-all-variants('features--');
+  @include shared.apply-variants-to-child('.feature-item', 'features--');
+
+  // Architectural foundation from tokens
+  clip-path: var(--theme-clip);
+  transform: skew(var(--theme-skew));
+
   &::before {
     content: '';
     position: absolute;
@@ -74,28 +81,12 @@
     left: -15%;
     width: 50%;
     height: 50%;
-    background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+    background: radial-gradient(circle, var(--theme-accent, rgba(99, 102, 241, 0.15)) 0%, transparent 70%);
     filter: blur(100px);
     pointer-events: none;
     animation: pulseGlow 6s ease-in-out infinite;
+    opacity: 0.2;
   }
-
-  &::after {
-    content: '';
-    position: absolute;
-    bottom: -10%;
-    right: -10%;
-    width: 40%;
-    height: 40%;
-    background: radial-gradient(circle, rgba(244, 63, 94, 0.1) 0%, transparent 70%);
-    filter: blur(80px);
-    pointer-events: none;
-    animation: pulseGlow 4s ease-in-out infinite reverse;
-  }
-
-  // Moved to end to override defaults correctly
-  @include shared.apply-all-variants('features--');
-  @include shared.apply-variants-to-child('.feature-item', 'features--');
 
   // CRITICAL: Force inline styles to override variant backgrounds
   &[style*='background'] {
@@ -123,6 +114,7 @@
   // Apply theme variables to inner elements
   .title {
      color: var(--theme-color, white);
+     font-family: var(--theme-font);
      background: var(--theme-text-gradient, linear-gradient(135deg, #ffffff 0%, var(--theme-accent, #a5b4fc) 100%));
      -webkit-background-clip: text;
      background-clip: text;
@@ -130,6 +122,11 @@
   }
 
   .feature-item {
+     border-radius: var(--theme-items-radius, var(--theme-radius));
+     border: var(--theme-border);
+     box-shadow: var(--theme-shadow);
+     padding: var(--theme-items-padding, 2.5rem);
+     
      .icon-bg {
         background: var(--theme-accent, var(--feature-color));
      }

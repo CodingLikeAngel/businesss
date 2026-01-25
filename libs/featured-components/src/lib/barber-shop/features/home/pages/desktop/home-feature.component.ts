@@ -21,7 +21,7 @@ import {
   StatItem,
   UIAccordionComponent
 } from '@negocio/ui-components';
-import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
+import { GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
 
 @Component({
   selector: 'lib-home-feature',
@@ -32,7 +32,6 @@ import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, 
     UINavBarComponent,
     UIHeroSectionComponent,
     ReservationFormComponent,
-    FaqSectionComponent,
     PricingSectionComponent,
     GallerySectionComponent,
     PromotionsSectionComponent,

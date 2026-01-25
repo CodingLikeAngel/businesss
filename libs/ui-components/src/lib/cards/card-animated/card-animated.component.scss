@@ -2,6 +2,20 @@
 @use './styles/index' as *;
 
 .card-animated {
+    @include shared.apply-all-variants('card-animated--');
+    
+    // Architectural foundation based on tokens
+    border-radius: var(--theme-radius);
+    border: var(--theme-border);
+    box-shadow: var(--theme-shadow);
+    clip-path: var(--theme-clip);
+    transform: skew(var(--theme-skew));
+    font-family: var(--theme-font);
+    padding: var(--theme-items-padding, 1.5rem);
+    background: var(--theme-bg, rgba(255,255,255,0.05));
+    color: var(--theme-color, #fff);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+
     // CRITICAL: Force inline styles to override variant backgrounds
     &[style*='background'] {
         background: var(--theme-bg, var(--background-color)) !important;
@@ -13,5 +27,10 @@
 
     &[style*='color'] {
         color: var(--theme-color, var(--text-color)) !important;
+    }
+
+    h3, h1, h2, h4, .title {
+        font-family: var(--theme-font);
+        color: var(--theme-color);
     }
 }

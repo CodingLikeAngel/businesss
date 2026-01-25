@@ -7,8 +7,21 @@
 */
 
 .pricing-container {
+  padding: var(--theme-padding) var(--sp-4);
+  background-color: var(--theme-bg, #0d1117);
+  color: var(--theme-color, white);
+  font-family: var(--theme-font, 'Outfit', sans-serif);
+  position: relative;
+  overflow: hidden;
+  
+  @include shared.texture-noise;
   @include shared.editor-robustness;
   @include shared.apply-all-variants('pricing--');
+  @include shared.apply-variants-to-child('.table-wrapper', 'pricing--');
+
+  // Architectural foundation
+  clip-path: var(--theme-clip);
+  transform: skew(var(--theme-skew));
 
   // CRITICAL: Force inline styles to override variant backgrounds
   &[style*='background'] {
@@ -78,15 +91,15 @@
 
 .table-wrapper {
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1.5rem;
+  border: var(--theme-border, 1px solid rgba(255, 255, 255, 0.1));
+  border-radius: var(--theme-items-radius, var(--theme-radius));
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--theme-shadow);
   transition: all 0.4s ease;
   
   &:hover {
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
-    border-color: var(--pricing-accent, #3b82f6);
+    border-color: var(--theme-accent, var(--pricing-accent, #3b82f6));
   }
 }
 

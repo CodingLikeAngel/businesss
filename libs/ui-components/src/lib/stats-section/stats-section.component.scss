@@ -7,7 +7,21 @@
  */
 
 .stats-container {
+  padding: var(--theme-padding) var(--sp-4);
+  background-color: var(--theme-bg, #0d1117);
+  color: var(--theme-color, white);
+  font-family: var(--theme-font, 'Outfit', sans-serif);
+  overflow: hidden;
+  position: relative;
+  @include shared.texture-noise;
+  @include shared.editor-robustness;
+
   @include shared.apply-all-variants('stats--');
+  @include shared.apply-variants-to-child('.stat-card', 'stats--');
+
+  // Architectural foundation
+  clip-path: var(--theme-clip);
+  transform: skew(var(--theme-skew));
 
   // CRITICAL: Force inline styles to override variant backgrounds
   &[style*='background'] {
@@ -30,8 +44,10 @@
       }
   }
 
-  @media (min-width: 1024px) {
-    padding: 8rem 4rem;
+  // Value color follows accent but respects theme color
+  .value {
+     color: var(--theme-accent, #3b82f6);
+     font-family: var(--theme-font);
   }
 }
 
@@ -346,18 +362,19 @@
 
 .stat-card {
   background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1.5rem;
-  padding: 3rem 2rem;
+  border: var(--theme-border, 1px solid rgba(255, 255, 255, 0.1));
+  border-radius: var(--theme-items-radius, var(--theme-radius));
+  padding: var(--theme-items-padding, 3rem 2rem);
   text-align: center;
   transition: all 0.4s ease;
   position: relative;
   overflow: hidden;
+  box-shadow: var(--theme-shadow);
 
   &:hover {
     transform: translateY(-10px);
     background: rgba(255, 255, 255, 0.08);
-    border-color: var(--stats-accent, #3b82f6);
+    border-color: var(--theme-accent, var(--stats-accent, #3b82f6));
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   }
 
