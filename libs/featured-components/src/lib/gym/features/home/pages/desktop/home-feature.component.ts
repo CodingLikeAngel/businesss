@@ -21,7 +21,6 @@ import {
   UIStatsLibSectionComponent,
   StatItem,
   UIStepsSectionComponent,
-  UIAccordionComponent,
   UIChartComponent,
   ChartData,
   PromotionsSectionComponent,
@@ -29,8 +28,7 @@ import {
   UIGallerySectionComponent,
   UIPricingTableSectionComponent,
   ProductsSectionComponent,
-  UINewsletterSectionComponent,
-  UITestimonialsSectionComponent
+  UINewsletterSectionComponent
 } from '@negocio/ui-components';
 import { ReservationFormComponent } from '@negocio/featured-components';
 
@@ -51,14 +49,12 @@ import { ReservationFormComponent } from '@negocio/featured-components';
     UITitleComponent,
     UIFooterComponent,
     UIStepsSectionComponent,
-    UIAccordionComponent,
     UIChartComponent,
     PromotionsSectionComponent,
     UIFaqSectionComponent,
     UIPricingTableSectionComponent,
     ProductsSectionComponent,
-    UINewsletterSectionComponent,
-    UITestimonialsSectionComponent
+    UINewsletterSectionComponent
   ],
   templateUrl: './home-feature.component.html',
   styleUrl: './home-feature.component.scss',
