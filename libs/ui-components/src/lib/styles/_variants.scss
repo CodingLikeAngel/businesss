@@ -5,12 +5,12 @@
   --theme-bg: #{$bg};
   --theme-color: #{$color};
   --theme-accent: #{$accent};
-  --theme-border: 1px solid rgba(#{$accent}, 0.5);
+  --theme-border: 1px solid rgba($accent, 0.5);
   --theme-shadow: 
     0 4px 6px -1px rgba(0, 0, 0, 0.1),
     0 2px 4px -2px rgba(0, 0, 0, 0.1),
-    0 0 20px rgba(#{$glow-color}, 0.2);
-  --theme-glow: 0 0 30px rgba(#{$glow-color}, 0.6), 0 0 60px rgba(#{$glow-color}, 0.2);
+    0 0 20px rgba($glow-color, 0.2);
+  --theme-glow: 0 0 30px rgba($glow-color, 0.6), 0 0 60px rgba($glow-color, 0.2);
 
   background: var(--theme-bg);
   color: var(--theme-color);
@@ -36,7 +36,7 @@
   &:hover {
     transform: translateY(-4px) scale(1.02);
     box-shadow: var(--theme-glow), 0 12px 24px rgba(0, 0, 0, 0.2);
-    border-color: rgba(#{$accent}, 0.8);
+    border-color: rgba($accent, 0.8);
     
     &::before {
       transform: translateX(100%);
@@ -73,8 +73,6 @@
       0 0 15px rgba(59, 130, 246, 0.5);
     filter: brightness(1.1);
   }
-
-}
 }
 
 @mixin variant-secondary {
@@ -94,8 +92,6 @@
     box-shadow: 0 10px 20px rgba(0,0,0,0.3);
     filter: contrast(1.1);
   }
-
-}
 }
 
 @mixin variant-outline {
@@ -118,7 +114,6 @@
   border: none;
   border-radius: var(--theme-radius);
   &:hover { background: rgba(0,0,0,0.05); }
-}
 
 @mixin variant-glass {
 
@@ -163,8 +158,6 @@
     text-shadow: 0 4px 8px rgba(0,0,0,0.5);
   }
 
-}
-
   &::after {
     content: '';
     position: absolute;
@@ -195,7 +188,6 @@
     text-shadow: 0 4px 8px rgba(0,0,0,0.5);
     letter-spacing: 0.5px;
   }
-}
 
 @mixin variant-neon {
 
@@ -234,8 +226,6 @@
     box-shadow: 0 0 30px rgba(255, 0, 255, 0.6);
   }
 
-}
-
   &:hover {
     transform: scale(1.03) translateY(-2px);
     border-color: #ff00ff !important;
@@ -251,7 +241,6 @@
     color: #fff !important;
     text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
   }
-}
 
 @mixin variant-cyberpunk {
 
@@ -292,8 +281,6 @@
     color: #000;
   }
 
-}
-
   &::after {
     content: '';
     position: absolute;
@@ -328,7 +315,6 @@
       box-shadow: 25px 25px 0px rgba(252, 238, 10, 0.4);
     }
   }
-}
 
 @mixin variant-retro {
 
@@ -356,8 +342,6 @@
     box-shadow: 0px 0px 0px #b58900;
   }
 
-}
-
   &:hover {
     transform: translate(-4px, -4px);
     box-shadow: 12px 12px 0px #b58900;
@@ -368,7 +352,6 @@
     transform: translate(2px, 2px);
     box-shadow: 2px 2px 0px #b58900;
   }
-}
 
 @mixin variant-minimal {
 
@@ -389,8 +372,6 @@
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   }
-
-}
 }
 
 @mixin variant-luxury {
@@ -422,8 +403,6 @@
     box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
   }
 
-}
-
   &:hover {
     color: #fff;
     background: #d4af37;
@@ -434,8 +413,6 @@
     }
   }
 
-}
-
   &:hover {
     color: #fff;
     background: #d4af37;
@@ -445,7 +422,6 @@
       left: 150%;
     }
   }
-}
 
 @mixin variant-matrix {
 
@@ -480,8 +456,6 @@
     box-shadow: 0 0 40px rgba(0, 255, 65, 0.5);
   }
 
-}
-
   &:hover {
     background: #001100;
     box-shadow: 0 0 40px rgba(0, 255, 65, 0.5);
@@ -491,7 +465,6 @@
       color: rgba(0, 255, 65, 0.3);
     }
   }
-}
 
 @mixin variant-dark {
   --theme-bg: #1f2937;
@@ -520,7 +493,6 @@
     z-index: -1;
     animation: glitch-anim 1s infinite;
   }
-}
 
 @mixin variant-portal {
   --theme-bg: radial-gradient(circle, #00a2ff 0%, #000 70%);
@@ -630,8 +602,6 @@
     }
   }
 
-}
-
   &:hover {
     transform: translateY(-5px);
     box-shadow: 0 0 30px rgba(14, 165, 233, 0.5);
@@ -645,7 +615,6 @@
   * {
     text-shadow: 0 0 10px rgba(125, 211, 252, 0.5);
   }
-}
 
 @mixin variant-quantum {
 
@@ -663,8 +632,6 @@
     box-shadow: 0 0 45px rgba(99, 102, 241, 0.7);
     transform: perspective(1000px) rotateY(5deg);
   }
-
-}
 
 @mixin variant-mario {
 
@@ -704,8 +671,6 @@
     box-shadow: 10px 10px 0px #000;
   }
 
-}
-
   &::after {
     content: '🪙';
     position: absolute;
@@ -730,7 +695,6 @@
   * {
     text-shadow: 2px 2px 0 #000;
   }
-}
 
 @mixin variant-zelda {
 
@@ -761,8 +725,6 @@
     box-shadow: 0 0 30px rgba(251, 223, 113, 0.6);
   }
 
-}
-
   &:hover {
     background: #007c44;
     transform: scale(1.05);
@@ -779,7 +741,6 @@
   * {
     text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
   }
-}
 
 @mixin variant-kirby {
   @include unified-variant-base(
@@ -873,7 +834,6 @@
     position: relative;
     z-index: 3;
   }
-}
 
 @mixin variant-rayman {
   @include unified-variant-base(
@@ -932,7 +892,6 @@
   &:active {
     transform: scale(0.95) rotate(-1deg);
   }
-}
 
 @mixin variant-lum {
   @include unified-variant-base(
@@ -979,7 +938,6 @@
   &:active {
     transform: scale(0.97) rotate(-0.25deg);
   }
-}
 
 @mixin variant-phoenix {
   @include unified-variant-base(
@@ -1028,7 +986,6 @@
   &:active {
     transform: scale(0.98);
   }
-}
 
 @mixin variant-galactic {
 
@@ -1056,8 +1013,6 @@
     box-shadow: 0 20px 40px rgba(30, 27, 75, 0.6), 0 0 20px rgba(165, 180, 252, 0.3);
   }
 
-}
-
   &::after {
     content: '';
     position: absolute;
@@ -1078,7 +1033,6 @@
   &:active {
     transform: scale(0.98);
   }
-}
 
 @mixin variant-orbitron {
 
@@ -1116,8 +1070,6 @@
     text-shadow: 0 0 8px rgba(0, 255, 255, 0.8);
   }
 
-}
-
   &::after {
     content: '';
     position: absolute;
@@ -1143,7 +1095,6 @@
   &:active {
     transform: scale(0.98);
   }
-}
 
 @mixin variant-cartoon {
   --theme-bg: rgba(255, 245, 157, 0.5);
@@ -1269,10 +1220,6 @@
 
 }
 
-}
-
-}
-
 @mixin variant-success {
 
   background: #10b981;
@@ -1284,10 +1231,6 @@
     background: #059669;
     box-shadow: 0 4px 10px rgba(16, 185, 129, 0.3);
   }
-
-}
-
-}
 
 }
 
@@ -1327,8 +1270,6 @@
     transform: translateY(-3px);
     box-shadow: 0 10px 25px rgba(0,0,0,0.5), 0 0 15px rgba(255,255,255,0.1);
   }
-
-}
 
 @mixin variant-platform {
   --theme-bg: #00D26A;
@@ -1392,8 +1333,6 @@
 
   * { position: relative; z-index: 1; }
 
-}
-
 @mixin variant-default {
 
   --theme-bg: #fff;
@@ -1411,8 +1350,6 @@
     background: #f9fafb;
     border-color: #d1d5db;
   }
-
-}
 
 @mixin variant-river {
   --theme-bg: linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(16, 185, 129, 0.2));
@@ -1478,8 +1415,6 @@
     box-shadow: inset 0 0 40px rgba(76, 29, 149, 0.4), 0 0 20px rgba(0,0,0,1);
     transform: scale(0.98);
   }
-
-}
 
 @mixin variant-cosmic {
   --theme-bg: linear-gradient(135deg, rgba(76, 29, 149, 0.8), rgba(17, 24, 39, 0.8));
@@ -1608,8 +1543,6 @@
     text-shadow: 3px 3px 0px #b967ff;
   }
 
-}
-
 @mixin variant-aurora {
 
   --theme-bg: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
@@ -1626,8 +1559,6 @@
     transform: translateY(-3px) scale(1.02);
     box-shadow: 0 15px 30px rgba(79, 172, 254, 0.6);
   }
-
-}
 
 @mixin variant-trailblazer {
   --theme-bg: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(255, 215, 0, 0.2));
@@ -1703,7 +1634,6 @@
     mask-composite: exclude;
     pointer-events: none;
   }
-}
 
 @mixin variant-rose-radial {
   --theme-bg: radial-gradient(circle at center, #f43f5e 0%, #be123c 100%);
@@ -1869,8 +1799,6 @@
     border-radius: 50%;
     z-index: 2;
   }
-
-}
 }
 
 @mixin variant-animal-crossing {
@@ -1891,7 +1819,6 @@
   &:hover {
     background: linear-gradient(135deg, #f0dbb3 0%, #e1c9a8 100%);
   }
-}
 
 @mixin variant-assassins-creed {
   @include unified-variant-base(
@@ -1921,7 +1848,6 @@
   &:hover {
     background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
   }
-}
 
 @mixin variant-watch-dogs {
   --theme-bg: #000000;
@@ -1941,7 +1867,6 @@
   &:hover {
     box-shadow: 0 0 15px #00ff00, 0 0 20px #00ff00;
   }
-}
 
 @mixin variant-bioshock-enhanced {
   --theme-bg: linear-gradient(135deg, #1e293b 0%, #06b6d4 100%);
@@ -1961,7 +1886,6 @@
     background: linear-gradient(135deg, #06b6d4 0%, #1e293b 100%);
     box-shadow: 0 0 25px rgba(245, 158, 11, 0.7);
   }
-}
 
 @mixin variant-lol {
   --theme-bg: linear-gradient(135deg, #1e40af 0%, #dc2626 100%);
@@ -1981,7 +1905,6 @@
     transform: scale(1.02);
     box-shadow: 0 0 20px rgba(251, 191, 36, 0.7);
   }
-}
 
 @mixin variant-overwatch {
   --theme-bg: linear-gradient(135deg, #3b82f6 0%, #ef4444 100%);
@@ -2000,7 +1923,6 @@
   &:hover {
     animation: pulse 0.5s ease-in-out;
   }
-}
 
 @mixin variant-minecraft {
 
@@ -2024,8 +1946,6 @@
   &:active {
     box-shadow: inset 4px 4px 0px 0px rgba(0,0,0,0.5);
   }
-
-}
 }
 
 @mixin variant-fortnite {
@@ -2046,7 +1966,6 @@
     background: linear-gradient(135deg, #0077ff 0%, #00d4ff 100%);
     box-shadow: 0 0 20px rgba(0, 119, 255, 0.7);
   }
-}
 
 @mixin variant-elegant {
 
@@ -2067,8 +1986,6 @@
     color: #fff;
     letter-spacing: 6px;
   }
-
-}
 
 @mixin variant-luxury {
 
@@ -2099,8 +2016,6 @@
     box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
   }
 
-}
-
   &:hover {
     color: #fff;
     background: #d4af37;
@@ -2110,8 +2025,6 @@
       left: 100%;
     }
   }
-
-}
 
 @mixin variant-vintage {
 
@@ -2141,8 +2054,6 @@
     box-shadow: 6px 6px 0px #3d3b38;
   }
 
-}
-
 @mixin variant-corporate {
 
   --theme-bg: #fff;
@@ -2164,8 +2075,6 @@
     box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
     transform: translateY(-1px);
   }
-
-}
 
 @mixin variant-rockstar {
   @include unified-variant-base(
@@ -2237,7 +2146,6 @@
   &:active {
     transform: skewX(2deg) scale(0.97);
   }
-}
 
 @mixin variant-corporate {
 
@@ -2260,8 +2168,6 @@
     box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
     transform: translateY(-1px);
   }
-
-}
 }
 
 @mixin variant-vaporwave {
@@ -2283,13 +2189,10 @@
     text-shadow: 3px 3px 0px #b967ff;
   }
 
-}
-
   &:hover {
     transform: scale(1.05) rotate(-1deg);
     text-shadow: 4px 4px 0px #b967ff;
   }
-}
 
 @mixin variant-elegant {
 
@@ -2311,8 +2214,6 @@
     letter-spacing: 6px;
   }
 
-}
-
   &:hover {
     background: #000;
     color: #fff;
@@ -2322,7 +2223,6 @@
       border-color: rgba(255,255,255,0.2);
     }
   }
-}
 
 @mixin variant-vintage {
 
@@ -2351,8 +2251,6 @@
     transform: translate(-2px, -2px);
     box-shadow: 6px 6px 0px #3d3b38;
   }
-
-}
 }
 
 @mixin variant-crystal {
@@ -2447,7 +2345,6 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-}
 
 @mixin variant-gear {
   position: relative;
@@ -2557,7 +2454,6 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-}
 
 @mixin variant-star {
   position: relative;
@@ -2671,7 +2567,6 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-}
 
 @mixin variant-hexagon {
   position: relative;
@@ -2781,7 +2676,6 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-}
 
 @mixin variant-morphing-blob {
   position: relative;
@@ -2809,7 +2703,6 @@
     animation: blob-pulse 0.6s ease-out;
     box-shadow: 0 0 30px rgba(102, 126, 234, 0.6);
   }
-}
 
 @mixin variant-neural-network {
   position: relative;
@@ -2837,7 +2730,6 @@
   &:hover {
     box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
   }
-}
 
 @mixin variant-quantum-field {
   position: relative;
@@ -2860,7 +2752,6 @@
   &:hover {
     box-shadow: 0 0 25px rgba(99, 102, 241, 0.8);
   }
-}
 
 @mixin variant-dna-helix {
   position: relative;
@@ -2887,7 +2778,6 @@
     transform: scale(1.02);
     box-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
   }
-}
 
 @mixin variant-lava-flow {
   position: relative;
@@ -2915,7 +2805,6 @@
     box-shadow: 0 0 30px rgba(220, 38, 38, 0.8);
     animation: lava-erupt 0.5s ease-out;
   }
-}
 
 @mixin variant-ice-crystal {
   position: relative;
@@ -2944,7 +2833,6 @@
   &:hover {
     box-shadow: 0 0 25px rgba(125, 211, 252, 0.8);
   }
-}
 
 @mixin variant-thunder-storm {
   position: relative;
@@ -2977,7 +2865,6 @@
   &:hover {
     box-shadow: 0 0 30px rgba(245, 158, 11, 0.8);
   }
-}
 
 @mixin variant-water-ripple {
   position: relative;
@@ -3002,7 +2889,6 @@
   &:hover {
     box-shadow: 0 0 25px rgba(14, 165, 233, 0.8);
   }
-}
 
 @mixin variant-black-hole {
   position: relative;
@@ -3027,7 +2913,6 @@
   &:hover {
     box-shadow: 0 0 40px rgba(245, 158, 11, 0.9);
   }
-}
 
 @mixin variant-wormhole {
   position: relative;
@@ -3051,7 +2936,6 @@
     animation: wormhole-portal 0.5s ease-out;
     box-shadow: 0 0 30px rgba(124, 58, 237, 0.8);
   }
-}
 
 @mixin variant-stellar-nova {
   position: relative;
@@ -3077,7 +2961,6 @@
     box-shadow: 0 0 40px rgba(251, 191, 36, 1);
     animation: nova-burst 0.6s ease-out;
   }
-}
 
 @mixin variant-cosmic-dust {
   position: relative;
@@ -3103,7 +2986,6 @@
   &:hover {
     box-shadow: 0 0 25px rgba(232, 121, 249, 0.8);
   }
-}
 
 @mixin variant-ubisoft {
   @include unified-variant-base(
@@ -3140,7 +3022,6 @@
     background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 70%);
     animation: liquid-sway 10s infinite linear;
   }
-}
 
 @mixin variant-crystal-prism {
   @include variant-glass;
@@ -3230,7 +3111,6 @@
     transform: translateY(-3px) scale(1.02);
     box-shadow: 0 0 30px rgba(255, 0, 128, 0.8), 0 0 60px rgba(255, 0, 128, 0.6);
   }
-}
 
 @mixin variant-cyber-grid {
   position: relative;
@@ -3261,7 +3141,6 @@
     box-shadow: 0 0 25px rgba(0, 255, 136, 0.5);
     transform: translateY(-2px);
   }
-}
 
 @mixin variant-quantum-leap {
   position: relative;
@@ -3277,7 +3156,6 @@
     transform: translateY(-3px) rotate(2deg);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
   }
-}
 
 @mixin variant-hologram {
   position: relative;
@@ -3293,7 +3171,6 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 255, 255, 0.5);
   }
-}
 
 @mixin variant-plasma-wave {
   position: relative;
@@ -3311,7 +3188,6 @@
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 8px 25px rgba(255, 23, 68, 0.5);
   }
-}
 
 @mixin variant-neural-link {
   position: relative;
@@ -3327,7 +3203,6 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
   }
-}
 
 @mixin variant-fractal-maze {
   position: relative;
@@ -3345,7 +3220,6 @@
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
   }
-}
 
 @mixin variant-time-portal {
   position: relative;
@@ -3361,7 +3235,6 @@
     transform: translateY(-3px) rotate(45deg);
     box-shadow: 0 0 50px rgba(255, 0, 0, 0.7);
   }
-}
 
 @mixin variant-dimension-gate {
   position: relative;
@@ -3377,7 +3250,6 @@
     transform: translateY(-2px) perspective(500px) rotateX(5deg);
     box-shadow: 0 8px 25px rgba(124, 58, 237, 0.5);
   }
-}
 
 @mixin variant-energy-storm {
   position: relative;
@@ -3393,7 +3265,6 @@
     transform: translateY(-2px);
     box-shadow: 0 0 30px rgba(255, 255, 0, 0.6);
   }
-}
 
 @mixin variant-galaxy-spiral {
   position: relative;
@@ -3409,7 +3280,6 @@
     transform: translateY(-2px) scale(1.05);
     box-shadow: 0 8px 25px rgba(76, 29, 149, 0.5);
   }
-}
 
 @mixin variant-cyber-nebula {
   position: relative;
@@ -3425,7 +3295,6 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(232, 121, 249, 0.5);
   }
-}
 
 @mixin variant-quantum-entanglement {
   position: relative;
@@ -3441,7 +3310,6 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
   }
-}
 
 @mixin variant-holo-projection {
   position: relative;
@@ -3457,7 +3325,6 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(0, 255, 255, 0.5);
   }
-}
 
 @mixin variant-plasma-core {
   position: relative;
@@ -3473,7 +3340,6 @@
     transform: translateY(-3px) scale(1.1);
     box-shadow: 0 0 50px rgba(255, 23, 68, 0.8);
   }
-}
 
 @mixin variant-neural-web {
   position: relative;
@@ -3489,7 +3355,6 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 25px rgba(139, 92, 246, 0.5);
   }
-}
 
 @mixin variant-fractal-reality {
   position: relative;
@@ -3507,7 +3372,6 @@
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
   }
-}
 
 @mixin variant-chrono-shift {
   position: relative;
@@ -3523,7 +3387,6 @@
     transform: translateY(-2px) rotate(2deg);
     box-shadow: 0 8px 25px rgba(156, 39, 176, 0.5);
   }
-}
 
 @mixin variant-void-dimension {
   position: relative;
@@ -3539,7 +3402,6 @@
     transform: translateY(-3px) scale(1.1);
     box-shadow: 0 0 60px rgba(139, 92, 246, 0.8);
   }
-}
 
 @mixin variant-cosmic-storm {
   position: relative;
@@ -3557,4 +3419,3 @@
     transform: translateY(-2px) scale(1.02);
     box-shadow: 0 8px 25px rgba(255, 23, 68, 0.5);
   }
-}
