@@ -23,9 +23,16 @@ import {
   UIStepsSectionComponent,
   UIAccordionComponent,
   UIChartComponent,
-  ChartData
+  ChartData,
+  PromotionsSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent,
+  ProductsSectionComponent,
+  UINewsletterSectionComponent,
+  UITestimonialsSectionComponent
 } from '@negocio/ui-components';
-import { GallerySectionComponent, PricingSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
+import { ReservationFormComponent } from '@negocio/featured-components';
 
 @Component({
   selector: 'lib-home-feature',
@@ -36,18 +43,22 @@ import { GallerySectionComponent, PricingSectionComponent, ReservationFormCompon
     UINavBarComponent,
     UIHeroSectionComponent,
     ReservationFormComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
+    UIGallerySectionComponent,
     UIStatsLibSectionComponent,
     UIModalComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,
     UITitleComponent,
     UIFooterComponent,
-    UIStatsLibSectionComponent,
     UIStepsSectionComponent,
     UIAccordionComponent,
-    UIChartComponent
+    UIChartComponent,
+    PromotionsSectionComponent,
+    UIFaqSectionComponent,
+    UIPricingTableSectionComponent,
+    ProductsSectionComponent,
+    UINewsletterSectionComponent,
+    UITestimonialsSectionComponent
   ],
   templateUrl: './home-feature.component.html',
   styleUrl: './home-feature.component.scss',
@@ -96,31 +107,31 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
 
   premiumCardConfigs: CardPremiumConfig[] = [
     {
-      title: 'Entrenamiento Personal',
-      description: 'Sesiones personalizadas con entrenador experto.',
-      image: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b',
-      price: '60€',
-      discount: '-10%',
+      title: 'Desafío de Verano',
+      description: 'Programa intensivo de 8 semanas para transformar tu físico.',
+      image: 'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&q=80',
+      price: '120€',
+      discount: '-20%',
       icon: 'heroStar',
-      tooltip: '¡Mejora tu rendimiento!',
+      tooltip: '¡Empieza hoy!',
     },
     {
-      title: 'Clases Grupales',
-      description: 'Yoga, pilates y más en grupo.',
-      image: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b',
-      price: '20€/clase',
-      discount: 'Oferta',
+      title: 'Pack Entreno Personal',
+      description: '10 sesiones con entrenador + plan nutricional.',
+      image: 'https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?auto=format&fit=crop&q=80',
+      price: '300€',
+      discount: 'Ahorra 50€',
       icon: 'heroStar',
-      tooltip: 'Únete a la comunidad.',
+      tooltip: 'Resultados garantizados.',
     },
     {
-      title: 'Plan Nutricional',
-      description: 'Dieta personalizada para tus objetivos.',
-      image: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061',
-      price: '40€',
-      discount: 'Novedad',
+      title: 'Pase de Invitado',
+      description: 'Trae a un amigo gratis durante todo el mes.',
+      image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&q=80',
+      price: 'Gratis',
+      discount: 'Socios',
       icon: 'heroStar',
-      tooltip: 'Alimenta tu cuerpo.',
+      tooltip: 'Entrena acompañado.',
     },
   ];
 

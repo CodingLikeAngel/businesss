@@ -4,9 +4,6 @@
 <div class="relative z-30">
   <lib-ui-components-nav-bar
     [variant]="getVariant('navbar')"
-    [logoText]="navBarConfig.logoText"
-    [showMobileMenu]="navBarConfig.showMobileMenu"
-    [isFixed]="navBarConfig.isFixed"
     [navLinks]="navBarConfig.navLinks"
     [customStyles]="navBarConfig.customStyles"
     (linkClicked)="scrollToSection($event)"
@@ -32,8 +29,8 @@
   ></lib-ui-hero-section>
 </section>
 
-<!-- STATS (New!) -->
-<section id="stats" class="relative z-20">
+<!-- STATS -->
+<section id="stats" class="relative z-20 py-16 bg-slate-950">
   <lib-ui-components-stats-section
     [title]="'Fuerza en Cifras'"
     [subtitle]="'Tu comunidad, tu evolución, tu éxito.'"
@@ -42,8 +39,8 @@
   ></lib-ui-components-stats-section>
 </section>
 
-<!-- PROGRESS CHART (New!) -->
-<section id="analytics" class="relative z-20 py-20 bg-slate-950">
+<!-- PROGRESS CHART -->
+<section id="analytics" class="relative z-20 py-20 bg-slate-900">
   <div class="container mx-auto px-6">
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
         <div>
@@ -52,13 +49,13 @@
                 [variant]="getVariant('title')"
                 [align]="'left'"
             ></lib-ui-components-title>
-            <p class="text-dim mt-6 text-xl leading-relaxed">
+            <p class="text-white/70 mt-6 text-xl leading-relaxed">
                 Nuestra plataforma exclusiva te permite monitorizar cada repetición, cada julio de energía y cada gramo de progreso. La ciencia del deporte a tu favor.
             </p>
         </div>
-        <div class="glass-panel p-10">
+        <div class="p-8 bg-slate-800/50 rounded-2xl border border-white/10 backdrop-blur-sm">
             <lib-ui-chart
-                [title]="'Evolución de Rendimiento Sedentario'"
+                [title]="'Evolución de Rendimiento'"
                 [variant]="'cybernetic'"
                 [data]="chartData"
             ></lib-ui-chart>
@@ -78,7 +75,7 @@
 </section>
 
 <!-- SERVICES / CLASSES -->
-<section id="servicios" class="relative z-20 py-20">
+<section id="servicios" class="relative z-20 py-20 bg-slate-950/80">
   <div class="container mx-auto px-6 max-w-7xl">
     <lib-ui-components-title
       level="h2"
@@ -91,13 +88,25 @@
     <lib-ui-components-card-rutas
       [items]="serviceCards"
       [variant]="getVariant('card')"
+      [backgroundColor]="'rgba(20, 20, 20, 0.8)'"
       [isMobile]="false"
     ></lib-ui-components-card-rutas>
   </div>
 </section>
 
+<!-- PROMOTIONS (New!) -->
+<section id="promociones" class="relative z-20 py-24 bg-slate-900">
+  <div class="container mx-auto px-6 max-w-7xl">
+     <lib-promotions-section 
+        [variant]="'banner'" 
+        [items]="premiumCardConfigs"
+        [title]="'Ofertas Explosivas'"
+     ></lib-promotions-section>
+  </div>
+</section>
+
 <!-- PRICING -->
-<section id="precios" class="relative z-20 py-20 bg-black/40">
+<section id="precios" class="relative z-20 py-20 bg-black/60">
   <div class="container mx-auto px-6 max-w-7xl">
     <lib-ui-components-title
       level="h2"
@@ -106,38 +115,62 @@
       align="center"
       class="mb-16"
     ></lib-ui-components-title>
-    <lib-pricing-section [variant]="getVariant('pricing')" [priceColumns]="priceColumns" [priceRows]="priceRows"></lib-pricing-section>
+    <div class="p-8 bg-slate-900/50 rounded-2xl border border-red-900/30">
+        <lib-ui-pricing-table-section 
+            [variant]="'minimal'" 
+            [columns]="priceColumns" 
+            [rows]="priceRows"
+        ></lib-ui-pricing-table-section>
+    </div>
   </div>
 </section>
 
+<!-- PRODUCTS -->
+<section id="productos" class="relative z-20 py-24 bg-slate-900">
+    <lib-products-section
+        [title]="'Suplementación Pro'"
+        [subtitle]="'Maximiza tus resultados con nuestra línea premium.'"
+        [products]="products"
+        [variant]="'glass'"
+    ></lib-products-section>
+</section>
+
 <!-- FAQ (Accordion) -->
-<section id="faq" class="relative z-20 py-20">
+<section id="faq" class="relative z-20 py-20 bg-slate-950">
   <div class="container mx-auto px-6 max-w-4xl">
-    <div class="text-center mb-12">
-        <h2 class="text-4xl font-black text-white uppercase tracking-tighter">Preguntas Frecuentes</h2>
-    </div>
-    <lib-ui-components-accordion
-      [items]="gymFaq"
-      [variant]="'glass'"
-      [rounded]="'full'"
-    ></lib-ui-components-accordion>
+    <lib-ui-faq-section 
+        [variant]="'accordion'" 
+        [items]="faqItems"
+    ></lib-ui-faq-section>
   </div>
 </section>
 
 <!-- GALLERY -->
-<section id="galeria" class="relative z-20 py-20">
+<section id="galeria" class="relative z-20 py-20 bg-black">
   <div class="container mx-auto px-6 max-w-7xl">
-    <lib-gallery-section [variant]="getVariant('gallery')" [images]="allGalleryConfigs[0].images"></lib-gallery-section>
+    <lib-ui-components-gallery-section 
+        [variant]="'masonry'" 
+        [images]="allGalleryConfigs[0].images"
+    ></lib-ui-components-gallery-section>
   </div>
 </section>
 
 <!-- CONTACT -->
-<section id="forms" class="relative z-20 py-24 mb-10">
+<section id="forms" class="relative z-20 py-24 mb-10 bg-gradient-to-t from-black to-slate-900">
   <div class="container mx-auto px-6 max-w-4xl">
-    <div class="glass-panel p-12">
-        <lib-reservation-form [variant]="getVariant('form')"></lib-reservation-form>
+    <div class="p-12 bg-slate-900 rounded-2xl border border-red-500/20 shadow-[0_0_50px_rgba(220,38,38,0.2)]">
+        <lib-reservation-form [variant]="'neon'"></lib-reservation-form>
     </div>
   </div>
+</section>
+
+<!-- NEWSLETTER -->
+<section class="relative z-20 py-16 bg-red-600 text-white">
+    <lib-ui-newsletter-section
+        [title]="'Comunidad Espartana'"
+        [description]="'Consejos de nutrición, rutinas y motivación semanal.'"
+        [variant]="'glass'"
+    ></lib-ui-newsletter-section>
 </section>
 
 <lib-ui-components-footer
