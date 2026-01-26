@@ -6,11 +6,34 @@
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
     
-    <lib-ui-header
-      [variant]="$any(section.content['variant'] || getVariant(section.id))"
-      [title]="section.content['title'] || 'Encabezado'"
-      [subtitle]="section.content['subtitle'] || ''"
-      [navItems]="section.content['navItems'] || []"
-      [customStyles]="section.styles || {}"
-    ></lib-ui-header>
+    <ng-container [ngSwitch]="section.config?.['subtype']">
+      <!-- CLASSIC HEADER -->
+      <lib-ui-header-classic *ngSwitchCase="'classic'"
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [title]="section.content['title'] || 'Classic Header'"
+        [logo]="section.content['logoKey'] || null"
+        [navItems]="section.content['navItems'] || []"
+        [ctaLabel]="section.content['ctaLabel'] || 'Contact'"
+        [customStyles]="section.styles || {}"
+      ></lib-ui-header-classic>
+
+      <!-- MODERN HEADER -->
+      <lib-ui-header-modern *ngSwitchCase="'modern'"
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [title]="section.content['title'] || 'Modern Header'"
+        [logo]="section.content['logoKey'] || null"
+        [navItems]="section.content['navItems'] || []"
+        [ctaLabel]="section.content['ctaLabel'] || 'Launch'"
+        [customStyles]="section.styles || {}"
+      ></lib-ui-header-modern>
+
+      <!-- DEFAULT (Fallback) -->
+      <lib-ui-header *ngSwitchDefault
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [title]="section.content['title'] || 'Encabezado'"
+        [subtitle]="section.content['subtitle'] || ''"
+        [navItems]="section.content['navItems'] || []"
+        [customStyles]="section.styles || {}"
+      ></lib-ui-header>
+    </ng-container>
 </div>

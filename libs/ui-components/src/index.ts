@@ -15,6 +15,8 @@ export * from './lib/tabs/tabs.component';
 
 // Navigation / Headers / Footers
 export * from './lib/headers/header/header.component';
+export * from './lib/headers/header-classic/header-classic.component';
+export * from './lib/headers/header-modern/header-modern.component';
 export * from './lib/nav-bars/nav/nav-bar.component';
 export * from './lib/footer/footer-1/footer.component';
 export * from './lib/footer/footer-deep/deep-footer.component';

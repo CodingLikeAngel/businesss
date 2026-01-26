@@ -5,6 +5,8 @@ import { VariantService, PageSection } from '../../../services/variant.service';
 import {
   UIHeroSectionComponent,
   UIHeaderComponent,
+  UIHeaderClassicComponent,
+  UIHeaderModernComponent,
   UIFooterComponent,
   UIFaqSectionComponent,
   UIFeaturesSectionComponent,
@@ -50,6 +52,7 @@ interface SectionVariant {
   description: string;
   category: string;
   libraryType: 'section' | 'component'; // 'section' for organisms, 'component' for atoms/molecules
+  subtypes?: { id: string, label: string }[];
 }
 
 @Component({
@@ -60,6 +63,8 @@ interface SectionVariant {
     FormsModule,
     UIHeroSectionComponent,
     UIHeaderComponent,
+    UIHeaderClassicComponent,
+    UIHeaderModernComponent,
     UIFooterComponent,
     UIFaqSectionComponent,
     UIFeaturesSectionComponent,
@@ -186,6 +191,15 @@ interface SectionVariant {
           </div>
 
           <div class="modal-variant-selector">
+            <ng-container *ngIf="selectedComponent.subtypes">
+                <label>Tipo</label>
+                <select [(ngModel)]="selectedSubtype" class="select-v2">
+                  <option *ngFor="let subtype of selectedComponent.subtypes" [value]="subtype.id">
+                    {{ subtype.label }}
+                  </option>
+                </select>
+            </ng-container>
+
             <label>Variante</label>
             <select [(ngModel)]="selectedVariant" class="select-v2">
               <option *ngFor="let variant of selectedComponent.variants" [value]="variant">
@@ -203,7 +217,11 @@ interface SectionVariant {
                   <lib-ui-hero-section *ngSwitchCase="'hero'" [variant]="$any(selectedVariant)" title="Título Hero" subtitle="Subtítulo descriptivo"></lib-ui-hero-section>
                   <lib-ui-cta-section *ngSwitchCase="'cta'" [variant]="$any(selectedVariant)"></lib-ui-cta-section>
                   <lib-reservation-form *ngSwitchCase="'reservation-form'" [variant]="$any(selectedVariant)"></lib-reservation-form>
-                  <lib-ui-header *ngSwitchCase="'header'" [variant]="$any(selectedVariant)" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header>
+                  <div *ngSwitchCase="'header'" class="h-full w-full">
+                     <lib-ui-header *ngIf="!selectedSubtype || selectedSubtype === 'standard'" [variant]="$any(selectedVariant)" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header>
+                     <lib-ui-header-classic *ngIf="selectedSubtype === 'classic'" [variant]="$any(selectedVariant)" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header-classic>
+                     <lib-ui-header-modern *ngIf="selectedSubtype === 'modern'" [variant]="$any(selectedVariant)" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header-modern>
+                  </div>
                   <lib-ui-components-footer *ngSwitchCase="'footer'" [variant]="$any(selectedVariant)" title="Logo"></lib-ui-components-footer>
                   <div *ngSwitchCase="'faq'" class="p-4"><lib-ui-faq-section [variant]="$any(selectedVariant)"></lib-ui-faq-section></div>
                   <div *ngSwitchCase="'features'" class="p-4"><lib-ui-features-section [variant]="$any(selectedVariant)"></lib-ui-features-section></div>
@@ -916,6 +934,7 @@ interface SectionVariant {
 export class ComponentExplorerComponent implements OnInit {
   selectedComponent: SectionVariant | null = null;
   selectedVariant = 'glass';
+  selectedSubtype: string | null = null;
   selectedCategory = 'all';
 
   categories = [
@@ -971,7 +990,12 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['primary', 'outline', 'glass', 'neon', 'cyberpunk', 'mario', 'rayman', 'rockstar'],
       description: 'Barra de navegación principal (Global)',
       category: 'content',
-      libraryType: 'section'
+      libraryType: 'section',
+      subtypes: [
+        { id: 'standard', label: 'Estándar' },
+        { id: 'classic', label: 'Clásico' },
+        { id: 'modern', label: 'Moderno' }
+      ]
     },
     {
       type: 'footer',
@@ -1319,6 +1343,7 @@ export class ComponentExplorerComponent implements OnInit {
   selectComponent(component: SectionVariant) {
     this.selectedComponent = component;
     this.selectedVariant = component.variants[0];
+    this.selectedSubtype = component.subtypes ? component.subtypes[0].id : null;
   }
 
   closePreview() {
@@ -1337,7 +1362,9 @@ export class ComponentExplorerComponent implements OnInit {
       styles: {},
       content: {},
       elements: [],
-      config: {},
+      config: {
+        subtype: this.selectedSubtype
+      },
       customStyles: {},
       animation: 'none',
       layout: 'default'
