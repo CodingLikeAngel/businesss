@@ -185,37 +185,38 @@
 
 @mixin variant-cyberpunk {
   --theme-bg: #fcee0a;
-  --theme-color: #000;
+  --theme-color: #000000;
   
+  position: relative;
   background: var(--theme-bg);
   color: var(--theme-color);
   font-family: 'Orbitron', sans-serif;
   font-weight: 900;
   text-transform: uppercase;
-  clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
+  /* Very subtle notch instead of deep deforming polygon */
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 15px), calc(100% - 15px) 100%, 0 100%);
   border: none;
   padding: 2rem 3rem;
-  position: relative;
-  transition: 0.1s;
-  box-shadow: 8px 8px 0px #000;
+  transition: all 0.1s;
+  box-shadow: 6px 6px 0px #000;
 
   &::before {
-    content: 'ACCESS_GRANTED';
+    content: 'TRML_VX_99';
     position: absolute;
-    top: 5px; right: 15px;
-    font-size: 0.6rem;
-    opacity: 0.7;
-    letter-spacing: 2px;
+    bottom: 5px; left: 10px;
+    font-size: 0.5rem;
+    letter-spacing: 1px;
+    opacity: 0.6;
   }
 
   &:hover {
-    transform: translate(-4px, -4px);
-    box-shadow: 12px 12px 0px #ff003c;
     background: #00f3ff;
+    transform: translate(-3px, -3px);
+    box-shadow: 12px 12px 0px #ff003c;
     
     &::before {
-       content: 'SYS_OVERRIDE';
-       color: #ff003c;
+      content: 'ERROR_REWRITE';
+      color: #ff003c;
     }
   }
 }
@@ -564,45 +565,41 @@
 }
 
 @mixin variant-zelda {
-  --theme-bg: #005a31;
+  --theme-bg: #004d2c;
   --theme-accent: #fbdf71;
   
   position: relative;
   background: var(--theme-bg);
   color: var(--theme-accent);
   border: 2px solid var(--theme-accent);
-  padding: 1.5rem 4rem;
+  border-radius: 4px; /* Content safety first */
+  padding: 2rem 3rem;
   font-family: 'Cinzel', serif;
   text-transform: uppercase;
-  letter-spacing: 3px;
-  clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
+  letter-spacing: 2px;
   overflow: hidden;
-  transition: all 0.4s ease;
+  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
 
-  &::before {
+  /* Modern decorative corners instead of deforming clip-path */
+  &::before, &::after {
     content: '▲';
     position: absolute;
-    top: 5px; left: 50%; transform: translateX(-50%);
-    opacity: 0.3;
+    font-size: 0.8rem;
+    opacity: 0.4;
+    transition: 0.3s;
   }
-
-  &::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(rgba(251, 223, 113, 0.05), transparent);
-    pointer-events: none;
-  }
+  &::before { top: 10px; left: 10px; }
+  &::after { bottom: 10px; right: 10px; transform: rotate(180deg); }
 
   &:hover {
-    background: #007c44;
-    box-shadow: 0 0 30px rgba(251, 223, 113, 0.2);
-    transform: scale(1.05);
+    background: #005a31;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.4), 0 0 20px rgba(251, 223, 113, 0.1);
+    transform: translateY(-4px);
 
-    &::before {
-       opacity: 1;
-       text-shadow: 0 0 10px var(--theme-accent);
-       animation: pulse 2s infinite;
+    &::before, &::after {
+      opacity: 1;
+      text-shadow: 0 0 10px var(--theme-accent);
     }
   }
 }
@@ -1021,20 +1018,35 @@
 }
 
 @mixin variant-water {
-  --theme-bg: #3b82f6;
+  --theme-bg: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   --theme-color: #fff;
   
   background: var(--theme-bg);
-  border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
-  padding: 1.5rem 3rem;
-  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+  border-radius: 16px;
+  padding: 2rem 3rem;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.5s ease;
+  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+
+  /* Use a wavy pseudo-element for decoration instead of deforming the component */
+  &::before {
+    content: '';
+    position: absolute;
+    bottom: -50%; left: -25%; width: 150%; height: 100%;
+    background: rgba(255,255,255,0.1);
+    border-radius: 40%;
+    animation: rotate 10s linear infinite;
+    pointer-events: none;
+  }
 
   &:hover {
-    border-radius: 50%;
-    transform: scale(1.05);
-    background: #2563eb;
-    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.4);
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(37, 99, 235, 0.3);
+    
+    &::before {
+      animation-duration: 5s;
+    }
   }
 }
 
@@ -1625,31 +1637,46 @@
   border: var(--theme-border);
 }
 @mixin variant-pokemon {
-  --theme-bg: #fff;
+  --theme-bg: #ffffff;
   
   position: relative;
-  background: linear-gradient(to bottom, #ee1515 48%, #333 48%, #333 52%, #fff 52%);
-  border: 6px solid #333;
-  border-radius: 50%;
-  width: 120px; height: 120px;
-  display: flex; align-items: center; justify-content: center;
-  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  background: var(--theme-bg);
+  color: #333;
+  border: 4px solid #333;
+  border-radius: 20px;
+  padding: 2rem;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 0px #333;
 
+  /* PokeBall inspired header decoration instead of deforming the whole component */
   &::before {
     content: '';
     position: absolute;
-    width: 30px; height: 30px;
+    top: 0; left: 0; right: 0; height: 12px;
+    background: #ee1515;
+    border-bottom: 4px solid #333;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 6px; left: 50%; transform: translateX(-50%);
+    width: 20px; height: 20px;
     background: #fff;
-    border: 6px solid #333;
+    border: 4px solid #333;
     border-radius: 50%;
     z-index: 2;
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
   }
 
   &:hover {
-    transform: rotate(360deg) scale(1.1);
-    box-shadow: 0 20px 40px rgba(238, 21, 21, 0.4);
+    transform: translateY(-10px);
+    box-shadow: 0 20px 0px #ee1515;
+    
+    &::after {
+      background: #ee1515;
+      animation: pulse 1s infinite;
+    }
   }
 }
 
@@ -1939,20 +1966,21 @@
   
   background: var(--theme-bg);
   color: var(--theme-color);
-  font-family: 'Impact', sans-serif;
+  font-family: 'Impact', 'Arial Black', sans-serif;
   text-transform: uppercase;
-  font-size: 2rem;
-  padding: 1rem 3rem;
-  border-left: 15px solid #f9d71c;
-  transform: skewX(-10deg);
-  transition: all 0.2s;
-  box-shadow: 10px 10px 0px rgba(249, 215, 28, 0.2);
+  padding: 2rem 4rem;
+  border-radius: 0;
+  border-left: 8px solid #f9d71c;
+  position: relative;
+  transition: all 0.2s cubic-bezier(0.17, 0.67, 0.83, 0.67);
+  box-shadow: 8px 8px 0px rgba(0,0,0,0.2);
 
   &:hover {
-    transform: skewX(-10deg) translate(-5px, -5px);
-    box-shadow: 20px 20px 0px rgba(249, 215, 28, 0.4);
     background: #111;
+    border-left-width: 16px;
+    padding-left: 4.5rem;
     color: #fff;
+    box-shadow: 12px 12px 0px rgba(249, 215, 28, 0.3);
   }
 }
 
@@ -2064,32 +2092,35 @@
 
 }
 @mixin variant-crystal {
-  --theme-bg: linear-gradient(135deg, #fff 0%, #e0f2fe 100%);
+  --theme-bg: rgba(255, 255, 255, 0.8);
   --theme-color: #0369a1;
   
-  position: relative;
   background: var(--theme-bg);
+  backdrop-filter: blur(12px);
   color: var(--theme-color);
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  padding: 2rem;
-  font-family: 'Cinzel', serif;
-  font-weight: 700;
-  text-transform: uppercase;
-  transition: all 0.5s ease;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
 
+  /* Faceted light effect in background */
   &::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.8) 50%, transparent 60%);
-    animation: shimmer-fast 4s infinite;
+    background: linear-gradient(135deg, transparent 45%, rgba(255,255,255,0.6) 50%, transparent 55%);
+    background-size: 200% 200%;
+    animation: shimmer-fast 6s infinite;
+    pointer-events: none;
   }
 
   &:hover {
-    transform: scale(1.05) rotate(2deg);
-    box-shadow: 0 20px 40px rgba(186, 230, 253, 0.4);
-    filter: brightness(1.05);
+    background: rgba(255, 255, 255, 0.95);
+    transform: scale(1.01);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    border-color: var(--theme-color);
   }
 }
 
