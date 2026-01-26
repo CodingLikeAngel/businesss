@@ -234,6 +234,16 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
         });
       });
     }
+
+    // Listen for keyboard shortcuts from the store
+    this.actions$.pipe(
+      ofType(UIActions.executeShortcut),
+      takeUntil(this.destroy$)
+    ).subscribe(({ shortcut }) => {
+      if (shortcut === 'toggle-shortcuts') {
+        this.toggleShortcuts();
+      }
+    });
   }
 
   // Removed redundant handlers in favor of onElementMoved/Resized
