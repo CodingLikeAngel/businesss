@@ -43,7 +43,12 @@ export interface SmartContainerConfig {
 })
 export class SmartContainerComponent implements OnInit {
   @Input() config: SmartContainerConfig = {};
+  @Input() variant: string = 'default';
   @Input() customID: string = '';
+
+  @HostBinding('class') get variantClass() {
+    return `container--${this.variant}`;
+  }
 
   @HostBinding('style.width') get width() { return this.config.width || '100%'; }
   @HostBinding('style.height') get height() { return this.config.height || 'auto'; }

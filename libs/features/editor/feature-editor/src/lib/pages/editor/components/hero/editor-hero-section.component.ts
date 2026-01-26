@@ -2,7 +2,6 @@ import { Component, Input, ElementRef, ViewChild, ViewChildren, QueryList, After
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   HeroConfig,
-  ApplyDynamicStylesDirective,
   EnhancedVisualEditableDirective,
   VisualEditingConfig, 
   VisualEditingEvent
@@ -25,7 +24,6 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UITitleComponent,
     UICardAnimatedComponent,
-    ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective
   ],
   templateUrl: './editor-hero-section.component.html',

@@ -198,61 +198,61 @@ interface SectionVariant {
             <div class="preview-viewport" [ngSwitch]="selectedComponent.type" role="region" aria-label="Vista previa del componente">
                   <!-- CONTENT -->
                   <div *ngSwitchCase="'promotions'" class="p-4">
-                    <lib-promotions-section [variant]="selectedVariant"></lib-promotions-section>
+                    <lib-promotions-section [variant]="$any(selectedVariant)"></lib-promotions-section>
                   </div>
-                  <lib-ui-hero-section *ngSwitchCase="'hero'" [variant]="selectedVariant" title="Título Hero" subtitle="Subtítulo descriptivo"></lib-ui-hero-section>
-                  <lib-ui-cta-section *ngSwitchCase="'cta'" [variant]="selectedVariant"></lib-ui-cta-section>
-                  <lib-reservation-form *ngSwitchCase="'reservation-form'" [variant]="selectedVariant"></lib-reservation-form>
-                  <lib-ui-header *ngSwitchCase="'header'" [variant]="selectedVariant" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header>
-                  <lib-ui-components-footer *ngSwitchCase="'footer'" [variant]="selectedVariant" title="Logo"></lib-ui-components-footer>
-                  <div *ngSwitchCase="'faq'" class="p-4"><lib-ui-faq-section [variant]="selectedVariant"></lib-ui-faq-section></div>
-                  <div *ngSwitchCase="'features'" class="p-4"><lib-ui-features-section [variant]="selectedVariant"></lib-ui-features-section></div>
-                  <div *ngSwitchCase="'gallery'" class="p-4"><lib-ui-components-gallery-section [variant]="selectedVariant"></lib-ui-components-gallery-section></div>
-                  <div *ngSwitchCase="'stats'" class="p-4"><lib-ui-components-stats-section [variant]="selectedVariant"></lib-ui-components-stats-section></div>
-                  <div *ngSwitchCase="'steps'" class="p-4"><lib-ui-steps-section [variant]="selectedVariant"></lib-ui-steps-section></div>
+                  <lib-ui-hero-section *ngSwitchCase="'hero'" [variant]="$any(selectedVariant)" title="Título Hero" subtitle="Subtítulo descriptivo"></lib-ui-hero-section>
+                  <lib-ui-cta-section *ngSwitchCase="'cta'" [variant]="$any(selectedVariant)"></lib-ui-cta-section>
+                  <lib-reservation-form *ngSwitchCase="'reservation-form'" [variant]="$any(selectedVariant)"></lib-reservation-form>
+                  <lib-ui-header *ngSwitchCase="'header'" [variant]="$any(selectedVariant)" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header>
+                  <lib-ui-components-footer *ngSwitchCase="'footer'" [variant]="$any(selectedVariant)" title="Logo"></lib-ui-components-footer>
+                  <div *ngSwitchCase="'faq'" class="p-4"><lib-ui-faq-section [variant]="$any(selectedVariant)"></lib-ui-faq-section></div>
+                  <div *ngSwitchCase="'features'" class="p-4"><lib-ui-features-section [variant]="$any(selectedVariant)"></lib-ui-features-section></div>
+                  <div *ngSwitchCase="'gallery'" class="p-4"><lib-ui-components-gallery-section [variant]="$any(selectedVariant)"></lib-ui-components-gallery-section></div>
+                  <div *ngSwitchCase="'stats'" class="p-4"><lib-ui-components-stats-section [variant]="$any(selectedVariant)"></lib-ui-components-stats-section></div>
+                  <div *ngSwitchCase="'steps'" class="p-4"><lib-ui-steps-section [variant]="$any(selectedVariant)"></lib-ui-steps-section></div>
                   <div *ngSwitchCase="'showcase'" class="p-4"><lib-ui-gaming-variants-showcase></lib-ui-gaming-variants-showcase></div>
-                  <div *ngSwitchCase="'testimonials'" class="p-4"><lib-ui-testimonials-section [variant]="selectedVariant"></lib-ui-testimonials-section></div>
+                  <div *ngSwitchCase="'testimonials'" class="p-4"><lib-ui-testimonials-section [variant]="$any(selectedVariant)"></lib-ui-testimonials-section></div>
                   <!-- COMMERCE -->
-                  <div *ngSwitchCase="'services'" class="p-4"><lib-service-section [variant]="selectedVariant" [title]="'Nuestros Servicios'"></lib-service-section></div>
-                  <div *ngSwitchCase="'pricing'" class="p-4"><lib-ui-pricing-table-section [variant]="selectedVariant"></lib-ui-pricing-table-section></div>
-                  <div *ngSwitchCase="'newsletter'" class="p-4"><lib-ui-newsletter-section [variant]="selectedVariant"></lib-ui-newsletter-section></div>
-                  <div *ngSwitchCase="'products'" class="p-4"><lib-products-section [variant]="selectedVariant"></lib-products-section></div>
+                  <div *ngSwitchCase="'services'" class="p-4"><lib-service-section [variant]="$any(selectedVariant)" [title]="'Nuestros Servicios'"></lib-service-section></div>
+                  <div *ngSwitchCase="'pricing'" class="p-4"><lib-ui-pricing-table-section [variant]="$any(selectedVariant)"></lib-ui-pricing-table-section></div>
+                  <div *ngSwitchCase="'newsletter'" class="p-4"><lib-ui-newsletter-section [variant]="$any(selectedVariant)"></lib-ui-newsletter-section></div>
+                  <div *ngSwitchCase="'products'" class="p-4"><lib-products-section [variant]="$any(selectedVariant)"></lib-products-section></div>
                   <!-- INTERACTIVE -->
-                  <div *ngSwitchCase="'contact'" class="p-4"><lib-ui-contact-section [variant]="selectedVariant"></lib-ui-contact-section></div>
-                  <div *ngSwitchCase="'smart-container'" class="p-4"><lib-smart-container [variant]="selectedVariant">Contenido del Contenedor Inteligente</lib-smart-container></div>
-                  <div *ngSwitchCase="'draggable-box'" class="h-64 relative border border-white/10 m-4"><lib-draggable-box [variant]="selectedVariant" label="Caja Movible"></lib-draggable-box></div>
+                  <div *ngSwitchCase="'contact'" class="p-4"><lib-ui-contact-section [variant]="$any(selectedVariant)"></lib-ui-contact-section></div>
+                  <div *ngSwitchCase="'smart-container'" class="p-4"><lib-smart-container [variant]="$any(selectedVariant)">Contenido del Contenedor Inteligente</lib-smart-container></div>
+                  <div *ngSwitchCase="'draggable-box'" class="h-64 relative border border-white/10 m-4"><lib-draggable-box [variant]="$any(selectedVariant)" label="Caja Movible"></lib-draggable-box></div>
                   <div *ngSwitchCase="'bubble'" class="h-64 relative overflow-hidden rounded-xl border border-white/10 m-4">
                      <lib-bubble-animation [variant]="$any(selectedVariant)"></lib-bubble-animation>
                   </div>
                   <div *ngSwitchCase="'tabs'" class="p-4">
-                    <lib-ui-components-tabs [variant]="selectedVariant" [showAs]="'tabs'" [tabs]="[{label:'Tab 1', sectionId:'tab1'}, {label:'Tab 2', sectionId:'tab2'}]"></lib-ui-components-tabs>
+                    <lib-ui-components-tabs [variant]="$any(selectedVariant)" [showAs]="'tabs'" [tabs]="[{label:'Tab 1', sectionId:'tab1'}, {label:'Tab 2', sectionId:'tab2'}]"></lib-ui-components-tabs>
                   </div>
                   <div *ngSwitchCase="'accordion'" class="p-4">
-                    <lib-ui-components-accordion [variant]="selectedVariant" [items]="[{title:'Item 1', content:'Detalle 1'}, {title:'Item 2', content:'Detalle 2'}]"></lib-ui-components-accordion>
+                    <lib-ui-components-accordion [variant]="$any(selectedVariant)" [items]="[{title:'Item 1', content:'Detalle 1'}, {title:'Item 2', content:'Detalle 2'}]"></lib-ui-components-accordion>
                   </div>
                   <div *ngSwitchCase="'button'" class="flex gap-4 justify-center items-center h-full min-h-[200px]">
-                    <lib-ui-components-button [variant]="selectedVariant">Botón</lib-ui-components-button>
+                    <lib-ui-components-button [variant]="$any(selectedVariant)">Botón</lib-ui-components-button>
                   </div>
                   <div *ngSwitchCase="'chip'" class="flex justify-center items-center h-full min-h-[200px]">
-                     <lib-ui-components-chip [variant]="selectedVariant" label="Chip"></lib-ui-components-chip>
+                     <lib-ui-components-chip [variant]="$any(selectedVariant)" label="Chip"></lib-ui-components-chip>
                   </div>
                   <div *ngSwitchCase="'spinner'" class="flex justify-center items-center h-full min-h-[200px]">
-                     <lib-ui-spinner [variant]="selectedVariant"></lib-ui-spinner>
+                     <lib-ui-spinner [variant]="$any(selectedVariant)"></lib-ui-spinner>
                   </div>
                   <div *ngSwitchCase="'date-time-picker'" class="p-8 flex justify-center">
-                     <lib-ui-components-date-time-picker [variant]="selectedVariant"></lib-ui-components-date-time-picker>
+                     <lib-ui-components-date-time-picker [variant]="$any(selectedVariant)"></lib-ui-components-date-time-picker>
                   </div>
                   <div *ngSwitchCase="'ui-chart'" class="p-8 h-80">
-                     <lib-ui-chart [variant]="selectedVariant" [data]="{labels: ['Ene', 'Feb', 'Mar'], datasets: [{label: 'Ventas', data: [10, 20, 15]}]}"></lib-ui-chart>
+                     <lib-ui-chart [variant]="$any(selectedVariant)" [data]="{labels: ['Ene', 'Feb', 'Mar'], datasets: [{label: 'Ventas', data: [10, 20, 15]}]}"></lib-ui-chart>
                   </div>
                   <div *ngSwitchCase="'breadcrumbs'" class="p-8">
-                     <lib-ui-breadcrumbs [variant]="selectedVariant" [items]="[{label:'Home', url:'/'}, {label:'Sección', url:'#'}]"></lib-ui-breadcrumbs>
+                     <lib-ui-breadcrumbs [variant]="$any(selectedVariant)" [items]="[{label:'Home', url:'/'}, {label:'Sección', url:'#'}]"></lib-ui-breadcrumbs>
                   </div>
                   <div *ngSwitchCase="'card-animated'" class="max-w-xs mx-auto p-4">
-                     <lib-ui-components-card-animated [variant]="selectedVariant" title="Tarjeta" description="Descripción de la tarjeta animada"></lib-ui-components-card-animated>
+                     <lib-ui-components-card-animated [variant]="$any(selectedVariant)" title="Tarjeta" description="Descripción de la tarjeta animada"></lib-ui-components-card-animated>
                   </div>
                   <div *ngSwitchCase="'card-product'" class="max-w-xs mx-auto p-4">
-                     <lib-card-products [variant]="selectedVariant" [product]="{name:'Producto', price:'$99', image:'', description: 'Producto de prueba'}"></lib-card-products>
+                     <lib-card-products [variant]="$any(selectedVariant)" [product]="{name:'Producto', price:'$99', image:'', description: 'Producto de prueba'}"></lib-card-products>
                   </div>
                   <div *ngSwitchCase="'card-testimonial'" class="max-w-md mx-auto p-4">
                      <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
@@ -261,13 +261,13 @@ interface SectionVariant {
                      </div>
                   </div>
                   <div *ngSwitchCase="'image'" class="p-4 flex justify-center">
-                    <lib-ui-image [variant]="selectedVariant" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-image>
+                    <lib-ui-image [variant]="$any(selectedVariant)" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-image>
                   </div>
                   <div *ngSwitchCase="'table'" class="p-4">
-                    <lib-ui-components-table [variant]="selectedVariant" [rows]="[{id:1, name:'Item A'}, {id:2, name:'Item B'}]" [columns]="[{key:'id', label:'ID'}, {key:'name', label:'Nombre'}]"></lib-ui-components-table>
+                    <lib-ui-components-table [variant]="$any(selectedVariant)" [rows]="[{id:1, name:'Item A'}, {id:2, name:'Item B'}]" [columns]="[{key:'id', label:'ID'}, {key:'name', label:'Nombre'}]"></lib-ui-components-table>
                   </div>
                   <div *ngSwitchCase="'list'" class="max-w-md mx-auto p-4">
-                    <lib-ui-list [variant]="selectedVariant" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-list>
+                    <lib-ui-list [variant]="$any(selectedVariant)" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-list>
                   </div>
                   <div *ngSwitchCase="'title'" class="p-4">
                     <lib-ui-components-title [variant]="$any(selectedVariant)" [level]="'h1'" text="Título de ejemplo"></lib-ui-components-title>
