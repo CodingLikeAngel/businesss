@@ -34,8 +34,7 @@ export class MoveElementCommand extends BaseCommand {
   }
 
   execute(): void {
-    // This is called when the command is initially executed
-    // The actual movement has already happened, so we just ensure state is consistent
+    this.redo();
   }
 
   undo(): void {
@@ -68,7 +67,7 @@ export class ResizeElementCommand extends BaseCommand {
   }
 
   execute(): void {
-    // Movement has already happened
+    this.redo();
   }
 
   undo(): void {
@@ -103,7 +102,7 @@ export class StyleChangeCommand extends BaseCommand {
   }
 
   execute(): void {
-    // Styles have already been applied
+    this.redo();
   }
 
   undo(): void {
@@ -149,7 +148,7 @@ export class ResizeSectionCommand extends BaseCommand {
   }
 
   execute(): void {
-    // Resize has already happened
+    this.redo();
   }
 
   undo(): void {
@@ -177,7 +176,9 @@ export class CompositeCommand extends BaseCommand {
   }
 
   execute(): void {
-    // Commands are already executed, this is for consistency
+    for (const command of this.commands) {
+      command.execute();
+    }
   }
 
   undo(): void {

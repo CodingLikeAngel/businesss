@@ -353,35 +353,23 @@ export class VisualEditorService {
           return;
         }
 
-        // Delete/Backspace - Delete element
-        if ((e.key === 'Delete' || e.key === 'Backspace') && this.activeElement) {
-          e.preventDefault();
-          this.deleteElement();
+        // SHORTCUTS HANDLED BY GLOBAL KEYBOARD SERVICE
+        // We remove internal handlers to prevent conflicts with HistoryService
+
+        // Arrow keys - Nudge element (Keep this as it's specific to visual editing)
+        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key) && this.activeElement) {
+          // Check if not focused on input
+          const target = e.target as HTMLElement;
+          if (!target.tagName.match(/INPUT|TEXTAREA|SELECT/)) {
+             e.preventDefault();
+             const step = e.shiftKey ? 10 : 1;
+             this.nudgeElement(e.key, step);
+          }
         }
 
-        // Escape - Deselect
+        // Escape - Deselect (Keep as it is visual specific)
         if (e.key === 'Escape') {
           this.deselectElement();
-        }
-
-        // Arrow keys - Nudge element
-        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key) && this.activeElement) {
-          e.preventDefault();
-          const step = e.shiftKey ? 10 : 1;
-          this.nudgeElement(e.key, step);
-        }
-
-        // Ctrl+Z - Undo
-        if ((e.ctrlKey || e.metaKey) && e.key === 'z' && !e.shiftKey) {
-          e.preventDefault();
-          this.undo();
-        }
-
-        // Ctrl+Shift+Z or Ctrl+Y - Redo
-        if (((e.ctrlKey || e.metaKey) && e.key === 'z' && e.shiftKey) || 
-            ((e.ctrlKey || e.metaKey) && e.key === 'y')) {
-          e.preventDefault();
-          this.redo();
         }
 
         // Ctrl+D - Duplicate

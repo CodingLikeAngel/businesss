@@ -7,7 +7,8 @@ import {
   hideNotification,
   clearNotifications,
   setError,
-  clearError
+  clearError,
+  executeCommand
 } from '../actions/ui.actions';
 
 @Injectable()
@@ -76,13 +77,25 @@ export class UIEffects {
     { dispatch: false }
   );
 
-  // Clear all notifications when requested
   clearAllNotifications$ = createEffect(() =>
     this.actions$.pipe(
       ofType(clearNotifications),
       tap(() => {
         // Additional cleanup if needed
         console.log('All notifications cleared');
+      })
+    ),
+    { dispatch: false }
+  );
+
+  // Execute command side effects
+  executeCommand$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(executeCommand),
+      tap(({ command }) => {
+        // Execute the command logic (dispatch store actions)
+        // This is safe here because we are in an effect, not a reducer
+        command.execute();
       })
     ),
     { dispatch: false }

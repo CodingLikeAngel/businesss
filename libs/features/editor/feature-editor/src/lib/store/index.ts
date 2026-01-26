@@ -33,8 +33,8 @@ function historyReducer(state: HistoryState = initialHistoryState, action: any):
     case executeCommand.type: {
       const command: Command = action.command;
 
-      // Execute the command
-      command.execute();
+      // Execute the command (handled by effect now)
+      // command.execute();
 
       // Add to history
       const newPast = state.present ? [...state.past, state.present] : [...state.past];
@@ -53,6 +53,11 @@ function historyReducer(state: HistoryState = initialHistoryState, action: any):
         canRedo: false,
       };
     }
+
+    // Special case: Initial execute needs to happen via effect or service
+    // because reducers must be pure. We assume the command object structure
+    // contains the data but the side effect (store dispatch) is handled elsewhere.
+
 
     case undo.type: {
       if (!state.canUndo || !state.present) {
