@@ -3,12 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
   TitleConfig,
-  ApplyDynamicStylesDirective,
   EnhancedVisualEditableDirective,
   VisualEditingConfig,
   VisualEditingEvent
 } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { UIContactSectionComponent } from '@negocio/ui-components';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 /**
@@ -21,7 +21,7 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    ApplyDynamicStylesDirective,
+    UIContactSectionComponent,
     EnhancedVisualEditableDirective
   ],
   templateUrl: './editor-contact-section.component.html',

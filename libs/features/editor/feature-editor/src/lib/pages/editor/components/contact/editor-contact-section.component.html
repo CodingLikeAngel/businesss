@@ -1,90 +1,23 @@
-<!-- DESKTOP CONTACT -->
-<section *ngIf="!isMobile" #sectionElement [id]="section.id"
-  class="relative z-20 py-20 mb-16 cursor-pointer editor-section contact-section"
+<!-- CONSISTENT CONTACT EDITOR -->
+<section #sectionElement [id]="section.id"
+  class="relative z-20 cursor-pointer editor-section"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
-  [applyDynamicStyles]="section.styles"
-  [enhancedVisualEditable]="getSectionConfig()"
-  sectionId="{{section.id}}"
-  (visualEvents)="handleSectionEvent($event)">
-  <div class="container mx-auto px-6 max-w-6xl">
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 text-white">
-      <!-- Contact Form -->
-      <div #contactFormElement class="editor-element"
-           [class.is-selected]="selectedElementId === section.id + '_form_wrapper'"
-           (click)="selectElement($event, getMergedElement(section.id, section.id + '_form_wrapper', section.content, 'contact_form'))"
-           [applyDynamicStyles]="section.styles"
-           [enhancedVisualEditable]="getFormWrapperConfig()"
-           elementId="{{section.id + '_form_wrapper'}}"
-           sectionId="{{section.id}}"
-           (visualEvents)="handleFormWrapperEvent($event)">
-        
-        <h2 class="text-4xl font-bold mb-6">{{ section.content['title'] || '¡Contáctanos!' }}</h2>
-        <p class="text-lg text-white/70 mb-10">{{ section.content['subtitle'] || 'Cuéntanos tu proyecto y te ayudaremos a hacerlo realidad.' }}</p>
-
-        <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
-          <div class="form-group">
-            <input type="text" formControlName="name" placeholder="Nombre completo" class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 focus:border-indigo-500 transition-colors">
-          </div>
-          <div class="form-group">
-            <input type="email" formControlName="email" placeholder="Correo electrónico" class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 focus:border-indigo-500 transition-colors">
-          </div>
-          <div class="form-group">
-            <textarea formControlName="message" placeholder="¿En qué podemos ayudarte?" rows="5" class="w-full bg-white/5 border border-white/10 rounded-xl px-6 py-4 focus:border-indigo-500 transition-colors"></textarea>
-          </div>
-          <button type="submit" [disabled]="contactForm.invalid || isSubmitting" class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 py-4 rounded-xl font-bold transition-all transform active:scale-95 shadow-xl">
-             {{ isSubmitting ? 'Enviando...' : 'Enviar Mensaje' }}
-          </button>
-        </form>
-      </div>
-
-      <!-- Contact Info Section -->
-      <div #contactInfoElement class="editor-element"
-           [class.is-selected]="selectedElementId === section.id + '_info_wrapper'"
-           (click)="selectElement($event, getMergedElement(section.id, section.id + '_info_wrapper', section.content, 'contact_info'))"
-           [applyDynamicStyles]="section.styles"
-           [enhancedVisualEditable]="getInfoWrapperConfig()"
-           elementId="{{section.id + '_info_wrapper'}}"
-           sectionId="{{section.id}}"
-           (visualEvents)="handleInfoWrapperEvent($event)">
-        
-        <h3 class="text-2xl font-bold mb-8">{{ section.content['infoTitle'] || 'Información de Contacto' }}</h3>
-        
-        <div class="flex flex-col gap-8">
-          <div *ngFor="let info of section.content['contactItems']; let i = index" class="flex items-start gap-6 p-6 rounded-2xl bg-white/5 border border-white/5 hover:bg-white/10 transition-colors cursor-pointer group">
-            <div class="text-3xl p-4 rounded-xl bg-indigo-500/10 group-hover:scale-110 transition-transform">{{ info.icon }}</div>
-            <div>
-              <h4 class="font-bold text-lg mb-1">{{ info.title }}</h4>
-              <p class="text-white/60">{{ info.value }}</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- MOBILE CONTACT -->
-<section *ngIf="isMobile" #sectionElement
-  class="relative z-20 py-10 cursor-pointer editor-section contact-section text-white"
-  [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)"
-  [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="getSectionConfig()"
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
   
-  <div class="px-6">
-    <div #contactFormElement class="editor-element mb-12"
-         [class.is-selected]="selectedElementId === section.id + '_form_wrapper'"
-         (click)="selectElement($event, { id: section.id + '_form_wrapper', type: 'contact_form' })">
-      <h2 class="text-3xl font-bold mb-4">{{ section.content['title'] || '¡Contáctanos!' }}</h2>
-      <form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
-        <input type="text" formControlName="name" placeholder="Nombre" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3">
-        <input type="email" formControlName="email" placeholder="Email" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3">
-        <textarea formControlName="message" placeholder="Mensaje" rows="4" class="w-full bg-white/5 border border-white/10 rounded-lg px-4 py-3"></textarea>
-        <button type="submit" class="w-full bg-indigo-600 py-3 rounded-lg font-bold">Enviar</button>
-      </form>
-    </div>
+  <div class="container mx-auto px-6 max-w-7xl">
+    <lib-ui-contact-section
+        [title]="section.content['title'] || '¡Contáctanos!'"
+        [subtitle]="section.content['subtitle'] || 'Cuéntanos tu proyecto y te ayudaremos a hacerlo realidad.'"
+        [infoTitle]="section.content['infoTitle'] || 'Información de Contacto'"
+        [contactItems]="section.content['contactItems']"
+        [variant]="$any(getVariant(section.id))"
+        [customStyles]="section.styles"
+    ></lib-ui-contact-section>
+
+    <!-- Overlay invisibles para selección de elementos específicos si se desea granularidad extrema -->
+    <!-- (Opcional, usualmente con la selección de sección basta si el componente es monolítico) -->
   </div>
 </section>
