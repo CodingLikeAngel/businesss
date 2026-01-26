@@ -8,6 +8,10 @@ import {
   UIHeaderClassicComponent,
   UIHeaderModernComponent,
   UIFooterComponent,
+  UIFooterMegaComponent,
+  UIFooterSimpleComponent,
+  UIHeroMinimalComponent,
+  UIHeroSplitComponent,
   UIFaqSectionComponent,
   UIFeaturesSectionComponent,
   UIGallerySectionComponent,
@@ -66,6 +70,10 @@ interface SectionVariant {
     UIHeaderClassicComponent,
     UIHeaderModernComponent,
     UIFooterComponent,
+    UIFooterMegaComponent,
+    UIFooterSimpleComponent,
+    UIHeroMinimalComponent,
+    UIHeroSplitComponent,
     UIFaqSectionComponent,
     UIFeaturesSectionComponent,
     UIGallerySectionComponent,
@@ -215,6 +223,8 @@ interface SectionVariant {
                     <lib-promotions-section [variant]="$any(selectedVariant)"></lib-promotions-section>
                   </div>
                   <lib-ui-hero-section *ngSwitchCase="'hero'" [variant]="$any(selectedVariant)" title="Título Hero" subtitle="Subtítulo descriptivo"></lib-ui-hero-section>
+                  <lib-ui-hero-minimal *ngSwitchCase="'hero-minimal'" [variant]="$any(selectedVariant)" title="Less is More" subtitle="Minimalist design focuses on the essential." badge="Introducing"></lib-ui-hero-minimal>
+                  <lib-ui-hero-split *ngSwitchCase="'hero-split'" [variant]="$any(selectedVariant)" title="Hero Split Title" subtitle="Subtitle description for the split hero layout." ctaLabel="Get Started"></lib-ui-hero-split>
                   <lib-ui-cta-section *ngSwitchCase="'cta'" [variant]="$any(selectedVariant)"></lib-ui-cta-section>
                   <lib-reservation-form *ngSwitchCase="'reservation-form'" [variant]="$any(selectedVariant)"></lib-reservation-form>
                   <div *ngSwitchCase="'header'" class="h-full w-full">
@@ -222,7 +232,11 @@ interface SectionVariant {
                      <lib-ui-header-classic *ngIf="selectedSubtype === 'classic'" [variant]="$any(selectedVariant)" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header-classic>
                      <lib-ui-header-modern *ngIf="selectedSubtype === 'modern'" [variant]="$any(selectedVariant)" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header-modern>
                   </div>
-                  <lib-ui-components-footer *ngSwitchCase="'footer'" [variant]="$any(selectedVariant)" title="Logo"></lib-ui-components-footer>
+                  <div *ngSwitchCase="'footer'">
+                    <lib-ui-components-footer *ngIf="!selectedSubtype || selectedSubtype === 'standard'" [variant]="$any(selectedVariant)" title="Logo"></lib-ui-components-footer>
+                    <lib-ui-footer-mega *ngIf="selectedSubtype === 'mega'" [variant]="$any(selectedVariant)" title="Mega Corp" description="Innovative solutions for the modern world." copyright="© 2024 Mega Corp. All rights reserved."></lib-ui-footer-mega>
+                    <lib-ui-footer-simple *ngIf="selectedSubtype === 'simple'" [variant]="$any(selectedVariant)" title="Company Name" copyright="© 2024 All rights reserved."></lib-ui-footer-simple>
+                  </div>
                   <div *ngSwitchCase="'faq'" class="p-4"><lib-ui-faq-section [variant]="$any(selectedVariant)"></lib-ui-faq-section></div>
                   <div *ngSwitchCase="'features'" class="p-4"><lib-ui-features-section [variant]="$any(selectedVariant)"></lib-ui-features-section></div>
                   <div *ngSwitchCase="'gallery'" class="p-4"><lib-ui-components-gallery-section [variant]="$any(selectedVariant)"></lib-ui-components-gallery-section></div>
@@ -962,6 +976,24 @@ export class ComponentExplorerComponent implements OnInit {
       ]
     },
     {
+      type: 'hero-minimal',
+      label: 'Hero Minimalista',
+      icon: '🎯',
+      variants: ['light', 'dark', 'glass', 'neon', 'minimal'],
+      description: 'Hero minimalista con diseño limpio y centrado',
+      category: 'content',
+      libraryType: 'section'
+    },
+    {
+      type: 'hero-split',
+      label: 'Hero Dividido',
+      icon: '⚡',
+      variants: ['glass', 'neon', 'minimal', 'cyberpunk'],
+      description: 'Hero con layout dividido entre texto e imagen',
+      category: 'content',
+      libraryType: 'section'
+    },
+    {
       type: 'cta',
       label: 'Llamada a la Acción (CTA)',
       icon: '📢',
@@ -1009,7 +1041,12 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['primary', 'glass', 'neon', 'cyberpunk', 'mario', 'rayman', 'rockstar', 'ice', 'metal', 'energy', 'void'],
       description: 'Sección inferior con enlaces y redes sociales (Global)',
       category: 'content',
-      libraryType: 'section'
+      libraryType: 'section',
+      subtypes: [
+        { id: 'standard', label: 'Estándar' },
+        { id: 'mega', label: 'Mega' },
+        { id: 'simple', label: 'Simple' }
+      ]
     },
     {
       type: 'faq',
