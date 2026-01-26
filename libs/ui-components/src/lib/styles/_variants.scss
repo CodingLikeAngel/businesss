@@ -5,38 +5,44 @@
   --theme-bg: #{$bg};
   --theme-color: #{$color};
   --theme-accent: #{$accent};
-  --theme-border: 1px solid rgba($accent, 0.5);
-  --theme-shadow: 
-    0 4px 6px -1px rgba(0, 0, 0, 0.1),
-    0 2px 4px -2px rgba(0, 0, 0, 0.1),
-    0 0 20px rgba($glow-color, 0.2);
-  --theme-glow: 0 0 30px rgba($glow-color, 0.6), 0 0 60px rgba($glow-color, 0.2);
+  --theme-border: 1px solid rgba($accent, 0.3);
+  --theme-shadow-sm: 0 2px 4px rgba(0,0,0,0.05), 0 1px 2px rgba(0,0,0,0.1);
+  --theme-shadow-md: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+  --theme-shadow-lg: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+  --theme-glow: 0 0 20px rgba($glow-color, 0.4), 0 0 40px rgba($glow-color, 0.1);
 
   background: var(--theme-bg);
   color: var(--theme-color);
   border: var(--theme-border);
   border-radius: $unified-border-radius;
-  box-shadow: var(--theme-shadow);
+  box-shadow: var(--theme-shadow-sm);
   font-family: $unified-font-family;
-  font-weight: $unified-font-weight;
-  transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+  font-weight: 500;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  z-index: 1;
 
   &::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.05), transparent);
+    background: linear-gradient(120deg, transparent 30%, rgba(255,255,255,0.1) 50%, transparent 70%);
     transform: translateX(-100%);
-    transition: 0.6s;
+    transition: 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     pointer-events: none;
+    z-index: -1;
   }
 
   &:hover {
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: var(--theme-glow), 0 12px 24px rgba(0, 0, 0, 0.2);
-    border-color: rgba($accent, 0.8);
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: var(--theme-shadow-md), var(--theme-glow);
+    border-color: rgba($accent, 0.6);
     
     &::before {
       transform: translateX(100%);
@@ -44,55 +50,58 @@
   }
 
   &:active {
-    transform: translateY(-1px) scale(0.98);
+    transform: translateY(0) scale(0.98);
+    box-shadow: var(--theme-shadow-sm);
   }
 }
-@mixin variant-primary {
 
-  --theme-bg: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-  --theme-color: white;
+@mixin variant-primary {
+  --theme-bg: linear-gradient(145deg, #2563eb, #1d4ed8);
+  --theme-color: #ffffff;
   --theme-accent: #60a5fa;
-  --theme-radius: 12px;
-  --theme-shadow: 
-    0 10px 15px -3px rgba(37, 99, 235, 0.3),
-    0 4px 6px -4px rgba(37, 99, 235, 0.3),
-    inset 0 1px 0 rgba(255, 255, 255, 0.2);
   
   background: var(--theme-bg);
   color: var(--theme-color);
-  border-radius: var(--theme-radius);
-  box-shadow: var(--theme-shadow);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: 
-      0 20px 25px -5px rgba(37, 99, 235, 0.4),
-      0 0 15px rgba(59, 130, 246, 0.5);
-    filter: brightness(1.1);
-  }
-
-}
-@mixin variant-secondary {
-
-  --theme-bg: linear-gradient(135deg, #4b5563 0%, #1f2937 100%);
-  --theme-color: white;
-  --theme-accent: #9ca3af;
-  --theme-radius: 10px;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border-radius: var(--theme-radius);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: all 0.3s ease;
+  border-radius: 12px;
+  padding: 0.8rem 1.8rem;
+  font-weight: 600;
+  box-shadow: 
+    0 4px 6px -1px rgba(37, 99, 235, 0.2),
+    0 2px 4px -1px rgba(37, 99, 235, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
   &:hover {
     transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-    filter: contrast(1.1);
+    box-shadow: 
+      0 10px 20px -5px rgba(37, 99, 235, 0.4),
+      0 0 15px rgba(59, 130, 246, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    filter: brightness(1.1);
   }
-
 }
+
+@mixin variant-secondary {
+  --theme-bg: #f8fafc;
+  --theme-color: #1e293b;
+  
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 0.8rem 1.8rem;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+
+  &:hover {
+    background: #fff;
+    border-color: #cbd5e1;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+  }
+}
+
 @mixin variant-outline {
   --theme-bg: transparent;
   --theme-color: currentColor;
@@ -114,325 +123,212 @@
   &:hover { background: rgba(0,0,0,0.05); }
 }
 @mixin variant-glass {
-  --theme-bg: rgba(255, 255, 255, 0.05);
+  --theme-bg: rgba(255, 255, 255, 0.03);
   --theme-color: #ffffff;
-  --theme-accent: #ffffff;
-  --theme-radius: 2rem;
-  --theme-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  --theme-border: 1px solid rgba(255, 255, 255, 0.15);
   
-  position: relative;
-  overflow: hidden;
   background: var(--theme-bg);
-  backdrop-filter: blur(25px) saturate(200%);
-  -webkit-backdrop-filter: blur(25px) saturate(200%);
-  border-radius: var(--theme-radius);
-  border: var(--theme-border) !important;
-  color: var(--theme-color);
-  box-shadow: var(--theme-shadow);
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-    transform: rotate(30deg);
-    pointer-events: none;
-    transition: all 0.8s ease;
-  }
-
-  &:hover {
-    transform: translateY(-8px);
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.4) !important;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-    
-    &::before {
-      transform: rotate(45deg) translate(10%, 10%);
-    }
-  }
-
-  p, span, h1, h2, h3, h4, h5, h6 {
-    text-shadow: 0 4px 8px rgba(0,0,0,0.5);
-    letter-spacing: 0.5px;
-  }
-}
-@mixin variant-neon {
-  --theme-bg: #050505;
-  --theme-color: #ffffff;
-  --theme-accent: #00f3ff;
-  --theme-radius: 12px;
-  --theme-shadow: 0 0 15px rgba(0, 243, 255, 0.4);
-  --theme-border: 2px solid #00f3ff;
-  
-  position: relative;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border-radius: var(--theme-radius);
-  border: var(--theme-border) !important;
-  box-shadow: var(--theme-shadow);
-  font-family: 'Orbitron', sans-serif;
-  transition: all 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-
-  &::before {
-    content: '';
-    position: absolute;
-    inset: -2px;
-    border-radius: 14px;
-    background: linear-gradient(45deg, #00f3ff, #ff00ff, #00ff88, #00f3ff);
-    background-size: 400% 400%;
-    z-index: -1;
-    opacity: 0.5;
-    filter: blur(10px);
-    animation: gradient-shift 3s ease infinite;
-  }
-
-  &:hover {
-    transform: scale(1.03) translateY(-2px);
-    border-color: #ff00ff !important;
-    box-shadow: 0 0 30px rgba(255, 0, 255, 0.6);
-    
-    &::before {
-      opacity: 0.8;
-      filter: blur(15px);
-    }
-  }
-
-  * {
-    color: #fff !important;
-    text-shadow: 0 0 10px rgba(0, 243, 255, 0.8);
-  }
-}
-@mixin variant-cyberpunk {
-
-  --theme-bg: #fcee0a;
-  --theme-color: #1a1a1a;
-  --theme-accent: #00ffcc;
-  --theme-radius: 0px;
-  --theme-border: 4px solid #000;
-  --theme-shadow: 10px 10px 0px #000, 0 0 30px rgba(252, 238, 10, 0.4);
-
-  position: relative;
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
-  border: none;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 900;
-  text-transform: uppercase;
-  padding: 2rem 3rem;
-  transition: all 0.15s cubic-bezier(0.18, 0.89, 0.32, 1.28);
-  box-shadow: var(--theme-shadow);
-
-  &::before {
-    content: 'SYSTEM_OK';
-    position: absolute;
-    top: 8px;
-    right: 20px;
-    font-size: 0.6rem;
-    letter-spacing: 3px;
-    opacity: 0.7;
-    animation: binary-flicker 2s infinite;
-  }
-
-  &:hover {
-    transform: translate(-5px, -5px);
-    box-shadow: 15px 15px 0px #000, 0 0 40px rgba(0, 255, 204, 0.5);
-    background: var(--theme-accent);
-    color: #000;
-  }
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 2rem;
+  padding: 2.5rem;
+  box-shadow: 
+    0 8px 32px 0 rgba(0, 0, 0, 0.3),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 
   &::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(rgba(0,0,0,0) 50%, rgba(0,0,0,0.05) 50%);
-    background-size: 100% 4px;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%);
     pointer-events: none;
   }
 
   &:hover {
-    transform: translate(-5px, -5px);
-    box-shadow: 15px 15px 0px #000, 0 0 40px rgba(0, 255, 204, 0.5);
-    background: var(--theme-accent);
-    color: #000;
-
-    &::before {
-      content: 'USER_AUTH';
-      color: #ff003c;
-    }
-
-  &.section {
-    background: #000;
-    color: #fcee0a;
-    border: 4px solid #fcee0a;
-    box-shadow: 20px 20px 0px rgba(252, 238, 10, 0.2);
-    
-    &:hover {
-      box-shadow: 25px 25px 0px rgba(252, 238, 10, 0.4);
-    }
-
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: 
+      0 25px 50px -12px rgba(0, 0, 0, 0.5),
+      inset 0 0 20px rgba(255, 255, 255, 0.1);
+  }
 }
-}
-}
-@mixin variant-retro {
 
-  --theme-bg: #fdf6e3;
-  --theme-color: #657b83;
-  --theme-border: 4px solid #b58900;
-  --theme-shadow: 4px 4px 0px #b58900;
+@mixin variant-neon {
+  --theme-bg: #000;
+  --theme-color: #fff;
+  --theme-accent: #00f3ff;
+  
+  background: #000;
+  color: #fff;
+  border: 2px solid #00f3ff;
+  border-radius: 12px;
+  box-shadow: 
+    0 0 10px rgba(0, 243, 255, 0.5),
+    inset 0 0 10px rgba(0, 243, 255, 0.2);
+  font-family: 'Orbitron', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: #ff00ff;
+    box-shadow: 
+      0 0 20px rgba(255, 0, 255, 0.8),
+      0 0 40px rgba(255, 0, 255, 0.4),
+      inset 0 0 15px rgba(255, 0, 255, 0.2);
+    transform: scale(1.05);
+    text-shadow: 0 0 10px #ff00ff;
+  }
+}
+
+@mixin variant-cyberpunk {
+  --theme-bg: #fcee0a;
+  --theme-color: #000;
   
   background: var(--theme-bg);
   color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
-  font-family: 'Press Start 2P', cursive;
-  padding: 1.5rem 2.5rem;
-  transition: all 0.1s steps(2);
-  
-  &:hover {
-    transform: translate(-3px, -3px);
-    box-shadow: 7px 7px 0px #b58900;
-    color: #d33682;
-  }
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 95% 100%, 0 100%);
+  border: none;
+  padding: 2rem 3rem;
+  position: relative;
+  transition: 0.1s;
+  box-shadow: 8px 8px 0px #000;
 
-  &:active {
-    transform: translate(2px, 2px);
-    box-shadow: 0px 0px 0px #b58900;
+  &::before {
+    content: 'ACCESS_GRANTED';
+    position: absolute;
+    top: 5px; right: 15px;
+    font-size: 0.6rem;
+    opacity: 0.7;
+    letter-spacing: 2px;
   }
 
   &:hover {
     transform: translate(-4px, -4px);
-    box-shadow: 12px 12px 0px #b58900;
-    color: #d33682;
-  }
-
-  &:active {
-    transform: translate(2px, 2px);
-    box-shadow: 2px 2px 0px #b58900;
+    box-shadow: 12px 12px 0px #ff003c;
+    background: #00f3ff;
+    
+    &::before {
+       content: 'SYS_OVERRIDE';
+       color: #ff003c;
+    }
   }
 }
-@mixin variant-minimal {
 
-  --theme-bg: transparent;
-  --theme-color: #1a1a1a;
-  --theme-border: 1px solid #e5e5e5;
+@mixin variant-retro {
+  --theme-bg: #2d1b58;
+  --theme-color: #ff00ff;
   
   background: var(--theme-bg);
-  border: var(--theme-border);
   color: var(--theme-color);
-  border-radius: 4px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 4px solid #00ffff;
+  box-shadow: 8px 8px 0px #00ffff, -8px -8px 0px #ff00ff;
+  font-family: 'VT323', monospace;
+  font-size: 1.5rem;
+  padding: 1rem 2rem;
+  transition: all 0.1s steps(2);
 
   &:hover {
-    border-color: #1a1a1a;
-    background: #1a1a1a;
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translate(2px, 2px);
+    box-shadow: 4px 4px 0px #00ffff, -4px -4px 0px #ff00ff;
+    filter: hue-rotate(90deg);
   }
-
 }
-@mixin variant-luxury {
 
-  --theme-bg: #000;
+@mixin variant-minimal {
+  --theme-bg: #f5f5f7;
+  --theme-color: #1d1d1f;
+  
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  border: none;
+  border-radius: 980px; // Pill shape
+  padding: 0.6rem 1.4rem;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-weight: 500;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #e8e8ed;
+    transform: scale(1.02);
+  }
+}
+
+@mixin variant-luxury {
+  --theme-bg: #000000;
   --theme-color: #d4af37;
   
-  background: #000;
-  color: #d4af37;
+  background: var(--theme-bg);
+  color: var(--theme-color);
   border: 1px solid #d4af37;
+  padding: 1.2rem 3rem;
   font-family: 'Cinzel', serif;
   text-transform: uppercase;
-  letter-spacing: 3px;
-  padding: 1.2rem 2.5rem;
+  letter-spacing: 5px;
+  font-weight: 700;
   position: relative;
   overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
 
   &::before {
     content: '';
     position: absolute;
-    top: 0; left: -100%; width: 50%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(212, 175, 55, 0.4), transparent);
-    animation: shimmer-fast 3s infinite;
+    top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, 
+      transparent, 
+      rgba(212,175,55, 0.2), 
+      transparent
+    );
+    transition: 0.6s;
   }
 
   &:hover {
-    background: #d4af37;
     color: #000;
-    box-shadow: 0 0 30px rgba(212, 175, 55, 0.5);
-  }
-
-  &:hover {
-    color: #fff;
     background: #d4af37;
-    box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+    letter-spacing: 7px;
+    box-shadow: 0 0 40px rgba(212,175,55, 0.4);
     
     &::before {
       left: 100%;
     }
+  }
+}
 
-  &:hover {
-    color: #fff;
-    background: #d4af37;
-    box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3);
-    
-    &::before {
-      left: 150%;
-    }
-
-}
-}
-}
 @mixin variant-matrix {
-
   --theme-bg: #000;
   --theme-color: #00ff41;
-  --theme-border: 1px solid #00ff41;
   
-  background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
+  background: #000;
+  color: #00ff41;
+  border: 1px solid #00ff41;
   font-family: 'Courier New', monospace;
+  text-shadow: 0 0 8px #00ff41;
   position: relative;
   overflow: hidden;
-  text-shadow: 0 0 10px #00ff41;
 
-  &::before {
-    content: '0110101101010110';
+  &::after {
+    content: '010111010101101010101101';
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    color: rgba(0, 255, 65, 0.15);
+    top: -100%; left: 0; width: 100%;
     font-size: 10px;
+    opacity: 0.15;
+    animation: rain 10s linear infinite;
     word-break: break-all;
-    animation: matrix-rain 10s linear infinite;
     pointer-events: none;
   }
 
   &:hover {
     background: #001100;
-    box-shadow: 0 0 40px rgba(0, 255, 65, 0.5);
+    box-shadow: 0 0 25px rgba(0, 255, 65, 0.4);
+    letter-spacing: 2px;
   }
-
-  &:hover {
-    background: #001100;
-    box-shadow: 0 0 40px rgba(0, 255, 65, 0.5);
-    transform: perspective(500px) rotateX(2deg);
-    
-    &::before {
-      color: rgba(0, 255, 65, 0.3);
-    }
-
 }
-}
+
 @mixin variant-dark {
   --theme-bg: #1f2937;
   --theme-color: #f3f4f6;
@@ -505,12 +401,30 @@
 @mixin variant-jungle {
   --theme-bg: linear-gradient(135deg, #064e3b, #065f46);
   --theme-color: #d1fae5;
-  --theme-border: 1px solid #10b981;
-  --theme-accent: #10b981;
+  
   background: var(--theme-bg);
   color: var(--theme-color);
-  border: var(--theme-border);
+  border-radius: 40px 10px 40px 10px;
+  overflow: hidden;
+  box-shadow: 0 10px 20px rgba(6, 78, 59, 0.3);
+  position: relative;
+
+  &::after {
+    content: '🌿';
+    position: absolute;
+    bottom: -10px; right: -5px;
+    font-size: 2rem;
+    opacity: 0.2;
+    transform: rotate(15deg);
+  }
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(6, 78, 59, 0.4);
+    background: linear-gradient(135deg, #065f46, #047857);
+  }
 }
+
 @mixin variant-neomorph {
   --theme-bg: #e0e5ec;
   --theme-color: #31344b;
@@ -567,105 +481,132 @@
 }
 
 @mixin variant-quantum {
-  --theme-bg: #000;
+  --theme-bg: #0f172a;
   --theme-color: #818cf8;
-  --theme-border: 1px solid #6366f1;
   
-  background: var(--theme-bg);
-  border: var(--theme-border);
-  color: var(--theme-color);
-  box-shadow: 0 0 25px rgba(99, 102, 241, 0.4);
-  transition: all 0.5s ease;
+  background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+  color: #818cf8;
+  border: 1px solid rgba(129, 140, 248, 0.3);
+  border-radius: 16px;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: -50%;
+    background: conic-gradient(from 0deg, transparent, rgba(129, 140, 248, 0.1), transparent);
+    animation: rotate 6s linear infinite;
+  }
 
   &:hover {
-    box-shadow: 0 0 45px rgba(99, 102, 241, 0.7);
-    transform: perspective(1000px) rotateY(5deg);
+    transform: perspective(1000px) rotateX(10deg);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 30px rgba(129, 140, 248, 0.2);
+    border-color: #818cf8;
   }
 }
 
 @mixin variant-mario {
+  --theme-bg: #e60012;
+  --theme-accent: #fbd000;
+  
   position: relative;
-  overflow: visible;
-  font-family: 'Press Start 2P', cursive;
-  font-size: 0.7rem;
-  padding: 1rem 2rem;
-  background: #e53e3e;
-  color: white;
+  background: var(--theme-bg);
+  color: #fff;
+  font-family: 'Press Start 2P', system-ui;
   border: 4px solid #000;
-  box-shadow: 6px 6px 0px #000;
-  image-rendering: pixelated;
+  box-shadow: 4px 4px 0px #000;
+  padding: 1.2rem 2.5rem;
+  transition: all 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  cursor: pointer;
+  overflow: visible;
 
   &::before {
     content: 'M';
     position: absolute;
-    top: -15px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: white;
-    color: #e53e3e;
-    width: 30px;
-    height: 30px;
+    top: -22px; left: 50%; transform: translateX(-50%);
+    width: 44px; height: 44px;
+    background: #fff;
+    color: #e60012;
     border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 3px solid #000;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    border: 4px solid #000;
+    box-shadow: 4px 0px 0px rgba(0,0,0,0.2);
+    z-index: 2;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -12px; left: 10%; width: 80%; height: 8px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 50%;
+    filter: blur(2px);
+    transition: 0.2s;
   }
 
   &:hover {
-    animation: mario-jump 0.4s ease-out;
-    background: #ff5e5e;
-    transform: translateY(-5px);
-    box-shadow: 10px 10px 0px #000;
+    transform: translateY(-8px);
+    background: #ff1a1a;
+    box-shadow: 0px 12px 0px #000;
+    
+    &::after {
+      transform: scale(0.8);
+      opacity: 0.5;
+    }
+  }
+
+  &:active {
+    transform: translateY(2px);
+    box-shadow: 0px 0px 0px #000;
   }
 }
 
 @mixin variant-zelda {
-
+  --theme-bg: #005a31;
+  --theme-accent: #fbdf71;
+  
   position: relative;
-  padding: 1.5rem 3rem;
-  background: #005a31;
-  color: #fbdf71;
-  border: 4px solid #fbdf71;
-  clip-path: polygon(15% 0, 85% 0, 100% 50%, 85% 100%, 15% 100%, 0 50%);
+  background: var(--theme-bg);
+  color: var(--theme-accent);
+  border: 2px solid var(--theme-accent);
+  padding: 1.5rem 4rem;
   font-family: 'Cinzel', serif;
   text-transform: uppercase;
-  letter-spacing: 2px;
+  letter-spacing: 3px;
+  clip-path: polygon(10% 0, 90% 0, 100% 50%, 90% 100%, 10% 100%, 0 50%);
   overflow: hidden;
+  transition: all 0.4s ease;
 
   &::before {
     content: '▲';
     position: absolute;
-    top: 5px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 1.5rem;
-    animation: triforce-glow 2s infinite;
+    top: 5px; left: 50%; transform: translateX(-50%);
+    opacity: 0.3;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(rgba(251, 223, 113, 0.05), transparent);
+    pointer-events: none;
   }
 
   &:hover {
     background: #007c44;
+    box-shadow: 0 0 30px rgba(251, 223, 113, 0.2);
     transform: scale(1.05);
-    box-shadow: 0 0 30px rgba(251, 223, 113, 0.6);
-  }
 
-  &:hover {
-    background: #007c44;
-    transform: scale(1.05);
-    box-shadow: 0 0 30px rgba(251, 223, 113, 0.6);
-    
-    &::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(rgba(255,255,255,0.1), transparent);
+    &::before {
+       opacity: 1;
+       text-shadow: 0 0 10px var(--theme-accent);
+       animation: pulse 2s infinite;
     }
-
-  * {
-    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.8);
   }
 }
-}
+
 @mixin variant-kirby {
   @include unified-variant-base(
     linear-gradient(135deg, #ff1493, #ffb6c1, #ff69b4),
@@ -1055,27 +996,48 @@
   box-shadow: var(--theme-shadow);
 }
 @mixin variant-fire {
-  --theme-bg: rgba(249, 115, 22, 0.2);
-  --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(249, 115, 22, 0.5);
-  --theme-accent: #f97316;
-  --theme-shadow: 0 0 15px #f97316;
+  --theme-bg: linear-gradient(to top, #991b1b, #ef4444);
+  
   background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
+  color: #fff;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+  font-weight: 800;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, rgba(251, 146, 60, 0.4), transparent);
+    animation: pulse 2s infinite;
+  }
+
+  &:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 0 30px #f97316;
+    background: linear-gradient(to top, #b91c1c, #f87171);
+  }
 }
+
 @mixin variant-water {
-  --theme-bg: rgba(59, 130, 246, 0.2);
-  --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(59, 130, 246, 0.5);
-  --theme-accent: #3b82f6;
-  --theme-shadow: 0 0 15px #3b82f6;
+  --theme-bg: #3b82f6;
+  --theme-color: #fff;
+  
   background: var(--theme-bg);
-  color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
+  border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+  padding: 1.5rem 3rem;
+  transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
+
+  &:hover {
+    border-radius: 50%;
+    transform: scale(1.05);
+    background: #2563eb;
+    box-shadow: 0 20px 40px rgba(59, 130, 246, 0.4);
+  }
 }
+
 @mixin variant-leaf {
   --theme-bg: rgba(34, 197, 94, 0.2);
   --theme-color: #ffffff;
@@ -1376,16 +1338,25 @@
   box-shadow: var(--theme-shadow);
 }
 @mixin variant-stone {
-  --theme-bg: linear-gradient(135deg, rgba(120, 119, 116, 0.3), rgba(161, 161, 170, 0.3));
-  --theme-color: #ffffff;
-  --theme-border: 2px solid rgba(120, 119, 116, 0.5);
-  --theme-accent: #787774;
-  --theme-shadow: 0 0 10px #787774;
+  --theme-bg: #27272a;
+  --theme-color: #f4f4f5;
+  
   background: var(--theme-bg);
   color: var(--theme-color);
-  border: var(--theme-border);
-  box-shadow: var(--theme-shadow);
+  border: 4px solid #3f3f46;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 900;
+  box-shadow: 8px 8px 0px #18181b;
+  transition: 0.1s;
+
+  &:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 10px 10px 0px #18181b;
+    background: #3f3f46;
+  }
 }
+
 @mixin variant-donkeykong {
   --theme-bg: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(0, 0, 255, 0.2));
   --theme-color: #ffffff;
@@ -1439,22 +1410,26 @@
   }
 }
 @mixin variant-aurora {
-
-  --theme-bg: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%);
-  background: linear-gradient(270deg, #00f2fe, #4facfe, #00f2fe);
+  --theme-bg: linear-gradient(270deg, #00f2fe, #4facfe, #7000ff, #00f2fe);
+  --theme-color: #fff;
+  
+  background: var(--theme-bg);
   background-size: 400% 400%;
-  animation: gradient-shift 10s ease infinite;
+  animation: gradient-shift 12s ease infinite;
   color: #fff;
   border: none;
   border-radius: 30px;
-  box-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
-  transition: all 0.3s;
+  box-shadow: 0 10px 30px rgba(79, 172, 254, 0.3);
+  padding: 1rem 3rem;
+  font-weight: 700;
+  letter-spacing: 1px;
 
   &:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 15px 30px rgba(79, 172, 254, 0.6);
+    transform: scale(1.05) rotate(1deg);
+    box-shadow: 0 15px 45px rgba(112, 0, 255, 0.4);
   }
 }
+
 @mixin variant-trailblazer {
   --theme-bg: linear-gradient(135deg, rgba(255, 0, 0, 0.2), rgba(255, 215, 0, 0.2));
   --theme-color: #ffffff;
@@ -1650,35 +1625,34 @@
   border: var(--theme-border);
 }
 @mixin variant-pokemon {
-
+  --theme-bg: #fff;
+  
   position: relative;
-  background: linear-gradient(to bottom, #ee1515 50%, #ffffff 50%);
-  color: #333;
-  border: 4px solid #333;
-  border-radius: 12px;
-  padding: 1.5rem 2rem;
-  font-weight: 800;
-  overflow: visible;
-
-  &:hover {
-    transform: rotate(2deg) scale(1.05);
-  }
+  background: linear-gradient(to bottom, #ee1515 48%, #333 48%, #333 52%, #fff 52%);
+  border: 6px solid #333;
+  border-radius: 50%;
+  width: 120px; height: 120px;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
 
   &::before {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 25px;
-    height: 25px;
-    background: white;
-    border: 4px solid #333;
+    width: 30px; height: 30px;
+    background: #fff;
+    border: 6px solid #333;
     border-radius: 50%;
     z-index: 2;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
   }
 
+  &:hover {
+    transform: rotate(360deg) scale(1.1);
+    box-shadow: 0 20px 40px rgba(238, 21, 21, 0.4);
+  }
 }
+
 @mixin variant-animal-crossing {
   --theme-bg: linear-gradient(135deg, #f5e6d3 0%, #e8d5c4 100%);
   --theme-color: #5a3d2b;
@@ -1845,25 +1819,26 @@
   }
 }
 @mixin variant-elegant {
-
-  --theme-bg: #fff;
+  --theme-bg: transparent;
   --theme-color: #1a1a1a;
   
   background: var(--theme-bg);
   color: var(--theme-color);
+  border-bottom: 2px solid #1a1a1a;
+  padding: 0.5rem 0;
   font-family: 'Playfair Display', serif;
-  border: 1px solid #1a1a1a;
-  padding: 1rem 3rem;
-  text-transform: uppercase;
-  letter-spacing: 4px;
-  transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  font-style: italic;
+  font-size: 1.1rem;
+  transition: all 0.3s ease;
 
   &:hover {
-    background: #1a1a1a;
-    color: #fff;
-    letter-spacing: 6px;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    background: rgba(0,0,0,0.02);
+    letter-spacing: 1px;
   }
 }
+
 @mixin variant-luxury {
 
   --theme-bg: #000;
@@ -1933,98 +1908,54 @@
   }
 }
 @mixin variant-corporate {
-
-  --theme-bg: #fff;
-  --theme-color: #1e3a8a;
-  --theme-border: 1px solid #e2e8f0;
+  --theme-bg: #ffffff;
+  --theme-color: #0f172a;
   
   background: var(--theme-bg);
   color: var(--theme-color);
-  border: var(--theme-border);
-  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
   padding: 0.75rem 1.5rem;
-  font-family: 'Inter', sans-serif;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
   font-weight: 600;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  transition: all 0.2s ease;
+  letter-spacing: -0.01em;
+  box-shadow: 
+    0 1px 2px rgba(0,0,0,0.05),
+    0 0 0 1px rgba(0,0,0,0.05);
 
   &:hover {
-    border-color: #3b82f6;
-    box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1);
-    transform: translateY(-1px);
+    border-color: #2563eb;
+    background: #f8fafc;
+    color: #2563eb;
+    box-shadow: 
+      0 4px 6px -1px rgba(37, 99, 235, 0.1),
+      0 0 0 1px rgba(37, 99, 235, 0.1);
   }
 }
+
 @mixin variant-rockstar {
-  @include unified-variant-base(
-    #000000,
-    #ffffff,
-    #f9d71c,
-    #f9d71c
-  );
-  position: relative;
-  overflow: hidden;
-  --theme-clip: polygon(0 0, 100% 0, 100% 80%, 90% 100%, 0 100%);
-  clip-path: var(--theme-clip);
-  font-family: 'Bungee', 'Impact', sans-serif;
+  --theme-bg: #000;
+  --theme-color: #f9d71c;
+  
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  font-family: 'Impact', sans-serif;
   text-transform: uppercase;
-  letter-spacing: 3px;
-  font-weight: 900;
-  border: none;
-  border-right: 8px solid #f9d71c;
-  background-image:
-    repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 10px,
-      rgba(249, 215, 28, 0.1) 10px,
-      rgba(249, 215, 28, 0.1) 20px
-    ),
-    radial-gradient(circle at 30% 70%, rgba(249, 215, 28, 0.2) 0%, transparent 50%);
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg,
-      transparent 30%,
-      rgba(249, 215, 28, 0.1) 50%,
-      transparent 70%
-    );
-    animation: rockstar-scan 3s linear infinite;
-  }
-
-  &::after {
-    content: '💰';
-    position: absolute;
-    top: -10px;
-    left: -10px;
-    font-size: 1.8rem;
-    opacity: 0.9;
-    animation: money-spin 4s linear infinite;
-  }
+  font-size: 2rem;
+  padding: 1rem 3rem;
+  border-left: 15px solid #f9d71c;
+  transform: skewX(-10deg);
+  transition: all 0.2s;
+  box-shadow: 10px 10px 0px rgba(249, 215, 28, 0.2);
 
   &:hover {
-    transform: skewX(-5deg) scale(1.03);
-    box-shadow: 0 0 30px rgba(249, 215, 28, 0.8), 0 10px 20px rgba(0, 0, 0, 0.8);
-    border-right-width: 12px;
-    background-image:
-      repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 10px,
-        rgba(249, 215, 28, 0.2) 10px,
-        rgba(249, 215, 28, 0.2) 20px
-      ),
-      radial-gradient(circle at 30% 70%, rgba(249, 215, 28, 0.4) 0%, transparent 50%);
-  }
-
-  &:active {
-    transform: skewX(2deg) scale(0.97);
+    transform: skewX(-10deg) translate(-5px, -5px);
+    box-shadow: 20px 20px 0px rgba(249, 215, 28, 0.4);
+    background: #111;
+    color: #fff;
   }
 }
+
 @mixin variant-corporate {
 
   --theme-bg: #fff;
@@ -2133,98 +2064,35 @@
 
 }
 @mixin variant-crystal {
+  --theme-bg: linear-gradient(135deg, #fff 0%, #e0f2fe 100%);
+  --theme-color: #0369a1;
+  
   position: relative;
-  overflow: hidden;
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  padding: 2rem;
   font-family: 'Cinzel', serif;
   font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 3px;
+  transition: all 0.5s ease;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 
-  // Crystal geometric shape - unique faceted clip-path
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-
-  // Crystal gradient with light refraction effect
-  background:
-    linear-gradient(135deg, rgba(56, 189, 248, 0.9), rgba(147, 197, 253, 0.7), rgba(196, 181, 253, 0.8)),
-    radial-gradient(circle at 30% 30%, rgba(255,255,255,0.4) 0%, transparent 50%),
-    radial-gradient(circle at 70% 70%, rgba(255,255,255,0.3) 0%, transparent 50%);
-  color: #1e293b;
-
-  // Crystal facets and light rays
   &::before {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background:
-      linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.2) 45%, rgba(255,255,255,0.2) 55%, transparent 60%),
-      linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.15) 55%, transparent 60%);
-    z-index: 1;
-  }
-
-  // Floating crystal particles
-  &::after {
-    content: '💎';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 2rem;
-    opacity: 0.6;
-    animation: crystal-float 3s ease-in-out infinite;
-    z-index: 2;
-  }
-
-  // Prism light effect
-  span::before {
-    content: '';
-    position: absolute;
-    top: -10px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 4px;
-    height: 20px;
-    background: linear-gradient(to bottom, rgba(255,255,255,0.8), rgba(56,189,248,0.6));
-    border-radius: 2px;
-    animation: prism-light 2s ease-in-out infinite;
-    z-index: 2;
+    inset: 0;
+    background: linear-gradient(45deg, transparent 40%, rgba(255,255,255,0.8) 50%, transparent 60%);
+    animation: shimmer-fast 4s infinite;
   }
 
   &:hover {
-    // Crystal transformation with light burst
-    animation: crystal-transform 0.8s ease-out;
-    box-shadow:
-      0 0 30px rgba(56, 189, 248, 0.8),
-      0 0 50px rgba(147, 197, 253, 0.6),
-      0 0 70px rgba(196, 181, 253, 0.4),
-      inset 0 0 20px rgba(255, 255, 255, 0.3);
-
-    &::after {
-      animation: crystal-float 1.5s ease-in-out infinite, crystal-shine 1.5s ease-in-out infinite;
-    }
-
-  &:active {
-    transform: scale(0.96) rotate(2deg);
-    filter: brightness(1.1);
-    transition: all 0.1s ease;
-  }
-
-  // Text with crystal refraction effect
-  * {
-    position: relative;
-    z-index: 3;
-    text-shadow:
-      0 0 10px rgba(56, 189, 248, 0.5),
-      1px 1px 2px rgba(0,0,0,0.3);
-    background: linear-gradient(45deg, rgba(255,255,255,0.8), rgba(56,189,248,0.4));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    transform: scale(1.05) rotate(2deg);
+    box-shadow: 0 20px 40px rgba(186, 230, 253, 0.4);
+    filter: brightness(1.05);
   }
 }
-}
+
 @mixin variant-gear {
   position: relative;
   overflow: hidden;
@@ -2867,14 +2735,35 @@
   }
 }
 @mixin variant-ubisoft {
-  @include unified-variant-base(
-    linear-gradient(135deg, #0070d2, #003087),
-    #ffffff,
-    #0070d2,
-    #0070d2
-  );
-  border-radius: 0.5rem;
+  --theme-bg: rgba(255, 255, 255, 0.05);
+  --theme-color: #00ffff;
+  
+  background: var(--theme-bg);
+  color: var(--theme-color);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  font-family: 'Exo 2', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 5px;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 2px;
+    background: #00ffff;
+    animation: scanline 4s linear infinite;
+  }
+
+  &:hover {
+    background: rgba(0, 255, 255, 0.1);
+    border-color: #00ffff;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    text-shadow: 0 0 10px #00ffff;
+  }
 }
+
 @mixin variant-rockstar {
   background: #000;
   color: #f9d71c;
