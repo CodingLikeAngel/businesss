@@ -954,7 +954,12 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['glass', 'neon', 'cyberpunk', 'minimal', 'mario', 'rayman', 'rockstar'],
       description: 'Sección principal con título, subtítulo y llamada a la acción',
       category: 'content',
-      libraryType: 'section'
+      libraryType: 'section',
+      subtypes: [
+        { id: 'standard', label: 'Estándar' },
+        { id: 'split', label: 'Dividido' },
+        { id: 'minimal', label: 'Minimalista' }
+      ]
     },
     {
       type: 'cta',

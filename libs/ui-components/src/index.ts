@@ -21,6 +21,8 @@ export * from './lib/nav-bars/nav/nav-bar.component';
 export * from './lib/footer/footer-1/footer.component';
 export * from './lib/footer/footer-deep/deep-footer.component';
 export * from './lib/footer/videogames-footer/videogames-footer.component';
+export * from './lib/footer/footer-simple/footer-simple.component';
+export * from './lib/footer/footer-mega/footer-mega.component';
 
 // Cards
 export * from './lib/cards/card/card.component';
@@ -37,6 +39,8 @@ export * from './lib/chart/chart.component';
 
 // Misc UI
 export * from './lib/hero/hero.component';
+export * from './lib/hero/hero-split/hero-split.component';
+export * from './lib/hero/hero-minimal/hero-minimal.component';
 export * from './lib/features-section/features-section.component';
 export * from './lib/acordeon/accordion.component';
 

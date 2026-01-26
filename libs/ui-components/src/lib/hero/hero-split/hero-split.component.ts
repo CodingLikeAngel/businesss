@@ -1,0 +1,213 @@
+import { Component, input, output, computed } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+@Component({
+  selector: 'lib-ui-hero-split',
+  standalone: true,
+  imports: [CommonModule],
+  template: `
+    <section class="hero-split" [class]="heroClasses()" [style]="heroStyles()">
+      <div class="split-container">
+        <!-- Text Side -->
+        <div class="split-content">
+          <h1 class="split-title">{{ title() }}</h1>
+          <p class="split-subtitle">{{ subtitle() }}</p>
+          <div class="split-actions" *ngIf="showCta()">
+            <button class="btn-primary" (click)="onCtaClick()">{{ ctaLabel() }}</button>
+            <button class="btn-secondary" *ngIf="secondaryCtaLabel()" (click)="onSecondaryCtaClick()">{{ secondaryCtaLabel() }}</button>
+          </div>
+        </div>
+
+        <!-- Visual Side -->
+        <div class="split-visual">
+          <img *ngIf="image()" [src]="image()" [alt]="title()" class="hero-image" />
+          <div *ngIf="!image()" class="placeholder-visual">
+             <div class="icon-visual">{{ icon() }}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  `,
+  styles: [`
+    :host {
+      display: block;
+      width: 100%;
+    }
+    
+    .hero-split {
+      position: relative;
+      overflow: hidden;
+      padding: 4rem 2rem;
+      background: var(--surface-color, #0f172a);
+      color: var(--text-color, #f8fafc);
+      min-height: 60vh;
+      display: flex;
+      align-items: center;
+
+      &.variant-glass {
+         background: radial-gradient(circle at top right, rgba(99, 102, 241, 0.15), transparent 40%),
+                     linear-gradient(to bottom, #1e293b, #0f172a);
+      }
+
+      &.variant-neon {
+          background: #09090b;
+          .split-title {
+              text-shadow: 0 0 20px rgba(99, 102, 241, 0.5);
+          }
+          .btn-primary {
+              box-shadow: 0 0 15px currentColor;
+          }
+      }
+      
+      &.variant-minimal {
+          background: #ffffff;
+          color: #1e293b;
+          .split-title {
+              letter-spacing: -0.05em;
+          }
+      }
+    }
+    
+    .split-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 3rem;
+      align-items: center;
+      
+      @media (min-width: 960px) {
+        grid-template-columns: 1fr 1fr;
+        gap: 5rem;
+      }
+      
+      &.reverse {
+        /* Support for reversing layout if needed */
+        direction: rtl;
+        .split-content { direction: ltr; }
+      }
+    }
+    
+    .split-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .split-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin: 0;
+      background: linear-gradient(to right, currentColor, rgba(255,255,255,0.5));
+      -webkit-background-clip: text;
+      
+      @media (min-width: 768px) {
+        font-size: 3.5rem;
+      }
+    }
+    
+    .split-subtitle {
+      font-size: 1.1rem;
+      opacity: 0.8;
+      line-height: 1.6;
+      max-width: 500px;
+    }
+    
+    .split-actions {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .btn-primary {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      background: var(--accent-color, #6366f1);
+      color: white;
+      border: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      
+      &:hover {
+        transform: translateY(-2px);
+        filter: brightness(1.1);
+      }
+    }
+    
+    .btn-secondary {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.5rem;
+      background: transparent;
+      border: 1px solid currentColor;
+      color: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      
+      &:hover {
+        background: rgba(255,255,255,0.1);
+      }
+    }
+    
+    .split-visual {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .hero-image {
+      max-width: 100%;
+      height: auto;
+      border-radius: 1.5rem;
+      box-shadow: 0 20px 50px -10px rgba(0,0,0,0.5);
+      transform: perspective(1000px) rotateY(-5deg);
+      transition: transform 0.5s ease;
+      
+      &:hover {
+        transform: perspective(1000px) rotateY(0deg) scale(1.02);
+      }
+    }
+    
+    .placeholder-visual {
+        width: 100%;
+        aspect-ratio: 4/3;
+        background: rgba(255,255,255,0.05);
+        border: 2px dashed rgba(255,255,255,0.1);
+        border-radius: 1.5rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .icon-visual {
+        font-size: 5rem;
+    }
+  `]
+})
+export class UIHeroSplitComponent {
+  title = input('Hero Split Title');
+  subtitle = input('Subtitle description for the split hero layout.');
+  variant = input('glass');
+  ctaLabel = input('Get Started');
+  secondaryCtaLabel = input('');
+  showCta = input(true);
+  image = input<string | null>(null);
+  icon = input('🚀');
+  customStyles = input<Record<string, any>>({});
+
+  ctaClicked = output<void>();
+  secondaryCtaClicked = output<void>();
+
+  onCtaClick() { this.ctaClicked.emit(); }
+  onSecondaryCtaClick() { this.secondaryCtaClicked.emit(); }
+
+  heroClasses = computed(() => [
+    'hero-split',
+    `variant-${this.variant()}`
+  ]);
+
+  heroStyles = computed(() => this.customStyles());
+}
