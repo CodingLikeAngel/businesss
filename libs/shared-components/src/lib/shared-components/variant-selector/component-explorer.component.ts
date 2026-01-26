@@ -33,7 +33,13 @@ import {
   UICardComponent,
   PromotionsSectionComponent,
   ProductsSectionComponent,
-  ServiceSectionComponent
+  ServiceSectionComponent,
+  CTASectionComponent,
+  ReservationFormComponent,
+  UIDateTimePickerComponent,
+  UIChartComponent,
+  SmartContainerComponent,
+  DraggableBoxComponent
 } from '@negocio/ui-components';
 
 interface SectionVariant {
@@ -82,7 +88,13 @@ interface SectionVariant {
     UICardComponent,
     PromotionsSectionComponent,
     ProductsSectionComponent,
-    ServiceSectionComponent
+    ServiceSectionComponent,
+    CTASectionComponent,
+    ReservationFormComponent,
+    UIDateTimePickerComponent,
+    UIChartComponent,
+    SmartContainerComponent,
+    DraggableBoxComponent
   ],
   template: `
     <div class="explorer-container">
@@ -189,6 +201,8 @@ interface SectionVariant {
                     <lib-promotions-section [variant]="selectedVariant"></lib-promotions-section>
                   </div>
                   <lib-ui-hero-section *ngSwitchCase="'hero'" [variant]="selectedVariant" title="Título Hero" subtitle="Subtítulo descriptivo"></lib-ui-hero-section>
+                  <lib-ui-cta-section *ngSwitchCase="'cta'" [variant]="selectedVariant"></lib-ui-cta-section>
+                  <lib-reservation-form *ngSwitchCase="'reservation-form'" [variant]="selectedVariant"></lib-reservation-form>
                   <lib-ui-header *ngSwitchCase="'header'" [variant]="selectedVariant" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header>
                   <lib-ui-components-footer *ngSwitchCase="'footer'" [variant]="selectedVariant" title="Logo"></lib-ui-components-footer>
                   <div *ngSwitchCase="'faq'" class="p-4"><lib-ui-faq-section [variant]="selectedVariant"></lib-ui-faq-section></div>
@@ -205,6 +219,8 @@ interface SectionVariant {
                   <div *ngSwitchCase="'products'" class="p-4"><lib-products-section [variant]="selectedVariant"></lib-products-section></div>
                   <!-- INTERACTIVE -->
                   <div *ngSwitchCase="'contact'" class="p-4"><lib-ui-contact-section [variant]="selectedVariant"></lib-ui-contact-section></div>
+                  <div *ngSwitchCase="'smart-container'" class="p-4"><lib-smart-container [variant]="selectedVariant">Contenido del Contenedor Inteligente</lib-smart-container></div>
+                  <div *ngSwitchCase="'draggable-box'" class="h-64 relative border border-white/10 m-4"><lib-draggable-box [variant]="selectedVariant" label="Caja Movible"></lib-draggable-box></div>
                   <div *ngSwitchCase="'bubble'" class="h-64 relative overflow-hidden rounded-xl border border-white/10 m-4">
                      <lib-bubble-animation [variant]="$any(selectedVariant)"></lib-bubble-animation>
                   </div>
@@ -222,6 +238,12 @@ interface SectionVariant {
                   </div>
                   <div *ngSwitchCase="'spinner'" class="flex justify-center items-center h-full min-h-[200px]">
                      <lib-ui-spinner [variant]="selectedVariant"></lib-ui-spinner>
+                  </div>
+                  <div *ngSwitchCase="'date-time-picker'" class="p-8 flex justify-center">
+                     <lib-ui-components-date-time-picker [variant]="selectedVariant"></lib-ui-components-date-time-picker>
+                  </div>
+                  <div *ngSwitchCase="'ui-chart'" class="p-8 h-80">
+                     <lib-ui-chart [variant]="selectedVariant" [data]="{labels: ['Ene', 'Feb', 'Mar'], datasets: [{label: 'Ventas', data: [10, 20, 15]}]}"></lib-ui-chart>
                   </div>
                   <div *ngSwitchCase="'breadcrumbs'" class="p-8">
                      <lib-ui-breadcrumbs [variant]="selectedVariant" [items]="[{label:'Home', url:'/'}, {label:'Sección', url:'#'}]"></lib-ui-breadcrumbs>
@@ -925,6 +947,15 @@ export class ComponentExplorerComponent implements OnInit {
       libraryType: 'section'
     },
     {
+      type: 'reservation-form',
+      label: 'Reserva de Citas',
+      icon: '📅',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Formulario estructurado para reserva de servicios y citas',
+      category: 'commerce',
+      libraryType: 'section'
+    },
+    {
       type: 'contact',
       label: 'Formulario de Contacto',
       icon: '📬',
@@ -1203,6 +1234,15 @@ export class ComponentExplorerComponent implements OnInit {
        variants: ['primary', 'secondary', 'glass', 'neon', 'cyberpunk'],
        description: 'Visualización de datos atomizada',
        category: 'content',
+       libraryType: 'component'
+    },
+    {
+       type: 'date-time-picker',
+       label: 'Selector Fecha/Hora',
+       icon: '📅',
+       variants: ['primary', 'secondary', 'glass', 'neon'],
+       description: 'Selector de fecha y hora atomizado para formularios',
+       category: 'interactive',
        libraryType: 'component'
     },
     {

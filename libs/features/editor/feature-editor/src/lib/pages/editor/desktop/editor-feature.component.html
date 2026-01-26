@@ -809,6 +809,22 @@
       >
       </lib-editor-showcase-section>
 
+      <!-- RESERVATION FORM -->
+      <lib-editor-reservation-form-section
+        *ngSwitchCase="'reservation-form'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-reservation-form-section>
+
       <!-- CTA -->
       <lib-editor-cta-section
         *ngSwitchCase="'cta'"

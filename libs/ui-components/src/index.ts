@@ -61,6 +61,8 @@ export * from './lib/newsletter-section/newsletter-section.component';
 export * from './lib/steps-section/steps-section.component';
 export * from './lib/promotions-section/promotions-section.component';
 export * from './lib/cta-section/cta-section.component';
+export * from './lib/reservation-form/reservation-form.component';
+export * from './lib/draggable-box/draggable-box.component';
 
 // Showcase Components
 export * from './lib/showcase/gaming-variants-showcase.component';

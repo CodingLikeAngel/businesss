@@ -45,6 +45,7 @@ import { EditorButtonSectionComponent } from '../components/button/editor-button
 import { EditorImageSectionComponent } from '../components/image/editor-image-section.component';
 import { EditorSmartContainerSectionComponent } from '../components/smart-container/editor-smart-container-section.component';
 import { EditorDraggableBoxSectionComponent } from '../components/draggable-box/editor-draggable-box-section.component';
+import { EditorReservationFormSectionComponent } from '../components/reservation-form/editor-reservation-form-section.component';
 import { EditorGenericSectionComponent } from '../components/generic/editor-generic-section.component';
 
 
@@ -95,6 +96,7 @@ import { EditorGenericSectionComponent } from '../components/generic/editor-gene
     EditorImageSectionComponent,
     EditorSmartContainerSectionComponent,
     EditorDraggableBoxSectionComponent,
+    EditorReservationFormSectionComponent,
     EditorGenericSectionComponent
   ],
 

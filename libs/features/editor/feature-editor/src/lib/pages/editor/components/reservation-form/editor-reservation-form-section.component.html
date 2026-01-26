@@ -1,0 +1,26 @@
+<!-- Structured Reservation Form Editor Section -->
+<div #sectionElement
+  class="editor-section cursor-pointer py-16 transition-all duration-700"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <div class="container mx-auto px-6 max-w-5xl">
+    <div #formElement class="editor-element"
+         [class.is-selected]="selectedElementId === section.id + '_form_wrapper'"
+         (click)="selectElement($event, getMergedElement(section.id, section.id + '_form_wrapper', section.content, 'reservation'))"
+         [enhancedVisualEditable]="getFormWrapperConfig()"
+         elementId="{{section.id + '_form_wrapper'}}"
+         sectionId="{{section.id}}"
+         (visualEvents)="handleFormWrapperEvent($event)">
+      <lib-reservation-form
+        [title]="section.content['title'] || 'Reserva tu Cita'"
+        [subtitle]="section.content['subtitle'] || 'Elige tu servicio y horario preferido'"
+        [variant]="$any(getVariant(section.id))"
+      ></lib-reservation-form>
+    </div>
+  </div>
+</div>
