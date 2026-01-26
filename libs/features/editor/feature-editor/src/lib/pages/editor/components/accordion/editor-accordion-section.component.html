@@ -1,105 +1,40 @@
-<!-- DESKTOP ACCORDION -->
-<div *ngIf="!isMobile" #sectionElement
-  class="editor-section cursor-pointer py-12"
+<!-- Standardized Accordion Editor Section -->
+<div #sectionElement
+  class="editor-section cursor-pointer transition-all duration-500 group"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
-  [applyDynamicStyles]="selectedSectionId === section.id ? getSectionStyles(section.styles) : {}"
+  [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="getSectionConfig()"
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
 
-  <div class="container mx-auto px-6 max-w-3xl relative">
-    <lib-ui-components-title #titleElement *ngIf="section.content['title']"
-      [level]="'h2'"
-      [text]="section.content['title']"
-      [variant]="getVariant(section.id)"
-      [align]="'center'"
-      class="mb-8 block editor-element"
-      [class.is-selected]="selectedElementId === section.id + '_title'"
-      (click)="selectElement($event, getMergedElement(section.id, section.id + '_title', { content: section.content, styles: section.content['titleStyles'] }, 'title'))"
-      [applyDynamicStyles]="section.content['titleStyles']"
-      [enhancedVisualEditable]="getTitleConfig()"
-      elementId="{{section.id + '_title'}}"
-      sectionId="{{section.id}}"
-      (visualEvents)="handleTitleEvent($event)">
-    </lib-ui-components-title>
-
-    <div *ngIf="section.content['description'] || section.content['text']" #descElement 
-         class="mb-8 block editor-element text-center"
-         [class.is-selected]="selectedElementId === section.id + '_desc'"
-         (click)="selectElement($event, getMergedElement(section.id, section.id + '_desc', { content: section.content, styles: section.content['descStyles'] }, 'text'))"
-         [applyDynamicStyles]="section.content['descStyles']"
-         [enhancedVisualEditable]="getDescConfig()"
-         elementId="{{section.id + '_desc'}}"
+  <div class="container mx-auto px-6 max-w-4xl py-12">
+    <div class="editor-element mb-12"
+         [class.is-selected]="selectedElementId === section.id + '_title'"
+         (click)="selectElement($event, getMergedElement(section.id, section.id + '_title', section.content, 'title'))"
+         [enhancedVisualEditable]="getTitleConfig()"
+         elementId="{{section.id + '_title'}}"
          sectionId="{{section.id}}"
-         (visualEvents)="handleDescEvent($event)">
-      <p class="text-lg opacity-80">{{ section.content['description'] || section.content['text'] }}</p>
+         (visualEvents)="handleTitleEvent($event)">
+      <lib-ui-components-title
+        [level]="'h2'"
+        [text]="section.content['title'] || 'Preguntas Frecuentes'"
+        [variant]="$any(getVariant(section.id))"
+        align="center"
+      ></lib-ui-components-title>
     </div>
 
-    <lib-ui-components-accordion #accordionElement
-      [items]="section.content['items'] || []"
-      [variant]="section.content['variant'] || getVariant(section.id)"
-      [customStyles]="section.content['accordionStyles'] || {}"
-      class="editor-element"
-      [class.is-selected]="selectedElementId === section.id + '_accordion'"
-      (click)="selectElement($event, getMergedElement(section.id, section.id + '_accordion', { content: section.content, styles: section.content['accordionStyles'] }, 'accordion'))"
-      [applyDynamicStyles]="section.content['accordionStyles']"
-      [enhancedVisualEditable]="getAccordionConfig()"
-      elementId="{{section.id + '_accordion'}}"
-      sectionId="{{section.id}}"
-      (visualEvents)="handleAccordionEvent($event)">
-    </lib-ui-components-accordion>
+    <div #accordionElement class="editor-element"
+         [class.is-selected]="selectedElementId === section.id + '_accordion'"
+         (click)="selectElement($event, getMergedElement(section.id, section.id + '_accordion', section.content, 'accordion'))"
+         [enhancedVisualEditable]="getAccordionConfig()"
+         elementId="{{section.id + '_accordion'}}"
+         sectionId="{{section.id}}"
+         (visualEvents)="handleAccordionEvent($event)">
+      <lib-ui-components-accordion
+        [items]="section.content['items'] || []"
+        [variant]="$any(getVariant(section.id))"
+      ></lib-ui-components-accordion>
+    </div>
   </div>
-</div>
-
-<!-- MOBILE ACCORDION -->
-<div *ngIf="isMobile" #sectionElement
-  class="editor-section cursor-pointer py-8 p-4"
-  [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)"
-  [applyDynamicStyles]="selectedSectionId === section.id ? getSectionStyles(section.styles) : {}"
-  [enhancedVisualEditable]="getSectionConfig()"
-  sectionId="{{section.id}}"
-  (visualEvents)="handleSectionEvent($event)">
-
-  <lib-ui-components-title #titleElement *ngIf="section.content['title']"
-    [level]="'h3'"
-    [text]="section.content['title']"
-    [variant]="getVariant(section.id)"
-    [align]="'center'"
-    class="mb-6 block editor-element"
-    [class.is-selected]="selectedElementId === section.id + '_title'"
-    (click)="selectElement($event, { id: section.id + '_title', content: section.content, styles: section.content['titleStyles'], type: 'title', sectionId: section.id })"
-    [applyDynamicStyles]="section.content['titleStyles']"
-    [enhancedVisualEditable]="getTitleConfig()"
-    elementId="{{section.id + '_title'}}"
-    sectionId="{{section.id}}"
-    (visualEvents)="handleTitleEvent($event)">
-  </lib-ui-components-title>
-
-  <div *ngIf="section.content['description'] || section.content['text']" #descElement 
-       class="mb-6 block editor-element text-center"
-       [class.is-selected]="selectedElementId === section.id + '_desc'"
-       (click)="selectElement($event, { id: section.id + '_desc', content: section.content, styles: section.content['descStyles'], type: 'text', sectionId: section.id })"
-       [applyDynamicStyles]="section.content['descStyles']"
-       [enhancedVisualEditable]="getDescConfig()"
-       elementId="{{section.id + '_desc'}}"
-       sectionId="{{section.id}}"
-       (visualEvents)="handleDescEvent($event)">
-    <p class="text-base opacity-80">{{ section.content['description'] || section.content['text'] }}</p>
-  </div>
-
-  <lib-ui-components-accordion #accordionElement
-    [items]="section.content['items'] || [{ title: 'Accordion Item 1', content: 'Content 1' }, { title: 'Accordion Item 2', content: 'Content 2' }]"
-    [variant]="section.content['variant'] || getVariant(section.id)"
-    [customStyles]="section.content['accordionStyles'] || {}"
-    class="editor-element"
-    [class.is-selected]="selectedElementId === section.id + '_accordion'"
-    (click)="selectElement($event, { id: section.id + '_accordion', content: section.content, styles: section.content['accordionStyles'], type: 'accordion', sectionId: section.id })"
-    [applyDynamicStyles]="section.content['accordionStyles']"
-    [enhancedVisualEditable]="getAccordionConfig()"
-    elementId="{{section.id + '_accordion'}}"
-    sectionId="{{section.id}}"
-    (visualEvents)="handleAccordionEvent($event)">
-  </lib-ui-components-accordion>
 </div>

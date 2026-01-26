@@ -1,6 +1,6 @@
-<!-- DESKTOP FOOTER -->
-<div *ngIf="!isMobile" #sectionElement
-  class="editor-section cursor-pointer py-4"
+<!-- Modern Footer Editor Section -->
+<div #sectionElement
+  class="editor-section cursor-pointer py-2 transition-all duration-700"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
@@ -11,7 +11,6 @@
   <div #footerElement class="editor-element"
        [class.is-selected]="selectedElementId === section.id + '_footer'"
        (click)="selectElement($event, getMergedElement(section.id, section.id + '_footer', section.content, 'footer'))"
-       [applyDynamicStyles]="section.styles"
        [enhancedVisualEditable]="getFooterConfig()"
        elementId="{{section.id + '_footer'}}"
        sectionId="{{section.id}}"
@@ -19,37 +18,7 @@
     <lib-ui-components-footer
       [variant]="$any(section.content['variant'] || getVariant(section.id))"
       [title]="section.content['title'] || 'Pie de Página'"
-      [description]="section.content['description'] || 'Descripción del footer'"
-      [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles || {}"
-    ></lib-ui-components-footer>
-  </div>
-</div>
-
-<!-- MOBILE FOOTER -->
-<div *ngIf="isMobile" #sectionElement
-  class="editor-section cursor-pointer py-2 p-2"
-  [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)"
-  [applyDynamicStyles]="section.styles"
-  [enhancedVisualEditable]="getSectionConfig()"
-  sectionId="{{section.id}}"
-  (visualEvents)="handleSectionEvent($event)">
-
-  <div #footerElement class="editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_footer'"
-       (click)="selectElement($event, { id: section.id + '_footer', content: section.content, type: 'footer' })"
-       [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getFooterConfig()"
-       elementId="{{section.id + '_footer'}}"
-       sectionId="{{section.id}}"
-       (visualEvents)="handleFooterEvent($event)">
-    <lib-ui-components-footer
-      [variant]="$any(section.content['variant'] || getVariant(section.id))"
-      [title]="section.content['title'] || 'Pie de Página'"
-      [description]="section.content['description'] || 'Descripción del footer'"
-      [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles || {}"
+      [description]="section.content['description'] || 'Soluciones profesionales para empresas ambiciosas.'"
     ></lib-ui-components-footer>
   </div>
 </div>

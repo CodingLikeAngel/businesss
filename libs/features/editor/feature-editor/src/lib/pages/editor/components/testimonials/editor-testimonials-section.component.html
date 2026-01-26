@@ -1,6 +1,6 @@
-<!-- DESKTOP TESTIMONIALS -->
-<div *ngIf="!isMobile" #sectionElement
-  class="editor-section cursor-pointer py-4"
+<!-- Premium Testimonials Editor Section -->
+<div #sectionElement
+  class="editor-section cursor-pointer py-16 transition-all duration-700"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
@@ -8,50 +8,20 @@
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
 
-  <div #testimonialsElement class="editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_testimonials'"
-       (click)="selectElement($event, getMergedElement(section.id, section.id + '_testimonials', section.content, 'testimonials'))"
-       [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getTestimonialsConfig()"
-       elementId="{{section.id + '_testimonials'}}"
-       sectionId="{{section.id}}"
-       (visualEvents)="handleTestimonialsEvent($event)">
-    <lib-ui-testimonials-section
-      [title]="section.content['title'] || 'Lo que dicen de nosotros'"
-      [subtitle]="section.content['subtitle'] || 'Historias reales de éxito.'"
-      [variant]="getVariant(section.id)"
-      [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles"
-      [testimonials]="section.content['items'] || testimonialsConfig.items">
-    </lib-ui-testimonials-section>
-  </div>
-</div>
-
-<!-- MOBILE TESTIMONIALS -->
-<div *ngIf="isMobile" #sectionElement
-  class="editor-section cursor-pointer py-2 p-2"
-  [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)"
-  [applyDynamicStyles]="section.styles"
-  [enhancedVisualEditable]="getSectionConfig()"
-  sectionId="{{section.id}}"
-  (visualEvents)="handleSectionEvent($event)">
-
-  <div #testimonialsElement class="editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_testimonials'"
-       (click)="selectElement($event, { id: section.id + '_testimonials', content: section.content, type: 'testimonials' })"
-       [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getTestimonialsConfig()"
-       elementId="{{section.id + '_testimonials'}}"
-       sectionId="{{section.id}}"
-       (visualEvents)="handleTestimonialsEvent($event)">
-    <lib-ui-testimonials-section
-      [title]="section.content['title'] || 'Lo que dicen de nosotros'"
-      [subtitle]="section.content['subtitle'] || 'Historias reales de éxito.'"
-      [variant]="getVariant(section.id)"
-      [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles"
-      [testimonials]="section.content['items'] || testimonialsConfig.items">
-    </lib-ui-testimonials-section>
+  <div class="container mx-auto px-6 max-w-7xl">
+    <div class="editor-element"
+         [class.is-selected]="selectedElementId === section.id + '_testimonials_wrapper'"
+         (click)="selectElement($event, getMergedElement(section.id, section.id + '_testimonials_wrapper', section.content, 'testimonials'))"
+         [enhancedVisualEditable]="getTestimonialsWrapperConfig()"
+         elementId="{{section.id + '_testimonials_wrapper'}}"
+         sectionId="{{section.id}}"
+         (visualEvents)="handleTestimonialsWrapperEvent($event)">
+      <lib-ui-testimonials-section
+        [title]="section.content['title'] || 'Lo que Dicen Nuestros Clientes'"
+        [subtitle]="section.content['subtitle'] || 'Opiniones que nos inspiran a mejorar cada día'"
+        [variant]="$any(getVariant(section.id))"
+        [testimonials]="section.content['items'] || []"
+      ></lib-ui-testimonials-section>
+    </div>
   </div>
 </div>

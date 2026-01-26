@@ -112,6 +112,7 @@
   border: var(--theme-border-width) solid currentColor;
   border-radius: var(--theme-radius);
 }
+
 @mixin variant-ghost {
   --theme-bg: transparent;
   --theme-color: currentColor;
@@ -122,6 +123,7 @@
   border-radius: var(--theme-radius);
   &:hover { background: rgba(0,0,0,0.05); }
 }
+
 @mixin variant-glass {
   --theme-bg: rgba(255, 255, 255, 0.03);
   --theme-color: #ffffff;
@@ -2179,7 +2181,6 @@
     animation: steam-particles 2s ease-in-out infinite;
     z-index: 2;
   }
-
   span::after {
     content: '';
     position: absolute;
@@ -2204,8 +2205,7 @@
     &::after {
       animation: gear-rotate 2s linear infinite, gear-glow 2s ease-in-out infinite;
     }
-
-    span::before,
+  span::before,
     span::after {
       animation-duration: 1s;
     }
@@ -2314,8 +2314,7 @@
     &::after {
       animation: star-twinkle 1s ease-in-out infinite, star-explode 1s ease-in-out infinite;
     }
-
-    span::before,
+  span::before,
     span::after {
       animation-duration: 1.5s;
     }
@@ -2425,8 +2424,7 @@
     &::after {
       animation: bee-buzz 1s ease-in-out infinite, bee-dance 1s ease-in-out infinite;
     }
-
-    span::before {
+  span::before {
       animation: honey-drip 1.5s ease-in-out infinite;
     }
 

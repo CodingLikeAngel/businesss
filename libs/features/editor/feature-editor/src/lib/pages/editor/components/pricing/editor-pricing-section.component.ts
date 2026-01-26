@@ -39,7 +39,7 @@ export class EditorPricingSectionComponent extends EnhancedBaseEditorSectionComp
   ngAfterViewInit() {
     // Aplicar edición visual técnica
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
-    this.applyElementVisualEditing(this.pricingElement, this.section.id + '_pricing');
+    this.applyElementVisualEditing(this.pricingElement, this.section.id + '_pricing_wrapper');
   }
 
   getSectionConfig(): VisualEditingConfig {
@@ -53,7 +53,7 @@ export class EditorPricingSectionComponent extends EnhancedBaseEditorSectionComp
     });
   }
 
-  getPricingConfig(): VisualEditingConfig {
+  getPricingWrapperConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
       styling: {
         selectionOutline: '2px solid #10b981',
@@ -68,12 +68,12 @@ export class EditorPricingSectionComponent extends EnhancedBaseEditorSectionComp
     this.handleVisualEvent(event, this.section.id);
   }
 
-  handlePricingEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_pricing');
+  handlePricingWrapperEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id + '_pricing_wrapper');
   }
 
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_pricing' || elementId === this.section.id) {
+    if (elementId === this.section.id + '_pricing_wrapper' || elementId === this.section.id) {
       if (['moved', 'resized'].includes(event.type)) {
         this.updatePricingStyles(event.bounds);
       }

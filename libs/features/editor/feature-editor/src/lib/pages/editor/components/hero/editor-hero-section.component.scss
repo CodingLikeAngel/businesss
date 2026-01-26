@@ -1,209 +1,80 @@
 @use '../../../../../../../../../ui-components/src/lib/styles/mixins' as shared;
 
-/* Standardized Hero Section Styles for Editor */
+/* 
+  EDITOR HERO SECTION - PREMIUM REFACTOR
+  Synchronized with UI Library but with enhanced editor hooks
+*/
+
 :host {
   display: block;
   width: 100%;
 }
 
-/* Reproduce the complex Hero styles from ui-components to ensure visual parity */
-.hero-section {
-  min-height: 80vh;
+.editor-section {
   position: relative;
-  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   
-  // Design System Bridge
-  background-color: var(--theme-bg, #111827);
-  background-image: var(--theme-bg-image, none);
-  color: var(--theme-color, #ffffff);
-  font-family: var(--theme-font, shared.$unified-font-family);
-  border: var(--theme-border, none);
-  box-shadow: var(--theme-shadow, none);
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  transition: all 0.5s ease;
-  @include shared.texture-noise;
-
   &.is-selected {
-    outline: 3px solid #6366f1;
-    z-index: 50;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.3), 0 20px 50px rgba(0,0,0,0.4);
+    z-index: 100;
   }
+}
 
-  // Apply all variants
+.hero-section {
+  // Common properties - Standardized
+  @include shared.texture-noise;
   @include shared.apply-all-variants('hero-section--');
+  
+  /* Background parity with UI component */
+  background-color: var(--theme-bg, #0f172a);
+  color: var(--theme-color, #fff);
+  font-family: var(--theme-font, shared.$unified-font-family);
 
-  // CRITICAL: Force manual styles from Editor only if style attribute is present
-  &[style*='background'] {
-      background-color: var(--theme-bg) !important;
-      background-image: var(--theme-bg-image, none) !important;
-      background-blend-mode: overlay, normal;
+  .background-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.5) 100%);
+    z-index: 1;
   }
-
-  &[style*='color'] {
-      color: var(--theme-color) !important;
-
-      .hero-title {
-        color: var(--theme-color) !important;
-        -webkit-text-fill-color: var(--theme-color) !important;
-        background: none !important;
-      }
-
-      .hero-subtitle {
-        color: var(--theme-color) !important;
-      }
-  }
-}
-
-.video-container {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  overflow: hidden;
-
-  video {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-  }
-}
-
-.background-overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-  z-index: 1;
 }
 
 .hero-content {
   position: relative;
   z-index: 10;
-  text-align: center;
-  max-width: 64rem;
-  padding: 2rem;
+  
+  .cta-button {
+    background: var(--theme-accent, #2563eb);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+    
+    &:hover {
+      transform: translateY(-4px) scale(1.05);
+      filter: brightness(1.1);
+    }
+  }
 }
 
-.hero-title {
-  margin-bottom: 1.5rem;
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
-  transition: transform 0.3s ease;
+/* Editor Element Overrides */
+.editor-element {
+  transition: all 0.3s ease;
+  position: relative;
   
-  font-size: 4rem;
-  font-weight: 800;
-  line-height: 1.1;
-  color: var(--theme-color, white);
-  background: var(--hero-title-gradient, linear-gradient(to right, #00b4ff, #ff4500));
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-
   &.is-selected {
-    transform: scale(1.02);
-  }
-  
-  @media (max-width: 768px) {
-    font-size: 2.5rem;
-  }
-}
-
-.hero-subtitle {
-  margin-bottom: 2rem;
-  width: fit-content;
-  margin-left: auto;
-  margin-right: auto;
-  color: var(--theme-color, rgba(255, 255, 255, 0.9));
-}
-
-.cta-button {
-  padding: 1rem 2.5rem;
-  border-radius: 0.75rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: linear-gradient(90deg, #00b4ff, #ff4500);
-  color: white;
-  border: none;
-
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -8px;
+      border: 2px dashed #10b981;
+      border-radius: 8px;
+      pointer-events: none;
+      animation: dash-flow 20s linear infinite;
+    }
   }
 }
 
-/* Matrix Effect */
-.matrix-container {
-  position: absolute;
-  inset: 0;
-  z-index: 5;
-  pointer-events: none;
-
-  .matrix-canvas {
-    width: 100%;
-    height: 100%;
-    opacity: 0.3;
-  }
+@keyframes dash-flow {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: 1000; }
 }
-
-/* Particles */
-.particle-container {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  pointer-events: none;
-
-  .particle {
-    position: absolute;
-    width: 100px;
-    height: 100px;
-    filter: blur(20px);
-    opacity: 0.2;
-    background: radial-gradient(circle, #3b82f6, transparent);
-  }
-
-  .particle-1 {
-    top: 20%;
-    left: 10%;
-    animation: float 10s infinite;
-  }
-  .particle-2 {
-    bottom: 20%;
-    right: 10%;
-    animation: float 12s infinite reverse;
-  }
-  .particle-3 {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    animation: pulse 8s infinite;
-  }
-}
-
-@keyframes float {
-  0%,
-  100% {
-    transform: translate(0, 0);
-  }
-  50% {
-    transform: translate(30px, -50px);
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: translate(-50%, -50%) scale(1);
-    opacity: 0.2;
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.5);
-    opacity: 0.4;
-  }
-}
-

@@ -1,61 +1,46 @@
-<!-- DESKTOP FEATURES -->
-<div *ngIf="!isMobile" #sectionElement
-  class="editor-section cursor-pointer p-12"
+<!-- World-Class Features Editor Section -->
+<div #sectionElement
+  class="editor-section cursor-pointer py-16 transition-all duration-500"
   [class.is-selected]="selectedSectionId === section.id"
-  [class.has-floating-children]="$any(section).hasFloatingChildren"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="getSectionConfig()"
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
-  
-  <div class="max-w-7xl mx-auto">
+
+  <div class="container mx-auto px-6 max-w-7xl">
     <div class="text-center mb-16">
-      <lib-ui-components-title #titleElement
-        [level]="section.content['level'] || 'h2'"
-        [text]="section.content['title'] || 'Nuestros Servicios Premium'"
-        [variant]="$any(getVariant(section.id))"
-        [align]="'center'"
-        class="editor-element"
-        [class.is-selected]="selectedElementId === section.id + '_title'"
-        (click)="selectElement($event, getMergedElement(section.id, section.id + '_title', section.content, 'title'))"
-        [applyDynamicStyles]="section.content['titleStyles']"
-        [enhancedVisualEditable]="getTitleConfig()"
-        elementId="{{section.id + '_title'}}"
-        sectionId="{{section.id}}"
-        (visualEvents)="handleTitleEvent($event)">
-      </lib-ui-components-title>
+      <div class="editor-element mb-4"
+           [class.is-selected]="selectedElementId === section.id + '_title'"
+           (click)="selectElement($event, getMergedElement(section.id, section.id + '_title', section.content, 'title'))"
+           [enhancedVisualEditable]="getTitleConfig()"
+           elementId="{{section.id + '_title'}}"
+           sectionId="{{section.id}}"
+           (visualEvents)="handleTitleEvent($event)">
+        <lib-ui-components-title
+          [level]="'h2'"
+          [text]="section.content['title'] || 'Nuestras Características'"
+          [variant]="$any(getVariant(section.id))"
+          align="center"
+        ></lib-ui-components-title>
+      </div>
       
-      <div class="mt-4">
-        <p #featuresElement class="text-xl text-white/70 max-w-2xl mx-auto editor-element"
+      <div class="editor-element opacity-80"
            [class.is-selected]="selectedElementId === section.id + '_subtitle'"
-           (click)="selectElement($event, getMergedElement(section.id, section.id + '_subtitle', section.content, 'subtitle'))"
-           [applyDynamicStyles]="section.content['subtitleStyles']"
+           (click)="selectElement($event, { id: section.id + '_subtitle', sectionId: section.id, type: 'subtitle', content: section.content })"
            [enhancedVisualEditable]="getSubtitleConfig()"
            elementId="{{section.id + '_subtitle'}}"
            sectionId="{{section.id}}"
            (visualEvents)="handleSubtitleEvent($event)">
-          {{ section.content['subtitle'] || 'Descubre cómo podemos ayudarte.' }}
-        </p>
+        <p class="text-xl max-w-2xl mx-auto">{{ section.content['subtitle'] || 'Innovación y diseño en cada detalle.' }}</p>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div *ngFor="let feat of section.content['items']; let i = index; trackBy: trackByItem"
-           #featureElement
-           class="editor-element"
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+      <div *ngFor="let feat of section.content['items']; let i = index"
+           class="editor-element transform hover:scale-105 transition-transform duration-300"
            [class.is-selected]="selectedElementId === section.id + '_feature_' + i"
-           (click)="selectElement($event, {
-             id: section.id + '_feature_' + i,
-             elementId: section.id + '_feature_' + i,
-             sectionId: section.id,
-             type: 'feature',
-             content: feat,
-             index: i,
-             isItem: true,
-             excludedFields: ['subtitle']
-           })"
-           [applyDynamicStyles]="feat.styles || {}"
+           (click)="selectElement($event, { id: section.id + '_feature_' + i, sectionId: section.id, type: 'feature', content: feat, index: i, isItem: true })"
            [enhancedVisualEditable]="getFeatureCardConfig()"
            elementId="{{section.id + '_feature_' + i}}"
            sectionId="{{section.id}}"
@@ -65,52 +50,8 @@
           [title]="feat.title"
           [description]="feat.description"
           [variant]="$any(feat.variant || getVariant(section.id))"
-          [customStyles]="feat.styles || {}"
-          [applyDynamicStyles]="feat.styles || {}"
-          [animation]="'bounce'"
         ></lib-ui-components-card-animated>
       </div>
-    </div>
-  </div>
-</div>
-
-<!-- MOBILE FEATURES -->
-<div *ngIf="isMobile" class="editor-section cursor-pointer p-6"
-  [class.is-selected]="selectedSectionId === section.id"
-  [class.has-floating-children]="$any(section).hasFloatingChildren"
-  (click)="selectSection($event, section)">
-  
-  <div class="text-center mb-8">
-    <h2 class="text-2xl font-bold text-white mb-2 editor-element"
-        [class.is-selected]="selectedElementId === section.id + '_title'"
-        (click)="selectElement($event, { id: section.id + '_title', content: section.content, type: 'title' })">
-      {{ section.content['title'] || 'Servicios Premium' }}
-    </h2>
-  </div>
-
-  <div class="space-y-4">
-    <div *ngFor="let feat of section.content['items']; let i = index; trackBy: trackByItem" 
-         class="editor-element"
-         [class.is-selected]="selectedElementId === section.id + '_feature_' + i"
-         (click)="selectElement($event, {
-             id: section.id + '_feature_' + i,
-             elementId: section.id + '_feature_' + i,
-             sectionId: section.id,
-             type: 'feature',
-             content: feat,
-             index: i,
-             isItem: true,
-             excludedFields: ['subtitle']
-         })"
-         [applyDynamicStyles]="feat.styles || {}">
-      <lib-ui-components-card-animated
-        [icon]="feat.icon"
-        [title]="feat.title"
-        [description]="feat.description"
-        [variant]="$any(feat.variant || getVariant(section.id))"
-        [customStyles]="feat.styles || {}"
-        [animation]="'bounce'"
-      ></lib-ui-components-card-animated>
     </div>
   </div>
 </div>

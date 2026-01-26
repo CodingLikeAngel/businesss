@@ -1,6 +1,6 @@
-<!-- DESKTOP PRICING -->
-<div *ngIf="!isMobile" #sectionElement
-  class="editor-section cursor-pointer py-4"
+<!-- Elite Pricing Editor Section -->
+<div #sectionElement
+  class="editor-section cursor-pointer py-16 transition-all duration-700"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
@@ -8,48 +8,20 @@
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
 
-  <div #pricingElement class="editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_pricing'"
-       (click)="selectElement($event, getMergedElement(section.id, section.id + '_pricing', section.content, 'pricing'))"
-       [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getPricingConfig()"
-       elementId="{{section.id + '_pricing'}}"
-       sectionId="{{section.id}}"
-       (visualEvents)="handlePricingEvent($event)">
-    <lib-ui-pricing-table-section
-      [title]="section.content['title'] || 'Planes y Precios'"
-      [subtitle]="section.content['subtitle'] || 'Elige el plan que mejor se adapte a ti.'"
-      [variant]="$any(section.content['variant'] || getVariant(section.id))"
-      [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles || {}"
-    ></lib-ui-pricing-table-section>
-  </div>
-</div>
-
-<!-- MOBILE PRICING -->
-<div *ngIf="isMobile" #sectionElement
-  class="editor-section cursor-pointer py-2 p-2"
-  [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)"
-  [applyDynamicStyles]="section.styles"
-  [enhancedVisualEditable]="getSectionConfig()"
-  sectionId="{{section.id}}"
-  (visualEvents)="handleSectionEvent($event)">
-
-  <div #pricingElement class="editor-element"
-       [class.is-selected]="selectedElementId === section.id + '_pricing'"
-       (click)="selectElement($event, { id: section.id + '_pricing', content: section.content, type: 'pricing' })"
-       [applyDynamicStyles]="section.styles"
-       [enhancedVisualEditable]="getPricingConfig()"
-       elementId="{{section.id + '_pricing'}}"
-       sectionId="{{section.id}}"
-       (visualEvents)="handlePricingEvent($event)">
-    <lib-ui-pricing-table-section
-      [title]="section.content['title'] || 'Planes y Precios'"
-      [subtitle]="section.content['subtitle'] || 'Elige el plan que mejor se adapte a ti.'"
-      [variant]="$any(section.content['variant'] || getVariant(section.id))"
-      [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles || {}"
-    ></lib-ui-pricing-table-section>
+  <div class="container mx-auto px-6 max-w-7xl">
+    <div class="editor-element"
+         [class.is-selected]="selectedElementId === section.id + '_pricing_wrapper'"
+         (click)="selectElement($event, getMergedElement(section.id, section.id + '_pricing_wrapper', section.content, 'pricing'))"
+         [enhancedVisualEditable]="getPricingWrapperConfig()"
+         elementId="{{section.id + '_pricing_wrapper'}}"
+         sectionId="{{section.id}}"
+         (visualEvents)="handlePricingWrapperEvent($event)">
+      <lib-ui-pricing-table-section
+        [title]="section.content['title'] || 'Planes a tu Medida'"
+        [subtitle]="section.content['subtitle'] || 'Escoge la solución perfecta para tu crecimiento'"
+        [variant]="$any(getVariant(section.id))"
+        [rows]="section.content['items'] || []"
+      ></lib-ui-pricing-table-section>
+    </div>
   </div>
 </div>

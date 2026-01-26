@@ -6,21 +6,19 @@ import {
   VisualEditingConfig,
   VisualEditingEvent
 } from '@negocio/shared-components';
-import {
-  UIButtonComponent
-} from '@negocio/ui-components';
+import { CTASectionComponent } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
 /**
  * Enhanced Editor CTA Section Component
- * Modernized for granular store synchronization and visual editing.
+ * Powered by UI library CTA and standardized editing tools.
  */
 @Component({
   selector: 'lib-editor-cta-section',
   standalone: true,
   imports: [
     CommonModule,
-    UIButtonComponent,
+    CTASectionComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective
   ],

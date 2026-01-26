@@ -62,7 +62,7 @@ export class EditorTestimonialsSectionComponent extends EnhancedBaseEditorSectio
 
     // Aplicar edición visual básica
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
-    this.applyElementVisualEditing(this.testimonialsElement, this.section.id + '_testimonials');
+    this.applyElementVisualEditing(this.testimonialsElement, this.section.id + '_testimonials_wrapper');
   }
 
   getSectionConfig(): VisualEditingConfig {
@@ -76,7 +76,7 @@ export class EditorTestimonialsSectionComponent extends EnhancedBaseEditorSectio
     });
   }
 
-  getTestimonialsConfig(): VisualEditingConfig {
+  getTestimonialsWrapperConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
       styling: {
         selectionOutline: '2px solid #10b981',
@@ -91,12 +91,12 @@ export class EditorTestimonialsSectionComponent extends EnhancedBaseEditorSectio
     this.handleVisualEvent(event, this.section.id);
   }
 
-  handleTestimonialsEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_testimonials');
+  handleTestimonialsWrapperEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id + '_testimonials_wrapper');
   }
 
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_testimonials' || elementId === this.section.id) {
+    if (elementId === this.section.id + '_testimonials_wrapper' || elementId === this.section.id) {
       if (['moved', 'resized'].includes(event.type)) {
         this.updateTestimonialStyles(event.bounds);
       }

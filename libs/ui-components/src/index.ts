@@ -60,6 +60,7 @@ export * from './lib/contact-section/contact-section.component';
 export * from './lib/newsletter-section/newsletter-section.component';
 export * from './lib/steps-section/steps-section.component';
 export * from './lib/promotions-section/promotions-section.component';
+export * from './lib/cta-section/cta-section.component';
 
 // Showcase Components
 export * from './lib/showcase/gaming-variants-showcase.component';
