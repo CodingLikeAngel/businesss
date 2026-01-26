@@ -10,96 +10,62 @@
 
 @layer base {
   .btn {
-    --btn-padding: var(--sp-3) var(--sp-6);
-    --btn-font-size: var(--fs-sm);
-    --btn-radius: 8px;
-    --btn-bg: var(--theme-bg, #1e293b);
-    --btn-color: var(--theme-color, #fff);
-    --btn-accent: var(--theme-accent, #3b82f6);
-    
+    // 1. Structural Constants
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: var(--sp-2);
-    padding: var(--btn-padding);
-    font-size: var(--btn-font-size);
-    font-weight: 700;
-    color: var(--btn-color);
-    background: var(--btn-bg);
-    border-radius: var(--btn-radius);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    gap: 0.6rem;
+    padding: 0.8rem 1.8rem;
+    font-size: var(--fs-sm);
+    font-weight: 600;
     cursor: pointer;
     position: relative;
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     user-select: none;
     z-index: 1;
     letter-spacing: 0.02em;
+    text-decoration: none;
+    border: none;
+    
+    // 2. High-Performance Smoothness
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 
+    // 3. Defaults (Overridden by Variants)
+    background: var(--theme-bg, #1e293b);
+    color: var(--theme-color, #fff);
+    border-radius: var(--theme-radius, 8px);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+
+    // 4. APPLY THE MAGIC (Variants)
     @include shared.apply-all-variants('btn-');
-    @include shared.shimmer-effect;
 
-    &:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: var(--shadow-premium);
-      border-color: rgba(255, 255, 255, 0.3);
-      
-      &::after {
-        opacity: 1;
-      }
-    }
-
-    &:active {
-      transform: translateY(-1px) scale(0.98);
-      transition: all 0.1s;
+    // 5. Shared Interaction Logic
+    &:active:not(.btn-disabled) {
+      transform: translateY(1px) scale(0.98);
+      transition-duration: 0.1s;
     }
 
     &.btn-disabled, &:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
       filter: grayscale(1);
-    }
-
-    // Ripple effect
-    .ripple {
-      position: absolute;
-      background: rgba(255, 255, 255, 0.3);
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      transform: scale(0);
       pointer-events: none;
-      z-index: 0;
-
-      &.active {
-        animation: ripple-effect 0.6s linear;
-      }
     }
 
-    // Loading overlay
-    .loading-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: inherit;
-      z-index: 2;
-    }
-
+    // Modern Loading State
     .spinner {
-      width: 20px;
-      height: 20px;
-      border: 3px solid rgba(255, 255, 255, 0.3);
-      border-top-color: #fff;
+      width: 1.25rem;
+      height: 1.25rem;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: currentColor;
       border-radius: 50%;
-      animation: spin 1s linear infinite;
+      animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
     }
 
     .btn-content {
       display: flex;
       align-items: center;
-      gap: var(--sp-2);
+      gap: 0.5rem;
       z-index: 1;
       
       &.is-hidden {
@@ -116,50 +82,12 @@
     }
   }
 
-  // Rounded variants
-  .btn-rounded-md { --btn-radius: 12px; }
-  .btn-rounded-full { --btn-radius: 99px; }
-
-  // Size variants
-  .btn-sm {
-    --btn-padding: var(--sp-2) var(--sp-4);
-    --btn-font-size: var(--fs-xs);
-  }
-
-  .btn-lg {
-    --btn-padding: var(--sp-4) var(--sp-8);
-    --btn-font-size: var(--fs-md);
-  }
-}
-
-@keyframes ripple-effect {
-  to {
-    transform: scale(4);
-    opacity: 0;
-  }
+  // Functional Sizing
+  .btn-sm { padding: 0.5rem 1.2rem; font-size: var(--fs-xs); }
+  .btn-lg { padding: 1.2rem 2.5rem; font-size: var(--fs-md); }
+  .btn-rounded-full { border-radius: 9999px; }
 }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
-}
-
-// Special button theme adjustments
-.btn-glass {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(12px);
-  border-color: rgba(255, 255, 255, 0.1);
-  color: #fff;
-  
-  &:hover {
-    background: rgba(255, 255, 255, 0.1);
-  }
-}
-
-.btn-neon {
-  border-color: var(--btn-accent);
-  box-shadow: 0 0 10px rgba(var(--btn-accent), 0.3);
-  
-  &:hover {
-    box-shadow: 0 0 20px var(--btn-accent);
-  }
 }

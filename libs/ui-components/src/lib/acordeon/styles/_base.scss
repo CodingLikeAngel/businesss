@@ -4,195 +4,82 @@
 
 /* 
   ==========================================================================
-  ACCORDION BASE
+  CORE ACCORDION COMPONENT - REDESIGNED
   ==========================================================================
 */
 
 .accordion-container {
   width: 100%;
-  border-radius: 1rem;
   overflow: hidden;
-  background: var(--theme-bg, var(--accordion-bg, #fff));
-  color: var(--theme-color, var(--accordion-text, #333));
-  border: var(--theme-border, 1px solid rgba(0, 0, 0, 0.1));
-  transition: all 0.3s ease;
-  box-shadow: var(--theme-shadow, none);
-
-  @include shared.apply-all-variants('variant-');
-}
-
-.accordion-item {
-  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
-  &:last-child { border-bottom: none; }
-}
-
-.accordion-header {
-  width: 100%;
-  padding: 1.25rem 1.5rem;
-  background: transparent;
-  border: none;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  cursor: pointer;
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 700;
-  transition: all 0.3s ease;
-  color: inherit;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   
-  &:hover {
-    background: rgba(0, 0, 0, 0.02);
-  }
-}
+  // Design System Bridge
+  background: var(--theme-bg, #fff);
+  color: var(--theme-color, #333);
+  border-radius: var(--theme-radius, 1rem);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
 
-.accordion-content {
-  padding: 0 1.5rem 1.5rem;
-  line-height: 1.6;
-  opacity: 0.8;
-  animation: slideDown 0.3s ease;
-}
+  // Apply Global Variants (The Magic)
+  @include shared.apply-all-variants('variant-');
 
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-10px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* 
-  ==========================================================================
-  THEMATIC VARIANTS
-  ==========================================================================
-*/
-
-/* --- Nintendo / Mario --- */
-.variant-mario {
-  --accordion-bg: linear-gradient(135deg, #e53e3e, #3182ce);
-  --accordion-text: #ffffff;
-  --accordion-border: 2px solid rgba(255, 204, 0, 0.8);
-  --accordion-shadow: 0 0 20px rgba(229, 62, 62, 0.5), 0 4px 15px rgba(0, 0, 0, 0.3);
-  --accordion-glow: 0 0 30px rgba(255, 204, 0, 0.6);
-  border: var(--accordion-border);
-  border-radius: 0.75rem;
-  box-shadow: var(--accordion-shadow);
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-
-  .accordion-header {
-    &:hover {
-      background: rgba(255, 204, 0, 0.1);
-      color: #ffd700;
+  .accordion-item {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    &:last-child { border-bottom: none; }
+    
+    &--active {
+      .accordion-header {
+        background: rgba(0, 0, 0, 0.02);
+        color: var(--theme-accent, inherit);
+      }
     }
   }
 
-  .accordion-item--active .accordion-header {
-    background: rgba(230, 0, 18, 0.8);
-    color: #fff;
-    text-shadow: 0 0 10px #e60012;
-  }
-
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: var(--accordion-glow), 0 6px 20px rgba(0, 0, 0, 0.4);
-  }
-}
-
-/* --- Ubisoft / Rayman --- */
-.variant-rayman {
-  --accordion-bg: linear-gradient(135deg, #7b2ff7, #3e0b8a);
-  --accordion-text: #ffffff;
-  --accordion-border: 2px solid rgba(255, 215, 0, 0.8);
-  --accordion-shadow: 0 0 20px rgba(123, 47, 247, 0.5), 0 4px 15px rgba(0, 0, 0, 0.3);
-  --accordion-glow: 0 0 30px rgba(247, 224, 23, 0.6);
-  border: var(--accordion-border);
-  border-radius: 0.75rem;
-  box-shadow: var(--accordion-shadow);
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 600;
-  transition: all 0.3s ease;
-
   .accordion-header {
+    width: 100%;
+    padding: 1.5rem 2rem;
+    background: transparent;
+    border: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-family: inherit; // Inherit from variant/base
+    font-weight: 700;
+    transition: all 0.3s ease;
+    color: inherit;
+    text-align: left;
+    
     &:hover {
-      color: #f7e017;
-      text-shadow: 0 0 10px #f7e017;
+      background: rgba(0, 0, 0, 0.04);
+    }
+
+    .icon {
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
   }
 
-  .accordion-item--active .accordion-header {
-    color: #f7e017;
-    text-shadow: 0 0 10px #f7e017;
-  }
-
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: var(--accordion-glow), 0 6px 20px rgba(0, 0, 0, 0.4);
+  .accordion-content {
+    padding: 0 2rem 2rem;
+    line-height: 1.7;
+    opacity: 0.9;
+    font-size: 1rem;
   }
 }
 
-/* --- Rockstar --- */
-.variant-rockstar {
-  --accordion-bg: linear-gradient(135deg, #111, #333);
-  --accordion-text: #ffffff;
-  --accordion-border: 2px solid rgba(249, 215, 28, 0.8);
-  --accordion-shadow: 0 0 20px rgba(249, 215, 28, 0.5), 0 4px 15px rgba(0, 0, 0, 0.3);
-  --accordion-glow: 0 0 30px rgba(249, 215, 28, 0.6);
-  border: var(--accordion-border);
-  border-radius: 0.75rem;
-  box-shadow: var(--accordion-shadow);
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  transition: all 0.3s ease;
-
-  .accordion-header {
-    &:hover {
-      background: rgba(249, 215, 28, 0.1);
-      color: #f9d71c;
-    }
-  }
-
-  .accordion-item--active .accordion-header {
-    background: rgba(249, 215, 28, 0.8);
-    color: #000;
-  }
-
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: var(--accordion-glow), 0 6px 20px rgba(0, 0, 0, 0.4);
-  }
-}
-
-/* --- Cyberpunk --- */
+// Special Thematic Refinements for Accordion
 .variant-cyberpunk {
-  --accordion-bg: linear-gradient(135deg, #050510, #1a1a2e);
-  --accordion-text: #00ffcc;
-  --accordion-border: 2px solid rgba(255, 0, 85, 0.8);
-  --accordion-shadow: 0 0 20px rgba(255, 0, 85, 0.5), 0 4px 15px rgba(0, 0, 0, 0.3);
-  --accordion-glow: 0 0 30px rgba(0, 255, 204, 0.6);
-  border: var(--accordion-border);
-  border-radius: 0.75rem;
-  box-shadow: var(--accordion-shadow);
-  font-family: 'Orbitron', sans-serif;
-  font-weight: 600;
-  transition: all 0.3s ease;
+  .accordion-header { text-transform: uppercase; letter-spacing: 1px; }
+  .accordion-item--active .accordion-header { border-left: 5px solid var(--theme-accent); }
+}
 
-  .accordion-header {
-    text-shadow: 0 0 5px #00ffcc;
-    &:hover {
-      background: rgba(255, 0, 85, 0.1);
-      color: #ff0055;
-    }
-  }
+.variant-mario {
+  .accordion-header { border-bottom: 4px solid #000; }
+  .accordion-item--active .accordion-header { background: #fff; color: #e60012; }
+}
 
-  .accordion-item--active .accordion-header {
-    color: #ff0055;
-    text-shadow: 0 0 10px #ff0055;
-  }
-
-  &:hover {
-    transform: scale(1.02);
-    box-shadow: var(--accordion-glow), 0 6px 20px rgba(0, 0, 0, 0.4);
-  }
+.variant-glass {
+  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
