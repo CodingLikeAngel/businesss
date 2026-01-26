@@ -39,7 +39,7 @@ import { ResizeSectionCommand } from '../../services/commands';
 import { AppState } from '../../store/state/app.state';
 import * as UIActions from '../../store/actions/ui.actions';
 import { Store } from '@ngrx/store';
-import { MoveElementCommand, ResizeElementCommand, StyleChangeCommand } from '../../services/commands';
+import { MoveElementCommand, ResizeElementCommand, StyleChangeCommand, SectionContentCommand } from '../../services/commands';
 import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
@@ -236,14 +236,16 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     }
 
     // Listen for keyboard shortcuts from the store
-    this.actions$.pipe(
-      ofType(UIActions.executeShortcut),
-      takeUntil(this.destroy$)
-    ).subscribe(({ shortcut }) => {
-      if (shortcut === 'toggle-shortcuts') {
-        this.toggleShortcuts();
-      }
-    });
+    if (this.actions$) {
+      this.actions$.pipe(
+        ofType(UIActions.executeShortcut),
+        takeUntil(this.destroy$)
+      ).subscribe(({ shortcut }) => {
+        if (shortcut === 'toggle-shortcuts') {
+          this.toggleShortcuts();
+        }
+      });
+    }
   }
 
   // Removed redundant handlers in favor of onElementMoved/Resized
@@ -560,7 +562,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
         const newItems = [...items];
         newItems[index] = { ...item, styles: newStyles };
 
-        const command = new StyleChangeCommand('section', section.id, null, section.content, { ...section.content, [listKey]: newItems }, this.store);
+        const command = new SectionContentCommand(section.id, section.content, { ...section.content, [listKey]: newItems }, this.store);
         this.historyService.execute(command);
       }
     }

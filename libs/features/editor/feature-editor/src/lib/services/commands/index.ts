@@ -166,6 +166,36 @@ export class ResizeSectionCommand extends BaseCommand {
   }
 }
 
+// Section Content Command
+export class SectionContentCommand extends BaseCommand {
+  constructor(
+    private sectionId: string,
+    private oldContent: any,
+    private newContent: any,
+    private store: any
+  ) {
+    super('section-content-change', `Change content for section ${sectionId}`);
+  }
+
+  execute(): void {
+    this.redo();
+  }
+
+  undo(): void {
+    this.store.dispatch(updateSection({
+      sectionId: this.sectionId,
+      changes: { content: this.oldContent }
+    }));
+  }
+
+  redo(): void {
+    this.store.dispatch(updateSection({
+      sectionId: this.sectionId,
+      changes: { content: this.newContent }
+    }));
+  }
+}
+
 // Composite Command for batch operations
 export class CompositeCommand extends BaseCommand {
   constructor(
