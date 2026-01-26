@@ -1508,6 +1508,7 @@ export class VisualEditorService {
     // Clean up alignment guides
     this.clearGuides();
 
+    
     // Clean up listeners
     this.overlayListeners.forEach(unlisten => unlisten());
     this.overlayListeners = [];
