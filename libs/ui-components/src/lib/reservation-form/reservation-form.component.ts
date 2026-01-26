@@ -117,16 +117,41 @@ import { UITitleComponent } from '../title/title.component';
           ></lib-ui-components-input>
         </div>
 
+        <div class="space-y-6">
+           <lib-ui-components-input
+            type="range"
+            [variant]="variant()"
+            label="Presupuesto máximo deseado"
+            formControlName="budget"
+          ></lib-ui-components-input>
+
+           <lib-ui-components-input
+            type="checkbox"
+            [variant]="variant()"
+            label="Deseo recibir promociones por email"
+            formControlName="newsletter"
+          ></lib-ui-components-input>
+
+          <lib-ui-components-input
+            type="checkbox"
+            [variant]="variant()"
+            label="Acepto los términos y condiciones"
+            formControlName="terms"
+          ></lib-ui-components-input>
+        </div>
+
         <div class="flex justify-center pt-4">
           <lib-ui-components-button
-            [variant]="variant()"
+            [variant]="variant() === 'default' ? 'primary' : variant()"
             [size]="'lg'"
             [rounded]="'full'"
             type="submit"
             [disabled]="reservationForm.invalid"
             class="w-full md:w-auto md:px-12"
           >
-            Confirmar Reserva
+            <span class="flex items-center gap-2">
+              Confirmar Reserva <i class="icon-calendar"></i>
+            </span>
           </lib-ui-components-button>
         </div>
       </form>
@@ -207,6 +232,9 @@ export class ReservationFormComponent implements OnInit {
       manicureType: [''],
       color: [''],
       notes: [''],
+      budget: [50],
+      newsletter: [false],
+      terms: [false, Validators.requiredTrue]
     });
 
     // Escuchamos cambios en el servicio para actualizar validaciones dinámicas

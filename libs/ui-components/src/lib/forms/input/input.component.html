@@ -1,163 +1,92 @@
-<fieldset class="input-fieldset" [class.input-error]="isValid() === false" [class.input-success]="isValid() === true">
+<fieldset class="input-fieldset" 
+          [class.input-error]="isValid() === false" 
+          [class.input-success]="isValid() === true"
+          [class.has-label]="label()"
+          [class.has-floating-label]="showFloatingLabel() && ['text', 'email', 'password', 'number', 'tel', 'url', 'date', 'time', 'datetime-local', 'select', 'textarea'].includes(type())">
+  
   <legend *ngIf="legend()" class="input-legend">{{legend()}}</legend>
-  <div class="input-wrapper">
-    <div class="input-container" [class.checkbox-layout]="type() === 'checkbox'">
-      <ng-container [ngSwitch]="type()">
-        <!-- Text input -->
-        <div *ngSwitchCase="'text'" class="input-group">
-          <input
-            [type]="type()"
-            [value]="value"
-            (input)="onInputChange($event)"
-            (focus)="onFocus()"
-            (blur)="onBlur()"
-            [placeholder]="placeholder()"
-            [disabled]="disabled"
-            [class]="'input input-' + variant() + ' input-' + size()"
-            [class.input-disabled]="disabled"
-            [ngStyle]="inputStyles()"
-            [attr.list]="options().length > 0 ? 'datalist-text' : null"
-            [attr.aria-describedby]="errorMessage() ? errorId : null"
-            tag="input"
-          />
-          <label *ngIf="label()" class="floating-label" [class.floated]="isFloated()">{{label()}}</label>
-          <div *ngIf="icon()" class="input-icon">
-            <i [class]="icon()"></i>
-          </div>
-        </div>
+  
+  <div class="input-wrapper" [class.is-focused]="isFocused" [class.is-floated]="isFloated()">
+    
+    <!-- LABELS FOR NON-FLOATING OR SPECIFIC TYPES -->
+    <label *ngIf="label() && (!showFloatingLabel() || ['checkbox', 'radio', 'range', 'color'].includes(type()))" 
+           [for]="name() || errorId" 
+           class="static-label">
+      {{label()}}
+    </label>
 
-        <!-- Email input -->
-        <div *ngSwitchCase="'email'" class="input-group">
-          <input
-            [type]="type()"
-            [value]="value"
-            (input)="onInputChange($event)"
-            (focus)="onFocus()"
-            (blur)="onBlur()"
-            [placeholder]="placeholder()"
-            [disabled]="disabled"
-            [class]="'input input-' + variant() + ' input-' + size()"
-            [class.input-disabled]="disabled"
-            [ngStyle]="inputStyles()"
-            [attr.aria-describedby]="errorMessage() ? errorId : null"
-            tag="input"
-          />
-          <label *ngIf="label()" class="floating-label" [class.floated]="isFloated()">{{label()}}</label>
-          <div *ngIf="icon()" class="input-icon">
-            <i [class]="icon()"></i>
-          </div>
-        </div>
+    <div class="input-control-outer" [ngSwitch]="type()">
+      
+      <!-- CHECKBOX / RADIO -->
+      <div *ngSwitchCase="'checkbox'" class="selection-control checkbox">
+        <input type="checkbox" [id]="name() || errorId" [checked]="value" (change)="onInputChange($event)" [disabled]="disabled" class="real-input">
+        <div class="control-indicator"></div>
+        <span class="control-label" *ngIf="label()">{{label()}}</span>
+      </div>
 
-        <!-- Datetime-local input -->
-        <div *ngSwitchCase="'datetime-local'" class="input-group">
-          <input
-            [type]="type()"
-            [value]="value"
-            (input)="onInputChange($event)"
-            (focus)="onFocus()"
-            (blur)="onBlur()"
-            [disabled]="disabled"
-            [class]="'input input-' + variant() + ' input-' + size()"
-            [class.input-disabled]="disabled"
-            [ngStyle]="inputStyles()"
-            [attr.aria-describedby]="errorMessage() ? errorId : null"
-            tag="input"
-          />
-          <label *ngIf="label()" class="floating-label" [class.floated]="isFloated()">{{label()}}</label>
-          <div *ngIf="icon()" class="input-icon">
-            <i [class]="icon()"></i>
-          </div>
+      <div *ngSwitchCase="'radio'" class="selection-control radio">
+        <div class="radio-options" *ngIf="options().length > 0; else singleRadio">
+          <label *ngFor="let opt of options(); let i = index" class="radio-item">
+            <input type="radio" [name]="name()" [value]="opt.value" [checked]="value === opt.value" (change)="onInputChange($event)" [disabled]="disabled" class="real-input">
+            <div class="control-indicator"></div>
+            <span class="control-label">{{opt.label}}</span>
+          </label>
         </div>
+        <ng-template #singleRadio>
+          <input type="radio" [id]="name() || errorId" [checked]="value" (change)="onInputChange($event)" [disabled]="disabled" class="real-input">
+          <div class="control-indicator"></div>
+          <span class="control-label" *ngIf="label()">{{label()}}</span>
+        </ng-template>
+      </div>
 
-        <!-- Checkbox input -->
-        <input
-          *ngSwitchCase="'checkbox'"
-          type="checkbox"
-          [checked]="value"
-          (change)="onInputChange($event)"
-          [disabled]="disabled"
-          [class]="'input input-' + variant() + ' input-' + size()"
-          [class.input-disabled]="disabled"
-          [ngStyle]="inputStyles()"
-          tag="input"
-        />
-        <span *ngIf="type() === 'checkbox' && label()" class="checkbox-label">{{label()}}</span>
+      <!-- RANGE / SLIDER -->
+      <div *ngSwitchCase="'range'" class="range-control">
+        <input type="range" [value]="value" (input)="onInputChange($event)" [disabled]="disabled" class="input range-input" [ngStyle]="inputStyles()">
+        <span class="range-value">{{value}}</span>
+      </div>
 
-        <!-- Select -->
-        <div *ngSwitchCase="'select'" class="input-group">
-          <select
-            [value]="value"
-            (change)="onInputChange($event)"
-            (focus)="onFocus()"
-            (blur)="onBlur()"
-            [disabled]="disabled"
-            [class]="'input input-' + variant() + ' input-' + size()"
-            [class.input-disabled]="disabled"
-            [ngStyle]="inputStyles()"
-            [attr.aria-describedby]="errorMessage() ? errorId : null"
-            tag="select"
-          >
-            <option value="" disabled selected>{{ placeholder() || 'Selecciona una opción' }}</option>
-            <option *ngFor="let option of options()" [value]="option.value">
-              {{ option.label }}
-            </option>
-          </select>
-          <label *ngIf="label()" class="floating-label" [class.floated]="isFloated()">{{label()}}</label>
-          <div *ngIf="icon()" class="input-icon">
-            <i [class]="icon()"></i>
-          </div>
-        </div>
+      <!-- COLOR -->
+      <div *ngSwitchCase="'color'" class="color-control">
+        <input type="color" [value]="value" (input)="onInputChange($event)" [disabled]="disabled" class="input color-input" [ngStyle]="inputStyles()">
+        <span class="color-hex">{{value}}</span>
+      </div>
 
-        <!-- Textarea -->
-        <div *ngSwitchCase="'textarea'" class="input-group">
-          <textarea
-            [value]="value"
-            (input)="onInputChange($event)"
-            (focus)="onFocus()"
-            (blur)="onBlur()"
-            [placeholder]="placeholder()"
-            [disabled]="disabled"
-            [rows]="rows() || 4"
-            [class]="'input input-' + variant() + ' input-' + size()"
-            [class.input-disabled]="disabled"
-            [ngStyle]="inputStyles()"
-            [attr.aria-describedby]="errorMessage() ? errorId : null"
-            tag="textarea"
-          ></textarea>
-          <label *ngIf="label()" class="floating-label" [class.floated]="isFloated()">{{label()}}</label>
-          <div *ngIf="icon()" class="input-icon">
-            <i [class]="icon()"></i>
-          </div>
-        </div>
+      <!-- SELECT -->
+      <div *ngSwitchCase="'select'" class="input-group">
+        <select [id]="name() || errorId" [value]="value" (change)="onInputChange($event)" (focus)="onFocus()" (blur)="onBlur()" [disabled]="disabled" class="input select-input" [ngStyle]="inputStyles()">
+          <option value="" disabled selected>{{ placeholder() || 'Selecciona una opción' }}</option>
+          <option *ngFor="let option of options()" [value]="option.value">{{ option.label }}</option>
+        </select>
+        <label *ngIf="label() && showFloatingLabel()" class="floating-label">{{label()}}</label>
+        <div class="select-arrow"></div>
+      </div>
 
-        <!-- Fallback -->
-        <div *ngSwitchDefault class="input-group">
-          <input
-            [type]="type()"
-            [value]="value"
-            (input)="onInputChange($event)"
-            (focus)="onFocus()"
-            (blur)="onBlur()"
-            [placeholder]="placeholder()"
-            [disabled]="disabled"
-            [class]="'input input-' + variant() + ' input-' + size()"
-            [class.input-disabled]="disabled"
-            [ngStyle]="inputStyles()"
-            [attr.aria-describedby]="errorMessage() ? errorId : null"
-            tag="input"
-          />
-          <label *ngIf="label()" class="floating-label" [class.floated]="isFloated()">{{label()}}</label>
-          <div *ngIf="icon()" class="input-icon">
-            <i [class]="icon()"></i>
-          </div>
-        </div>
-      </ng-container>
-      <datalist *ngIf="type() === 'text' && options().length > 0" id="datalist-text">
-        <option *ngFor="let option of options()" [value]="option.value">
-      </datalist>
+      <!-- TEXTAREA -->
+      <div *ngSwitchCase="'textarea'" class="input-group">
+        <textarea [id]="name() || errorId" [value]="value" (input)="onInputChange($event)" (focus)="onFocus()" (blur)="onBlur()" [placeholder]="!showFloatingLabel() ? placeholder() : ''" [disabled]="disabled" [rows]="rows()" class="input textarea-input" [ngStyle]="inputStyles()"></textarea>
+        <label *ngIf="label() && showFloatingLabel()" class="floating-label">{{label()}}</label>
+        <div *ngIf="icon()" class="input-icon"><i [class]="icon()"></i></div>
+      </div>
+
+      <!-- DEFAULT TEXT-BASED INPUTS -->
+      <div *ngSwitchDefault class="input-group">
+        <input [type]="type()" [id]="name() || errorId" [value]="value" (input)="onInputChange($event)" (focus)="onFocus()" (blur)="onBlur()" [placeholder]="!showFloatingLabel() ? placeholder() : ''" [disabled]="disabled" class="input default-input" [ngStyle]="inputStyles()" [attr.list]="options().length > 0 ? 'datalist-' + errorId : null">
+        <label *ngIf="label() && showFloatingLabel()" class="floating-label">{{label()}}</label>
+        <div *ngIf="icon()" class="input-icon"><i [class]="icon()"></i></div>
+        
+        <datalist *ngIf="options().length > 0" [id]="'datalist-' + errorId">
+          <option *ngFor="let option of options()" [value]="option.value">{{option.label}}</option>
+        </datalist>
+      </div>
+
     </div>
-    <div *ngIf="errorMessage()" class="error-message" [id]="errorId" role="alert" aria-live="polite">{{errorMessage()}}</div>
-    <div *ngIf="successMessage()" class="success-message">{{successMessage()}}</div>
+
+    <!-- MESSAGES -->
+    <div class="feedback-area">
+      <div *ngIf="errorMessage()" class="error-message" [id]="errorId" role="alert">{{errorMessage()}}</div>
+      <div *ngIf="successMessage()" class="success-message">{{successMessage()}}</div>
+    </div>
+
   </div>
 </fieldset>
 

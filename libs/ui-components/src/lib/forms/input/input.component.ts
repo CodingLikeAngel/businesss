@@ -52,16 +52,18 @@ export class UIInputComponent implements ControlValueAccessor {
   size = input<'sm' | 'md' | 'lg'>('md');
   placeholder = input('');
   @Input() disabled = false; // Keep as Input for CVA compatibility/mutable
-  type = input('text');
+  type = input<'text' | 'email' | 'password' | 'number' | 'tel' | 'url' | 'date' | 'time' | 'datetime-local' | 'select' | 'textarea' | 'checkbox' | 'radio' | 'range' | 'color'>('text');
   customStyles = input<InputCustomStyles>({});
   options = input<InputOption[]>([]);
-  rows = input<number | undefined>(undefined);
+  rows = input<number>(4);
   label = input('');
   legend = input('');
   icon = input('');
+  name = input(''); // Added for accessibility and radio grouping
   errorMessage = input('');
   successMessage = input('');
   isValid = input<boolean | null>(null);
+  showFloatingLabel = input<boolean>(true);
 
   private innerValue: any = '';
   isFocused = false;
