@@ -79,6 +79,11 @@ export class VisualEditorService {
   private selectionStartPoint: { x: number; y: number } | null = null;
   private registeredElements = new Set<HTMLElement>();
 
+  // Toggles for robustness
+  public snapToGrid = true;
+  public showGuides = true;
+  public gridStep = 8; // Multiple of 4/8 is standard for design systems
+
 
   // Configuración por defecto
   private defaultConfig: DragResizeConfig = {
@@ -96,7 +101,7 @@ export class VisualEditorService {
       bottomLeft: true,
       bottomRight: true
     },
-    grid: 1
+    grid: 8
   };
 
   private _interactionMode: InteractionMode = 'all';
@@ -973,13 +978,30 @@ export class VisualEditorService {
            }
        }
 
-       // Create Ghost Element
-       ghost = element.cloneNode(true) as HTMLElement;
-       const rect = element.getBoundingClientRect();
-       
-       // Calculate boundaries 
-       // We use GLOBAL coordinates for the ghost checks because ghost is fixed
-       if (config.containment) {
+        // Create Ghost Element
+        ghost = element.cloneNode(true) as HTMLElement;
+        const rect = element.getBoundingClientRect();
+        
+        // Add coordinates label to ghost
+        const posLabel = this.renderer.createElement('div');
+        this.renderer.addClass(posLabel, 'visual-pos-label');
+        this.renderer.setStyle(posLabel, 'position', 'absolute');
+        this.renderer.setStyle(posLabel, 'bottom', '-30px');
+        this.renderer.setStyle(posLabel, 'left', '50%');
+        this.renderer.setStyle(posLabel, 'transform', 'translateX(-50%)');
+        this.renderer.setStyle(posLabel, 'background', '#10b981');
+        this.renderer.setStyle(posLabel, 'color', 'white');
+        this.renderer.setStyle(posLabel, 'padding', '2px 8px');
+        this.renderer.setStyle(posLabel, 'border-radius', '4px');
+        this.renderer.setStyle(posLabel, 'font-size', '10px');
+        this.renderer.setStyle(posLabel, 'white-space', 'nowrap');
+        this.renderer.setStyle(posLabel, 'z-index', '10001');
+        this.renderer.setProperty(posLabel, 'textContent', `X: ${Math.round(rect.left)} Y: ${Math.round(rect.top)}`);
+        this.renderer.appendChild(ghost, posLabel);
+
+        // Calculate boundaries 
+        // We use GLOBAL coordinates for the ghost checks because ghost is fixed
+        if (config.containment) {
            let containerEl: HTMLElement | null = null;
            
            if (typeof config.containment === 'string') {
@@ -1076,8 +1098,20 @@ export class VisualEditorService {
       if (newY < minY) newY = minY;
       // Max bounds are unlimited (down/right) per user requirement
 
+      // SNAPPING LOGIC
+      if (this.snapToGrid) {
+        newX = Math.round(newX / this.gridStep) * this.gridStep;
+        newY = Math.round(newY / this.gridStep) * this.gridStep;
+      }
+
       this.renderer.setStyle(ghost, 'left', `${newX}px`);
       this.renderer.setStyle(ghost, 'top', `${newY}px`);
+
+      // Update position label
+      const posLabel = ghost.querySelector('.visual-pos-label');
+      if (posLabel) {
+        posLabel.textContent = `X: ${Math.round(newX)} Y: ${Math.round(newY)}`;
+      }
     };
 
     const cleanupGhost = () => {
@@ -1160,6 +1194,8 @@ export class VisualEditorService {
    * Detecta alineaciones con otros elementos para snapping y guías
    */
   private detectAlignment(element: HTMLElement, currentLeft: number, currentTop: number): { x: number | null, y: number | null } {
+    if (!this.showGuides) return { x: null, y: null };
+    
     const parent = element.offsetParent as HTMLElement;
     if (!parent) return { x: null, y: null };
 
@@ -1490,7 +1526,10 @@ export class VisualEditorService {
 
     const overlays = document.querySelectorAll('[data-overlay="true"]');
     overlays.forEach(overlay => {
-      this.renderer.removeChild(document.body, overlay);
+      const parent = overlay.parentNode;
+      if (parent) {
+        this.renderer.removeChild(parent, overlay);
+      }
     });
   }
 
@@ -1585,6 +1624,13 @@ export class VisualEditorService {
         white-space: nowrap;
         box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
         pointer-events: none;
+        z-index: 10001;
+      }
+
+      .visual-pos-label {
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        font-family: 'Courier New', monospace;
+        font-weight: 700;
       }
 
       .visual-resize-handle {
@@ -1592,10 +1638,27 @@ export class VisualEditorService {
         background: white;
         border: 2px solid #6366f1;
         border-radius: 50%;
-        width: 12px;
-        height: 12px;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-        transition: all 0.2s ease;
+        width: 14px;
+        height: 14px;
+        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        z-index: 10002;
+      }
+
+      .visual-resize-handle:hover {
+        transform: scale(1.3);
+        background: #6366f1;
+        border-color: white;
+      }
+
+      .visual-ghost-drag {
+        filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+        transition: opacity 0.2s ease;
+      }
+
+      .marquee-selection {
+        border-radius: 4px;
+        backdrop-filter: blur(2px);
       }
 
       .visual-resize-handle:hover {

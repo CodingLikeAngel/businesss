@@ -1,0 +1,55 @@
+<div class="shortcuts-overlay" (click)="closeGuide()">
+  <div class="shortcuts-content" (click)="$event.stopPropagation()">
+    <div class="shortcuts-header">
+      <h3>⌨️ Atajos de Teclado</h3>
+      <button class="close-btn" (click)="closeGuide()">&times;</button>
+    </div>
+    
+    <div class="shortcuts-body">
+      <div *ngFor="let category of categories" class="category-section">
+        <h4 class="category-title">{{ category }}</h4>
+        <div class="shortcut-list">
+          <div *ngFor="let shortcut of shortcutsByCategory[category]" class="shortcut-item">
+            <span class="shortcut-description">{{ shortcut.description }}</span>
+            <span class="shortcut-key">{{ getDisplay(shortcut) }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Logic specific shortcuts not in KeyboardService yet -->
+      <div class="category-section">
+        <h4 class="category-title">Edición Visual</h4>
+        <div class="shortcut-list">
+          <div class="shortcut-item">
+            <span class="shortcut-description">Mover elemento (Nudge)</span>
+            <span class="shortcut-key">↑ ↓ ← →</span>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-description">Mover más rápido</span>
+            <span class="shortcut-key">Shift + Arrows</span>
+          </div>
+          <div class="shortcut-item">
+            <span class="shortcut-description">Selección múltiple</span>
+            <span class="shortcut-key">Ctrl / Cmd + Click</span>
+          </div>
+          <div class="shortcut-item">
+             <span class="shortcut-description">Selección por área</span>
+             <span class="shortcut-key">Shift + Drag Mouse</span>
+          </div>
+           <div class="shortcut-item">
+             <span class="shortcut-description">Duplicar elemento</span>
+             <span class="shortcut-key">Ctrl + D</span>
+          </div>
+          <div class="shortcut-item">
+             <span class="shortcut-description">Cancelar selección</span>
+             <span class="shortcut-key">Escape</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shortcuts-footer">
+      <p>Utiliza estos atajos para agilizar tu flujo de diseño.</p>
+    </div>
+  </div>
+</div>

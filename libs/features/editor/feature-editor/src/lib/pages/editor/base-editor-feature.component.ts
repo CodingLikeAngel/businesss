@@ -40,6 +40,7 @@ import { AppState } from '../../store/state/app.state';
 import * as UIActions from '../../store/actions/ui.actions';
 import { Store } from '@ngrx/store';
 import { MoveElementCommand, ResizeElementCommand, StyleChangeCommand } from '../../services/commands';
+import { Actions, ofType } from '@ngrx/effects';
 
 @Component({
   standalone: true,
@@ -55,6 +56,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
   protected historyService = inject(HistoryService);
   protected keyboardService = inject(KeyboardService);
   protected visualEditorService = inject(VisualEditorService);
+  protected actions$ = inject(Actions);
 
   private variantSub?: Subscription;
   private configSubs: Subscription[] = [];
@@ -83,6 +85,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
 
   editorState: EditorState;
   modalState: ModalState;
+  showShortcuts = false;
   loading$ = this.editorService.loading$;
   sections$: Observable<PageSection[]>;
 
@@ -316,6 +319,26 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     if (elementId) {
       this.store.dispatch(UIActions.selectElement({ elementId }));
     }
+  }
+
+  toggleShortcuts() {
+    this.showShortcuts = !this.showShortcuts;
+  }
+
+  toggleSnap() {
+    this.visualEditorService.snapToGrid = !this.visualEditorService.snapToGrid;
+  }
+
+  toggleGuides() {
+    this.visualEditorService.showGuides = !this.visualEditorService.showGuides;
+  }
+
+  get isSnapEnabled() {
+    return this.visualEditorService.snapToGrid;
+  }
+
+  get isGuidesEnabled() {
+    return this.visualEditorService.showGuides;
   }
 
   trackBySectionId(index: number, section: any): string {

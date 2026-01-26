@@ -83,6 +83,13 @@ export class KeyboardService {
       action: 'delete-selected',
       description: 'Delete selected elements',
       preventDefault: true
+    },
+    {
+      key: '/',
+      shift: true,
+      action: 'toggle-shortcuts',
+      description: 'Show shortcuts guide',
+      preventDefault: true
     }
   ];
 
@@ -220,7 +227,8 @@ export class KeyboardService {
       'History': ['undo', 'redo'],
       'Selection': ['select-all', 'clear-selection'],
       'Grouping': ['group-elements', 'ungroup-elements'],
-      'Editing': ['delete-selected']
+      'Editing': ['delete-selected'],
+      'Help': ['toggle-shortcuts']
     };
 
     const result: { [category: string]: KeyboardShortcut[] } = {};

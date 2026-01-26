@@ -47,6 +47,7 @@ import { EditorSmartContainerSectionComponent } from '../components/smart-contai
 import { EditorDraggableBoxSectionComponent } from '../components/draggable-box/editor-draggable-box-section.component';
 import { EditorReservationFormSectionComponent } from '../components/reservation-form/editor-reservation-form-section.component';
 import { EditorGenericSectionComponent } from '../components/generic/editor-generic-section.component';
+import { ShortcutsGuideComponent } from '../components/shortcuts-guide/shortcuts-guide.component';
 
 
 
@@ -97,7 +98,8 @@ import { EditorGenericSectionComponent } from '../components/generic/editor-gene
     EditorSmartContainerSectionComponent,
     EditorDraggableBoxSectionComponent,
     EditorReservationFormSectionComponent,
-    EditorGenericSectionComponent
+    EditorGenericSectionComponent,
+    ShortcutsGuideComponent
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

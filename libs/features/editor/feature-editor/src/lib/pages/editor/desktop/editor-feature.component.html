@@ -5,18 +5,29 @@
     <lib-undo-redo-toolbar></lib-undo-redo-toolbar>
 
     <!-- Mode Switcher -->
-    <div class="bg-gray-900/90 backdrop-blur-md rounded-full px-2 py-1 flex items-center gap-1 border border-white/10 shadow-xl">
-       <button (click)="setMode('all')" [ngClass]="{'bg-white/20 text-indigo-400': currentMode === 'all'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Modo Completo (Mover y Redimensionar)">
-         ✨
-       </button>
-       <div class="w-px h-4 bg-white/20 mx-1"></div>
-       <button (click)="setMode('move')" [ngClass]="{'bg-white/20 text-indigo-400': currentMode === 'move'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Modo Posición (Solo Mover)">
-         📍
-       </button>
-       <button (click)="setMode('resize')" [ngClass]="{'bg-white/20 text-indigo-400': currentMode === 'resize'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Modo Redimensionar (Solo Tamaño)">
-         📐
-       </button>
-    </div>
+     <div class="bg-gray-900/90 backdrop-blur-md rounded-full px-2 py-1 flex items-center gap-1 border border-white/10 shadow-xl">
+        <button (click)="setMode('all')" [ngClass]="{'bg-indigo-500/30 text-indigo-400': currentMode === 'all'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Modo Completo">
+          ✨
+        </button>
+        <div class="w-px h-4 bg-white/20 mx-1"></div>
+        <button (click)="setMode('move')" [ngClass]="{'bg-indigo-500/30 text-indigo-400': currentMode === 'move'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Mover">
+          📍
+        </button>
+        <button (click)="setMode('resize')" [ngClass]="{'bg-indigo-500/30 text-indigo-400': currentMode === 'resize'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Redimensionar">
+          📐
+        </button>
+        <div class="w-px h-4 bg-white/20 mx-1"></div>
+        <button (click)="toggleSnap()" [ngClass]="{'text-indigo-400': isSnapEnabled}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Ajustar a Cuadrícula (Snap)">
+          🧲
+        </button>
+        <button (click)="toggleGuides()" [ngClass]="{'text-indigo-400': isGuidesEnabled}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Mostrar Guías">
+          📏
+        </button>
+        <div class="w-px h-4 bg-white/20 mx-1"></div>
+        <button (click)="toggleShortcuts()" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Ayuda y Atajos">
+          ⌨️
+        </button>
+     </div>
   </div>
 
   <div *ngIf="loading$ | async" class="flex items-center justify-center p-20">
@@ -888,3 +899,6 @@
   "
   (modalOnClose)="closeModal()"
 ></lib-ui-components-modal>
+
+<!-- Shortcuts Guide -->
+<lib-shortcuts-guide *ngIf="showShortcuts" (close)="toggleShortcuts()"></lib-shortcuts-guide>
