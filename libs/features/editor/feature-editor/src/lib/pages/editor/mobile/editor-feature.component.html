@@ -31,6 +31,28 @@
       >
       </lib-editor-hero-section>
 
+      <!-- HERO MINIMAL -->
+      <lib-editor-hero-section
+        *ngSwitchCase="'hero-minimal'"
+        [section]="section"
+        [heroConfig]="heroConfig"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-hero-section>
+
+      <!-- HERO SPLIT -->
+      <lib-editor-hero-section
+        *ngSwitchCase="'hero-split'"
+        [section]="section"
+        [heroConfig]="heroConfig"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-hero-section>
+
       <!-- FEATURES -->
       <lib-editor-features-section
         *ngSwitchCase="'features'"

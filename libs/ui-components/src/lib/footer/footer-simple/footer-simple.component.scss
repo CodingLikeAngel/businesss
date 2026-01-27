@@ -1,0 +1,115 @@
+@use '../../styles/mixins' as shared;
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.footer-simple {
+  padding: 2rem;
+  background: var(--surface-color, #ffffff);
+  color: var(--text-color, #64748b);
+  border-top: 1px solid rgba(0,0,0,0.05);
+
+  // Apply all global variants
+  @include shared.apply-all-variants('variant-');
+  
+  &.variant-dark {
+     background: #0f172a;
+     color: #94a3b8;
+     border-top: 1px solid rgba(255,255,255,0.05);
+  }
+
+  &.variant-light {
+     background: #f8fafc;
+     color: #475569;
+     border-top: 1px solid #e2e8f0;
+     .brand-name { color: #0f172a; }
+  }
+
+  &.variant-glass {
+     background: rgba(255, 255, 255, 0.05);
+     backdrop-filter: blur(10px);
+     border-top: 1px solid rgba(255, 255, 255, 0.1);
+     color: white;
+     .brand-name { color: white; }
+  }
+
+  &.variant-neon {
+     background: black;
+     border-top: 1px solid var(--neon-primary, #00f3ff);
+     box-shadow: 0 -4px 15px rgba(0, 243, 255, 0.1);
+     .brand-name { color: var(--neon-primary, #00f3ff); text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
+  }
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  
+  @media (min-width: 768px) {
+     flex-direction: row;
+     justify-content: space-between;
+  }
+}
+
+.footer-brand {
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   gap: 0.25rem;
+   
+   @media (min-width: 768px) {
+       align-items: flex-start;
+   }
+}
+
+.brand-name {
+   font-weight: 700;
+   color: var(--text-primary, #0f172a);
+   
+   .footer-simple.variant-dark & {
+       color: white;
+   }
+}
+
+.copyright {
+   font-size: 0.8rem;
+   opacity: 0.8;
+}
+
+.footer-links {
+    display: flex;
+    gap: 1.5rem;
+    
+    .footer-link {
+        text-decoration: none;
+        color: inherit;
+        font-size: 0.9rem;
+        transition: color 0.2s;
+        
+        &:hover {
+            color: var(--accent-color, #6366f1);
+        }
+    }
+}
+
+.social-icons {
+    display: flex;
+    gap: 1rem;
+    
+    .social-icon {
+        text-decoration: none;
+        font-size: 1.2rem;
+        opacity: 0.7;
+        transition: opacity 0.2s;
+        
+        &:hover {
+            opacity: 1;
+        }
+    }
+}

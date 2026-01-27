@@ -8,7 +8,9 @@ import {
 } from '@negocio/shared-components';
 import {
   UITitleComponent,
-  UICardAnimatedComponent
+  UICardAnimatedComponent,
+  UIHeroMinimalComponent,
+  UIHeroSplitComponent
 } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
@@ -24,6 +26,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UITitleComponent,
     UICardAnimatedComponent,
+    UIHeroMinimalComponent,
+    UIHeroSplitComponent,
     EnhancedVisualEditableDirective
   ],
   templateUrl: './editor-hero-section.component.html',
