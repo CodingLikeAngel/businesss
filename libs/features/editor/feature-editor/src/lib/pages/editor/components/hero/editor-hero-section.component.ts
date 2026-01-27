@@ -8,10 +8,13 @@ import {
 } from '@negocio/shared-components';
 import {
   UITitleComponent,
-  UICardAnimatedComponent,
+  UICardAnimatedComponent
+} from '@negocio/ui-components';
+
+import {
   UIHeroMinimalComponent,
   UIHeroSplitComponent
-} from '@negocio/ui-components';
+} from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
 /**

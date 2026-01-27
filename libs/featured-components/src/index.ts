@@ -1,3 +1,19 @@
+// Section components (migrated from ui-components)
+export * from './lib/newsletter-section/newsletter-section.component';
+export * from './lib/newsletter-section/newsletter-minimal/newsletter-minimal.component';
+export * from './lib/newsletter-section/newsletter-modern/newsletter-modern.component';
+export * from './lib/newsletter-section/newsletter-creative/newsletter-creative.component';
+export * from './lib/testimonials-section/testimonials-section.component';
+export * from './lib/stats-section/stats-section.component';
+export * from './lib/steps-section/steps-section.component';
+export * from './lib/service-section/service-section.component';
+export * from './lib/gallery-section/gallery-section.component';
+export * from './lib/features-section/features-section.component';
+export * from './lib/faq-section/faq-section.component';
+export * from './lib/hero/hero.component';
+export * from './lib/hero/hero-minimal/hero-minimal.component';
+export * from './lib/hero/hero-split/hero-split.component';
+
 export * from './lib/shared/features/about/feature-about/src/lib/feature-about/pages/about/desktop/feature-about-page.component';
 export * from './lib/shared/features/about/feature-about/src/lib/feature-about/pages/about/mobile/feature-about-page.component';
 export * from './lib/shared/features/contact/feature-contact/src/lib/feature-contact/pages/contact/desktop/feature-contact-desktop-page.component';

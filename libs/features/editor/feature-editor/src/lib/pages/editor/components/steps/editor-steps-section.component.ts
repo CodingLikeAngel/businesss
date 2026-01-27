@@ -6,9 +6,7 @@ import {
   VisualEditingConfig,
   VisualEditingEvent
 } from '@negocio/shared-components';
-import {
-  UIStepsSectionComponent
-} from '@negocio/ui-components';
+import { UIStepsSectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
 /**

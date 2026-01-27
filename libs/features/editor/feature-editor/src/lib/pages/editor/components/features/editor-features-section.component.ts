@@ -11,6 +11,10 @@ import {
   UITitleComponent,
   UICardAnimatedComponent
 } from '@negocio/ui-components';
+
+import {
+  UIFeaturesSectionComponent
+} from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
 /**
@@ -25,6 +29,7 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UITitleComponent,
     UICardAnimatedComponent,
+    UIFeaturesSectionComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective
   ],

@@ -8,9 +8,7 @@ import {
   VisualEditingConfig,
   VisualEditingEvent
 } from '@negocio/shared-components';
-import {
-  ServiceSectionComponent
-} from '@negocio/ui-components';
+import { ServiceSectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
 /**

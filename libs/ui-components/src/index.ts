@@ -38,10 +38,6 @@ export * from './lib/gallery/gallery.component';
 export * from './lib/chart/chart.component';
 
 // Misc UI
-export * from './lib/hero/hero.component';
-export * from './lib/hero/hero-split/hero-split.component';
-export * from './lib/hero/hero-minimal/hero-minimal.component';
-export * from './lib/features-section/features-section.component';
 export * from './lib/acordeon/accordion.component';
 
 // Animations
@@ -50,12 +46,7 @@ export * from './lib/animations/water/water-animation.component';
 export * from './lib/bubble/bubble-animation.component';
 
 export * from './lib/products-section/products-section.component';
-export * from './lib/service-section/service-section.component';
-export * from './lib/stats-section/stats-section.component';
-export * from './lib/testimonials-section/testimonials-section.component';
 export * from './lib/pricing-table-section/pricing-table-section.component';
-export * from './lib/faq-section/faq-section.component';
-export * from './lib/gallery-section/gallery-section.component';
 
 // Models
 export * from './lib/models/ui-components-data.model';
@@ -63,11 +54,6 @@ export * from './lib/models/ui-components-data.model';
 // New Components
 export * from './lib/breadcrumbs/breadcrumbs.component';
 export * from './lib/contact-section/contact-section.component';
-export * from './lib/newsletter-section/newsletter-section.component';
-export * from './lib/newsletter-section/newsletter-minimal/newsletter-minimal.component';
-export * from './lib/newsletter-section/newsletter-modern/newsletter-modern.component';
-export * from './lib/newsletter-section/newsletter-creative/newsletter-creative.component';
-export * from './lib/steps-section/steps-section.component';
 export * from './lib/promotions-section/promotions-section.component';
 export * from './lib/cta-section/cta-section.component';
 export * from './lib/reservation-form/reservation-form.component';

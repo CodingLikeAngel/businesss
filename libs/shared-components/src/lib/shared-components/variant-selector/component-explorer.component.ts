@@ -2,14 +2,10 @@ import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { VariantService, PageSection } from '../../../services/variant.service';
+
+// Section components from featured-components
 import {
   UIHeroSectionComponent,
-  UIHeaderComponent,
-  UIHeaderClassicComponent,
-  UIHeaderModernComponent,
-  UIFooterComponent,
-  UIFooterMegaComponent,
-  UIFooterSimpleComponent,
   UIHeroMinimalComponent,
   UIHeroSplitComponent,
   UIFaqSectionComponent,
@@ -17,11 +13,23 @@ import {
   UIGallerySectionComponent,
   UIStatsLibSectionComponent,
   UIStepsSectionComponent,
-  UIPricingTableSectionComponent,
   UINewsletterSectionComponent,
   UINewsletterMinimalComponent,
   UINewsletterModernComponent,
   UINewsletterCreativeComponent,
+  UITestimonialsSectionComponent,
+  ServiceSectionComponent
+} from '@negocio/featured-components';
+
+// Atomic UI components from ui-components
+import {
+  UIHeaderComponent,
+  UIHeaderClassicComponent,
+  UIHeaderModernComponent,
+  UIFooterComponent,
+  UIFooterMegaComponent,
+  UIFooterSimpleComponent,
+  UIPricingTableSectionComponent,
   UIContactSectionComponent,
   UITabsComponent,
   UIAccordionComponent,
@@ -34,7 +42,6 @@ import {
   UIImageComponent,
   UITableComponent,
   BubbleAnimationComponent,
-  UITestimonialsSectionComponent,
   UIListComponent,
   UIGamingVariantsShowcaseComponent,
   UIInputComponent,
@@ -42,7 +49,6 @@ import {
   UICardComponent,
   PromotionsSectionComponent,
   ProductsSectionComponent,
-  ServiceSectionComponent,
   CTASectionComponent,
   ReservationFormComponent,
   UIDateTimePickerComponent,
@@ -68,13 +74,8 @@ interface SectionVariant {
   imports: [
     CommonModule,
     FormsModule,
+    // Section components from featured-components
     UIHeroSectionComponent,
-    UIHeaderComponent,
-    UIHeaderClassicComponent,
-    UIHeaderModernComponent,
-    UIFooterComponent,
-    UIFooterMegaComponent,
-    UIFooterSimpleComponent,
     UIHeroMinimalComponent,
     UIHeroSplitComponent,
     UIFaqSectionComponent,
@@ -82,11 +83,20 @@ interface SectionVariant {
     UIGallerySectionComponent,
     UIStatsLibSectionComponent,
     UIStepsSectionComponent,
-    UIPricingTableSectionComponent,
     UINewsletterSectionComponent,
     UINewsletterMinimalComponent,
     UINewsletterModernComponent,
     UINewsletterCreativeComponent,
+    UITestimonialsSectionComponent,
+    ServiceSectionComponent,
+    // Atomic UI components from ui-components
+    UIHeaderComponent,
+    UIHeaderClassicComponent,
+    UIHeaderModernComponent,
+    UIFooterComponent,
+    UIFooterMegaComponent,
+    UIFooterSimpleComponent,
+    UIPricingTableSectionComponent,
     UIContactSectionComponent,
     UITabsComponent,
     UIAccordionComponent,
@@ -99,7 +109,6 @@ interface SectionVariant {
     UIImageComponent,
     UITableComponent,
     BubbleAnimationComponent,
-    UITestimonialsSectionComponent,
     UIListComponent,
     UIGamingVariantsShowcaseComponent,
     UIInputComponent,
@@ -107,7 +116,6 @@ interface SectionVariant {
     UICardComponent,
     PromotionsSectionComponent,
     ProductsSectionComponent,
-    ServiceSectionComponent,
     CTASectionComponent,
     ReservationFormComponent,
     UIDateTimePickerComponent,
