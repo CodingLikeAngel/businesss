@@ -228,9 +228,11 @@ interface SectionVariant {
                   <div *ngSwitchCase="'promotions'" class="p-4">
                     <lib-promotions-section [variant]="$any(selectedVariant)"></lib-promotions-section>
                   </div>
-                  <lib-ui-hero-section *ngSwitchCase="'hero'" [variant]="$any(selectedVariant)" title="Título Hero" subtitle="Subtítulo descriptivo"></lib-ui-hero-section>
-                  <lib-ui-hero-minimal *ngSwitchCase="'hero-minimal'" [variant]="$any(selectedVariant)" title="Less is More" subtitle="Minimalist design focuses on the essential." badge="Introducing"></lib-ui-hero-minimal>
-                  <lib-ui-hero-split *ngSwitchCase="'hero-split'" [variant]="$any(selectedVariant)" title="Hero Split Title" subtitle="Subtitle description for the split hero layout." ctaLabel="Get Started"></lib-ui-hero-split>
+                  <div *ngSwitchCase="'hero'">
+                    <lib-ui-hero-section *ngIf="!selectedSubtype || selectedSubtype === 'standard'" [variant]="$any(selectedVariant)" title="Título Hero" subtitle="Subtítulo descriptivo"></lib-ui-hero-section>
+                    <lib-ui-hero-minimal *ngIf="selectedSubtype === 'minimal'" [variant]="$any(selectedVariant)" title="Less is More" subtitle="Minimalist design focuses on the essential." badge="Introducing"></lib-ui-hero-minimal>
+                    <lib-ui-hero-split *ngIf="selectedSubtype === 'split'" [variant]="$any(selectedVariant)" title="Hero Split Title" subtitle="Subtitle description for the split hero layout." ctaLabel="Get Started"></lib-ui-hero-split>
+                  </div>
                   <lib-ui-cta-section *ngSwitchCase="'cta'" [variant]="$any(selectedVariant)"></lib-ui-cta-section>
                   <lib-reservation-form *ngSwitchCase="'reservation-form'" [variant]="$any(selectedVariant)"></lib-reservation-form>
                   <div *ngSwitchCase="'header'" class="h-full w-full">
@@ -998,24 +1000,6 @@ export class ComponentExplorerComponent implements OnInit {
         { id: 'split', label: 'Dividido' },
         { id: 'minimal', label: 'Minimalista' }
       ]
-    },
-    {
-      type: 'hero-minimal',
-      label: 'Hero Minimalista',
-      icon: '🎯',
-      variants: ['light', 'dark', 'glass', 'neon', 'minimal'],
-      description: 'Hero minimalista con diseño limpio y centrado',
-      category: 'content',
-      libraryType: 'section'
-    },
-    {
-      type: 'hero-split',
-      label: 'Hero Dividido',
-      icon: '⚡',
-      variants: ['glass', 'neon', 'minimal', 'cyberpunk'],
-      description: 'Hero con layout dividido entre texto e imagen',
-      category: 'content',
-      libraryType: 'section'
     },
     {
       type: 'cta',
