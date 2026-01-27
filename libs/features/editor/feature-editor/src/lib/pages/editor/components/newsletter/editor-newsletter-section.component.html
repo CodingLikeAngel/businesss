@@ -16,15 +16,70 @@
        elementId="{{section.id + '_newsletter_wrapper'}}"
        sectionId="{{section.id}}"
        (visualEvents)="handleNewsletterWrapperEvent($event)">
-    <lib-ui-newsletter-section
-      [title]="section.content['title'] || 'Suscríbete a nuestra Newsletter'"
-      [description]="section.content['description'] || 'Las mejores ofertas en tu email'"
-      [buttonText]="section.content['buttonText'] || 'Suscribirse'"
-      [placeholder]="section.content['placeholder'] || 'email@ejemplo.com'"
-      [variant]="$any(section.content['variant'] || getVariant(section.id))"
-      [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles || {}"
-    ></lib-ui-newsletter-section>
+
+    <ng-container [ngSwitch]="getNewsletterSubtype()">
+      <!-- CLASSIC -->
+      <lib-ui-newsletter-section
+        *ngSwitchCase="'classic'"
+        [title]="section.content['title'] || 'Suscríbete a nuestra Newsletter'"
+        [description]="section.content['description'] || 'Las mejores ofertas en tu email'"
+        [buttonText]="section.content['buttonText'] || 'Suscribirse'"
+        [placeholder]="section.content['placeholder'] || 'email@ejemplo.com'"
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [subtype]="'classic'"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}">
+      </lib-ui-newsletter-section>
+
+      <!-- MINIMAL -->
+      <lib-ui-newsletter-minimal
+        *ngSwitchCase="'minimal'"
+        [title]="section.content['title'] || 'Stay Updated'"
+        [description]="section.content['description'] || 'Get the latest updates delivered to your inbox.'"
+        [buttonText]="section.content['buttonText'] || 'Subscribe'"
+        [placeholder]="section.content['placeholder'] || 'Enter your email'"
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}">
+      </lib-ui-newsletter-minimal>
+
+      <!-- MODERN -->
+      <lib-ui-newsletter-modern
+        *ngSwitchCase="'modern'"
+        [title]="section.content['title'] || 'Join Our Community'"
+        [description]="section.content['description'] || 'Subscribe to get exclusive content, tips, and updates delivered straight to your inbox.'"
+        [buttonText]="section.content['buttonText'] || 'Get Started'"
+        [placeholder]="section.content['placeholder'] || 'Your email address'"
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}">
+      </lib-ui-newsletter-modern>
+
+      <!-- CREATIVE -->
+      <lib-ui-newsletter-creative
+        *ngSwitchCase="'creative'"
+        [title]="section.content['title'] || 'Never Miss a Beat'"
+        [description]="section.content['description'] || 'Join thousands of subscribers and get exclusive content, early access, and special offers.'"
+        [buttonText]="section.content['buttonText'] || 'Subscribe Now'"
+        [placeholder]="section.content['placeholder'] || 'Enter your email address'"
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}">
+      </lib-ui-newsletter-creative>
+
+      <!-- DEFAULT (fallback to classic) -->
+      <lib-ui-newsletter-section
+        *ngSwitchDefault
+        [title]="section.content['title'] || 'Suscríbete a nuestra Newsletter'"
+        [description]="section.content['description'] || 'Las mejores ofertas en tu email'"
+        [buttonText]="section.content['buttonText'] || 'Suscribirse'"
+        [placeholder]="section.content['placeholder'] || 'email@ejemplo.com'"
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [subtype]="'classic'"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}">
+      </lib-ui-newsletter-section>
+    </ng-container>
   </div>
 </div>
 
@@ -46,14 +101,69 @@
        elementId="{{section.id + '_newsletter_wrapper'}}"
        sectionId="{{section.id}}"
        (visualEvents)="handleNewsletterWrapperEvent($event)">
-    <lib-ui-newsletter-section
-      [title]="section.content['title'] || 'Suscríbete a nuestra Newsletter'"
-      [description]="section.content['description'] || 'Las mejores ofertas en tu email'"
-      [buttonText]="section.content['buttonText'] || 'Suscribirse'"
-      [placeholder]="section.content['placeholder'] || 'email@ejemplo.com'"
-      [variant]="$any(section.content['variant'] || getVariant(section.id))"
-      [customStyles]="section.styles || {}"
-      [applyDynamicStyles]="section.styles || {}"
-    ></lib-ui-newsletter-section>
+
+    <ng-container [ngSwitch]="getNewsletterSubtype()">
+      <!-- CLASSIC -->
+      <lib-ui-newsletter-section
+        *ngSwitchCase="'classic'"
+        [title]="section.content['title'] || 'Suscríbete a nuestra Newsletter'"
+        [description]="section.content['description'] || 'Las mejores ofertas en tu email'"
+        [buttonText]="section.content['buttonText'] || 'Suscribirse'"
+        [placeholder]="section.content['placeholder'] || 'email@ejemplo.com'"
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [subtype]="'classic'"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}">
+      </lib-ui-newsletter-section>
+
+      <!-- MINIMAL -->
+      <lib-ui-newsletter-minimal
+        *ngSwitchCase="'minimal'"
+        [title]="section.content['title'] || 'Stay Updated'"
+        [description]="section.content['description'] || 'Get the latest updates delivered to your inbox.'"
+        [buttonText]="section.content['buttonText'] || 'Subscribe'"
+        [placeholder]="section.content['placeholder'] || 'Enter your email'"
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}">
+      </lib-ui-newsletter-minimal>
+
+      <!-- MODERN -->
+      <lib-ui-newsletter-modern
+        *ngSwitchCase="'modern'"
+        [title]="section.content['title'] || 'Join Our Community'"
+        [description]="section.content['description'] || 'Subscribe to get exclusive content, tips, and updates delivered straight to your inbox.'"
+        [buttonText]="section.content['buttonText'] || 'Get Started'"
+        [placeholder]="section.content['placeholder'] || 'Your email address'"
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}">
+      </lib-ui-newsletter-modern>
+
+      <!-- CREATIVE -->
+      <lib-ui-newsletter-creative
+        *ngSwitchCase="'creative'"
+        [title]="section.content['title'] || 'Never Miss a Beat'"
+        [description]="section.content['description'] || 'Join thousands of subscribers and get exclusive content, early access, and special offers.'"
+        [buttonText]="section.content['buttonText'] || 'Subscribe Now'"
+        [placeholder]="section.content['placeholder'] || 'Enter your email address'"
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}">
+      </lib-ui-newsletter-creative>
+
+      <!-- DEFAULT (fallback to classic) -->
+      <lib-ui-newsletter-section
+        *ngSwitchDefault
+        [title]="section.content['title'] || 'Suscríbete a nuestra Newsletter'"
+        [description]="section.content['description'] || 'Las mejores ofertas en tu email'"
+        [buttonText]="section.content['buttonText'] || 'Suscribirse'"
+        [placeholder]="section.content['placeholder'] || 'email@ejemplo.com'"
+        [variant]="$any(section.content['variant'] || getVariant(section.id))"
+        [subtype]="'classic'"
+        [customStyles]="section.styles || {}"
+        [applyDynamicStyles]="section.styles || {}">
+      </lib-ui-newsletter-section>
+    </ng-container>
   </div>
 </div>

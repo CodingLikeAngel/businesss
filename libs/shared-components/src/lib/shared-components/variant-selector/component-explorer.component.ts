@@ -19,6 +19,9 @@ import {
   UIStepsSectionComponent,
   UIPricingTableSectionComponent,
   UINewsletterSectionComponent,
+  UINewsletterMinimalComponent,
+  UINewsletterModernComponent,
+  UINewsletterCreativeComponent,
   UIContactSectionComponent,
   UITabsComponent,
   UIAccordionComponent,
@@ -81,6 +84,9 @@ interface SectionVariant {
     UIStepsSectionComponent,
     UIPricingTableSectionComponent,
     UINewsletterSectionComponent,
+    UINewsletterMinimalComponent,
+    UINewsletterModernComponent,
+    UINewsletterCreativeComponent,
     UIContactSectionComponent,
     UITabsComponent,
     UIAccordionComponent,
@@ -247,7 +253,25 @@ interface SectionVariant {
                   <!-- COMMERCE -->
                   <div *ngSwitchCase="'services'" class="p-4"><lib-service-section [variant]="$any(selectedVariant)" [title]="'Nuestros Servicios'"></lib-service-section></div>
                   <div *ngSwitchCase="'pricing'" class="p-4"><lib-ui-pricing-table-section [variant]="$any(selectedVariant)"></lib-ui-pricing-table-section></div>
-                  <div *ngSwitchCase="'newsletter'" class="p-4"><lib-ui-newsletter-section [variant]="$any(selectedVariant)"></lib-ui-newsletter-section></div>
+                  <div *ngSwitchCase="'newsletter'" class="p-4">
+                    <lib-ui-newsletter-section
+                      *ngIf="!selectedSubtype || selectedSubtype === 'classic'"
+                      [variant]="$any(selectedVariant)"
+                      [subtype]="'classic'">
+                    </lib-ui-newsletter-section>
+                    <lib-ui-newsletter-minimal
+                      *ngIf="selectedSubtype === 'minimal'"
+                      [variant]="$any(selectedVariant)">
+                    </lib-ui-newsletter-minimal>
+                    <lib-ui-newsletter-modern
+                      *ngIf="selectedSubtype === 'modern'"
+                      [variant]="$any(selectedVariant)">
+                    </lib-ui-newsletter-modern>
+                    <lib-ui-newsletter-creative
+                      *ngIf="selectedSubtype === 'creative'"
+                      [variant]="$any(selectedVariant)">
+                    </lib-ui-newsletter-creative>
+                  </div>
                   <div *ngSwitchCase="'products'" class="p-4"><lib-products-section [variant]="$any(selectedVariant)"></lib-products-section></div>
                   <!-- INTERACTIVE -->
                   <div *ngSwitchCase="'contact'" class="p-4"><lib-ui-contact-section [variant]="$any(selectedVariant)"></lib-ui-contact-section></div>
@@ -1142,10 +1166,16 @@ export class ComponentExplorerComponent implements OnInit {
       type: 'newsletter',
       label: 'Newsletter',
       icon: '📧',
-      variants: ['default', 'glass', 'neon', 'minimal'],
+      variants: ['default', 'glass', 'neon', 'minimal', 'cyberpunk', 'gradient'],
       description: 'Suscripción a boletín de noticias',
       category: 'commerce',
-      libraryType: 'section'
+      libraryType: 'section',
+      subtypes: [
+        { id: 'classic', label: 'Clásico' },
+        { id: 'minimal', label: 'Minimalista' },
+        { id: 'modern', label: 'Moderno' },
+        { id: 'creative', label: 'Creativo' }
+      ]
     },
     {
       type: 'products',

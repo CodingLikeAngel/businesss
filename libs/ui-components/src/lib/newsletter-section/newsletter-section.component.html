@@ -1,27 +1,95 @@
-<div [ngClass]="['newsletter-section', 'variant-' + variant()]" [ngStyle]="newsletterStyles()">
-  <div class="content">
-    <div class="text-content">
-      <h2>{{ title() }}</h2>
-      <p>{{ description() }}</p>
-    </div>
-    <div class="form-container">
-      <div class="input-wrapper">
-        <lib-ui-components-input
-          [type]="'email'"
-          [placeholder]="placeholder()"
-          [(ngModel)]="email"
-          [variant]="$any(variant())">
-        </lib-ui-components-input>
+<ng-container [ngSwitch]="subtype()">
+  <!-- CLASSIC -->
+  <div *ngSwitchCase="'classic'" [ngClass]="['newsletter-section', 'variant-' + variant()]" [ngStyle]="newsletterStyles()">
+    <div class="content">
+      <div class="text-content">
+        <h2>{{ title() }}</h2>
+        <p>{{ description() }}</p>
       </div>
-      <lib-ui-components-button
-        [variant]="variant() === 'default' ? 'primary' : $any(variant())"
-        [disabled]="isSubmitting"
-        (buttonClick)="onSubmit()">
-        {{ isSubmitting ? '...' : buttonText() }}
-      </lib-ui-components-button>
-    </div>
-    <div class="success-msg" *ngIf="successMessage">
-      {{ successMessage }}
+      <div class="form-container">
+        <div class="input-wrapper">
+          <lib-ui-components-input
+            [type]="'email'"
+            [placeholder]="placeholder()"
+            [(ngModel)]="email"
+            [variant]="$any(variant())">
+          </lib-ui-components-input>
+        </div>
+        <lib-ui-components-button
+          [variant]="variant() === 'default' ? 'primary' : $any(variant())"
+          [disabled]="isSubmitting"
+          (buttonClick)="onSubmit()">
+          {{ isSubmitting ? '...' : buttonText() }}
+        </lib-ui-components-button>
+      </div>
+      <div class="success-msg" *ngIf="successMessage">
+        {{ successMessage }}
+      </div>
     </div>
   </div>
-</div>
+
+  <!-- MINIMAL -->
+  <lib-ui-newsletter-minimal
+    *ngSwitchCase="'minimal'"
+    [title]="title()"
+    [description]="description()"
+    [placeholder]="placeholder()"
+    [buttonText]="buttonText()"
+    [variant]="variant()"
+    [customStyles]="customStyles()"
+    (subscribe)="subscribe.emit($event)">
+  </lib-ui-newsletter-minimal>
+
+  <!-- MODERN -->
+  <lib-ui-newsletter-modern
+    *ngSwitchCase="'modern'"
+    [title]="title()"
+    [description]="description()"
+    [placeholder]="placeholder()"
+    [buttonText]="buttonText()"
+    [variant]="variant()"
+    [customStyles]="customStyles()"
+    (subscribe)="subscribe.emit($event)">
+  </lib-ui-newsletter-modern>
+
+  <!-- CREATIVE -->
+  <lib-ui-newsletter-creative
+    *ngSwitchCase="'creative'"
+    [title]="title()"
+    [description]="description()"
+    [placeholder]="placeholder()"
+    [buttonText]="buttonText()"
+    [variant]="variant()"
+    [customStyles]="customStyles()"
+    (subscribe)="subscribe.emit($event)">
+  </lib-ui-newsletter-creative>
+
+  <!-- DEFAULT (fallback to classic) -->
+  <div *ngSwitchDefault [ngClass]="['newsletter-section', 'variant-' + variant()]" [ngStyle]="newsletterStyles()">
+    <div class="content">
+      <div class="text-content">
+        <h2>{{ title() }}</h2>
+        <p>{{ description() }}</p>
+      </div>
+      <div class="form-container">
+        <div class="input-wrapper">
+          <lib-ui-components-input
+            [type]="'email'"
+            [placeholder]="placeholder()"
+            [(ngModel)]="email"
+            [variant]="$any(variant())">
+          </lib-ui-components-input>
+        </div>
+        <lib-ui-components-button
+          [variant]="variant() === 'default' ? 'primary' : $any(variant())"
+          [disabled]="isSubmitting"
+          (buttonClick)="onSubmit()">
+          {{ isSubmitting ? '...' : buttonText() }}
+        </lib-ui-components-button>
+      </div>
+      <div class="success-msg" *ngIf="successMessage">
+        {{ successMessage }}
+      </div>
+    </div>
+  </div>
+</ng-container>

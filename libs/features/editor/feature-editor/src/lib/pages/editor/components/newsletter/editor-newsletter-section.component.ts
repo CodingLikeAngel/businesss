@@ -7,7 +7,10 @@ import {
   VisualEditingEvent
 } from '@negocio/shared-components';
 import {
-  UINewsletterSectionComponent
+  UINewsletterSectionComponent,
+  UINewsletterMinimalComponent,
+  UINewsletterModernComponent,
+  UINewsletterCreativeComponent
 } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
@@ -21,6 +24,9 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
   imports: [
     CommonModule,
     UINewsletterSectionComponent,
+    UINewsletterMinimalComponent,
+    UINewsletterModernComponent,
+    UINewsletterCreativeComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective
   ],
@@ -88,5 +94,9 @@ export class EditorNewsletterSectionComponent extends EnhancedBaseEditorSectionC
         transform: `translate(${bounds.x}px, ${bounds.y}px)`
       }
     });
+  }
+
+  getNewsletterSubtype(): string {
+    return this.section.config?.['subtype'] || 'classic';
   }
 }

@@ -3,6 +3,15 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UIInputComponent } from '../forms/input/input.component';
 import { UIButtonComponent } from '../button/button.component';
+import { UINewsletterMinimalComponent } from './newsletter-minimal/newsletter-minimal.component';
+import { UINewsletterModernComponent } from './newsletter-modern/newsletter-modern.component';
+import { UINewsletterCreativeComponent } from './newsletter-creative/newsletter-creative.component';
+import { variants as baseVariants } from '../models/ui-components-data.model';
+
+const newsletterVariants = baseVariants;
+type NewsletterVariantType = typeof newsletterVariants[number] | (string & {});
+
+export type NewsletterSubtype = 'classic' | 'minimal' | 'modern' | 'creative';
 
 export interface NewsletterCustomStyles {
   backgroundColor?: string;
@@ -17,7 +26,15 @@ export interface NewsletterCustomStyles {
 @Component({
   selector: 'lib-ui-newsletter-section',
   standalone: true,
-  imports: [CommonModule, FormsModule, UIInputComponent, UIButtonComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    UIInputComponent,
+    UIButtonComponent,
+    UINewsletterMinimalComponent,
+    UINewsletterModernComponent,
+    UINewsletterCreativeComponent
+  ],
   templateUrl: './newsletter-section.component.html',
   styleUrls: ['./newsletter-section.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -27,7 +44,8 @@ export class UINewsletterSectionComponent {
   description = input('Recibe las últimas noticias y ofertas especiales directamente en tu bandeja de entrada.');
   placeholder = input('Tu correo electrónico');
   buttonText = input('Suscribirse');
-  variant = input('primary');
+  variant = input<NewsletterVariantType>('primary');
+  subtype = input<NewsletterSubtype>('classic');
   customStyles = input<NewsletterCustomStyles>({});
 
   @Output() subscribe = new EventEmitter<string>();
@@ -65,7 +83,7 @@ export class UINewsletterSectionComponent {
   onSubmit() {
     if (!this.email) return;
     this.isSubmitting = true;
-    
+
     setTimeout(() => {
         this.isSubmitting = false;
         this.successMessage = '¡Gracias por suscribirte!';
