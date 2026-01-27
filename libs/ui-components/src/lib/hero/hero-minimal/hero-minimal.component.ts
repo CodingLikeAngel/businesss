@@ -42,6 +42,33 @@ import { CommonModule } from '@angular/common';
           background: #0f172a;
           color: white;
       }
+
+      &.variant-glass {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          color: white;
+          border-radius: 1rem;
+          margin: 1rem;
+          min-height: auto;
+      }
+
+      &.variant-neon {
+          background: #09090b;
+          color: white;
+          border: 1px solid var(--neon-primary, #00f3ff);
+          box-shadow: 0 0 20px rgba(0, 243, 255, 0.1);
+          
+          .minimal-title {
+              text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+          }
+          
+          .pill-badge {
+              border-color: var(--neon-primary, #00f3ff);
+              color: var(--neon-primary, #00f3ff);
+              box-shadow: 0 0 5px var(--neon-primary, #00f3ff);
+          }
+      }
     }
     
     .content-container {

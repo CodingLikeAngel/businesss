@@ -71,6 +71,53 @@ import { CommonModule } from '@angular/common';
               color: #0f172a;
           }
       }
+
+      &.variant-glass {
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      &.variant-neon {
+          background: #0a0a0a;
+          border-top: 1px solid var(--neon-primary, #00f3ff);
+          box-shadow: 0 -4px 20px rgba(0, 243, 255, 0.1);
+          
+          .mega-title {
+              color: var(--neon-primary, #00f3ff);
+              text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+          }
+          
+          .social-circle:hover {
+              background: var(--neon-primary, #00f3ff);
+              box-shadow: 0 0 15px var(--neon-primary, #00f3ff);
+          }
+      }
+
+      &.variant-cyberpunk {
+          background: #000;
+          border-top: 2px solid #facc15;
+          clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+          
+          .mega-title {
+              color: #facc15;
+              text-transform: uppercase;
+              letter-spacing: 2px;
+              font-family: 'Courier New', monospace;
+          }
+          
+          .news-btn {
+              background: #facc15;
+              color: black;
+              border-radius: 0;
+              font-weight: bold;
+              
+              &:hover {
+                  box-shadow: 4px 4px 0 #fff;
+                  transform: translate(-2px, -2px);
+              }
+          }
+      }
     }
     
     .footer-grid {

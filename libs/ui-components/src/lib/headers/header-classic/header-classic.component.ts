@@ -84,6 +84,14 @@ type HeaderVariantType = typeof headerVariants[number] | (string & {});
          .logo { color: #1a1a1a; font-weight: 800; }
          a { color: #444; &:hover { color: var(--primary-color, blue); } }
       }
+
+      &.variant-cyberpunk {
+          background: #000;
+          border-bottom: 2px solid #facc15;
+          .logo { color: #facc15; font-family: 'Courier New'; text-transform: uppercase; }
+          a { color: #facc15; font-family: 'Courier New'; &:hover { text-decoration: underline; background: #facc15; color: black; } }
+          .cta-button { background: #ff003c; color: white; border-radius: 0; box-shadow: 3px 3px 0 #facc15; }
+      }
     }
 
     .header-container {

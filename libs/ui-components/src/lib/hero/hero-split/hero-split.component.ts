@@ -66,6 +66,34 @@ import { CommonModule } from '@angular/common';
               letter-spacing: -0.05em;
           }
       }
+
+      &.variant-cyberpunk {
+          background: #000;
+          color: #facc15;
+          border: 2px solid #facc15;
+          clip-path: polygon(0 0, 100% 0, 100% 95%, 95% 100%, 0 100%);
+          
+          .split-title {
+              font-family: 'Courier New', monospace;
+              text-transform: uppercase;
+              letter-spacing: 2px;
+              background: none;
+              -webkit-text-fill-color: #facc15;
+              text-shadow: 2px 2px 0 #ff003c;
+          }
+          
+          .btn-primary {
+              background: #ff003c;
+              color: white;
+              border-radius: 0;
+              box-shadow: 4px 4px 0 #facc15;
+              
+              &:hover {
+                  transform: translate(-2px, -2px);
+                  box-shadow: 6px 6px 0 #facc15;
+              }
+          }
+      }
     }
     
     .split-container {

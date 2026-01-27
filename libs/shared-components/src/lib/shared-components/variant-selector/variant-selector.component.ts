@@ -415,7 +415,7 @@ export class VariantSelectorComponent implements OnInit {
           // CRITICAL FIX: For components that use section.styles as customStyles input, update section.styles
           // We only do this if the element type corresponds to a major section type, not a sub-element like title or card
           // Removed 'accordion' from this list to prevent coupling
-          const sectionTypes = ['hero', 'features', 'services', 'products', 'testimonials', 'pricing', 'promotions', 'faq', 'gallery', 'contact', 'bubble', 'features', 'stats', 'newsletter', 'steps', 'table', 'breadcrumbs', 'chip', 'spinner', 'chart', 'showcase', 'tabs', 'list', 'navBar', 'cta', 'team', 'blog'];
+          const sectionTypes = ['hero', 'hero-minimal', 'hero-split', 'features', 'services', 'products', 'testimonials', 'pricing', 'promotions', 'faq', 'gallery', 'contact', 'bubble', 'features', 'stats', 'newsletter', 'steps', 'table', 'breadcrumbs', 'chip', 'spinner', 'chart', 'showcase', 'tabs', 'list', 'navBar', 'cta', 'team', 'blog'];
           
           if (sectionTypes.includes(this.selectedElement.type)) {
             updates.styles = styles;

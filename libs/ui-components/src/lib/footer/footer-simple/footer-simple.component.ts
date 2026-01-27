@@ -46,6 +46,28 @@ import { CommonModule } from '@angular/common';
          color: #94a3b8;
          border-top: 1px solid rgba(255,255,255,0.05);
       }
+
+      &.variant-light {
+         background: #f8fafc;
+         color: #475569;
+         border-top: 1px solid #e2e8f0;
+         .brand-name { color: #0f172a; }
+      }
+
+      &.variant-glass {
+         background: rgba(255, 255, 255, 0.05);
+         backdrop-filter: blur(10px);
+         border-top: 1px solid rgba(255, 255, 255, 0.1);
+         color: white;
+         .brand-name { color: white; }
+      }
+
+      &.variant-neon {
+         background: black;
+         border-top: 1px solid var(--neon-primary, #00f3ff);
+         box-shadow: 0 -4px 15px rgba(0, 243, 255, 0.1);
+         .brand-name { color: var(--neon-primary, #00f3ff); text-shadow: 0 0 10px rgba(0, 243, 255, 0.5); }
+      }
     }
     
     .footer-container {
