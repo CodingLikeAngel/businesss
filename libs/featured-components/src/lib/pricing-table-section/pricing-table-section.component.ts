@@ -1,6 +1,6 @@
 import { Component, input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UITableComponent, TableColumn, TableRow } from '../table/table.component';
+import { UITableComponent, TableColumn, TableRow } from '@negocio/ui-components';
 import { CustomStyles } from '../models/custom-styles.interface';
 
 @Component({

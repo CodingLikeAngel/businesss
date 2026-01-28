@@ -59,28 +59,28 @@
     <!-- Sección FAQ -->
     <section id="faq" class="relative z-20 ">
       <div class="p-8 rounded-2xl">
-        <lib-faq-section [variant]="selectedVariant" [faqItems]="faqItems"></lib-faq-section>
+        <lib-ui-faq-section [variant]="selectedVariant" [items]="faqItems"></lib-ui-faq-section>
       </div>
     </section>
 
     <!-- Sección Precios -->
     <section id="precios" class="relative z-20  px-4 ">
       <div >
-        <lib-pricing-section [variant]="selectedVariant" [priceColumns]="priceColumns" [priceRows]="priceRows"></lib-pricing-section>
+        <lib-ui-pricing-table-section [variant]="selectedVariant" [columns]="priceColumns" [rows]="priceRows"></lib-ui-pricing-table-section>
       </div>
     </section>
 
     <!-- Sección Promociones -->
     <section id="promociones" class="relative z-20 ">
       <div class="p-14">
-        <lib-promotions-section [selectedVariant]="selectedVariant" [variant]="selectedVariant" [premiumCardConfigs]="premiumCardConfigs"></lib-promotions-section>
+        <lib-promotions-section [variant]="selectedVariant" [items]="premiumCardConfigs"></lib-promotions-section>
       </div>
     </section>
 
     <!-- Sección Galería -->
     <section id="galeria" class="relative z-20  p-4">
       <div class=" ">
-        <lib-gallery-section [variant]="selectedVariant" [images]="allGalleryConfigs[0].images"></lib-gallery-section>
+        <lib-ui-components-gallery-section [variant]="selectedVariant" [images]="allGalleryConfigs[0].images"></lib-ui-components-gallery-section>
       </div>
     </section>
 

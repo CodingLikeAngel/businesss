@@ -3,9 +3,7 @@ import { Component, input, output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
-import { UIButtonComponent } from '../button/button.component';
-import { UIInputComponent } from '../forms/input/input.component';
-import { UITitleComponent } from '../title/title.component';
+import { UIButtonComponent, UIInputComponent, UITitleComponent } from '@negocio/ui-components';
 import { variants } from '../models/ui-components-data.model';export interface ContactCustomStyles {
   backgroundColor?: string;
   color?: string;

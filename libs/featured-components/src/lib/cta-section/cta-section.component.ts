@@ -1,6 +1,6 @@
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UIButtonComponent } from '../button/button.component';
+import { UIButtonComponent } from '@negocio/ui-components';
 
 @Component({
   selector: 'lib-ui-cta-section',

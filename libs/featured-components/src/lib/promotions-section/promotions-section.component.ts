@@ -4,8 +4,8 @@ import {
   UICardPremiumComponent,
   UIChipComponent,
   UITooltipComponent,
-} from '../../index';
-import { CardPremiumConfig } from '../cards/card-premium/card-premium.component';
+} from '@negocio/ui-components';
+import { CardPremiumConfig } from '@negocio/ui-components';
 import { CustomStyles } from '../models/custom-styles.interface';
 
 @Component({

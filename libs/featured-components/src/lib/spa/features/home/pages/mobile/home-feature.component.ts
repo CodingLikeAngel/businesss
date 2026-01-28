@@ -4,8 +4,10 @@ import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VariantRotationService } from '@negocio/shared-components';
 import {
+  UIHeroSectionComponent
+} from '@negocio/featured-components';
+import {
   UINavBarComponent,
-  UIHeroSectionComponent,
   UITabsComponent,
   CardVariant,
   AccordionItem,

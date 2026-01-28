@@ -4,8 +4,16 @@ import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VariantRotationService } from '@negocio/shared-components';
 import {
-  UINavBarComponent,
   UIHeroSectionComponent,
+  FaqSectionComponent,
+  GallerySectionComponent,
+  PricingSectionComponent,
+  PromotionsSectionComponent,
+  ReservationFormComponent,
+  ServiceSectionComponent
+} from '@negocio/featured-components';
+import {
+  UINavBarComponent,
   UITabsComponent,
   CardVariant,
   AccordionItem,
@@ -18,7 +26,6 @@ import {
   BubbleAnimationComponent,
   BubbleConfig,
 } from '@negocio/ui-components';
-import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
 
 
 const VARIANTS = [

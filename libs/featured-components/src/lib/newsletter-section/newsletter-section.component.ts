@@ -1,8 +1,7 @@
 import { Component, Output, EventEmitter, ViewEncapsulation, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UIInputComponent } from '../forms/input/input.component';
-import { UIButtonComponent } from '../button/button.component';
+import { UIInputComponent, UIButtonComponent } from '@negocio/ui-components';
 import { UINewsletterMinimalComponent } from './newsletter-minimal/newsletter-minimal.component';
 import { UINewsletterModernComponent } from './newsletter-modern/newsletter-modern.component';
 import { UINewsletterCreativeComponent } from './newsletter-creative/newsletter-creative.component';

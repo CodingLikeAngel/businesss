@@ -4,7 +4,6 @@ import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VariantRotationService } from '@negocio/shared-components';
 import {
-
   UITabsComponent,
   CardVariant,
   AccordionItem,
@@ -18,12 +17,18 @@ import {
   BubbleAnimationComponent,
   BubbleConfig,
   UIButtonComponent,
+  UINavBarComponent as LibUINavBarComponent,
+  UINavBarComponent
 } from '@negocio/ui-components';
-import { UINavBarComponent as LibUINavBarComponent } from '@negocio/ui-components';
-import { UIHeroSectionComponent as LibUIHeroSectionComponent } from '@negocio/ui-components';
-import { UIHeroSectionComponent } from '@negocio/ui-components';
-import { UINavBarComponent } from '@negocio/ui-components';
-import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
+import {
+  UIHeroSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent,
+  PromotionsSectionComponent,
+  ReservationFormComponent,
+  ServiceSectionComponent
+} from '@negocio/featured-components';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 const VARIANTS = [
@@ -50,16 +55,14 @@ type VariantType = typeof VARIANTS[number];
   imports: [
     CommonModule,
     RouterModule,
-    LibUINavBarComponent,
-    LibUIHeroSectionComponent,
     UINavBarComponent,
     UIHeroSectionComponent,
     UITabsComponent,
     ReservationFormComponent,
     // ServiceSectionComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
+    UIFaqSectionComponent,
+    UIPricingTableSectionComponent,
+    UIGallerySectionComponent,
     PromotionsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,

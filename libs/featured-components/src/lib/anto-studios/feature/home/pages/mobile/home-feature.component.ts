@@ -3,21 +3,23 @@ import { BaseHomeFeatureComponent } from '../base-home-feature.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { 
-  UIHeroSectionComponent, 
-  UIModalComponent, 
-  UICardRutasComponent, 
-  BubbleAnimationComponent, 
-  UITitleComponent, 
-  UiCardProductsComponent, 
-  UITestimonialsSectionComponent, 
-  UICardAnimatedComponent, 
-  UICardComponent,
+import {
+  UIModalComponent,
+  UICardRutasComponent,
+  BubbleAnimationComponent,
+  UITitleComponent,
+  UiCardProductsComponent,
+  UICardAnimatedComponent,
+  UICardComponent
+} from '@negocio/ui-components';
+import {
+  UIHeroSectionComponent,
   UIFaqSectionComponent,
   UIGallerySectionComponent,
   UIPricingTableSectionComponent,
-  PromotionsSectionComponent
-} from '@negocio/ui-components';
+  PromotionsSectionComponent,
+  UITestimonialsSectionComponent
+} from '@negocio/featured-components';
 import { ReservationFormComponent } from '../../components/reservation-form/reservation-form.component';
 import { Product } from '@negocio/shared-components';
 
@@ -37,14 +39,14 @@ import { Product } from '@negocio/shared-components';
     UIPricingTableSectionComponent,
     UIGallerySectionComponent,
     PromotionsSectionComponent,
+    UITestimonialsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,
     UITitleComponent,
     UiCardProductsComponent,
-    UITestimonialsSectionComponent,
-    UICardAnimatedComponent,
-    UICardComponent
+    UICardComponent,
+    UICardAnimatedComponent
   ],
 })
 export class HomeMobileFeatureComponent extends BaseHomeFeatureComponent implements OnInit {

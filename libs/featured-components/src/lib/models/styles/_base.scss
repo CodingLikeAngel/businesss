@@ -1,0 +1,4 @@
+@use "sass:map";
+@use "./variables" as var;
+@use "sass:color";
+/* Removed external Google Fonts import to avoid network inlining during build */

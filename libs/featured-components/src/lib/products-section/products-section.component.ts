@@ -1,6 +1,6 @@
 import { Component, input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UICardComponent } from '../cards/card/card.component';
+import { UICardComponent } from '@negocio/ui-components';
 import { CustomStyles } from '../models/custom-styles.interface';
 
 export interface Product {

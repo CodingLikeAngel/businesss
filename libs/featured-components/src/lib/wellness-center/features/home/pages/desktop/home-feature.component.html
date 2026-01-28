@@ -58,17 +58,17 @@
   </div>
 </section>
 
-<section id="faq" class="relative z-20">
+  <section id="faq" class="relative z-20">
   <div class="container mx-auto px-6 max-w-7xl">
     <div class="rounded-2xl">
-      <lib-faq-section [variant]="getVariant('faq')" [faqItems]="faqItems"></lib-faq-section>
+      <lib-ui-faq-section [variant]="getVariant('faq')" [faqItems]="faqItems"></lib-ui-faq-section>
     </div>
   </div>
 </section>
 
 <section id="precios" class="relative z-20">
   <div class="container mx-auto px-6 max-w-7xl">
-    <lib-pricing-section [variant]="getVariant('pricing')" [priceColumns]="priceColumns" [priceRows]="priceRows"></lib-pricing-section>
+    <lib-ui-pricing-table-section [variant]="getVariant('pricing')" [priceColumns]="priceColumns" [priceRows]="priceRows"></lib-ui-pricing-table-section>
   </div>
 </section>
 
@@ -86,7 +86,7 @@
 
 <section id="galeria" class="relative z-20">
   <div class="container mx-auto px-6 max-w-7xl">
-    <lib-gallery-section [variant]="getVariant('gallery')" [images]="allGalleryConfigs[0].images"></lib-gallery-section>
+    <lib-ui-gallery-section [variant]="getVariant('gallery')" [images]="allGalleryConfigs[0].images"></lib-ui-gallery-section>
   </div>
 </section>
 

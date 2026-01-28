@@ -1,6 +1,6 @@
 import { Component, input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UIAccordionComponent } from '../acordeon/accordion.component';
+import { UIAccordionComponent } from '@negocio/ui-components';
 import { CustomStyles } from '../models/custom-styles.interface';
 
 export interface FaqItem {

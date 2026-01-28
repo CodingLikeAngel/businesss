@@ -1,8 +1,7 @@
 import { Component, Output, EventEmitter, ViewEncapsulation, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UIInputComponent } from '../../forms/input/input.component';
-import { UIButtonComponent } from '../../button/button.component';
+import { UIInputComponent, UIButtonComponent } from '@negocio/ui-components';
 import { variants as baseVariants } from '../../models/ui-components-data.model';
 
 const newsletterMinimalVariants = baseVariants;

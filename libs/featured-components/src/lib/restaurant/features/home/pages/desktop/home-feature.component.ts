@@ -14,20 +14,21 @@ import {
   UIPricingTableSectionComponent,
   UIHeroSectionComponent,
   PromotionsSectionComponent,
+  ReservationFormComponent
+} from '@negocio/featured-components';
+import {
   UINavBarComponent,
   UICardRutasComponent,
   BubbleAnimationComponent,
   UITitleComponent,
   UIFooterComponent,
   UIModalComponent,
-  StatItem,
   CardVariant,
   AccordionItem,
   TableColumn,
   TableRow,
   CardPremiumConfig
 } from '@negocio/ui-components';
-import { ReservationFormComponent } from '@negocio/featured-components';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
@@ -258,7 +259,7 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
     },
   ];
 
-  restaurantStats: StatItem[] = [
+  restaurantStats: any[] = [
     {
       icon: '🍽️',
       label: 'Platos Servidos',

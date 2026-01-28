@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { VariantRotationService } from '@negocio/shared-components';
 import {
   UINavBarComponent,
-  UIHeroSectionComponent,
   UITabsComponent,
   CardVariant,
   AccordionItem,
@@ -18,12 +17,15 @@ import {
   BubbleAnimationComponent,
   BubbleConfig,
 } from '@negocio/ui-components';
-import { FaqSectionComponent } from '../home/components/faq-section/faq-section.component';
-import { GallerySectionComponent } from '../home/components/gallery-section/gallery-section.component';
-import { PricingSectionComponent } from '../home/components/pricing-section/pricing-section.component';
-import { PromotionsSectionComponent } from '../home/components/promotions-section/promotions-section.component';
-import { ReservationFormComponent } from '../home/components/reservation-form/reservation-form.component';
-import { ServiceSectionComponent } from '../home/components/service-section/service-section.component';
+import {
+  UIHeroSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent,
+  PromotionsSectionComponent,
+  ReservationFormComponent,
+  ServiceSectionComponent
+} from '@negocio/featured-components';
 
 
 const VARIANTS = [
@@ -52,9 +54,9 @@ type VariantType = typeof VARIANTS[number];
     UITabsComponent,
     ReservationFormComponent,
     // ServiceSectionComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
+    UIFaqSectionComponent,
+    UIPricingTableSectionComponent,
+    UIGallerySectionComponent,
     PromotionsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,

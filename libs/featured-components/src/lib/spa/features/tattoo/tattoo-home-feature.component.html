@@ -78,28 +78,28 @@
     <!-- Sección FAQ -->
     <section id="faq" class="mb-16 relative">
       <div class="bg-[rgba(255,255,255,0.05)] backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(255,30,86,0.3)]">
-        <lib-faq-section [variant]="selectedVariant" [faqItems]="faqItems"></lib-faq-section>
+        <lib-ui-faq-section [variant]="selectedVariant" [items]="faqItems"></lib-ui-faq-section>
       </div>
     </section>
 
     <!-- Sección Precios -->
     <section id="precios" class="mb-16 relative">
       <div class="bg-[rgba(255,255,255,0.05)] backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(255,30,86,0.3)]">
-        <lib-pricing-section [variant]="selectedVariant" [priceColumns]="priceColumns" [priceRows]="priceRows"></lib-pricing-section>
+        <lib-ui-pricing-table-section [variant]="selectedVariant" [columns]="priceColumns" [rows]="priceRows"></lib-ui-pricing-table-section>
       </div>
     </section>
 
     <!-- Sección Promociones -->
     <section id="promociones" class="mb-16 relative">
       <div class="bg-[rgba(255,255,255,0.05)] backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(255,30,86,0.3)]">
-        <lib-promotions-section [selectedVariant]="selectedVariant" [variant]="selectedVariant" [premiumCardConfigs]="premiumCardConfigs"></lib-promotions-section>
+        <lib-promotions-section [variant]="selectedVariant" [items]="premiumCardConfigs"></lib-promotions-section>
       </div>
     </section>
 
     <!-- Sección Galería -->
     <section id="galeria" class="mb-16 relative">
       <div class="bg-[rgba(255,255,255,0.05)] backdrop-blur-xl p-8 rounded-2xl shadow-[0_10px_40px_rgba(255,30,86,0.3)]">
-        <lib-gallery-section [variant]="selectedVariant" [images]="allGalleryConfigs[0].images"></lib-gallery-section>
+        <lib-ui-components-gallery-section [variant]="selectedVariant" [images]="allGalleryConfigs[0].images"></lib-ui-components-gallery-section>
       </div>
     </section>
 

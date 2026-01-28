@@ -17,12 +17,17 @@ import {
   BubbleAnimationComponent,
   BubbleConfig as BubbleAnimationConfig,
   UIFooterComponent,
+  UINavBarComponent,
 } from '@negocio/ui-components';
-import { UINavBarComponent as LibUINavBarComponent } from '@negocio/ui-components';
-import { UIHeroSectionComponent as LibUIHeroSectionComponent } from '@negocio/ui-components';
-import { UIHeroSectionComponent } from '@negocio/ui-components';
-import { UINavBarComponent } from '@negocio/ui-components';
-import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent, ServiceSectionComponent } from '@negocio/featured-components';
+import {
+  UIHeroSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent,
+  PromotionsSectionComponent,
+  ReservationFormComponent,
+  ServiceSectionComponent
+} from '@negocio/featured-components';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 @Component({
@@ -31,12 +36,11 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
   imports: [
     CommonModule,
     RouterModule,
-    LibUINavBarComponent,
     UINavBarComponent,
     ReservationFormComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
+    UIFaqSectionComponent,
+    UIPricingTableSectionComponent,
+    UIGallerySectionComponent,
     PromotionsSectionComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,

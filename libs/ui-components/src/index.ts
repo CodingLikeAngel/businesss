@@ -45,18 +45,11 @@ export * from './lib/animations/forest/forest-animation.component';
 export * from './lib/animations/water/water-animation.component';
 export * from './lib/bubble/bubble-animation.component';
 
-export * from './lib/products-section/products-section.component';
-export * from './lib/pricing-table-section/pricing-table-section.component';
-
 // Models
 export * from './lib/models/ui-components-data.model';
 
 // New Components
 export * from './lib/breadcrumbs/breadcrumbs.component';
-export * from './lib/contact-section/contact-section.component';
-export * from './lib/promotions-section/promotions-section.component';
-export * from './lib/cta-section/cta-section.component';
-export * from './lib/reservation-form/reservation-form.component';
 export * from './lib/draggable-box/draggable-box.component';
 
 // Showcase Components

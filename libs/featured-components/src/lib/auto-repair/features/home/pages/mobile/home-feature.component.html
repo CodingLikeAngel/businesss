@@ -40,13 +40,13 @@
   </div>
 </div>
 
-<lib-faq-section [faqItems]="faqItems" [variant]="getVariant('faq')"></lib-faq-section>
+<lib-ui-faq-section [items]="faqItems" [variant]="getVariant('faq')"></lib-ui-faq-section>
 
-<lib-pricing-section [priceColumns]="priceColumns" [priceRows]="priceRows" [variant]="getVariant('pricing')"></lib-pricing-section>
+<lib-ui-pricing-table-section [columns]="priceColumns" [rows]="priceRows" [variant]="getVariant('pricing')"></lib-ui-pricing-table-section>
 
-<lib-gallery-section [images]="allGalleryConfigs[0].images" [variant]="getVariant('gallery')"></lib-gallery-section>
+<lib-ui-components-gallery-section [images]="allGalleryConfigs[0].images" [variant]="getVariant('gallery')"></lib-ui-components-gallery-section>
 
-<lib-promotions-section [premiumCardConfigs]="premiumCardConfigs" [variant]="getVariant('promotions')"></lib-promotions-section>
+<lib-promotions-section [items]="premiumCardConfigs" [variant]="getVariant('promotions')"></lib-promotions-section>
 
 <lib-reservation-form [variant]="getVariant('reservation')"></lib-reservation-form>
 

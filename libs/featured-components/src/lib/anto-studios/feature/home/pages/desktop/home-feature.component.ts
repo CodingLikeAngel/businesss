@@ -3,20 +3,22 @@ import { BaseHomeFeatureComponent } from '../base-home-feature.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { 
-  UIHeroSectionComponent, 
-  UIModalComponent, 
-  UICardRutasComponent, 
-  BubbleAnimationComponent, 
-  UITitleComponent, 
-  UITestimonialsSectionComponent, 
-  UICardAnimatedComponent, 
-  UIStatsLibSectionComponent, 
-  UIStepsSectionComponent, 
+import {
+  UIModalComponent,
+  UICardRutasComponent,
+  BubbleAnimationComponent,
+  UITitleComponent,
+  UICardAnimatedComponent,
   UIGamingVariantsShowcaseComponent,
+} from '@negocio/ui-components';
+import {
+  UIHeroSectionComponent,
+  UITestimonialsSectionComponent,
+  UIStatsLibSectionComponent,
+  UIStepsSectionComponent,
   StatItem,
   Step
-} from '@negocio/ui-components';
+} from '@negocio/featured-components';
 import { ReservationFormComponent } from '../../components/reservation-form/reservation-form.component';
 import { Product } from '@negocio/shared-components';
 

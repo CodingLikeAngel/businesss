@@ -13,6 +13,16 @@ export * from './lib/faq-section/faq-section.component';
 export * from './lib/hero/hero.component';
 export * from './lib/hero/hero-minimal/hero-minimal.component';
 export * from './lib/hero/hero-split/hero-split.component';
+export * from './lib/reservation-form/reservation-form.component';
+export * from './lib/pricing-table-section/pricing-table-section.component';
+export * from './lib/products-section/products-section.component';
+export * from './lib/promotions-section/promotions-section.component';
+export * from './lib/cta-section/cta-section.component';
+export * from './lib/contact-section/contact-section.component';
+
+// Export models used by section components
+export type { StatItem } from './lib/stats-section/stats-section.component';
+export type { Step } from './lib/steps-section/steps-section.component';
 
 export * from './lib/shared/features/about/feature-about/src/lib/feature-about/pages/about/desktop/feature-about-page.component';
 export * from './lib/shared/features/about/feature-about/src/lib/feature-about/pages/about/mobile/feature-about-page.component';
@@ -24,14 +34,6 @@ export * from './lib/shared/features/about/shell/src/lib/feature-about-shell/des
 export * from './lib/shared/features/about/shell/src/lib/feature-about-shell/mobile.shell';
 export * from './lib/shared/features/contact/shell/src/lib/feature-contact-shell/desktop.shell';
 export * from './lib/shared/features/contact/shell/src/lib/feature-contact-shell/mobile.shell';
-
-// Home components
-export * from './lib/training-institute/features/home/components/faq-section/faq-section.component';
-export * from './lib/training-institute/features/home/components/gallery-section/gallery-section.component';
-export * from './lib/training-institute/features/home/components/pricing-section/pricing-section.component';
-export * from './lib/training-institute/features/home/components/promotions-section/promotions-section.component';
-export * from './lib/training-institute/features/home/components/reservation-form/reservation-form.component';
-export * from './lib/training-institute/features/home/components/service-section/service-section.component';
 
 // Features
 export * from './lib/spa/features/about/about-feature.component';

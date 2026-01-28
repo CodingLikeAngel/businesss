@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output, ViewEncapsulation, input, computed } f
 import { CommonModule } from '@angular/common';
 
 import { CustomStyles } from '../models/custom-styles.interface';
-import { UICardComponent } from '../cards/card/card.component';
+import { UICardComponent } from '@negocio/ui-components';
 
 export interface ServiceItem {
   title: string;

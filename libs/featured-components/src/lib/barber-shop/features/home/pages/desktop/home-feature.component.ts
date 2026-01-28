@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { VariantService, NavBarConfig, HeroConfig, FooterConfig, BubbleConfig } from '@negocio/shared-components';
 import {
   UINavBarComponent,
-  UIHeroSectionComponent,
   CardVariant,
   AccordionItem,
   TableColumn,
@@ -17,15 +16,17 @@ import {
   UICardRutasComponent,
   BubbleAnimationComponent,
   UIFooterComponent,
+  UIAccordionComponent
+} from '@negocio/ui-components';
+import {
+  UIHeroSectionComponent,
   UIStatsLibSectionComponent,
-  StatItem,
-  UIAccordionComponent,
   UIGallerySectionComponent,
   UIPricingTableSectionComponent,
   PromotionsSectionComponent,
-  ProductsSectionComponent
-} from '@negocio/ui-components';
-import { ReservationFormComponent } from '@negocio/featured-components';
+  ProductsSectionComponent,
+  ReservationFormComponent
+} from '@negocio/featured-components';
 
 @Component({
   selector: 'lib-home-feature',
@@ -68,7 +69,7 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   footerConfig: FooterConfig;
   bubbleConfig: BubbleConfig;
 
-  barberStats: StatItem[] = [
+  barberStats: any[] = [
     { icon: '✂️', label: 'Cortes Master', value: '15k+', description: 'Estilos perfeccionados', progress: 95, trend: 'up' },
     { icon: '💈', label: 'Tradición', value: '12', description: 'Años al servicio', trend: 'stable' },
     { icon: '⭐', label: 'Valoración', value: '4.9', description: 'Media de 5k reseñas', progress: 98, trend: 'up' },

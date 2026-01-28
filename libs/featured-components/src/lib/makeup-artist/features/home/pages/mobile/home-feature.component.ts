@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { VariantRotationService } from '@negocio/shared-components';
 import {
   UINavBarComponent,
-  UIHeroSectionComponent,
   UITabsComponent,
   CardVariant,
   AccordionItem,
@@ -20,7 +19,14 @@ import {
   BubbleConfig,
   UIButtonComponent,
 } from '@negocio/ui-components';
-import { FaqSectionComponent, GallerySectionComponent, PricingSectionComponent, PromotionsSectionComponent, ReservationFormComponent } from '@negocio/featured-components';
+import {
+  UIHeroSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent,
+  PromotionsSectionComponent,
+  ReservationFormComponent
+} from '@negocio/featured-components';
 
 const VARIANTS = [
   'jungle',
@@ -47,9 +53,9 @@ type VariantType = typeof VARIANTS[number];
     UIHeroSectionComponent,
     UITabsComponent,
     ReservationFormComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
+    UIFaqSectionComponent,
+    UIPricingTableSectionComponent,
+    UIGallerySectionComponent,
     PromotionsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,

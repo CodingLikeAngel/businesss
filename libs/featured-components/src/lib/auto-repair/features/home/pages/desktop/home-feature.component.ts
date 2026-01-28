@@ -4,6 +4,21 @@ import { RouterModule } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { VariantService, NavBarConfig, HeroConfig, FooterConfig, BubbleConfig } from '@negocio/shared-components';
 import {
+  UINavBarComponent,
+  CardVariant,
+  AccordionItem,
+  TableColumn,
+  TableRow,
+  GalleryImage,
+  UITitleComponent,
+  CardPremiumConfig,
+  UIModalComponent,
+  UICardRutasComponent,
+  BubbleAnimationComponent,
+  BubbleConfig as BubbleAnimationConfig,
+  UIFooterComponent,
+} from '@negocio/ui-components';
+import {
   UIStatsLibSectionComponent,
   UIFeaturesSectionComponent,
   UITestimonialsSectionComponent,
@@ -13,19 +28,8 @@ import {
   UIPricingTableSectionComponent,
   UIHeroSectionComponent,
   PromotionsSectionComponent,
-  UINavBarComponent,
-  UICardRutasComponent,
-  BubbleAnimationComponent,
-  UITitleComponent,
-  UIFooterComponent,
-  UIModalComponent,
-  CardVariant,
-  AccordionItem,
-  TableColumn,
-  TableRow,
-  CardPremiumConfig
-} from '@negocio/ui-components';
-import { ReservationFormComponent } from '@negocio/featured-components';
+  ReservationFormComponent
+} from '@negocio/featured-components';
 
 @Component({
   selector: 'lib-home-feature',
@@ -40,15 +44,15 @@ import { ReservationFormComponent } from '@negocio/featured-components';
     UIPricingTableSectionComponent,
     UIGallerySectionComponent,
     PromotionsSectionComponent,
+    UIModalComponent,
+    UICardRutasComponent,
     BubbleAnimationComponent,
     UITitleComponent,
-    UICardRutasComponent,
     UIFooterComponent,
     UIStatsLibSectionComponent,
     UIFeaturesSectionComponent,
     UITestimonialsSectionComponent,
-    UINewsletterSectionComponent,
-    UIModalComponent
+    UINewsletterSectionComponent
   ],
   templateUrl: './home-feature.component.html',
   styles: [`
@@ -100,9 +104,8 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
   priceRows: TableRow[] = [
     { service: 'Cambio de Aceite', description: 'Aceite sintético 5W30 + Filtro de aceite', price: '65€' },
     { service: 'Carga de Aire', description: 'Recarga de gas refrigerante R134a', price: '50€' },
-    { service: 'Revisión Pre-ITV', description: 'Inspección de 40 puntos de seguridad', price: '45€' },
-    { service: 'Diagnosis Ecu', description: 'Lectura de fallos y borrado de códigos', price: '30€' },
-    { service: 'Pastillas Freno', description: 'Sustitución eje delantero (Mano de obra)', price: '60€' },
+    { service: 'Diagnóstico ECU', description: 'Lectura de fallos y borrado de códigos', price: '30€' },
+    { service: 'Pastillas Freno', description: 'Sustitución y equilibrado (Mano de obra)', price: '60€' },
   ];
 
   repairStats = [
@@ -145,13 +148,13 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
     {
       author: 'Marta Jiménez',
       role: 'Empresaria',
-      quote: 'Gestionan la flota de mi empresa. Rapidez increíble y precios muy competitivos.',
+      quote: 'Gestionando la flota de mi empresa. Rapidez increíble y precios muy competitivos.',
       avatar: 'https://i.pravatar.cc/150?u=marta'
     },
     {
       author: 'Juan Pérez',
       role: 'Conductor Profesional',
-      quote: 'Los mejores diagnosticando averías eléctricas que nadie más sabía arreglar.',
+      quote: 'Los mejores diagnósticos y averías eléctricas que nadie más sabía arreglar.',
       avatar: 'https://i.pravatar.cc/150?u=juan'
     }
   ];
@@ -344,9 +347,9 @@ export class HomeDesktopFeatureComponent implements OnDestroy, OnInit {
       'default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass',
       'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano',
       'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud',
-      'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum',
+      'fire', 'water', 'leaf', 'amber-low', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum',
       'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew',
-      'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal',
+      'orange-dash', 'indigo-dots', 'bubble', 'electron', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal',
       'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs',
       'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void',
       'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua',

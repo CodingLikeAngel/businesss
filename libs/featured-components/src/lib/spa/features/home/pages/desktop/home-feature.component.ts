@@ -14,6 +14,9 @@ import {
   UIPricingTableSectionComponent,
   UIHeroSectionComponent,
   PromotionsSectionComponent,
+  ReservationFormComponent
+} from '@negocio/featured-components';
+import {
   UINavBarComponent,
   UICardRutasComponent,
   BubbleAnimationComponent,
@@ -26,7 +29,6 @@ import {
   TableRow,
   CardPremiumConfig
 } from '@negocio/ui-components';
-import { ReservationFormComponent } from '@negocio/featured-components';
 
 @Component({
   selector: 'lib-home-feature',

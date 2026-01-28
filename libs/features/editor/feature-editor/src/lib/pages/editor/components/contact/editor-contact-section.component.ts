@@ -8,7 +8,7 @@ import {
   VisualEditingEvent
 } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
-import { UIContactSectionComponent } from '@negocio/ui-components';
+import { UIContactSectionComponent } from '@negocio/featured-components';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 
 /**

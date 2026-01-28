@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { VariantService, NavBarConfig, HeroConfig, FooterConfig, BubbleConfig } from '@negocio/shared-components';
 import {
   UINavBarComponent,
-  UIHeroSectionComponent,
   CardVariant,
   AccordionItem,
   TableColumn,
@@ -18,19 +17,22 @@ import {
   BubbleAnimationComponent,
   BubbleConfig as BubbleAnimationConfig,
   UIFooterComponent,
+  UIChartComponent,
+  ChartData,
+} from '@negocio/ui-components';
+import {
+  UIHeroSectionComponent,
   UIStatsLibSectionComponent,
   StatItem,
   UIStepsSectionComponent,
-  UIChartComponent,
-  ChartData,
   PromotionsSectionComponent,
   UIFaqSectionComponent,
   UIGallerySectionComponent,
   UIPricingTableSectionComponent,
   ProductsSectionComponent,
-  UINewsletterSectionComponent
-} from '@negocio/ui-components';
-import { ReservationFormComponent } from '@negocio/featured-components';
+  UINewsletterSectionComponent,
+  ReservationFormComponent
+} from '@negocio/featured-components';
 
 @Component({
   selector: 'lib-home-feature',

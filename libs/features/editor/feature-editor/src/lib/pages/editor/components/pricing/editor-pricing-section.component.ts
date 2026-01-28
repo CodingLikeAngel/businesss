@@ -9,7 +9,7 @@ import {
 } from '@negocio/shared-components';
 import {
   UIPricingTableSectionComponent
-} from '@negocio/ui-components';
+} from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
 /**

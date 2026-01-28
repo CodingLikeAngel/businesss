@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs';
 import { VariantService, NavBarConfig, HeroConfig, FooterConfig, BubbleConfig } from '@negocio/shared-components';
 import {
   UINavBarComponent,
-  UIHeroSectionComponent,
   CardVariant,
   AccordionItem,
   TableColumn,
@@ -19,11 +18,14 @@ import {
   BubbleConfig as BubbleAnimationConfig,
   UIFooterComponent,
 } from '@negocio/ui-components';
-import { FaqSectionComponent } from '../../components/faq-section/faq-section.component';
-import { GallerySectionComponent } from '../../components/gallery-section/gallery-section.component';
-import { PricingSectionComponent } from '../../components/pricing-section/pricing-section.component';
-import { PromotionsSectionComponent } from '../../components/promotions-section/promotions-section.component';
-import { ReservationFormComponent } from '../../components/reservation-form/reservation-form.component';
+import {
+  UIHeroSectionComponent,
+  UIFaqSectionComponent,
+  UIGallerySectionComponent,
+  UIPricingTableSectionComponent,
+  PromotionsSectionComponent,
+  ReservationFormComponent
+} from '@negocio/featured-components';
 
 @Component({
   selector: 'lib-home-feature',
@@ -34,9 +36,9 @@ import { ReservationFormComponent } from '../../components/reservation-form/rese
     UINavBarComponent,
     UIHeroSectionComponent,
     ReservationFormComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
+    UIFaqSectionComponent,
+    UIPricingTableSectionComponent,
+    UIGallerySectionComponent,
     PromotionsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,
