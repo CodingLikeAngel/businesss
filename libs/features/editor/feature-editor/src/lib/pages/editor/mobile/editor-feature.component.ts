@@ -39,7 +39,25 @@ import { EditorButtonSectionComponent } from '../components/button/editor-button
 import { EditorImageSectionComponent } from '../components/image/editor-image-section.component';
 import { EditorSmartContainerSectionComponent } from '../components/smart-container/editor-smart-container-section.component';
 import { EditorDraggableBoxSectionComponent } from '../components/draggable-box/editor-draggable-box-section.component';
+import { EditorDraggableBox1SectionComponent } from '../components/draggable-box/editor-draggable-box-1-section.component';
+import { EditorDraggableBox2SectionComponent } from '../components/draggable-box/editor-draggable-box-2-section.component';
+import { EditorDraggableBox3SectionComponent } from '../components/draggable-box/editor-draggable-box-3-section.component';
 import { EditorGenericSectionComponent } from '../components/generic/editor-generic-section.component';
+import { EditorNavBar1SectionComponent } from '../components/nav-bar/editor-nav-bar-1-section.component';
+import { EditorNavBar2SectionComponent } from '../components/nav-bar/editor-nav-bar-2-section.component';
+import { EditorNavBar3SectionComponent } from '../components/nav-bar/editor-nav-bar-3-section.component';
+import { EditorGallery1SectionComponent } from '../components/gallery/editor-gallery-1-section.component';
+import { EditorGallery2SectionComponent } from '../components/gallery/editor-gallery-2-section.component';
+import { EditorGallery3SectionComponent } from '../components/gallery/editor-gallery-3-section.component';
+import { EditorChart1SectionComponent } from '../components/chart/editor-chart-1-section.component';
+import { EditorChart2SectionComponent } from '../components/chart/editor-chart-2-section.component';
+import { EditorChart3SectionComponent } from '../components/chart/editor-chart-3-section.component';
+import { EditorAccordion1SectionComponent } from '../components/accordion/editor-accordion-1-section.component';
+import { EditorAccordion2SectionComponent } from '../components/accordion/editor-accordion-2-section.component';
+import { EditorAccordion3SectionComponent } from '../components/accordion/editor-accordion-3-section.component';
+import { EditorBreadcrumbs1SectionComponent } from '../components/breadcrumbs/editor-breadcrumbs-1-section.component';
+import { EditorBreadcrumbs2SectionComponent } from '../components/breadcrumbs/editor-breadcrumbs-2-section.component';
+import { EditorBreadcrumbs3SectionComponent } from '../components/breadcrumbs/editor-breadcrumbs-3-section.component';
 
 @Component({
   selector: 'lib-editor-mobile-feature',
@@ -85,7 +103,25 @@ import { EditorGenericSectionComponent } from '../components/generic/editor-gene
     EditorImageSectionComponent,
     EditorSmartContainerSectionComponent,
     EditorDraggableBoxSectionComponent,
-    EditorGenericSectionComponent
+    EditorDraggableBox1SectionComponent,
+    EditorDraggableBox2SectionComponent,
+    EditorDraggableBox3SectionComponent,
+    EditorGenericSectionComponent,
+    EditorNavBar1SectionComponent,
+    EditorNavBar2SectionComponent,
+    EditorNavBar3SectionComponent,
+    EditorGallery1SectionComponent,
+    EditorGallery2SectionComponent,
+    EditorGallery3SectionComponent,
+    EditorChart1SectionComponent,
+    EditorChart2SectionComponent,
+    EditorChart3SectionComponent,
+    EditorAccordion1SectionComponent,
+    EditorAccordion2SectionComponent,
+    EditorAccordion3SectionComponent,
+    EditorBreadcrumbs1SectionComponent,
+    EditorBreadcrumbs2SectionComponent,
+    EditorBreadcrumbs3SectionComponent
   ],
 })
 export class EditorMobileFeatureComponent extends BaseEditorFeatureComponent implements OnInit {
