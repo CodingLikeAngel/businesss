@@ -54,7 +54,59 @@ import {
   UIDateTimePickerComponent,
   UIChartComponent,
   SmartContainerComponent,
-  DraggableBoxComponent
+  DraggableBoxComponent,
+  // New component types
+  UIButton1Component,
+  UIButton2Component,
+  UIButton3Component,
+  UIChip1Component,
+  UIChip2Component,
+  UIChip3Component,
+  UIInput1Component,
+  UIInput2Component,
+  UIInput3Component,
+  UIImage1Component,
+  UIImage2Component,
+  UIImage3Component,
+  UIList1Component,
+  UIList2Component,
+  UIList3Component,
+  UIModal1Component,
+  UIModal2Component,
+  UIModal3Component,
+  UISpinner1Component,
+  UISpinner2Component,
+  UISpinner3Component,
+  UITable1Component,
+  UITable2Component,
+  UITable3Component,
+  UITooltip1Component,
+  UITooltip2Component,
+  UITooltip3Component,
+  UITitle1Component,
+  UITitle2Component,
+  UITitle3Component,
+  UITabs1Component,
+  UITabs2Component,
+  UITabs3Component,
+  UINavBar1Component,
+  UINavBar2Component,
+  UINavBar3Component,
+  UIGallery1Component,
+  UIGallery2Component,
+  UIGallery3Component,
+  UIChart1Component,
+  UIChart2Component,
+  UIChart3Component,
+  UIAccordion1Component,
+  UIAccordion2Component,
+  UIAccordion3Component,
+  UIBreadcrumbs1Component,
+  UIBreadcrumbs2Component,
+  UIBreadcrumbs3Component,
+  UIDraggableBox1Component,
+  UIDraggableBox2Component,
+  UIDraggableBox3Component
 } from '@negocio/ui-components';
 
 interface SectionVariant {
@@ -121,7 +173,59 @@ interface SectionVariant {
     UIDateTimePickerComponent,
     UIChartComponent,
     SmartContainerComponent,
-    DraggableBoxComponent
+    DraggableBoxComponent,
+    // New component types
+    UIButton1Component,
+    UIButton2Component,
+    UIButton3Component,
+    UIChip1Component,
+    UIChip2Component,
+    UIChip3Component,
+    UIInput1Component,
+    UIInput2Component,
+    UIInput3Component,
+    UIImage1Component,
+    UIImage2Component,
+    UIImage3Component,
+    UIList1Component,
+    UIList2Component,
+    UIList3Component,
+    UIModal1Component,
+    UIModal2Component,
+    UIModal3Component,
+    UISpinner1Component,
+    UISpinner2Component,
+    UISpinner3Component,
+    UITable1Component,
+    UITable2Component,
+    UITable3Component,
+    UITooltip1Component,
+    UITooltip2Component,
+    UITooltip3Component,
+    UITitle1Component,
+    UITitle2Component,
+    UITitle3Component,
+    UITabs1Component,
+    UITabs2Component,
+    UITabs3Component,
+    UINavBar1Component,
+    UINavBar2Component,
+    UINavBar3Component,
+    UIGallery1Component,
+    UIGallery2Component,
+    UIGallery3Component,
+    UIChart1Component,
+    UIChart2Component,
+    UIChart3Component,
+    UIAccordion1Component,
+    UIAccordion2Component,
+    UIAccordion3Component,
+    UIBreadcrumbs1Component,
+    UIBreadcrumbs2Component,
+    UIBreadcrumbs3Component,
+    UIDraggableBox1Component,
+    UIDraggableBox2Component,
+    UIDraggableBox3Component
   ],
   template: `
     <div class="explorer-container">
@@ -344,15 +448,101 @@ interface SectionVariant {
                   <div *ngSwitchCase="'input'" class="p-4">
                     <lib-ui-components-input [variant]="$any(selectedVariant)" placeholder="Escribe algo..."></lib-ui-components-input>
                   </div>
-                  <div *ngSwitchCase="'generic'" class="p-4 flex flex-col items-center justify-center h-full min-h-[200px] text-center">
-                    <h2 class="text-white text-xl font-semibold mb-2">Librería de Componentes</h2>
-                    <p class="text-white/70 text-sm">Pulsa sobre un componente para previsualizarlo y añadirlo a tu lienzo.</p>
-                  </div>
-                  <div *ngSwitchDefault class="preview-mockup default-mockup">
-                    <div class="mock-content">
-                       <p class="text-center text-white/50">Vista previa no disponible para este componente ({{ selectedComponent.type }})</p>
-                    </div>
-                  </div>
+                   <div *ngSwitchCase="'generic'" class="p-4 flex flex-col items-center justify-center h-full min-h-[200px] text-center">
+                     <h2 class="text-white text-xl font-semibold mb-2">Librería de Componentes</h2>
+                     <p class="text-white/70 text-sm">Pulsa sobre un componente para previsualizarlo y añadirlo a tu lienzo.</p>
+                   </div>
+                   <!-- NEW COMPONENT TYPES PREVIEWS -->
+                   <div *ngSwitchCase="'button-new'" class="flex gap-4 justify-center items-center h-full min-h-[200px]">
+                     <lib-ui-components-button-1 *ngIf="!selectedSubtype || selectedSubtype === 'button-1'" [variant]="$any(selectedVariant)">Botón 1</lib-ui-components-button-1>
+                     <lib-ui-components-button-2 *ngIf="selectedSubtype === 'button-2'" [variant]="$any(selectedVariant)">Botón 2</lib-ui-components-button-2>
+                     <lib-ui-components-button-3 *ngIf="selectedSubtype === 'button-3'" [variant]="$any(selectedVariant)">Botón 3</lib-ui-components-button-3>
+                   </div>
+                   <div *ngSwitchCase="'chip-new'" class="flex justify-center items-center h-full min-h-[200px]">
+                     <lib-ui-components-chip-1 *ngIf="!selectedSubtype || selectedSubtype === 'chip-1'" [variant]="$any(selectedVariant)" label="Chip 1"></lib-ui-components-chip-1>
+                     <lib-ui-components-chip-2 *ngIf="selectedSubtype === 'chip-2'" [variant]="$any(selectedVariant)" label="Chip 2"></lib-ui-components-chip-2>
+                     <lib-ui-components-chip-3 *ngIf="selectedSubtype === 'chip-3'" [variant]="$any(selectedVariant)" label="Chip 3"></lib-ui-components-chip-3>
+                   </div>
+                   <div *ngSwitchCase="'input-new'" class="p-4">
+                     <lib-ui-components-input-1 *ngIf="!selectedSubtype || selectedSubtype === 'input-1'" [variant]="$any(selectedVariant)" placeholder="Input 1..."></lib-ui-components-input-1>
+                     <lib-ui-components-input-2 *ngIf="selectedSubtype === 'input-2'" [variant]="$any(selectedVariant)" placeholder="Input 2..."></lib-ui-components-input-2>
+                     <lib-ui-components-input-3 *ngIf="selectedSubtype === 'input-3'" [variant]="$any(selectedVariant)" placeholder="Input 3..."></lib-ui-components-input-3>
+                   </div>
+                   <div *ngSwitchCase="'image-new'" class="p-4 flex justify-center">
+                     <lib-ui-image-1 *ngIf="!selectedSubtype || selectedSubtype === 'image-1'" [variant]="$any(selectedVariant)" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-image-1>
+                     <lib-ui-image-2 *ngIf="selectedSubtype === 'image-2'" [variant]="$any(selectedVariant)" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-image-2>
+                     <lib-ui-image-3 *ngIf="selectedSubtype === 'image-3'" [variant]="$any(selectedVariant)" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-image-3>
+                   </div>
+                   <div *ngSwitchCase="'list-new'" class="max-w-md mx-auto p-4">
+                     <lib-ui-list-1 *ngIf="!selectedSubtype || selectedSubtype === 'list-1'" [variant]="$any(selectedVariant)" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-list-1>
+                     <lib-ui-list-2 *ngIf="selectedSubtype === 'list-2'" [variant]="$any(selectedVariant)" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-list-2>
+                     <lib-ui-list-3 *ngIf="selectedSubtype === 'list-3'" [variant]="$any(selectedVariant)" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-list-3>
+                   </div>
+                   <div *ngSwitchCase="'modal-new'" class="p-4 flex justify-center items-center h-full min-h-[200px]">
+                     <lib-ui-components-modal-1 *ngIf="!selectedSubtype || selectedSubtype === 'modal-1'" [variant]="$any(selectedVariant)" [isOpen]="true" title="Modal 1" content="Contenido del modal 1"></lib-ui-components-modal-1>
+                     <lib-ui-components-modal-2 *ngIf="selectedSubtype === 'modal-2'" [variant]="$any(selectedVariant)" [isOpen]="true" title="Modal 2" content="Contenido del modal 2"></lib-ui-components-modal-2>
+                     <lib-ui-components-modal-3 *ngIf="selectedSubtype === 'modal-3'" [variant]="$any(selectedVariant)" [isOpen]="true" title="Modal 3" content="Contenido del modal 3"></lib-ui-components-modal-3>
+                   </div>
+                   <div *ngSwitchCase="'spinner-new'" class="flex justify-center items-center h-full min-h-[200px]">
+                     <lib-ui-components-spinner-1 *ngIf="!selectedSubtype || selectedSubtype === 'spinner-1'" [variant]="$any(selectedVariant)"></lib-ui-components-spinner-1>
+                     <lib-ui-components-spinner-2 *ngIf="selectedSubtype === 'spinner-2'" [variant]="$any(selectedVariant)"></lib-ui-components-spinner-2>
+                     <lib-ui-components-spinner-3 *ngIf="selectedSubtype === 'spinner-3'" [variant]="$any(selectedVariant)"></lib-ui-components-spinner-3>
+                   </div>
+                   <div *ngSwitchCase="'table-new'" class="p-4">
+                     <lib-ui-components-table-1 *ngIf="!selectedSubtype || selectedSubtype === 'table-1'" [variant]="$any(selectedVariant)" [data]="[{id:1, name:'Item A'}, {id:2, name:'Item B'}]" [columns]="[{key:'id', label:'ID'}, {key:'name', label:'Nombre'}]"></lib-ui-components-table-1>
+                     <lib-ui-components-table-2 *ngIf="selectedSubtype === 'table-2'" [variant]="$any(selectedVariant)" [data]="[{id:1, name:'Item A'}, {id:2, name:'Item B'}]" [columns]="[{key:'id', label:'ID'}, {key:'name', label:'Nombre'}]"></lib-ui-components-table-2>
+                     <lib-ui-components-table-3 *ngIf="selectedSubtype === 'table-3'" [variant]="$any(selectedVariant)" [data]="[{id:1, name:'Item A'}, {id:2, name:'Item B'}]" [columns]="[{key:'id', label:'ID'}, {key:'name', label:'Nombre'}]"></lib-ui-components-table-3>
+                   </div>
+                   <div *ngSwitchCase="'tooltip-new'" class="p-4 flex justify-center items-center h-full min-h-[200px]">
+                     <lib-ui-components-tooltip-1 *ngIf="!selectedSubtype || selectedSubtype === 'tooltip-1'" [variant]="$any(selectedVariant)" text="Tooltip 1"></lib-ui-components-tooltip-1>
+                     <lib-ui-components-tooltip-2 *ngIf="selectedSubtype === 'tooltip-2'" [variant]="$any(selectedVariant)" text="Tooltip 2"></lib-ui-components-tooltip-2>
+                     <lib-ui-components-tooltip-3 *ngIf="selectedSubtype === 'tooltip-3'" [variant]="$any(selectedVariant)" text="Tooltip 3"></lib-ui-components-tooltip-3>
+                   </div>
+                   <div *ngSwitchCase="'title-new'" class="p-4">
+                     <lib-ui-components-title-1 *ngIf="!selectedSubtype || selectedSubtype === 'title-1'" [variant]="$any(selectedVariant)" content="Título 1"></lib-ui-components-title-1>
+                     <lib-ui-components-title-2 *ngIf="selectedSubtype === 'title-2'" [variant]="$any(selectedVariant)" content="Título 2"></lib-ui-components-title-2>
+                     <lib-ui-components-title-3 *ngIf="selectedSubtype === 'title-3'" [variant]="$any(selectedVariant)" content="Título 3"></lib-ui-components-title-3>
+                   </div>
+                   <div *ngSwitchCase="'tabs-new'" class="p-4">
+                     <lib-ui-components-tabs-1 *ngIf="!selectedSubtype || selectedSubtype === 'tabs-1'" [variant]="$any(selectedVariant)" [tabs]="[{id:'tab1', label:'Tab 1'}, {id:'tab2', label:'Tab 2'}]"></lib-ui-components-tabs-1>
+                     <lib-ui-components-tabs-2 *ngIf="selectedSubtype === 'tabs-2'" [variant]="$any(selectedVariant)" [tabs]="[{id:'tab1', label:'Tab 1'}, {id:'tab2', label:'Tab 2'}]"></lib-ui-components-tabs-2>
+                     <lib-ui-components-tabs-3 *ngIf="selectedSubtype === 'tabs-3'" [variant]="$any(selectedVariant)" [tabs]="[{id:'tab1', label:'Tab 1'}, {id:'tab2', label:'Tab 2'}]"></lib-ui-components-tabs-3>
+                   </div>
+                   <div *ngSwitchCase="'nav-bar-new'" class="p-4">
+                     <lib-ui-components-nav-bar-1 *ngIf="!selectedSubtype || selectedSubtype === 'nav-bar-1'" [variant]="$any(selectedVariant)" [items]="[{id:'nav1', label:'Inicio', href:'#'}, {id:'nav2', label:'Servicios', href:'#'}, {id:'nav3', label:'Contacto', href:'#'}]"></lib-ui-components-nav-bar-1>
+                     <lib-ui-components-nav-bar-2 *ngIf="selectedSubtype === 'nav-bar-2'" [variant]="$any(selectedVariant)" [items]="[{id:'nav1', label:'Inicio', href:'#'}, {id:'nav2', label:'Servicios', href:'#'}, {id:'nav3', label:'Contacto', href:'#'}]"></lib-ui-components-nav-bar-2>
+                     <lib-ui-components-nav-bar-3 *ngIf="selectedSubtype === 'nav-bar-3'" [variant]="$any(selectedVariant)" [items]="[{id:'nav1', label:'Inicio', href:'#'}, {id:'nav2', label:'Servicios', href:'#'}, {id:'nav3', label:'Contacto', href:'#'}]"></lib-ui-components-nav-bar-3>
+                   </div>
+                   <div *ngSwitchCase="'gallery-new'" class="p-4">
+                     <lib-ui-components-gallery-1 *ngIf="!selectedSubtype || selectedSubtype === 'gallery-1'" [variant]="$any(selectedVariant)" [items]="[{id:'img1', src:'https://via.placeholder.com/300x200', alt:'Imagen 1'}, {id:'img2', src:'https://via.placeholder.com/300x200', alt:'Imagen 2'}]"></lib-ui-components-gallery-1>
+                     <lib-ui-components-gallery-2 *ngIf="selectedSubtype === 'gallery-2'" [variant]="$any(selectedVariant)" [items]="[{id:'img1', src:'https://via.placeholder.com/300x200', alt:'Imagen 1'}, {id:'img2', src:'https://via.placeholder.com/300x200', alt:'Imagen 2'}]"></lib-ui-components-gallery-2>
+                     <lib-ui-components-gallery-3 *ngIf="selectedSubtype === 'gallery-3'" [variant]="$any(selectedVariant)" [items]="[{id:'img1', src:'https://via.placeholder.com/300x200', alt:'Imagen 1'}, {id:'img2', src:'https://via.placeholder.com/300x200', alt:'Imagen 2'}]"></lib-ui-components-gallery-3>
+                   </div>
+                   <div *ngSwitchCase="'chart-new'" class="p-8 h-80">
+                     <lib-ui-components-chart-1 *ngIf="!selectedSubtype || selectedSubtype === 'chart-1'" [variant]="$any(selectedVariant)" [data]="[{label:'Ene', value:10}, {label:'Feb', value:20}, {label:'Mar', value:15}]"></lib-ui-components-chart-1>
+                     <lib-ui-components-chart-2 *ngIf="selectedSubtype === 'chart-2'" [variant]="$any(selectedVariant)" [data]="[{label:'Ene', value:10}, {label:'Feb', value:20}, {label:'Mar', value:15}]"></lib-ui-components-chart-2>
+                     <lib-ui-components-chart-3 *ngIf="selectedSubtype === 'chart-3'" [variant]="$any(selectedVariant)" [data]="[{label:'Ene', value:10}, {label:'Feb', value:20}, {label:'Mar', value:15}]"></lib-ui-components-chart-3>
+                   </div>
+                   <div *ngSwitchCase="'accordion-new'" class="p-4">
+                     <lib-ui-components-accordion-1 *ngIf="!selectedSubtype || selectedSubtype === 'accordion-1'" [variant]="$any(selectedVariant)" [items]="[{id:'acc1', title:'Item 1', content:'Detalle 1'}, {id:'acc2', title:'Item 2', content:'Detalle 2'}]"></lib-ui-components-accordion-1>
+                     <lib-ui-components-accordion-2 *ngIf="selectedSubtype === 'accordion-2'" [variant]="$any(selectedVariant)" [items]="[{id:'acc1', title:'Item 1', content:'Detalle 1'}, {id:'acc2', title:'Item 2', content:'Detalle 2'}]"></lib-ui-components-accordion-2>
+                     <lib-ui-components-accordion-3 *ngIf="selectedSubtype === 'accordion-3'" [variant]="$any(selectedVariant)" [items]="[{id:'acc1', title:'Item 1', content:'Detalle 1'}, {id:'acc2', title:'Item 2', content:'Detalle 2'}]"></lib-ui-components-accordion-3>
+                   </div>
+                   <div *ngSwitchCase="'breadcrumbs-new'" class="p-8">
+                     <lib-ui-components-breadcrumbs-1 *ngIf="!selectedSubtype || selectedSubtype === 'breadcrumbs-1'" [variant]="$any(selectedVariant)" [items]="[{label:'Home', path:'/'}, {label:'Sección', path:'#'}]"></lib-ui-components-breadcrumbs-1>
+                     <lib-ui-components-breadcrumbs-2 *ngIf="selectedSubtype === 'breadcrumbs-2'" [variant]="$any(selectedVariant)" [items]="[{label:'Home', path:'/'}, {label:'Sección', path:'#'}]"></lib-ui-components-breadcrumbs-2>
+                     <lib-ui-components-breadcrumbs-3 *ngIf="selectedSubtype === 'breadcrumbs-3'" [variant]="$any(selectedVariant)" [items]="[{label:'Home', path:'/'}, {label:'Sección', path:'#'}]"></lib-ui-components-breadcrumbs-3>
+                   </div>
+                   <div *ngSwitchCase="'draggable-box-new'" class="h-64 relative border border-white/10 m-4">
+                     <lib-ui-components-draggable-box-1 *ngIf="!selectedSubtype || selectedSubtype === 'draggable-box-1'" [variant]="$any(selectedVariant)" content="Caja 1"></lib-ui-components-draggable-box-1>
+                     <lib-ui-components-draggable-box-2 *ngIf="selectedSubtype === 'draggable-box-2'" [variant]="$any(selectedVariant)" content="Caja 2"></lib-ui-components-draggable-box-2>
+                     <lib-ui-components-draggable-box-3 *ngIf="selectedSubtype === 'draggable-box-3'" [variant]="$any(selectedVariant)" content="Caja 3"></lib-ui-components-draggable-box-3>
+                   </div>
+                   <div *ngSwitchDefault class="preview-mockup default-mockup">
+                     <div class="mock-content">
+                        <p class="text-center text-white/50">Vista previa no disponible para este componente ({{ selectedComponent.type }})</p>
+                     </div>
+                   </div>
             </div>
           </div>
 
@@ -1368,6 +1558,245 @@ export class ComponentExplorerComponent implements OnInit {
        description: 'Sección de ayuda y navegación de la librería',
        category: 'content',
        libraryType: 'section'
+    },
+    // --- NEW COMPONENT TYPES WITH SUBTYPES ---
+    {
+      type: 'button-new',
+      label: 'Botón (Nuevos Tipos)',
+      icon: '🔘',
+      variants: ['primary', 'secondary', 'outline', 'ghost', 'link', 'glass', 'neon', 'cyberpunk', 'mario'],
+      description: 'Botones interactivos con múltiples estilos',
+      category: 'interactive',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'button-1', label: 'Minimalista' },
+        { id: 'button-2', label: 'Moderno' },
+        { id: 'button-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'chip-new',
+      label: 'Chips (Nuevos Tipos)',
+      icon: '🏷️',
+      variants: ['default', 'outline', 'solid', 'glass', 'neon'],
+      description: 'Etiquetas compactas para categorías o filtros',
+      category: 'interactive',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'chip-1', label: 'Minimalista' },
+        { id: 'chip-2', label: 'Moderno' },
+        { id: 'chip-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'input-new',
+      label: 'Input (Nuevos Tipos)',
+      icon: '📝',
+      variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft', 'kingfisher', 'custom1', 'custom2'],
+      description: 'Inputs de formulario editables',
+      category: 'interactive',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'input-1', label: 'Minimalista' },
+        { id: 'input-2', label: 'Moderno' },
+        { id: 'input-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'image-new',
+      label: 'Imagen (Nuevos Tipos)',
+      icon: '🖼️',
+      variants: ['default', 'rounded', 'circle', 'thumbnail', 'glass', 'neon', 'hover-zoom'],
+      description: 'Componente de imagen con efectos y lazy loading',
+      category: 'content',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'image-1', label: 'Minimalista' },
+        { id: 'image-2', label: 'Moderno' },
+        { id: 'image-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'list-new',
+      label: 'Lista (Nuevos Tipos)',
+      icon: '📋',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Lista simple de elementos atomizada',
+      category: 'content',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'list-1', label: 'Minimalista' },
+        { id: 'list-2', label: 'Moderno' },
+        { id: 'list-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'modal-new',
+      label: 'Modal (Nuevos Tipos)',
+      icon: '📦',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Ventanas modales interactivas',
+      category: 'interactive',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'modal-1', label: 'Minimalista' },
+        { id: 'modal-2', label: 'Moderno' },
+        { id: 'modal-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'spinner-new',
+      label: 'Spinner (Nuevos Tipos)',
+      icon: '⏳',
+      variants: ['default', 'circle', 'dots', 'bars', 'neon', 'glass'],
+      description: 'Indicadores de carga animados',
+      category: 'interactive',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'spinner-1', label: 'Minimalista' },
+        { id: 'spinner-2', label: 'Moderno' },
+        { id: 'spinner-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'table-new',
+      label: 'Tabla (Nuevos Tipos)',
+      icon: '▦',
+      variants: ['default', 'striped', 'bordered', 'hover', 'glass', 'neon'],
+      description: 'Presentación tabular de datos atomizada',
+      category: 'content',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'table-1', label: 'Minimalista' },
+        { id: 'table-2', label: 'Moderno' },
+        { id: 'table-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'tooltip-new',
+      label: 'Tooltip (Nuevos Tipos)',
+      icon: '💡',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Tooltips informativos',
+      category: 'interactive',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'tooltip-1', label: 'Minimalista' },
+        { id: 'tooltip-2', label: 'Moderno' },
+        { id: 'tooltip-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'title-new',
+      label: 'Título (Nuevos Tipos)',
+      icon: '📜',
+      variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft'],
+      description: 'Títulos editables con nivel (h1-h6), alineación y animación',
+      category: 'content',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'title-1', label: 'Minimalista' },
+        { id: 'title-2', label: 'Moderno' },
+        { id: 'title-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'tabs-new',
+      label: 'Pestañas (Nuevos Tipos)',
+      icon: '📑',
+      variants: ['default', 'glass', 'neon', 'pills'],
+      description: 'Navegación por pestañas atomizada',
+      category: 'interactive',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'tabs-1', label: 'Minimalista' },
+        { id: 'tabs-2', label: 'Moderno' },
+        { id: 'tabs-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'nav-bar-new',
+      label: 'Barra de Navegación (Nuevos Tipos)',
+      icon: '🧭',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Barras de navegación interactivas',
+      category: 'interactive',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'nav-bar-1', label: 'Minimalista' },
+        { id: 'nav-bar-2', label: 'Moderno' },
+        { id: 'nav-bar-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'gallery-new',
+      label: 'Galería (Nuevos Tipos)',
+      icon: '🖼️',
+      variants: ['glass', 'grid', 'masonry', 'carousel', 'neon', 'cyberpunk'],
+      description: 'Galería de imágenes y trabajos',
+      category: 'content',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'gallery-1', label: 'Minimalista' },
+        { id: 'gallery-2', label: 'Moderno' },
+        { id: 'gallery-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'chart-new',
+      label: 'Gráfico (Nuevos Tipos)',
+      icon: '📈',
+      variants: ['primary', 'secondary', 'glass', 'neon', 'cyberpunk'],
+      description: 'Visualización de datos atomizada',
+      category: 'content',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'chart-1', label: 'Minimalista' },
+        { id: 'chart-2', label: 'Moderno' },
+        { id: 'chart-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'accordion-new',
+      label: 'Acordeón (Nuevos Tipos)',
+      icon: '↕️',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Lista de elementos expandibles atomizada',
+      category: 'interactive',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'accordion-1', label: 'Minimalista' },
+        { id: 'accordion-2', label: 'Moderno' },
+        { id: 'accordion-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'breadcrumbs-new',
+      label: 'Breadcrumbs (Nuevos Tipos)',
+      icon: '🗺️',
+      variants: ['default', 'slash', 'arrow', 'glass', 'neon'],
+      description: 'Navegación de migas de pan',
+      category: 'interactive',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'breadcrumbs-1', label: 'Minimalista' },
+        { id: 'breadcrumbs-2', label: 'Moderno' },
+        { id: 'breadcrumbs-3', label: 'Clásico' }
+      ]
+    },
+    {
+      type: 'draggable-box-new',
+      label: 'Caja Arrastrable (Nuevos Tipos)',
+      icon: '🎯',
+      variants: ['default', 'glass', 'neon', 'minimal'],
+      description: 'Elemento sandbox para pruebas de posición',
+      category: 'interactive',
+      libraryType: 'component',
+      subtypes: [
+        { id: 'draggable-box-1', label: 'Minimalista' },
+        { id: 'draggable-box-2', label: 'Moderno' },
+        { id: 'draggable-box-3', label: 'Clásico' }
+      ]
     }
   ];
 
