@@ -1567,7 +1567,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['primary', 'secondary', 'outline', 'ghost', 'link', 'glass', 'neon', 'cyberpunk', 'mario'],
       description: 'Botones interactivos con múltiples estilos',
       category: 'interactive',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'button-1', label: 'Minimalista' },
         { id: 'button-2', label: 'Moderno' },
@@ -1581,7 +1581,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'outline', 'solid', 'glass', 'neon'],
       description: 'Etiquetas compactas para categorías o filtros',
       category: 'interactive',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'chip-1', label: 'Minimalista' },
         { id: 'chip-2', label: 'Moderno' },
@@ -1595,7 +1595,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft', 'kingfisher', 'custom1', 'custom2'],
       description: 'Inputs de formulario editables',
       category: 'interactive',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'input-1', label: 'Minimalista' },
         { id: 'input-2', label: 'Moderno' },
@@ -1609,7 +1609,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'rounded', 'circle', 'thumbnail', 'glass', 'neon', 'hover-zoom'],
       description: 'Componente de imagen con efectos y lazy loading',
       category: 'content',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'image-1', label: 'Minimalista' },
         { id: 'image-2', label: 'Moderno' },
@@ -1623,7 +1623,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'glass', 'neon', 'minimal'],
       description: 'Lista simple de elementos atomizada',
       category: 'content',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'list-1', label: 'Minimalista' },
         { id: 'list-2', label: 'Moderno' },
@@ -1637,7 +1637,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'glass', 'neon', 'minimal'],
       description: 'Ventanas modales interactivas',
       category: 'interactive',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'modal-1', label: 'Minimalista' },
         { id: 'modal-2', label: 'Moderno' },
@@ -1651,7 +1651,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'circle', 'dots', 'bars', 'neon', 'glass'],
       description: 'Indicadores de carga animados',
       category: 'interactive',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'spinner-1', label: 'Minimalista' },
         { id: 'spinner-2', label: 'Moderno' },
@@ -1665,7 +1665,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'striped', 'bordered', 'hover', 'glass', 'neon'],
       description: 'Presentación tabular de datos atomizada',
       category: 'content',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'table-1', label: 'Minimalista' },
         { id: 'table-2', label: 'Moderno' },
@@ -1679,7 +1679,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'glass', 'neon', 'minimal'],
       description: 'Tooltips informativos',
       category: 'interactive',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'tooltip-1', label: 'Minimalista' },
         { id: 'tooltip-2', label: 'Moderno' },
@@ -1693,7 +1693,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft'],
       description: 'Títulos editables con nivel (h1-h6), alineación y animación',
       category: 'content',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'title-1', label: 'Minimalista' },
         { id: 'title-2', label: 'Moderno' },
@@ -1707,7 +1707,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'glass', 'neon', 'pills'],
       description: 'Navegación por pestañas atomizada',
       category: 'interactive',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'tabs-1', label: 'Minimalista' },
         { id: 'tabs-2', label: 'Moderno' },
@@ -1721,7 +1721,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'glass', 'neon', 'minimal'],
       description: 'Barras de navegación interactivas',
       category: 'interactive',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'nav-bar-1', label: 'Minimalista' },
         { id: 'nav-bar-2', label: 'Moderno' },
@@ -1735,7 +1735,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['glass', 'grid', 'masonry', 'carousel', 'neon', 'cyberpunk'],
       description: 'Galería de imágenes y trabajos',
       category: 'content',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'gallery-1', label: 'Minimalista' },
         { id: 'gallery-2', label: 'Moderno' },
@@ -1749,7 +1749,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['primary', 'secondary', 'glass', 'neon', 'cyberpunk'],
       description: 'Visualización de datos atomizada',
       category: 'content',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'chart-1', label: 'Minimalista' },
         { id: 'chart-2', label: 'Moderno' },
@@ -1763,7 +1763,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'glass', 'neon', 'minimal'],
       description: 'Lista de elementos expandibles atomizada',
       category: 'interactive',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'accordion-1', label: 'Minimalista' },
         { id: 'accordion-2', label: 'Moderno' },
@@ -1777,7 +1777,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'slash', 'arrow', 'glass', 'neon'],
       description: 'Navegación de migas de pan',
       category: 'interactive',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'breadcrumbs-1', label: 'Minimalista' },
         { id: 'breadcrumbs-2', label: 'Moderno' },
@@ -1791,7 +1791,7 @@ export class ComponentExplorerComponent implements OnInit {
       variants: ['default', 'glass', 'neon', 'minimal'],
       description: 'Elemento sandbox para pruebas de posición',
       category: 'interactive',
-      libraryType: 'component',
+      libraryType: 'section',
       subtypes: [
         { id: 'draggable-box-1', label: 'Minimalista' },
         { id: 'draggable-box-2', label: 'Moderno' },
