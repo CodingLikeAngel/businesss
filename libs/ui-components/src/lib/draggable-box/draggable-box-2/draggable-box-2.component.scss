@@ -1,0 +1,50 @@
+@import '../../../styles/shared';
+
+.draggable-box-2 {
+  @include shared.apply-all-variants;
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.875rem 1.25rem;
+  border-radius: 10px;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+  background: var(--component-bg, var(--theme-bg, #ffffff));
+  color: var(--component-text, var(--theme-color, #1a1a1a));
+  border: 2px solid var(--component-border, var(--theme-border, #e0e0e0));
+  cursor: grab;
+  user-select: none;
+  transition: box-shadow 0.2s ease;
+
+  &:active {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  }
+
+  &.draggable-box-2-rounded-none {
+    border-radius: 0;
+  }
+
+  &.draggable-box-2-rounded-full {
+    border-radius: 9999px;
+  }
+
+  &.draggable-box-2-sm {
+    padding: 0.625rem 1rem;
+  }
+
+  &.draggable-box-2-lg {
+    padding: 1.125rem 1.5rem;
+  }
+
+  &.dark {
+    background: var(--component-bg, var(--theme-bg, #1a1a1a));
+    color: var(--component-text, var(--theme-color, #ffffff));
+    border-color: var(--component-border, var(--theme-border, #333333));
+  }
+}
+
+.draggable-box-2-content {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: inherit;
+}

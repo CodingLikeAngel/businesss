@@ -1,0 +1,67 @@
+@use '../../../styles/mixins' as shared;
+
+.title-1 {
+  margin: 0;
+  color: var(--theme-color, #ffffff);
+  font-weight: 600;
+  line-height: 1.2;
+  transition: all 0.2s ease;
+
+  @include shared.apply-all-variants('title-1-variant-');
+
+  // Size variants
+  &.title-1-xs {
+    font-size: 0.875rem;
+  }
+
+  &.title-1-sm {
+    font-size: 1rem;
+  }
+
+  &.title-1-md {
+    font-size: 1.25rem;
+  }
+
+  &.title-1-lg {
+    font-size: 1.5rem;
+  }
+
+  &.title-1-xl {
+    font-size: 1.75rem;
+  }
+
+  // Weight variants
+  &.title-1-normal {
+    font-weight: 400;
+  }
+
+  &.title-1-medium {
+    font-weight: 500;
+  }
+
+  &.title-1-semibold {
+    font-weight: 600;
+  }
+
+  &.title-1-bold {
+    font-weight: 700;
+  }
+
+  // Align variants
+  &.title-1-left {
+    text-align: left;
+  }
+
+  &.title-1-center {
+    text-align: center;
+  }
+
+  &.title-1-right {
+    text-align: right;
+  }
+
+  // Dark mode
+  &.dark {
+    color: var(--theme-color, #ffffff);
+  }
+}

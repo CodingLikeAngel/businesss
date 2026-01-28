@@ -1,0 +1,12 @@
+<nav class="nav-bar-2" [class]="navBarClasses()" [style]="navBarStyles()">
+  @for (item of items(); track item.id) {
+    <a
+      class="nav-bar-2-item"
+      [class]="itemClasses()(item)"
+      [href]="item.href"
+      [attr.disabled]="item.disabled ? 'true' : null"
+    >
+      {{ item.label }}
+    </a>
+  }
+</nav>

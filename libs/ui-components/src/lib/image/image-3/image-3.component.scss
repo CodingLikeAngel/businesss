@@ -1,0 +1,113 @@
+@use '../../styles/mixins' as shared;
+
+.image-3-wrapper {
+  display: block;
+  width: 100%;
+}
+
+.image-3-container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.image-3 {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+
+  @include shared.apply-all-variants('image-3-');
+
+  // Size variants
+  &.image-3--size-small {
+    max-width: 200px;
+    max-height: 200px;
+  }
+
+  &.image-3--size-medium {
+    max-width: 400px;
+    max-height: 400px;
+  }
+
+  &.image-3--size-large {
+    max-width: 700px;
+    max-height: 700px;
+  }
+
+  // Shape variants
+  &.image-3--shape-square {
+    border-radius: 0;
+  }
+
+  &.image-3--shape-circle {
+    border-radius: 50%;
+  }
+
+  &.image-3--shape-rounded {
+    border-radius: 16px;
+  }
+
+  // Animation variants
+  &.image-3--animation-fade {
+    animation: image-3-fade 0.4s ease-in-out;
+  }
+
+  &.image-3--animation-zoom {
+    animation: image-3-zoom 0.4s ease-in-out;
+  }
+
+  &.image-3--animation-slide {
+    animation: image-3-slide 0.4s ease-in-out;
+  }
+
+  // With caption
+  &.image-3--with-caption {
+    margin-bottom: 1rem;
+  }
+}
+
+.image-3-caption {
+  margin-top: 1rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--theme-color, #ffffff);
+  text-align: center;
+  opacity: 1;
+}
+
+@keyframes image-3-fade {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes image-3-zoom {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes image-3-slide {
+  from {
+    transform: translateX(-40px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

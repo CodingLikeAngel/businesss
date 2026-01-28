@@ -1,0 +1,14 @@
+<div [class]="chartClasses()" [style]="chartStyles()">
+  <div class="chart-2-header">
+    <h3 class="chart-2-title">{{ title() }}</h3>
+  </div>
+  <div class="chart-2-body">
+    @for (point of data(); track point.label) {
+      <div class="chart-2-bar-container">
+        <div class="chart-2-bar" [style.height.%]="(point.value / maxValue()) * 100"></div>
+        <span class="chart-2-label">{{ point.label }}</span>
+        <span class="chart-2-value">{{ point.value }}</span>
+      </div>
+    }
+  </div>
+</div>

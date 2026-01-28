@@ -1,0 +1,101 @@
+@use '../../../styles/mixins' as shared;
+
+.gallery-1 {
+  display: grid;
+  background: var(--theme-bg, rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  gap: 0.5rem;
+
+  @include shared.apply-all-variants('gallery-1-variant-');
+
+  // Size variants
+  &.gallery-1-sm {
+    gap: 0.25rem;
+  }
+
+  &.gallery-1-md {
+    gap: 0.5rem;
+  }
+
+  &.gallery-1-lg {
+    gap: 0.75rem;
+  }
+
+  // Column variants
+  &.gallery-1-cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  &.gallery-1-cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  &.gallery-1-cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  // Rounded variants
+  &.gallery-1-rounded-none {
+    border-radius: 0;
+  }
+
+  &.gallery-1-rounded-md {
+    border-radius: 8px;
+  }
+
+  &.gallery-1-rounded-full {
+    border-radius: 12px;
+  }
+
+  // Dark mode
+  &.dark {
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+}
+
+.gallery-1-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  // Size variants
+  &.gallery-1-item-sm {
+    border-radius: 3px;
+  }
+
+  &.gallery-1-item-md {
+    border-radius: 4px;
+  }
+
+  &.gallery-1-item-lg {
+    border-radius: 5px;
+  }
+}
+
+.gallery-1-caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  text-align: center;
+}

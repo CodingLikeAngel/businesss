@@ -1,0 +1,13 @@
+<div [ngClass]="imageClasses()" [ngStyle]="imageStyles()" class="image-1-wrapper">
+  <div class="image-1-container">
+    <img
+      [src]="src()"
+      [alt]="alt()"
+      [class]="imageClasses()"
+      [ngStyle]="imageStyles()"
+      class="image-1"
+    />
+    <ng-content></ng-content>
+    <div *ngIf="caption()" class="image-1-caption">{{caption()}}</div>
+  </div>
+</div>

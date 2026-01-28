@@ -1,0 +1,270 @@
+@use '../../../styles/mixins' as shared;
+
+:host {
+  display: block;
+  width: 100%;
+  --input-3-transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --input-3-radius: 8px;
+  --input-3-padding-x: 1.25rem;
+  --input-3-padding-y: 0.875rem;
+  
+  @include shared.apply-all-variants('input-3-');
+}
+
+.input-3-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  transition: var(--input-3-transition);
+
+  &.input-3-error {
+    --accent-color: #ef4444;
+    --accent-glow: rgba(239, 68, 68, 0.2);
+  }
+
+  &.input-3-success {
+    --accent-color: #10b981;
+    --accent-glow: rgba(16, 185, 129, 0.2);
+  }
+}
+
+.input-3-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5625rem;
+  width: 100%;
+
+  .input-3-static-label {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.025em;
+    padding-left: 0.3125rem;
+  }
+}
+
+.input-3-control-outer {
+  position: relative;
+  width: 100%;
+}
+
+.input-3 {
+  width: 100%;
+  padding: var(--input-3-padding-y) var(--input-3-padding-x);
+  font-size: 1rem;
+  color: var(--theme-color, #ffffff);
+  background: var(--theme-bg, rgba(15, 23, 42, 0.6));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--input-3-radius);
+  transition: var(--input-3-transition);
+  outline: none;
+  font-family: inherit;
+  font-weight: 500;
+
+  &::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+    transition: opacity 0.25s ease;
+  }
+
+  &:focus {
+    border-color: var(--accent-color, #6366f1);
+    box-shadow: 0 0 0 4px var(--accent-glow, rgba(99, 102, 241, 0.2));
+    background: var(--theme-bg-focused, rgba(15, 23, 42, 0.8));
+    
+    &::placeholder {
+      opacity: 0.5;
+    }
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    filter: grayscale(0.5);
+  }
+}
+
+.input-3-input-group {
+  position: relative;
+
+  .input-3-floating-label {
+    position: absolute;
+    top: 50%;
+    left: var(--input-3-padding-x);
+    transform: translateY(-50%);
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.4);
+    pointer-events: none;
+    transition: var(--input-3-transition);
+    padding: 0 0.4375rem;
+    z-index: 10;
+  }
+
+  .input-3:focus + .input-3-floating-label,
+  .is-floated .input-3-floating-label {
+    top: 0;
+    transform: translateY(-50%) scale(0.825);
+    font-size: 0.875rem;
+    color: var(--accent-color, #a855f7);
+    background: var(--theme-bg, #0f172a);
+    font-weight: 600;
+  }
+}
+
+.input-3-selection-control {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.4375rem 0.1875rem;
+
+  .input-3-real-input {
+    display: none;
+  }
+
+  .input-3-control-indicator {
+    width: 1.375rem;
+    height: 1.375rem;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 0.3125rem;
+    position: relative;
+    transition: var(--input-3-transition);
+    background: rgba(255, 255, 255, 0.05);
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 2.5px;
+      background: var(--accent-color, #6366f1);
+      border-radius: 0.15625rem;
+      transform: scale(0);
+      transition: transform 0.18s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+  }
+
+  &.input-3-radio .input-3-control-indicator {
+    border-radius: 50%;
+    &::after { border-radius: 50%; }
+  }
+
+  .input-3-real-input:checked + .input-3-control-indicator {
+    border-color: var(--accent-color, #6366f1);
+    box-shadow: 0 0 10px var(--accent-glow, rgba(99, 102, 241, 0.3));
+    
+    &::after {
+      transform: scale(1);
+    }
+  }
+
+  .input-3-control-label {
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.9);
+    user-select: none;
+  }
+
+  &:hover .input-3-control-indicator {
+    border-color: rgba(255, 255, 255, 0.4);
+  }
+}
+
+.input-3-range-control {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.4375rem 0;
+
+  .input-3-range-input {
+    flex: 1;
+    appearance: none;
+    height: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
+    padding: 0;
+
+    &::-webkit-slider-thumb {
+      appearance: none;
+      width: 1.375rem;
+      height: 1.375rem;
+      background: var(--accent-color, #6366f1);
+      border-radius: 50%;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.45);
+      transition: transform 0.18s;
+    }
+
+    &:active::-webkit-slider-thumb {
+      transform: scale(1.15);
+    }
+  }
+
+  .input-3-range-value {
+    min-width: 2.625rem;
+    text-align: center;
+    font-weight: 700;
+    font-family: monospace;
+    color: var(--accent-color, #6366f1);
+    font-size: 0.9375rem;
+  }
+}
+
+.input-3-color-control {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+
+  .input-3-color-input {
+    width: 4rem;
+    height: 2.875rem;
+    padding: 0.21875rem;
+    cursor: pointer;
+    border-radius: 0.4375rem;
+  }
+
+  .input-3-color-hex {
+    font-family: monospace;
+    font-weight: 600;
+    opacity: 0.8;
+    font-size: 0.9375rem;
+  }
+}
+
+.input-3-select-input {
+  appearance: none;
+  cursor: pointer;
+  padding-right: 3rem;
+}
+
+.input-3-select-arrow {
+  position: absolute;
+  top: 50%;
+  right: 1.25rem;
+  transform: translateY(-50%);
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 2px solid rgba(255, 255, 255, 0.5);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.5);
+  rotate: 45deg;
+  pointer-events: none;
+}
+
+.input-3-input-icon {
+  position: absolute;
+  right: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+}
+
+.input-3-feedback-area {
+  margin-top: 0.21875rem;
+  padding: 0 0.21875rem;
+
+  .input-3-error-message { font-size: 0.78125rem; color: #ef4444; font-weight: 600; }
+  .input-3-success-message { font-size: 0.78125rem; color: #10b981; font-weight: 600; }
+}
+
+.input-3-sm { --input-3-padding-y: 0.5625rem; font-size: 0.875rem; }
+.input-3-md { --input-3-padding-y: 0.875rem; font-size: 1rem; }
+.input-3-lg { --input-3-padding-y: 1.1875rem; font-size: 1.125rem; }

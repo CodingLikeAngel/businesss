@@ -1,0 +1,109 @@
+@use '../../styles/mixins' as shared;
+
+.image-1-wrapper {
+  display: block;
+  width: 100%;
+}
+
+.image-1-container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  transition: all 0.2s ease-in-out;
+}
+
+.image-1 {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: all 0.2s ease-in-out;
+
+  @include shared.apply-all-variants('image-1-');
+
+  // Size variants
+  &.image-1--size-small {
+    max-width: 150px;
+    max-height: 150px;
+  }
+
+  &.image-1--size-medium {
+    max-width: 300px;
+    max-height: 300px;
+  }
+
+  &.image-1--size-large {
+    max-width: 500px;
+    max-height: 500px;
+  }
+
+  // Shape variants
+  &.image-1--shape-square {
+    border-radius: 0;
+  }
+
+  &.image-1--shape-circle {
+    border-radius: 50%;
+  }
+
+  &.image-1--shape-rounded {
+    border-radius: 8px;
+  }
+
+  // Animation variants
+  &.image-1--animation-fade {
+    animation: image-1-fade 0.3s ease-in-out;
+  }
+
+  &.image-1--animation-zoom {
+    animation: image-1-zoom 0.3s ease-in-out;
+  }
+
+  &.image-1--animation-slide {
+    animation: image-1-slide 0.3s ease-in-out;
+  }
+
+  // With caption
+  &.image-1--with-caption {
+    margin-bottom: 0.5rem;
+  }
+}
+
+.image-1-caption {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--theme-color, #ffffff);
+  text-align: center;
+  opacity: 0.9;
+}
+
+@keyframes image-1-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes image-1-zoom {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes image-1-slide {
+  from {
+    transform: translateX(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

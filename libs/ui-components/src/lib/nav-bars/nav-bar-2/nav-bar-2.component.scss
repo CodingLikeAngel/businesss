@@ -1,0 +1,84 @@
+@use '../../../styles/mixins' as shared;
+
+.nav-bar-2 {
+  display: flex;
+  align-items: center;
+  background: var(--theme-bg, rgba(15, 23, 42, 0.98));
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s ease;
+
+  @include shared.apply-all-variants('nav-bar-2-variant-');
+
+  // Size variants
+  &.nav-bar-2-sm {
+    gap: 0.375rem;
+  }
+
+  &.nav-bar-2-md {
+    gap: 0.625rem;
+  }
+
+  &.nav-bar-2-lg {
+    gap: 0.875rem;
+  }
+
+  // Rounded variants
+  &.nav-bar-2-rounded-none {
+    border-radius: 0;
+  }
+
+  &.nav-bar-2-rounded-md {
+    border-radius: 12px;
+  }
+
+  &.nav-bar-2-rounded-full {
+    border-radius: 16px;
+  }
+
+  // Dark mode
+  &.dark {
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+.nav-bar-2-item {
+  background: transparent;
+  border: none;
+  color: var(--theme-color, #ffffff);
+  padding: 0.625rem 1.25rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  border-radius: 6px;
+  text-decoration: none;
+
+  &:hover:not(.disabled) {
+    background: rgba(255, 255, 255, 0.125);
+    transform: scale(1.02);
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // Size variants
+  &.nav-bar-2-item-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
+
+  &.nav-bar-2-item-md {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9375rem;
+  }
+
+  &.nav-bar-2-item-lg {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.0625rem;
+  }
+}

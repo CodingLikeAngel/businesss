@@ -1,0 +1,89 @@
+@use '../../../styles/mixins' as shared;
+
+.list-3-wrapper {
+  display: block;
+  width: 100%;
+}
+
+.list-3-container {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+
+  @include shared.apply-all-variants('list-3-variant-');
+
+  // Rounded variants
+  &.list-3-rounded-none {
+    .list-3-item {
+      border-radius: 0;
+    }
+  }
+
+  &.list-3-rounded-md {
+    .list-3-item {
+      border-radius: 10px;
+    }
+  }
+
+  &.list-3-rounded-full {
+    .list-3-item {
+      border-radius: 9999px;
+    }
+  }
+
+  // Size variants
+  &.list-3-sm {
+    .list-3-item {
+      padding: 0.5rem 1rem;
+      font-size: 0.9375rem;
+    }
+  }
+
+  &.list-3-md {
+    .list-3-item {
+      padding: 0.75rem 1.25rem;
+      font-size: 1.0625rem;
+    }
+  }
+
+  &.list-3-lg {
+    .list-3-item {
+      padding: 1rem 1.75rem;
+      font-size: 1.1875rem;
+    }
+  }
+
+  // Dark mode
+  &.dark {
+    .list-3-item {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+  }
+}
+
+.list-3-item {
+  display: flex;
+  align-items: center;
+  background: var(--theme-bg, rgba(15, 23, 42, 0.6));
+  color: var(--theme-color, #ffffff);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  cursor: pointer;
+  font-weight: 600;
+
+  &:hover {
+    background: var(--theme-bg-focused, rgba(15, 23, 42, 0.85));
+    transform: translateX(8px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  }
+
+  &:active {
+    transform: translateX(4px);
+  }
+}

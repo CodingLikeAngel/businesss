@@ -1,0 +1,110 @@
+@use '../../../styles/mixins' as shared;
+
+.spinner-3-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner-3 {
+  position: relative;
+  display: inline-block;
+
+  @include shared.apply-all-variants('spinner-3-variant-');
+
+  // Size variants
+  &.spinner-3-xs {
+    .spinner-3-svg {
+      width: 16px;
+      height: 16px;
+
+      .spinner-3-circle {
+        stroke-width: 2px;
+      }
+    }
+  }
+
+  &.spinner-3-sm {
+    .spinner-3-svg {
+      width: 24px;
+      height: 24px;
+
+      .spinner-3-circle {
+        stroke-width: 2.5px;
+      }
+    }
+  }
+
+  &.spinner-3-md {
+    .spinner-3-svg {
+      width: 40px;
+      height: 40px;
+
+      .spinner-3-circle {
+        stroke-width: 3px;
+      }
+    }
+  }
+
+  &.spinner-3-lg {
+    .spinner-3-svg {
+      width: 56px;
+      height: 56px;
+
+      .spinner-3-circle {
+        stroke-width: 4px;
+      }
+    }
+  }
+
+  // Speed variants
+  &.spinner-3-slow {
+    .spinner-3-circle {
+      animation-duration: 1.5s;
+    }
+  }
+
+  &.spinner-3-normal {
+    .spinner-3-circle {
+      animation-duration: 1s;
+    }
+  }
+
+  &.spinner-3-fast {
+    .spinner-3-circle {
+      animation-duration: 0.6s;
+    }
+  }
+
+  // Dark mode
+  &.dark {
+    .spinner-3-circle {
+      stroke: var(--theme-color, #ffffff);
+    }
+  }
+}
+
+.spinner-3-svg {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+.spinner-3-circle {
+  stroke: var(--theme-color, #ffffff);
+  stroke-linecap: round;
+  stroke-dasharray: 80;
+  stroke-dashoffset: 60;
+  animation: spinner3Rotate 1s linear infinite;
+}
+
+@keyframes spinner3Rotate {
+  0% {
+    transform: rotate(0deg);
+    stroke-dashoffset: 60;
+  }
+  100% {
+    transform: rotate(360deg);
+    stroke-dashoffset: 60;
+  }
+}

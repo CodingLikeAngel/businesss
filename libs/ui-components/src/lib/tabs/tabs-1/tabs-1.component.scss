@@ -1,0 +1,91 @@
+@use '../../../styles/mixins' as shared;
+
+.tabs-1-wrapper {
+  display: block;
+  width: 100%;
+}
+
+.tabs-1 {
+  display: flex;
+  align-items: center;
+  background: var(--theme-bg, rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+
+  @include shared.apply-all-variants('tabs-1-variant-');
+
+  // Size variants
+  &.tabs-1-sm {
+    gap: 0.25rem;
+  }
+
+  &.tabs-1-md {
+    gap: 0.5rem;
+  }
+
+  &.tabs-1-lg {
+    gap: 0.75rem;
+  }
+
+  // Rounded variants
+  &.tabs-1-rounded-none {
+    border-radius: 0;
+  }
+
+  &.tabs-1-rounded-md {
+    border-radius: 8px;
+  }
+
+  &.tabs-1-rounded-full {
+    border-radius: 12px;
+  }
+
+  // Dark mode
+  &.dark {
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+}
+
+.tabs-1-tab {
+  background: transparent;
+  border: none;
+  color: var(--theme-color, #ffffff);
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 4px;
+
+  &:hover:not(.disabled) {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  &.active {
+    background: rgba(255, 255, 255, 0.15);
+    font-weight: 600;
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  // Size variants
+  &.tabs-1-tab-sm {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  &.tabs-1-tab-md {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  &.tabs-1-tab-lg {
+    padding: 0.625rem 1.25rem;
+    font-size: 1rem;
+  }
+}

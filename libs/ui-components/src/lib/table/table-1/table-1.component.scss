@@ -1,0 +1,148 @@
+@use '../../../styles/mixins' as shared;
+
+.table-1-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-1 {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--theme-bg, rgba(15, 23, 42, 0.95));
+  color: var(--theme-color, #ffffff);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+
+  @include shared.apply-all-variants('table-1-variant-');
+
+  // Size variants
+  &.table-1-sm {
+    font-size: 0.875rem;
+  }
+
+  &.table-1-md {
+    font-size: 1rem;
+  }
+
+  &.table-1-lg {
+    font-size: 1.125rem;
+  }
+
+  // Rounded variants
+  &.table-1-rounded-none {
+    border-radius: 0;
+  }
+
+  &.table-1-rounded-md {
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  &.table-1-rounded-full {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  // Striped
+  &.striped {
+    .table-1-row:nth-child(even) {
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
+
+  // Hoverable
+  &.hoverable {
+    .table-1-row:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: scale(1.01);
+      transition: all 0.2s ease;
+    }
+  }
+
+  // Dark mode
+  &.dark {
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+}
+
+.table-1-header {
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+
+  &.header-sm {
+    .table-1-header-cell {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  &.header-md {
+    .table-1-header-cell {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+    }
+  }
+
+  &.header-lg {
+    .table-1-header-cell {
+      padding: 1rem 1.25rem;
+      font-size: 1.125rem;
+    }
+  }
+}
+
+.table-1-header-cell {
+  text-align: left;
+  font-weight: 600;
+  color: var(--theme-color, #ffffff);
+  padding: 0.75rem 1rem;
+}
+
+.table-1-sort-icon {
+  margin-left: 0.5rem;
+  opacity: 0.5;
+  font-size: 0.75rem;
+}
+
+.table-1-body {
+  background: transparent;
+}
+
+.table-1-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.table-1-cell {
+  padding: 0.75rem 1rem;
+  color: var(--theme-color, #ffffff);
+}
+
+.table-1-body {
+  &.body-sm {
+    .table-1-cell {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.875rem;
+    }
+  }
+
+  &.body-md {
+    .table-1-cell {
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+    }
+  }
+
+  &.body-lg {
+    .table-1-cell {
+      padding: 1rem 1.25rem;
+      font-size: 1.125rem;
+    }
+  }
+}

@@ -1,0 +1,16 @@
+<div class="tabs-2-wrapper">
+  <div class="tabs-2" [class]="tabsClasses()" [style]="tabsStyles()">
+    @for (tab of tabs(); track tab.id) {
+      <button
+        class="tabs-2-tab"
+        [class]="tabClasses()(tab)"
+        [disabled]="tab.disabled"
+        [attr.aria-selected]="tab.id === activeTab()"
+        [attr.aria-controls]="'tab-' + tab.id"
+        [attr.id]="'tab-' + tab.id"
+      >
+        {{ tab.label }}
+      </button>
+    }
+  </div>
+</div>

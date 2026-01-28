@@ -1,0 +1,121 @@
+@use '../../../styles/mixins' as shared;
+
+.tooltip-1-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-1 {
+  position: absolute;
+  background: var(--theme-bg, rgba(15, 23, 42, 0.95));
+  color: var(--theme-color, #ffffff);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+  z-index: 1000;
+  transition: all 0.2s ease;
+
+  @include shared.apply-all-variants('tooltip-1-variant-');
+
+  // Size variants
+  &.tooltip-1-sm {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  &.tooltip-1-md {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.875rem;
+  }
+
+  &.tooltip-1-lg {
+    padding: 0.625rem 1rem;
+    font-size: 1rem;
+  }
+
+  // Rounded variants
+  &.tooltip-1-rounded-none {
+    border-radius: 0;
+  }
+
+  &.tooltip-1-rounded-md {
+    border-radius: 4px;
+  }
+
+  &.tooltip-1-rounded-full {
+    border-radius: 8px;
+  }
+
+  // Position variants
+  &.tooltip-1-top {
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+
+    .tooltip-1-arrow {
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-top-color: var(--theme-bg, rgba(15, 23, 42, 0.95));
+    }
+  }
+
+  &.tooltip-1-bottom {
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+
+    .tooltip-1-arrow {
+      top: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-color: var(--theme-bg, rgba(15, 23, 42, 0.95));
+    }
+  }
+
+  &.tooltip-1-left {
+    right: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+
+    .tooltip-1-arrow {
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-left-color: var(--theme-bg, rgba(15, 23, 42, 0.95));
+    }
+  }
+
+  &.tooltip-1-right {
+    left: calc(100% + 8px);
+    top: 50%;
+    transform: translateY(-50%);
+
+    .tooltip-1-arrow {
+      left: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-right-color: var(--theme-bg, rgba(15, 23, 42, 0.95));
+    }
+  }
+
+  // Dark mode
+  &.dark {
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+}
+
+.tooltip-1-content {
+  display: block;
+}
+
+.tooltip-1-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+  border-top-color: var(--theme-bg, rgba(15, 23, 42, 0.95));
+}

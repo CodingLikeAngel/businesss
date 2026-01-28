@@ -1,0 +1,10 @@
+<div class="gallery-2" [class]="galleryClasses()" [style]="galleryStyles()">
+  @for (item of items(); track item.id) {
+    <div class="gallery-2-item" [class]="itemClasses()(item)">
+      <img [src]="item.src" [alt]="item.alt || ''" />
+      @if (item.caption) {
+        <div class="gallery-2-caption">{{ item.caption }}</div>
+      }
+    </div>
+  }
+</div>

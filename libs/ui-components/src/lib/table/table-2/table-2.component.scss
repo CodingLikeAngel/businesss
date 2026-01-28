@@ -1,0 +1,149 @@
+@use '../../../styles/mixins' as shared;
+
+.table-2-wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-2 {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--theme-bg, rgba(15, 23, 42, 0.98));
+  color: var(--theme-color, #ffffff);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  transition: all 0.25s ease;
+
+  @include shared.apply-all-variants('table-2-variant-');
+
+  // Size variants
+  &.table-2-sm {
+    font-size: 0.9375rem;
+  }
+
+  &.table-2-md {
+    font-size: 1.0625rem;
+  }
+
+  &.table-2-lg {
+    font-size: 1.1875rem;
+  }
+
+  // Rounded variants
+  &.table-2-rounded-none {
+    border-radius: 0;
+  }
+
+  &.table-2-rounded-md {
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  &.table-2-rounded-full {
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  // Striped
+  &.striped {
+    .table-2-row:nth-child(even) {
+      background: rgba(255, 255, 255, 0.075);
+    }
+  }
+
+  // Hoverable
+  &.hoverable {
+    .table-2-row:hover {
+      background: rgba(255, 255, 255, 0.125);
+      transform: scale(1.015);
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  // Dark mode
+  &.dark {
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+.table-2-header {
+  background: rgba(255, 255, 255, 0.075);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.15);
+
+  &.header-sm {
+    .table-2-header-cell {
+      padding: 0.625rem 0.875rem;
+      font-size: 0.9375rem;
+    }
+  }
+
+  &.header-md {
+    .table-2-header-cell {
+      padding: 0.875rem 1.25rem;
+      font-size: 1.0625rem;
+    }
+  }
+
+  &.header-lg {
+    .table-2-header-cell {
+      padding: 1.125rem 1.625rem;
+      font-size: 1.1875rem;
+    }
+  }
+}
+
+.table-2-header-cell {
+  text-align: left;
+  font-weight: 700;
+  color: var(--theme-color, #ffffff);
+  padding: 0.875rem 1.25rem;
+}
+
+.table-2-sort-icon {
+  margin-left: 0.625rem;
+  opacity: 0.6;
+  font-size: 0.8125rem;
+}
+
+.table-2-body {
+  background: transparent;
+}
+
+.table-2-row {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.075);
+  transition: all 0.25s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+.table-2-cell {
+  padding: 0.875rem 1.25rem;
+  color: var(--theme-color, #ffffff);
+}
+
+.table-2-body {
+  &.body-sm {
+    .table-2-cell {
+      padding: 0.625rem 0.875rem;
+      font-size: 0.9375rem;
+    }
+  }
+
+  &.body-md {
+    .table-2-cell {
+      padding: 0.875rem 1.25rem;
+      font-size: 1.0625rem;
+    }
+  }
+
+  &.body-lg {
+    .table-2-cell {
+      padding: 1.125rem 1.625rem;
+      font-size: 1.1875rem;
+    }
+  }
+}

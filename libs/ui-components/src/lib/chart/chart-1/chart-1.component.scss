@@ -1,0 +1,82 @@
+@use '../../../styles/mixins' as shared;
+
+.chart-1 {
+  background: var(--theme-bg, rgba(15, 23, 42, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  padding: 1rem;
+
+  @include shared.apply-all-variants('chart-1-variant-');
+
+  // Size variants
+  &.chart-1-sm {
+    padding: 0.75rem;
+  }
+
+  &.chart-1-md {
+    padding: 1rem;
+  }
+
+  &.chart-1-lg {
+    padding: 1.25rem;
+  }
+
+  // Rounded variants
+  &.chart-1-rounded-none {
+    border-radius: 0;
+  }
+
+  &.chart-1-rounded-md {
+    border-radius: 8px;
+  }
+
+  &.chart-1-rounded-full {
+    border-radius: 12px;
+  }
+
+  // Dark mode
+  &.dark {
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+  }
+}
+
+.chart-1-title {
+  margin: 0 0 1rem 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--theme-color, #ffffff);
+}
+
+.chart-1-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  height: 200px;
+}
+
+.chart-1-bar {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+.chart-1-bar-fill {
+  height: 100%;
+  background: var(--theme-color, #ffffff);
+  transition: height 0.3s ease;
+}
+
+.chart-1-label {
+  margin-top: 0.5rem;
+  font-size: 0.75rem;
+  color: var(--theme-color, #ffffff);
+  text-align: center;
+}

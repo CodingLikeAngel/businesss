@@ -1,0 +1,11 @@
+<div class="chart-1" [class]="chartClasses()" [style]="chartStyles()">
+  <h3 class="chart-1-title">{{ title() }}</h3>
+  <div class="chart-1-bars">
+    @for (point of data(); track point.label) {
+      <div class="chart-1-bar" [style]="getBarStyle(point)">
+        <div class="chart-1-bar-fill"></div>
+        <div class="chart-1-label">{{ point.label }}</div>
+      </div>
+    }
+  </div>
+</div>

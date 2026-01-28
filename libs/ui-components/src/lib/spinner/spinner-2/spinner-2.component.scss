@@ -1,0 +1,111 @@
+@use '../../../styles/mixins' as shared;
+
+.spinner-2-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.spinner-2 {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  @include shared.apply-all-variants('spinner-2-variant-');
+
+  // Size variants
+  &.spinner-2-xs {
+    gap: 4px;
+
+    .spinner-2-dot {
+      width: 6px;
+      height: 6px;
+    }
+  }
+
+  &.spinner-2-sm {
+    gap: 6px;
+
+    .spinner-2-dot {
+      width: 8px;
+      height: 8px;
+    }
+  }
+
+  &.spinner-2-md {
+    gap: 8px;
+
+    .spinner-2-dot {
+      width: 10px;
+      height: 10px;
+    }
+  }
+
+  &.spinner-2-lg {
+    gap: 12px;
+
+    .spinner-2-dot {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  // Speed variants
+  &.spinner-2-slow {
+    .spinner-2-dot {
+      animation-duration: 1.5s;
+    }
+  }
+
+  &.spinner-2-normal {
+    .spinner-2-dot {
+      animation-duration: 1s;
+    }
+  }
+
+  &.spinner-2-fast {
+    .spinner-2-dot {
+      animation-duration: 0.6s;
+    }
+  }
+
+  // Dark mode
+  &.dark {
+    .spinner-2-dot {
+      background: var(--theme-color, #ffffff);
+    }
+  }
+}
+
+.spinner-2-dot {
+  width: 10px;
+  height: 10px;
+  background: var(--theme-color, #ffffff);
+  border-radius: 50%;
+  animation: spinner2Bounce 1s ease-in-out infinite;
+
+  &:nth-child(1) {
+    animation-delay: 0s;
+  }
+
+  &:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  &:nth-child(3) {
+    animation-delay: 0.4s;
+  }
+}
+
+@keyframes spinner2Bounce {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    transform: translateY(-10px);
+    opacity: 1;
+  }
+}

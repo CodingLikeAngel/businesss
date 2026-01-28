@@ -1,0 +1,25 @@
+<div class="table-1-wrapper">
+  <table class="table-1" [class]="tableClasses()" [style]="tableStyles()">
+    <thead class="table-1-header" [class]="headerClasses()">
+      <tr>
+        @for (column of columns(); track column.key) {
+          <th class="table-1-header-cell">
+            {{ column.label }}
+            @if (column.sortable) {
+              <span class="table-1-sort-icon">↕</span>
+            }
+          </th>
+        }
+      </tr>
+    </thead>
+    <tbody class="table-1-body" [class]="bodyClasses()">
+      @for (row of data(); track trackByFn($index, row)) {
+        <tr class="table-1-row">
+          @for (column of columns(); track column.key) {
+            <td class="table-1-cell">{{ row[column.key] }}</td>
+          }
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

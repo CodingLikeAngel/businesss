@@ -1,0 +1,121 @@
+@use '../../../styles/mixins' as shared;
+
+.tooltip-2-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip-2 {
+  position: absolute;
+  background: var(--theme-bg, rgba(15, 23, 42, 0.98));
+  color: var(--theme-color, #ffffff);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  padding: 0.625rem 1rem;
+  font-size: 0.9375rem;
+  white-space: nowrap;
+  z-index: 1000;
+  transition: all 0.25s ease;
+
+  @include shared.apply-all-variants('tooltip-2-variant-');
+
+  // Size variants
+  &.tooltip-2-sm {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  &.tooltip-2-md {
+    padding: 0.625rem 1rem;
+    font-size: 0.9375rem;
+  }
+
+  &.tooltip-2-lg {
+    padding: 0.75rem 1.25rem;
+    font-size: 1.0625rem;
+  }
+
+  // Rounded variants
+  &.tooltip-2-rounded-none {
+    border-radius: 0;
+  }
+
+  &.tooltip-2-rounded-md {
+    border-radius: 6px;
+  }
+
+  &.tooltip-2-rounded-full {
+    border-radius: 10px;
+  }
+
+  // Position variants
+  &.tooltip-2-top {
+    bottom: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+
+    .tooltip-2-arrow {
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-top-color: var(--theme-bg, rgba(15, 23, 42, 0.98));
+    }
+  }
+
+  &.tooltip-2-bottom {
+    top: calc(100% + 10px);
+    left: 50%;
+    transform: translateX(-50%);
+
+    .tooltip-2-arrow {
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-bottom-color: var(--theme-bg, rgba(15, 23, 42, 0.98));
+    }
+  }
+
+  &.tooltip-2-left {
+    right: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+
+    .tooltip-2-arrow {
+      right: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-left-color: var(--theme-bg, rgba(15, 23, 42, 0.98));
+    }
+  }
+
+  &.tooltip-2-right {
+    left: calc(100% + 10px);
+    top: 50%;
+    transform: translateY(-50%);
+
+    .tooltip-2-arrow {
+      left: -8px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-right-color: var(--theme-bg, rgba(15, 23, 42, 0.98));
+    }
+  }
+
+  // Dark mode
+  &.dark {
+    background: rgba(0, 0, 0, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+  }
+}
+
+.tooltip-2-content {
+  display: block;
+}
+
+.tooltip-2-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 8px solid transparent;
+  border-top-color: var(--theme-bg, rgba(15, 23, 42, 0.98));
+}

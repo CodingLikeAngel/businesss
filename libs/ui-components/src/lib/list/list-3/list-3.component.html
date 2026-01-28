@@ -1,0 +1,8 @@
+<div [ngClass]="listClasses()" [ngStyle]="listStyles()" class="list-3-wrapper">
+  <ul class="list-3-container">
+    <li *ngFor="let item of items()" [ngClass]="itemClasses()" class="list-3-item">
+      <ng-content></ng-content>
+      {{ item }}
+    </li>
+  </ul>
+</div>

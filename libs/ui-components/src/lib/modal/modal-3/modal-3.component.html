@@ -1,0 +1,27 @@
+@if (isOpen()) {
+  <div class="modal-3-wrapper" [style.z-index]="zIndex()">
+    <div class="modal-3-overlay" [class]="overlayClasses()" (click)="closeModal()"></div>
+    <div
+      class="modal-3-container"
+      [class]="modalClasses()"
+      [style]="modalStyles()"
+      (keyup)="handleKeyUp($event)"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="modal-3-title"
+    >
+      <div class="modal-3-header" [class]="headerClasses()">
+        <h2 id="modal-3-title" class="modal-3-title">{{ title() }}</h2>
+        <button class="modal-3-close" (click)="closeModal()" aria-label="Close modal">
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-3-body" [class]="bodyClasses()">
+        <ng-content></ng-content>
+      </div>
+    </div>
+  </div>
+}

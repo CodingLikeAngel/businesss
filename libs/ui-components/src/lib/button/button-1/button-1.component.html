@@ -1,0 +1,34 @@
+<button
+  [ngClass]="buttonClasses()"
+  [ngStyle]="buttonStyles()"
+  (click)="handleClick($event)"
+  [attr.aria-label]="ariaLabel() || 'Button 1'"
+  [attr.aria-disabled]="disabled() ? 'true' : 'false'"
+  [attr.aria-expanded]="expanded()"
+  [attr.aria-pressed]="pressed()"
+  [disabled]="disabled() || loading()"
+>
+  <span class="ripple" [class.active]="rippleActive"></span>
+  
+  <div class="loading-overlay" *ngIf="loading()">
+    <span class="spinner"></span>
+  </div>
+
+  <div class="btn-1-content" [class.is-hidden]="loading()">
+    <ng-container *ngIf="leadingIcon()">
+      <ng-icon *ngIf="getIconType(leadingIcon()) === 'ng-icon'" [name]="leadingIcon()!" class="icon"></ng-icon>
+      <span *ngIf="getIconType(leadingIcon()) === 'svg'" [innerHTML]="leadingIcon()" class="icon"></span>
+      <span *ngIf="getIconType(leadingIcon()) === 'text'" class="icon">{{ leadingIcon() }}</span>
+    </ng-container>
+
+    <span class="text-container">
+      <ng-content></ng-content>
+    </span>
+
+    <ng-container *ngIf="trailingIcon()">
+      <ng-icon *ngIf="getIconType(trailingIcon()) === 'ng-icon'" [name]="trailingIcon()!" class="icon"></ng-icon>
+      <span *ngIf="getIconType(trailingIcon()) === 'svg'" [innerHTML]="trailingIcon()" class="icon"></span>
+      <span *ngIf="getIconType(trailingIcon()) === 'text'" class="icon">{{ trailingIcon() }}</span>
+    </ng-container>
+  </div>
+</button>

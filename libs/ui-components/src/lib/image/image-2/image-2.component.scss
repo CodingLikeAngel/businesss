@@ -1,0 +1,113 @@
+@use '../../styles/mixins' as shared;
+
+.image-2-wrapper {
+  display: block;
+  width: 100%;
+}
+
+.image-2-container {
+  position: relative;
+  display: inline-block;
+  overflow: hidden;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.image-2 {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  @include shared.apply-all-variants('image-2-');
+
+  // Size variants
+  &.image-2--size-small {
+    max-width: 180px;
+    max-height: 180px;
+  }
+
+  &.image-2--size-medium {
+    max-width: 350px;
+    max-height: 350px;
+  }
+
+  &.image-2--size-large {
+    max-width: 600px;
+    max-height: 600px;
+  }
+
+  // Shape variants
+  &.image-2--shape-square {
+    border-radius: 0;
+  }
+
+  &.image-2--shape-circle {
+    border-radius: 50%;
+  }
+
+  &.image-2--shape-rounded {
+    border-radius: 12px;
+  }
+
+  // Animation variants
+  &.image-2--animation-fade {
+    animation: image-2-fade 0.4s ease-in-out;
+  }
+
+  &.image-2--animation-zoom {
+    animation: image-2-zoom 0.4s ease-in-out;
+  }
+
+  &.image-2--animation-slide {
+    animation: image-2-slide 0.4s ease-in-out;
+  }
+
+  // With caption
+  &.image-2--with-caption {
+    margin-bottom: 0.75rem;
+  }
+}
+
+.image-2-caption {
+  margin-top: 0.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--theme-color, #ffffff);
+  text-align: center;
+  opacity: 0.95;
+}
+
+@keyframes image-2-fade {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes image-2-zoom {
+  from {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes image-2-slide {
+  from {
+    transform: translateX(-30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}

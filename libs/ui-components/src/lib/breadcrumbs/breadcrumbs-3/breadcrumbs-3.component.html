@@ -1,0 +1,14 @@
+<nav [class]="breadcrumbsClasses()" [style]="breadcrumbsStyles()">
+  @for (item of items(); track item.label; let last = $last) {
+    <span [class]="itemClasses(item, $index)">
+      @if (!last && item.path && !item.disabled) {
+        <a [routerLink]="item.path">{{ item.label }}</a>
+      } @else {
+        <span>{{ item.label }}</span>
+      }
+    </span>
+    @if (!last) {
+      <span class="breadcrumbs-3-separator">/</span>
+    }
+  }
+</nav>
