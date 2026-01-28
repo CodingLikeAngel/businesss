@@ -1,0 +1,70 @@
+<div #sectionElement class="editor-section">
+  <div class="editor-section-header">
+    <h3>Image 2</h3>
+    <button class="editor-section-toggle" (click)="toggleSection()">
+      <span [class.expanded]="isExpanded()">▼</span>
+    </button>
+  </div>
+  <div class="editor-section-content" [class.expanded]="isExpanded()">
+    <div class="editor-section-controls">
+      <div class="editor-control-group">
+        <label>Source URL</label>
+        <input type="text" [value]="section.data.src || 'https://via.placeholder.com/300'" (input)="updateSectionData('src', $any($event.target).value)">
+      </div>
+      <div class="editor-control-group">
+        <label>Alt Text</label>
+        <input type="text" [value]="section.data.alt || 'Image description'" (input)="updateSectionData('alt', $any($event.target).value)">
+      </div>
+      <div class="editor-control-group">
+        <label>Size</label>
+        <select [value]="section.data.size || 'medium'" (change)="updateSectionData('size', $any($event.target).value)">
+          <option value="small">Small</option>
+          <option value="medium">Medium</option>
+          <option value="large">Large</option>
+          <option value="custom">Custom</option>
+        </select>
+      </div>
+      <div class="editor-control-group">
+        <label>Shape</label>
+        <select [value]="section.data.shape || 'square'" (change)="updateSectionData('shape', $any($event.target).value)">
+          <option value="square">Square</option>
+          <option value="circle">Circle</option>
+          <option value="rounded">Rounded</option>
+        </select>
+      </div>
+      <div class="editor-control-group">
+        <label>Animation</label>
+        <select [value]="section.data.animation || 'none'" (change)="updateSectionData('animation', $any($event.target).value)">
+          <option value="none">None</option>
+          <option value="fade">Fade</option>
+          <option value="zoom">Zoom</option>
+          <option value="slide">Slide</option>
+        </select>
+      </div>
+      <div class="editor-control-group">
+        <label>Variant</label>
+        <select [value]="section.data.variant || 'primary'" (change)="updateSectionData('variant', $any($event.target).value)">
+          <option value="default">Default</option>
+          <option value="primary">Primary</option>
+          <option value="secondary">Secondary</option>
+          <option value="polaroid">Polaroid</option>
+        </select>
+      </div>
+    </div>
+    <div class="editor-section-preview">
+      <lib-ui-image-2
+        #componentElement
+        [src]="section.data.src || 'https://via.placeholder.com/300'"
+        [alt]="section.data.alt || 'Image description'"
+        [size]="section.data.size || 'medium'"
+        [width]="section.data.width"
+        [height]="section.data.height"
+        [shape]="section.data.shape || 'square'"
+        [caption]="section.data.caption"
+        [variant]="section.data.variant || 'primary'"
+        [animation]="section.data.animation || 'none'"
+        [customStyles]="section.data.customStyles || {}">
+      </lib-ui-image-2>
+    </div>
+  </div>
+</div>
