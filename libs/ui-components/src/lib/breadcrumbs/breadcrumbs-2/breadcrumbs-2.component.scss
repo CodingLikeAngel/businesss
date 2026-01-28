@@ -1,7 +1,7 @@
-@import '../../../styles/shared';
+@use '../../styles/mixins' as shared;
 
 .breadcrumbs-2 {
-  @include shared.apply-all-variants;
+  @include shared.apply-all-variants('breadcrumbs-2-');
   display: flex;
   align-items: center;
   gap: 0.625rem;
