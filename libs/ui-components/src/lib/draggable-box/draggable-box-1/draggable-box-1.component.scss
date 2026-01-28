@@ -1,7 +1,7 @@
-@import '../../../styles/shared';
+@use '../../styles/mixins' as shared;
 
 .draggable-box-1 {
-  @include shared.apply-all-variants;
+  @include shared.apply-all-variants('draggable-box-1-');
   position: absolute;
   display: flex;
   align-items: center;
