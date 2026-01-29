@@ -1,4 +1,4 @@
-@use '../../styles/mixins' as shared;
+@use '../../../styles/mixins' as shared;
 
 :host {
   display: block;
@@ -7,6 +7,7 @@
   --input-3-radius: 8px;
   --input-3-padding-x: 1.25rem;
   --input-3-padding-y: 0.875rem;
+  // Input-3: Modern/Sleek style - balanced design with moderate styling
   
   @include shared.apply-all-variants('input-3-');
 }

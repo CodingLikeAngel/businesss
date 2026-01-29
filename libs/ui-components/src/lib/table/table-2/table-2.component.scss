@@ -13,6 +13,7 @@
   border: 2px solid rgba(255, 255, 255, 0.15);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   transition: all 0.25s ease;
+  // Table-2: Bold/Prominent style - stronger borders, shadows, and spacing
 
   @include shared.apply-all-variants('table-2-variant-');
 

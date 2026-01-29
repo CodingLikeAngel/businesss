@@ -11,6 +11,7 @@
   background: var(--component-bg, var(--theme-bg, #ffffff));
   color: var(--component-text, var(--theme-color, #1a1a1a));
   border: 1.5px solid var(--component-border, var(--theme-border, #e0e0e0));
+  // Breadcrumbs-3: Modern/Sleek style - balanced design with moderate styling
 
   &.breadcrumbs-3-rounded-none {
     border-radius: 0;

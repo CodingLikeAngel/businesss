@@ -1,3 +1,4 @@
+<!-- Breadcrumbs-2: Bold/Prominent Style - Strong Visual Presence -->
 <nav [class]="breadcrumbsClasses()" [style]="breadcrumbsStyles()">
   @for (item of items(); track item.label; let last = $last) {
     <span [class]="itemClasses(item, $index)">

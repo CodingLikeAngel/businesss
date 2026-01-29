@@ -1,4 +1,5 @@
 <div [class]="accordionClasses()" [style]="accordionStyles()">
+  <!-- Accordion-3: Modern/Sleek Style - Balanced Design -->
   @for (item of items(); track item.id) {
     <div [class]="itemClasses(item)">
       <button class="accordion-3-header" (click)="toggleItem(item)">

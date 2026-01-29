@@ -19,6 +19,7 @@
   height: auto;
   object-fit: cover;
   transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  // Image-3: Modern/Sleek style - balanced design with moderate styling
 
   @include shared.apply-all-variants('image-3-');
 

@@ -1,4 +1,4 @@
-@use '../styles/mixins' as shared;
+@use '../../styles/mixins' as shared;
 
 :host {
   display: block;
@@ -7,6 +7,7 @@
   --input-1-radius: 4px;
   --input-1-padding-x: 1rem;
   --input-1-padding-y: 0.75rem;
+  // Input-1: Minimalist style - clean inputs with subtle borders
   
   @include shared.apply-all-variants('input-1-');
 }

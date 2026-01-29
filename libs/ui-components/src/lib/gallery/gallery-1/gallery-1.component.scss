@@ -7,6 +7,7 @@
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
   gap: 0.5rem;
+  // Gallery-1: Minimalist style - clean grid with subtle borders
 
   @include shared.apply-all-variants('gallery-1-variant-');
 

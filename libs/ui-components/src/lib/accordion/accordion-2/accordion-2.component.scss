@@ -11,6 +11,7 @@
   background: var(--component-bg, var(--theme-bg, #ffffff));
   color: var(--component-text, var(--theme-color, #1a1a1a));
   border: 2px solid var(--component-border, var(--theme-border, #e0e0e0));
+  // Accordion-2: Bold/Prominent style - stronger borders, shadows, and spacing
 
   &.accordion-2-rounded-none {
     border-radius: 0;

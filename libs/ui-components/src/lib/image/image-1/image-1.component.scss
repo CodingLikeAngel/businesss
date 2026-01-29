@@ -18,6 +18,7 @@
   height: auto;
   object-fit: cover;
   transition: all 0.2s ease-in-out;
+  // Image-1: Minimalist style - clean image with subtle transitions
 
   @include shared.apply-all-variants('image-1-');
 

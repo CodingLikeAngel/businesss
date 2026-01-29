@@ -7,6 +7,7 @@
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.225s ease;
   gap: 0.5625rem;
+  // Gallery-3: Modern/Sleek style - balanced design with moderate styling
 
   @include shared.apply-all-variants('gallery-3-variant-');
 

@@ -13,6 +13,7 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
+  // Table-1: Minimalist style - clean table with subtle borders
 
   @include shared.apply-all-variants('table-1-variant-');
 

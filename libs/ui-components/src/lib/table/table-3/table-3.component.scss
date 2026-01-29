@@ -13,6 +13,7 @@
   border: 1.5px solid rgba(255, 255, 255, 0.125);
   box-shadow: 0 3px 12px rgba(0, 0, 0, 0.15);
   transition: all 0.225s ease;
+  // Table-3: Modern/Sleek style - balanced design with moderate styling
 
   @include shared.apply-all-variants('table-3-variant-');
 
