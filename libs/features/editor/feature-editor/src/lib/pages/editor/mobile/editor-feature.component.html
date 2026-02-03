@@ -550,15 +550,42 @@
         (sectionResized)="onSectionResized($event.section, $event.bounds)"
       ></lib-editor-smart-container-section>
 
-      <!-- DRAGGABLE BOX -->
+      <!-- DRAGGABLE BOX (standalone - handles events internally) -->
       <lib-editor-draggable-box-section *ngSwitchCase="'draggable-box'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+      ></lib-editor-draggable-box-section>
+
+      <!-- DRAGGABLE BOX 1 -->
+      <lib-editor-draggable-box-1-section *ngSwitchCase="'draggable-box-1'"
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
         (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)"
-      ></lib-editor-draggable-box-section>
+      ></lib-editor-draggable-box-1-section>
+
+      <!-- DRAGGABLE BOX 2 -->
+      <lib-editor-draggable-box-2-section *ngSwitchCase="'draggable-box-2'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      ></lib-editor-draggable-box-2-section>
+
+      <!-- DRAGGABLE BOX 3 -->
+      <lib-editor-draggable-box-3-section *ngSwitchCase="'draggable-box-3'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      ></lib-editor-draggable-box-3-section>
 
       <!-- GENERIC -->
       <lib-editor-generic-section *ngSwitchCase="'generic'"
