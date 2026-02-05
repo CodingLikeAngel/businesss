@@ -434,11 +434,21 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
       boxVariant: this.section.content?.['boxVariant'] || 'draggable-box-1'
     };
 
+    const hasVariant = !!this.currentContent.variant && this.currentContent.variant !== 'default';
     const borderStyle = this.section.styles?.['border'] || '';
+    
+    // ROBUSTNESS: If we have a variant, we should allow backgroundColor to be empty so the variant can shine.
+    // However, if there's no variant, we MUST have a fallback color so it's not invisible.
     this.currentStyles = {
-      backgroundColor: this.section.styles?.['backgroundColor'] || '#10b981',
-      borderColor: this.extractBorderColor(borderStyle),
-      borderWidth: this.extractBorderWidth(borderStyle),
+      backgroundColor: this.section.styles?.['backgroundColor'] !== undefined 
+        ? this.section.styles?.['backgroundColor'] 
+        : (hasVariant ? '' : '#10b981'),
+      borderColor: this.section.styles?.['borderColor'] !== undefined 
+        ? this.section.styles?.['borderColor'] 
+        : (hasVariant ? '' : this.extractBorderColor(borderStyle)),
+      borderWidth: this.section.styles?.['borderWidth'] !== undefined 
+        ? parseInt(this.section.styles?.['borderWidth'] as string) 
+        : this.extractBorderWidth(borderStyle),
       borderRadius: parseInt(this.section.styles?.['borderRadius'] as string || '12') || 12,
       borderRadiusUnit: 'px',
       padding: parseInt(this.section.styles?.['padding'] as string || '20') || 20,
