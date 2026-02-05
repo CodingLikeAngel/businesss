@@ -285,12 +285,9 @@ export interface UndoRedoState {
                    [style.top.px]="currentPosition.y"
                    [style.width.px]="currentSize.width"
                    [style.height.px]="currentSize.height"
-                   [style.backgroundColor]="editableStyles.backgroundColor"
-                   [style.border]="editableStyles.borderWidth + 'px solid ' + editableStyles.borderColor"
-                   [style.borderRadius]="editableContent.rounded === 'md' ? (editableStyles.borderRadius + borderRadiusUnit) : null"
-                   [style.padding]="editableStyles.padding + paddingUnit"
-                   [style.boxShadow]="editableStyles.boxShadow"
                    [class.snapping]="snapToGrid && isDragging"
+                   [class.is-dragging]="isDragging"
+                   [class.is-resizing]="isResizing"
                    (mousedown)="onMouseDown($event)">
                 
                 <lib-ui-components-draggable-box-1
@@ -784,6 +781,29 @@ export interface UndoRedoState {
       position: absolute !important;
       cursor: move;
       z-index: 100;
+      /* ROBUSTNESS: Outline is separate from content styling */
+      outline: 2px solid transparent;
+      outline-offset: 0;
+      transition: outline-color 0.15s ease;
+    }
+
+    .draggable-wrapper:hover {
+      outline-color: rgba(99, 102, 241, 0.5);
+    }
+
+    .draggable-wrapper.is-dragging,
+    .draggable-wrapper.is-resizing {
+      outline-color: var(--primary-accent);
+      outline-width: 3px;
+    }
+
+    /* Ensure inner components fill the wrapper */
+    .draggable-wrapper > lib-ui-components-draggable-box-1,
+    .draggable-wrapper > lib-ui-components-draggable-box-2,
+    .draggable-wrapper > lib-ui-components-draggable-box-3 {
+      display: block;
+      width: 100%;
+      height: 100%;
     }
 
     /* RESIZE HANDLES */
@@ -950,14 +970,36 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
   get canRedo(): boolean { return this.redoStack.length > 0; }
 
   ngOnInit() {
-    // Load initial position and size
-    this.currentPosition = { 
-      x: Math.max(0, this.config.position?.x || 0), 
-      y: Math.max(0, this.config.position?.y || 0) 
+    // Define sensible default sizes per component type
+    const defaultSizes: Record<string, { width: number; height: number }> = {
+      'draggable-box-1': { width: 280, height: 120 },
+      'draggable-box-2': { width: 260, height: 100 },
+      'draggable-box-3': { width: 320, height: 180 }
     };
+    
+    const variant = this.config.content['boxVariant'] || 'draggable-box-1';
+    const defaultSize = defaultSizes[variant] || { width: 280, height: 120 };
+
+    // Load initial position and size with validation
+    this.currentPosition = { 
+      x: Math.max(50, Math.min(500, this.config.position?.x || 100)), 
+      y: Math.max(50, Math.min(500, this.config.position?.y || 100)) 
+    };
+    
+    // ROBUSTNESS: If incoming size is suspiciously large or zero, use defaults
+    let incomingWidth = this.config.size?.width || 0;
+    let incomingHeight = this.config.size?.height || 0;
+    
+    if (incomingWidth < 100 || incomingWidth > 800) {
+      incomingWidth = defaultSize.width;
+    }
+    if (incomingHeight < 60 || incomingHeight > 600) {
+      incomingHeight = defaultSize.height;
+    }
+
     this.currentSize = { 
-      width: Math.max(100, this.config.size?.width || 300), 
-      height: Math.max(60, this.config.size?.height || 200) 
+      width: incomingWidth, 
+      height: incomingHeight 
     };
     this.initialPosition = { ...this.currentPosition };
     this.initialSize = { ...this.currentSize };
@@ -968,7 +1010,7 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
       title: this.config.content['title'] || 'Draggable Box',
       description: this.config.content['description'] || 'Arrastra y redimensiona este elemento',
       variant: this.config.content['variant'] || '',
-      boxVariant: this.config.content['boxVariant'] || 'draggable-box-1',
+      boxVariant: variant,
       rounded: this.config.content['rounded'] || 'md',
       size: this.config.content['size'] || 'md',
       dark: this.config.content['dark'] || false

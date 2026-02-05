@@ -524,10 +524,18 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
       const width = this.section.styles['width'];
       const height = this.section.styles['height'];
       
-      if (left) this.boxLeft = parseInt(left) || this.boxLeft;
-      if (top) this.boxTop = parseInt(top) || this.boxTop;
-      if (width) this.boxWidth = parseInt(width) || this.boxWidth;
-      if (height) this.boxHeight = parseInt(height) || this.boxHeight;
+      if (left) this.boxLeft = Math.max(0, parseInt(left) || this.boxLeft);
+      if (top) this.boxTop = Math.max(0, parseInt(top) || this.boxTop);
+      
+      // ROBUSTNESS: Clamp width and height to sensible bounds
+      if (width) {
+        const parsedWidth = parseInt(width) || this.boxWidth;
+        this.boxWidth = Math.min(800, Math.max(100, parsedWidth));
+      }
+      if (height) {
+        const parsedHeight = parseInt(height) || this.boxHeight;
+        this.boxHeight = Math.min(600, Math.max(60, parsedHeight));
+      }
 
       this.updateSectionHeight();
     }
