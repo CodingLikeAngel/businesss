@@ -392,13 +392,13 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   // Box ID
   get boxId(): string { return this.section.id + '_box'; }
 
-  // Position and size state
+  // Position and size state - defaults match validated range
   boxLeft = 50;
   boxTop = 50;
-  boxWidth = 300;
-  boxHeight = 200;
-  sectionHeight = 500;
-  containerHeight = 400;
+  boxWidth = 280;  // Within valid range 150-400
+  boxHeight = 120; // Within valid range 80-250
+  sectionHeight = 300;
+  containerHeight = 250;
 
   // Current content and styles (merged from section and isolated mode)
   currentContent: any = {};
@@ -518,6 +518,11 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   }
 
   private loadPositionFromStore() {
+    // Define strict valid ranges
+    const MIN_WIDTH = 150, MAX_WIDTH = 400;
+    const MIN_HEIGHT = 80, MAX_HEIGHT = 250;
+    const DEFAULT_WIDTH = 280, DEFAULT_HEIGHT = 120;
+    
     if (this.section.styles) {
       const left = this.section.styles['left'];
       const top = this.section.styles['top'];
@@ -527,14 +532,14 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
       if (left) this.boxLeft = Math.max(0, parseInt(left) || this.boxLeft);
       if (top) this.boxTop = Math.max(0, parseInt(top) || this.boxTop);
       
-      // ROBUSTNESS: Clamp width and height to sensible bounds
+      // ROBUSTNESS: Only accept widths/heights within strict bounds
       if (width) {
-        const parsedWidth = parseInt(width) || this.boxWidth;
-        this.boxWidth = Math.min(800, Math.max(100, parsedWidth));
+        const parsedWidth = parseInt(width) || DEFAULT_WIDTH;
+        this.boxWidth = (parsedWidth >= MIN_WIDTH && parsedWidth <= MAX_WIDTH) ? parsedWidth : DEFAULT_WIDTH;
       }
       if (height) {
-        const parsedHeight = parseInt(height) || this.boxHeight;
-        this.boxHeight = Math.min(600, Math.max(60, parsedHeight));
+        const parsedHeight = parseInt(height) || DEFAULT_HEIGHT;
+        this.boxHeight = (parsedHeight >= MIN_HEIGHT && parsedHeight <= MAX_HEIGHT) ? parsedHeight : DEFAULT_HEIGHT;
       }
 
       this.updateSectionHeight();
