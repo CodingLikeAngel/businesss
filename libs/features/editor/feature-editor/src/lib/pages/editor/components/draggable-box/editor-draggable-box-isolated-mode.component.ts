@@ -797,13 +797,27 @@ export interface UndoRedoState {
       outline-width: 3px;
     }
 
-    /* Ensure inner components fill the wrapper */
-    .draggable-wrapper > lib-ui-components-draggable-box-1,
-    .draggable-wrapper > lib-ui-components-draggable-box-2,
-    .draggable-wrapper > lib-ui-components-draggable-box-3 {
-      display: block;
-      width: 100%;
-      height: 100%;
+    /* Ensure inner components fill the wrapper - PIERCE ENCAPSULATION */
+    .draggable-wrapper {
+      ::ng-deep {
+        lib-ui-components-draggable-box-1,
+        lib-ui-components-draggable-box-2,
+        lib-ui-components-draggable-box-3 {
+          display: block !important;
+          width: 100% !important;
+          height: 100% !important;
+          position: relative !important;
+        }
+        
+        .draggable-box-1,
+        .draggable-box-2,
+        .draggable-box-3 {
+          position: absolute !important;
+          inset: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+      }
     }
 
     /* RESIZE HANDLES */
@@ -970,7 +984,7 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
   get canRedo(): boolean { return this.redoStack.length > 0; }
 
   ngOnInit() {
-    // Define sensible default sizes per component type
+    // Define sensible default sizes per component type - these match the actual visual design
     const defaultSizes: Record<string, { width: number; height: number }> = {
       'draggable-box-1': { width: 280, height: 120 },
       'draggable-box-2': { width: 260, height: 100 },
@@ -980,26 +994,24 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
     const variant = this.config.content['boxVariant'] || 'draggable-box-1';
     const defaultSize = defaultSizes[variant] || { width: 280, height: 120 };
 
-    // Load initial position and size with validation
+    // Load initial position with validation
     this.currentPosition = { 
       x: Math.max(50, Math.min(500, this.config.position?.x || 100)), 
       y: Math.max(50, Math.min(500, this.config.position?.y || 100)) 
     };
     
-    // ROBUSTNESS: If incoming size is suspiciously large or zero, use defaults
-    let incomingWidth = this.config.size?.width || 0;
-    let incomingHeight = this.config.size?.height || 0;
+    // ROBUSTNESS: Use STRICT validation - only accept sizes within a very tight range
+    // If the size looks like it came from corrupted data, use defaults
+    const incomingWidth = this.config.size?.width || 0;
+    const incomingHeight = this.config.size?.height || 0;
     
-    if (incomingWidth < 100 || incomingWidth > 800) {
-      incomingWidth = defaultSize.width;
-    }
-    if (incomingHeight < 60 || incomingHeight > 600) {
-      incomingHeight = defaultSize.height;
-    }
-
+    // Valid range is very tight: width 150-400, height 80-250
+    const isWidthValid = incomingWidth >= 150 && incomingWidth <= 400;
+    const isHeightValid = incomingHeight >= 80 && incomingHeight <= 250;
+    
     this.currentSize = { 
-      width: incomingWidth, 
-      height: incomingHeight 
+      width: isWidthValid ? incomingWidth : defaultSize.width, 
+      height: isHeightValid ? incomingHeight : defaultSize.height 
     };
     this.initialPosition = { ...this.currentPosition };
     this.initialSize = { ...this.currentSize };
