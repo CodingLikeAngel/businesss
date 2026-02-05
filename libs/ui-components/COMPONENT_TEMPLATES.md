@@ -7,6 +7,7 @@ Plantillas listas para copiar y pegar al crear nuevos componentes.
 ## 📋 Template 1: Componente Simple (Atom)
 
 ### TypeScript
+
 ```typescript
 import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -39,16 +40,13 @@ export class UI[ComponentName]Component {
 ```
 
 ### HTML
+
 ```html
-<div 
-  [class]="componentClasses()" 
-  [style]="componentStyles()"
-  class="[component-name]-container">
-  {{ label() }}
-</div>
+<div [class]="componentClasses()" [style]="componentStyles()" class="[component-name]-container">{{ label() }}</div>
 ```
 
 ### SCSS
+
 ```scss
 @use '../../styles/mixins' as shared;
 
@@ -61,10 +59,10 @@ export class UI[ComponentName]Component {
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
   transition: all 0.3s ease;
-  
+
   // ⚠️ IMPORTANTE: Aplicar variants aquí
   @include shared.apply-all-variants('variant-');
-  
+
   // Overrides específicos si es necesario
   &.variant-neon {
     border: 1px solid var(--neon-primary, #00f3ff);
@@ -78,6 +76,7 @@ export class UI[ComponentName]Component {
 ## 📋 Template 2: Componente con Subtypes (como Header/Footer)
 
 ### TypeScript
+
 ```typescript
 import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -108,6 +107,7 @@ export class UI[ComponentName]Component {
 ```
 
 ### HTML con ngSwitch para subtypes
+
 ```html
 <ng-container [ngSwitch]="subtype()">
   <!-- SUBTYPE 1 -->
@@ -129,9 +129,14 @@ export class UI[ComponentName]Component {
 
 ---
 
-## 📋 Template 3: Editor Section Component
+---
+
+## 📋 Template 3: Editor Section Component (Universal & Draggable)
+
+Use this template to ensure your component is automatically draggable, resizable, and editable.
 
 ### TypeScript
+
 ```typescript
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -174,7 +179,7 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
           [variant]="$any(section.content['variant'] || getVariant(section.id))"
           [label]="section.content['label'] || 'Label'"
           [customStyles]="section.styles || {}"
-        ></lib-ui-[component-name]
+        ></lib-ui-[component-name]>
       </div>
     </div>
   `
@@ -184,6 +189,7 @@ export class Editor[ComponentName]SectionComponent extends EnhancedBaseEditorSec
   @ViewChild('componentElement', { static: true }) componentElement!: ElementRef;
 
   ngAfterViewInit() {
+    // 🚀 Regla de Oro: Registrar para edición visual
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
     this.applyElementVisualEditing(this.componentElement, this.section.id + '_[component-name]');
   }
@@ -193,19 +199,19 @@ export class Editor[ComponentName]SectionComponent extends EnhancedBaseEditorSec
       styling: {
         selectionOutline: '2px solid #6366f1',
         hoverEffects: true,
-        resizeHandles: true,
-        dimensionLabels: true
+        resizeHandles: true
       } as any
     });
   }
 
   getComponentConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
+      enableDrag: true,    // ⬅️ Permitir arrastrar
+      enableResize: true,  // ⬅️ Permitir redimensionar
       styling: {
         selectionOutline: '2px solid #10b981',
-        hoverEffects: !this.platformInfo.isMobile,
-        resizeHandles: true,
-        dimensionLabels: true
+        hoverEffects: true,
+        resizeHandles: true
       } as any
     });
   }
@@ -225,6 +231,7 @@ export class Editor[ComponentName]SectionComponent extends EnhancedBaseEditorSec
 ## 📋 Template 4: Registro en Component Explorer
 
 ### 1. Import
+
 ```typescript
 import { UI[ComponentName]Component } from '@negocio/ui-components';
 
@@ -236,6 +243,7 @@ imports: [
 ```
 
 ### 2. Añadir a lista de componentes
+
 ```typescript
 {
   type: '[component-name]',
@@ -258,12 +266,10 @@ imports: [
 ```
 
 ### 3. Añadir preview
+
 ```html
 <div *ngSwitchCase="'[component-name]'" class="p-4">
-  <lib-ui-[component-name] 
-    [variant]="$any(selectedVariant)" 
-    [label]="'Ejemplo'">
-  </lib-ui-[component-name]>
+  <lib-ui-[component-name] [variant]="$any(selectedVariant)" [label]="'Ejemplo'"> </lib-ui-[component-name]>
 </div>
 ```
 
@@ -272,6 +278,7 @@ imports: [
 ## 📋 Template 5: Añadir al Editor Feature
 
 ### 1. Import en TypeScript
+
 ```typescript
 import { Editor[ComponentName]SectionComponent } from '../components/[component-name]/editor-[component-name]-section.component';
 
@@ -283,18 +290,10 @@ imports: [
 ```
 
 ### 2. Añadir caso en HTML
+
 ```html
 <!-- [COMPONENT NAME] -->
-<lib-editor-[component-name]-section
-  *ngSwitchCase="'[component-name]'"
-  [section]="section"
-  [componentVariants]="componentVariants"
-  [globalVariant]="globalVariant"
-  (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
-  (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
-  (sectionResized)="onSectionResized($event.section, $event.bounds)"
->
-</lib-editor-[component-name]-section>
+<lib-editor-[component-name]-section *ngSwitchCase="'[component-name]'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)" (elementResized)="onElementResized($event.bounds, $event.elementId, section)" (sectionResized)="onSectionResized($event.section, $event.bounds)"> </lib-editor-[component-name]-section>
 ```
 
 ---
@@ -320,7 +319,7 @@ variants: [
   'secondary',
   'outline',
   'ghost',
-  
+
   // Modernos (elegir 3-4)
   'neon',
   'cyberpunk',
@@ -328,12 +327,12 @@ variants: [
   'gradient',
   'retro',
   'minimal',
-  
+
   // Temáticos (opcional)
   'dark',
   'success',
-  'danger'
-]
+  'danger',
+];
 ```
 
 **Total mínimo: 7 variants** (4 básicos + 3 modernos)

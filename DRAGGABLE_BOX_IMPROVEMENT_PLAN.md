@@ -5,22 +5,26 @@
 ### Completed Work
 
 1. **Event Handling Fix**
+
    - Removed `elementMoved` and `elementResized` event bindings from parent template
    - Component now uses native mouse event handlers instead of `elementMoved$` subscription
    - Position changes persist directly to NgRx store
 
 2. **Native Drag/Resize Implementation**
+
    - 8 resize handles (nw, n, ne, e, se, s, sw, w)
    - Smooth drag and resize with visual feedback
    - Minimum size constraints (100px)
 
 3. **Isolated Mode Enhancements**
+
    - Content editing (title, description)
    - Style controls (background color, border color/radius/width, padding, shadows)
    - Position and size adjustment
    - Snap-to-grid functionality
 
 4. **Keyboard Shortcuts**
+
    - `I` - Open isolated mode
    - Arrow keys - Fine position adjustment (1px normal, 10px with Shift)
    - `Escape` - Close isolated mode
@@ -46,39 +50,36 @@
 ```
 
 **Draggable Box 2 - Enhanced Features:**
+
 - Multiple content areas (header, body, footer)
 - Image support
 - Icon integration
 - Button styling options
 
 **Draggable Box 3 - Advanced Features:**
+
 - Card layout with header image
 - Overlay content mode
 - Gradient backgrounds
 - Animation controls
 
-#### 1.2 Unified Base Component
+#### 1.2 Universal Base Component (NEW STRATEGY)
 
-Create a shared base class for all draggable box variants:
+Instead of just a "Draggable Box Base", we are implementing a **Universal Editable Base** that all editor components will inherit from.
 
 ```typescript
-// draggable-box-base.component.ts
-export abstract class DraggableBoxBaseComponent extends BaseEditorSectionComponent {
-  abstract boxId: string;
-  abstract currentContent: any;
-  abstract currentStyles: any;
-  
-  // Shared drag/resize logic
-  protected initDragHandlers(): void { ... }
-  protected initResizeHandlers(): void { ... }
-  
-  // Shared style management
-  protected updateStyles(changes: StyleChanges): void { ... }
-  
-  // Shared persistence
-  protected persistToStore(): void { ... }
+// enhanced-base-editor-section.component.ts (ALREADY EXISTS - Use as base)
+export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSectionComponent {
+  // Use applySectionVisualEditing and applyElementVisualEditing
 }
 ```
+
+**New Integration Steps:**
+
+1. ✅ Inherit from `EnhancedBaseEditorSectionComponent`.
+2. ✅ Implement `ngAfterViewInit` with `applyElementVisualEditing`.
+3. ✅ Use `handleVisualEvent` for unified movement/resize logic.
+4. ✅ Add metadata for isolated mode properties.
 
 ---
 
@@ -91,6 +92,7 @@ export abstract class DraggableBoxBaseComponent extends BaseEditorSectionCompone
 ```
 
 **Features:**
+
 - Card layout with header, content, footer sections
 - Image upload and cropping
 - Title and description editing
@@ -98,6 +100,7 @@ export abstract class DraggableBoxBaseComponent extends BaseEditorSectionCompone
 - Hover effects and animations
 
 **Interface:**
+
 ```typescript
 interface CardConfig {
   headerImage?: string;
@@ -120,6 +123,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Image upload with drag & drop
 - Aspect ratio controls (16:9, 4:3, 1:1, 3:4, 9:16)
 - Object-fit options (cover, contain, fill)
@@ -134,6 +138,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Button text editing
 - Style presets (primary, secondary, outline, ghost)
 - Size controls (small, medium, large)
@@ -152,6 +157,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Nested section support
 - Background options (color, gradient, image)
 - Padding/margin controls
@@ -165,6 +171,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - CSS Grid-based layout
 - Column count controls (1-6)
 - Gap controls
@@ -178,6 +185,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Flexbox layout controls
 - Direction (row/column)
 - Justify content options
@@ -196,6 +204,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - YouTube/Vimeo URL support
 - Video upload
 - Autoplay controls
@@ -210,6 +219,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Multiple image support
 - Gallery layout options (grid, carousel, masonry)
 - Image ordering
@@ -224,6 +234,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Icon picker (from library)
 - Icon size controls
 - Color customization
@@ -241,6 +252,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Form field builder
 - Field types (text, email, textarea, select, checkbox, radio)
 - Validation rules
@@ -254,6 +266,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Input type selection
 - Label and placeholder editing
 - Validation display
@@ -267,6 +280,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Rows configuration
 - Character limit
 - Resize options
@@ -283,6 +297,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Logo configuration
 - Navigation links management
 - Menu style (horizontal, vertical, hamburger)
@@ -296,6 +311,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Menu item management
 - Nested menu support
 - Active state styling
@@ -309,6 +325,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Breadcrumb items management
 - Separator configuration
 - Link styling
@@ -325,6 +342,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Rich text editing (HTML)
 - Font family selection
 - Font size controls
@@ -339,6 +357,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Heading level (h1-h6)
 - Font size presets
 - Font weight options
@@ -352,6 +371,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Quote text editing
 - Author configuration
 - Citation style
@@ -365,6 +385,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - List type (ordered, unordered)
 - List items management
 - Icon customization
@@ -382,6 +403,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Accordion items management
 - Icon customization (chevron, plus, arrow)
 - Multiple open option
@@ -395,6 +417,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Tab items management
 - Tab style (underline, pills, boxed)
 - Icon integration
@@ -408,6 +431,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Modal size (small, medium, large, full)
 - Header configuration
 - Footer buttons
@@ -422,6 +446,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Trigger type (click, hover, scroll)
 - Position options
 - Animation (fade, slide, zoom)
@@ -439,6 +464,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Social platform selection
 - URL configuration
 - Icon customization
@@ -452,6 +478,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Share networks selection
 - Button styling
 - Count display options
@@ -464,6 +491,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Avatar upload
 - Name and bio editing
 - Social links integration
@@ -481,6 +509,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Product image
 - Title and description
 - Price display
@@ -495,6 +524,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Price formatting
 - Currency selection
 - Discount display
@@ -508,6 +538,7 @@ interface CardConfig {
 ```
 
 **Features:**
+
 - Quantity selector
 - Button styling
 - Animation options
@@ -546,7 +577,7 @@ export class EditorComponentPreviewService {
   getComponentPreview(type: string, config: any): string {
     // Generate preview HTML for component palette
   }
-  
+
   getComponentConfig(type: string): ComponentConfig {
     // Return default configuration for new instances
   }
@@ -558,28 +589,25 @@ export class EditorComponentPreviewService {
 ## Implementation Priorities
 
 ### High Priority (Phase 1-2)
+
 1. ✅ Draggable Box (completed)
-2. Card components (high usage)
-3. Image components (high usage)
-4. Button components (high usage)
+2. 🔄 Card components (Convert to Universal)
+3. 🔄 Image components (Convert to Universal)
+4. 🔄 Button components (Convert to Universal)
 
-### Medium Priority (Phase 3-5)
-5. Container/Grid/Flex (layout foundation)
-6. Form components (user interaction)
-7. Video/Gallery (media support)
+### Medium Priority (Phase 3-11)
 
-### Lower Priority (Phase 6-10)
-8. Navigation components
-9. Content components
-10. Interactive components
-11. Social components
-12. E-commerce components
+5. 📅 Universal Metadata Implementation
+6. 📅 Container/Grid/Slot System
+7. 📅 Form & Media components
+8. 📅 Social & Interactive components
 
 ---
 
 ## Files to Create/Modify
 
 ### New Files
+
 ```
 libs/features/editor/feature-editor/src/lib/pages/editor/components/
 ├── draggable-box/
@@ -606,6 +634,7 @@ libs/features/editor/feature-editor/src/lib/pages/editor/services/
 ```
 
 ### Modified Files
+
 ```
 libs/features/editor/feature-editor/src/lib/pages/editor/components/draggable-box/
 └── editor-draggable-box-section.component.ts (completed)
@@ -621,6 +650,7 @@ libs/features/editor/feature-editor/src/lib/pages/editor/
 ## Testing Checklist
 
 ### Unit Tests
+
 - [ ] Drag functionality
 - [ ] Resize functionality
 - [ ] Position persistence
@@ -630,12 +660,14 @@ libs/features/editor/feature-editor/src/lib/pages/editor/
 - [ ] Undo/redo
 
 ### Integration Tests
+
 - [ ] NgRx store integration
 - [ ] Template rendering
 - [ ] Event bindings
 - [ ] Component interactions
 
 ### E2E Tests
+
 - [ ] Full drag/resize workflow
 - [ ] Isolated mode editing
 - [ ] Template switching

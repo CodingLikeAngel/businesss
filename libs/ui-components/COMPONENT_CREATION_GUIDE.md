@@ -49,14 +49,14 @@ import { CommonModule } from '@angular/common';
 import { variants as baseVariants } from '../../models/ui-components-data.model';
 
 const notificationVariants = baseVariants;
-type NotificationVariantType = typeof notificationVariants[number] | (string & {});
+type NotificationVariantType = (typeof notificationVariants)[number] | (string & {});
 
 @Component({
   selector: 'lib-ui-notification',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './notification.component.html',
-  styleUrl: './notification.component.scss'
+  styleUrl: './notification.component.scss',
 })
 export class UINotificationComponent {
   // Inputs
@@ -71,12 +71,7 @@ export class UINotificationComponent {
   dismissed = output<void>();
 
   // Computed
-  notificationClasses = computed(() => [
-    'notification',
-    `variant-${this.variant()}`,
-    `type-${this.type()}`,
-    this.dismissible() ? 'is-dismissible' : ''
-  ].filter(Boolean));
+  notificationClasses = computed(() => ['notification', `variant-${this.variant()}`, `type-${this.type()}`, this.dismissible() ? 'is-dismissible' : ''].filter(Boolean));
 
   notificationStyles = computed(() => this.customStyles());
 
@@ -88,30 +83,20 @@ export class UINotificationComponent {
 
 ```html
 <!-- notification.component.html -->
-<div 
-  [class]="notificationClasses()" 
-  [style]="notificationStyles()"
-  class="notification-container">
-  
+<div [class]="notificationClasses()" [style]="notificationStyles()" class="notification-container">
   <div class="notification-icon">
     <span *ngIf="type() === 'info'">ℹ️</span>
     <span *ngIf="type() === 'success'">✅</span>
     <span *ngIf="type() === 'warning'">⚠️</span>
     <span *ngIf="type() === 'error'">❌</span>
   </div>
-  
+
   <div class="notification-content">
     <h4 class="notification-title">{{ title() }}</h4>
     <p class="notification-message">{{ message() }}</p>
   </div>
-  
-  <button 
-    *ngIf="dismissible()" 
-    class="notification-close"
-    (click)="onDismiss()"
-    aria-label="Cerrar notificación">
-    ✕
-  </button>
+
+  <button *ngIf="dismissible()" class="notification-close" (click)="onDismiss()" aria-label="Cerrar notificación">✕</button>
 </div>
 ```
 
@@ -211,7 +196,7 @@ export class UINotificationComponent {
   cursor: pointer;
   opacity: 0.7;
   transition: opacity 0.2s;
-  
+
   &:hover {
     opacity: 1;
   }
@@ -223,6 +208,7 @@ export class UINotificationComponent {
 **El mixin `apply-all-variants` DEBE aplicarse en el elemento que tiene la clase `variant-${variant}`**
 
 ✅ **Correcto:**
+
 ```scss
 .notification {
   @include shared.apply-all-variants('variant-');
@@ -230,6 +216,7 @@ export class UINotificationComponent {
 ```
 
 ❌ **Incorrecto:**
+
 ```scss
 :host {
   @include shared.apply-all-variants('variant-'); // ❌ No funciona
@@ -264,8 +251,8 @@ import { UINotificationComponent } from '@negocio/ui-components';
 // En el array de imports del @Component:
 imports: [
   // ... otros imports ...
-  UINotificationComponent
-]
+  UINotificationComponent,
+];
 ```
 
 ### 4.2 Añadir a la lista de componentes
@@ -302,12 +289,7 @@ imports: [
 <!-- En el ngSwitch del preview-viewport -->
 
 <div *ngSwitchCase="'notification'" class="p-4">
-  <lib-ui-notification 
-    [variant]="$any(selectedVariant)" 
-    [type]="'info'"
-    title="Notificación de Ejemplo"
-    message="Este es un mensaje de notificación de prueba">
-  </lib-ui-notification>
+  <lib-ui-notification [variant]="$any(selectedVariant)" [type]="'info'" title="Notificación de Ejemplo" message="Este es un mensaje de notificación de prueba"> </lib-ui-notification>
 </div>
 ```
 
@@ -322,52 +304,21 @@ imports: [
 
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ApplyDynamicStylesDirective,
-  EnhancedVisualEditableDirective,
-  VisualEditingConfig,
-  VisualEditingEvent
-} from '@negocio/shared-components';
+import { ApplyDynamicStylesDirective, EnhancedVisualEditableDirective, VisualEditingConfig, VisualEditingEvent } from '@negocio/shared-components';
 import { UINotificationComponent } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
 @Component({
   selector: 'lib-editor-notification-section',
   standalone: true,
-  imports: [
-    CommonModule,
-    UINotificationComponent,
-    ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
-  ],
+  imports: [CommonModule, UINotificationComponent, ApplyDynamicStylesDirective, EnhancedVisualEditableDirective],
   template: `
-    <div #sectionElement
-      class="editor-section cursor-pointer py-4 transition-all"
-      [class.is-selected]="selectedSectionId === section.id"
-      (click)="selectSection($event, section)"
-      [applyDynamicStyles]="section.styles"
-      [enhancedVisualEditable]="getSectionConfig()"
-      sectionId="{{section.id}}"
-      (visualEvents)="handleSectionEvent($event)">
-
-      <div #notificationElement class="editor-element"
-           [class.is-selected]="selectedElementId === section.id + '_notification'"
-           (click)="selectElement($event, getMergedElement(section.id, section.id + '_notification', section.content, 'notification'))"
-           [enhancedVisualEditable]="getNotificationConfig()"
-           elementId="{{section.id + '_notification'}}"
-           sectionId="{{section.id}}"
-           (visualEvents)="handleNotificationEvent($event)">
-        <lib-ui-notification
-          [variant]="$any(section.content['variant'] || getVariant(section.id))"
-          [title]="section.content['title'] || 'Notificación'"
-          [message]="section.content['message'] || 'Mensaje de notificación'"
-          [type]="section.content['type'] || 'info'"
-          [dismissible]="section.content['dismissible'] !== false"
-          [customStyles]="section.styles || {}"
-        ></lib-ui-notification>
+    <div #sectionElement class="editor-section cursor-pointer py-4 transition-all" [class.is-selected]="selectedSectionId === section.id" (click)="selectSection($event, section)" [applyDynamicStyles]="section.styles" [enhancedVisualEditable]="getSectionConfig()" sectionId="{{ section.id }}" (visualEvents)="handleSectionEvent($event)">
+      <div #notificationElement class="editor-element" [class.is-selected]="selectedElementId === section.id + '_notification'" (click)="selectElement($event, getMergedElement(section.id, section.id + '_notification', section.content, 'notification'))" [enhancedVisualEditable]="getNotificationConfig()" elementId="{{ section.id + '_notification' }}" sectionId="{{ section.id }}" (visualEvents)="handleNotificationEvent($event)">
+        <lib-ui-notification [variant]="$any(section.content['variant'] || getVariant(section.id))" [title]="section.content['title'] || 'Notificación'" [message]="section.content['message'] || 'Mensaje de notificación'" [type]="section.content['type'] || 'info'" [dismissible]="section.content['dismissible'] !== false" [customStyles]="section.styles || {}"></lib-ui-notification>
       </div>
     </div>
-  `
+  `,
 })
 export class EditorNotificationSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
@@ -384,8 +335,8 @@ export class EditorNotificationSectionComponent extends EnhancedBaseEditorSectio
         selectionOutline: '2px solid #6366f1',
         hoverEffects: true,
         resizeHandles: true,
-        dimensionLabels: true
-      } as any
+        dimensionLabels: true,
+      } as any,
     });
   }
 
@@ -395,8 +346,8 @@ export class EditorNotificationSectionComponent extends EnhancedBaseEditorSectio
         selectionOutline: '2px solid #10b981',
         hoverEffects: !this.platformInfo.isMobile,
         resizeHandles: true,
-        dimensionLabels: true
-      } as any
+        dimensionLabels: true,
+      } as any,
     });
   }
 
@@ -424,8 +375,8 @@ import { EditorNotificationSectionComponent } from '../components/notification/e
 // En el array de imports:
 imports: [
   // ... otros imports ...
-  EditorNotificationSectionComponent
-]
+  EditorNotificationSectionComponent,
+];
 ```
 
 ### 6.2 Añadir caso en editor-feature.component.html
@@ -437,22 +388,14 @@ imports: [
   <!-- ... otros casos ... -->
 
   <!-- NOTIFICATION -->
-  <lib-editor-notification-section
-    *ngSwitchCase="'notification'"
-    [section]="section"
-    [componentVariants]="componentVariants"
-    [globalVariant]="globalVariant"
-    (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
-    (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
-    (sectionResized)="onSectionResized($event.section, $event.bounds)"
-  >
-  </lib-editor-notification-section>
+  <lib-editor-notification-section *ngSwitchCase="'notification'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)" (elementResized)="onElementResized($event.bounds, $event.elementId, section)" (sectionResized)="onSectionResized($event.section, $event.bounds)"> </lib-editor-notification-section>
 
   <!-- ... otros casos ... -->
 </ng-container>
 ```
 
 **Repetir lo mismo en la versión mobile:**
+
 - `libs/features/editor/feature-editor/src/lib/pages/editor/mobile/editor-feature.component.html`
 
 ---
@@ -464,12 +407,14 @@ imports: [
 Cada componente debe tener al menos **3-4 variants** bien configurados. Aquí tienes ejemplos:
 
 #### Variants Básicos (Recomendados para todos)
+
 1. **primary** - Estilo principal
 2. **secondary** - Estilo secundario
 3. **outline** - Solo borde
 4. **ghost** - Transparente
 
 #### Variants Modernos (Elige 3-4)
+
 5. **neon** - Efecto neón
 6. **cyberpunk** - Estilo cyberpunk
 7. **glass** - Efecto glassmorphism
@@ -478,6 +423,7 @@ Cada componente debe tener al menos **3-4 variants** bien configurados. Aquí ti
 10. **minimal** - Minimalista
 
 #### Variants Temáticos (Opcionales)
+
 11. **dark** - Tema oscuro
 12. **light** - Tema claro
 13. **success** - Verde (éxito)
@@ -498,7 +444,7 @@ Cada componente debe tener al menos **3-4 variants** bien configurados. Aquí ti
   variants: [
     // Básicos (4)
     'primary',
-    'secondary', 
+    'secondary',
     'outline',
     'ghost',
     // Modernos (4)
@@ -522,6 +468,7 @@ Cada componente debe tener al menos **3-4 variants** bien configurados. Aquí ti
 Antes de considerar el componente completo, verifica:
 
 ### Componente UI
+
 - [ ] Componente creado en `libs/ui-components/src/lib/[name]/`
 - [ ] TypeScript con inputs/outputs correctos
 - [ ] HTML template funcional
@@ -529,49 +476,90 @@ Antes de considerar el componente completo, verifica:
 - [ ] Exportado en `libs/ui-components/src/index.ts`
 
 ### Component Explorer
+
 - [ ] Importado en `component-explorer.component.ts`
 - [ ] Añadido a la lista de componentes con al menos 3-4 variants
 - [ ] Preview añadido en el template del modal
 - [ ] Categoría asignada correctamente
 
 ### Editor Section
+
 - [ ] Componente de editor creado
 - [ ] Extiende `EnhancedBaseEditorSectionComponent`
 - [ ] Configuración de visual editing implementada
 - [ ] Template con bindings correctos
 
 ### Editor Feature
+
 - [ ] Importado en `editor-feature.component.ts` (desktop y mobile)
 - [ ] Caso `*ngSwitchCase` añadido en HTML (desktop y mobile)
 - [ ] Eventos configurados correctamente
 
 ### Variants
+
 - [ ] Mínimo 3-4 variants configurados
 - [ ] Variants funcionan correctamente
 - [ ] Estilos específicos añadidos si es necesario
 
 ### Testing
+
 - [ ] Componente se muestra en el explorer
 - [ ] Preview funciona correctamente
 - [ ] Se puede añadir al lienzo
 - [ ] Variants se aplican correctamente
 - [ ] Edición visual funciona
 
+## 🚀 Paso 8: Integración con el Sistema Universal (NUEVO)
+
+Para que tu componente sea "Premium" y soporte drag & drop nativo, sigue estos pasos extra:
+
+### 8.1 Extender `EnhancedBaseEditorSectionComponent`
+
+Asegúrate de que tu `EditorSectionComponent` extienda la clase base enriquecida.
+
+### 8.2 Registrar en AfterViewInit
+
+```typescript
+ngAfterViewInit() {
+  this.applySectionVisualEditing(this.sectionElement, this.section.id);
+  this.applyElementVisualEditing(this.notificationElement, this.section.id + '_notification');
+}
+```
+
+### 8.3 Configurar Draggability
+
+En el método `getNotificationConfig` (o similar), habilita `enableDrag: true`.
+
+---
+
+## ✅ Checklist Final Actualizado
+
+### Integración Universal
+
+- [ ] Extiende `EnhancedBaseEditorSectionComponent`
+- [ ] Llama a `applyElementVisualEditing` en `ngAfterViewInit`
+- [ ] `enableDrag` y `enableResize` configurados en la config del elemento
+- [ ] Eventos `handleVisualEvent` implementados
+- [ ] Metadata de edición definida (próximamente)
+
 ---
 
 ## 📚 Ejemplos de Referencia
 
 ### Componentes Simples (Atoms)
+
 - `button` - Botón básico
 - `chip` - Chip/tag
 - `spinner` - Cargador
 
 ### Componentes Medianos (Molecules)
+
 - `notification` - Notificación
 - `card` - Tarjeta
 - `input` - Campo de entrada
 
 ### Componentes Complejos (Organisms)
+
 - `header` - Cabecera (con subtypes)
 - `footer` - Pie de página (con subtypes)
 - `hero` - Hero section (con subtypes)
@@ -592,16 +580,19 @@ Antes de considerar el componente completo, verifica:
 ## 🆘 Solución de Problemas
 
 ### Variants no se aplican
+
 - ✅ Verifica que `apply-all-variants` esté en el elemento con clase `variant-*`
 - ✅ Verifica que la clase se esté aplicando en el template: `[class]="classes()"`
 - ✅ Revisa la consola del navegador por errores SCSS
 
 ### Componente no aparece en explorer
+
 - ✅ Verifica que esté exportado en `index.ts`
 - ✅ Verifica que esté importado en `component-explorer.component.ts`
 - ✅ Verifica que esté en la lista de componentes
 
 ### No se puede editar visualmente
+
 - ✅ Verifica que extienda `EnhancedBaseEditorSectionComponent`
 - ✅ Verifica que tenga `@ViewChild` para los elementos
 - ✅ Verifica que llame a `applySectionVisualEditing` en `ngAfterViewInit`
