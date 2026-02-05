@@ -46,10 +46,15 @@ export class UIDraggableBox1Component implements AfterViewInit {
     }
     
     Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
+      if (key !== 'backgroundColor' && key !== 'color' && key !== 'borderRadius') {
         styles[key] = customStyles[key];
       }
     });
+
+    // Only apply manual borderRadius if preset is 'md' (standard/manual)
+    if (this.rounded() === 'md' && customStyles['borderRadius']) {
+      styles['borderRadius'] = customStyles['borderRadius'];
+    }
 
     return styles;
   });

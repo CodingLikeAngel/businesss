@@ -96,9 +96,9 @@ export interface UndoRedoState {
                   <label>Tipo de Componente</label>
                   <div class="select-wrapper">
                     <select [(ngModel)]="editableContent.boxVariant" (ngModelChange)="onContentChange()" class="premium-select">
-                      <option value="draggable-box-1">Caja Estándar (Box 1)</option>
-                      <option value="draggable-box-2">Caja Borde Neón (Box 2)</option>
-                      <option value="draggable-box-3">Caja Minimalista (Box 3)</option>
+                      <option value="draggable-box-1">Caja Estándar (Card)</option>
+                      <option value="draggable-box-2">Caja Widget (Icon & Info)</option>
+                      <option value="draggable-box-3">Caja Glass (Elegant)</option>
                     </select>
                   </div>
                 </div>
@@ -107,8 +107,8 @@ export interface UndoRedoState {
                   <label>Esquinas Redondeadas</label>
                   <div class="select-wrapper">
                     <select [(ngModel)]="editableContent.rounded" (ngModelChange)="onContentChange()" class="premium-select">
-                      <option value="none">Ninguno</option>
-                      <option value="md">Mediano (Default)</option>
+                      <option value="none">Recto (Ninguno)</option>
+                      <option value="md">Suave (Manual/Default)</option>
                       <option value="full">Total (Píldora)</option>
                     </select>
                   </div>
@@ -276,7 +276,7 @@ export interface UndoRedoState {
                    [style.height.px]="currentSize.height"
                    [style.backgroundColor]="editableStyles.backgroundColor"
                    [style.border]="editableStyles.borderWidth + 'px solid ' + editableStyles.borderColor"
-                   [style.borderRadius]="editableStyles.borderRadius + borderRadiusUnit"
+                   [style.borderRadius]="editableContent.rounded === 'md' ? (editableStyles.borderRadius + borderRadiusUnit) : null"
                    [style.padding]="editableStyles.padding + paddingUnit"
                    [style.boxShadow]="editableStyles.boxShadow"
                    (mousedown)="onMouseDown($event)">
@@ -1236,7 +1236,12 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
       styles.borderWidth = `${this.editableStyles.borderWidth}px`;
     }
     
-    styles.borderRadius = `${this.editableStyles.borderRadius}${this.borderRadiusUnit}`;
+    // Only apply manual border-radius if the preset is 'md' (standard/manual).
+    // If 'none' or 'full' is selected, we let the component's CSS classes handle it.
+    if (this.editableContent.rounded === 'md') {
+      styles.borderRadius = `${this.editableStyles.borderRadius}${this.borderRadiusUnit}`;
+    }
+    
     styles.padding = `${this.editableStyles.padding}${this.paddingUnit}`;
     styles.boxShadow = this.editableStyles.boxShadow;
     

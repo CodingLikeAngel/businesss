@@ -6,43 +6,81 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.875rem 1.25rem;
-  border-radius: 10px;
-  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.2);
+  padding: 0;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
   background: var(--component-bg, var(--theme-bg, #ffffff));
   color: var(--component-text, var(--theme-color, #1a1a1a));
-  border: 2px solid var(--component-border, var(--theme-border, #e0e0e0));
+  border: 1px solid var(--component-border, var(--theme-border, rgba(0,0,0,0.08)));
   cursor: grab;
   user-select: none;
-  transition: box-shadow 0.2s ease;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
 
-  &:active {
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  .accent-line {
+    height: 4px;
+    width: 60%;
+    background: var(--theme-color, #6366f1);
+    margin: 0 auto;
+    border-radius: 0 0 4px 4px;
+    opacity: 0.8;
   }
 
-  &.draggable-box-2-rounded-none {
-    border-radius: 0;
+  .widget-layout {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    gap: 1rem;
+
+    .icon-section {
+      .icon-bg {
+        width: 48px;
+        height: 48px;
+        background: rgba(var(--theme-color-rgb, 99, 102, 241), 0.1);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: inset 0 0 0 1px rgba(var(--theme-color-rgb, 99, 102, 241), 0.2);
+      }
+    }
+
+    .info-section {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      
+      .draggable-box-2-label {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        font-weight: 800;
+        opacity: 0.6;
+      }
+
+      .draggable-box-2-content {
+        font-size: 1rem;
+        font-weight: 700;
+      }
+    }
   }
 
-  &.draggable-box-2-rounded-full {
-    border-radius: 9999px;
+  &:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
   }
 
-  &.draggable-box-2-sm {
-    padding: 0.625rem 1rem;
-  }
-
-  &.draggable-box-2-lg {
-    padding: 1.125rem 1.5rem;
-  }
+  &.draggable-box-2-rounded-none { border-radius: 0; .accent-line { width: 100%; border-radius: 0; } }
+  &.draggable-box-2-rounded-full { border-radius: 9999px; padding-left: 1rem; }
 
   &.dark {
-    background: var(--component-bg, var(--theme-bg, #1a1a1a));
-    color: var(--component-text, var(--theme-color, #ffffff));
-    border-color: var(--component-border, var(--theme-border, #333333));
+    background: var(--component-bg, var(--theme-bg, #111827));
+    color: var(--component-text, var(--theme-color, #f3f4f6));
+    border-color: rgba(255, 255, 255, 0.1);
   }
 }
 

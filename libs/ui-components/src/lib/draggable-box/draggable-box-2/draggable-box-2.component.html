@@ -1,3 +1,14 @@
 <div #draggableBox [class]="boxClasses()" [style]="boxStyles()">
-  <span class="draggable-box-2-content">{{ content() }}</span>
+  <div class="accent-line"></div>
+  <div class="widget-layout">
+    <div class="icon-section">
+      <div class="icon-bg">
+        <span class="icon-emoji">⚡</span>
+      </div>
+    </div>
+    <div class="info-section">
+      <span class="draggable-box-2-label">Widget de Acción</span>
+      <span class="draggable-box-2-content">{{ content() }}</span>
+    </div>
+  </div>
 </div>

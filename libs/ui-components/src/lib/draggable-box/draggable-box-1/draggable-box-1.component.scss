@@ -9,40 +9,43 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.75rem 1rem;
-  border-radius: 6px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 1.25rem;
+  border-radius: 12px;
+  box-shadow: 
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
   background: var(--component-bg, var(--theme-bg, #ffffff));
   color: var(--component-text, var(--theme-color, #1a1a1a));
-  border: 1px solid var(--component-border, var(--theme-border, #e0e0e0));
+  border: 1px solid var(--component-border, var(--theme-border, rgba(0, 0, 0, 0.1)));
   cursor: grab;
   user-select: none;
-  transition: box-shadow 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 100%);
+    pointer-events: none;
+  }
 
   &:active {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transform: scale(0.98);
   }
 
-  &.draggable-box-1-rounded-none {
-    border-radius: 0;
-  }
+  &.draggable-box-1-rounded-none { border-radius: 0; }
+  &.draggable-box-1-rounded-full { border-radius: 9999px; }
 
-  &.draggable-box-1-rounded-full {
-    border-radius: 9999px;
-  }
-
-  &.draggable-box-1-sm {
-    padding: 0.5rem 0.75rem;
-  }
-
-  &.draggable-box-1-lg {
-    padding: 1rem 1.25rem;
-  }
+  &.draggable-box-1-sm { padding: 0.75rem; .draggable-box-1-content { font-size: 0.75rem; } }
+  &.draggable-box-1-lg { padding: 2rem; .draggable-box-1-content { font-size: 1.125rem; } }
 
   &.dark {
-    background: var(--component-bg, var(--theme-bg, #1a1a1a));
-    color: var(--component-text, var(--theme-color, #ffffff));
-    border-color: var(--component-border, var(--theme-border, #333333));
+    background: var(--component-bg, var(--theme-bg, #0f172a));
+    color: var(--component-text, var(--theme-color, #f8fafc));
+    border-color: var(--component-border, var(--theme-border, rgba(255,255,255,0.1)));
   }
 }
 

@@ -62,7 +62,7 @@ import * as PageActions from '../../../../store/actions/page.actions';
           [style.height.px]="boxHeight"
           [style.backgroundColor]="currentStyles.backgroundColor"
           [style.border]="currentStyles.borderWidth + 'px solid ' + currentStyles.borderColor"
-          [style.borderRadius]="currentStyles.borderRadius + currentStyles.borderRadiusUnit"
+          [style.borderRadius]="currentContent.rounded === 'md' ? (currentStyles.borderRadius + currentStyles.borderRadiusUnit) : null"
           [style.padding]="currentStyles.padding + currentStyles.paddingUnit"
           [style.boxShadow]="currentStyles.boxShadow"
           [style.zIndex]="10"
