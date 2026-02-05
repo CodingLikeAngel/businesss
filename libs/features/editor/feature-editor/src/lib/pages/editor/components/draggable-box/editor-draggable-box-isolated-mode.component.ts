@@ -707,17 +707,17 @@ export interface UndoRedoState {
       background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
       background-color: #0f172a;
       position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      overflow: auto; /* Changed to auto to allow scrolling to the box if needed */
+      display: block; /* Removed flex centering that was hiding the box */
+      padding: 100px; /* Give some breathing room */
     }
 
     .canvas-inner {
-      width: 2000px;
-      height: 2000px;
+      width: 3000px; /* Larger inner canvas */
+      height: 3000px;
       position: relative;
       flex-shrink: 0;
+      background: transparent;
     }
 
     .show-grid {

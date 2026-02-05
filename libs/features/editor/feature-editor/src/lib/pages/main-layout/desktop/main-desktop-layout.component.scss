@@ -162,6 +162,11 @@
   position: relative;
   overflow: hidden;
   background: #020617;
+  
+  // Ensure the workspace can top-level itself when needed
+  :host-context(body.isolated-mode-active) & {
+    z-index: 99999 !important;
+  }
 }
 
 .tools-sidebar {
