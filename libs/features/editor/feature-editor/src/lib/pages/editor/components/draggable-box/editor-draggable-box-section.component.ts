@@ -83,6 +83,9 @@ import * as PageActions from '../../../../store/actions/page.actions';
             <lib-ui-components-draggable-box-1
               *ngIf="currentContent.boxVariant === 'draggable-box-1' || !currentContent.boxVariant"
               [variant]="currentContent.variant || globalVariant || 'secondary'"
+              [rounded]="currentContent.rounded || 'md'"
+              [size]="currentContent.size || 'md'"
+              [dark]="currentContent.dark || false"
               [content]="currentContent.title || 'Draggable Box'"
               [customStyles]="currentStyles">
             </lib-ui-components-draggable-box-1>
@@ -90,6 +93,9 @@ import * as PageActions from '../../../../store/actions/page.actions';
             <lib-ui-components-draggable-box-2
               *ngIf="currentContent.boxVariant === 'draggable-box-2'"
               [variant]="currentContent.variant || globalVariant || 'secondary'"
+              [rounded]="currentContent.rounded || 'md'"
+              [size]="currentContent.size || 'md'"
+              [dark]="currentContent.dark || false"
               [content]="currentContent.title || 'Draggable Box'"
               [customStyles]="currentStyles">
             </lib-ui-components-draggable-box-2>
@@ -97,6 +103,9 @@ import * as PageActions from '../../../../store/actions/page.actions';
             <lib-ui-components-draggable-box-3
               *ngIf="currentContent.boxVariant === 'draggable-box-3'"
               [variant]="currentContent.variant || globalVariant || 'secondary'"
+              [rounded]="currentContent.rounded || 'md'"
+              [size]="currentContent.size || 'md'"
+              [dark]="currentContent.dark || false"
               [content]="currentContent.title || 'Draggable Box'"
               [customStyles]="currentStyles">
             </lib-ui-components-draggable-box-3>
@@ -651,14 +660,21 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
     this.boxWidth = config.size.width;
     this.boxHeight = config.size.height;
 
-    this.currentContent.title = config.content.title;
-    this.currentContent.description = config.content.description;
-    this.currentContent.variant = config.content.variant;
+    this.currentContent = {
+      ...this.currentContent,
+      title: config.content.title,
+      description: config.content.description,
+      variant: config.content.variant,
+      boxVariant: config.content.boxVariant,
+      rounded: config.content.rounded,
+      size: config.content.size,
+      dark: config.content.dark
+    };
 
     const borderStyle = config.styles.border || '';
     this.currentStyles.backgroundColor = config.styles.backgroundColor;
-    this.currentStyles.borderColor = this.extractBorderColor(borderStyle);
-    this.currentStyles.borderWidth = this.extractBorderWidth(borderStyle);
+    this.currentStyles.borderColor = config.styles.borderColor || this.extractBorderColor(borderStyle);
+    this.currentStyles.borderWidth = parseInt(config.styles.borderWidth as string) || this.extractBorderWidth(borderStyle);
     this.currentStyles.borderRadius = parseInt(config.styles.borderRadius as string || '12') || 12;
     this.currentStyles.padding = parseInt(config.styles.padding as string || '20') || 20;
     this.currentStyles.boxShadow = config.styles.boxShadow;

@@ -55,7 +55,7 @@ export class UIDraggableBox3Component implements AfterViewInit {
   });
 
   boxClasses = computed(() => {
-    const classes = ['draggable-box-3', `draggable-box-3-${this.variant()}`];
+    const classes = ['draggable-box-3', `variant-${this.variant()}`];
     classes.push(`draggable-box-3-rounded-${this.rounded()}`);
     classes.push(`draggable-box-3-${this.size()}`);
     if (this.dark()) classes.push('dark');

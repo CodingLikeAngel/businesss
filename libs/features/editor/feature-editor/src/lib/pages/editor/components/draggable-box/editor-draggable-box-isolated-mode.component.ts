@@ -104,6 +104,37 @@ export interface UndoRedoState {
                 </div>
 
                 <div class="control-group">
+                  <label>Esquinas Redondeadas</label>
+                  <div class="select-wrapper">
+                    <select [(ngModel)]="editableContent.rounded" (ngModelChange)="onContentChange()" class="premium-select">
+                      <option value="none">Ninguno</option>
+                      <option value="md">Mediano (Default)</option>
+                      <option value="full">Total (Píldora)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="control-row">
+                  <div class="control-group half">
+                    <label>Tamaño Base</label>
+                    <div class="select-wrapper">
+                      <select [(ngModel)]="editableContent.size" (ngModelChange)="onContentChange()" class="premium-select">
+                        <option value="sm">Pequeño</option>
+                        <option value="md">Normal</option>
+                        <option value="lg">Grande</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="control-group half">
+                    <label>Modo Oscuro</label>
+                    <div class="toggle-wrapper" (click)="editableContent.dark = !editableContent.dark; onContentChange()" [class.active]="editableContent.dark">
+                      <div class="toggle-slider"></div>
+                      <span>{{ editableContent.dark ? 'Activado' : 'Desactivado' }}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="control-group">
                   <label>Variante de Estilo</label>
                   <div class="select-wrapper">
                   <select [(ngModel)]="editableContent.variant" (ngModelChange)="onVariantChange()" class="premium-select">
@@ -342,14 +373,15 @@ export interface UndoRedoState {
 
     .isolated-mode-overlay {
       position: fixed;
-      inset: 0;
-      background: rgba(2, 6, 23, 0.9);
-      backdrop-filter: blur(12px) saturate(180%);
-      z-index: 2000000; /* Ensure it's above everything */
+      inset: 0 !important;
+      background: rgba(2, 6, 23, 0.95);
+      backdrop-filter: blur(16px) saturate(180%);
+      z-index: 9999999 !important; /* Extremely high to beat any sidebar */
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2vh 2vw;
+      padding: 1.5vh 1.5vw;
+      pointer-events: all;
     }
 
     .isolated-mode-container {
@@ -562,6 +594,64 @@ export interface UndoRedoState {
     .premium-select {
       appearance: none;
       padding-right: 2rem;
+    }
+
+    /* TOGGLE SWITCH */
+    .toggle-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      padding: 0.5rem 0.75rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .toggle-wrapper:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .toggle-wrapper.active {
+      border-color: var(--primary-accent);
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .toggle-slider {
+      width: 32px;
+      height: 18px;
+      background: #334155;
+      border-radius: 20px;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .toggle-slider::after {
+      content: '';
+      position: absolute;
+      left: 3px;
+      top: 3px;
+      width: 12px;
+      height: 12px;
+      background: white;
+      border-radius: 50%;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .active .toggle-slider {
+      background: var(--primary-accent);
+    }
+
+    .active .toggle-slider::after {
+      left: calc(100% - 15px);
+    }
+
+    .toggle-wrapper span {
+      font-size: 11px;
+      font-weight: 700;
+      color: #f8fafc;
     }
 
     .color-input-wrapper {
@@ -788,17 +878,27 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
 
   ngOnInit() {
     // Load initial position and size
-    this.currentPosition = { ...this.config.position };
-    this.currentSize = { ...this.config.size };
-    this.initialPosition = { ...this.config.position };
-    this.initialSize = { ...this.config.size };
+    this.currentPosition = { 
+      x: Math.max(0, this.config.position?.x || 0), 
+      y: Math.max(0, this.config.position?.y || 0) 
+    };
+    this.currentSize = { 
+      width: Math.max(100, this.config.size?.width || 300), 
+      height: Math.max(60, this.config.size?.height || 200) 
+    };
+    this.initialPosition = { ...this.currentPosition };
+    this.initialSize = { ...this.currentSize };
 
     // Load editable content
     this.editableContent = {
       ...this.config.content,
       title: this.config.content['title'] || 'Draggable Box',
       description: this.config.content['description'] || 'Arrastra y redimensiona este elemento',
-      variant: this.config.content['variant'] || ''
+      variant: this.config.content['variant'] || '',
+      boxVariant: this.config.content['boxVariant'] || 'draggable-box-1',
+      rounded: this.config.content['rounded'] || 'md',
+      size: this.config.content['size'] || 'md',
+      dark: this.config.content['dark'] || false
     };
 
     // Load editable styles
@@ -1057,10 +1157,14 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
   }
 
   onPositionChange() {
+    this.currentPosition.x = Math.max(0, this.currentPosition.x);
+    this.currentPosition.y = Math.max(0, this.currentPosition.y);
     this.scheduleSaveState();
   }
 
   onSizeChange() {
+    this.currentSize.width = Math.max(40, this.currentSize.width);
+    this.currentSize.height = Math.max(40, this.currentSize.height);
     this.scheduleSaveState();
   }
 
@@ -1159,7 +1263,10 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
         title: this.editableContent.title,
         description: this.editableContent.description,
         variant: this.editableContent.variant,
-        boxVariant: this.editableContent.boxVariant
+        boxVariant: this.editableContent.boxVariant,
+        rounded: this.editableContent.rounded,
+        size: this.editableContent.size,
+        dark: this.editableContent.dark
       },
       styles: {
         ...this.config.styles,
