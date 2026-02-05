@@ -71,7 +71,7 @@ Instead of a giant `ngSwitch` in `editor-feature.component.html`, we'll move tow
 
 ---
 
-## 🔄 Phase 4: Persistence & State Management
+## 🏗 Phase 4: Persistence & State Management
 
 ### 4.1 Debounced NgRx Updates
 
@@ -91,23 +91,50 @@ Add controls to manage the "Stacking Order":
 
 ---
 
+## 🏗 Phase 5: The "Golden Standard" Experience (Premium UX)
+
+For a component to be considered "Golden Standard", it must implement:
+
+### 5.1 Morphological Differentiation
+
+Variants should not just change colors; they should change the **visual structure and morphology** (e.g., adding icon orbs, glass reflections, decorative blobs).
+
+### 5.2 Style Priority Logic (Presets vs. Manual)
+
+Presets (None, Medium, Full) should always take precedence. Manual style overrides (like `borderRadius: 24px`) should only be applied when the "Medium/Manual" preset is selected, ensuring consistent design.
+
+### 5.3 Premium Isolated Mode Features
+
+- **Ambient Context**: The canvas background must adapt to the dark/light mode toggle.
+- **Ghost Preview**: Show a dashed outline of the original position/size during drag/resize.
+- **Magnetic Grid (Snap)**: Implement a 40px grid with visual "magnet" feedback (dots change color when snapping).
+- **Undo/Redo Stack**: Full history of changes within the isolated session.
+
+### 5.4 High-Velocity Entry Points
+
+- **Double-Click**: Instant entry to Isolated Mode from the main editor.
+- **Quick-Edit Floating Button**: A primary action button (🎯) that appears on hover.
+- **Keyboard Shortcuts**: Pulse `I` to isolate, `G` for grid, `Esc` to exit.
+
+---
+
 ## 📋 Implementation Roadmap (Updated)
 
-| Task                              | Priority | Status                                       |
-| :-------------------------------- | :------- | :------------------------------------------- |
-| **Draggable Box Standardization** | High     | ✅ COMPLETED (Gold Standard established)     |
-| **Standardized Isolated Mode UI** | High     | ✅ COMPLETED (Z-index & rendering fixed)     |
-| **Component Template Updates**    | High     | 🔄 In Progress                               |
-| **Metadata-Driven Property Sync** | Medium   | 📅 Planned                                   |
-| **Z-Index Management**            | Low      | ✅ In Progress (Base logic in Isolated Mode) |
-| **Universal Button Integration**  | Medium   | 📅 Next Up                                   |
+| Task                                | Priority | Status                                       |
+| :---------------------------------- | :------- | :------------------------------------------- |
+| **Draggable Box (Golden Standard)** | High     | ✅ COMPLETED (Reference established)         |
+| **Standardized Isolated Mode UI**   | High     | ✅ COMPLETED (Ambient & Snap features)       |
+| **Quick Action Entry Points**       | Medium   | ✅ COMPLETED (Double click & Float btn)      |
+| **Undo/Redo Base System**           | Medium   | ✅ COMPLETED (Isolated Mode implementations) |
+| **Component Template Updates**      | High     | ✅ COMPLETED (Updated with Golden UX)        |
+| **Universal Button Integration**    | Medium   | 📅 Next Up                                   |
 
 ---
 
 ## ✅ Success Criteria
 
-- [ ] Any developer can add a new component to the editor in < 15 minutes.
-- [ ] Components look and feel "premium" while being edited.
-- [ ] Isolated mode menu is ALWAYS visible (never hidden by sidebars).
-- [ ] All 5 core properties (Variant, Rounded, Size, Dark, Custom) sync flawslessly.
-- [ ] Undo/Redo works for all properties.
+- [ ] Any developer can add a premium component in < 30 minutes.
+- [ ] Components look and feel "premium" while being edited (animations, ambient feedback).
+- [ ] Isolated mode is the default for complex structural edits.
+- [ ] Stacking order (z-index) is fully manageable.
+- [ ] All 5 core properties (Variant, Rounded, Size, Dark, Custom) sync flawlessy.

@@ -543,20 +543,22 @@ Para componentes complejos que requieren edición detallada (como Draggable Box)
 Crea un componente en la misma carpeta que tu sección de editor:
 `editor-[component-name]-isolated-mode.component.ts`
 
-**Características Clave:**
+**Requisitos "Golden Standard" (Mandatorios):**
 
-- Overlays con Glassmorphism (`z-index: 99999`)
-- Controles de contenido y estilo
-- Soporte para Deshacer/Rehacer (Undo/Redo)
-- Selectores de Variant y Tipo de Componente
+1.  **Ambient Responsive Canvas**: El fondo del canvas debe reaccionar al modo oscuro (`.ambient-dark`).
+2.  **Magnetic Grid & Snap**: Implementar cuadrícula de 40px que cambie a color azul acento cuando el "Snap" esté activo.
+3.  **Ghost Preview**: Durante el drag, mostrar un "fantasma" de la posición original.
+4.  **History Engine**: Implementar `undoStack` y `redoStack` para cambios locales.
+5.  **High-Velocity Entry**: Implementar `(dblclick)` y el botón flotante `quick-isolated-btn` en la sección del editor.
 
 ### 9.2 Integrar en la Sección del Editor
 
 ```typescript
-openIsolatedMode() {
+openIsolatedMode(event?: MouseEvent) {
+  if (event) event.stopPropagation();
   document.body.classList.add('isolated-mode-active');
   this.showIsolatedMode = true;
-  // ... cargar config ...
+  // Cargar configuración de entrada...
 }
 
 closeIsolatedMode() {

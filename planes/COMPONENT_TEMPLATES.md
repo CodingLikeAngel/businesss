@@ -114,9 +114,15 @@ export class UI[ComponentName]Component {
     <div #componentElement class="editor-element"
          [class.is-selected]="selectedElementId === section.id + '_el'"
          (click)="selectElement($event, getMergedElement(section.id, section.id + '_el', section.content, '[component-name]'))"
+         (dblclick)="openIsolatedMode()"
          [enhancedVisualEditable]="getComponentConfig()"
          elementId="{{section.id + '_el'}}"
          (visualEvents)="handleComponentEvent($event)">
+
+      <!-- Quick Action Floating Button -->
+      <button class="quick-isolated-btn" (click)="openIsolatedMode($event)" title="Editar Avanzado (I)">
+        🎯
+      </button>
 
       <lib-ui-[component-name]
         [variant]="section.content['variant'] || getVariant(section.id)"
@@ -127,10 +133,24 @@ export class UI[ComponentName]Component {
         [customStyles]="section.styles || {}"
       ></lib-ui-[component-name]>
     </div>
-  `
+  `,
+  styles: [`
+    .editor-element { position: relative; cursor: move; }
+    .quick-isolated-btn {
+      position: absolute; top: 10px; right: 10px;
+      width: 32px; height: 32px;
+      background: rgba(99, 102, 241, 0.9);
+      border-radius: 50%; opacity: 0;
+      transform: scale(0.8); transition: all 0.2s;
+    }
+    .editor-element:hover .quick-isolated-btn { opacity: 1; transform: scale(1); }
+  `]
 })
 export class Editor[ComponentName]SectionComponent extends EnhancedBaseEditorSectionComponent {
-  // 🚀 Implementar lógica de guardado y sync aquí
+  openIsolatedMode(event?: MouseEvent) {
+    if (event) event.stopPropagation();
+    // Logic to open isolated mode...
+  }
 }
 ```
 
@@ -149,72 +169,67 @@ export class Editor[ComponentName]SectionComponent extends EnhancedBaseEditorSec
     <div class="isolated-mode-overlay" (click)="close()">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
 
-        <!-- Premium Sidebar -->
-        <div class="controls-sidebar">
-          <div class="sidebar-section">
-            <h4>APARIENCIA</h4>
-            <div class="control-group">
-              <label>Variante</label>
-              <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()" class="premium-select">
-                <option *ngFor="let v of availableVariants" [value]="v">{{v}}</option>
-              </select>
-            </div>
+        <!-- Header with History Controls -->
+        <div class="isolated-mode-header">
+           <div class="history-controls">
+              <button (click)="undo()" [disabled]="!canUndo">↶</button>
+              <button (click)="redo()" [disabled]="!canRedo">↷</button>
+           </div>
+           <div class="canvas-controls">
+              <button [class.active]="showGrid" (click)="toggleGrid()">#</button>
+              <button [class.active]="snapToGrid" (click)="toggleSnap()">⊞</button>
+           </div>
+        </div>
 
-            <div class="toggle-row">
-               <span>Modo Oscuro</span>
+        <div class="isolated-mode-body">
+           <!-- Premium Sidebar -->
+           <aside class="controls-sidebar">
+             <div class="sidebar-section">
+               <label>Tamaño Base</label>
+               <select [(ngModel)]="editableContent.size" class="premium-select">
+                 <option value="sm">Pequeño</option><option value="md">Normal</option><option value="lg">Grande</option>
+               </select>
+
+               <label>Modo Luz Canvas</label>
                <div class="premium-toggle" [class.active]="editableContent.dark" (click)="toggleDark()">
-                 <div class="handle"></div>
+                 <span>{{ editableContent.dark ? 'OSCURO' : 'CLARO' }}</span>
                </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Professional Canvas -->
-        <div class="isolated-canvas">
-          <div class="canvas-inner">
-             <div class="draggable-wrapper"
-                  [style.left.px]="currentPosition.x"
-                  [style.top.px]="currentPosition.y"
-                  [style.width.px]="currentSize.width"
-                  [style.height.px]="currentSize.height">
-               <lib-ui-[component-name]
-                 [variant]="editableContent.variant"
-                 [rounded]="editableContent.rounded"
-                 [size]="editableContent.size"
-                 [dark]="editableContent.dark"
-                 [customStyles]="getCustomStyles()">
-               </lib-ui-[component-name]>
              </div>
-          </div>
+           </aside>
+
+           <!-- Professional Canvas (Ambient Responsive) -->
+           <div class="isolated-canvas" [class.ambient-dark]="editableContent.dark" [class.show-grid]="showGrid" [class.snapping]="snapToGrid">
+             <div class="canvas-inner">
+                <!-- GHOST PREVIEW -->
+                <div class="ghost-wrapper" *ngIf="isDragging" [style.left.px]="initialX" [style.top.px]="initialY"></div>
+
+                <div class="draggable-wrapper" (mousedown)="onMouseDown($event)"
+                     [class.magnetic-active]="snapToGrid && isDragging"
+                     [style.left.px]="currentPosition.x" [style.top.px]="currentPosition.y">
+                  <lib-ui-[component-name] ...inputs...></lib-ui-[component-name]>
+                </div>
+             </div>
+           </div>
         </div>
 
-        <!-- Footer Actions -->
+        <!-- Footer -->
         <div class="isolated-mode-footer">
-          <button (click)="close()" class="btn-secondary">Cancelar</button>
-          <button (click)="apply()" class="btn-primary">Guardar Cambios</button>
+           <button (click)="close()">Cancelar</button>
+           <button class="btn-primary" (click)="apply()">Guardar</button>
         </div>
       </div>
     </div>
   `,
-  styleUrl: './isolated-mode.premium.scss' // Reusar o extender de un core SCSS
+  styles: [`
+    .isolated-canvas { background: #f1f5f9; transition: background 0.4s; }
+    .isolated-canvas.ambient-dark { background: #020617; }
+    .isolated-canvas.show-grid { background-image: radial-gradient(rgba(0,0,0,0.1) 1.5px, transparent 1.5px); background-size: 40px 40px; }
+    .isolated-canvas.ambient-dark.show-grid { background-image: radial-gradient(rgba(255,255,255,0.2) 1.5px, transparent 1.5px); }
+    .isolated-canvas.snapping.show-grid { background-image: radial-gradient(var(--primary-accent) 2px, transparent 2px); }
+  `]
 })
 export class Editor[ComponentName]IsolatedModeComponent {
-  // 🚀 CRITICAL: Implementar sync de los "Big 5"
-  apply() {
-    const updated = {
-       content: {
-         ...this.editableContent,
-         variant: this.editableContent.variant,
-         rounded: this.editableContent.rounded,
-         size: this.editableContent.size,
-         dark: this.editableContent.dark
-       },
-       styles: { ...this.editableStyles },
-       position: this.currentPosition,
-       size: this.currentSize
-    };
-    this.applied.emit(updated);
-  }
+  // 🚀 CRITICAL: Implementar sync de los "Big 5" y Undo/Redo stack
 }
 ```
 
