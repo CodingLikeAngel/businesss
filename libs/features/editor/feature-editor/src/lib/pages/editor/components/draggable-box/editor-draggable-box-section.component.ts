@@ -79,7 +79,12 @@ import * as PageActions from '../../../../store/actions/page.actions';
           <div class="resize-handle w" (mousedown)="startResize($event, 'w')"></div>
           
           <!-- Box Content - UI Components -->
-          <div class="box-content-wrapper">
+          <div class="box-content-wrapper" (dblclick)="openIsolatedMode()">
+            <!-- Quick Action Floating Button -->
+            <button class="quick-isolated-btn" (click)="openIsolatedMode($event)" title="Editar en Modo Aislado (I)">
+              🎯
+            </button>
+
             <lib-ui-components-draggable-box-1
               *ngIf="currentContent.boxVariant === 'draggable-box-1' || !currentContent.boxVariant"
               [variant]="currentContent.variant || globalVariant || 'secondary'"
@@ -239,6 +244,40 @@ import * as PageActions from '../../../../store/actions/page.actions';
 
     .draggable-box.is-resizing {
       cursor: se-resize;
+    }
+
+    /* QUICK ISOLATED BUTTON */
+    .quick-isolated-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      width: 32px;
+      height: 32px;
+      background: rgba(99, 102, 241, 0.9);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 20;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      pointer-events: all;
+    }
+
+    .draggable-box:hover .quick-isolated-btn {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .quick-isolated-btn:hover {
+      background: #6366f1;
+      transform: scale(1.15) !important;
+      box-shadow: 0 6px 16px rgba(99, 102, 241, 0.4);
     }
 
     .box-content {
@@ -625,7 +664,11 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
     }));
   }
 
-  openIsolatedMode() {
+  openIsolatedMode(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
     document.body.classList.add('isolated-mode-active');
     this.isolatedConfig = {
       sectionId: this.section.id,
