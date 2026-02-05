@@ -234,10 +234,13 @@
   isolation: isolate;
   z-index: 1;
 
-  // When isolated mode is active, we want the canvas to be on top of EVERYTHING
+  // CRITICAL: When isolated mode is active, we MUST break out of all stacking contexts
+  // and perspective traps so that fixed positioning works globally.
   :host-context(body.isolated-mode-active) & {
-    z-index: 999999 !important;
+    z-index: 9999999 !important;
     isolation: auto !important;
+    overflow: visible !important;
+    padding: 0 !important; /* Remove padding to allow full coverage */
   }
 }
 
@@ -247,6 +250,11 @@
   align-items: center;
   justify-content: center;
   min-height: 100%;
+
+  :host-context(body.isolated-mode-active) & {
+    perspective: none !important;
+    transform: none !important;
+  }
 }
 
 .preview-frame {
@@ -256,6 +264,17 @@
   transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
+
+  :host-context(body.isolated-mode-active) & {
+    transition: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+    border-radius: 0 !important;
+    border: none !important;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: auto !important;
+  }
 
   &.frame-desktop {
     width: 1366px; /* standard laptop */
