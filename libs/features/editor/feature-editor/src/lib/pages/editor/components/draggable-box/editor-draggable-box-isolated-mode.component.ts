@@ -1,14 +1,15 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UIDraggableBox1Component, UIDraggableBox2Component, UIDraggableBox3Component } from '@negocio/ui-components';
-import { SimpleVisualEditorService, SimpleEditableElement } from '@negocio/shared-components';
-import { Subject, takeUntil } from 'rxjs';
+import { UIDraggableBox1Component, UIDraggableBox2Component, UIDraggableBox3Component, variants } from '@negocio/ui-components';
+import { SimpleVisualEditorService } from '@negocio/shared-components';
+import { Subject } from 'rxjs';
 
 export interface IsolatedModeConfig {
   sectionId: string;
   elementId: string;
   variant: string;
+  globalVariant?: string;
   content: any;
   styles: any;
   position: { x: number; y: number };
@@ -71,6 +72,29 @@ export interface UndoRedoState {
         <div class="isolated-mode-body">
           <!-- Sidebar Controls -->
           <div class="controls-sidebar">
+            <div class="sidebar-section">
+              <h4 class="section-title">✨ Tipo y Estilo</h4>
+              <div class="control-group">
+                <label>Tipo de Caja</label>
+                <select [(ngModel)]="editableContent.boxVariant" (ngModelChange)="onContentChange()">
+                  <option value="draggable-box-1">Caja Estándar (Box 1)</option>
+                  <option value="draggable-box-2">Caja con Borde Neón (Box 2)</option>
+                  <option value="draggable-box-3">Caja Minimalista (Box 3)</option>
+                </select>
+              </div>
+              <div class="control-group">
+                <label>Estilo Visual (Variant)</label>
+                <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()">
+                  <option *ngFor="let v of availableVariants" [value]="v">
+                    {{ v | titlecase }}
+                  </option>
+                </select>
+                <p class="variant-hint" *ngIf="!editableContent.variant || editableContent.variant === 'default'">
+                  Usando tema global: {{ config.globalVariant || 'default' }}
+                </p>
+              </div>
+            </div>
+
             <div class="sidebar-section">
               <h4 class="section-title">📝 Contenido</h4>
               <div class="control-group">
@@ -194,8 +218,8 @@ export interface UndoRedoState {
                    (mousedown)="onMouseDown($event)">
                 
                 <lib-ui-components-draggable-box-1
-                  *ngIf="config.variant === 'draggable-box-1'"
-                  [variant]="editableContent.variant || 'secondary'"
+                  *ngIf="editableContent.boxVariant === 'draggable-box-1'"
+                  [variant]="editableContent.variant || config.globalVariant || 'secondary'"
                   [rounded]="editableContent.rounded || 'md'"
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
@@ -204,8 +228,8 @@ export interface UndoRedoState {
                 </lib-ui-components-draggable-box-1>
 
                 <lib-ui-components-draggable-box-2
-                  *ngIf="config.variant === 'draggable-box-2'"
-                  [variant]="editableContent.variant || 'secondary'"
+                  *ngIf="editableContent.boxVariant === 'draggable-box-2'"
+                  [variant]="editableContent.variant || config.globalVariant || 'secondary'"
                   [rounded]="editableContent.rounded || 'md'"
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
@@ -214,8 +238,8 @@ export interface UndoRedoState {
                 </lib-ui-components-draggable-box-2>
 
                 <lib-ui-components-draggable-box-3
-                  *ngIf="config.variant === 'draggable-box-3'"
-                  [variant]="editableContent.variant || 'secondary'"
+                  *ngIf="editableContent.boxVariant === 'draggable-box-3'"
+                  [variant]="editableContent.variant || config.globalVariant || 'secondary'"
                   [rounded]="editableContent.rounded || 'md'"
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
@@ -288,13 +312,13 @@ export interface UndoRedoState {
     .isolated-mode-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.9);
-      backdrop-filter: blur(12px);
-      z-index: 10000;
+      background: rgba(2, 6, 23, 0.85); /* Matches App shell deeper blue */
+      backdrop-filter: blur(20px) saturate(180%);
+      z-index: 99999; /* Higher than everything else */
       display: flex;
       align-items: center;
       justify-content: center;
-      animation: fadeIn 0.2s ease;
+      animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     @keyframes fadeIn {
@@ -441,9 +465,17 @@ export interface UndoRedoState {
 
     .control-group label {
       display: block;
-      color: rgba(255, 255, 255, 0.6);
+      color: rgba(255, 255, 255, 0.7);
       font-size: 0.75rem;
-      margin-bottom: 0.25rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .variant-hint {
+      font-size: 0.65rem;
+      color: #6366f1;
+      margin-top: 0.5rem;
+      font-style: italic;
     }
 
     .control-group input[type="text"],
@@ -659,6 +691,8 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
   @ViewChild('draggableWrapper') draggableWrapperRef!: ElementRef;
   @ViewChild('canvasInner') canvasInnerRef!: ElementRef;
 
+  availableVariants = variants;
+
   private visualEditor = inject(SimpleVisualEditorService);
   private destroy$ = new Subject<void>();
 
@@ -710,7 +744,8 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
     this.editableContent = {
       ...this.config.content,
       title: this.config.content['title'] || 'Draggable Box',
-      description: this.config.content['description'] || 'Arrastra y redimensiona este elemento'
+      description: this.config.content['description'] || 'Arrastra y redimensiona este elemento',
+      variant: this.config.content['variant'] || ''
     };
 
     // Load editable styles
@@ -1037,7 +1072,9 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
       content: {
         ...this.config.content,
         title: this.editableContent.title,
-        description: this.editableContent.description
+        description: this.editableContent.description,
+        variant: this.editableContent.variant,
+        boxVariant: this.editableContent.boxVariant
       },
       styles: {
         ...this.config.styles,
@@ -1051,6 +1088,5 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
       size: { ...this.currentSize }
     };
     this.applied.emit(updatedConfig);
-    this.closed.emit();
   }
 }

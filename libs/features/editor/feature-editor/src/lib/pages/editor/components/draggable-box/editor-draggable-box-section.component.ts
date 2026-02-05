@@ -2,6 +2,7 @@ import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, inject, OnDest
 import { CommonModule } from '@angular/common';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
 import { EditorDraggableBoxIsolatedModeComponent, IsolatedModeConfig } from './editor-draggable-box-isolated-mode.component';
+import { UIDraggableBox1Component, UIDraggableBox2Component, UIDraggableBox3Component } from '@negocio/ui-components';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as PageActions from '../../../../store/actions/page.actions';
@@ -9,7 +10,13 @@ import * as PageActions from '../../../../store/actions/page.actions';
 @Component({
   selector: 'lib-editor-draggable-box-section',
   standalone: true,
-  imports: [CommonModule, EditorDraggableBoxIsolatedModeComponent],
+  imports: [
+    CommonModule, 
+    EditorDraggableBoxIsolatedModeComponent,
+    UIDraggableBox1Component,
+    UIDraggableBox2Component,
+    UIDraggableBox3Component
+  ],
   template: `
     <section 
       [id]="section.id" 
@@ -71,10 +78,28 @@ import * as PageActions from '../../../../store/actions/page.actions';
           <div class="resize-handle sw" (mousedown)="startResize($event, 'sw')"></div>
           <div class="resize-handle w" (mousedown)="startResize($event, 'w')"></div>
           
-          <!-- Box Content -->
-          <div class="box-content">
-            <h3 class="box-title">{{ currentContent.title || 'Draggable Box' }}</h3>
-            <p class="box-description">{{ currentContent.description || 'Arrastra y redimensiona este elemento' }}</p>
+          <!-- Box Content - UI Components -->
+          <div class="box-content-wrapper">
+            <lib-ui-components-draggable-box-1
+              *ngIf="currentContent.boxVariant === 'draggable-box-1' || !currentContent.boxVariant"
+              [variant]="currentContent.variant || globalVariant || 'secondary'"
+              [content]="currentContent.title || 'Draggable Box'"
+              [customStyles]="currentStyles">
+            </lib-ui-components-draggable-box-1>
+
+            <lib-ui-components-draggable-box-2
+              *ngIf="currentContent.boxVariant === 'draggable-box-2'"
+              [variant]="currentContent.variant || globalVariant || 'secondary'"
+              [content]="currentContent.title || 'Draggable Box'"
+              [customStyles]="currentStyles">
+            </lib-ui-components-draggable-box-2>
+
+            <lib-ui-components-draggable-box-3
+              *ngIf="currentContent.boxVariant === 'draggable-box-3'"
+              [variant]="currentContent.variant || globalVariant || 'secondary'"
+              [content]="currentContent.title || 'Draggable Box'"
+              [customStyles]="currentStyles">
+            </lib-ui-components-draggable-box-3>
           </div>
         </div>
 
@@ -404,7 +429,9 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
     this.currentContent = {
       ...this.section.content,
       title: this.section.content?.['title'] || 'Draggable Box',
-      description: this.section.content?.['description'] || 'Arrastra y redimensiona este elemento'
+      description: this.section.content?.['description'] || 'Arrastra y redimensiona este elemento',
+      variant: this.section.content?.['variant'] || '',
+      boxVariant: this.section.content?.['boxVariant'] || 'draggable-box-1'
     };
 
     const borderStyle = this.section.styles?.['border'] || '';
@@ -565,7 +592,9 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
     const updatedContent = {
       ...this.section.content,
       title: this.currentContent.title,
-      description: this.currentContent.description
+      description: this.currentContent.description,
+      variant: this.currentContent.variant,
+      boxVariant: this.currentContent.boxVariant
     };
 
     this.store.dispatch(PageActions.updateSection({
@@ -578,10 +607,12 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   }
 
   openIsolatedMode() {
+    document.body.classList.add('isolated-mode-active');
     this.isolatedConfig = {
       sectionId: this.section.id,
       elementId: this.boxId,
-      variant: 'draggable-box-1',
+      variant: this.currentContent.boxVariant || 'draggable-box-1',
+      globalVariant: this.globalVariant,
       content: { ...this.currentContent },
       styles: {
         ...this.section.styles,
@@ -599,6 +630,7 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   }
 
   closeIsolatedMode() {
+    document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
     this.isolatedConfig = null;
   }
@@ -611,6 +643,7 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
 
     this.currentContent.title = config.content.title;
     this.currentContent.description = config.content.description;
+    this.currentContent.variant = config.content.variant;
 
     const borderStyle = config.styles.border || '';
     this.currentStyles.backgroundColor = config.styles.backgroundColor;

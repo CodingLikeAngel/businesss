@@ -2,7 +2,9 @@
 :host-context(body.is-resizing-active) {
   user-select: none !important;
   cursor: col-resize !important;
-  * { pointer-events: none !important; }
+  * {
+    pointer-events: none !important;
+  }
 }
 
 .builder-shell {
@@ -47,24 +49,24 @@
       color: white;
       font-size: 1.25rem;
       box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .project-info {
-      .project-name { 
-        font-weight: 700; 
-        font-size: 0.95rem; 
+      .project-name {
+        font-weight: 700;
+        font-size: 0.95rem;
         letter-spacing: -0.01em;
         background: linear-gradient(to right, #fff, #94a3b8);
         -webkit-background-clip: text;
         background-clip: text;
         -webkit-text-fill-color: transparent;
       }
-      .save-status { 
-        font-size: 0.7rem; 
-        color: #10b981; 
-        display: flex; 
-        align-items: center; 
+      .save-status {
+        font-size: 0.7rem;
+        color: #10b981;
+        display: flex;
+        align-items: center;
         gap: 6px;
         opacity: 0.8;
       }
@@ -83,7 +85,7 @@
       display: flex;
       gap: 4px;
       border: 1px solid rgba(255, 255, 255, 0.05);
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 
       button {
         background: transparent;
@@ -98,10 +100,13 @@
         align-items: center;
         justify-content: center;
 
-        &:hover { color: white; background: rgba(255, 255, 255, 0.05); }
-        &.active { 
-          background: white; 
-          color: #020617; 
+        &:hover {
+          color: white;
+          background: rgba(255, 255, 255, 0.05);
+        }
+        &.active {
+          background: white;
+          color: #020617;
           transform: scale(1.05);
           box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
         }
@@ -132,14 +137,20 @@
       background: rgba(255, 255, 255, 0.05);
       color: white;
       border-color: rgba(255, 255, 255, 0.1);
-      &:hover { border-color: #6366f1; background: rgba(99, 102, 241, 0.1); }
+      &:hover {
+        border-color: #6366f1;
+        background: rgba(99, 102, 241, 0.1);
+      }
     }
 
     .btn-publish {
       background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
       color: white;
       box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
-      &:hover { transform: translateY(-2px); box-shadow: 0 15px 20px -3px rgba(99, 102, 241, 0.5); }
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 20px -3px rgba(99, 102, 241, 0.5);
+      }
     }
   }
 }
@@ -162,14 +173,16 @@
   border-radius: 20px;
   overflow: hidden;
   z-index: 500;
-  box-shadow: 10px 0 30px rgba(0,0,0,0.3);
+  box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3);
   transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
 
   &.is-resizing {
     transition: none !important;
     border-right: 2px solid #6366f1 !important;
-    * { transition: none !important; }
+    * {
+      transition: none !important;
+    }
   }
 
   .sidebar-resizer {
@@ -182,7 +195,9 @@
     z-index: 1000;
     transition: background 0.3s;
 
-    &:hover { background: rgba(99, 102, 241, 0.1); }
+    &:hover {
+      background: rgba(99, 102, 241, 0.1);
+    }
   }
 }
 
@@ -190,8 +205,10 @@
 .canvas-area {
   flex: 1;
   background-color: #0f172a;
-  background-image: 
-    radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.03) 1px,
+    transparent 0
+  );
   background-size: 40px 40px;
   overflow: auto;
   display: flex;
@@ -200,12 +217,23 @@
   padding: 80px;
   scroll-behavior: smooth;
 
-  &::-webkit-scrollbar { width: 8px; }
-  &::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.05); border-radius: 10px; }
-  
+  &::-webkit-scrollbar {
+    width: 8px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+  }
+
   /* Create stacking context to prevent internal z-index: 10000 from leaking to sidebars */
   isolation: isolate;
   z-index: 1;
+
+  // When isolated mode is active, we want the canvas to be on top of EVERYTHING
+  :host-context(body.isolated-mode-active) & {
+    z-index: 999999 !important;
+    isolation: auto !important;
+  }
 }
 
 .canvas-wrapper {
@@ -218,7 +246,8 @@
 
 .preview-frame {
   background: white;
-  box-shadow: 0 50px 100px -20px rgba(0,0,0,0.8), 0 30px 60px -30px rgba(0,0,0,0.9);
+  box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.8),
+    0 30px 60px -30px rgba(0, 0, 0, 0.9);
   transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
@@ -226,7 +255,7 @@
   &.frame-desktop {
     width: 1366px; /* standard laptop */
     border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.05);
+    border: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   &.frame-tablet {
@@ -251,12 +280,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    .camera { 
-        width: 10px; 
-        height: 10px; 
-        background: #0f172a; 
-        border-radius: 50%;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+    .camera {
+      width: 10px;
+      height: 10px;
+      background: #0f172a;
+      border-radius: 50%;
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.5);
     }
   }
 
@@ -265,7 +294,9 @@
     height: 100%;
     overflow-y: auto;
     overflow-x: hidden;
-    &::-webkit-scrollbar { width: 0; }
+    &::-webkit-scrollbar {
+      width: 0;
+    }
   }
 }
 
@@ -302,17 +333,17 @@
     outline-color: #6366f1;
     background: rgba(99, 102, 241, 0.03);
     &::after {
-        content: 'EDITAR';
-        position: absolute;
-        top: 4px;
-        right: 4px;
-        font-size: 8px;
-        font-weight: 900;
-        background: #6366f1;
-        color: white;
-        padding: 1px 6px;
-        border-radius: 3px;
-        z-index: 40;
+      content: 'EDITAR';
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      font-size: 8px;
+      font-weight: 900;
+      background: #6366f1;
+      color: white;
+      padding: 1px 6px;
+      border-radius: 3px;
+      z-index: 40;
     }
   }
 
