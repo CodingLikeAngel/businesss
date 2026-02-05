@@ -339,6 +339,69 @@ variants: [
 
 ---
 
+## 📋 Template 6: Isolated Mode Component
+
+Component for advanced editing of complex elements.
+
+### TypeScript Template
+
+```typescript
+@Component({
+  selector: 'lib-editor-[name]-isolated-mode',
+  standalone: true,
+  imports: [CommonModule, FormsModule, UI[ComponentName]Component],
+  template: `
+    <div class="isolated-mode-overlay" (click)="closed.emit()">
+      <div class="isolated-mode-container" (click)="$event.stopPropagation()">
+        <!-- Controls Sidebar -->
+        <div class="controls-sidebar">
+           <h4 class="section-title">✨ Estilo</h4>
+           <select [(ngModel)]="editableContent.variant">
+             <option *ngFor="let v of availableVariants" [value]="v">{{v}}</option>
+           </select>
+        </div>
+
+        <!-- Canvas Area -->
+        <div class="isolated-canvas">
+          <lib-ui-[component-name]
+            [variant]="editableContent.variant || config.globalVariant"
+            [content]="editableContent.content">
+          </lib-ui-[component-name]>
+        </div>
+      </div>
+    </div>
+  `,
+  styles: [`
+    .isolated-mode-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(2, 6, 23, 0.85);
+      backdrop-filter: blur(20px);
+      z-index: 99999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .isolated-mode-container {
+      background: #1a1a2e;
+      border-radius: 16px;
+      width: 90vw;
+      height: 85vh;
+      display: flex;
+    }
+  `]
+})
+export class Editor[ComponentName]IsolatedModeComponent {
+  @Input() config!: any;
+  @Output() closed = new EventEmitter<void>();
+  @Output() applied = new EventEmitter<any>();
+  availableVariants = variants;
+  editableContent: any = {};
+}
+```
+
+---
+
 ## ✅ Quick Checklist
 
 - [ ] Componente UI creado

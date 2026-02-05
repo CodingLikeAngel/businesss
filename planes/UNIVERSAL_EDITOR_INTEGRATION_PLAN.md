@@ -108,14 +108,14 @@ Add controls to manage the "Stacking Order":
 
 ## 📋 Implementation Roadmap
 
-| Task                              | Priority | Status     |
-| :-------------------------------- | :------- | :--------- |
-| **Universal Metadata Definition** | High     | 📅 Planned |
-| **Standardized Isolated Mode UI** | High     | 📅 Planned |
-| **Component Registry Cleanup**    | Medium   | 📅 Planned |
-| **Gradients & Advanced Styles**   | Medium   | 📅 Planned |
-| **Z-Index Management**            | Low      | 📅 Planned |
-| **Batch Selection Support**       | Low      | 📅 Planned |
+| Task                              | Priority | Status                                       |
+| :-------------------------------- | :------- | :------------------------------------------- |
+| **Universal Metadata Definition** | High     | 📅 Planned                                   |
+| **Standardized Isolated Mode UI** | High     | 🔄 In Progress (Draggable Box ref complete)  |
+| **Component Registry Cleanup**    | Medium   | 📅 Planned                                   |
+| **Gradients & Advanced Styles**   | Medium   | 📅 Planned                                   |
+| **Z-Index Management**            | Low      | ✅ In Progress (Base logic in Isolated Mode) |
+| **Batch Selection Support**       | Low      | 📅 Planned                                   |
 
 ---
 

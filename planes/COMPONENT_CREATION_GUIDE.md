@@ -509,6 +509,8 @@ Antes de considerar el componente completo, verifica:
 - [ ] Variants se aplican correctamente
 - [ ] Edición visual funciona
 
+---
+
 ## 🚀 Paso 8: Integración con el Sistema Universal (NUEVO)
 
 Para que tu componente sea "Premium" y soporte drag & drop nativo, sigue estos pasos extra:
@@ -529,6 +531,50 @@ ngAfterViewInit() {
 ### 8.3 Configurar Draggability
 
 En el método `getNotificationConfig` (o similar), habilita `enableDrag: true`.
+
+---
+
+## 🎯 Paso 9: Implementar Modo Aislado (Isolated Mode)
+
+Para componentes complejos que requieren edición detallada (como Draggable Box), implementamos un **Modo Aislado**.
+
+### 9.1 Crear el Componente de Modo Aislado
+
+Crea un componente en la misma carpeta que tu sección de editor:
+`editor-[component-name]-isolated-mode.component.ts`
+
+**Características Clave:**
+
+- Overlays con Glassmorphism (`z-index: 99999`)
+- Controles de contenido y estilo
+- Soporte para Deshacer/Rehacer (Undo/Redo)
+- Selectores de Variant y Tipo de Componente
+
+### 9.2 Integrar en la Sección del Editor
+
+```typescript
+openIsolatedMode() {
+  document.body.classList.add('isolated-mode-active');
+  this.showIsolatedMode = true;
+  // ... cargar config ...
+}
+
+closeIsolatedMode() {
+  document.body.classList.remove('isolated-mode-active');
+  this.showIsolatedMode = false;
+}
+```
+
+### 9.3 Configuración de CSS Global
+
+Asegúrate de que el contenedor principal del editor tenga esta regla en su SCSS:
+
+```scss
+:host-context(body.isolated-mode-active) .canvas-area {
+  z-index: 999999 !important;
+  isolation: auto !important;
+}
+```
 
 ---
 

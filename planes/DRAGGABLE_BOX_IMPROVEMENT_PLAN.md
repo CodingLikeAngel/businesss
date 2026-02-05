@@ -16,21 +16,28 @@
    - Smooth drag and resize with visual feedback
    - Minimum size constraints (100px)
 
-3. **Isolated Mode Enhancements**
+3. **Isolated Mode Enhancements ✅**
 
-   - Content editing (title, description)
-   - Style controls (background color, border color/radius/width, padding, shadows)
-   - Position and size adjustment
-   - Snap-to-grid functionality
+   - **Visibility Fix**: Implemented high-priority stacking (`z-index: 99999`) and body class signaling (`.isolated-mode-active`) to prevent overlap from sidebars/menus.
+   - **Variant Selector**: Integrated a dual selector system for switching both **Component Type** (`box-1`, `box-2`, `box-3`) and **Visual Variant** (`glass`, `neon`, `cyberpunk`, etc.).
+   - **Content Editing**: Full support for title and description.
+   - **Style Controls**: Advanced controls for background, borders, shadows, and padding.
+   - **Global Theme Sync**: Automatic detection and application of the project's global variant.
 
-4. **Keyboard Shortcuts**
+4. **Native Drag/Resize Implementation ✅**
 
-   - `I` - Open isolated mode
-   - Arrow keys - Fine position adjustment (1px normal, 10px with Shift)
-   - `Escape` - Close isolated mode
-   - `Ctrl+Z` / `Ctrl+Y` - Undo/redo support
+   - 8 native resize handles with smooth interaction.
+   - Position persistence to NgRx store with debounced updates.
+   - Minimum size constraints and grid snapping.
 
-5. **UI Improvements**
+5. **Keyboard Shortcuts ✅**
+
+   - `I` - Open isolated mode.
+   - Arrow keys - Fine position adjustment.
+   - `Escape` - Close isolated mode.
+   - `Ctrl+Z` / `Ctrl+Y` - Full Undo/Redo support.
+
+6. **UI Improvements**
    - Enhanced section header with gradient background
    - 8 visible resize handles on hover
    - Position/size info panel
@@ -42,7 +49,12 @@
 
 ### Phase 1: Complete Draggable Box Variants
 
-#### 1.1 Create `draggable-box-2` and `draggable-box-3` variants
+#### 1.1 Create `draggable-box-2` and `draggable-box-3` variants ✅
+
+**STATUS: COMPLETED**
+
+- `UIDraggableBox1Component`, `UIDraggableBox2Component`, and `UIDraggableBox3Component` are fully implemented and integrated.
+- The editor can switch between them dynamically in Isolated Mode.
 
 ```typescript
 // editor-draggable-box-2-section.component.ts
@@ -590,7 +602,7 @@ export class EditorComponentPreviewService {
 
 ### High Priority (Phase 1-2)
 
-1. ✅ Draggable Box (completed)
+1. ✅ Draggable Box Variants & Isolated Mode (Completed)
 2. 🔄 Card components (Convert to Universal)
 3. 🔄 Image components (Convert to Universal)
 4. 🔄 Button components (Convert to Universal)
