@@ -77,6 +77,15 @@
   &.draggable-box-2-rounded-none { border-radius: 0; .accent-line { width: 100%; border-radius: 0; } }
   &.draggable-box-2-rounded-full { border-radius: 9999px; padding-left: 1rem; }
 
+  &.draggable-box-2-sm {
+    .widget-layout { padding: 0.6rem; gap: 0.6rem; .icon-section .icon-bg { width: 32px; height: 32px; font-size: 1rem; } }
+    .info-section .draggable-box-2-content { font-size: 0.8rem; }
+  }
+  &.draggable-box-2-lg {
+    .widget-layout { padding: 1.5rem; gap: 1.5rem; .icon-section .icon-bg { width: 64px; height: 64px; font-size: 2rem; } }
+    .info-section .draggable-box-2-content { font-size: 1.25rem; }
+  }
+
   &.dark {
     background: var(--component-bg, var(--theme-bg, #111827));
     color: var(--component-text, var(--theme-color, #f3f4f6));

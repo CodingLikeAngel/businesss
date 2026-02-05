@@ -115,6 +115,13 @@
   &.draggable-box-3-rounded-none { border-radius: 0; }
   &.draggable-box-3-rounded-full { border-radius: 9999px; }
 
+  &.draggable-box-3-sm {
+    .elegant-body { padding: 1rem; .main-content .draggable-box-3-content { font-size: 1rem; } }
+  }
+  &.draggable-box-3-lg {
+    .elegant-body { padding: 2rem; .main-content .draggable-box-3-content { font-size: 1.5rem; } }
+  }
+
   &.dark {
     background: var(--component-bg, var(--theme-bg, rgba(15, 23, 42, 0.8)));
     color: var(--component-text, var(--theme-color, #f8fafc));

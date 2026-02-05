@@ -127,10 +127,12 @@ export interface UndoRedoState {
                   </div>
                   <div class="control-group half">
                     <label>Modo Oscuro</label>
-                    <div class="toggle-wrapper" (click)="editableContent.dark = !editableContent.dark; onContentChange()" [class.active]="editableContent.dark">
-                      <div class="toggle-slider"></div>
-                      <span>{{ editableContent.dark ? 'Activado' : 'Desactivado' }}</span>
+                  <div class="toggle-wrapper" (click)="toggleDarkMode()" [class.active]="editableContent.dark">
+                    <div class="toggle-track">
+                      <div class="toggle-thumb"></div>
                     </div>
+                    <span>{{ editableContent.dark ? 'OSCURO' : 'CLARO' }}</span>
+                  </div>
                   </div>
                 </div>
 
@@ -263,8 +265,9 @@ export interface UndoRedoState {
           <!-- Canvas Area -->
           <div class="isolated-canvas" 
                #canvas
-               [class.show-grid]="showGrid"
-               [style.background-size]="gridSize + 'px ' + gridSize + 'px'">
+             [class.show-grid]="showGrid"
+             [class.grid-snapping]="snapToGrid"
+             [style.background-size]="gridSize + 'px ' + gridSize + 'px'">
             
             <div class="canvas-inner" #canvasInner>
               <div class="draggable-wrapper"
@@ -279,6 +282,7 @@ export interface UndoRedoState {
                    [style.borderRadius]="editableContent.rounded === 'md' ? (editableStyles.borderRadius + borderRadiusUnit) : null"
                    [style.padding]="editableStyles.padding + paddingUnit"
                    [style.boxShadow]="editableStyles.boxShadow"
+                   [class.snapping]="snapToGrid && isDragging"
                    (mousedown)="onMouseDown($event)">
                 
                 <lib-ui-components-draggable-box-1
@@ -312,14 +316,14 @@ export interface UndoRedoState {
                 </lib-ui-components-draggable-box-3>
 
                 <!-- Resize Handles -->
-                <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>
-                <div class="resize-handle n" (mousedown)="startResize($event, 'n')"></div>
-                <div class="resize-handle ne" (mousedown)="startResize($event, 'ne')"></div>
-                <div class="resize-handle e" (mousedown)="startResize($event, 'e')"></div>
-                <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
-                <div class="resize-handle s" (mousedown)="startResize($event, 's')"></div>
-                <div class="resize-handle sw" (mousedown)="startResize($event, 'sw')"></div>
-                <div class="resize-handle w" (mousedown)="startResize($event, 'w')"></div>
+                <div class="resize-handle nw" [class.active]="resizeHandle === 'nw'" (mousedown)="startResize($event, 'nw')"></div>
+                <div class="resize-handle n" [class.active]="resizeHandle === 'n'" (mousedown)="startResize($event, 'n')"></div>
+                <div class="resize-handle ne" [class.active]="resizeHandle === 'ne'" (mousedown)="startResize($event, 'ne')"></div>
+                <div class="resize-handle e" [class.active]="resizeHandle === 'e'" (mousedown)="startResize($event, 'e')"></div>
+                <div class="resize-handle se" [class.active]="resizeHandle === 'se'" (mousedown)="startResize($event, 'se')"></div>
+                <div class="resize-handle s" [class.active]="resizeHandle === 's'" (mousedown)="startResize($event, 's')"></div>
+                <div class="resize-handle sw" [class.active]="resizeHandle === 'sw'" (mousedown)="startResize($event, 'sw')"></div>
+                <div class="resize-handle w" [class.active]="resizeHandle === 'w'" (mousedown)="startResize($event, 'w')"></div>
               </div>
             </div>
 
@@ -597,55 +601,69 @@ export interface UndoRedoState {
     }
 
     /* TOGGLE SWITCH */
-    .toggle-wrapper {
+     .toggle-wrapper {
       display: flex;
       align-items: center;
       gap: 0.75rem;
       background: rgba(255, 255, 255, 0.03);
       border: 1px solid var(--border-color);
-      padding: 0.5rem 0.75rem;
-      border-radius: 10px;
+      padding: 0.6rem 1rem;
+      border-radius: 12px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
     }
 
-    .toggle-wrapper:hover {
-      background: rgba(255, 255, 255, 0.05);
-      border-color: rgba(255, 255, 255, 0.2);
+    .toggle-wrapper span {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: var(--text-dim);
     }
 
-    .toggle-wrapper.active {
-      border-color: var(--primary-accent);
-      background: rgba(99, 102, 241, 0.05);
-    }
-
-    .toggle-slider {
-      width: 32px;
-      height: 18px;
-      background: #334155;
+    .toggle-track {
+      width: 36px;
+      height: 20px;
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 20px;
       position: relative;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .toggle-slider::after {
-      content: '';
+    .toggle-thumb {
       position: absolute;
-      left: 3px;
-      top: 3px;
-      width: 12px;
-      height: 12px;
-      background: white;
+      left: 2px;
+      top: 2px;
+      width: 14px;
+      height: 14px;
+      background: #94a3b8;
       border-radius: 50%;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
     }
 
-    .active .toggle-slider {
+    .toggle-wrapper.active {
+      border-color: var(--primary-accent);
+      background: rgba(99, 102, 241, 0.1);
+    }
+
+    .toggle-wrapper.active .toggle-track {
       background: var(--primary-accent);
+      border-color: var(--primary-accent);
     }
 
-    .active .toggle-slider::after {
-      left: calc(100% - 15px);
+    .toggle-wrapper.active .toggle-thumb {
+      left: calc(100% - 17px);
+      background: white;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    .toggle-wrapper.active span { color: white; }
+
+    /* SNAPPING INDICATOR */
+    .draggable-wrapper.snapping {
+      box-shadow: 0 0 0 2px var(--primary-accent), 0 0 20px var(--primary-accent-glow) !important;
     }
 
     .toggle-wrapper span {
@@ -724,6 +742,13 @@ export interface UndoRedoState {
       background-image: 
         radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
       background-size: 40px 40px;
+      transition: all 0.3s;
+    }
+
+    .grid-snapping.show-grid {
+      background-image: 
+        radial-gradient(var(--primary-accent) 1px, transparent 1px);
+      background-size: 40px 40px;
     }
 
     .draggable-wrapper {
@@ -743,14 +768,31 @@ export interface UndoRedoState {
       z-index: 10;
     }
 
-    .resize-handle.nw { top: -5px; left: -5px; cursor: nw-resize; }
-    .resize-handle.n { top: -5px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
-    .resize-handle.ne { top: -5px; right: -5px; cursor: ne-resize; }
-    .resize-handle.e { top: 50%; right: -5px; transform: translateY(-50%); cursor: e-resize; }
-    .resize-handle.se { bottom: -5px; right: -5px; cursor: se-resize; }
-    .resize-handle.s { bottom: -5px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
-    .resize-handle.sw { bottom: -5px; left: -5px; cursor: sw-resize; }
-    .resize-handle.w { top: 50%; left: -5px; transform: translateY(-50%); cursor: w-resize; }
+    .resize-handle:hover {
+      background: var(--primary-accent);
+      transform: translate(0, 0) scale(1.5) !important;
+      box-shadow: 0 0 10px var(--primary-accent-glow);
+    }
+    
+    .resize-handle.active {
+      background: var(--primary-accent);
+      border-color: #fff;
+      transform: translate(0, 0) scale(1.8) !important;
+      box-shadow: 0 0 15px var(--primary-accent-glow);
+    }
+
+    .resize-handle.nw { top: -6px; left: -6px; cursor: nw-resize; }
+    .resize-handle.n { top: -6px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
+    .resize-handle.ne { top: -6px; right: -6px; cursor: ne-resize; }
+    .resize-handle.e { top: 50%; right: -6px; transform: translateY(-50%); cursor: e-resize; }
+    .resize-handle.se { bottom: -6px; right: -6px; cursor: se-resize; }
+    .resize-handle.s { bottom: -6px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+    .resize-handle.sw { bottom: -6px; left: -6px; cursor: sw-resize; }
+    .resize-handle.w { top: 50%; left: -6px; transform: translateY(-50%); cursor: w-resize; }
+
+    /* Adjust n/s handles for hovering override */
+    .resize-handle.n:hover, .resize-handle.s:hover, .resize-handle.n.active, .resize-handle.s.active { transform: translateX(-50%) scale(1.5) !important; }
+    .resize-handle.e:hover, .resize-handle.w:hover, .resize-handle.e.active, .resize-handle.w.active { transform: translateY(-50%) scale(1.5) !important; }
 
     /* POSITION DOCK */
     .modern-position-dock {
@@ -839,6 +881,11 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
   private visualEditor = inject(SimpleVisualEditorService);
   private destroy$ = new Subject<void>();
 
+  // Public state for template access
+  public isDragging = false;
+  public isResizing = false;
+  public resizeHandle = '';
+
   // Position and size state
   currentPosition: { x: number; y: number } = { x: 100, y: 100 };
   currentSize: { width: number; height: number } = { width: 300, height: 200 };
@@ -854,12 +901,9 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
   // Grid settings
   showGrid = true;
   snapToGrid = false;
-  gridSize = 20;
+  gridSize = 40;
 
   // Drag/Resize state
-  private isDragging = false;
-  private isResizing = false;
-  private resizeHandle = '';
   private dragStartX = 0;
   private dragStartY = 0;
   private startPositionX = 0;
@@ -1025,6 +1069,12 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
         this.currentPosition.x += delta;
         break;
     }
+    
+    if (this.snapToGrid) {
+      this.currentPosition.x = Math.round(this.currentPosition.x / this.gridSize) * this.gridSize;
+      this.currentPosition.y = Math.round(this.currentPosition.y / this.gridSize) * this.gridSize;
+    }
+    
     this.onPositionChange();
   }
 
@@ -1208,15 +1258,24 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
     this.onSizeChange();
   }
 
+  toggleDarkMode() {
+    this.editableContent.dark = !this.editableContent.dark;
+    
+    // If we enable dark mode, we might want to clear manual colors if they look like "light defaults"
+    if (this.editableContent.dark && this.editableStyles.backgroundColor === '#ffffff') {
+      this.editableStyles.backgroundColor = '#111827';
+    } else if (!this.editableContent.dark && this.editableStyles.backgroundColor === '#111827') {
+      this.editableStyles.backgroundColor = '#ffffff';
+    }
+    
+    this.onContentChange();
+  }
+
   onVariantChange() {
     // If a variant is selected, we clear the manual colors so the variant can shine
     if (this.editableContent.variant && this.editableContent.variant !== '') {
       this.editableStyles.backgroundColor = '';
       this.editableStyles.borderColor = '';
-    } else {
-      // Reverting to "Por defecto" (inherited from global)
-      // We don't necessarily want to force green here if the global theme is active
-      // But if there's no color at all, the component might look broken if global is also default
     }
     this.onContentChange();
   }
