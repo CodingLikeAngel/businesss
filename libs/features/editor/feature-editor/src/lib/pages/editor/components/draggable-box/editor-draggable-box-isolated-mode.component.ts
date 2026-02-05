@@ -114,25 +114,24 @@ export interface UndoRedoState {
                   </div>
                 </div>
 
-                <div class="control-row">
-                  <div class="control-group half">
-                    <label>Tamaño Base</label>
-                    <div class="select-wrapper">
-                      <select [(ngModel)]="editableContent.size" (ngModelChange)="onContentChange()" class="premium-select">
-                        <option value="sm">Pequeño</option>
-                        <option value="md">Normal</option>
-                        <option value="lg">Grande</option>
-                      </select>
-                    </div>
+                <div class="control-group">
+                  <label>Tamaño Base</label>
+                  <div class="select-wrapper">
+                    <select [(ngModel)]="editableContent.size" (ngModelChange)="onContentChange()" class="premium-select">
+                      <option value="sm">Pequeño</option>
+                      <option value="md">Normal</option>
+                      <option value="lg">Grande</option>
+                    </select>
                   </div>
-                  <div class="control-group half">
-                    <label>Modo Oscuro</label>
+                </div>
+
+                <div class="control-group">
+                  <label>Modo de Iluminación Ambient</label>
                   <div class="toggle-wrapper" (click)="toggleDarkMode()" [class.active]="editableContent.dark">
                     <div class="toggle-track">
                       <div class="toggle-thumb"></div>
                     </div>
                     <span>{{ editableContent.dark ? 'OSCURO' : 'CLARO' }}</span>
-                  </div>
                   </div>
                 </div>
 
@@ -584,11 +583,12 @@ export interface UndoRedoState {
     /* INPUTS & SELECTS */
     .premium-input, .premium-select, .premium-textarea {
       width: 100%;
-      background: rgba(255, 255, 255, 0.03);
+      min-height: 40px;
+      background: rgba(255, 255, 255, 0.05);
       border: 1px solid var(--border-color);
       color: #f8fafc;
-      padding: 0.6rem 0.8rem;
-      border-radius: 10px;
+      padding: 0.6rem 1rem;
+      border-radius: 12px;
       font-size: 13px;
       transition: all 0.2s;
     }
@@ -739,9 +739,7 @@ export interface UndoRedoState {
 
     .isolated-canvas {
       flex: 1;
-      background-color: #f1f5f9; /* Light background by default */
-      background-image: 
-        radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+      background-color: #f1f5f9;
       background-size: 40px 40px;
       position: relative;
       overflow: auto;
@@ -751,8 +749,6 @@ export interface UndoRedoState {
 
     .isolated-canvas.ambient-dark {
       background-color: #020617;
-      background-image: 
-        radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     }
 
     .canvas-inner {
@@ -763,17 +759,25 @@ export interface UndoRedoState {
     }
 
     .show-grid {
-      /* Grid is already handled by background-image, this is for visibility toggle */
+      background-image: 
+        radial-gradient(rgba(0, 0, 0, 0.2) 1.5px, transparent 1.5px);
+    }
+
+    .ambient-dark.show-grid {
+      background-image: 
+        radial-gradient(rgba(255, 255, 255, 0.3) 1.5px, transparent 1.5px);
     }
 
     .grid-snapping.show-grid {
       background-image: 
-        radial-gradient(var(--primary-accent) 1px, transparent 1px);
+        radial-gradient(var(--primary-accent) 2px, transparent 2px);
+      box-shadow: inset 0 0 100px rgba(99, 102, 241, 0.05);
     }
     
     .grid-snapping.ambient-dark.show-grid {
         background-image: 
-        radial-gradient(var(--primary-accent) 1.5px, transparent 1.5px);
+        radial-gradient(var(--primary-accent) 2.5px, transparent 2.5px);
+        box-shadow: inset 0 0 100px rgba(99, 102, 241, 0.1);
     }
 
     .draggable-wrapper {
