@@ -1,33 +1,39 @@
-This plan outlines the transition from specific "Draggable Box" implementations to a **Universal Editable System** where ANY UI component (Atom, Molecule, or Organism) can be easily made draggable, resizable, and editable within the visual editor.
+# 🎯 Plan de Integración Universal del Editor Visual
 
-## 🎯 Goal
-
-Enable a "Plug & Play" experience for developers creating new components, ensuring they automatically support:
-
-1.  **Selection & Highlighting**
-2.  **Native Drag & Drop** (Positioning)
-3.  **8-Point Resizing**
-4.  **Content Editing** (Images, Text, Icons)
-5.  **Style Overrides** (Shadows, Borders, Glassmorphism)
-6.  **History & Persistence** (Undo/Redo via NgRx)
+Este plan define la transición hacia un **Sistema de Edición Universal** donde CUALQUIER componente UI puede ser draggable, resizable y editable de forma premium.
 
 ---
 
-## 🛠 Phase 1: The Core Foundation & Technical Standards
+## 🎯 Objetivo Principal
 
-### 1.1 Mandatory Property Parity (The "Big 4")
+Permitir una experiencia "Plug & Play" donde los desarrolladores puedan crear nuevos componentes que automáticamente soporten:
 
-Every UI component MUST implement the following inputs to ensure consistent behavior in the editor:
+1.  **Selección & Highlighting**
+2.  **Drag & Drop Nativo**
+3.  **Redimensionado 8-Puntos**
+4.  **Edición de Contenido** (Textos, Imágenes, Iconos)
+5.  **Overrides de Estilo** (Shadows, Borders, Glassmorphism)
+6.  **Historial & Persistencia** (Undo/Redo vía NgRx)
 
-- `variant`: Style variant (e.g., `primary`, `glass`, `neon`).
-- `rounded`: Radius preset (`none`, `md`, `full`).
-- `size`: Scaling preset (`sm`, `md`, `lg`).
-- `dark`: Boolean toggle for localized dark mode.
-- `customStyles`: Object for manual CSS overrides (backgroundColor, borderColor, etc.).
+---
 
-### 1.2 CSS Prefix Standardization
+## 🛠 Fase 1: Fundación Core & Estándares Técnicos
 
-All components must use the `variant-` prefix in their SCSS and use the `apply-all-variants` mixin. This allows the editor to apply global themes (Glass, Neon, Cyberpunk) dynamically.
+### 1.1 Paridad de Propiedades Mandatorias (Los "Big 5")
+
+Todo componente UI DEBE implementar estos inputs:
+
+| Input          | Tipo                       | Descripción                                     |
+| -------------- | -------------------------- | ----------------------------------------------- |
+| `variant`      | string                     | Variante de estilo (primary, glass, neon, etc.) |
+| `rounded`      | `'none' \| 'md' \| 'full'` | Preset de border-radius                         |
+| `size`         | `'sm' \| 'md' \| 'lg'`     | Escala del componente                           |
+| `dark`         | boolean                    | Modo oscuro localizado                          |
+| `customStyles` | object                     | Overrides CSS manuales                          |
+
+### 1.2 Estandarización de Prefijos CSS
+
+Todos los componentes usan el prefijo `variant-` en su SCSS:
 
 ```scss
 .my-component {
@@ -35,54 +41,59 @@ All components must use the `variant-` prefix in their SCSS and use the `apply-a
 }
 ```
 
-### 1.3 Container Rendering Rules
+### 1.3 Reglas de Renderizado de Contenedor
 
-To ensure correct behavior with resizing handles, UI components must:
+Los componentes UI deben:
 
-- Use `width: 100%` and `height: 100%`.
-- Use `inset: 0` if they are absolutely positioned within the editor wrapper.
-
----
-
-## 🏗 Phase 2: Standardized Isolated Mode (Premium UI)
-
-### 2.1 The "Isolation" Protocol
-
-When a component enters Isolated Mode, the system must:
-
-1.  **Promote Z-Index**: Use `body.isolated-mode-active` to boost the canvas stacking context to `9999999`.
-2.  **Break Perspective Traps**: Disable parent `perspective` and `isolation` properties to allow the fixed overlay to cover the entire screen.
-3.  **Visual Feedback**: Implement a checkerboard background in the canvas to handle transparency clearly.
-
-### 2.2 Advanced Property Sync
-
-The `EditorSection` components must synchronize all 5 core properties (`variant`, `rounded`, `size`, `dark`, `customStyles`) between the isolated state and the main project state via `applyIsolatedChanges`.
+- Usar `width: 100%` y `height: 100%`
+- Usar `position: absolute; inset: 0;` si están dentro del wrapper del editor
 
 ---
 
-## 🏗 Phase 3: Component Registry & Factory
+## 🏗 Fase 2: Modo Aislado Premium (Isolated Mode)
 
-### 3.1 Dynamic Editor Resolver
+### 2.1 Protocolo de Aislamiento
 
-Instead of a giant `ngSwitch` in `editor-feature.component.html`, we'll move towards a dynamic registration system.
+Cuando un componente entra en Isolated Mode:
 
-1.  **Registry**: A central map of `component-type` -> `EditorComponentClass`.
-2.  **Auto-Registration**: A decorator or a service that allows components to register themselves.
+1.  **Promoción de Z-Index**: `body.isolated-mode-active` eleva el canvas a `z-index: 9999999`
+2.  **Romper Trampas de Perspectiva**: Desactivar `perspective` e `isolation` de elementos padres
+3.  **Feedback Visual**: Canvas con fondo tipo checkerboard y grid magnético
+
+### 2.2 Features Premium del Canvas
+
+| Feature                           | Estado          |
+| --------------------------------- | --------------- |
+| Ambient Dark/Light Mode           | ✅ Implementado |
+| Magnetic Grid (Snap 40px)         | ✅ Implementado |
+| Ghost Preview (posición original) | ✅ Implementado |
+| Undo/Redo Stack local             | ✅ Implementado |
+| Position Info Dock                | ✅ Implementado |
 
 ---
 
-## 🏗 Phase 4: Persistence & State Management
+## 🏗 Fase 3: Registro de Componentes & Factory
 
-### 4.1 Debounced NgRx Updates
+### 3.1 Resolver Dinámico (Próximamente)
 
-Ensure that rapid drag/resize operations don't overwhelm the store by implementing:
+En lugar de un gigantesco `ngSwitch` en `editor-feature.component.html`, migrar a:
 
-- `subject.pipe(debounceTime(300))` for store dispatches.
-- Optimistic UI updates (Local state update -> Store sync).
+1.  **Registry**: Mapa central `component-type` → `EditorComponentClass`
+2.  **Auto-Registration**: Decorador o servicio que auto-registre componentes
 
-### 4.2 Element Layering (Z-Index)
+---
 
-Add controls to manage the "Stacking Order":
+## 🏗 Fase 4: Persistencia & Gestión de Estado
+
+### 4.1 Updates Debounced a NgRx
+
+```typescript
+this.persistSubject$.pipe(debounceTime(300), takeUntil(this.destroy$)).subscribe(() => this.persistToStore());
+```
+
+### 4.2 Gestión de Capas (Z-Index)
+
+Controles para ordenar elementos:
 
 - `bringToFront()`
 - `sendToBack()`
@@ -91,50 +102,110 @@ Add controls to manage the "Stacking Order":
 
 ---
 
-## 🏗 Phase 5: The "Golden Standard" Experience (Premium UX)
+## 🏗 Fase 5: Experiencia "Golden Standard" (UX Premium)
 
-For a component to be considered "Golden Standard", it must implement:
+### 5.1 Diferenciación Morfológica
 
-### 5.1 Morphological Differentiation
+Las variantes no solo cambian colores; cambian la **estructura visual** (orbes de iconos, reflejos de glass, blobs decorativos).
 
-Variants should not just change colors; they should change the **visual structure and morphology** (e.g., adding icon orbs, glass reflections, decorative blobs).
+### 5.2 Lógica de Prioridad de Estilos
 
-### 5.2 Style Priority Logic (Presets vs. Manual)
+```
+Presets (None, Medium, Full) > Manual Overrides > Variant Defaults
+```
 
-Presets (None, Medium, Full) should always take precedence. Manual style overrides (like `borderRadius: 24px`) should only be applied when the "Medium/Manual" preset is selected, ensuring consistent design.
+### 5.3 Puntos de Entrada de Alta Velocidad
 
-### 5.3 Premium Isolated Mode Features
-
-- **Ambient Context**: The canvas background must adapt to the dark/light mode toggle.
-- **Ghost Preview**: Show a dashed outline of the original position/size during drag/resize.
-- **Magnetic Grid (Snap)**: Implement a 40px grid with visual "magnet" feedback (dots change color when snapping).
-- **Undo/Redo Stack**: Full history of changes within the isolated session.
-
-### 5.4 High-Velocity Entry Points
-
-- **Double-Click**: Instant entry to Isolated Mode from the main editor.
-- **Quick-Edit Floating Button**: A primary action button (🎯) that appears on hover.
-- **Keyboard Shortcuts**: Pulse `I` to isolate, `G` for grid, `Esc` to exit.
+| Método           | Implementación                    |
+| ---------------- | --------------------------------- |
+| Doble Clic       | `(dblclick)="openIsolatedMode()"` |
+| Botón Flotante   | `.quick-isolated-btn` con 🎯      |
+| Atajo de Teclado | Tecla `I` para aislar             |
 
 ---
 
-## 📋 Implementation Roadmap (Updated)
+## 🏗 Fase 6: Capa de Robustez (NUEVO)
 
-| Task                                | Priority | Status                                       |
-| :---------------------------------- | :------- | :------------------------------------------- |
-| **Draggable Box (Golden Standard)** | High     | ✅ COMPLETED (Reference established)         |
-| **Standardized Isolated Mode UI**   | High     | ✅ COMPLETED (Ambient & Snap features)       |
-| **Quick Action Entry Points**       | Medium   | ✅ COMPLETED (Double click & Float btn)      |
-| **Undo/Redo Base System**           | Medium   | ✅ COMPLETED (Isolated Mode implementations) |
-| **Component Template Updates**      | High     | ✅ COMPLETED (Updated with Golden UX)        |
-| **Universal Button Integration**    | Medium   | 📅 Next Up                                   |
+### 6.1 Arquitectura de Bounding
+
+**Regla**: El wrapper solo gestiona posición/dimensiones. Los estilos visuales van en el componente interno.
+
+```scss
+.draggable-wrapper {
+  outline: 2px solid transparent; // NO border
+  outline-offset: 0;
+}
+
+.draggable-wrapper > lib-ui-component {
+  width: 100%;
+  height: 100%;
+}
+```
+
+### 6.2 Validación de Dimensiones
+
+```typescript
+// Límites sensatos
+const MIN_WIDTH = 100,
+  MAX_WIDTH = 800;
+const MIN_HEIGHT = 60,
+  MAX_HEIGHT = 600;
+
+if (incomingWidth < MIN_WIDTH || incomingWidth > MAX_WIDTH) {
+  incomingWidth = defaultSize.width;
+}
+```
+
+### 6.3 Carga Defensiva
+
+Nunca confiar en datos del store sin validación:
+
+```typescript
+this.currentPosition = {
+  x: Math.max(50, Math.min(500, config.position?.x || 100)),
+  y: Math.max(50, Math.min(500, config.position?.y || 100)),
+};
+```
 
 ---
 
-## ✅ Success Criteria
+## 📋 Roadmap de Implementación
 
-- [ ] Any developer can add a premium component in < 30 minutes.
-- [ ] Components look and feel "premium" while being edited (animations, ambient feedback).
-- [ ] Isolated mode is the default for complex structural edits.
-- [ ] Stacking order (z-index) is fully manageable.
-- [ ] All 5 core properties (Variant, Rounded, Size, Dark, Custom) sync flawlessy.
+| Tarea                               | Prioridad | Estado         |
+| ----------------------------------- | --------- | -------------- |
+| **Draggable Box (Golden Standard)** | Alta      | ✅ Completado  |
+| **Isolated Mode Premium**           | Alta      | ✅ Completado  |
+| **Quick Action Entry Points**       | Media     | ✅ Completado  |
+| **Undo/Redo Base System**           | Media     | ✅ Completado  |
+| **Robustness Layer**                | Alta      | ✅ Completado  |
+| **Grid & Snap System**              | Media     | ✅ Completado  |
+| **Component Registry (Factory)**    | Media     | 📅 Planificado |
+| **Z-Index Management UI**           | Baja      | 📅 Planificado |
+| **Universal Button Integration**    | Media     | 📅 Planificado |
+
+---
+
+## ✅ Criterios de Éxito
+
+- [x] El contorno de edición siempre encaja con el contenido visible
+- [x] Los componentes se ven premium durante la edición (animaciones, feedback)
+- [x] El Isolated Mode es el estándar para ediciones estructurales
+- [ ] El stacking order (z-index) es completamente gestionable
+- [x] Los "Big 5" (Variant, Rounded, Size, Dark, Custom) se sincronizan correctamente
+- [x] Undo/Redo funciona para todas las propiedades editables
+- [ ] Cualquier desarrollador puede añadir un componente premium en < 30 minutos
+
+---
+
+## 📚 Documentación Relacionada
+
+| Documento                           | Propósito                               |
+| ----------------------------------- | --------------------------------------- |
+| `COMPONENT_CREATION_GUIDE.md`       | Guía paso a paso para crear componentes |
+| `COMPONENT_TEMPLATES.md`            | Plantillas rápidas de código            |
+| `DRAGGABLE_BOX_IMPROVEMENT_PLAN.md` | Referencia del Golden Standard          |
+| `ROBUSTNESS_STANDARDS.md`           | Estándares de validación y bounding     |
+
+---
+
+**Última actualización**: 2026-02-05
