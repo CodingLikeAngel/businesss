@@ -48,7 +48,7 @@ import * as PageActions from '../../../../store/actions/page.actions';
         [style.minHeight.px]="containerHeight"
         [style.padding.px]="40">
         
-        <!-- Draggable Box -->
+        <!-- Draggable Box - WRAPPER IS ONLY FOR POSITIONING AND HANDLES -->
         <div 
           #editableBox
           [id]="boxId"
@@ -60,11 +60,6 @@ import * as PageActions from '../../../../store/actions/page.actions';
           [style.top.px]="boxTop"
           [style.width.px]="boxWidth"
           [style.height.px]="boxHeight"
-          [style.backgroundColor]="currentStyles.backgroundColor"
-          [style.border]="currentStyles.borderWidth + 'px solid ' + currentStyles.borderColor"
-          [style.borderRadius]="currentContent.rounded === 'md' ? (currentStyles.borderRadius + currentStyles.borderRadiusUnit) : null"
-          [style.padding]="currentStyles.padding + currentStyles.paddingUnit"
-          [style.boxShadow]="currentStyles.boxShadow"
           [style.zIndex]="10"
           (mousedown)="onMouseDown($event)">
           
@@ -78,7 +73,7 @@ import * as PageActions from '../../../../store/actions/page.actions';
           <div class="resize-handle sw" (mousedown)="startResize($event, 'sw')"></div>
           <div class="resize-handle w" (mousedown)="startResize($event, 'w')"></div>
           
-          <!-- Box Content - UI Components -->
+          <!-- Box Content - UI Components FILL THE WRAPPER -->
           <div class="box-content-wrapper" (dblclick)="openIsolatedMode()">
             <!-- Quick Action Floating Button -->
             <button class="quick-isolated-btn" (click)="openIsolatedMode($event)" title="Editar en Modo Aislado (I)">
@@ -228,22 +223,59 @@ import * as PageActions from '../../../../store/actions/page.actions';
     .draggable-box {
       cursor: move;
       user-select: none;
-      transition: box-shadow 0.2s ease, transform 0.1s ease;
-      border-radius: 12px;
+      transition: outline-color 0.2s ease, transform 0.1s ease;
+      /* Use OUTLINE for selection - doesn't affect layout */
+      outline: 2px solid transparent;
+      outline-offset: 0;
     }
 
     .draggable-box:hover {
-      box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.5), 0 15px 40px rgba(0, 0, 0, 0.3) !important;
+      outline-color: rgba(102, 126, 234, 0.6);
     }
 
     .draggable-box.is-dragging {
       cursor: grabbing;
-      box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.8), 0 20px 50px rgba(0, 0, 0, 0.4) !important;
-      transform: scale(1.02);
+      outline-color: rgba(102, 126, 234, 0.9);
+      outline-width: 3px;
+      transform: scale(1.01);
     }
 
     .draggable-box.is-resizing {
       cursor: se-resize;
+      outline-color: rgba(102, 126, 234, 0.9);
+      outline-width: 3px;
+    }
+
+    /* CRITICAL: Force inner content to fill wrapper */
+    .box-content-wrapper {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+
+    /* Pierce Angular encapsulation to ensure UI components fill wrapper */
+    ::ng-deep {
+      .box-content-wrapper {
+        lib-ui-components-draggable-box-1,
+        lib-ui-components-draggable-box-2,
+        lib-ui-components-draggable-box-3 {
+          display: block !important;
+          width: 100% !important;
+          height: 100% !important;
+          position: relative !important;
+        }
+        
+        .draggable-box-1,
+        .draggable-box-2,
+        .draggable-box-3 {
+          position: absolute !important;
+          inset: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+      }
     }
 
     /* QUICK ISOLATED BUTTON */
