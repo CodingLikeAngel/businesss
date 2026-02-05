@@ -267,9 +267,18 @@ export interface UndoRedoState {
                #canvas
              [class.show-grid]="showGrid"
              [class.grid-snapping]="snapToGrid"
+             [class.ambient-dark]="editableContent.dark"
              [style.background-size]="gridSize + 'px ' + gridSize + 'px'">
             
             <div class="canvas-inner" #canvasInner>
+              <!-- GHOST PREVIEW (Original Position) -->
+              <div class="ghost-wrapper"
+                   *ngIf="isDragging || isResizing"
+                   [style.left.px]="initialPosition.x"
+                   [style.top.px]="initialPosition.y"
+                   [style.width.px]="initialSize.width"
+                   [style.height.px]="initialSize.height">
+              </div>
               <div class="draggable-wrapper"
                    #draggableWrapper
                    [id]="config.elementId"
@@ -392,12 +401,27 @@ export interface UndoRedoState {
       background: var(--bg-surface);
       border: 1px solid var(--border-color);
       border-radius: 24px;
-      box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8);
+      box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
       width: 100%;
       height: 100%;
       display: flex;
       flex-direction: column;
       overflow: hidden;
+      animation: container-entry 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes container-entry {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    .ghost-wrapper {
+      position: absolute;
+      border: 2px dashed rgba(99, 102, 241, 0.3);
+      background: rgba(99, 102, 241, 0.05);
+      border-radius: 12px;
+      pointer-events: none;
+      z-index: 5;
     }
 
     /* HEADER */
@@ -715,40 +739,41 @@ export interface UndoRedoState {
 
     .isolated-canvas {
       flex: 1;
-      /* Transparent checkerboard */
+      background-color: #f1f5f9; /* Light background by default */
       background-image: 
-        linear-gradient(45deg, #1e293b 25%, transparent 25%), 
-        linear-gradient(-45deg, #1e293b 25%, transparent 25%), 
-        linear-gradient(45deg, transparent 75%, #1e293b 75%), 
-        linear-gradient(-45deg, transparent 75%, #1e293b 75%);
-      background-size: 20px 20px;
-      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
-      background-color: #0f172a;
+        radial-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+      background-size: 40px 40px;
       position: relative;
-      overflow: auto; /* Changed to auto to allow scrolling to the box if needed */
-      display: block; /* Removed flex centering that was hiding the box */
-      padding: 100px; /* Give some breathing room */
+      overflow: auto;
+      padding: 100px;
+      transition: background-color 0.4s ease, background-image 0.4s ease;
+    }
+
+    .isolated-canvas.ambient-dark {
+      background-color: #020617;
+      background-image: 
+        radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     }
 
     .canvas-inner {
-      width: 3000px; /* Larger inner canvas */
-      height: 3000px;
+      width: 4000px;
+      height: 4000px;
       position: relative;
       flex-shrink: 0;
-      background: transparent;
     }
 
     .show-grid {
-      background-image: 
-        radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px);
-      background-size: 40px 40px;
-      transition: all 0.3s;
+      /* Grid is already handled by background-image, this is for visibility toggle */
     }
 
     .grid-snapping.show-grid {
       background-image: 
         radial-gradient(var(--primary-accent) 1px, transparent 1px);
-      background-size: 40px 40px;
+    }
+    
+    .grid-snapping.ambient-dark.show-grid {
+        background-image: 
+        radial-gradient(var(--primary-accent) 1.5px, transparent 1.5px);
     }
 
     .draggable-wrapper {
