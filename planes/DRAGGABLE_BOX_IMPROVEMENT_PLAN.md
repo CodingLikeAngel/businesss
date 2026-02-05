@@ -18,17 +18,16 @@
 
 3. **Isolated Mode Enhancements ✅**
 
-   - **Visibility Fix**: Implemented high-priority stacking (`z-index: 99999`) and body class signaling (`.isolated-mode-active`) to prevent overlap from sidebars/menus.
-   - **Variant Selector**: Integrated a dual selector system for switching both **Component Type** (`box-1`, `box-2`, `box-3`) and **Visual Variant** (`glass`, `neon`, `cyberpunk`, etc.).
-   - **Content Editing**: Full support for title and description.
-   - **Style Controls**: Advanced controls for background, borders, shadows, and padding.
-   - **Global Theme Sync**: Automatic detection and application of the project's global variant.
+   - **Visibility Fix**: Implemented dual-layer z-index promotion. Body class signal triggers stacking context breakout (`9999999`), ensuring the editor covers all global sidebars/headers.
+   - **Rendering Fix**: Replaced flex-centering with an absolute-position canvas + overflow support, preventing components with 0 or low coordinates from being hidden.
+   - **Variant Selector**: Integrated a dual selector system for switching both **Component Type** (`box-1`, `box-2`, `box-3`) and **Visual Variant** (`glass`, `neon`, etc.).
+   - **Content Sync**: Full synchronization of the "Big 5" properties (Variant, Rounded, Size, Dark Mode, Custom Styles) implemented in both main and isolated modes.
 
 4. **Native Drag/Resize Implementation ✅**
 
-   - 8 native resize handles with smooth interaction.
+   - 8 native resize handles with smooth interaction. Fixed component `width/height: 100%` to ensure they respond correctly to handles.
    - Position persistence to NgRx store with debounced updates.
-   - Minimum size constraints and grid snapping.
+   - Minimum size constraints (40px) and grid snapping.
 
 5. **Keyboard Shortcuts ✅**
 

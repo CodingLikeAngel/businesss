@@ -1,10 +1,10 @@
-# 🎨 Plantillas Rápidas para Crear Componentes
+# 🎨 Plantillas Rápidas para Crear Componentes (Golden Standard)
 
-Plantillas listas para copiar y pegar al crear nuevos componentes.
+Use estas plantillas para asegurar compatibilidad total con el sistema de edición visual avanzado.
 
 ---
 
-## 📋 Template 1: Componente Simple (Atom)
+## 📋 Template 1: UI Component (Atom/Molecule)
 
 ### TypeScript
 
@@ -24,25 +24,44 @@ type [COMPONENT_NAME]VariantType = typeof [COMPONENT_NAME]Variants[number] | (st
   styleUrl: './[component-name].component.scss'
 })
 export class UI[ComponentName]Component {
-  // Inputs
-  label = input('Label');
-  variant = input<[COMPONENT_NAME]VariantType>('primary');
+  // 🚀 MANDATORIOS: Los "Big 5" del Editor
+  variant = input<[COMPONENT_NAME]VariantType>('secondary');
+  rounded = input<'none' | 'md' | 'full'>('md');
+  size = input<'sm' | 'md' | 'lg'>('md');
+  dark = input<boolean>(false);
   customStyles = input<Record<string, any>>({});
 
-  // Computed
-  componentClasses = computed(() => [
-    '[component-name]',
-    `variant-${this.variant()}`
-  ].filter(Boolean));
+  // Inputs de contenido
+  label = input('Label Content');
 
-  componentStyles = computed(() => this.customStyles());
+  // Computed: Clases estandarizadas
+  componentClasses = computed(() => {
+    const classes = ['[component-name]', `variant-${this.variant()}`];
+    classes.push(`[component-name]-rounded-${this.rounded()}`);
+    classes.push(`[component-name]-size-${this.size()}`);
+    if (this.dark()) classes.push('dark');
+    return classes.join(' ');
+  });
+
+  // Computed: Estilos personalizados
+  componentStyles = computed(() => {
+    const styles: Record<string, any> = { ...this.customStyles() };
+
+    // Mapeo inteligente de variables si existen
+    if (styles['backgroundColor']) styles['--component-bg'] = styles['backgroundColor'];
+    if (styles['borderColor']) styles['--component-border'] = styles['borderColor'];
+
+    return styles;
+  });
 }
 ```
 
 ### HTML
 
 ```html
-<div [class]="componentClasses()" [style]="componentStyles()" class="[component-name]-container">{{ label() }}</div>
+<div [class]="componentClasses()" [style]="componentStyles()">
+  <span class="content">{{ label() }}</span>
+</div>
 ```
 
 ### SCSS
@@ -53,297 +72,73 @@ export class UI[ComponentName]Component {
 :host {
   display: block;
   width: 100%;
+  height: 100%; // 🚀 IMPORTANTE: Para que el redimensionado funcione
 }
 
 .[component-name] {
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  transition: all 0.3s ease;
-
-  // ⚠️ IMPORTANTE: Aplicar variants aquí
+  // 🚀 REGLA DE ORO: Usar prefijo 'variant-'
   @include shared.apply-all-variants('variant-');
 
-  // Overrides específicos si es necesario
-  &.variant-neon {
-    border: 1px solid var(--neon-primary, #00f3ff);
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+  width: 100%;
+  height: 100%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+  // States
+  &.dark {
+    background: #0f172a;
+    color: white;
+  }
+
+  // Rounded Presets
+  &.draggable-box-1-rounded-none {
+    border-radius: 0;
+  }
+  &.draggable-box-1-rounded-full {
+    border-radius: 9999px;
   }
 }
 ```
 
 ---
 
-## 📋 Template 2: Componente con Subtypes (como Header/Footer)
+## 📋 Template 2: Editor Section (The Bridge)
 
 ### TypeScript
 
 ```typescript
-import { Component, input, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { variants as baseVariants } from '../../models/ui-components-data.model';
-
-const [COMPONENT_NAME]Variants = baseVariants;
-type [COMPONENT_NAME]VariantType = typeof [COMPONENT_NAME]Variants[number] | (string & {});
-
-@Component({
-  selector: 'lib-ui-[component-name]',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './[component-name].component.html',
-  styleUrl: './[component-name].component.scss'
-})
-export class UI[ComponentName]Component {
-  title = input('[Component Name]');
-  variant = input<[COMPONENT_NAME]VariantType>('primary');
-  customStyles = input<Record<string, any>>({});
-
-  componentClasses = computed(() => [
-    '[component-name]',
-    `variant-${this.variant()}`
-  ].filter(Boolean));
-
-  componentStyles = computed(() => this.customStyles());
-}
-```
-
-### HTML con ngSwitch para subtypes
-
-```html
-<ng-container [ngSwitch]="subtype()">
-  <!-- SUBTYPE 1 -->
-  <div *ngSwitchCase="'type1'" [class]="componentClasses()" [style]="componentStyles()">
-    <!-- Contenido tipo 1 -->
-  </div>
-
-  <!-- SUBTYPE 2 -->
-  <div *ngSwitchCase="'type2'" [class]="componentClasses()" [style]="componentStyles()">
-    <!-- Contenido tipo 2 -->
-  </div>
-
-  <!-- DEFAULT -->
-  <div *ngSwitchDefault [class]="componentClasses()" [style]="componentStyles()">
-    <!-- Contenido por defecto -->
-  </div>
-</ng-container>
-```
-
----
-
----
-
-## 📋 Template 3: Editor Section Component (Universal & Draggable)
-
-Use this template to ensure your component is automatically draggable, resizable, and editable.
-
-### TypeScript
-
-```typescript
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import {
-  ApplyDynamicStylesDirective,
-  EnhancedVisualEditableDirective,
-  VisualEditingConfig,
-  VisualEditingEvent
-} from '@negocio/shared-components';
-import { UI[ComponentName]Component } from '@negocio/ui-components';
-import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
-
 @Component({
   selector: 'lib-editor-[component-name]-section',
   standalone: true,
-  imports: [
-    CommonModule,
-    UI[ComponentName]Component,
-    ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
-  ],
+  imports: [CommonModule, UI[ComponentName]Component, EnhancedVisualEditableDirective],
   template: `
-    <div #sectionElement
-      class="editor-section cursor-pointer py-4 transition-all"
-      [class.is-selected]="selectedSectionId === section.id"
-      (click)="selectSection($event, section)"
-      [applyDynamicStyles]="section.styles"
-      [enhancedVisualEditable]="getSectionConfig()"
-      sectionId="{{section.id}}"
-      (visualEvents)="handleSectionEvent($event)">
+    <div #componentElement class="editor-element"
+         [class.is-selected]="selectedElementId === section.id + '_el'"
+         (click)="selectElement($event, getMergedElement(section.id, section.id + '_el', section.content, '[component-name]'))"
+         [enhancedVisualEditable]="getComponentConfig()"
+         elementId="{{section.id + '_el'}}"
+         (visualEvents)="handleComponentEvent($event)">
 
-      <div #componentElement class="editor-element"
-           [class.is-selected]="selectedElementId === section.id + '_[component-name]'"
-           (click)="selectElement($event, getMergedElement(section.id, section.id + '_[component-name]', section.content, '[component-name]'))"
-           [enhancedVisualEditable]="getComponentConfig()"
-           elementId="{{section.id + '_[component-name]'}}"
-           sectionId="{{section.id}}"
-           (visualEvents)="handleComponentEvent($event)">
-        <lib-ui-[component-name]
-          [variant]="$any(section.content['variant'] || getVariant(section.id))"
-          [label]="section.content['label'] || 'Label'"
-          [customStyles]="section.styles || {}"
-        ></lib-ui-[component-name]>
-      </div>
+      <lib-ui-[component-name]
+        [variant]="section.content['variant'] || getVariant(section.id)"
+        [rounded]="section.content['rounded'] || 'md'"
+        [size]="section.content['size'] || 'md'"
+        [dark]="section.content['dark'] || false"
+        [label]="section.content['label']"
+        [customStyles]="section.styles || {}"
+      ></lib-ui-[component-name]>
     </div>
   `
 })
-export class Editor[ComponentName]SectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
-  @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
-  @ViewChild('componentElement', { static: true }) componentElement!: ElementRef;
-
-  ngAfterViewInit() {
-    // 🚀 Regla de Oro: Registrar para edición visual
-    this.applySectionVisualEditing(this.sectionElement, this.section.id);
-    this.applyElementVisualEditing(this.componentElement, this.section.id + '_[component-name]');
-  }
-
-  getSectionConfig(): VisualEditingConfig {
-    return this.createElementConfig('section', {
-      styling: {
-        selectionOutline: '2px solid #6366f1',
-        hoverEffects: true,
-        resizeHandles: true
-      } as any
-    });
-  }
-
-  getComponentConfig(): VisualEditingConfig {
-    return this.createElementConfig('element', {
-      enableDrag: true,    // ⬅️ Permitir arrastrar
-      enableResize: true,  // ⬅️ Permitir redimensionar
-      styling: {
-        selectionOutline: '2px solid #10b981',
-        hoverEffects: true,
-        resizeHandles: true
-      } as any
-    });
-  }
-
-  handleSectionEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id);
-  }
-
-  handleComponentEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_[component-name]');
-  }
+export class Editor[ComponentName]SectionComponent extends EnhancedBaseEditorSectionComponent {
+  // 🚀 Implementar lógica de guardado y sync aquí
 }
 ```
 
 ---
 
-## 📋 Template 4: Registro en Component Explorer
+## 📋 Template 3: Isolated Mode (Premium Editor)
 
-### 1. Import
-
-```typescript
-import { UI[ComponentName]Component } from '@negocio/ui-components';
-
-// En imports array:
-imports: [
-  // ... otros ...
-  UI[ComponentName]Component
-]
-```
-
-### 2. Añadir a lista de componentes
-
-```typescript
-{
-  type: '[component-name]',
-  label: '[Component Name]',
-  icon: '🔔', // Cambiar por emoji apropiado
-  description: 'Descripción del componente',
-  category: '[category]', // 'feedback', 'layout', 'navigation', etc.
-  libraryType: 'component', // o 'section'
-  variants: [
-    'primary',
-    'secondary',
-    'outline',
-    'ghost',
-    'neon',
-    'cyberpunk',
-    'glass',
-    'gradient'
-  ]
-}
-```
-
-### 3. Añadir preview
-
-```html
-<div *ngSwitchCase="'[component-name]'" class="p-4">
-  <lib-ui-[component-name] [variant]="$any(selectedVariant)" [label]="'Ejemplo'"> </lib-ui-[component-name]>
-</div>
-```
-
----
-
-## 📋 Template 5: Añadir al Editor Feature
-
-### 1. Import en TypeScript
-
-```typescript
-import { Editor[ComponentName]SectionComponent } from '../components/[component-name]/editor-[component-name]-section.component';
-
-// En imports:
-imports: [
-  // ... otros ...
-  Editor[ComponentName]SectionComponent
-]
-```
-
-### 2. Añadir caso en HTML
-
-```html
-<!-- [COMPONENT NAME] -->
-<lib-editor-[component-name]-section *ngSwitchCase="'[component-name]'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)" (elementResized)="onElementResized($event.bounds, $event.elementId, section)" (sectionResized)="onSectionResized($event.section, $event.bounds)"> </lib-editor-[component-name]-section>
-```
-
----
-
-## 🔄 Reemplazos Necesarios
-
-Al usar estas plantillas, reemplaza:
-
-- `[COMPONENT_NAME]` → Nombre en mayúsculas (ej: `NOTIFICATION`)
-- `[ComponentName]` → PascalCase (ej: `Notification`)
-- `[component-name]` → kebab-case (ej: `notification`)
-- `[category]` → Categoría apropiada
-- `🔔` → Emoji apropiado para el componente
-
----
-
-## 📝 Variants Mínimos Recomendados
-
-```typescript
-variants: [
-  // Básicos (4 obligatorios)
-  'primary',
-  'secondary',
-  'outline',
-  'ghost',
-
-  // Modernos (elegir 3-4)
-  'neon',
-  'cyberpunk',
-  'glass',
-  'gradient',
-  'retro',
-  'minimal',
-
-  // Temáticos (opcional)
-  'dark',
-  'success',
-  'danger',
-];
-```
-
-**Total mínimo: 7 variants** (4 básicos + 3 modernos)
-
----
-
-## 📋 Template 6: Isolated Mode Component
-
-Component for advanced editing of complex elements.
-
-### TypeScript Template
+### TypeScript
 
 ```typescript
 @Component({
@@ -351,69 +146,89 @@ Component for advanced editing of complex elements.
   standalone: true,
   imports: [CommonModule, FormsModule, UI[ComponentName]Component],
   template: `
-    <div class="isolated-mode-overlay" (click)="closed.emit()">
+    <div class="isolated-mode-overlay" (click)="close()">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
-        <!-- Controls Sidebar -->
+
+        <!-- Premium Sidebar -->
         <div class="controls-sidebar">
-           <h4 class="section-title">✨ Estilo</h4>
-           <select [(ngModel)]="editableContent.variant">
-             <option *ngFor="let v of availableVariants" [value]="v">{{v}}</option>
-           </select>
+          <div class="sidebar-section">
+            <h4>APARIENCIA</h4>
+            <div class="control-group">
+              <label>Variante</label>
+              <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()" class="premium-select">
+                <option *ngFor="let v of availableVariants" [value]="v">{{v}}</option>
+              </select>
+            </div>
+
+            <div class="toggle-row">
+               <span>Modo Oscuro</span>
+               <div class="premium-toggle" [class.active]="editableContent.dark" (click)="toggleDark()">
+                 <div class="handle"></div>
+               </div>
+            </div>
+          </div>
         </div>
 
-        <!-- Canvas Area -->
+        <!-- Professional Canvas -->
         <div class="isolated-canvas">
-          <lib-ui-[component-name]
-            [variant]="editableContent.variant || config.globalVariant"
-            [content]="editableContent.content">
-          </lib-ui-[component-name]>
+          <div class="canvas-inner">
+             <div class="draggable-wrapper"
+                  [style.left.px]="currentPosition.x"
+                  [style.top.px]="currentPosition.y"
+                  [style.width.px]="currentSize.width"
+                  [style.height.px]="currentSize.height">
+               <lib-ui-[component-name]
+                 [variant]="editableContent.variant"
+                 [rounded]="editableContent.rounded"
+                 [size]="editableContent.size"
+                 [dark]="editableContent.dark"
+                 [customStyles]="getCustomStyles()">
+               </lib-ui-[component-name]>
+             </div>
+          </div>
+        </div>
+
+        <!-- Footer Actions -->
+        <div class="isolated-mode-footer">
+          <button (click)="close()" class="btn-secondary">Cancelar</button>
+          <button (click)="apply()" class="btn-primary">Guardar Cambios</button>
         </div>
       </div>
     </div>
   `,
-  styles: [`
-    .isolated-mode-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(2, 6, 23, 0.85);
-      backdrop-filter: blur(20px);
-      z-index: 99999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .isolated-mode-container {
-      background: #1a1a2e;
-      border-radius: 16px;
-      width: 90vw;
-      height: 85vh;
-      display: flex;
-    }
-  `]
+  styleUrl: './isolated-mode.premium.scss' // Reusar o extender de un core SCSS
 })
 export class Editor[ComponentName]IsolatedModeComponent {
-  @Input() config!: any;
-  @Output() closed = new EventEmitter<void>();
-  @Output() applied = new EventEmitter<any>();
-  availableVariants = variants;
-  editableContent: any = {};
+  // 🚀 CRITICAL: Implementar sync de los "Big 5"
+  apply() {
+    const updated = {
+       content: {
+         ...this.editableContent,
+         variant: this.editableContent.variant,
+         rounded: this.editableContent.rounded,
+         size: this.editableContent.size,
+         dark: this.editableContent.dark
+       },
+       styles: { ...this.editableStyles },
+       position: this.currentPosition,
+       size: this.currentSize
+    };
+    this.applied.emit(updated);
+  }
 }
 ```
 
 ---
 
-## ✅ Quick Checklist
+## ✅ Checklist de Implementación Universal
 
-- [ ] Componente UI creado
-- [ ] SCSS con `apply-all-variants` en elemento correcto
-- [ ] Exportado en `index.ts`
-- [ ] Registrado en `component-explorer`
-- [ ] Preview añadido
-- [ ] Editor section creado
-- [ ] Añadido a `editor-feature` (desktop y mobile)
-- [ ] Mínimo 7 variants configurados
-- [ ] Probado en el editor
+- [ ] ¿El componente UI tiene los Inputs: `variant`, `rounded`, `size`, `dark`, `customStyles`?
+- [ ] ¿El SCSS usa `@include shared.apply-all-variants('variant-')`?
+- [ ] ¿El componente UI tiene `width: 100%` y `height: 100%`?
+- [ ] ¿El Editor Section pasa TODAS las propiedades al componente UI?
+- [ ] ¿El Isolated Mode sincroniza las 5 propiedades al guardar?
+- [ ] ¿Se disparan los z-index correctamente en Isolated Mode?
 
 ---
 
-**¡Listo para usar! 🚀**
+**¡Sigue estas reglas para que tus componentes se sientan premium! 🚀**

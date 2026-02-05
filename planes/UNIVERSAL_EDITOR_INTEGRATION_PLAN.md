@@ -13,66 +13,61 @@ Enable a "Plug & Play" experience for developers creating new components, ensuri
 
 ---
 
-## 🛠 Phase 1: The Core Foundation
+## 🛠 Phase 1: The Core Foundation & Technical Standards
 
-### 1.1 Universal Metadata Interface
+### 1.1 Mandatory Property Parity (The "Big 4")
 
-Define a standardized metadata structure that components use to tell the editor what is editable.
+Every UI component MUST implement the following inputs to ensure consistent behavior in the editor:
 
-```typescript
-// libs/shared-components/src/lib/models/visual-editing.metadata.ts
-export interface ComponentEditorMetadata {
-  type: string;
-  fields: {
-    [key: string]: {
-      type: 'text' | 'rich-text' | 'image' | 'icon' | 'color' | 'select';
-      label: string;
-      options?: string[]; // For 'select' type
-    };
-  };
-  capabilities: {
-    draggable: boolean;
-    resizable: boolean;
-    stylable: boolean;
-  };
+- `variant`: Style variant (e.g., `primary`, `glass`, `neon`).
+- `rounded`: Radius preset (`none`, `md`, `full`).
+- `size`: Scaling preset (`sm`, `md`, `lg`).
+- `dark`: Boolean toggle for localized dark mode.
+- `customStyles`: Object for manual CSS overrides (backgroundColor, borderColor, etc.).
+
+### 1.2 CSS Prefix Standardization
+
+All components must use the `variant-` prefix in their SCSS and use the `apply-all-variants` mixin. This allows the editor to apply global themes (Glass, Neon, Cyberpunk) dynamically.
+
+```scss
+.my-component {
+  @include shared.apply-all-variants('variant-');
 }
 ```
 
-### 1.2 Evolution of `EnhancedBaseEditorSectionComponent`
+### 1.3 Container Rendering Rules
 
-Upgrade the base class to handle metadata-driven editing.
+To ensure correct behavior with resizing handles, UI components must:
+
+- Use `width: 100%` and `height: 100%`.
+- Use `inset: 0` if they are absolutely positioned within the editor wrapper.
 
 ---
 
-## 🏗 Phase 2: Component Registry & Factory
+## 🏗 Phase 2: Standardized Isolated Mode (Premium UI)
 
-### 2.1 Dynamic Editor Resolver
+### 2.1 The "Isolation" Protocol
+
+When a component enters Isolated Mode, the system must:
+
+1.  **Promote Z-Index**: Use `body.isolated-mode-active` to boost the canvas stacking context to `9999999`.
+2.  **Break Perspective Traps**: Disable parent `perspective` and `isolation` properties to allow the fixed overlay to cover the entire screen.
+3.  **Visual Feedback**: Implement a checkerboard background in the canvas to handle transparency clearly.
+
+### 2.2 Advanced Property Sync
+
+The `EditorSection` components must synchronize all 5 core properties (`variant`, `rounded`, `size`, `dark`, `customStyles`) between the isolated state and the main project state via `applyIsolatedChanges`.
+
+---
+
+## 🏗 Phase 3: Component Registry & Factory
+
+### 3.1 Dynamic Editor Resolver
 
 Instead of a giant `ngSwitch` in `editor-feature.component.html`, we'll move towards a dynamic registration system.
 
 1.  **Registry**: A central map of `component-type` -> `EditorComponentClass`.
 2.  **Auto-Registration**: A decorator or a service that allows components to register themselves.
-
----
-
-## 🎨 Phase 3: Aesthetic Isolated Mode (Premium UI)
-
-### 3.1 Glassmorphism Editor Panels
-
-Update the isolated mode panels to use:
-
-- Transparent backdrop filters (Glassmorphism).
-- Smooth CSS Transitions.
-- Micro-interactions (Hover effects, ripple).
-- Floating toolbars for quick actions (Duplicate, Delete, Bring to Front).
-
-### 3.2 Real-time Style Controls
-
-Implement a "Visual CSS Builder" for the isolated mode:
-
-- **Shadow Builder**: 3D shadow presets.
-- **Border Radius**: Individual corner control.
-- **Gradients**: Visual linear/radial gradient picker.
 
 ---
 
@@ -96,26 +91,16 @@ Add controls to manage the "Stacking Order":
 
 ---
 
-## 📱 Phase 5: Mobile Editing Optimization
-
-### 5.1 Touch-Friendly Handles
-
-- Larger hit areas for resize handles on mobile.
-- "Long press to drag" functionality.
-- Mobile-specific editing bottom sheet.
-
----
-
-## 📋 Implementation Roadmap
+## 📋 Implementation Roadmap (Updated)
 
 | Task                              | Priority | Status                                       |
 | :-------------------------------- | :------- | :------------------------------------------- |
-| **Universal Metadata Definition** | High     | 📅 Planned                                   |
-| **Standardized Isolated Mode UI** | High     | 🔄 In Progress (Draggable Box ref complete)  |
-| **Component Registry Cleanup**    | Medium   | 📅 Planned                                   |
-| **Gradients & Advanced Styles**   | Medium   | 📅 Planned                                   |
+| **Draggable Box Standardization** | High     | ✅ COMPLETED (Gold Standard established)     |
+| **Standardized Isolated Mode UI** | High     | ✅ COMPLETED (Z-index & rendering fixed)     |
+| **Component Template Updates**    | High     | 🔄 In Progress                               |
+| **Metadata-Driven Property Sync** | Medium   | 📅 Planned                                   |
 | **Z-Index Management**            | Low      | ✅ In Progress (Base logic in Isolated Mode) |
-| **Batch Selection Support**       | Low      | 📅 Planned                                   |
+| **Universal Button Integration**  | Medium   | 📅 Next Up                                   |
 
 ---
 
@@ -123,5 +108,6 @@ Add controls to manage the "Stacking Order":
 
 - [ ] Any developer can add a new component to the editor in < 15 minutes.
 - [ ] Components look and feel "premium" while being edited.
-- [ ] All edits persist across page reloads.
-- [ ] Undo/Redo works flawlessly for all properties.
+- [ ] Isolated mode menu is ALWAYS visible (never hidden by sidebars).
+- [ ] All 5 core properties (Variant, Rounded, Size, Dark, Custom) sync flawslessly.
+- [ ] Undo/Redo works for all properties.
