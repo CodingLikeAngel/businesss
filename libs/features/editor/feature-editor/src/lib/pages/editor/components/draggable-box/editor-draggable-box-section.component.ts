@@ -497,7 +497,7 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
       title: this.section.content?.['title'] || 'Draggable Box',
       description: this.section.content?.['description'] || 'Arrastra y redimensiona este elemento',
       variant: this.section.content?.['variant'] || '',
-      boxVariant: this.section.content?.['boxVariant'] || 'draggable-box-1'
+      boxVariant: this.section.content?.['boxVariant'] || this.section.config?.['subtype'] || 'draggable-box-1'
     };
 
     const hasVariant = !!this.currentContent.variant && this.currentContent.variant !== 'default';
