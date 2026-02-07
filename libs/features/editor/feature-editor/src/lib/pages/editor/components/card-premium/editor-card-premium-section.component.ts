@@ -8,8 +8,8 @@ import {
   VisualEditingEvent
 } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
-import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorCardPremiumIsolatedModeComponent } from './editor-card-premium-isolated-mode.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 @Component({
   selector: 'lib-editor-card-premium-section',
