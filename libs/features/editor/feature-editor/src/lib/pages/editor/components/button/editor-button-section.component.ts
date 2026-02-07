@@ -165,6 +165,8 @@ export class EditorButtonSectionComponent extends EnhancedBaseEditorSectionCompo
         dark: config.content.dark,
         leadingIcon: config.content.leadingIcon,
         trailingIcon: config.content.trailingIcon,
+        haptic: config.content.haptic,
+        soundUrl: config.content.soundUrl,
         buttonStyles: config.styles,
         customStyles: config.styles
       }
