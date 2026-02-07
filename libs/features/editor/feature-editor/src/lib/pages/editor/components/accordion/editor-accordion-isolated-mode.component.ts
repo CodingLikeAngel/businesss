@@ -293,7 +293,7 @@ export interface UndoRedoState {
       --bg-header: #1e293b;
       --border-color: rgba(255, 255, 255, 0.08);
       --text-dim: #94a3b8;
-      --sidebar-width: 320px;
+      --sidebar-width: 380px;
     }
 
     .isolated-mode-overlay {

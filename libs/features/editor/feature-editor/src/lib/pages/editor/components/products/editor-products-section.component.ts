@@ -12,6 +12,8 @@ import {
   ProductsSectionComponent
 } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorProductsIsolatedModeComponent } from './editor-products-isolated-mode.component';
 
 /**
  * Enhanced Editor Products Section Component
@@ -24,7 +26,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     ProductsSectionComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorProductsIsolatedModeComponent
   ],
   templateUrl: './editor-products-section.component.html'
 })
@@ -34,6 +37,9 @@ export class EditorProductsSectionComponent extends EnhancedBaseEditorSectionCom
 
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('productsElement', { static: true }) productsElement!: ElementRef;
+
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
 
   ngDoCheck() {
     // Sincronización de items individuales (productos) si se editan desde el panel lateral
@@ -118,5 +124,31 @@ export class EditorProductsSectionComponent extends EnhancedBaseEditorSectionCom
         transform: `translate(${bounds.x}px, ${bounds.y}px)`
       }
     });
+  }
+
+  openIsolatedMode(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_products_wrapper',
+      type: 'products',
+      content: { ...this.section.content },
+      styles: { ...this.section.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 1100, height: 700 }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    this.showIsolatedMode = false;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: { ...this.section.content, ...config.content },
+      styles: { ...this.section.styles, ...config.styles }
+    });
+    this.showIsolatedMode = false;
   }
 }

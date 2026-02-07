@@ -11,6 +11,8 @@ import {
   PromotionsSectionComponent
 } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorPromotionsIsolatedModeComponent } from './editor-promotions-isolated-mode.component';
 
 /**
  * Enhanced Editor Promotions Section Component
@@ -23,7 +25,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     PromotionsSectionComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorPromotionsIsolatedModeComponent
   ],
   templateUrl: './editor-promotions-section.component.html'
 })
@@ -32,6 +35,9 @@ export class EditorPromotionsSectionComponent extends EnhancedBaseEditorSectionC
 
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('promotionsElement', { static: true }) promotionsElement!: ElementRef;
+
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
 
   ngDoCheck() {
     // Sync items if edited via side panel
@@ -116,5 +122,31 @@ export class EditorPromotionsSectionComponent extends EnhancedBaseEditorSectionC
         transform: `translate(${bounds.x}px, ${bounds.y}px)`
       }
     });
+  }
+
+  openIsolatedMode(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_promotions_wrapper',
+      type: 'promotions',
+      content: { ...this.section.content },
+      styles: { ...this.section.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 1100, height: 700 }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    this.showIsolatedMode = false;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: { ...this.section.content, ...config.content },
+      styles: { ...this.section.styles, ...config.styles }
+    });
+    this.showIsolatedMode = false;
   }
 }

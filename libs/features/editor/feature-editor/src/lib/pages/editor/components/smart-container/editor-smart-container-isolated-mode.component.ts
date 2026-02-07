@@ -253,8 +253,21 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
     .close-main-btn { background: rgba(239, 68, 68, 0.1); color: #f87171; border: none; width: 36px; height: 36px; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
     .close-main-btn:hover { background: #ef4444; color: white; transform: rotate(90deg); }
 
-    .isolated-mode-body { flex: 1; display: flex; overflow: hidden; }
-    .controls-sidebar { width: 340px; background: #020617; border-right: 1px solid rgba(255,255,255,0.05); overflow-y: auto; }
+    .isolated-mode-body {
+      flex: 1;
+      display: flex;
+      flex-direction: row; /* Explicit row */
+      overflow: hidden;
+    }
+
+    .controls-sidebar {
+      width: 380px;
+      min-width: 380px; /* Safety */
+      flex-shrink: 0; /* Prevent shrinking */
+      background: #020617;
+      border-right: 1px solid rgba(255,255,255,0.05);
+      overflow-y: auto;
+    }
     .sidebar-scroll-content { padding: 2rem; }
     .sidebar-section { margin-bottom: 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2rem; }
     .sidebar-section.no-border { border-bottom: none; }

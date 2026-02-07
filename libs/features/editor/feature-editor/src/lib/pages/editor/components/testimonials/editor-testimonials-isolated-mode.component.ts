@@ -304,10 +304,20 @@ export interface UndoRedoState {
     }
     .close-main-btn:hover { background: #ef4444; color: white; }
 
-    .isolated-mode-body { flex: 1; display: flex; overflow: hidden; }
+    .isolated-mode-body {
+      flex: 1;
+      display: flex;
+      flex-direction: row; /* Explicit row */
+      overflow: hidden;
+    }
 
     .controls-sidebar {
-      width: 350px; background: #020617; border-right: 1px solid rgba(255, 255, 255, 0.08); overflow-y: auto;
+      width: 380px;
+      min-width: 380px; /* Safety */
+      flex-shrink: 0; /* Prevent shrinking */
+      background: #020617;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      overflow-y: auto;
     }
 
     .sidebar-scroll-content { padding: 1.8rem; }

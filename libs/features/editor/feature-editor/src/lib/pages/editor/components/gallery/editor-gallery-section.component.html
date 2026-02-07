@@ -1,12 +1,23 @@
 <!-- DESKTOP GALLERY -->
 <div *ngIf="!isMobile" #sectionElement
-  class="editor-section cursor-pointer py-4"
+  class="editor-section cursor-pointer transition-all duration-500 group relative py-12"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="getSectionConfig()"
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
+
+  <!-- Section Quick Actions -->
+  <div class="absolute top-0 left-0 right-0 h-12 bg-white/80 backdrop-blur-sm border-b border-slate-200 flex items-center justify-between px-4 z-50 opacity-0 group-hover:opacity-100 transition-opacity">
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Multimedia / Adaptive Gallery</span>
+      <div class="h-4 w-[1px] bg-slate-200 mx-2"></div>
+      <button (click)="openIsolatedMode($event)" class="bg-indigo-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full hover:bg-indigo-700 transition-colors uppercase tracking-widest shadow-lg shadow-indigo-200 flex items-center gap-2">
+        <span>🎯</span> EDITOR AVANZADO PRO
+      </button>
+    </div>
+  </div>
 
   <div #galleryElement class="editor-element"
        [class.is-selected]="selectedElementId === section.id + '_gallery_wrapper'"
@@ -25,11 +36,19 @@
       [applyDynamicStyles]="section.styles || {}"
     ></lib-ui-components-gallery-section>
   </div>
+
+  <!-- Isolated Mode Component -->
+  <lib-editor-gallery-isolated-mode 
+    *ngIf="showIsolatedMode && isolatedConfig"
+    [config]="isolatedConfig"
+    (closed)="onIsolatedModeClosed()"
+    (applied)="onIsolatedModeApplied($event)">
+  </lib-editor-gallery-isolated-mode>
 </div>
 
 <!-- MOBILE GALLERY -->
 <div *ngIf="isMobile" #sectionElement
-  class="editor-section cursor-pointer py-2 p-2"
+  class="editor-section cursor-pointer py-2 p-2 group relative"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"

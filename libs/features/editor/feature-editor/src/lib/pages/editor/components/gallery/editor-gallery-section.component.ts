@@ -10,6 +10,8 @@ import {
 } from '@negocio/shared-components';
 import { UIGallerySectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorGalleryIsolatedModeComponent } from './editor-gallery-isolated-mode.component';
 
 /**
  * Enhanced Editor Gallery Section Component
@@ -22,7 +24,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UIGallerySectionComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorGalleryIsolatedModeComponent
   ],
   templateUrl: './editor-gallery-section.component.html'
 })
@@ -32,6 +35,9 @@ export class EditorGallerySectionComponent extends EnhancedBaseEditorSectionComp
 
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('galleryElement', { static: true }) galleryElement!: ElementRef;
+
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
 
   ngDoCheck() {
     // Sincronización de imágenes individuales si se editan desde el panel lateral
@@ -116,5 +122,31 @@ export class EditorGallerySectionComponent extends EnhancedBaseEditorSectionComp
         transform: `translate(${bounds.x}px, ${bounds.y}px)`
       }
     });
+  }
+
+  openIsolatedMode(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_gallery_wrapper',
+      type: 'gallery',
+      content: { ...this.section.content },
+      styles: { ...this.section.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 800, height: 600 }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    this.showIsolatedMode = false;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: { ...this.section.content, ...config.content },
+      styles: { ...this.section.styles, ...config.styles }
+    });
+    this.showIsolatedMode = false;
   }
 }

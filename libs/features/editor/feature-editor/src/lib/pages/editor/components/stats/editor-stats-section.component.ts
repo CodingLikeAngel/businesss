@@ -9,6 +9,8 @@ import {
 } from '@negocio/shared-components';
 import { UIStatsLibSectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorStatsIsolatedModeComponent } from './editor-stats-isolated-mode.component';
 
 /**
  * Enhanced Editor Stats Section Component
@@ -21,7 +23,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UIStatsLibSectionComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorStatsIsolatedModeComponent
   ],
   templateUrl: './editor-stats-section.component.html'
 })
@@ -30,6 +33,9 @@ export class EditorStatsSectionComponent extends EnhancedBaseEditorSectionCompon
 
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('statsElement', { static: true }) statsElement!: ElementRef;
+
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
 
   ngDoCheck() {
     // Sincronización de items individuales (métricas) si se editan desde el panel lateral
@@ -114,5 +120,31 @@ export class EditorStatsSectionComponent extends EnhancedBaseEditorSectionCompon
         transform: `translate(${bounds.x}px, ${bounds.y}px)`
       }
     });
+  }
+
+  openIsolatedMode(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_stats_wrapper',
+      type: 'stats',
+      content: { ...this.section.content },
+      styles: { ...this.section.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 900, height: 500 }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    this.showIsolatedMode = false;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: { ...this.section.content, ...config.content },
+      styles: { ...this.section.styles, ...config.styles }
+    });
+    this.showIsolatedMode = false;
   }
 }

@@ -9,6 +9,8 @@ import {
 } from '@negocio/shared-components';
 import { UIFaqSectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorFaqIsolatedModeComponent } from './editor-faq-isolated-mode.component';
 
 /**
  * Enhanced Editor FAQ Section Component
@@ -21,7 +23,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UIFaqSectionComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorFaqIsolatedModeComponent
   ],
   templateUrl: './editor-faq-section.component.html'
 })
@@ -30,6 +33,9 @@ export class EditorFaqSectionComponent extends EnhancedBaseEditorSectionComponen
 
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('faqElement', { static: true }) faqElement!: ElementRef;
+
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
 
   ngDoCheck() {
     // Sincronización de items individuales (preguntas) si se editan desde el panel lateral
@@ -114,5 +120,31 @@ export class EditorFaqSectionComponent extends EnhancedBaseEditorSectionComponen
         transform: `translate(${bounds.x}px, ${bounds.y}px)`
       }
     });
+  }
+
+  openIsolatedMode(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_faq_wrapper',
+      type: 'faq',
+      content: { ...this.section.content },
+      styles: { ...this.section.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 800, height: 600 }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    this.showIsolatedMode = false;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: { ...this.section.content, ...config.content },
+      styles: { ...this.section.styles, ...config.styles }
+    });
+    this.showIsolatedMode = false;
   }
 }

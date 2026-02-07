@@ -230,8 +230,21 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
     .close-main-btn { background: rgba(239, 68, 68, 0.1); color: #f87171; border: none; width: 32px; height: 32px; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
     .close-main-btn:hover { background: #ef4444; color: white; transform: rotate(90deg); }
 
-    .isolated-mode-body { flex: 1; display: flex; overflow: hidden; }
-    .controls-sidebar { width: 320px; background: #020617; border-right: 1px solid rgba(255,255,255,0.1); overflow-y: auto; }
+    .isolated-mode-body {
+      flex: 1;
+      display: flex;
+      flex-direction: row; /* Explicit row */
+      overflow: hidden;
+    }
+
+    .controls-sidebar {
+      width: 320px;
+      min-width: 320px; /* Safety */
+      flex-shrink: 0; /* Prevent shrinking */
+      background: #020617;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      overflow-y: auto;
+    }
     .sidebar-scroll-content { padding: 1.5rem; }
     .sidebar-section { margin-bottom: 2rem; }
     .section-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.2rem; color: #94a3b8; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }

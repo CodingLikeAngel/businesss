@@ -193,8 +193,21 @@ export interface IsolatedModeConfig {
     .component-name { color: white; font-size: 13px; font-weight: 600; margin-left: 8px; }
     .close-main-btn { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: none; width: 30px; height: 30px; border-radius: 8px; cursor: pointer; }
 
-    .isolated-mode-body { flex: 1; display: flex; overflow: hidden; }
-    .controls-sidebar { width: 300px; background: #020617; border-right: 1px solid rgba(255,255,255,0.1); overflow-y: auto; }
+    .isolated-mode-body {
+      flex: 1;
+      display: flex;
+      flex-direction: row; /* Explicit row */
+      overflow: hidden;
+    }
+
+    .controls-sidebar {
+      width: 300px;
+      min-width: 300px; /* Safety */
+      flex-shrink: 0; /* Prevent shrinking */
+      background: #020617;
+      border-right: 1px solid rgba(255,255,255,0.1);
+      overflow-y: auto;
+    }
     .sidebar-scroll-content { padding: 1.5rem; }
     .sidebar-section { margin-bottom: 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1rem; }
     .section-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; color: #94a3b8; font-size: 12px; font-weight: 800; }

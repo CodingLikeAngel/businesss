@@ -1,10 +1,22 @@
-<div #sectionElement class="editor-section cursor-pointer py-12"
+<div #sectionElement class="editor-section cursor-pointer transition-all duration-500 group relative py-12"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="getSectionConfig()"
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
+
+  <!-- Section Quick Actions -->
+  <div class="absolute top-0 left-0 right-0 h-12 bg-white/80 backdrop-blur-sm border-b border-slate-200 flex items-center justify-between px-4 z-50 opacity-0 group-hover:opacity-100 transition-opacity">
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Interface / Tabbed Content</span>
+      <div class="h-4 w-[1px] bg-slate-200 mx-2"></div>
+      <button (click)="openIsolatedMode($event)" class="bg-indigo-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full hover:bg-indigo-700 transition-colors uppercase tracking-widest shadow-lg shadow-indigo-200 flex items-center gap-2">
+        <span>🎯</span> EDITOR AVANZADO PRO
+      </button>
+    </div>
+  </div>
+
     <div #tabsElement class="container mx-auto px-6 max-w-4xl editor-element"
        [class.is-selected]="selectedElementId === section.id + '_tabs'"
        (click)="selectElement($event, getMergedElement(section.id, section.id + '_tabs', section.content, 'tabs'))"
@@ -16,7 +28,17 @@
        <lib-ui-components-tabs
          [variant]="section.content['variant'] || getVariant(section.id)"
          [tabs]="section.content['tabs'] || [{ label: 'Tab 1', content: 'Content for Tab 1' }, { label: 'Tab 2', content: 'Content for Tab 2' }]"
+         [align]="section.content['align'] || 'left'"
+         [orientation]="section.content['orientation'] || 'horizontal'"
          [customStyles]="section.styles || {}"
        ></lib-ui-components-tabs>
     </div>
+
+  <!-- Isolated Mode Component -->
+  <lib-editor-tabs-isolated-mode 
+    *ngIf="showIsolatedMode && isolatedConfig"
+    [config]="isolatedConfig"
+    (closed)="onIsolatedModeClosed()"
+    (applied)="onIsolatedModeApplied($event)">
+  </lib-editor-tabs-isolated-mode>
 </div>

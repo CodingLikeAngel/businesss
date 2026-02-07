@@ -6,10 +6,10 @@ import {
   VisualEditingConfig,
   VisualEditingEvent
 } from '@negocio/shared-components';
-import {
-  UITabsComponent
-} from '@negocio/ui-components';
+import { UITabsComponent } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorTabsIsolatedModeComponent } from './editor-tabs-isolated-mode.component';
 
 /**
  * Enhanced Editor Tabs Section Component
@@ -23,13 +23,17 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UITabsComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorTabsIsolatedModeComponent
   ],
   templateUrl: './editor-tabs-section.component.html'
 })
 export class EditorTabsSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('tabsElement', { static: true }) tabsElement!: ElementRef;
+
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
 
   ngAfterViewInit() {
     // Apply standardized visual editing to elements
@@ -125,5 +129,31 @@ export class EditorTabsSectionComponent extends EnhancedBaseEditorSectionCompone
    */
   private updateTabsPosition(bounds: any): void {
     console.log('Tabs position updated:', bounds);
+  }
+
+  openIsolatedMode(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_tabs',
+      type: 'tabs',
+      content: { ...this.section.content },
+      styles: { ...this.section.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 600, height: 400 }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    this.showIsolatedMode = false;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: { ...this.section.content, ...config.content },
+      styles: { ...this.section.styles, ...config.styles }
+    });
+    this.showIsolatedMode = false;
   }
 }

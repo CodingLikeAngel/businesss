@@ -34,14 +34,12 @@ import { EditorSmartContainerIsolatedModeComponent } from './editor-smart-contai
       (visualEvents)="handleSectionEvent($event)"
     >
       <!-- Section Quick Actions -->
-      <div
-        class="absolute top-0 left-0 right-0 h-10 bg-slate-800/80 backdrop-blur-md border-b border-white/10 flex items-center justify-between px-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
-      >
+      <div class="absolute top-0 left-0 right-0 h-12 bg-white/80 backdrop-blur-sm border-b border-slate-200 flex items-center justify-between px-4 z-50 opacity-0 group-hover:opacity-100 transition-opacity">
         <div class="flex items-center gap-2">
-          <span class="text-[10px] font-black text-indigo-400 uppercase tracking-widest">Generic Smart Container</span>
-          <div class="h-3 w-[1px] bg-white/20 mx-1"></div>
-          <button (click)="openIsolatedMode($event)" class="bg-indigo-600 text-white text-[9px] font-bold px-3 py-1 rounded-full hover:bg-indigo-500 transition-all uppercase tracking-tighter shadow-xl">
-            Configure Container 🛠️
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Multimedia / Smart Container</span>
+          <div class="h-4 w-[1px] bg-slate-200 mx-2"></div>
+          <button (click)="openIsolatedMode($event)" class="bg-indigo-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full hover:bg-indigo-700 transition-colors uppercase tracking-widest shadow-lg shadow-indigo-200 flex items-center gap-2">
+            <span>🎯</span> CONFIGURAR CONTENEDOR PRO
           </button>
         </div>
       </div>

@@ -8,6 +8,8 @@ import {
 } from '@negocio/shared-components';
 import { UIStepsSectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorStepsIsolatedModeComponent } from './editor-steps-isolated-mode.component';
 
 /**
  * Enhanced Editor Steps Section Component
@@ -21,13 +23,17 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UIStepsSectionComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorStepsIsolatedModeComponent
   ],
   templateUrl: './editor-steps-section.component.html'
 })
 export class EditorStepsSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('stepsElement', { static: true }) stepsElement!: ElementRef;
+
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
 
   ngAfterViewInit() {
     // Apply standardized visual editing to elements
@@ -123,5 +129,31 @@ export class EditorStepsSectionComponent extends EnhancedBaseEditorSectionCompon
    */
   private updateStepsPosition(bounds: any): void {
     console.log('Steps position updated:', bounds);
+  }
+
+  openIsolatedMode(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_steps',
+      type: 'steps',
+      content: { ...this.section.content },
+      styles: { ...this.section.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 800, height: 400 }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    this.showIsolatedMode = false;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: { ...this.section.content, ...config.content },
+      styles: { ...this.section.styles, ...config.styles }
+    });
+    this.showIsolatedMode = false;
   }
 }

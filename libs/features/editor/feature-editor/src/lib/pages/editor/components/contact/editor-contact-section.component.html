@@ -1,12 +1,23 @@
 <!-- CONSISTENT CONTACT EDITOR -->
 <section #sectionElement [id]="section.id"
-  class="relative z-20 cursor-pointer editor-section"
+  class="relative z-20 cursor-pointer editor-section transition-all duration-500 group py-12"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [enhancedVisualEditable]="getSectionConfig()"
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
   
+  <!-- Section Quick Actions -->
+  <div class="absolute top-0 left-0 right-0 h-12 bg-white/80 backdrop-blur-sm border-b border-slate-200 flex items-center justify-between px-4 z-50 opacity-0 group-hover:opacity-100 transition-opacity">
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Business / Contact Center</span>
+      <div class="h-4 w-[1px] bg-slate-200 mx-2"></div>
+      <button (click)="openIsolatedMode($event)" class="bg-indigo-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full hover:bg-indigo-700 transition-colors uppercase tracking-widest shadow-lg shadow-indigo-200 flex items-center gap-2">
+        <span>🎯</span> EDITOR AVANZADO PRO
+      </button>
+    </div>
+  </div>
+
   <div class="container mx-auto px-6 max-w-7xl">
     <lib-ui-contact-section
         [title]="section.content['title'] || '¡Contáctanos!'"
@@ -16,8 +27,13 @@
         [variant]="$any(getVariant(section.id))"
         [customStyles]="section.styles"
     ></lib-ui-contact-section>
-
-    <!-- Overlay invisibles para selección de elementos específicos si se desea granularidad extrema -->
-    <!-- (Opcional, usualmente con la selección de sección basta si el componente es monolítico) -->
   </div>
+
+  <!-- Isolated Mode Component -->
+  <lib-editor-contact-isolated-mode 
+    *ngIf="showIsolatedMode && isolatedConfig"
+    [config]="isolatedConfig"
+    (closed)="onIsolatedModeClosed()"
+    (applied)="onIsolatedModeApplied($event)">
+  </lib-editor-contact-isolated-mode>
 </section>

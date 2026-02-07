@@ -10,6 +10,8 @@ import {
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { UIContactSectionComponent } from '@negocio/featured-components';
 import { trigger, state, style, transition, animate } from '@angular/animations';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorContactIsolatedModeComponent } from './editor-contact-isolated-mode.component';
 
 /**
  * Enhanced Editor Contact Section Component
@@ -22,7 +24,8 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
     CommonModule,
     ReactiveFormsModule,
     UIContactSectionComponent,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorContactIsolatedModeComponent
   ],
   templateUrl: './editor-contact-section.component.html',
   styleUrls: ['./editor-contact-section.component.scss'],
@@ -44,6 +47,9 @@ export class EditorContactSectionComponent extends EnhancedBaseEditorSectionComp
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('contactFormElement', { static: true }) contactFormElement!: ElementRef;
   @ViewChild('contactInfoElement', { static: true }) contactInfoElement!: ElementRef;
+
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
 
   contactForm!: FormGroup;
   isSubmitting = false;
@@ -192,5 +198,31 @@ export class EditorContactSectionComponent extends EnhancedBaseEditorSectionComp
         transform: `translate(${bounds.x}px, ${bounds.y}px)`
       }
     });
+  }
+
+  openIsolatedMode(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_contact_wrapper',
+      type: 'contact',
+      content: { ...this.section.content },
+      styles: { ...this.section.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 1000, height: 600 }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    this.showIsolatedMode = false;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: { ...this.section.content, ...config.content },
+      styles: { ...this.section.styles, ...config.styles }
+    });
+    this.showIsolatedMode = false;
   }
 }

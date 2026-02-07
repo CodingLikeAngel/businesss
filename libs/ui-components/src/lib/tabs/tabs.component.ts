@@ -9,7 +9,7 @@ const specificTabsVariants = ['pixel-adventure'] as const;
 export const tabsVariants = [...baseVariants, ...specificTabsVariants] as const;
 export type TabsVariantType = typeof tabsVariants[number] | (string & {});
 
-interface Tab {
+export interface Tab {
   label: string;
   sectionId: string;
   icon?: string;

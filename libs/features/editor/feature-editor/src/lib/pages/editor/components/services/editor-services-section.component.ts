@@ -10,6 +10,8 @@ import {
 } from '@negocio/shared-components';
 import { ServiceSectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorServicesIsolatedModeComponent } from './editor-services-isolated-mode.component';
 
 /**
  * Enhanced Editor Services Section Component
@@ -22,7 +24,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     ServiceSectionComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorServicesIsolatedModeComponent
   ],
   templateUrl: './editor-services-section.component.html'
 })
@@ -32,6 +35,9 @@ export class EditorServicesSectionComponent extends EnhancedBaseEditorSectionCom
 
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('servicesElement', { static: true }) servicesElement!: ElementRef;
+
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
 
   ngDoCheck() {
     // Sincronización de items individuales si se editan vía panel lateral
@@ -118,5 +124,31 @@ export class EditorServicesSectionComponent extends EnhancedBaseEditorSectionCom
         transform: `translate(${bounds.x}px, ${bounds.y}px)`
       }
     });
+  }
+
+  openIsolatedMode(event: MouseEvent): void {
+    event.stopPropagation();
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_services_wrapper',
+      type: 'services',
+      content: { ...this.section.content },
+      styles: { ...this.section.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 1000, height: 600 }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    this.showIsolatedMode = false;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: { ...this.section.content, ...config.content },
+      styles: { ...this.section.styles, ...config.styles }
+    });
+    this.showIsolatedMode = false;
   }
 }
