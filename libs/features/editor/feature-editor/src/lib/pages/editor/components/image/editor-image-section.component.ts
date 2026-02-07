@@ -8,7 +8,8 @@ import {
   VisualEditingEvent
 } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
-import { EditorImageIsolatedModeComponent, IsolatedModeConfig } from './editor-image-isolated-mode.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorImageIsolatedModeComponent } from './editor-image-isolated-mode.component';
 
 /**
  * Enhanced Editor Image Section Component
