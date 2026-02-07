@@ -85,17 +85,52 @@ Composiciones complejas que ocupan un bloque completo de la página.
     - ✅ Finalizado: Componentes de Card Premium y Rutas con sus respectivos modos aislados y herencia global.
 2.  **Sistema de Drag & Drop entre Secciones**:
     - ✅ Implementado: Reordenación de componentes UI dentro de un `smart-container` mediante panel de estructura visual.
+3.  **Chip Component**:
+    - ✅ Modo aislado completo con controles de contenido, variantes, y comportamiento.
+4.  **Corrección de Herencia Global**:
+    - ✅ Todos los componentes aislados ahora reciben `globalVariant` correctamente.
+5.  **Configuración TypeScript**:
+    - ✅ Actualizado `moduleResolution` a `bundler` para soporte completo de Angular CDK.
+
+### � FASE 6: Modos Aislados para Cards Restantes
+
+**Objetivo**: Implementar modos aislados premium para los componentes de cards que actualmente solo tienen wrappers básicos.
+
+#### Componentes Pendientes:
+
+1.  **Card Animated** (`editor-card-animated-section`)
+    - Estado actual: Wrapper básico con visual editing
+    - Necesita: Modo aislado con controles de animación, contenido, y estilos
+2.  **Card Product** (`editor-card-product-section`)
+    - Estado actual: Wrapper básico con visual editing
+    - Necesita: Modo aislado con controles de producto, precio, y variantes
+3.  **Card Testimonial** (`editor-card-testimonial-section`)
+    - Estado actual: Wrapper básico con visual editing
+    - Necesita: Modo aislado con controles de autor, rating, y contenido
+
+#### Plan de Implementación:
+
+Para cada card:
+
+- [ ] Crear componente de modo aislado (`editor-[card]-isolated-mode.component.ts`)
+- [ ] Integrar en el componente de sección existente
+- [ ] Añadir controles específicos del tipo de card
+- [ ] Implementar herencia de `globalVariant`
+- [ ] Añadir preview en tiempo real
+- [ ] Soporte para resize y personalización de estilos
 
 ---
 
-## 📊 Checklist de Calidad por Componente
+## �📊 Checklist de Calidad por Componente
 
 - [x] Soporta herencia de ADN Global (Architectural Bridge).
 - [x] Modo Aislado Premium (Isolated Mode).
 - [x] Efectos de Hover y Estados (Interactividad).
 - [x] Responsive design nativo integrado.
+- [x] Sistema de Drag & Drop para reordenación.
 
 ---
 
-**Última actualización**: 07 Feb 2026
+**Última actualización**: 07 Feb 2026 04:49
 **Responsable**: Antigravity AI
+**Progreso General**: 85% completado
