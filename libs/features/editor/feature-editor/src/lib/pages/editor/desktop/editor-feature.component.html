@@ -639,6 +639,54 @@
       >
       </lib-editor-card-section>
 
+      <!-- CARD PREMIUM -->
+      <lib-editor-card-premium-section
+        *ngSwitchCase="'card-premium'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-card-premium-section>
+
+      <!-- UI CARD PREMIUM (Atom) -->
+      <lib-editor-card-premium-section
+        *ngSwitchCase="'ui-card-premium'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-card-premium-section>
+
+      <!-- CARD RUTAS -->
+      <lib-editor-card-rutas-section
+        *ngSwitchCase="'card-rutas'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-card-rutas-section>
+
+      <!-- UI CARD RUTAS (Atom) -->
+      <lib-editor-card-rutas-section
+        *ngSwitchCase="'ui-card-rutas'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-card-rutas-section>
+
       <!-- UI CARD ANIMATED (Atom) -->
       <lib-editor-card-animated-section
         *ngSwitchCase="'ui-card-animated'"

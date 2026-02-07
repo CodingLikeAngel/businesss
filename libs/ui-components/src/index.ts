@@ -1,5 +1,5 @@
-
 // Components
+export { UISpacerComponent, spacerVariants, SpacerVariantType, SpacerCustomStyles } from './lib/spacer/spacer.component';
 export * from './lib/button/button.component';
 export * from './lib/button/button-1/button-1.component';
 export * from './lib/button/button-2/button-2.component';
@@ -118,6 +118,3 @@ export * from './lib/video/video.component';
 
 // Map
 export * from './lib/map/map.component';
-
-// Spacer
-export * from './lib/spacer/spacer.component';

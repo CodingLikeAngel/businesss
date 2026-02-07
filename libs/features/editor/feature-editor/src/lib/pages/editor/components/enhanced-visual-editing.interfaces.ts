@@ -1,5 +1,15 @@
 import { ElementRef } from '@angular/core';
 
+export interface IsolatedModeConfig {
+  sectionId: string;
+  elementId: string;
+  type: string;
+  content: any;
+  styles: any;
+  position: { x: number; y: number };
+  size: { width: number; height: number };
+}
+
 /**
  * Enhanced Visual Editing Configuration Interfaces
  * Provides type-safe configuration for standardized visual editing across editor components

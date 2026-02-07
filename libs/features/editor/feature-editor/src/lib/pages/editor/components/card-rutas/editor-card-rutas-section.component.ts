@@ -1,6 +1,6 @@
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UICardPremiumComponent } from '@negocio/ui-components';
+import { UICardRutasComponent } from '@negocio/ui-components';
 import {
   ApplyDynamicStylesDirective,
   EnhancedVisualEditableDirective,
@@ -9,22 +9,22 @@ import {
 } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
-import { EditorCardPremiumIsolatedModeComponent } from './editor-card-premium-isolated-mode.component';
+import { EditorCardRutasIsolatedModeComponent } from './editor-card-rutas-isolated-mode.component';
 
 @Component({
-  selector: 'lib-editor-card-premium-section',
+  selector: 'lib-editor-card-rutas-section',
   standalone: true,
   imports: [
     CommonModule,
-    UICardPremiumComponent,
+    UICardRutasComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorCardPremiumIsolatedModeComponent
+    EditorCardRutasIsolatedModeComponent
   ],
   template: `
     <div
       #sectionElement
-      class="editor-section cursor-pointer transition-all duration-500 group relative min-h-[500px]"
+      class="editor-section cursor-pointer transition-all duration-500 group relative min-h-[600px]"
       [class.is-selected]="selectedSectionId === section.id"
       (click)="selectSection($event, section)"
       [applyDynamicStyles]="section.styles"
@@ -37,53 +37,72 @@ import { EditorCardPremiumIsolatedModeComponent } from './editor-card-premium-is
         class="absolute top-0 left-0 right-0 h-12 bg-white/80 backdrop-blur-sm border-b border-slate-200 flex items-center justify-between px-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
       >
         <div class="flex items-center gap-2">
-          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Carta Premium</span>
+          <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Carta Rutas / Nature</span>
           <div class="h-4 w-[1px] bg-slate-200 mx-2"></div>
-          <button (click)="openIsolatedMode($event)" class="bg-indigo-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full hover:bg-indigo-700 transition-colors uppercase tracking-widest shadow-lg shadow-indigo-200">
-            Editor Avanzado ⚡
+          <button (click)="openIsolatedMode($event)" class="bg-emerald-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full hover:bg-emerald-700 transition-colors uppercase tracking-widest shadow-lg shadow-emerald-200">
+            Editar Rutas & Diseño 🏔️
           </button>
         </div>
       </div>
 
-      <div class="container mx-auto px-6 max-w-7xl relative py-24 h-full min-h-[500px] flex items-center justify-center">
-        <lib-ui-components-card-premium 
+      <div class="container mx-auto px-6 max-w-7xl relative py-20 h-full min-h-[600px] flex items-center justify-center">
+        <lib-ui-components-card-rutas 
           #cardElement
-          [config]="getCardConfigData()"
+          [items]="section.content['items'] || defaultItems"
           [variant]="$any(getVariant(section.id))"
+          [backgroundColor]="section.content['backgroundColor'] || 'rgba(255,255,255,0.05)'"
+          [textColor]="section.content['textColor'] || '#f8fafc'"
+          [accentColor]="section.content['accentColor'] || '#22d3ee'"
+          [animation]="section.content['animation'] || 'pulse'"
           [customStyles]="section.content['cardStyles'] || {}"
-          class="editor-element"
+          class="editor-element w-full max-w-4xl"
           [class.is-selected]="selectedElementId === section.id + '_card'"
-          (click)="selectElement($event, getMergedElement(section.id, section.id + '_card', section.content, 'card-premium'))"
+          (click)="selectElement($event, getMergedElement(section.id, section.id + '_card', section.content, 'card-rutas'))"
           [enhancedVisualEditable]="getCardConfig()"
           elementId="{{ section.id + '_card' }}"
           sectionId="{{ section.id }}"
           (visualEvents)="handleCardEvent($event)"
           [style.position]="section.content['cardStyles']?.['position'] || 'relative'"
           [style.width]="section.content['cardStyles']?.['width'] || '100%'"
-          [style.max-width.px]="400"
           [style.height]="section.content['cardStyles']?.['height']"
           [style.left]="section.content['cardStyles']?.['left']"
           [style.top]="section.content['cardStyles']?.['top']"
         >
-        </lib-ui-components-card-premium>
+        </lib-ui-components-card-rutas>
       </div>
 
       <!-- Isolated Mode Overlay -->
-      <lib-editor-card-premium-isolated-mode
+      <lib-editor-card-rutas-isolated-mode
         *ngIf="showIsolatedMode"
         [config]="isolatedConfig!"
         (closed)="showIsolatedMode = false"
         (applied)="onIsolatedModeApplied($event)">
-      </lib-editor-card-premium-isolated-mode>
+      </lib-editor-card-rutas-isolated-mode>
     </div>
   `
 })
-export class EditorCardPremiumSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
+export class EditorCardRutasSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('cardElement', { static: false }) cardElement?: ElementRef;
 
   showIsolatedMode = false;
   isolatedConfig?: IsolatedModeConfig;
+
+  defaultItems = [
+    {
+      routeName: 'Senda de los Pescadores',
+      imageUrl: 'https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?auto=format&fit=crop&q=80',
+      difficulty: 'Media',
+      rating: 4.8,
+      reviews: 45,
+      duration: 3,
+      distance: 8.5,
+      ascent: 250,
+      description: 'Hermosa ruta junto al río con vegetación exuberante.',
+      features: ['Accesible', 'Apto para niños'],
+      link: '#'
+    }
+  ];
 
   ngAfterViewInit() {
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
@@ -95,7 +114,7 @@ export class EditorCardPremiumSectionComponent extends EnhancedBaseEditorSection
   getSectionConfig(): VisualEditingConfig {
     return this.createElementConfig('section', {
       styling: {
-        selectionOutline: '2px solid #6366f1',
+        selectionOutline: '2px solid #10b981',
         hoverEffects: true,
         resizeHandles: true
       }
@@ -105,26 +124,11 @@ export class EditorCardPremiumSectionComponent extends EnhancedBaseEditorSection
   getCardConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
       styling: {
-        selectionOutline: '2px solid #10b981',
+        selectionOutline: '2px solid #22d3ee',
         hoverEffects: !this.platformInfo.isMobile,
         resizeHandles: true
-      },
-      constraints: {
-        lockAspectRatio: false
       }
     });
-  }
-
-  getCardConfigData() {
-    return {
-      title: this.section.content['title'] || 'Premium Title',
-      description: this.section.content['description'] || 'Premium description text.',
-      icon: this.section.content['icon'] || 'heroStar',
-      image: this.section.content['image'] || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80',
-      price: this.section.content['price'] || '',
-      discount: this.section.content['discount'] || '',
-      tooltip: this.section.content['tooltip'] || ''
-    };
   }
 
   handleSectionEvent(event: VisualEditingEvent): void {
@@ -173,16 +177,23 @@ export class EditorCardPremiumSectionComponent extends EnhancedBaseEditorSection
     this.isolatedConfig = {
       sectionId: this.section.id,
       elementId: this.section.id + '_card',
-      type: 'card-premium',
-      content: { ...this.getCardConfigData(), variant: this.getVariant(this.section.id) },
+      type: 'card-rutas',
+      content: {
+        items: this.section.content['items'] || [...this.defaultItems],
+        variant: this.getVariant(this.section.id),
+        backgroundColor: this.section.content['backgroundColor'],
+        textColor: this.section.content['textColor'],
+        accentColor: this.section.content['accentColor'],
+        animation: this.section.content['animation']
+      },
       styles: { ...cardStyles },
       position: {
         x: parseInt(cardStyles.left) || 0,
         y: parseInt(cardStyles.top) || 0
       },
       size: {
-        width: parseInt(cardStyles.width) || 400,
-        height: parseInt(cardStyles.height) || 500
+        width: parseInt(cardStyles.width) || 800,
+        height: parseInt(cardStyles.height) || 450
       }
     };
     this.showIsolatedMode = true;

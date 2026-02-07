@@ -51,6 +51,8 @@ import {
   UIInputComponent,
   UITitleComponent,
   UICardComponent,
+  UICardPremiumComponent,
+  UICardRutasComponent,
   UIDateTimePickerComponent,
   UIChartComponent,
   SmartContainerComponent,
@@ -171,6 +173,8 @@ interface SectionVariant {
     UIInputComponent,
     UITitleComponent,
     UICardComponent,
+    UICardPremiumComponent,
+    UICardRutasComponent,
     UIDateTimePickerComponent,
     UIChartComponent,
     SmartContainerComponent,
@@ -446,6 +450,18 @@ interface SectionVariant {
                   </div>
                   <div *ngSwitchCase="'card'" class="max-w-xs mx-auto p-4">
                     <lib-ui-components-card [variant]="$any(selectedVariant)" title="Tarjeta" description="Descripción de la tarjeta"></lib-ui-components-card>
+                  </div>
+                  <div *ngSwitchCase="'card-premium'" class="max-w-xs mx-auto p-4">
+                    <lib-ui-components-card-premium [variant]="$any(selectedVariant)" [config]="{title:'Premium', description:'Efectos avanzados', icon:'heroStar', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80', price:'$199', discount:'-20%', tooltip:'VIP'}"></lib-ui-components-card-premium>
+                  </div>
+                   <div *ngSwitchCase="'ui-card-premium'" class="max-w-xs mx-auto p-4">
+                    <lib-ui-components-card-premium [variant]="$any(selectedVariant)" [config]="{title:'Premium UI', description:'Atomizado', icon:'heroRocketLaunch', image: '', price:'', discount:'', tooltip:''}"></lib-ui-components-card-premium>
+                  </div>
+                  <div *ngSwitchCase="'card-rutas'" class="max-w-md mx-auto p-4">
+                    <lib-ui-components-card-rutas [variant]="$any(selectedVariant)" [items]="[{routeName:'Ruta Explora', imageUrl:'https://images.unsplash.com/photo-1542332213-9b5a5a3fad35?auto=format&fit=crop&q=80', difficulty:'Media', rating:4.8, reviews:10, duration:3, distance:10, ascent:300, description:'Ruta de prueba', features:[], link:'#'}]"></lib-ui-components-card-rutas>
+                  </div>
+                  <div *ngSwitchCase="'ui-card-rutas'" class="max-w-md mx-auto p-4">
+                    <lib-ui-components-card-rutas [variant]="$any(selectedVariant)" [items]="[{routeName:'Ruta UI', imageUrl:'', difficulty:'Baja', rating:5, reviews:1, duration:1, distance:2, ascent:50, description:'Ruta atomizada', features:[], link:'#'}]"></lib-ui-components-card-rutas>
                   </div>
                   <div *ngSwitchCase="'input'" class="p-4">
                     <lib-ui-components-input [variant]="$any(selectedVariant)" placeholder="Escribe algo..."></lib-ui-components-input>
@@ -1407,12 +1423,48 @@ export class ComponentExplorerComponent implements OnInit {
       libraryType: 'component'
     },
     {
+      type: 'card-premium',
+      label: 'Carta Premium',
+      icon: '💎',
+      variants: ['default', 'primary', 'secondary', 'glowing', 'glass', 'neon', 'cyberpunk', 'luxury', 'nintendo', 'zelda'],
+      description: 'Tarjeta avanzada con efectos visuales premium',
+      category: 'content',
+      libraryType: 'section'
+    },
+    {
+      type: 'card-rutas',
+      label: 'Carta Rutas Nature',
+      icon: '🏔️',
+      variants: ['default', 'glass', 'neon', 'trailblazer'],
+      description: 'Tarjeta especializada para rutas y naturaleza con soporte gestual',
+      category: 'content',
+      libraryType: 'section'
+    },
+    {
       type: 'ui-title',
       label: 'Título',
       icon: '📜',
       variants: ['default', 'primary', 'secondary', 'outline', 'ghost', 'link', 'neon', 'cyberpunk', 'gradient', 'glass', 'retro', 'pulse-gradient', 'holo', 'matrix', 'quantum', 'cybernetic', 'danger', 'success', 'nano', 'stellar', 'phoenix', 'galactic', 'orbitron', 'cartoon', 'luma', 'platform', 'hero', 'coin', 'cloud', 'fire', 'water', 'leaf', 'amber-glow', 'minimal-white', 'mario', 'zelda', 'kirby', 'rayman', 'lum', 'river', 'minimal', 'hex-teal', 'purple-edge', 'rose-radial', 'yellow-pulse', 'green-inset', 'blue-skew', 'orange-dash', 'indigo-dots', 'bubble', 'electoon', 'jungle', 'joycon', 'neomorph', 'glitch', 'portal', 'bioshock', 'super-meat-boy', 'pokemon', 'animal-crossing', 'assassins-creed', 'far-cry', 'watch-dogs', 'bioshock-enhanced', 'lol', 'overwatch', 'minecraft', 'fortnite', 'ice', 'metal', 'energy', 'void', 'cosmic', 'plasma', 'arcade', 'pixel', 'chaos', 'vortex', 'stone', 'donkeykong', 'supermeatboy', 'aqua', 'vaporwave', 'aurora', 'trailblazer', 'elegant', 'vintage', 'luxury', 'rockstar', 'ubisoft'],
       description: 'Títulos editables con nivel (h1-h6), alineación y animación',
       category: 'content',
+      libraryType: 'component'
+    },
+    {
+      type: 'ui-card-premium',
+      label: 'Carta Premium UI',
+      icon: '💎',
+      variants: ['default', 'primary', 'secondary', 'glowing', 'glass', 'neon', 'cyberpunk', 'luxury', 'nintendo', 'zelda'],
+      description: 'Cápsula premium atomizada',
+      category: 'interactive',
+      libraryType: 'component'
+    },
+    {
+      type: 'ui-card-rutas',
+      label: 'Carta Rutas UI',
+      icon: '🏔️',
+      variants: ['default', 'glass', 'neon', 'trailblazer'],
+      description: 'Cápsula de rutas atomizada',
+      category: 'interactive',
       libraryType: 'component'
     },
     {
