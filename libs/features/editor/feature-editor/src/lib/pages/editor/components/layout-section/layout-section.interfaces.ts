@@ -208,7 +208,7 @@ export function createInitialSlots(layoutType: LayoutType): SlotConfig[] {
   if (!layout) return [];
 
   return layout.slotNames.map((name, index) => ({
-    id: `slot_${Date.now()}_${index}`,
+    id: `slot_${Date.now()}_${index}_${Math.random().toString(36).substring(2, 9)}`,
     componentType: 'empty' as SlotComponentType,
     content: {},
     styles: {}

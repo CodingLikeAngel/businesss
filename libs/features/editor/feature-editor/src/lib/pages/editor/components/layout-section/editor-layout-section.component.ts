@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, ChangeDetectorRef, inject, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
@@ -158,11 +158,9 @@ import {
                 <lib-ui-components-card
                   *ngSwitchCase="'ui-card'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'glass')"
+                  [title]="slot.content?.['title'] || 'Título'"
+                  [description]="slot.content?.['description'] || 'Descripción...'"
                   class="slot-card">
-                  <div class="p-4">
-                    <h3>{{ slot.content?.['title'] || 'Título de Tarjeta' }}</h3>
-                    <p>{{ slot.content?.['description'] || 'Descripción de la tarjeta...' }}</p>
-                  </div>
                 </lib-ui-components-card>
 
                 <!-- UI CARD ANIMATED -->
@@ -651,7 +649,7 @@ import {
     .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4); }
   `]
 })
-export class EditorLayoutSectionComponent extends BaseEditorSectionComponent implements OnInit, OnDestroy {
+export class EditorLayoutSectionComponent extends BaseEditorSectionComponent implements OnInit, OnDestroy, OnChanges {
   private store = inject(Store);
   private cdr = inject(ChangeDetectorRef);
   private destroy$ = new Subject<void>();
@@ -690,14 +688,29 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.loadConfigFromSection();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['section'] && !changes['section'].firstChange) {
+      this.loadConfigFromSection();
+    }
+  }
+
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
   private loadConfigFromSection() {
-    if (this.section.content?.['layoutConfig']) {
-      this.config = { ...createDefaultLayoutConfig(), ...this.section.content['layoutConfig'] };
+    if (this.section?.content?.['layoutConfig']) {
+      const rawConfig = this.section.content['layoutConfig'];
+      this.config = {
+        ...createDefaultLayoutConfig(),
+        ...rawConfig,
+        slots: (rawConfig.slots || []).map((s: any) => ({
+          ...s,
+          content: s.content ? { ...s.content } : {},
+          styles: s.styles ? { ...s.styles } : {}
+        }))
+      };
     } else {
       this.config = createDefaultLayoutConfig();
     }
@@ -743,11 +756,18 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
     // Preserve existing slot content where possible
     for (let i = 0; i < Math.min(oldSlots.length, newSlots.length); i++) {
-      newSlots[i] = { ...oldSlots[i], id: newSlots[i].id };
+      newSlots[i] = { 
+        ...oldSlots[i], 
+        id: newSlots[i].id // Keep the type and content but use new ID if needed or keep it
+      };
     }
 
-    this.config.layoutType = type;
-    this.config.slots = newSlots;
+    this.config = {
+      ...this.config,
+      layoutType: type,
+      slots: newSlots
+    };
+    
     this.persistConfig();
     this.closeLayoutPicker();
   }
@@ -779,10 +799,18 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   assignComponent(comp: ComponentCatalogItem) {
     if (this.editingSlotIndex < 0 || this.editingSlotIndex >= this.config.slots.length) return;
 
-    const slot = this.config.slots[this.editingSlotIndex];
-    slot.componentType = comp.type;
-    slot.componentVariant = comp.defaultVariant || '';
-    slot.content = { ...(comp.defaultContent || {}) };
+    const newSlots = [...this.config.slots];
+    newSlots[this.editingSlotIndex] = {
+      ...newSlots[this.editingSlotIndex],
+      componentType: comp.type,
+      componentVariant: comp.defaultVariant || '',
+      content: { ...(comp.defaultContent || {}) }
+    };
+
+    this.config = {
+      ...this.config,
+      slots: newSlots
+    };
 
     this.persistConfig();
     this.closeComponentPicker();
@@ -792,12 +820,18 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     event.stopPropagation();
     if (index < 0 || index >= this.config.slots.length) return;
 
-    this.config.slots[index] = {
-      ...this.config.slots[index],
+    const newSlots = [...this.config.slots];
+    newSlots[index] = {
+      ...newSlots[index],
       componentType: 'empty',
       componentVariant: undefined,
       content: {},
       styles: {}
+    };
+
+    this.config = {
+      ...this.config,
+      slots: newSlots
     };
 
     this.persistConfig();
@@ -840,7 +874,14 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   applySlotConfig() {
     if (!this.editingSlot || this.editingSlotIndex < 0) return;
 
-    this.config.slots[this.editingSlotIndex] = { ...this.editingSlot };
+    const newSlots = [...this.config.slots];
+    newSlots[this.editingSlotIndex] = { ...this.editingSlot };
+
+    this.config = {
+      ...this.config,
+      slots: newSlots
+    };
+
     this.persistConfig();
     this.closeSlotConfig();
   }
