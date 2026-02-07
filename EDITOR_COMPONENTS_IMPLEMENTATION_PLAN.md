@@ -51,86 +51,54 @@ Composiciones complejas que ocupan un bloque completo de la página.
 
 ### 🛠️ UI COMPONENTS (Atoms) - En Proceso / Faltantes
 
-| Componente           | Estado Editor   | Priority |
-| :------------------- | :-------------- | :------- |
-| **button**           | ✅ Wrapper Base | High     |
-| **title**            | ✅ Wrapper Base | High     |
-| **image**            | ✅ Wrapper Base | High     |
-| **chip**             | ✅ Wrapper Base | Medium   |
-| **spinner**          | ✅ Wrapper Base | Low      |
-| **breadcrumbs**      | ✅ Wrapper Base | Medium   |
-| **card (Generic)**   | ✅ Wrapper Base | High     |
-| **input**            | ✅ Wrapper Base | High     |
-| **accordion**        | ✅ Wrapper Base | Medium   |
-| **tabs**             | ✅ Wrapper Base | Medium   |
-| **card-animated**    | ✅ Implementado | High     |
-| **card-product**     | ✅ Implementado | High     |
-| **card-testimonial** | ✅ Implementado | High     |
-| **card-premium**     | 🛠️ En Proceso   | High     |
-| **card-rutas**       | 🛠️ En Proceso   | Medium   |
-| **date-time-picker** | ❌ Faltante     | Medium   |
-| **tooltip**          | ❌ Faltante     | Low      |
-| **modal**            | ❌ Faltante     | Medium   |
-| **chart**            | ✅ Wrapper Base | Medium   |
+| Componente           | Estado Editor                     | Priority |
+| :------------------- | :-------------------------------- | :------- |
+| **button**           | ✅ Premium Isolated (Grads/Hover) | High     |
+| **title**            | ✅ Isolated Mode (Basic)          | High     |
+| **image**            | ✅ Isolated Mode                  | High     |
+| **accordion**        | ✅ Isolated Mode                  | Medium   |
+| **video**            | ✅ Isolated Mode                  | Medium   |
+| **showcase**         | ✅ Isolated Mode                  | Medium   |
+| **card-animated**    | ✅ Implementado                   | High     |
+| **card-product**     | ✅ Implementado                   | High     |
+| **card-testimonial** | ✅ Implementado                   | High     |
+| **chip**             | ✅ Wrapper Base                   | Medium   |
+| **spinner**          | ✅ Wrapper Base                   | Low      |
+| **card-premium**     | 🛠️ En Proceso                     | High     |
+| **card-rutas**       | 🛠️ En Proceso                     | Medium   |
+| **visual-spacer**    | 🚀 Siguiente Paso                 | High     |
 
 ---
 
-## 📝 Plan de Acción Inmediato
+## 📝 Plan de Acción Inmediato (Actualizado 07 Feb 2026)
 
-### FASE 1: Interfaz del Explorador (Dual-Tab)
+### FASE 4: Componentes de Utilidad & Diseño Avanzado
 
-**Archivo**: `libs/shared-components/src/lib/shared-components/variant-selector/component-explorer.component.ts`
+1.  **Visual Spacer Component**:
 
-- [ ] Añadir selector de pestañas (Tabs: SECCIONES | COMPONENTES).
-- [ ] Implementar propiedad `libraryType` en el modelo `SectionVariant`.
-- [ ] Filtrar la cuadrícula según la pestaña activa.
-- [ ] Mejorar la categorización secundaria (Contenido, Comercio, etc.).
+    - Crear `EditorSpacerSectionComponent`.
+    - Implementar un "spacer interactivo" que permita ajustar el margen entre secciones mediante drag-and-resize vertical.
+    - Soportar fondos decorativos (sutiles) o vacíos.
 
-### FASE 2: Completar Wrappers Atomizados
+2.  **Google Fonts Dynamic Loader (Title Editor)**:
 
-Crear los wrappers faltantes para que todos los elementos UI sean editables:
+    - Integrar un buscador de fuentes en el `EditorTitleIsolatedModeComponent`.
+    - Carga dinámica de fuentes seleccionadas mediante `WebFontLoader` o inyección de CSS.
+    - Persistencia de la familia tipográfica en el estado de la sección.
 
-1.  **EditorCardAnimatedSection**
-2.  **EditorCardPremiumSection**
-3.  **EditorCardRutasSection**
-4.  **EditorModalSection** (Permitir editar el contenido del modal como una sección)
-
-### FASE 3: Enriquecer Property Editing
-
-Asegurar que los componentes atomizados tengan todos sus inputs mapeados en el editor:
-
-- Botones: Iconos leading/trailing, tamaños, estados de carga.
-- Títulos: Alineación fluid, gradientes temáticos.
-- Cards: Configuración de sombra, bordes y hover-effects.
-
----
-
-## � Formato del Modelo en el Explorador
-
-Para soportar las dos pestañas, el objeto de configuración en `component-explorer.component.ts` debe ampliarse:
-
-```typescript
-{
-  type: 'button',
-  label: 'Botón UI',
-  icon: '🔘',
-  variants: ['primary', 'glass', 'neon'],
-  category: 'interactive',
-  libraryType: 'component' // <--- NUEVO: Distingue pestaña
-}
-```
+3.  **Refactor de Cards Premium**:
+    - Finalizar los componentes de Card Premium y Rutas con sus respectivos modos aislados.
 
 ---
 
 ## 📊 Checklist de Calidad por Componente
 
-- [ ] Soporta herencia de ADN Global (Architectural Bridge).
-- [ ] Editable visualmente (Drag/Resize si aplica).
-- [ ] Inputs mapeados en el panel lateral.
-- [ ] Preview funcional en el carrusel de variantes.
-- [ ] Responsive design nativo integrado.
+- [x] Soporta herencia de ADN Global (Architectural Bridge).
+- [x] Modo Aislado Premium (Isolated Mode).
+- [x] Efectos de Hover y Estados (Interactividad).
+- [x] Responsive design nativo integrado.
 
 ---
 
-**Última actualización**: 25 Ene 2026
+**Última actualización**: 07 Feb 2026
 **Responsable**: Antigravity AI
