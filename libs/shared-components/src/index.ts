@@ -42,6 +42,11 @@ export * from './lib/shared-components/variant-selector/steps-isolated-mode/edit
 export * from './lib/shared-components/variant-selector/reservation-isolated-mode/editor-reservation-isolated-mode.component';
 export * from './lib/shared-components/variant-selector/promotions-isolated-mode/editor-promotions-isolated-mode.component';
 
+// Industry-Specific Isolated Mode Components
+export * from './lib/shared-components/variant-selector/restaurant-isolated-mode';
+export * from './lib/shared-components/variant-selector/gym-isolated-mode';
+export * from './lib/shared-components/variant-selector/spa-isolated-mode';
+
 // Isolated Mode Integration Service
 export * from './lib/shared-components/variant-selector/isolated-mode-integration.service';
 export { IsolatedModeComponentType, ComponentRegistrationConfig, RegisteredComponent, IsolatedModeSession, IsolatedModeDiagnostics } from './lib/shared-components/variant-selector/isolated-mode-integration.service';

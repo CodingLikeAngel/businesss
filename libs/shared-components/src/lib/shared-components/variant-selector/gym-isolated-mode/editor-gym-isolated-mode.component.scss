@@ -1,0 +1,296 @@
+@use '../variables.scss' as *;
+
+/* Gym Isolated Mode Styles */
+.preview-gym {
+  padding: 2rem;
+  min-height: 100%;
+  
+  .preview-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    
+    .preview-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: inherit;
+    }
+    
+    .preview-tagline {
+      font-size: 1.25rem;
+      opacity: 0.9;
+      margin-bottom: 0.5rem;
+      color: inherit;
+    }
+    
+    .preview-description {
+      font-size: 1rem;
+      opacity: 0.7;
+      color: inherit;
+    }
+  }
+  
+  .preview-section-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: inherit;
+  }
+  
+  .preview-classes-section {
+    margin-bottom: 2rem;
+    
+    .preview-classes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    
+    .preview-class-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      text-align: center;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+      
+      .preview-class-icon {
+        font-size: 2.5rem;
+        margin-bottom: 0.75rem;
+      }
+      
+      h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: inherit;
+      }
+      
+      .preview-class-desc {
+        font-size: 0.85rem;
+        opacity: 0.8;
+        margin-bottom: 0.75rem;
+        color: inherit;
+      }
+      
+      .preview-class-meta {
+        display: flex;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-bottom: 0.5rem;
+        font-size: 0.8rem;
+        
+        span {
+          padding: 0.25rem 0.5rem;
+          border-radius: 4px;
+          background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .intensity-baja {
+          background: rgba(34, 197, 94, 0.2);
+          color: #22c55e;
+        }
+        
+        .intensity-media {
+          background: rgba(234, 179, 8, 0.2);
+          color: #eab308;
+        }
+        
+        .intensity-alta {
+          background: rgba(239, 68, 68, 0.2);
+          color: #ef4444;
+        }
+      }
+      
+      .preview-class-schedule {
+        font-size: 0.8rem;
+        opacity: 0.7;
+        color: inherit;
+      }
+    }
+  }
+  
+  .preview-plans-section {
+    .preview-plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+    }
+    
+    .preview-plan-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      text-align: center;
+      position: relative;
+      transition: all 0.2s ease;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+        transform: translateY(-2px);
+      }
+      
+      &.popular {
+        border-color: #ef4444;
+        background: rgba(239, 68, 68, 0.1);
+      }
+      
+      .popular-badge {
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: #ef4444;
+        color: white;
+        font-size: 0.7rem;
+        padding: 0.25rem 0.75rem;
+        border-radius: 9999px;
+        font-weight: 600;
+      }
+      
+      h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        color: inherit;
+      }
+      
+      .preview-plan-price {
+        font-size: 2rem;
+        font-weight: 700;
+        color: #ef4444;
+        margin-bottom: 1rem;
+      }
+      
+      .preview-plan-features {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: left;
+        
+        li {
+          font-size: 0.85rem;
+          padding: 0.35rem 0;
+          color: inherit;
+          opacity: 0.9;
+          
+          &:before {
+            content: '✓';
+            margin-right: 0.5rem;
+            color: #22c55e;
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Classes List Styles */
+.classes-list {
+  .class-edit {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    
+    .class-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      
+      .class-number {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      
+      .remove-btn {
+        background: rgba(239, 68, 68, 0.2);
+        border: none;
+        color: #ef4444;
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s ease;
+        
+        &:hover {
+          background: rgba(239, 68, 68, 0.3);
+        }
+      }
+    }
+    
+    .class-row {
+      display: flex;
+      gap: 0.5rem;
+      
+      .flex-1 {
+        flex: 1;
+      }
+    }
+  }
+}
+
+/* Plans List Styles */
+.plans-list {
+  .plan-edit {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 0.5rem;
+    padding: 0.75rem;
+    margin-bottom: 0.75rem;
+    
+    .plan-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      
+      .plan-number {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.5);
+      }
+      
+      .remove-btn {
+        background: rgba(239, 68, 68, 0.2);
+        border: none;
+        color: #ef4444;
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 1rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.15s ease;
+        
+        &:hover {
+          background: rgba(239, 68, 68, 0.3);
+        }
+      }
+    }
+    
+    .plan-row {
+      display: flex;
+      gap: 0.5rem;
+      
+      .flex-1 {
+        flex: 1;
+      }
+    }
+  }
+}
