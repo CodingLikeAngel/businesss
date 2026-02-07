@@ -28,3 +28,5 @@ export * from './lib/shared-components/variant-selector/element-group.directive'
 
 // Isolated Mode Components
 export * from './lib/shared-components/variant-selector/hero-isolated-mode/editor-hero-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/features-isolated-mode/editor-features-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/testimonials-isolated-mode/editor-testimonials-isolated-mode.component';
