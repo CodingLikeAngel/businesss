@@ -914,9 +914,24 @@
         [globalVariant]="globalVariant">
       </lib-editor-draggable-box-section>
 
+      <lib-editor-draggable-box-section *ngSwitchCase="'ui-draggable-box'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant">
+      </lib-editor-draggable-box-section>
+
 
       <!-- DRAGGABLE BOX 1 -->
       <lib-editor-draggable-box-1-section *ngSwitchCase="'draggable-box-1'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-draggable-box-1-section>
+
+      <lib-editor-draggable-box-1-section *ngSwitchCase="'ui-draggable-box-1'"
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
@@ -935,6 +950,15 @@
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-draggable-box-2-section>
 
+      <lib-editor-draggable-box-2-section *ngSwitchCase="'ui-draggable-box-2'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-draggable-box-2-section>
+
       <!-- DRAGGABLE BOX 3 -->
       <lib-editor-draggable-box-3-section *ngSwitchCase="'draggable-box-3'"
         [section]="section"
@@ -944,6 +968,186 @@
         (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-draggable-box-3-section>
+
+      <lib-editor-draggable-box-3-section *ngSwitchCase="'ui-draggable-box-3'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-draggable-box-3-section>
+
+      <!-- NAV BAR 1 -->
+      <lib-editor-nav-bar-1-section *ngSwitchCase="'nav-bar-1'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-nav-bar-1-section>
+
+      <lib-editor-nav-bar-1-section *ngSwitchCase="'ui-nav-bar-1'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-nav-bar-1-section>
+
+      <!-- NAV BAR 2 -->
+      <lib-editor-nav-bar-2-section *ngSwitchCase="'nav-bar-2'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-nav-bar-2-section>
+
+      <lib-editor-nav-bar-2-section *ngSwitchCase="'ui-nav-bar-2'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-nav-bar-2-section>
+
+      <!-- NAV BAR 3 -->
+      <lib-editor-nav-bar-3-section *ngSwitchCase="'nav-bar-3'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-nav-bar-3-section>
+
+      <lib-editor-nav-bar-3-section *ngSwitchCase="'ui-nav-bar-3'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-nav-bar-3-section>
+
+      <!-- TOOLTIP 1 -->
+      <lib-editor-tooltip-1-section *ngSwitchCase="'tooltip-1'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-tooltip-1-section>
+
+      <lib-editor-tooltip-1-section *ngSwitchCase="'ui-tooltip-1'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-tooltip-1-section>
+
+      <!-- TOOLTIP 2 -->
+      <lib-editor-tooltip-2-section *ngSwitchCase="'tooltip-2'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-tooltip-2-section>
+
+      <lib-editor-tooltip-2-section *ngSwitchCase="'ui-tooltip-2'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-tooltip-2-section>
+
+      <!-- TOOLTIP 3 -->
+      <lib-editor-tooltip-3-section *ngSwitchCase="'tooltip-3'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-tooltip-3-section>
+
+      <lib-editor-tooltip-3-section *ngSwitchCase="'ui-tooltip-3'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-tooltip-3-section>
+
+      <!-- MODAL 1 -->
+      <lib-editor-modal-1-section *ngSwitchCase="'modal-1'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-modal-1-section>
+
+      <lib-editor-modal-1-section *ngSwitchCase="'ui-modal-1'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-modal-1-section>
+
+      <!-- MODAL 2 -->
+      <lib-editor-modal-2-section *ngSwitchCase="'modal-2'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-modal-2-section>
+
+      <lib-editor-modal-2-section *ngSwitchCase="'ui-modal-2'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-modal-2-section>
+
+      <!-- MODAL 3 -->
+      <lib-editor-modal-3-section *ngSwitchCase="'modal-3'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-modal-3-section>
+
+      <lib-editor-modal-3-section *ngSwitchCase="'ui-modal-3'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)">
+      </lib-editor-modal-3-section>
 
 
       <!-- CHART -->

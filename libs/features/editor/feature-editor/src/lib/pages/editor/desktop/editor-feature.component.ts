@@ -56,6 +56,15 @@ import { EditorShapeSectionComponent } from '../components/shape/editor-shape-se
 import { EditorVideoSectionComponent } from '../components/video/editor-video-section.component';
 import { EditorMapSectionComponent } from '../components/map/editor-map-section.component';
 import { EditorSpacerSectionComponent } from '../components/spacer/editor-spacer-section.component';
+import { EditorNavBar1SectionComponent } from '../components/nav-bar/editor-nav-bar-1-section.component';
+import { EditorNavBar2SectionComponent } from '../components/nav-bar/editor-nav-bar-2-section.component';
+import { EditorNavBar3SectionComponent } from '../components/nav-bar/editor-nav-bar-3-section.component';
+import { EditorTooltip1SectionComponent } from '../components/tooltip/editor-tooltip-1-section.component';
+import { EditorTooltip2SectionComponent } from '../components/tooltip/editor-tooltip-2-section.component';
+import { EditorTooltip3SectionComponent } from '../components/tooltip/editor-tooltip-3-section.component';
+import { EditorModal1SectionComponent } from '../components/modal/editor-modal-1-section.component';
+import { EditorModal2SectionComponent } from '../components/modal/editor-modal-2-section.component';
+import { EditorModal3SectionComponent } from '../components/modal/editor-modal-3-section.component';
 import { ShortcutsGuideComponent } from '../components/shortcuts-guide/shortcuts-guide.component';
 
 
@@ -118,6 +127,15 @@ import { ShortcutsGuideComponent } from '../components/shortcuts-guide/shortcuts
     EditorVideoSectionComponent,
     EditorMapSectionComponent,
     EditorSpacerSectionComponent,
+    EditorNavBar1SectionComponent,
+    EditorNavBar2SectionComponent,
+    EditorNavBar3SectionComponent,
+    EditorTooltip1SectionComponent,
+    EditorTooltip2SectionComponent,
+    EditorTooltip3SectionComponent,
+    EditorModal1SectionComponent,
+    EditorModal2SectionComponent,
+    EditorModal3SectionComponent,
     ShortcutsGuideComponent
   ],
 
