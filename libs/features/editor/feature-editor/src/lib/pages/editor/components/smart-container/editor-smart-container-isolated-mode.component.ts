@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject } fro
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
+import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SmartContainerComponent, SmartContainerConfig } from '@negocio/ui-components';
 import { AppState } from '../../../../store/state/app.state';
 import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.selectors';
@@ -12,7 +13,7 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 @Component({
   selector: 'lib-editor-smart-container-isolated-mode',
   standalone: true,
-  imports: [CommonModule, FormsModule, SmartContainerComponent],
+  imports: [CommonModule, FormsModule, DragDropModule, SmartContainerComponent],
   template: `
     <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
@@ -33,12 +34,37 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
           <div class="controls-sidebar">
             <div class="sidebar-scroll-content">
               
+              <!-- STRUCTURE SECTION (Drag & Drop) -->
+              <div class="sidebar-section">
+                <div class="section-header">
+                  <span class="section-icon">🏗️</span>
+                  <h4>STRUCTURE & ORDER</h4>
+                </div>
+
+                <div class="layer-list" cdkDropList (cdkDropListDropped)="drop($event)">
+                  <div *ngIf="editableElements.length === 0" class="empty-state">
+                    No elements yet
+                  </div>
+                  
+                  <div *ngFor="let el of editableElements; let i = index" class="layer-item" cdkDrag>
+                    <div class="layer-handle" cdkDragHandle>
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 8h16M4 16h16" stroke-linecap="round"/>
+                      </svg>
+                    </div>
+                    <span class="layer-name">{{ el.name || el.type || 'Element ' + (i+1) }}</span>
+                    <span class="layer-type">{{ el.type }}</span>
+                  </div>
+                </div>
+                
+                <p class="text-[10px] text-slate-500 mt-2 italic">Drag items to reorder logic flow.</p>
+              </div>
+
               <!-- LAYOUT SECTION -->
               <div class="sidebar-section">
                 <div class="section-header">
                   <span class="section-icon">📐</span>
                   <h4>LAYOUT & DISPLAY</h4>
-                </div>
                 
                 <div class="control-group">
                   <label>Display Type</label>
@@ -145,11 +171,18 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                   style="display: block; width: 100%; height: 100%;">
                   
                   <!-- Preview content inside the container -->
-                  <div class="w-full h-full flex items-center justify-center text-slate-500 border-2 border-dashed border-slate-700 rounded-lg">
+                  <div *ngIf="editableElements.length === 0" class="w-full h-full flex items-center justify-center text-slate-500 border-2 border-dashed border-slate-700 rounded-lg">
                     <div class="text-center">
                       <p class="text-xs font-bold uppercase tracking-widest">Container Preview</p>
                       <p class="text-[10px] opacity-60 mt-1">Width: {{currentSize.width}}px | Height: {{currentSize.height}}px</p>
                     </div>
+                  </div>
+
+                  <!-- Blocks Preview -->
+                  <div *ngIf="editableElements.length > 0" class="w-full h-full relative" [style.display]="editableConfig.display" [style.flex-direction]="editableConfig.flexDirection" [style.justify-content]="editableConfig.justifyContent" [style.align-items]="editableConfig.alignItems" [style.gap]="editableConfig.gap">
+                     <div *ngFor="let el of editableElements" class="preview-block" [title]="el.type">
+                        <span class="text-[10px] font-bold">{{ el.type }}</span>
+                     </div>
                   </div>
                   
                 </lib-smart-container>
@@ -162,6 +195,8 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
               <div class="dock-item"><span class="label">DISPLAY</span><span class="value uppercase text-indigo-400">{{ editableConfig.display }}</span></div>
               <div class="dock-divider"></div>
               <div class="dock-item"><span class="label">SIZE</span><span class="value">{{ currentSize.width }}x{{ currentSize.height }}</span></div>
+              <div class="dock-divider"></div>
+               <div class="dock-item"><span class="label">ITEMS</span><span class="value">{{ editableElements.length }}</span></div>
             </div>
           </div>
         </div>
@@ -262,6 +297,33 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
     .btn-clean.secondary { background: transparent; color: #64748b; }
     .btn-clean:hover { transform: translateY(-2px); filter: brightness(1.1); }
     .btn-clean.active { transform: translateY(0); opacity: 0.8; }
+
+    /* Layer List Styles */
+    .layer-list { display: flex; flex-direction: column; gap: 8px; }
+    .empty-state { padding: 1rem; text-align: center; color: #475569; border: 1px dashed rgba(255,255,255,0.1); border-radius: 8px; font-size: 11px; }
+    .layer-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; cursor: grab; transition: all 0.2s; }
+    .layer-item:hover { background: rgba(255,255,255,0.06); border-color: rgba(99, 102, 241, 0.3); }
+    .layer-item:active { cursor: grabbing; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+    .layer-handle { color: #64748b; display: flex; align-items: center; }
+    .layer-name { color: #e2e8f0; font-size: 12px; font-weight: 600; flex: 1; }
+    .layer-type { color: #6366f1; font-size: 9px; font-weight: 800; text-transform: uppercase; background: rgba(99, 102, 241, 0.1); padding: 2px 6px; border-radius: 4px; }
+    .cdk-drag-preview { box-sizing: border-box; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); background: #1e293b; color: white; padding: 10px; display: flex; align-items: center; gap: 10px; }
+    .cdk-drag-placeholder { opacity: 0; }
+    .cdk-drag-animating { transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); }
+    .layer-list.cdk-drop-list-dragging .layer-item:not(.cdk-drag-placeholder) { transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); }
+
+    .preview-block {
+      background: rgba(99, 102, 241, 0.2);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      color: white;
+      padding: 0.5rem;
+      border-radius: 6px;
+      min-width: 50px;
+      min-height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   `]
 })
 export class EditorSmartContainerIsolatedModeComponent implements OnInit, OnDestroy {
@@ -270,6 +332,7 @@ export class EditorSmartContainerIsolatedModeComponent implements OnInit, OnDest
   @Output() public applied = new EventEmitter<IsolatedModeConfig>();
 
   public editableConfig: SmartContainerConfig = {};
+  public editableElements: any[] = [];
   public currentSize = { width: 0, height: 0 };
   
   private isResizing = false;
@@ -280,6 +343,12 @@ export class EditorSmartContainerIsolatedModeComponent implements OnInit, OnDest
 
   ngOnInit() {
     this.editableConfig = { ...this.config.content };
+    // Extract elements if passed in content, otherwise init empty
+    if (this.config.content['elements']) {
+        this.editableElements = [...this.config.content['elements']];
+        delete (this.editableConfig as any)['elements'];
+    }
+    
     this.currentSize = { ...this.config.size };
 
     window.addEventListener('mousemove', this.onMouseMove);
@@ -289,6 +358,10 @@ export class EditorSmartContainerIsolatedModeComponent implements OnInit, OnDest
   ngOnDestroy() {
     window.removeEventListener('mousemove', this.onMouseMove);
     window.removeEventListener('mouseup', this.onMouseUp);
+  }
+
+  public drop(event: CdkDragDrop<string[]>) {
+    moveItemInArray(this.editableElements, event.previousIndex, event.currentIndex);
   }
 
   public startResize(e: MouseEvent) {
@@ -318,7 +391,7 @@ export class EditorSmartContainerIsolatedModeComponent implements OnInit, OnDest
   public apply() {
     this.applied.emit({
       ...this.config,
-      content: { ...this.editableConfig },
+      content: { ...this.editableConfig, elements: this.editableElements },
       styles: {
         ...this.config.styles,
         width: this.currentSize.width + 'px',

@@ -79,12 +79,12 @@ Composiciones complejas que ocupan un bloque completo de la página.
 - **Tipografía Google Fonts**: Integrado en el editor de títulos con carga dinámica y controles de espaciado.
 - **Refactor de Botones**: Soporte para degradados y efectos hover avanzados.
 
-### FASE 5: Refactor de Cards & Secciones Dinámicas
+### ✅ COMPLETADO RECIENTEMENTE
 
 1.  **Refactor de Cards Premium**:
-    - Finalizar los componentes de Card Premium y Rutas con sus respectivos modos aislados.
+    - ✅ Finalizado: Componentes de Card Premium y Rutas con sus respectivos modos aislados y herencia global.
 2.  **Sistema de Drag & Drop entre Secciones**:
-    - Permitir reordenar componentes UI dentro de un `smart-container` mediante interacción visual.
+    - ✅ Implementado: Reordenación de componentes UI dentro de un `smart-container` mediante panel de estructura visual.
 
 ---
 
