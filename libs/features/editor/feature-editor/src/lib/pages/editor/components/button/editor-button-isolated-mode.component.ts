@@ -48,7 +48,6 @@ export interface UndoRedoState {
           
           <div class="header-actions">
             <div class="action-group">
-            <div class="action-group">
               <button class="icon-btn" (click)="showGrid = !showGrid" [class.active]="showGrid" title="Cuadrícula (G)">
                 <span class="icon">#</span>
               </button>
@@ -453,10 +452,17 @@ export interface UndoRedoState {
       cursor: pointer;
     }
 
-    .isolated-mode-body { flex: 1; display: flex; overflow: hidden; }
+    .isolated-mode-body {
+      flex: 1;
+      display: flex;
+      flex-direction: row; /* Explicit row */
+      overflow: hidden;
+    }
 
     .controls-sidebar {
       width: 320px;
+      min-width: 320px; /* Safety */
+      flex-shrink: 0; /* Prevent shrinking */
       background: #020617;
       border-right: 1px solid rgba(255, 255, 255, 0.08); 
       overflow-y: auto;

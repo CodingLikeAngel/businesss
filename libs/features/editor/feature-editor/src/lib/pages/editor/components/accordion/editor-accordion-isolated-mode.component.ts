@@ -142,7 +142,7 @@ export interface UndoRedoState {
                 <p class="variant-hint" *ngIf="!editableContent.variant">
                   Heredando: {{ config.content['globalVariant'] || 'glass' }}
                 </p>
-              </div> <!-- Close first section -->
+              </div></div> <!-- Close control-group AND first sidebar-section -->
               
               <!-- SECCIÓN: ITEMS DEL ACORDEÓN -->
               <div class="sidebar-section no-border">
@@ -434,12 +434,15 @@ export interface UndoRedoState {
     .isolated-mode-body {
       flex: 1;
       display: flex;
+      flex-direction: row; /* Explicit row */
       overflow: hidden;
     }
 
     /* SIDEBAR */
     .controls-sidebar {
       width: var(--sidebar-width);
+      min-width: var(--sidebar-width); /* Safety */
+      flex-shrink: 0; /* Prevent shrinking */
       background: #020617;
       border-right: 1px solid var(--border-color);
       display: flex;
