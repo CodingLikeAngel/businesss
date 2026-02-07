@@ -26,22 +26,37 @@ Integración de los "Big 5" y Isolated Mode para:
 - [x] **Draggable Box**: (Completado) Referencia de robustez.
 - [x] **Accordion (Suite completa)**: (Completado) Soporte para V1, V2, V3 con auto-expansión.
 - [x] **Buttons (Universal)**: (Completado) Edición de bordes, iconos y modo aislado.
-- [x] **Cards / Pricing Tables**: (En progreso) Control de elevación y posicionamiento dinámico.
+- [x] **Cards / Pricing Tables**: (Completado) Control de elevación y posicionamiento dinámico.
+- [x] **Smart Images**: (Completado) Filtros, object-fit y foco dinámico.
 
 ### 🖼 Fase 2: Componentes Multimedia & Formas (Semana 2)
 
 - [x] **Multimedia Pro**: Refactorización de `EditorImageSectionComponent` con soporte para posicionamiento libre y expansión automática.
-- [x] **UIShapeComponent**: Creación de componente base para formas abstractas SVG integrada en el editor.
-- [x] **Video Backgrounds**: Control de opacidad y overlays de color.
-- [x] **Google Maps Interactivo**: API real integrada con selección de puntos.
+- [x] **UIShapeComponent**: Creación de componente base para formas abstractas SVG integrada en el editor + Isolated Mode.
+- [x] **Video Backgrounds**: Control de opacidad y overlays de color + Isolated Mode (En progreso).
+- [x] **Google Maps Interactivo**: API real integrada con selección de puntos + Isolated Mode (En progreso).
 - [x] **Icon / Badge**: Selector de biblioteca de íconos integrado en Isolated Mode.
-- [ ] **Shapes / Dividers**: Formas geométricas editables para fondos.
 
-### 🏗 Fase 3: Layouts & Secciones Complejas (Semana 3)
+### 🧩 Fase 3: Átomos Avanzados & Tipografía (Semana 3)
 
-- [ ] **Hero Sections**: Gestión de backgrounds paralaje y alineación de contenido.
-- [ ] **Feature Grids**: Reordenación de items vía Drag & Drop.
-- [ ] **Testimonials / Sliders**: Configuración de animaciones y navegación.
+- [ ] **Titles & Text**: Isolated Mode para tipografía avanzada, gradientes de texto y sombras.
+- [ ] **Showcase / Feature Items**: Edición granular de íconos, títulos y descripciones en malla.
+- [ ] **Lists & Steps**: Reordenación drag-and-drop de elementos de lista.
+- [ ] **Charts & Statistics**: Editor visual de datos y tipos de gráficos (Bar, Line, Pie).
+- [ ] **Breadcrumbs & Navigation**: Gestión de rutas y estilos de navegación secundaria.
+
+### 🏗 Fase 4: Layouts & Secciones Complejas (Semana 4)
+
+- [ ] **Hero Sections Pro**: Gestión de backgrounds paralaje, mezcla de capas y video-hero.
+- [ ] **Contact / Reservation Forms**: Constructor de formularios visual con validaciones dinámicas.
+- [ ] **Tabs & Interaction Elements**: Edición de estados (Active, Hover) y transiciones.
+- [ ] **Portfolio / Gallery Grid**: Gestión de albúms y efectos de lightroom.
+
+### 🚀 Fase 5: Ecosistema & Inteligencia (Futuro)
+
+- [ ] **Smart Container integration**: Layouts anidados con auto-ajuste de flujo (Flex/Grid).
+- [ ] **Global Theme Sync**: Propagación de estilos desde modo aislado a toda la página.
+- [ ] **AI Style Generator**: Sugerencia de variantes basadas en el contenido del componente.
 
 ---
 
@@ -49,57 +64,40 @@ Integración de los "Big 5" y Isolated Mode para:
 
 ### 1. Robustez Estructural (Prevención de Overflows)
 
-Todo componente de sección debe implementar el sistema de **Autogestión de Altura**:
+Todo componente de sección debe implementar el sistema de **Autogestión de Altura** vía `autoExpandSectionHeight` heredado de `EnhancedBaseEditorSectionComponent`.
 
-```typescript
-private updateSectionHeight() {
-  // logic to measure children bounds and expand section styles
-}
-```
+### 2. Protocolo "Isolated Mode" Unificado (MUST HAVE)
 
-### 2. Protocolo "Isolated Mode" Unificado
-
-Cada `Editor{Component}Section` debe incluir:
+Cada `Editor{Component}Section` debe incluir su correspondiente `Editor{Component}IsolatedModeComponent` con:
 
 - Atajo de teclado `I` para aislamiento.
-- Botón flotante 🎯 rápido.
-- Panel lateral con:
-  - **Content**: Data pura (textos, arrays, urls).
-  - **Appearance**: Presets de la marca (Rounded, Variant, Dark).
-  - **Styles**: Overrides avanzados (CSS properties directas).
-  - **Dimensions**: Control numérico exacto de X, Y, W, H.
+- Botón flotante 🎯 rápido en el overlay del editor.
+- Interfaz de usuario Blur/Dark premium.
+- Control total de: **Content, Appearance, Styles, Dimensions**.
 
 ### 3. Registro Dinámico (Arquitectura de Futuro)
 
-Migrar hacia un `ComponentRegistry` para evitar el crecimiento infinito de plantillas:
-
-```typescript
-Registry.register('ui-button', {
-  editor: EditorButtonComponent,
-  isolated: EditorButtonIsolatedComponent,
-  defaults: DEFAULT_BUTTON_CONTENT,
-});
-```
+Migrar hacia un `ComponentRegistry` para evitar el crecimiento infinito de plantillas.
 
 ---
 
 ## 📋 Lista de Verificación para Nuevos Componentes (Definition of Done)
 
-- [ ] Soporta el input `customStyles` y lo aplica al elemento raíz del UI.
-- [ ] Implementa `VisualEditingConfig` con constraints de `containment: 'parent'`.
-- [ ] El Isolated Mode soporta Undo/Redo local.
-- [ ] La sección se expande automáticamente al mover/redimensionar el elemento.
-- [ ] Todas las variantes visuales están mapeadas en el selector de Isolated Mode.
+- [x] Soporta el input `customStyles` y lo aplica al elemento raíz del UI.
+- [x] Implementa `VisualEditingConfig` con constraints de `containment: 'parent'`.
+- [x] El Isolated Mode permite edición de contenido y estilo en tiempo real.
+- [x] La sección se expande automáticamente al mover/redimensionar el elemento.
+- [x] Todas las variantes visuales están mapeadas en el selector de Isolated Mode.
 
 ---
 
 ## 📅 Próximos Pasos Inmediatos
 
-1.  **Finalizar Accordion**: Asegurar que la expansión de altura funcione en todas las variantes (V2, V3).
-2.  **Componente Button**: Empezar la integración universal de botones.
-3.  **Refactor de Base Component**: Extraer la lógica de `updateSectionHeight` a `EnhancedBaseEditorSectionComponent` para que sea heredable y automática.
+1.  **Isolated Mode para Video**: Crear el componente de edición aislada para `EditorVideoSectionComponent`.
+2.  **Isolated Mode para Map**: Crear el componente de edición aislada para `EditorMapSectionComponent`.
+3.  **Title Mastery**: Implementar el editor avanzado de textos y títulos con soporte para gradientes.
 
 ---
 
 **Última actualización**: 2026-02-07
-**Estado del Proyecto**: 25% completado
+**Estado del Proyecto**: 40% completado
