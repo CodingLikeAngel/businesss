@@ -54,7 +54,7 @@ Composiciones complejas que ocupan un bloque completo de la página.
 | Componente           | Estado Editor                     | Priority |
 | :------------------- | :-------------------------------- | :------- |
 | **button**           | ✅ Premium Isolated (Grads/Hover) | High     |
-| **title**            | ✅ Isolated Mode (Basic)          | High     |
+| **title**            | ✅ Isolated + Google Fonts Loader | High     |
 | **image**            | ✅ Isolated Mode                  | High     |
 | **accordion**        | ✅ Isolated Mode                  | Medium   |
 | **video**            | ✅ Isolated Mode                  | Medium   |
@@ -64,30 +64,26 @@ Composiciones complejas que ocupan un bloque completo de la página.
 | **card-testimonial** | ✅ Implementado                   | High     |
 | **chip**             | ✅ Wrapper Base                   | Medium   |
 | **spinner**          | ✅ Wrapper Base                   | Low      |
+| **visual-spacer**    | ✅ Drag-to-Resize + Decorative    | High     |
 | **card-premium**     | 🛠️ En Proceso                     | High     |
-| **card-rutas**       | 🛠️ En Proceso                     | Medium   |
-| **visual-spacer**    | 🚀 Siguiente Paso                 | High     |
+| **card-rutas**       | �️ En Proceso                     | Medium   |
 
 ---
 
 ## 📝 Plan de Acción Inmediato (Actualizado 07 Feb 2026)
 
-### FASE 4: Componentes de Utilidad & Diseño Avanzado
+### ✅ COMPLETADO
 
-1.  **Visual Spacer Component**:
+- **Visual Spacer**: Implementado con redimensionado vertical fluido y variantes decorativas.
+- **Tipografía Google Fonts**: Integrado en el editor de títulos con carga dinámica y controles de espaciado.
+- **Refactor de Botones**: Soporte para degradados y efectos hover avanzados.
 
-    - Crear `EditorSpacerSectionComponent`.
-    - Implementar un "spacer interactivo" que permita ajustar el margen entre secciones mediante drag-and-resize vertical.
-    - Soportar fondos decorativos (sutiles) o vacíos.
+### FASE 5: Refactor de Cards & Secciones Dinámicas
 
-2.  **Google Fonts Dynamic Loader (Title Editor)**:
-
-    - Integrar un buscador de fuentes en el `EditorTitleIsolatedModeComponent`.
-    - Carga dinámica de fuentes seleccionadas mediante `WebFontLoader` o inyección de CSS.
-    - Persistencia de la familia tipográfica en el estado de la sección.
-
-3.  **Refactor de Cards Premium**:
+1.  **Refactor de Cards Premium**:
     - Finalizar los componentes de Card Premium y Rutas con sus respectivos modos aislados.
+2.  **Sistema de Drag & Drop entre Secciones**:
+    - Permitir reordenar componentes UI dentro de un `smart-container` mediante interacción visual.
 
 ---
 
