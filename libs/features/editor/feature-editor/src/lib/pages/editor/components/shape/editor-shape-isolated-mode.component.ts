@@ -4,15 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { UIShapeComponent } from '@negocio/ui-components';
 import { Subject } from 'rxjs';
 
-export interface IsolatedModeConfig {
-  sectionId: string;
-  elementId: string;
-  type: string;
-  content: any;
-  styles: any;
-  position: { x: number; y: number };
-  size: { width: number; height: number };
-}
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+export { IsolatedModeConfig };
 
 @Component({
   selector: 'lib-editor-shape-isolated-mode',

@@ -7,18 +7,8 @@ import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.
 import { map } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 
-/**
- * Testimonials Isolated Mode Configuration
- */
-export interface IsolatedModeConfig {
-  sectionId: string;
-  elementId: string;
-  type: string;
-  content: any;
-  styles: any;
-  position: { x: number; y: number };
-  size: { width: number; height: number };
-}
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+export { IsolatedModeConfig };
 
 export interface UndoRedoState {
   items: any[];
