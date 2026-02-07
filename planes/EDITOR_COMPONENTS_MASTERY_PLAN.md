@@ -24,9 +24,9 @@ Transformar la biblioteca de componentes UI en un ecosistema de diseño vivo don
 Integración de los "Big 5" y Isolated Mode para:
 
 - [x] **Draggable Box**: (Completado) Referencia de robustez.
-- [x] **Accordion (Suite completa)**: (En progreso) Soporte para V1, V2, V3.
-- [ ] **Buttons (Universal)**: Edición de bordes, gradientes, íconos y efectos hover.
-- [ ] **Cards / Pricing Tables**: Control de elevación, layouts de grid internos.
+- [x] **Accordion (Suite completa)**: (Completado) Soporte para V1, V2, V3 con auto-expansión.
+- [x] **Buttons (Universal)**: (Completado) Edición de bordes, iconos y modo aislado.
+- [x] **Cards / Pricing Tables**: (En progreso) Control de elevación y posicionamiento dinámico.
 
 ### 🖼 Fase 2: Componentes Multimedia & Formas (Semana 2)
 

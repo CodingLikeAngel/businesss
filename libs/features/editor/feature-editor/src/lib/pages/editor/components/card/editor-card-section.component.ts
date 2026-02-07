@@ -110,18 +110,38 @@ export class EditorCardSectionComponent extends EnhancedBaseEditorSectionCompone
           console.log('Card element selected for editing');
           break;
         case 'moved':
-          this.updateCardPosition(event.bounds);
-          break;
         case 'resized':
+          this.updateCardStyles(event.bounds);
           break;
       }
     }
   }
 
   /**
-   * Update card position in section data
+   * Update card position/size in section data
    */
-  private updateCardPosition(bounds: any): void {
-    console.log('Card position updated:', bounds);
+  private updateCardStyles(bounds: any): void {
+    const currentStyles = this.section.content['cardStyles'] || {};
+    const newStyles = {
+      ...currentStyles,
+      position: 'absolute',
+      width: bounds.width + 'px',
+      height: bounds.height + 'px',
+      left: bounds.x + 'px',
+      top: bounds.y + 'px'
+    };
+
+    if (JSON.stringify(currentStyles) !== JSON.stringify(newStyles)) {
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        content: {
+          ...this.section.content,
+          cardStyles: newStyles,
+          customStyles: newStyles
+        }
+      });
+
+      // Automatically expand section height
+      this.autoExpandSectionHeight(bounds);
+    }
   }
 }

@@ -138,14 +138,23 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
       ...baseConfig,
       ...partialConfig,
       type, // Ensure type is always defined
-      // Apply platform-specific adjustments
-      mobileSupport: partialConfig.mobileSupport !== undefined ?
-        partialConfig.mobileSupport : !this.platformInfo.isMobile,
+      // Deep merge for key nested objects to allow partial overrides
       interactions: {
         ...baseConfig.interactions,
         touchEnabled: this.platformInfo.isTouch,
-        ...partialConfig.interactions
-      }
+        ...(partialConfig.interactions || {})
+      },
+      constraints: {
+        ...baseConfig.constraints,
+        ...(partialConfig.constraints || {})
+      },
+      styling: {
+        ...baseConfig.styling,
+        ...(partialConfig.styling || {})
+      },
+      // Apply platform-specific adjustments
+      mobileSupport: partialConfig.mobileSupport !== undefined ?
+        partialConfig.mobileSupport : !this.platformInfo.isMobile
     };
   }
 
@@ -260,7 +269,7 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
    */
   protected createElementConfig(
     type: 'section' | 'element' | 'container',
-    overrides: Partial<VisualEditingConfig> = {}
+    overrides: any = {}
   ): VisualEditingConfig {
     return this.createVisualEditingConfig({ type, ...overrides });
   }
@@ -271,7 +280,7 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
   protected applySectionVisualEditing(
     elementRef: ElementRef<HTMLElement>,
     sectionId: string,
-    overrides: Partial<VisualEditingConfig> = {}
+    overrides: any = {}
   ): void {
     this.applyVisualEditing(
       elementRef,
@@ -290,7 +299,7 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
   protected applyElementVisualEditing(
     elementRef: ElementRef<HTMLElement>,
     elementId: string,
-    overrides: Partial<VisualEditingConfig> = {}
+    overrides: any = {}
   ): void {
     this.applyVisualEditing(
       elementRef,
@@ -309,7 +318,7 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
   protected applyContainerVisualEditing(
     elementRef: ElementRef<HTMLElement>,
     containerId: string,
-    overrides: Partial<VisualEditingConfig> = {}
+    overrides: any = {}
   ): void {
     this.applyVisualEditing(
       elementRef,
@@ -401,5 +410,33 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
       this.store
     );
     this.historyService.execute(command);
+  }
+
+  /**
+   * Automatically expand section height to contain an element's bounds.
+   * This implements the "Section Height Self-Management" standard.
+   * 
+   * @param bounds The current bounds (x, y, width, height) of the element
+   * @param safetyMargin Extra padding at the bottom (default 80px)
+   */
+  protected autoExpandSectionHeight(bounds: { x: number; y: number; width: number; height: number }, safetyMargin = 80): void {
+    if (!this.section) return;
+
+    const requiredHeight = bounds.y + bounds.height + safetyMargin;
+    const currentHeight = parseInt(this.section.styles['height'] || '0');
+    
+    // Only update if the element is pushing the boundaries
+    // We use a small threshold (10px) to avoid frequent updates for micro-movements
+    if (requiredHeight > currentHeight + 10) {
+      console.log(`[AutoExpand] Section ${this.section.id} expanding: ${currentHeight}px -> ${requiredHeight}px`);
+      
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        styles: {
+          ...this.section.styles,
+          height: `${requiredHeight}px`,
+          minHeight: `${requiredHeight}px`
+        }
+      });
+    }
   }
 }

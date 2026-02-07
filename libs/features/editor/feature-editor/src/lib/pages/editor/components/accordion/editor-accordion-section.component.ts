@@ -52,10 +52,6 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
   // Isolated Mode State
   showIsolatedMode = false;
   isolatedConfig: IsolatedModeConfig | null = null;
-  
-  // Layout state for overflow prevention
-  sectionHeight = 600;
-  containerHeight = 550;
 
   ngAfterViewInit() {
     // Initialize items from section content if not provided via input
@@ -66,7 +62,16 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
       ];
     }
     
-    this.updateSectionHeight();
+    // Initial height check
+    const accordionStyles = this.section.content['accordionStyles'] || {};
+    if (accordionStyles.top && accordionStyles.height) {
+      this.autoExpandSectionHeight({
+        x: parseInt(accordionStyles.left) || 0,
+        y: parseInt(accordionStyles.top),
+        width: parseInt(accordionStyles.width) || 0,
+        height: parseInt(accordionStyles.height)
+      });
+    }
     
     // Apply standardized visual editing to elements
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
@@ -289,6 +294,9 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
            customStyles: newStyles
          }
        });
+
+       // Automatically expand section height to accommodate new position/size
+       this.autoExpandSectionHeight(bounds);
     }
   }
 
@@ -314,6 +322,8 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
            titleStyles: newStyles
          }
        });
+
+       this.autoExpandSectionHeight(bounds);
     }
   }
 
@@ -392,33 +402,7 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
       }
     });
 
-    this.updateSectionHeight();
     this.closeIsolatedMode();
   }
 
-  private updateSectionHeight() {
-    const accordionStyles = this.section.content['accordionStyles'] || {};
-    const top = parseInt(accordionStyles.top) || 120;
-    const height = parseInt(accordionStyles.height) || 450;
-    
-    // Calculate required height with safety margin
-    const minHeight = top + height + 100;
-    
-    // Update local state
-    if (minHeight > this.sectionHeight) {
-      this.sectionHeight = minHeight;
-    }
-    
-    // Sync with section styles in the store if it's significantly different
-    const currentStoreHeight = parseInt(this.section.styles['height'] || '0');
-    if (Math.abs(currentStoreHeight - this.sectionHeight) > 20) {
-      this.variantService.updateSectionInCurrentPage(this.section.id, {
-        styles: {
-          ...this.section.styles,
-          height: `${this.sectionHeight}px`,
-          minHeight: `${this.sectionHeight}px`
-        }
-      });
-    }
-  }
 }

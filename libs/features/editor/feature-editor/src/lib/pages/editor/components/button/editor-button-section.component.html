@@ -1,40 +1,88 @@
-<!-- DESKTOP BUTTON -->
-<div *ngIf="!isMobile" class="editor-section cursor-pointer py-12"
+<!-- Standardized Button Editor Section -->
+<div
+  #sectionElement
+  class="editor-section cursor-pointer transition-all duration-500 group relative min-h-[200px]"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="createElementConfig('section')"
-  elementId="{{section.id}}"
-  (visualEvents)="handleVisualEvent($event, section.id)">
+  sectionId="{{ section.id }}"
+  (visualEvents)="handleVisualEvent($event, section.id)"
+>
+  <!-- Section Quick Actions -->
+  <div
+    class="absolute top-0 left-0 right-0 h-12 bg-white/80 backdrop-blur-sm border-b border-slate-200 flex items-center justify-between px-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
+  >
+    <div class="flex items-center gap-2">
+      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Botón Universal</span>
+    </div>
+    <button
+      class="flex items-center gap-2 px-3 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded-md text-xs font-bold transition-all shadow-sm"
+      (click)="openIsolatedMode($event)"
+      title="Modo Aislado (I)"
+    >
+      <span>🎯</span>
+      <span>Editar</span>
+    </button>
+  </div>
 
-  <div class="container mx-auto px-6 max-w-7xl flex justify-center items-center gap-4">
-    <lib-ui-components-button
-      [variant]="getVariant(section.id)"
-      [size]="section.content['size'] || 'md'"
-      [rounded]="section.content['rounded'] || 'md'"
-      [customStyles]="section.customStyles"
+  <!-- Button Container -->
+  <div class="container mx-auto px-6 max-w-7xl flex flex-wrap justify-center items-center gap-6 py-12 h-full">
+    <div
+      #buttonElement
       class="editor-element"
       [class.is-selected]="selectedElementId === section.id + '_button'"
-      (click)="selectElement($event, getMergedElement(section.id, section.id + '_button', section.content, 'button'))">
-      {{ section.content['label'] || 'Click Me' }}
-    </lib-ui-components-button>
+      (click)="
+        selectElement(
+          $event,
+          getMergedElement(
+            section.id,
+            section.id + '_button',
+            section.content,
+            'button'
+          )
+        )
+      "
+      [enhancedVisualEditable]="getButtonConfig()"
+      elementId="{{ section.id + '_button' }}"
+      sectionId="{{ section.id }}"
+      (visualEvents)="handleButtonEvent($event)"
+      [style.position]="section.content['buttonStyles']?.['position'] || 'relative'"
+      [style.width]="section.content['buttonStyles']?.['width']"
+      [style.height]="section.content['buttonStyles']?.['height']"
+      [style.left]="section.content['buttonStyles']?.['left']"
+      [style.top]="section.content['buttonStyles']?.['top']"
+    >
+      <lib-ui-components-button
+        [variant]="getVariant(section.id)"
+        [size]="section.content['size'] || 'md'"
+        [rounded]="section.content['rounded'] || 'md'"
+        [dark]="section.content['dark'] || false"
+        [leadingIcon]="section.content['leadingIcon']"
+        [trailingIcon]="section.content['trailingIcon']"
+        [customStyles]="section.content['buttonStyles'] || {}"
+        class="w-full h-full block"
+      >
+        {{ section.content['label'] || 'Haz clic aquí' }}
+      </lib-ui-components-button>
+
+      <!-- Quick Edit Overlay Icon -->
+      <button 
+        class="quick-edit-btn absolute -top-2 -right-2 w-6 h-6 bg-indigo-600 text-white rounded-full flex items-center justify-center text-[10px] shadow-lg opacity-0 group-hover:opacity-100 transition-all hover:scale-110 z-20"
+        (click)="openIsolatedMode($event)"
+        title="Modo Aislado (I)"
+      >
+        🎯
+      </button>
+    </div>
   </div>
 </div>
 
-<!-- MOBILE BUTTON -->
-<div *ngIf="isMobile" class="editor-section cursor-pointer py-8 p-4"
-  [class.is-selected]="selectedSectionId === section.id"
-  (click)="selectSection($event, section)">
-
-  <div class="flex justify-center">
-    <lib-ui-components-button
-      [variant]="getVariant(section.id)"
-      [size]="section.content['size'] || 'sm'"
-      [rounded]="section.content['rounded'] || 'md'"
-      class="editor-element"
-      [class.is-selected]="selectedElementId === section.id + '_button'"
-      (click)="selectElement($event, { id: section.id + '_button', content: section.content, type: 'button' })">
-      {{ section.content['label'] || 'Click Me' }}
-    </lib-ui-components-button>
-  </div>
-</div>
+<!-- Isolated Mode Modal -->
+<lib-editor-button-isolated-mode
+  *ngIf="showIsolatedMode"
+  [config]="isolatedConfig!"
+  (closed)="closeIsolatedMode()"
+  (applied)="applyIsolatedChanges($event)"
+>
+</lib-editor-button-isolated-mode>
