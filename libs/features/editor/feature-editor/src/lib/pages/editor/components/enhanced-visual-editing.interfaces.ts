@@ -3,7 +3,9 @@ import { ElementRef } from '@angular/core';
 export interface IsolatedModeConfig {
   sectionId: string;
   elementId: string;
-  type: string;
+  type?: string;
+  variant?: string;
+  globalVariant?: string;
   content: any;
   styles: any;
   position: { x: number; y: number };

@@ -8,16 +8,8 @@ import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.
 import { map } from 'rxjs/operators';
 import { Observable, Subject } from 'rxjs';
 
-export interface IsolatedModeConfig {
-  sectionId: string;
-  elementId: string;
-  variant: string;
-  globalVariant?: string;
-  content: any;
-  styles: any;
-  position: { x: number; y: number };
-  size: { width: number; height: number };
-}
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+export { IsolatedModeConfig };
 
 export interface UndoRedoState {
   position: { x: number; y: number };
@@ -688,7 +680,7 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
 
   private initializeState() {
     this.editableContent = {
-      variant: this.config.content.variant || 'primary',
+      variant: this.config.content.variant || this.config.variant || 'primary',
       rounded: this.config.content.rounded || 'md',
       size: this.config.content.size || 'md',
       dark: this.config.content.dark || false,

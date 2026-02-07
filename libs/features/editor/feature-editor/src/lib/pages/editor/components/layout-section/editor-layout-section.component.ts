@@ -20,6 +20,11 @@ import {
   UIDraggableBox1Component
 } from '@negocio/ui-components';
 
+import { EditorButtonIsolatedModeComponent } from '../button/editor-button-isolated-mode.component';
+import { EditorAccordionIsolatedModeComponent } from '../accordion/editor-accordion-isolated-mode.component';
+import { EditorDraggableBoxIsolatedModeComponent } from '../draggable-box/editor-draggable-box-isolated-mode.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+
 import { 
   LayoutSectionConfig, 
   LayoutType, 
@@ -49,7 +54,10 @@ import {
     UIListComponent,
     UIChipComponent,
     UiCardProductsComponent,
-    UIDraggableBox1Component
+    UIDraggableBox1Component,
+    EditorButtonIsolatedModeComponent,
+    EditorAccordionIsolatedModeComponent,
+    EditorDraggableBoxIsolatedModeComponent
   ],
   template: `
     <section 
@@ -124,6 +132,9 @@ import {
             <div class="slot-component">
               <!-- Editing Overlay -->
               <div *ngIf="isEditing" class="slot-controls">
+                <button class="slot-btn" (click)="openIsolatedMode(i, $event)" 
+                        *ngIf="['ui-button', 'ui-accordion', 'draggable-box'].includes(slot.componentType)"
+                        title="Modo Aislado">🎯</button>
                 <button class="slot-btn" (click)="openComponentPicker(i, $event)" title="Cambiar">🔄</button>
                 <button class="slot-btn" (click)="editSlotComponent(i, $event)" title="Configurar">⚙️</button>
                 <button class="slot-btn danger" (click)="clearSlot(i, $event)" title="Eliminar">🗑️</button>
@@ -336,6 +347,30 @@ import {
           </div>
         </div>
       </div>
+
+      <!-- Isolated Mode Components -->
+      <ng-container *ngIf="showIsolatedMode && activeIsolatedType">
+        <lib-editor-button-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-button'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-button-isolated-mode>
+
+        <lib-editor-accordion-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-accordion'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-accordion-isolated-mode>
+
+        <lib-editor-draggable-box-isolated-mode
+          *ngIf="activeIsolatedType === 'draggable-box'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-draggable-box-isolated-mode>
+      </ng-container>
 
     </section>
   `,
@@ -737,6 +772,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
   toggleEditing() {
     this.isEditing = !this.isEditing;
+    this.cdr.detectChanges();
   }
 
   toggleLayoutPicker() {
@@ -868,6 +904,71 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
   onSlotConfigChange() {
     // Live preview changes (config isn't saved until apply)
+    this.cdr.detectChanges();
+  }
+
+  // Isolated Mode Logic
+  showIsolatedMode = false;
+  activeIsolatedType: SlotComponentType | null = null;
+  isolatedConfig: IsolatedModeConfig = {
+    sectionId: '',
+    elementId: '',
+    type: '',
+    variant: '',
+    globalVariant: '',
+    content: {},
+    styles: {},
+    position: { x: 0, y: 0 },
+    size: { width: 0, height: 0 }
+  };
+
+  openIsolatedMode(index: number, event: Event) {
+    event.stopPropagation();
+    const slot = this.config.slots[index];
+    if (slot.componentType === 'empty') return;
+
+    this.editingSlotIndex = index;
+    this.activeIsolatedType = slot.componentType;
+    
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: slot.id,
+      type: slot.componentType,
+      variant: slot.componentVariant,
+      globalVariant: this.globalVariant,
+      content: { ...slot.content },
+      styles: { ...slot.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 0, height: 0 }
+    };
+    
+    this.showIsolatedMode = true;
+    this.cdr.detectChanges();
+  }
+
+  onIsolatedModeApplied(updatedConfig: IsolatedModeConfig) {
+    if (this.editingSlotIndex < 0) return;
+
+    const newSlots = [...this.config.slots];
+    newSlots[this.editingSlotIndex] = {
+      ...newSlots[this.editingSlotIndex],
+      content: { ...updatedConfig.content },
+      styles: { ...updatedConfig.styles }
+    };
+
+    this.config = {
+      ...this.config,
+      slots: newSlots
+    };
+
+    this.persistConfig();
+    this.onIsolatedModeClosed();
+  }
+
+  onIsolatedModeClosed() {
+    this.showIsolatedMode = false;
+    this.activeIsolatedType = null;
+    this.editingSlotIndex = -1;
     this.cdr.detectChanges();
   }
 
