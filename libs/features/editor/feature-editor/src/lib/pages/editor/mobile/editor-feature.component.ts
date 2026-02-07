@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BaseEditorFeatureComponent } from '../base-editor-feature.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -119,6 +119,7 @@ import { EditorReservationFormSectionComponent } from '../components/reservation
     EditorModal3SectionComponent,
     EditorReservationFormSectionComponent
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class EditorMobileFeatureComponent extends BaseEditorFeatureComponent implements OnInit {
   override ngOnInit() {
