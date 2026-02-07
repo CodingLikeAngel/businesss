@@ -16,7 +16,7 @@ export * from './lib/shared-components/variant-selector/visual-editor.service';
 export { SimpleVisualEditorService, SimpleEditableElement, DragState, ResizeState } from './services/simple-visual-editor.service';
 export * from './lib/shared-components/variant-selector/visual-editable.directive';
 export * from './lib/shared-components/variant-selector/enhanced-visual-editable.directive';
-export { VisualEditingConfig, VisualEditingEvent, DEFAULT_CONFIGS, PlatformInfo } from './lib/shared-components/variant-selector/enhanced-visual-editing.interfaces';
+export { VisualEditingConfig, VisualEditingEvent, DEFAULT_CONFIGS, PlatformInfo, IsolatedModeConfig, IsolatedModeEvent, IsolatedModeEventType, PreviewConfig, ControlPanelConfig, ControlSection, ControlDefinition } from './lib/shared-components/variant-selector/enhanced-visual-editing.interfaces';
 export * from './lib/shared-components/variant-selector/boundary-constraint.service';
 export * from './lib/shared-components/variant-selector/unified-styling.service';
 export * from './lib/shared-components/variant-selector/design-editor.component';
@@ -25,3 +25,6 @@ export * from './lib/shared-components/variant-selector/apply-dynamic-styles.dir
 // Element Grouping System
 export * from './lib/shared-components/variant-selector/element-group.service';
 export * from './lib/shared-components/variant-selector/element-group.directive';
+
+// Isolated Mode Components
+export * from './lib/shared-components/variant-selector/hero-isolated-mode/editor-hero-isolated-mode.component';

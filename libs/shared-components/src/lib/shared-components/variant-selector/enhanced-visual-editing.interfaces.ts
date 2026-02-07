@@ -410,3 +410,157 @@ export const DEFAULT_GROUP_CONFIGS: Record<string, Omit<GroupConfig, 'containmen
     minHeight: 100
   }
 };
+
+/**
+ * Isolated Mode Configuration
+ */
+export interface IsolatedModeConfig {
+  /** Unique identifier for the isolated mode instance */
+  id: string;
+  
+  /** Type of component being edited */
+  componentType: string;
+  
+  /** Current content configuration */
+  content: Record<string, any>;
+  
+  /** Current style configuration */
+  styles: Record<string, string>;
+  
+  /** Available variants */
+  variants?: string[];
+  
+  /** Original config for comparison */
+  originalConfig?: IsolatedModeConfig;
+  
+  /** Metadata */
+  metadata?: {
+    createdAt: number;
+    modifiedAt: number;
+    modifiedBy?: string;
+  };
+}
+
+/**
+ * Isolated Mode Events
+ */
+export type IsolatedModeEventType = 'opened' | 'closed' | 'applied' | 'cancelled' | 'changed';
+
+export interface IsolatedModeEvent {
+  type: IsolatedModeEventType;
+  config: IsolatedModeConfig;
+  timestamp: number;
+}
+
+/**
+ * Preview Configuration for Isolated Mode
+ */
+export interface PreviewConfig {
+  /** Preview width */
+  width?: number | 'auto';
+  
+  /** Preview height */
+  height?: number | 'auto';
+  
+  /** Background color of preview canvas */
+  backgroundColor?: string;
+  
+  /** Enable grid overlay */
+  showGrid?: boolean;
+  
+  /** Grid size in pixels */
+  gridSize?: number;
+  
+  /** Enable responsive preview */
+  responsive?: boolean;
+  
+  /** Available breakpoints for preview */
+  breakpoints?: {
+    name: string;
+    width: number;
+    icon: string;
+  }[];
+}
+
+/**
+ * Control Panel Configuration
+ */
+export interface ControlPanelConfig {
+  /** Show content controls */
+  showContent?: boolean;
+  
+  /** Show style controls */
+  showStyles?: boolean;
+  
+  /** Show layout controls */
+  showLayout?: boolean;
+  
+  /** Show background controls */
+  showBackground?: boolean;
+  
+  /** Show animation controls */
+  showAnimation?: boolean;
+  
+  /** Custom control sections */
+  customSections?: ControlSection[];
+}
+
+/**
+ * Control Section Definition
+ */
+export interface ControlSection {
+  /** Section ID */
+  id: string;
+  
+  /** Section title */
+  title: string;
+  
+  /** Section icon (emoji or class) */
+  icon?: string;
+  
+  /** Section controls */
+  controls: ControlDefinition[];
+  
+  /** Section visibility condition */
+  visibleWhen?: (config: IsolatedModeConfig) => boolean;
+}
+
+/**
+ * Control Definition
+ */
+export interface ControlDefinition {
+  /** Control ID (maps to config property) */
+  id: string;
+  
+  /** Control type */
+  type: 'text' | 'textarea' | 'number' | 'select' | 'checkbox' | 'color' | 'slider' | 'range' | 'button' | 'icon-select' | 'gradient';
+  
+  /** Control label */
+  label: string;
+  
+  /** Control placeholder */
+  placeholder?: string;
+  
+  /** Control options (for select) */
+  options?: { value: string; label: string; icon?: string }[];
+  
+  /** Control constraints */
+  min?: number;
+  max?: number;
+  step?: number;
+  
+  /** Default value */
+  defaultValue?: any;
+  
+  /** Required flag */
+  required?: boolean;
+  
+  /** Help text */
+  helpText?: string;
+  
+  /** Conditional visibility */
+  visibleWhen?: (config: IsolatedModeConfig) => boolean;
+  
+  /** On change callback */
+  onChange?: (value: any, config: IsolatedModeConfig) => void;
+}
