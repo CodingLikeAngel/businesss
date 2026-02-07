@@ -9,6 +9,8 @@ import {
 import {
   UIChipComponent
 } from '@negocio/ui-components';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorChipIsolatedModeComponent } from './editor-chip-isolated-mode.component';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
 /**
@@ -23,7 +25,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UIChipComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorChipIsolatedModeComponent
   ],
   templateUrl: './editor-chip-section.component.html'
 })
@@ -100,7 +103,7 @@ export class EditorChipSectionComponent extends EnhancedBaseEditorSectionCompone
 
   handleChipEvent(event: VisualEditingEvent): void {
     this.handleVisualEvent(event, this.section.id + '_chip');
-  }
+  } 
 
   /**
    * Custom event handling for chip-specific logic
@@ -112,7 +115,7 @@ export class EditorChipSectionComponent extends EnhancedBaseEditorSectionCompone
           console.log('Chip element selected for editing');
           break;
         case 'moved':
-          this.updateChipPosition(event.bounds);
+          // Moved handling
           break;
         case 'resized':
           break;
@@ -121,9 +124,34 @@ export class EditorChipSectionComponent extends EnhancedBaseEditorSectionCompone
   }
 
   /**
-   * Update chip position in section data
+   * ISOLATED MODE SUPPORT
    */
-  private updateChipPosition(bounds: any): void {
-    console.log('Chip position updated:', bounds);
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
+
+  openIsolatedMode(event: MouseEvent) {
+    event.stopPropagation();
+    const chipStyles = this.section.content['customStyles'] || {};
+    
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_chip',
+      type: 'chip',
+      content: { ...this.section.content },
+      styles: { ...chipStyles },
+      position: { x: 0, y: 0 },
+      size: { width: 0, height: 0 }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig) {
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+          content: {
+             ...this.section.content,
+             ...config.content
+          }
+      });
+      this.showIsolatedMode = false;
   }
 }

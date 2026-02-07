@@ -8,7 +8,8 @@ import {
   VisualEditingEvent
 } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
-import { EditorVideoIsolatedModeComponent, IsolatedModeConfig } from './editor-video-isolated-mode.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorVideoIsolatedModeComponent } from './editor-video-isolated-mode.component';
 
 @Component({
   selector: 'lib-editor-video-section',

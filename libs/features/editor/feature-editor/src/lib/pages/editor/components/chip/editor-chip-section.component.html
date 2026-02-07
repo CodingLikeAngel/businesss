@@ -19,7 +19,8 @@
       [enhancedVisualEditable]="getChipConfig()"
       elementId="{{section.id + '_chip'}}"
       sectionId="{{section.id}}"
-      (visualEvents)="handleChipEvent($event)">
+      (visualEvents)="handleChipEvent($event)"
+      (dblclick)="openIsolatedMode($event)">
       {{ section.content['label'] || 'Chip Label' }}
     </lib-ui-components-chip>
   </div>
@@ -45,7 +46,15 @@
     [enhancedVisualEditable]="getChipConfig()"
     elementId="{{section.id + '_chip'}}"
     sectionId="{{section.id}}"
-    (visualEvents)="handleChipEvent($event)">
+    (visualEvents)="handleChipEvent($event)"
+    (dblclick)="openIsolatedMode($event)">
     {{ section.content['label'] || 'Chip Label' }}
   </lib-ui-components-chip>
 </div>
+
+<lib-editor-chip-isolated-mode 
+  *ngIf="showIsolatedMode && isolatedConfig"
+  [config]="isolatedConfig"
+  (closed)="showIsolatedMode = false"
+  (applied)="onIsolatedModeApplied($event)">
+</lib-editor-chip-isolated-mode>

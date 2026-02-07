@@ -1,7 +1,8 @@
 import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, inject, OnDestroy, ChangeDetectorRef, HostListener, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
-import { EditorDraggableBoxIsolatedModeComponent, IsolatedModeConfig } from './editor-draggable-box-isolated-mode.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorDraggableBoxIsolatedModeComponent } from './editor-draggable-box-isolated-mode.component';
 import { UIDraggableBox1Component, UIDraggableBox2Component, UIDraggableBox3Component } from '@negocio/ui-components';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
 import { Store } from '@ngrx/store';
@@ -703,9 +704,11 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
     this.isolatedConfig = {
       sectionId: this.section.id,
       elementId: this.boxId,
-      variant: this.currentContent.boxVariant || 'draggable-box-1',
-      globalVariant: this.globalVariant,
-      content: { ...this.currentContent },
+      type: 'draggable-box',
+      content: { 
+        ...this.currentContent,
+        globalVariant: this.globalVariant
+      },
       styles: {
         ...this.section.styles,
         backgroundColor: this.currentStyles.backgroundColor,

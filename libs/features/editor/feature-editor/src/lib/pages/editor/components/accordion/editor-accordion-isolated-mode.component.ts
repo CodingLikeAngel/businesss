@@ -5,16 +5,7 @@ import { UIAccordionComponent, UIAccordion1Component, UIAccordion2Component, UIA
 import { SimpleVisualEditorService } from '@negocio/shared-components';
 import { Subject } from 'rxjs';
 
-export interface IsolatedModeConfig {
-  sectionId: string;
-  elementId: string;
-  variant: string;
-  globalVariant?: string;
-  content: any;
-  styles: any;
-  position: { x: number; y: number };
-  size: { width: number; height: number };
-}
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 export interface UndoRedoState {
   position: { x: number; y: number };
@@ -148,169 +139,22 @@ export interface UndoRedoState {
                     </option>
                   </select>
                   </div>
-                  <p class="variant-hint" *ngIf="!editableContent.variant">
-                    Heredando: {{ config.globalVariant || 'glass' }}
-                  </p>
-                </div>
-              </div>
+                <p class="variant-hint" *ngIf="!editableContent.variant">
+                  Heredando: {{ config.content['globalVariant'] || 'glass' }}
+                </p>
 
-              <!-- SECCIÓN: CONTENIDO -->
-              <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">📝</span>
-                  <h4>ITEMS DEL ACORDEÓN</h4>
-                </div>
-                
-                <div *ngFor="let item of editableContent.items; let i = index" class="accordion-item-editor">
-                  <div class="item-header">
-                    <span>Item {{ i + 1 }}</span>
-                    <button class="remove-btn" (click)="removeItem(i)">✕</button>
-                  </div>
-                  <div class="control-group">
-                    <label>Título</label>
-                    <input type="text" [(ngModel)]="item.title" (ngModelChange)="onContentChange()" class="premium-input">
-                  </div>
-                  <div class="control-group">
-                    <label>Contenido</label>
-                    <textarea [(ngModel)]="item.content" (ngModelChange)="onContentChange()" class="premium-textarea" rows="2"></textarea>
-                  </div>
-                </div>
-                
-                <button class="add-btn" (click)="addItem()">+ Añadir Item</button>
-              </div>
+<!-- ... skipping ... -->
 
-              <!-- SECCIÓN: COLORES -->
-              <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">🎨</span>
-                  <h4>COLORES Y BORDES</h4>
-                </div>
-                
-                <div class="control-group">
-                  <label>Fondo del Elemento</label>
-                  <div class="color-input-wrapper">
-                    <div class="color-preview" [style.background-color]="editableStyles.backgroundColor">
-                      <input type="color" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()">
-                    </div>
-                    <input type="text" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()" class="premium-input hex-input">
-                  </div>
-                </div>
-
-                <div class="control-group">
-                  <label>Color de Borde</label>
-                  <div class="color-input-wrapper">
-                    <div class="color-preview" [style.background-color]="editableStyles.borderColor">
-                      <input type="color" [(ngModel)]="editableStyles.borderColor" (ngModelChange)="onStyleChange()">
-                    </div>
-                    <input type="text" [(ngModel)]="editableStyles.borderColor" (ngModelChange)="onStyleChange()" class="premium-input hex-input">
-                  </div>
-                </div>
-
-                <div class="control-row">
-                  <div class="control-group half">
-                    <label>Radio ({{borderRadiusUnit}})</label>
-                    <input type="number" [(ngModel)]="editableStyles.borderRadius" (ngModelChange)="onStyleChange()" class="premium-input">
-                  </div>
-                  <div class="control-group half">
-                    <label>Unidad</label>
-                    <div class="select-wrapper">
-                      <select [(ngModel)]="borderRadiusUnit" (ngModelChange)="onStyleChange()" class="premium-select compact">
-                        <option value="px">px</option>
-                        <option value="rem">rem</option>
-                        <option value="%">%</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="control-group">
-                  <label>Sombra (Preset)</label>
-                  <div class="select-wrapper">
-                    <select [(ngModel)]="editableStyles.boxShadow" (ngModelChange)="onStyleChange()" class="premium-select">
-                      <option value="none">Sin Sombra</option>
-                      <option value="0 4px 6px rgba(0,0,0,0.15)">Suave</option>
-                      <option value="0 10px 25px rgba(0,0,0,0.3)">Elevada</option>
-                      <option value="0 20px 50px rgba(0,0,0,0.5)">Profunda</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <!-- SECCIÓN: DIMENSIONES -->
-              <div class="sidebar-section no-border">
-                <div class="section-header">
-                  <span class="section-icon">📐</span>
-                  <h4>POSICIÓN Y TAMAÑO</h4>
-                </div>
-                <div class="control-row">
-                  <div class="control-group">
-                    <label>Posición X</label>
-                    <div class="input-with-icon">
-                      <span class="axis">X</span>
-                      <input type="number" [(ngModel)]="currentPosition.x" (ngModelChange)="onPositionChange()" class="premium-input">
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <label>Posición Y</label>
-                    <div class="input-with-icon">
-                      <span class="axis">Y</span>
-                      <input type="number" [(ngModel)]="currentPosition.y" (ngModelChange)="onPositionChange()" class="premium-input">
-                    </div>
-                  </div>
-                </div>
-                <div class="control-row">
-                  <div class="control-group">
-                    <label>Ancho (W)</label>
-                    <input type="number" [(ngModel)]="currentSize.width" (ngModelChange)="onSizeChange()" class="premium-input">
-                  </div>
-                  <div class="control-group">
-                    <label>Alto (H) - Min</label>
-                    <input type="number" [(ngModel)]="currentSize.height" (ngModelChange)="onSizeChange()" class="premium-input">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Canvas Area -->
-          <div class="isolated-canvas" 
-               #canvas
-             [class.show-grid]="showGrid"
-             [class.grid-snapping]="snapToGrid"
-             [class.ambient-dark]="editableContent.dark"
-             [style.background-size]="gridSize + 'px ' + gridSize + 'px'">
-            
-            <div class="canvas-inner" #canvasInner>
-              <!-- GHOST PREVIEW (Original Position) -->
-              <div class="ghost-wrapper"
-                   *ngIf="isDragging || isResizing"
-                   [style.left.px]="initialPosition.x"
-                   [style.top.px]="initialPosition.y"
-                   [style.width.px]="initialSize.width"
-                   [style.height.px]="initialSize.height">
-              </div>
-              <div class="draggable-wrapper"
-                   #draggableWrapper
-                   [id]="config.elementId"
-                   [style.left.px]="currentPosition.x"
-                   [style.top.px]="currentPosition.y"
-                   [style.width.px]="currentSize.width"
-                   [style.height.px]="currentSize.height"
-                   [class.snapping]="snapToGrid && isDragging"
-                   [class.is-dragging]="isDragging"
-                   [class.is-resizing]="isResizing"
-                   (mousedown)="onMouseDown($event)">
-                
                 <lib-ui-components-accordion
                   *ngIf="editableContent.accordionVariant === 'accordion' || !editableContent.accordionVariant"
-                  [variant]="editableContent.variant || config.globalVariant || 'secondary'"
+                  [variant]="editableContent.variant || config.content['globalVariant'] || 'secondary'"
                   [items]="editableContent.items || []"
                   [customStyles]="getCustomStyles()">
                 </lib-ui-components-accordion>
 
                 <lib-ui-components-accordion-1
                   *ngIf="editableContent.accordionVariant === 'accordion-1'"
-                  [variant]="editableContent.variant || config.globalVariant || 'secondary'"
+                  [variant]="editableContent.variant || config.content['globalVariant'] || 'secondary'"
                   [rounded]="editableContent.rounded || 'md'"
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
@@ -320,7 +164,7 @@ export interface UndoRedoState {
 
                 <lib-ui-components-accordion-2
                   *ngIf="editableContent.accordionVariant === 'accordion-2'"
-                  [variant]="editableContent.variant || config.globalVariant || 'secondary'"
+                  [variant]="editableContent.variant || config.content['globalVariant'] || 'secondary'"
                   [rounded]="editableContent.rounded || 'md'"
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
@@ -330,7 +174,7 @@ export interface UndoRedoState {
 
                 <lib-ui-components-accordion-3
                   *ngIf="editableContent.accordionVariant === 'accordion-3'"
-                  [variant]="editableContent.variant || config.globalVariant || 'secondary'"
+                  [variant]="editableContent.variant || config.content['globalVariant'] || 'secondary'"
                   [rounded]="editableContent.rounded || 'md'"
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"

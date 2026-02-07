@@ -12,14 +12,10 @@ import {
   UICardAnimatedComponent
 } from '@negocio/ui-components';
 
-
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { EditorFeaturesIsolatedModeComponent } from './editor-features-isolated-mode.component';
 
-/**
- * Enhanced Editor Features Section Component
- * Synchronized with UIFeaturesSectionComponent to provide the same visual experience
- * while maintaining visual editing capabilities.
- */
 @Component({
   selector: 'lib-editor-features-section',
   standalone: true,
@@ -28,7 +24,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     UITitleComponent,
     UICardAnimatedComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorFeaturesIsolatedModeComponent
   ],
   templateUrl: './editor-features-section.component.html'
 })
@@ -154,5 +151,42 @@ export class EditorFeaturesSectionComponent extends EnhancedBaseEditorSectionCom
 
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
       // Standard movements/resizes are handled by BaseEditorFeatureComponent via direct service subscription
+  }
+  /**
+   * ISOLATED MODE SUPPORT
+   */
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
+
+  openIsolatedMode(event: MouseEvent) {
+    event.stopPropagation();
+    
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_grid',
+      type: 'features',
+      content: { 
+        ...this.section.content,
+        gridCols: this.section.content['gridCols'] || 3,
+        gridGap: this.section.content['gridGap'] || 10
+      },
+      styles: { ...this.section.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 0, height: 0 }
+    };
+    
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig) {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: {
+        ...this.section.content,
+        items: config.content.items,
+        gridCols: config.content.gridCols,
+        gridGap: config.content.gridGap
+      }
+    });
+    this.showIsolatedMode = false;
   }
 }

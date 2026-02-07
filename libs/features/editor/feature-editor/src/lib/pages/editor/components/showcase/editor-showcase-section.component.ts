@@ -10,7 +10,8 @@ import {
   UIShowcaseAtomComponent
 } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
-import { EditorShowcaseIsolatedModeComponent, IsolatedModeConfig } from './editor-showcase-isolated-mode.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorShowcaseIsolatedModeComponent } from './editor-showcase-isolated-mode.component';
 
 /**
  * Enhanced Editor Showcase Section Component

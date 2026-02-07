@@ -15,7 +15,8 @@ import {
   UITitleComponent
 } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
-import { EditorAccordionIsolatedModeComponent, IsolatedModeConfig } from './editor-accordion-isolated-mode.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { EditorAccordionIsolatedModeComponent } from './editor-accordion-isolated-mode.component';
 import { HostListener } from '@angular/core';
 
 /**
@@ -363,8 +364,7 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
     this.isolatedConfig = {
       sectionId: this.section.id,
       elementId: this.section.id + '_accordion',
-      variant: this.section.content['variant'] || 'secondary',
-      globalVariant: this.getVariant(this.section.id),
+      type: 'accordion',
       content: { ...this.section.content },
       styles: { ...accordionStyles },
       position: { 

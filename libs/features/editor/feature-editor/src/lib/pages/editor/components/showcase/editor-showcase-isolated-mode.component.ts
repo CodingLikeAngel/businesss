@@ -8,15 +8,7 @@ import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-export interface IsolatedModeConfig {
-  sectionId: string;
-  elementId: string;
-  type: string;
-  content: any;
-  styles: any;
-  position: { x: number; y: number };
-  size: { width: number; height: number };
-}
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 @Component({
   selector: 'lib-editor-showcase-isolated-mode',

@@ -3,15 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UIVideoComponent } from '@negocio/ui-components';
 
-export interface IsolatedModeConfig {
-  sectionId: string;
-  elementId: string;
-  type: string;
-  content: any;
-  styles: any;
-  position: { x: number; y: number };
-  size: { width: number; height: number };
-}
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 @Component({
   selector: 'lib-editor-video-isolated-mode',
