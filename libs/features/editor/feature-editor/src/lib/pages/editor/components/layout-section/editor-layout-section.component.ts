@@ -1020,32 +1020,108 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.editingSlotIndex = index;
     this.activeIsolatedType = slot.componentType;
     
+    // Build component-specific content mapping
+    let mappedContent: any = { ...slot.content };
+    let defaultSize = { width: 400, height: 300 };
+    
+    // Map content fields based on component type
+    switch (slot.componentType) {
+      case 'ui-button':
+        mappedContent = {
+          variant: slot.componentVariant || this.globalVariant || 'primary',
+          rounded: slot.content?.['rounded'] || 'md',
+          size: slot.content?.['size'] || 'md',
+          dark: slot.content?.['dark'] || false,
+          label: slot.content?.['text'] || slot.content?.['label'] || 'Botón',
+          leadingIcon: slot.content?.['leadingIcon'],
+          trailingIcon: slot.content?.['trailingIcon'],
+          haptic: slot.content?.['haptic'] || false,
+          soundUrl: slot.content?.['soundUrl'] || ''
+        };
+        defaultSize = { width: 180, height: 50 };
+        break;
+        
+      case 'ui-accordion':
+        mappedContent = {
+          variant: slot.componentVariant || this.globalVariant || 'default',
+          items: slot.content?.['items'] || [{ title: 'Item 1', content: 'Contenido 1' }],
+          multiOpen: slot.content?.['multiOpen'] || false,
+          animation: slot.content?.['animation'] || 'smooth'
+        };
+        defaultSize = { width: 350, height: 250 };
+        break;
+        
+      case 'draggable-box':
+        mappedContent = {
+          variant: slot.componentVariant || this.globalVariant || 'secondary',
+          rounded: slot.content?.['rounded'] || 'md',
+          size: slot.content?.['size'] || 'md',
+          dark: slot.content?.['dark'] || false,
+          text: slot.content?.['text'] || 'Draggable Box'
+        };
+        defaultSize = { width: 280, height: 120 };
+        break;
+        
+      default:
+        // Generic mapping for other components
+        mappedContent = { ...slot.content };
+    }
+    
     this.isolatedConfig = {
       sectionId: this.section.id,
       elementId: slot.id,
       type: slot.componentType,
-      variant: slot.componentVariant,
+      variant: slot.componentVariant || this.globalVariant,
       globalVariant: this.globalVariant,
-      content: { ...slot.content },
+      content: mappedContent,
       styles: { ...slot.styles },
       position: { x: 0, y: 0 },
       size: { 
-        width: parseInt(slot.styles?.['width']) || 400, 
-        height: parseInt(slot.styles?.['height']) || 300 
+        width: parseInt(slot.styles?.['width']) || defaultSize.width, 
+        height: parseInt(slot.styles?.['height']) || defaultSize.height 
       }
     };
+    
+    // Add body class for proper z-index stacking context
+    document.body.classList.add('isolated-mode-active');
     
     this.showIsolatedMode = true;
     this.cdr.detectChanges();
   }
 
+
+
   onIsolatedModeApplied(updatedConfig: IsolatedModeConfig) {
     if (this.editingSlotIndex < 0) return;
+
+    const slot = this.config.slots[this.editingSlotIndex];
+    let mappedContent: any = { ...updatedConfig.content };
+    
+    // Map content back to slot format based on component type
+    switch (slot.componentType) {
+      case 'ui-button':
+        mappedContent = {
+          ...updatedConfig.content,
+          text: updatedConfig.content.label || updatedConfig.content.text || 'Botón'
+        };
+        break;
+        
+      case 'draggable-box':
+        mappedContent = {
+          ...updatedConfig.content,
+          text: updatedConfig.content.text || 'Draggable Box'
+        };
+        break;
+        
+      default:
+        mappedContent = { ...updatedConfig.content };
+    }
 
     const newSlots = [...this.config.slots];
     newSlots[this.editingSlotIndex] = {
       ...newSlots[this.editingSlotIndex],
-      content: { ...updatedConfig.content },
+      componentVariant: updatedConfig.variant || slot.componentVariant,
+      content: mappedContent,
       styles: { ...updatedConfig.styles }
     };
 
@@ -1058,12 +1134,17 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.onIsolatedModeClosed();
   }
 
+
   onIsolatedModeClosed() {
+    // Remove body class for proper z-index stacking context
+    document.body.classList.remove('isolated-mode-active');
+    
     this.showIsolatedMode = false;
     this.activeIsolatedType = null;
     this.editingSlotIndex = -1;
     this.cdr.detectChanges();
   }
+
 
   applySlotConfig() {
     if (!this.editingSlot || this.editingSlotIndex < 0) return;

@@ -679,26 +679,31 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
   }
 
   private initializeState() {
+    // Safeguard against undefined content/styles
+    const content = this.config?.content || {};
+    const styles = this.config?.styles || {};
+    
     this.editableContent = {
-      variant: this.config.content.variant || this.config.variant || 'primary',
-      rounded: this.config.content.rounded || 'md',
-      size: this.config.content.size || 'md',
-      dark: this.config.content.dark || false,
-      label: this.config.content.label || 'Botón',
-      leadingIcon: this.config.content.leadingIcon,
-      trailingIcon: this.config.content.trailingIcon,
-      haptic: this.config.content.haptic || false,
-      soundUrl: this.config.content.soundUrl || ''
+      variant: content.variant || this.config?.variant || 'primary',
+      rounded: content.rounded || 'md',
+      size: content.size || 'md',
+      dark: content.dark || false,
+      label: content.label || content.text || 'Botón',
+      leadingIcon: content.leadingIcon,
+      trailingIcon: content.trailingIcon,
+      haptic: content.haptic || false,
+      soundUrl: content.soundUrl || ''
     };
 
     this.editableStyles = {
-      backgroundColor: this.config.styles.backgroundColor || '',
-      color: this.config.styles.color || '',
-      fontSize: this.config.styles.fontSize || '',
-      fontWeight: this.config.styles.fontWeight || '',
-      '--btn-hover-bg': this.config.styles['--btn-hover-bg'] || '',
-      '--btn-hover-shadow': this.config.styles['--btn-hover-shadow'] || ''
+      backgroundColor: styles.backgroundColor || '',
+      color: styles.color || '',
+      fontSize: styles.fontSize || '',
+      fontWeight: styles.fontWeight || '',
+      '--btn-hover-bg': styles['--btn-hover-bg'] || '',
+      '--btn-hover-shadow': styles['--btn-hover-shadow'] || ''
     };
+
 
     // Detect gradient
     if (this.editableStyles.backgroundColor?.startsWith('linear-gradient')) {
@@ -710,13 +715,16 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.hoverScale = parseFloat(this.config.styles['--btn-hover-scale']) || 1;
+    this.hoverScale = parseFloat(styles['--btn-hover-scale']) || 1;
 
-    this.currentPosition = { ...this.config.position };
-    this.currentSize = { ...this.config.size };
+    this.currentPosition = { ...(this.config?.position || { x: 0, y: 0 }) };
+    this.currentSize = { ...(this.config?.size || { width: 180, height: 50 }) };
+
     
     // Centrar inicialmente si no tiene posición o es 0,0
-    if (!this.config.position || (this.config.position.x === 0 && this.config.position.y === 0)) {
+    const pos = this.config?.position;
+    if (!pos || (pos.x === 0 && pos.y === 0)) {
+
        // Medidas por defecto razonables para un botón si no viene el tamaño
        if (!this.currentSize.width) this.currentSize.width = 180;
        if (!this.currentSize.height) this.currentSize.height = 50;
