@@ -9,9 +9,14 @@ import {
 } from '@negocio/shared-components';
 import {
   UIAccordionComponent,
+  UIAccordion1Component,
+  UIAccordion2Component,
+  UIAccordion3Component,
   UITitleComponent
 } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { EditorAccordionIsolatedModeComponent, IsolatedModeConfig } from './editor-accordion-isolated-mode.component';
+import { HostListener } from '@angular/core';
 
 /**
  * Enhanced Editor Accordion Section Component
@@ -25,9 +30,13 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     FormsModule,
     UIAccordionComponent,
+    UIAccordion1Component,
+    UIAccordion2Component,
+    UIAccordion3Component,
     UITitleComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorAccordionIsolatedModeComponent
   ],
   templateUrl: './editor-accordion-section.component.html'
 })
@@ -39,8 +48,13 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
 
   /** Items for the accordion */
   @Input() items: { title: string; content: string }[] = [];
+
   /** Emit when items change */
   @Output() itemsChanged = new EventEmitter<any[]>();
+
+  // Isolated Mode State
+  showIsolatedMode = false;
+  isolatedConfig: IsolatedModeConfig | null = null;
 
   ngAfterViewInit() {
     // Initialize items from section content if not provided via input
@@ -310,5 +324,70 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
     delete filtered['color'];
     delete filtered['--theme-color'];
     return filtered;
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    // Press 'I' to open isolated mode if accordion is selected
+    if ((event.key === 'i' || event.key === 'I') && !event.ctrlKey && !event.metaKey) {
+      if (this.selectedElementId === this.section.id + '_accordion') {
+        const activeElement = document.activeElement as HTMLElement;
+        if (activeElement.tagName !== 'INPUT' && activeElement.tagName !== 'TEXTAREA') {
+          this.openIsolatedMode();
+        }
+      }
+    }
+  }
+
+  openIsolatedMode(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+    
+    const accordionStyles = this.section.content['accordionStyles'] || {};
+    
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_accordion',
+      variant: this.section.content['variant'] || 'secondary',
+      globalVariant: this.getVariant(this.section.id),
+      content: { ...this.section.content },
+      styles: { ...accordionStyles },
+      position: { 
+        x: parseInt(accordionStyles.left) || 100, 
+        y: parseInt(accordionStyles.top) || 100 
+      },
+      size: { 
+        width: parseInt(accordionStyles.width) || 600, 
+        height: parseInt(accordionStyles.height) || 450 
+      }
+    };
+
+    document.body.classList.add('isolated-mode-active');
+    this.showIsolatedMode = true;
+  }
+
+  closeIsolatedMode() {
+    document.body.classList.remove('isolated-mode-active');
+    this.showIsolatedMode = false;
+    this.isolatedConfig = null;
+  }
+
+  applyIsolatedChanges(config: IsolatedModeConfig) {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: {
+        ...this.section.content,
+        items: config.content.items,
+        variant: config.content.variant,
+        rounded: config.content.rounded,
+        size: config.content.size,
+        dark: config.content.dark,
+        accordionStyles: config.styles,
+        customStyles: config.styles
+      }
+    });
+
+    this.closeIsolatedMode();
   }
 }

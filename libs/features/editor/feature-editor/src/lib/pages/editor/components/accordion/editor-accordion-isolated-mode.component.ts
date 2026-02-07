@@ -1,0 +1,1360 @@
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { UIAccordionComponent, UIAccordion1Component, UIAccordion2Component, UIAccordion3Component, variants } from '@negocio/ui-components';
+import { SimpleVisualEditorService } from '@negocio/shared-components';
+import { Subject } from 'rxjs';
+
+export interface IsolatedModeConfig {
+  sectionId: string;
+  elementId: string;
+  variant: string;
+  globalVariant?: string;
+  content: any;
+  styles: any;
+  position: { x: number; y: number };
+  size: { width: number; height: number };
+}
+
+export interface UndoRedoState {
+  position: { x: number; y: number };
+  size: { width: number; height: number };
+  styles: any;
+  content: any;
+}
+
+@Component({
+  selector: 'lib-editor-accordion-isolated-mode',
+  standalone: true,
+  imports: [
+    CommonModule, 
+    FormsModule,
+    UIAccordionComponent,
+    UIAccordion1Component,
+    UIAccordion2Component,
+    UIAccordion3Component
+  ],
+  template: `
+    <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
+      <div class="isolated-mode-container" (click)="$event.stopPropagation()">
+        
+        <!-- Header -->
+        <div class="isolated-mode-header">
+          <div class="header-breadcrumb">
+            <span class="mode-badge">🎯 MODO AISLADO</span>
+            <span class="separator">/</span>
+            <span class="component-name">ACORDEÓN - DISEÑO & POSICIÓN</span>
+          </div>
+          
+          <div class="header-actions">
+            <div class="action-group">
+              <button class="icon-btn" (click)="undo()" [disabled]="!canUndo" title="Deshacer (Ctrl+Z)">
+                <span class="icon">↶</span>
+              </button>
+              <button class="icon-btn" (click)="redo()" [disabled]="!canRedo" title="Rehacer (Ctrl+Y)">
+                <span class="icon">↷</span>
+              </button>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="action-group">
+              <button class="icon-btn" (click)="toggleGrid()" 
+                      [class.active]="showGrid" 
+                      title="Cuadrícula (G)">
+                <span class="icon">#</span>
+              </button>
+              <button class="icon-btn" (click)="toggleSnap()" 
+                      [class.active]="snapToGrid" 
+                      title="Snap (S)">
+                <span class="icon">⊞</span>
+              </button>
+              <button class="icon-btn" (click)="resetPosition()" title="Reset (R)">
+                <span class="icon">↺</span>
+              </button>
+            </div>
+
+            <div class="divider"></div>
+
+            <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <div class="isolated-mode-body">
+          <!-- Sidebar Controls -->
+          <div class="controls-sidebar">
+            <div class="sidebar-scroll-content">
+              <!-- SECCIÓN: ESTILO -->
+              <div class="sidebar-section">
+                <div class="section-header">
+                  <span class="section-icon">✨</span>
+                  <h4>APARIENCIA</h4>
+                </div>
+                
+                <div class="control-group">
+                  <label>Tipo de Componente</label>
+                  <div class="select-wrapper">
+                    <select [(ngModel)]="editableContent.accordionVariant" (ngModelChange)="onContentChange()" class="premium-select">
+                      <option value="accordion">Estándar (Básico)</option>
+                      <option value="accordion-1">Card (Sombreado)</option>
+                      <option value="accordion-2">Minimalista (Líneas)</option>
+                      <option value="accordion-3">Glass (Elegante)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label>Esquinas Redondeadas</label>
+                  <div class="select-wrapper">
+                    <select [(ngModel)]="editableContent.rounded" (ngModelChange)="onContentChange()" class="premium-select">
+                      <option value="none">Recto (Ninguno)</option>
+                      <option value="md">Suave (Manual/Default)</option>
+                      <option value="full">Total (Píldora)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label>Tamaño Base</label>
+                  <div class="select-wrapper">
+                    <select [(ngModel)]="editableContent.size" (ngModelChange)="onContentChange()" class="premium-select">
+                      <option value="sm">Pequeño</option>
+                      <option value="md">Normal</option>
+                      <option value="lg">Grande</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label>Modo de Iluminación Ambient</label>
+                  <div class="toggle-wrapper" (click)="toggleDarkMode()" [class.active]="editableContent.dark">
+                    <div class="toggle-track">
+                      <div class="toggle-thumb"></div>
+                    </div>
+                    <span>{{ editableContent.dark ? 'OSCURO' : 'CLARO' }}</span>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label>Variante de Estilo</label>
+                  <div class="select-wrapper">
+                  <select [(ngModel)]="editableContent.variant" (ngModelChange)="onVariantChange()" class="premium-select">
+                    <option value="">Página (Heredar)</option>
+                    <option value="default">Estándar (Blanco)</option>
+                    <option *ngFor="let v of availableVariants" [value]="v">
+                      {{ v | titlecase }}
+                    </option>
+                  </select>
+                  </div>
+                  <p class="variant-hint" *ngIf="!editableContent.variant">
+                    Heredando: {{ config.globalVariant || 'glass' }}
+                  </p>
+                </div>
+              </div>
+
+              <!-- SECCIÓN: CONTENIDO -->
+              <div class="sidebar-section">
+                <div class="section-header">
+                  <span class="section-icon">📝</span>
+                  <h4>ITEMS DEL ACORDEÓN</h4>
+                </div>
+                
+                <div *ngFor="let item of editableContent.items; let i = index" class="accordion-item-editor">
+                  <div class="item-header">
+                    <span>Item {{ i + 1 }}</span>
+                    <button class="remove-btn" (click)="removeItem(i)">✕</button>
+                  </div>
+                  <div class="control-group">
+                    <label>Título</label>
+                    <input type="text" [(ngModel)]="item.title" (ngModelChange)="onContentChange()" class="premium-input">
+                  </div>
+                  <div class="control-group">
+                    <label>Contenido</label>
+                    <textarea [(ngModel)]="item.content" (ngModelChange)="onContentChange()" class="premium-textarea" rows="2"></textarea>
+                  </div>
+                </div>
+                
+                <button class="add-btn" (click)="addItem()">+ Añadir Item</button>
+              </div>
+
+              <!-- SECCIÓN: COLORES -->
+              <div class="sidebar-section">
+                <div class="section-header">
+                  <span class="section-icon">🎨</span>
+                  <h4>COLORES Y BORDES</h4>
+                </div>
+                
+                <div class="control-group">
+                  <label>Fondo del Elemento</label>
+                  <div class="color-input-wrapper">
+                    <div class="color-preview" [style.background-color]="editableStyles.backgroundColor">
+                      <input type="color" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()">
+                    </div>
+                    <input type="text" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()" class="premium-input hex-input">
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label>Color de Borde</label>
+                  <div class="color-input-wrapper">
+                    <div class="color-preview" [style.background-color]="editableStyles.borderColor">
+                      <input type="color" [(ngModel)]="editableStyles.borderColor" (ngModelChange)="onStyleChange()">
+                    </div>
+                    <input type="text" [(ngModel)]="editableStyles.borderColor" (ngModelChange)="onStyleChange()" class="premium-input hex-input">
+                  </div>
+                </div>
+
+                <div class="control-row">
+                  <div class="control-group half">
+                    <label>Radio ({{borderRadiusUnit}})</label>
+                    <input type="number" [(ngModel)]="editableStyles.borderRadius" (ngModelChange)="onStyleChange()" class="premium-input">
+                  </div>
+                  <div class="control-group half">
+                    <label>Unidad</label>
+                    <div class="select-wrapper">
+                      <select [(ngModel)]="borderRadiusUnit" (ngModelChange)="onStyleChange()" class="premium-select compact">
+                        <option value="px">px</option>
+                        <option value="rem">rem</option>
+                        <option value="%">%</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label>Sombra (Preset)</label>
+                  <div class="select-wrapper">
+                    <select [(ngModel)]="editableStyles.boxShadow" (ngModelChange)="onStyleChange()" class="premium-select">
+                      <option value="none">Sin Sombra</option>
+                      <option value="0 4px 6px rgba(0,0,0,0.15)">Suave</option>
+                      <option value="0 10px 25px rgba(0,0,0,0.3)">Elevada</option>
+                      <option value="0 20px 50px rgba(0,0,0,0.5)">Profunda</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SECCIÓN: DIMENSIONES -->
+              <div class="sidebar-section no-border">
+                <div class="section-header">
+                  <span class="section-icon">📐</span>
+                  <h4>POSICIÓN Y TAMAÑO</h4>
+                </div>
+                <div class="control-row">
+                  <div class="control-group">
+                    <label>Posición X</label>
+                    <div class="input-with-icon">
+                      <span class="axis">X</span>
+                      <input type="number" [(ngModel)]="currentPosition.x" (ngModelChange)="onPositionChange()" class="premium-input">
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label>Posición Y</label>
+                    <div class="input-with-icon">
+                      <span class="axis">Y</span>
+                      <input type="number" [(ngModel)]="currentPosition.y" (ngModelChange)="onPositionChange()" class="premium-input">
+                    </div>
+                  </div>
+                </div>
+                <div class="control-row">
+                  <div class="control-group">
+                    <label>Ancho (W)</label>
+                    <input type="number" [(ngModel)]="currentSize.width" (ngModelChange)="onSizeChange()" class="premium-input">
+                  </div>
+                  <div class="control-group">
+                    <label>Alto (H) - Min</label>
+                    <input type="number" [(ngModel)]="currentSize.height" (ngModelChange)="onSizeChange()" class="premium-input">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Canvas Area -->
+          <div class="isolated-canvas" 
+               #canvas
+             [class.show-grid]="showGrid"
+             [class.grid-snapping]="snapToGrid"
+             [class.ambient-dark]="editableContent.dark"
+             [style.background-size]="gridSize + 'px ' + gridSize + 'px'">
+            
+            <div class="canvas-inner" #canvasInner>
+              <!-- GHOST PREVIEW (Original Position) -->
+              <div class="ghost-wrapper"
+                   *ngIf="isDragging || isResizing"
+                   [style.left.px]="initialPosition.x"
+                   [style.top.px]="initialPosition.y"
+                   [style.width.px]="initialSize.width"
+                   [style.height.px]="initialSize.height">
+              </div>
+              <div class="draggable-wrapper"
+                   #draggableWrapper
+                   [id]="config.elementId"
+                   [style.left.px]="currentPosition.x"
+                   [style.top.px]="currentPosition.y"
+                   [style.width.px]="currentSize.width"
+                   [style.height.px]="currentSize.height"
+                   [class.snapping]="snapToGrid && isDragging"
+                   [class.is-dragging]="isDragging"
+                   [class.is-resizing]="isResizing"
+                   (mousedown)="onMouseDown($event)">
+                
+                <lib-ui-components-accordion
+                  *ngIf="editableContent.accordionVariant === 'accordion' || !editableContent.accordionVariant"
+                  [variant]="editableContent.variant || config.globalVariant || 'secondary'"
+                  [items]="editableContent.items || []"
+                  [customStyles]="getCustomStyles()">
+                </lib-ui-components-accordion>
+
+                <lib-ui-components-accordion-1
+                  *ngIf="editableContent.accordionVariant === 'accordion-1'"
+                  [variant]="editableContent.variant || config.globalVariant || 'secondary'"
+                  [rounded]="editableContent.rounded || 'md'"
+                  [size]="editableContent.size || 'md'"
+                  [dark]="editableContent.dark || false"
+                  [items]="editableContent.items || []"
+                  [customStyles]="getCustomStyles()">
+                </lib-ui-components-accordion-1>
+
+                <lib-ui-components-accordion-2
+                  *ngIf="editableContent.accordionVariant === 'accordion-2'"
+                  [variant]="editableContent.variant || config.globalVariant || 'secondary'"
+                  [rounded]="editableContent.rounded || 'md'"
+                  [size]="editableContent.size || 'md'"
+                  [dark]="editableContent.dark || false"
+                  [items]="editableContent.items || []"
+                  [customStyles]="getCustomStyles()">
+                </lib-ui-components-accordion-2>
+
+                <lib-ui-components-accordion-3
+                  *ngIf="editableContent.accordionVariant === 'accordion-3'"
+                  [variant]="editableContent.variant || config.globalVariant || 'secondary'"
+                  [rounded]="editableContent.rounded || 'md'"
+                  [size]="editableContent.size || 'md'"
+                  [dark]="editableContent.dark || false"
+                  [items]="editableContent.items || []"
+                  [customStyles]="getCustomStyles()">
+                </lib-ui-components-accordion-3>
+
+                <!-- Resize Handles -->
+                <div class="resize-handle nw" [class.active]="resizeHandle === 'nw'" (mousedown)="startResize($event, 'nw')"></div>
+                <div class="resize-handle n" [class.active]="resizeHandle === 'n'" (mousedown)="startResize($event, 'n')"></div>
+                <div class="resize-handle ne" [class.active]="resizeHandle === 'ne'" (mousedown)="startResize($event, 'ne')"></div>
+                <div class="resize-handle e" [class.active]="resizeHandle === 'e'" (mousedown)="startResize($event, 'e')"></div>
+                <div class="resize-handle se" [class.active]="resizeHandle === 'se'" (mousedown)="startResize($event, 'se')"></div>
+                <div class="resize-handle s" [class.active]="resizeHandle === 's'" (mousedown)="startResize($event, 's')"></div>
+                <div class="resize-handle sw" [class.active]="resizeHandle === 'sw'" (mousedown)="startResize($event, 'sw')"></div>
+                <div class="resize-handle w" [class.active]="resizeHandle === 'w'" (mousedown)="startResize($event, 'w')"></div>
+              </div>
+            </div>
+
+            <!-- Enhanced Position Info -->
+            <div class="modern-position-dock">
+              <div class="dock-item">
+                <span class="label">X</span>
+                <span class="value">{{ currentPosition.x }}px</span>
+              </div>
+              <div class="dock-item">
+                <span class="label">Y</span>
+                <span class="value">{{ currentPosition.y }}px</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">WIDTH</span>
+                <span class="value">{{ currentSize.width }}px</span>
+              </div>
+              <div class="dock-item">
+                <span class="label">HEIGHT</span>
+                <span class="value">{{ currentSize.height }}px</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="isolated-mode-footer">
+          <div class="footer-hint">
+             Usar <b>G</b> (rejilla), <b>S</b> (snap), <b>R</b> (reset) o flechas para ajuste fino.
+          </div>
+          <div class="footer-actions-btns">
+            <button class="btn-clean secondary" (click)="cancel()">Descartar</button>
+            <button class="btn-clean primary" (click)="apply()">Guardar Cambios</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  `,
+  styles: [`
+    :host {
+      --primary-accent: #10b981;
+      --primary-accent-glow: rgba(16, 185, 129, 0.4);
+      --bg-darker: #020617;
+      --bg-surface: #0f172a;
+      --bg-header: #1e293b;
+      --border-color: rgba(255, 255, 255, 0.08);
+      --text-dim: #94a3b8;
+      --sidebar-width: 320px;
+    }
+
+    .isolated-mode-overlay {
+      position: fixed;
+      inset: 0 !important;
+      background: rgba(2, 6, 23, 0.95);
+      backdrop-filter: blur(16px) saturate(180%);
+      z-index: 9999999 !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5vh 1.5vw;
+      pointer-events: all;
+    }
+
+    .isolated-mode-container {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: 24px;
+      box-shadow: 0 40px 100px -20px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255, 255, 255, 0.05);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: container-entry 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes container-entry {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    
+    .ghost-wrapper {
+      position: absolute;
+      border: 2px dashed rgba(16, 185, 129, 0.3);
+      background: rgba(16, 185, 129, 0.05);
+      border-radius: 12px;
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    /* HEADER */
+    .isolated-mode-header {
+      height: 70px;
+      padding: 0 1.5rem;
+      background: var(--bg-header);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .header-breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .mode-badge {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.05em;
+      color: var(--primary-accent);
+      background: rgba(16, 185, 129, 0.15);
+      padding: 4px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .separator { color: var(--text-dim); font-size: 12px; }
+    .component-name { color: #f8fafc; font-size: 14px; font-weight: 700; }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.25rem;
+    }
+
+    .action-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .divider {
+      width: 1px;
+      height: 24px;
+      background: var(--border-color);
+    }
+
+    .icon-btn {
+      width: 38px;
+      height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      color: var(--text-dim);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .icon-btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      border-color: var(--primary-accent);
+    }
+
+    .icon-btn.active {
+      background: var(--primary-accent);
+      color: white;
+      box-shadow: 0 0 15px var(--primary-accent-glow);
+      border-color: var(--primary-accent);
+    }
+
+    .close-main-btn {
+      width: 38px;
+      height: 38px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 800;
+    }
+
+    .close-main-btn:hover {
+      background: #ef4444;
+      color: white;
+      transform: rotate(90deg);
+    }
+
+    /* BODY */
+    .isolated-mode-body {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    /* SIDEBAR */
+    .controls-sidebar {
+      width: var(--sidebar-width);
+      background: #020617;
+      border-right: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar-scroll-content {
+      padding: 1.5rem;
+      overflow-y: auto;
+      flex: 1;
+    }
+
+    .sidebar-section {
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .sidebar-section.no-border { border-bottom: none; }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-icon { font-size: 16px; }
+
+    .section-header h4 {
+      margin: 0;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      color: var(--text-dim);
+    }
+
+    .control-group { margin-bottom: 1.25rem; }
+    .control-group label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-dim);
+      margin-bottom: 0.6rem;
+      text-transform: uppercase;
+    }
+
+    .control-row {
+      display: flex;
+      gap: 1rem;
+    }
+    .control-group.half { flex: 1; }
+
+    /* INPUTS & SELECTS */
+    .premium-input, .premium-select, .premium-textarea {
+      width: 100%;
+      min-height: 40px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-color);
+      color: #f8fafc;
+      padding: 0.6rem 1rem;
+      border-radius: 12px;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .premium-input:focus, .premium-select:focus, .premium-textarea:focus {
+      outline: none;
+      background: rgba(16, 185, 129, 0.05);
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+    }
+
+    .premium-select option {
+      background: #1e293b;
+      color: white;
+      padding: 10px;
+    }
+
+    .select-wrapper { position: relative; }
+    .select-wrapper::after {
+      content: '▼';
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 8px;
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    .premium-select {
+      appearance: none;
+      padding-right: 2rem;
+    }
+
+    /* TOGGLE SWITCH */
+     .toggle-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      padding: 0.6rem 1rem;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+    }
+
+    .toggle-track {
+      width: 36px;
+      height: 20px;
+      background: #1e293b;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      position: relative;
+    }
+
+    .toggle-thumb {
+      position: absolute;
+      left: 2px;
+      top: 2px;
+      width: 14px;
+      height: 14px;
+      background: #94a3b8;
+      border-radius: 50%;
+      transition: all 0.3s;
+    }
+
+    .toggle-wrapper.active {
+      border-color: var(--primary-accent);
+      background: rgba(16, 185, 129, 0.1);
+    }
+
+    .toggle-wrapper.active .toggle-track {
+      background: var(--primary-accent);
+    }
+
+    .toggle-wrapper.active .toggle-thumb {
+      left: calc(100% - 17px);
+      background: white;
+    }
+
+    /* ACCORDION ITEM EDITOR */
+    .accordion-item-editor {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary-accent);
+    }
+
+    .remove-btn {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 10px;
+    }
+
+    .add-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--primary-accent);
+      border: 1px dashed var(--primary-accent);
+      border-radius: 12px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+
+    .add-btn:hover {
+      background: var(--primary-accent);
+      color: white;
+    }
+
+    .color-input-wrapper {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .color-preview {
+      width: 42px;
+      height: 38px;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+    }
+
+    .color-preview input[type="color"] {
+      position: absolute;
+      inset: -5px;
+      width: 200%;
+      height: 200%;
+      cursor: pointer;
+      opacity: 0;
+    }
+
+    .hex-input { font-family: 'Courier New', monospace; flex: 1; }
+
+    .input-with-icon {
+      position: relative;
+    }
+
+    .input-with-icon .axis {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: 800;
+      color: var(--primary-accent);
+      font-size: 10px;
+    }
+
+    .input-with-icon input { padding-left: 28px; }
+
+    .isolated-canvas {
+      flex: 1;
+      background-color: #f1f5f9;
+      background-size: 40px 40px;
+      position: relative;
+      overflow: auto;
+      padding: 100px;
+    }
+
+    .isolated-canvas.ambient-dark {
+      background-color: #020617;
+    }
+
+    .canvas-inner {
+      width: 4000px;
+      height: 4000px;
+      position: relative;
+    }
+
+    .show-grid {
+      background-image: 
+        radial-gradient(rgba(0, 0, 0, 0.2) 1.5px, transparent 1.5px);
+    }
+
+    .ambient-dark.show-grid {
+      background-image: 
+        radial-gradient(rgba(255, 255, 255, 0.3) 1.5px, transparent 1.5px);
+    }
+
+    .grid-snapping.show-grid {
+      background-image: 
+        radial-gradient(var(--primary-accent) 2px, transparent 2px);
+    }
+
+    .draggable-wrapper {
+      position: absolute !important;
+      cursor: move;
+      z-index: 100;
+      outline: 2px solid transparent;
+      transition: outline-color 0.15s ease;
+    }
+
+    .draggable-wrapper:hover {
+      outline-color: rgba(16, 185, 129, 0.5);
+    }
+
+    .draggable-wrapper.is-dragging,
+    .draggable-wrapper.is-resizing {
+      outline-color: var(--primary-accent);
+      outline-width: 3px;
+    }
+
+    .resize-handle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: #fff;
+      border: 2px solid var(--primary-accent);
+      border-radius: 50%;
+      z-index: 10;
+    }
+
+    .resize-handle:hover, .resize-handle.active {
+      background: var(--primary-accent);
+      transform: scale(1.5);
+    }
+
+    .resize-handle.nw { top: -6px; left: -6px; cursor: nw-resize; }
+    .resize-handle.n { top: -6px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
+    .resize-handle.ne { top: -6px; right: -6px; cursor: ne-resize; }
+    .resize-handle.e { top: 50%; right: -6px; transform: translateY(-50%); cursor: e-resize; }
+    .resize-handle.se { bottom: -6px; right: -6px; cursor: se-resize; }
+    .resize-handle.s { bottom: -6px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+    .resize-handle.sw { bottom: -6px; left: -6px; cursor: sw-resize; }
+    .resize-handle.w { top: 50%; left: -6px; transform: translateY(-50%); cursor: w-resize; }
+
+    .modern-position-dock {
+      position: absolute;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-color);
+      border-radius: 50px;
+      padding: 8px 12px;
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .dock-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .dock-item .label {
+      font-size: 8px;
+      font-weight: 900;
+      color: var(--primary-accent);
+      background: rgba(16, 185, 129, 0.1);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .dock-item .value { color: #fff; font-size: 11px; font-weight: 600; font-family: monospace; }
+    .dock-divider { width: 1px; height: 16px; background: var(--border-color); }
+
+    .isolated-mode-footer {
+      height: 60px;
+      background: var(--bg-header);
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1.5rem;
+    }
+
+    .footer-hint { font-size: 11px; color: var(--text-dim); }
+    .footer-hint b { color: var(--primary-accent); }
+
+    .btn-clean {
+      padding: 0.75rem 2rem;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+    }
+
+    .btn-clean.secondary {
+      background: transparent;
+      color: var(--text-dim);
+    }
+    .btn-clean.secondary:hover { color: #fff; background: rgba(255, 255, 255, 0.05); }
+
+    .btn-clean.primary {
+      background: var(--primary-accent);
+      color: white;
+    }
+    .btn-clean.primary:hover { transform: translateY(-2px); }
+  `]
+})
+export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
+  @Input() config!: IsolatedModeConfig;
+  @Output() closed = new EventEmitter<void>();
+  @Output() applied = new EventEmitter<IsolatedModeConfig>();
+  @ViewChild('canvas') canvasRef!: ElementRef;
+  @ViewChild('draggableWrapper') draggableWrapperRef!: ElementRef;
+  @ViewChild('canvasInner') canvasInnerRef!: ElementRef;
+
+  availableVariants = variants.filter(v => v !== 'default');
+
+  private visualEditor = inject(SimpleVisualEditorService);
+  private destroy$ = new Subject<void>();
+
+  // Public state for template access
+  public isDragging = false;
+  public isResizing = false;
+  public resizeHandle = '';
+
+  // Position and size state
+  currentPosition: { x: number; y: number } = { x: 100, y: 100 };
+  currentSize: { width: number; height: number } = { width: 600, height: 400 };
+  initialPosition: { x: number; y: number } = { x: 100, y: 100 };
+  initialSize: { width: number; height: number } = { width: 600, height: 400 };
+
+  // Editable content and styles
+  editableContent: any = { items: [] };
+  editableStyles: any = {};
+  borderRadiusUnit = 'px';
+  paddingUnit = 'px';
+
+  // Grid settings
+  showGrid = true;
+  snapToGrid = false;
+  gridSize = 40;
+
+  // Drag/Resize state
+  private dragStartX = 0;
+  private dragStartY = 0;
+  private startPositionX = 0;
+  private startPositionY = 0;
+  private startSizeWidth = 0;
+  private startSizeHeight = 0;
+
+  // Undo/Redo
+  private undoStack: UndoRedoState[] = [];
+  private redoStack: UndoRedoState[] = [];
+  private saveTimeout: any;
+
+  // Getters for template access
+  get canUndo(): boolean { return this.undoStack.length > 1; }
+  get canRedo(): boolean { return this.redoStack.length > 0; }
+
+  ngOnInit() {
+    // Load initial position with validation
+    this.currentPosition = { 
+      x: Math.max(0, Math.min(3000, this.config.position?.x ?? 100)), 
+      y: Math.max(0, Math.min(3000, this.config.position?.y ?? 100)) 
+    };
+    
+    // Sensible range for accordion
+    const incomingWidth = this.config.size?.width || 0;
+    const incomingHeight = this.config.size?.height || 0;
+    
+    const isWidthValid = incomingWidth >= 100 && incomingWidth <= 2500;
+    const isHeightValid = incomingHeight >= 50 && incomingHeight <= 2000;
+    
+    this.currentSize = { 
+      width: isWidthValid ? incomingWidth : 600, 
+      height: isHeightValid ? incomingHeight : 450 
+    };
+    this.initialPosition = { ...this.currentPosition };
+    this.initialSize = { ...this.currentSize };
+
+    // Load editable content
+    this.editableContent = {
+      ...this.config.content,
+      items: Array.isArray(this.config.content['items']) ? JSON.parse(JSON.stringify(this.config.content['items'])) : [],
+      variant: this.config.content['variant'] || '',
+      accordionVariant: this.config.content['accordionVariant'] || 'accordion',
+      rounded: this.config.content['rounded'] || 'md',
+      size: this.config.content['size'] || 'md',
+      dark: this.config.content['dark'] || false
+    };
+
+    // Load editable styles
+    const hasVariant = !!this.editableContent.variant && this.editableContent.variant !== 'default';
+    
+    this.editableStyles = {
+      backgroundColor: this.config.styles?.['backgroundColor'] !== undefined ? this.config.styles?.['backgroundColor'] : (hasVariant ? '' : '#ffffff'),
+      borderColor: this.config.styles?.['borderColor'] !== undefined ? this.config.styles?.['borderColor'] : (hasVariant ? '' : '#e2e8f0'),
+      borderWidth: parseInt(this.config.styles?.['borderWidth'] as string) || 1,
+      borderRadius: parseInt(this.config.styles?.['borderRadius'] as string) || 12,
+      boxShadow: this.config.styles?.['boxShadow'] || 'none',
+      padding: parseInt(this.config.styles?.['padding'] as string) || 20
+    };
+
+    // Detect units
+    if (this.config.styles?.['borderRadius']?.toString().includes('%')) this.borderRadiusUnit = '%';
+
+    // Save initial state for undo
+    this.saveState();
+
+    // Setup global mouse listeners
+    setTimeout(() => this.setupMouseListeners(), 100);
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.removeMouseListeners();
+    if (this.saveTimeout) {
+      clearTimeout(this.saveTimeout);
+    }
+  }
+
+  private setupMouseListeners() {
+    if (typeof document !== 'undefined') {
+      document.addEventListener('mousemove', this.onMouseMove);
+      document.addEventListener('mouseup', this.onMouseUp);
+    }
+  }
+
+  private removeMouseListeners() {
+    if (typeof document !== 'undefined') {
+      document.removeEventListener('mousemove', this.onMouseMove);
+      document.removeEventListener('mouseup', this.onMouseUp);
+    }
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      this.cancel();
+      return;
+    }
+
+    if ((event.ctrlKey || event.metaKey) && event.key === 'z' && !event.shiftKey) {
+      event.preventDefault();
+      this.undo();
+      return;
+    }
+
+    if ((event.ctrlKey || event.metaKey) && (event.key === 'y' || (event.key === 'z' && event.shiftKey))) {
+      event.preventDefault();
+      this.redo();
+      return;
+    }
+
+    if (event.key === 'g' || event.key === 'G') {
+      this.toggleGrid();
+      return;
+    }
+
+    if (event.key === 's' || event.key === 'S') {
+      this.toggleSnap();
+      return;
+    }
+
+    if (event.key === 'r' || event.key === 'R') {
+      this.resetPosition();
+      return;
+    }
+
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(event.key)) {
+      event.preventDefault();
+      const delta = event.shiftKey ? 10 : 1;
+      this.handleArrowKey(event.key, delta);
+      return;
+    }
+  }
+
+  private handleArrowKey(key: string, delta: number) {
+    switch (key) {
+      case 'ArrowUp': this.currentPosition.y -= delta; break;
+      case 'ArrowDown': this.currentPosition.y += delta; break;
+      case 'ArrowLeft': this.currentPosition.x -= delta; break;
+      case 'ArrowRight': this.currentPosition.x += delta; break;
+    }
+    
+    if (this.snapToGrid) {
+      this.currentPosition.x = Math.round(this.currentPosition.x / this.gridSize) * this.gridSize;
+      this.currentPosition.y = Math.round(this.currentPosition.y / this.gridSize) * this.gridSize;
+    }
+    
+    this.onPositionChange();
+  }
+
+  onMouseDown(event: MouseEvent) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    this.isDragging = true;
+    this.dragStartX = event.clientX;
+    this.dragStartY = event.clientY;
+    this.startPositionX = this.currentPosition.x;
+    this.startPositionY = this.currentPosition.y;
+  }
+
+  startResize(event: MouseEvent, handle: string) {
+    event.preventDefault();
+    event.stopPropagation();
+    
+    this.isResizing = true;
+    this.resizeHandle = handle;
+    this.dragStartX = event.clientX;
+    this.dragStartY = event.clientY;
+    this.startPositionX = this.currentPosition.x;
+    this.startPositionY = this.currentPosition.y;
+    this.startSizeWidth = this.currentSize.width;
+    this.startSizeHeight = this.currentSize.height;
+  }
+
+  private onMouseMove = (event: MouseEvent) => {
+    if (this.isDragging) {
+      const deltaX = event.clientX - this.dragStartX;
+      const deltaY = event.clientY - this.dragStartY;
+      
+      let newX = this.startPositionX + deltaX;
+      let newY = this.startPositionY + deltaY;
+      
+      if (this.snapToGrid) {
+        newX = Math.round(newX / this.gridSize) * this.gridSize;
+        newY = Math.round(newY / this.gridSize) * this.gridSize;
+      }
+      
+      this.currentPosition.x = newX;
+      this.currentPosition.y = newY;
+      this.onPositionChange();
+    }
+    
+    if (this.isResizing) {
+      const deltaX = event.clientX - this.dragStartX;
+      const deltaY = event.clientY - this.dragStartY;
+      
+      let newWidth = this.startSizeWidth;
+      let newHeight = this.startSizeHeight;
+      let newX = this.startPositionX;
+      let newY = this.startPositionY;
+      
+      if (this.resizeHandle.includes('e')) newWidth = this.startSizeWidth + deltaX;
+      if (this.resizeHandle.includes('w')) {
+        newWidth = this.startSizeWidth - deltaX;
+        newX = this.startPositionX + deltaX;
+      }
+      if (this.resizeHandle.includes('s')) newHeight = this.startSizeHeight + deltaY;
+      if (this.resizeHandle.includes('n')) {
+        newHeight = this.startSizeHeight - deltaY;
+        newY = this.startPositionY + deltaY;
+      }
+      
+      newWidth = Math.max(100, newWidth);
+      newHeight = Math.max(50, newHeight);
+      
+      if (this.snapToGrid) {
+        newWidth = Math.round(newWidth / this.gridSize) * this.gridSize;
+        newHeight = Math.round(newHeight / this.gridSize) * this.gridSize;
+        newX = Math.round(newX / this.gridSize) * this.gridSize;
+        newY = Math.round(newY / this.gridSize) * this.gridSize;
+      }
+      
+      this.currentSize.width = newWidth;
+      this.currentSize.height = newHeight;
+      this.currentPosition.x = newX;
+      this.currentPosition.y = newY;
+      this.onPositionChange();
+      this.onSizeChange();
+    }
+  }
+
+  private onMouseUp = () => {
+    this.isDragging = false;
+    this.isResizing = false;
+    this.resizeHandle = '';
+  };
+
+  private saveState() {
+    const state: UndoRedoState = {
+      position: { ...this.currentPosition },
+      size: { ...this.currentSize },
+      styles: { ...this.editableStyles },
+      content: JSON.parse(JSON.stringify(this.editableContent))
+    };
+    this.undoStack.push(state);
+    this.redoStack = [];
+  }
+
+  undo() {
+    if (this.undoStack.length > 1) {
+      const currentState = this.undoStack.pop()!;
+      this.redoStack.push(currentState);
+      const previousState = this.undoStack[this.undoStack.length - 1];
+      this.restoreState(previousState);
+    }
+  }
+
+  redo() {
+    if (this.redoStack.length > 0) {
+      const nextState = this.redoStack.pop()!;
+      this.undoStack.push(nextState);
+      this.restoreState(nextState);
+    }
+  }
+
+  private restoreState(state: UndoRedoState) {
+    this.currentPosition = { ...state.position };
+    this.currentSize = { ...state.size };
+    this.editableStyles = { ...state.styles };
+    this.editableContent = JSON.parse(JSON.stringify(state.content));
+  }
+
+  onPositionChange() {
+    this.currentPosition.x = Math.max(0, this.currentPosition.x);
+    this.currentPosition.y = Math.max(0, this.currentPosition.y);
+    this.scheduleSaveState();
+  }
+
+  onSizeChange() {
+    this.currentSize.width = Math.max(100, this.currentSize.width);
+    this.currentSize.height = Math.max(40, this.currentSize.height);
+    this.scheduleSaveState();
+  }
+
+  onStyleChange() {
+    this.scheduleSaveState();
+  }
+
+  onContentChange() {
+    this.scheduleSaveState();
+  }
+
+  private scheduleSaveState() {
+    if (this.saveTimeout) clearTimeout(this.saveTimeout);
+    this.saveTimeout = setTimeout(() => this.saveState(), 500);
+  }
+
+  toggleGrid() {
+    this.showGrid = !this.showGrid;
+  }
+
+  toggleSnap() {
+    this.snapToGrid = !this.snapToGrid;
+    if (this.snapToGrid) {
+      this.currentPosition.x = Math.round(this.currentPosition.x / this.gridSize) * this.gridSize;
+      this.currentPosition.y = Math.round(this.currentPosition.y / this.gridSize) * this.gridSize;
+      this.currentSize.width = Math.round(this.currentSize.width / this.gridSize) * this.gridSize;
+      this.currentSize.height = Math.round(this.currentSize.height / this.gridSize) * this.gridSize;
+      this.onPositionChange();
+      this.onSizeChange();
+    }
+  }
+
+  resetPosition() {
+    this.currentPosition = { x: 100, y: 100 };
+    this.currentSize = { width: 600, height: 450 };
+    this.onPositionChange();
+    this.onSizeChange();
+  }
+
+  toggleDarkMode() {
+    this.editableContent.dark = !this.editableContent.dark;
+    this.onContentChange();
+  }
+
+  onVariantChange() {
+    if (this.editableContent.variant && this.editableContent.variant !== '') {
+      this.editableStyles.backgroundColor = '';
+      this.editableStyles.borderColor = '';
+    }
+    this.onContentChange();
+  }
+
+  addItem() {
+    this.editableContent.items.push({ title: 'Nuevo Item', content: 'Contenido del nuevo item' });
+    this.onContentChange();
+  }
+
+  removeItem(index: number) {
+    this.editableContent.items.splice(index, 1);
+    this.onContentChange();
+  }
+
+  getCustomStyles(): any {
+    const styles: any = { ...this.editableStyles };
+    if (styles.backgroundColor === '') delete styles.backgroundColor;
+    if (styles.borderColor === '') delete styles.borderColor;
+    
+    styles.borderRadius = `${this.editableStyles.borderRadius}${this.borderRadiusUnit}`;
+    styles.padding = `${this.editableStyles.padding}${this.paddingUnit}`;
+    
+    return styles;
+  }
+
+  onOverlayClick(event: MouseEvent) {
+    this.cancel();
+  }
+
+  cancel() {
+    this.closed.emit();
+  }
+
+  close() {
+    this.cancel();
+  }
+
+  apply() {
+    const updatedConfig: IsolatedModeConfig = {
+      ...this.config,
+      content: {
+        ...this.config.content,
+        items: JSON.parse(JSON.stringify(this.editableContent.items)),
+        variant: this.editableContent.variant,
+        accordionVariant: this.editableContent.accordionVariant,
+        rounded: this.editableContent.rounded,
+        size: this.editableContent.size,
+        dark: this.editableContent.dark
+      },
+      styles: {
+        ...this.config.styles,
+        backgroundColor: this.editableStyles.backgroundColor,
+        borderColor: this.editableStyles.borderColor,
+        borderWidth: `${this.editableStyles.borderWidth}px`,
+        borderRadius: `${this.editableStyles.borderRadius}${this.borderRadiusUnit}`,
+        boxShadow: this.editableStyles.boxShadow,
+        padding: `${this.editableStyles.padding}${this.paddingUnit}`,
+        left: `${this.currentPosition.x}`,
+        top: `${this.currentPosition.y}`,
+        width: `${this.currentSize.width}`,
+        height: `${this.currentSize.height}`
+      },
+      position: { ...this.currentPosition },
+      size: { ...this.currentSize }
+    };
+    this.applied.emit(updatedConfig);
+  }
+}
