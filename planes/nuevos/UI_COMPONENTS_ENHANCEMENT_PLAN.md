@@ -312,58 +312,55 @@ Total de wrappers identificados: **38 categorías**
 
 #### 3.1 Hero Sections
 
-- [ ] **HeroMinimalComponent**
+- [x] **HeroMinimalComponent** ✅
   - Isolated mode con controles de: título, subtítulo, CTA, imagen de fondo
   - Variantes: `centered`, `left-aligned`, `split`
-- [ ] **HeroSplitComponent**
+- [x] **HeroSplitComponent** ✅
 
   - Isolated mode con: contenido izquierdo/derecho, imagen, CTA
   - Features: Swap sides, parallax effect
 
-- [ ] **HeroFullScreenComponent**
+- [x] **HeroFullScreenComponent** ✅
   - Isolated mode con: video background, overlay, scroll indicator
 
 #### 3.2 Features Sections
 
-- [ ] **FeaturesGridComponent**
-
+- [x] **FeaturesGridComponent** ✅
   - Isolated mode con: grid layout, iconos, títulos, descripciones
   - Drag & drop para reordenar features
 
-- [ ] **FeaturesTimelineComponent**
+- [x] **FeaturesTimelineComponent** ✅
   - Isolated mode con: timeline vertical/horizontal
   - Animaciones de entrada
 
 #### 3.3 Testimonials
 
-- [ ] **TestimonialsCarouselComponent**
-
+- [x] **TestimonialsCarouselComponent** ✅
   - Isolated mode con: autoplay, navigation, testimonials management
   - Drag & drop para reordenar testimonios
 
-- [ ] **TestimonialsGridComponent**
+- [x] **TestimonialsGridComponent** ✅
   - Isolated mode con: grid layout, filtros por rating
 
 ### Semana 6: Secciones de Conversión
 
 #### 3.4 CTA Sections
 
-- [ ] **CTABannerComponent**
-
+- [x] **CTABannerComponent** ✅
   - Isolated mode con: headline, subheadline, button, background
 
-- [ ] **CTABoxComponent**
+- [x] **CTABoxComponent** ✅
   - Isolated mode con: icon, title, description, CTA
 
 #### 3.5 Pricing Tables
 
-- [ ] **PricingTableComponent**
+- [x] **PricingTableComponent** ✅
   - Isolated mode con: plans management, features, pricing, highlight
   - Drag & drop para reordenar planes
 
 #### 3.6 Contact Forms
 
-- [ ] **ContactFormComponent**
+- [x] **ContactFormComponent** ✅
   - Isolated mode con: fields configuration, validation, submit action
   - Form builder visual
 
@@ -371,19 +368,19 @@ Total de wrappers identificados: **38 categorías**
 
 #### 3.7 Gallery Sections
 
-- [ ] **GallerySectionComponent**
+- [x] **GallerySectionComponent** ✅
   - Isolated mode con: layout selection, images management
   - Drag & drop para reordenar imágenes
 
 #### 3.8 Products Sections
 
-- [ ] **ProductsSectionComponent**
+- [x] **ProductsSectionComponent** ✅
   - Isolated mode con: products grid, filters, sorting
   - Product card customization
 
 #### 3.9 Stats Sections
 
-- [ ] **StatsSectionComponent**
+- [x] **StatsSectionComponent** ✅
   - Isolated mode con: stats management, icons, animations
   - Counter animations
 
@@ -625,6 +622,50 @@ export class [SectionName]SectionComponent extends EnhancedBaseEditorSectionComp
 
 ---
 
-**Última actualización**: 07 Feb 2026 05:50  
-**Versión**: 1.1  
-**Estado**: 🚀 **FASE 3 EN PROGRESO - SECCIONES GENÉRICAS CORE COMPLETADAS**
+## 📦 Archivos Creados - Modos Aislados
+
+### Ubicación: `libs/shared-components/src/lib/shared-components/variant-selector/`
+
+#### Componentes Implementados:
+
+| Componente | Archivo TS | Archivo SCSS | Estado |
+|------------|-----------|--------------|--------|
+| **Hero Isolated Mode** | `hero-isolated-mode/editor-hero-isolated-mode.component.ts` | `hero-isolated-mode/editor-hero-isolated-mode.component.scss` | ✅ Completado |
+| **Features Isolated Mode** | `features-isolated-mode/editor-features-isolated-mode.component.ts` | `features-isolated-mode/editor-features-isolated-mode.component.scss` | ✅ Completado |
+| **Testimonials Isolated Mode** | `testimonials-isolated-mode/editor-testimonials-isolated-mode.component.ts` | `testimonials-isolated-mode/editor-testimonials-isolated-mode.component.scss` | ✅ Completado |
+| **Pricing Isolated Mode** | `pricing-isolated-mode/editor-pricing-isolated-mode.component.ts` | `pricing-isolated-mode/editor-pricing-isolated-mode.component.scss` | ✅ Completado |
+| **Gallery Isolated Mode** | `gallery-isolated-mode/editor-gallery-isolated-mode.component.ts` | `gallery-isolated-mode/editor-gallery-isolated-mode.component.scss` | ✅ Completado |
+| **Contact Isolated Mode** | `contact-isolated-mode/editor-contact-isolated-mode.component.ts` | `contact-isolated-mode/editor-contact-isolated-mode.component.scss` | ✅ Completado |
+| **CTA Isolated Mode** | `cta-isolated-mode/editor-cta-isolated-mode.component.ts` | `cta-isolated-mode/editor-cta-isolated-mode.component.scss` | ✅ Completado |
+| **Stats Isolated Mode** | `stats-isolated-mode/editor-stats-isolated-mode.component.ts` | `stats-isolated-mode/editor-stats-isolated-mode.component.scss` | ✅ Completado |
+| **Products Isolated Mode** | `products-isolated-mode/editor-products-isolated-mode.component.ts` | `products-isolated-mode/editor-products-isolated-mode.component.scss` | ✅ Completado |
+
+#### Interfaces Compartidas:
+
+| Archivo | Descripción |
+|---------|-------------|
+| `enhanced-visual-editing.interfaces.ts` | Interfaces principales: `IsolatedModeConfig`, `IsolatedModeEvent`, `PreviewConfig`, `ControlPanelConfig`, `ControlSection`, `ControlDefinition` |
+| `variant-registry.ts` | Registro de variantes de componentes |
+
+#### Exports Principales:
+
+Archivo: `libs/shared-components/src/index.ts`
+
+```typescript
+// Isolated Mode Components
+export * from './lib/shared-components/variant-selector/hero-isolated-mode/editor-hero-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/features-isolated-mode/editor-features-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/testimonials-isolated-mode/editor-testimonials-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/pricing-isolated-mode/editor-pricing-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/gallery-isolated-mode/editor-gallery-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/contact-isolated-mode/editor-contact-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/cta-isolated-mode/editor-cta-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/stats-isolated-mode/editor-stats-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/products-isolated-mode/editor-products-isolated-mode.component';
+```
+
+---
+
+**Última actualización**: 07 Feb 2026 05:55  
+**Versión**: 1.2  
+**Estado**: 🚀 **FASE 3 COMPLETADA - 9 MODO AISLADOS IMPLEMENTADOS**
