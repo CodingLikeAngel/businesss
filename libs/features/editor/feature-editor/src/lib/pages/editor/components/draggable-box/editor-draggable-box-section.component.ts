@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, inject, OnDestroy, ChangeDetectorRef, HostListener } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, inject, OnDestroy, ChangeDetectorRef, HostListener, Inject, PLATFORM_ID } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
 import { EditorDraggableBoxIsolatedModeComponent, IsolatedModeConfig } from './editor-draggable-box-isolated-mode.component';
@@ -82,7 +82,7 @@ import * as PageActions from '../../../../store/actions/page.actions';
 
             <lib-ui-components-draggable-box-1
               *ngIf="currentContent.boxVariant === 'draggable-box-1' || !currentContent.boxVariant"
-              [variant]="currentContent.variant || globalVariant || 'secondary'"
+              [variant]="(currentContent.variant && currentContent.variant !== 'default') ? currentContent.variant : (globalVariant || 'secondary')"
               [rounded]="currentContent.rounded || 'md'"
               [size]="currentContent.size || 'md'"
               [dark]="currentContent.dark || false"
@@ -92,7 +92,7 @@ import * as PageActions from '../../../../store/actions/page.actions';
 
             <lib-ui-components-draggable-box-2
               *ngIf="currentContent.boxVariant === 'draggable-box-2'"
-              [variant]="currentContent.variant || globalVariant || 'secondary'"
+              [variant]="(currentContent.variant && currentContent.variant !== 'default') ? currentContent.variant : (globalVariant || 'secondary')"
               [rounded]="currentContent.rounded || 'md'"
               [size]="currentContent.size || 'md'"
               [dark]="currentContent.dark || false"
@@ -102,7 +102,7 @@ import * as PageActions from '../../../../store/actions/page.actions';
 
             <lib-ui-components-draggable-box-3
               *ngIf="currentContent.boxVariant === 'draggable-box-3'"
-              [variant]="currentContent.variant || globalVariant || 'secondary'"
+              [variant]="(currentContent.variant && currentContent.variant !== 'default') ? currentContent.variant : (globalVariant || 'secondary')"
               [rounded]="currentContent.rounded || 'md'"
               [size]="currentContent.size || 'md'"
               [dark]="currentContent.dark || false"
@@ -135,63 +135,46 @@ import * as PageActions from '../../../../store/actions/page.actions';
     </lib-editor-draggable-box-isolated-mode>
   `,
   styles: [`
-    :host {
-      display: block;
-    }
-
     .editor-section {
-      background: rgba(255, 255, 255, 0.02);
-      border: 1px dashed rgba(255, 255, 255, 0.15);
-      border-radius: 12px;
+      width: 100%;
+      height: 100%;
+      position: relative;
       overflow: hidden;
-      transition: all 0.3s ease;
-    }
-
-    .editor-section:hover {
-      border-color: rgba(102, 126, 234, 0.4);
-      background: rgba(255, 255, 255, 0.04);
+      background: #f8fafc;
     }
 
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 1rem 1.5rem;
-      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.5rem 1rem;
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+      height: 50px;
     }
 
     .section-label {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: #fff;
       font-weight: 600;
-    }
-
-    .label-icon {
-      font-size: 1.25rem;
-    }
-
-    .section-actions {
-      display: flex;
-      gap: 0.5rem;
+      color: #1e293b;
     }
 
     .action-btn {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
+      padding: 0.35rem 0.75rem;
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      color: #475569;
       font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
     }
 
     .action-btn:hover {
@@ -379,31 +362,28 @@ import * as PageActions from '../../../../store/actions/page.actions';
       position: absolute;
       bottom: 1rem;
       left: 1rem;
-      background: rgba(0, 0, 0, 0.85);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
       display: flex;
       flex-direction: column;
-      gap: 0.5rem;
-      color: white;
-      font-family: 'SF Mono', 'Courier New', monospace;
-      font-size: 0.75rem;
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      gap: 0.25rem;
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      z-index: 5;
     }
 
     .info-row {
       display: flex;
       justify-content: space-between;
       gap: 1rem;
+      font-size: 0.75rem;
     }
 
     .info-label {
-      color: rgba(255, 255, 255, 0.6);
-      text-transform: uppercase;
-      font-size: 0.65rem;
-      letter-spacing: 0.5px;
+      color: #64748b;
+      font-weight: 500;
     }
 
     .info-value {
@@ -421,8 +401,13 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   private cdr = inject(ChangeDetectorRef);
   private persistSubject$ = new Subject<void>();
 
+  constructor(@Inject(PLATFORM_ID) platformId: object) {
+    super(platformId);
+  }
+
   // Box ID
   get boxId(): string { return this.section.id + '_box'; }
+
 
   // Position and size state - defaults match validated range
   boxLeft = 50;
@@ -516,9 +501,7 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
 
     const hasVariant = !!this.currentContent.variant && this.currentContent.variant !== 'default';
     const borderStyle = this.section.styles?.['border'] || '';
-    
-    // ROBUSTNESS: If we have a variant, we should allow backgroundColor to be empty so the variant can shine.
-    // However, if there's no variant, we MUST have a fallback color so it's not invisible.
+
     this.currentStyles = {
       backgroundColor: this.section.styles?.['backgroundColor'] !== undefined 
         ? this.section.styles?.['backgroundColor'] 
@@ -578,6 +561,19 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
     }
   }
 
+  private updateSectionHeight() {
+    // Ensure section is tall enough to contain the box
+    const minHeight = this.boxTop + this.boxHeight + 50;
+    if (minHeight > this.sectionHeight) {
+      this.sectionHeight = minHeight;
+    }
+    // Also ensure container height
+    const minContainerHeight = this.boxTop + this.boxHeight + 20;
+    if (minContainerHeight > this.containerHeight) {
+      this.containerHeight = minContainerHeight;
+    }
+  }
+
   onMouseDown(event: MouseEvent) {
     if ((event.target as HTMLElement).classList.contains('resize-handle')) return;
     
@@ -620,57 +616,52 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
       this.boxTop = Math.max(0, this.startTop + deltaY);
       
       this.updateSectionHeight();
-      this.cdr.detectChanges();
-    }
-    
-    if (this.isResizing) {
+      this.persistPositionToStore(); // Will be debounced
+    } else if (this.isResizing) {
       const deltaX = event.clientX - this.dragStartX;
       const deltaY = event.clientY - this.dragStartY;
       
-      let newWidth = this.startWidth;
-      let newHeight = this.startHeight;
-      let newLeft = this.startLeft;
-      let newTop = this.startTop;
-      
+      // Minimum dimensions
+      const MIN_WIDTH = 100;
+      const MIN_HEIGHT = 60;
+
       if (this.resizeHandle.includes('e')) {
-        newWidth = Math.max(100, this.startWidth + deltaX);
+        this.boxWidth = Math.max(MIN_WIDTH, this.startWidth + deltaX);
       }
       if (this.resizeHandle.includes('w')) {
-        newWidth = Math.max(100, this.startWidth - deltaX);
-        newLeft = this.startLeft + deltaX;
+        const newWidth = Math.max(MIN_WIDTH, this.startWidth - deltaX);
+        if (newWidth !== this.startWidth - deltaX) {
+           // Limit reached
+        } else {
+           this.boxLeft = this.startLeft + deltaX;
+           this.boxWidth = newWidth;
+        }
       }
       if (this.resizeHandle.includes('s')) {
-        newHeight = Math.max(100, this.startHeight + deltaY);
+        this.boxHeight = Math.max(MIN_HEIGHT, this.startHeight + deltaY);
       }
       if (this.resizeHandle.includes('n')) {
-        newHeight = Math.max(100, this.startHeight - deltaY);
-        newTop = this.startTop + deltaY;
+        const newHeight = Math.max(MIN_HEIGHT, this.startHeight - deltaY);
+        if (newHeight !== this.startHeight - deltaY) {
+           // Limit reached
+        } else {
+           this.boxTop = this.startTop + deltaY;
+           this.boxHeight = newHeight;
+        }
       }
       
-      this.boxWidth = newWidth;
-      this.boxHeight = newHeight;
-      this.boxLeft = newLeft;
-      this.boxTop = newTop;
-      
-      this.updateSectionHeight();
-      this.cdr.detectChanges();
+      this.persistPositionToStore(); // Will be debounced
     }
   }
 
   private onMouseUp = () => {
-    this.isDragging = false;
-    this.isResizing = false;
-    this.resizeHandle = '';
-    
-    document.removeEventListener('mousemove', this.onMouseMove);
-    document.removeEventListener('mouseup', this.onMouseUp);
-    
-    this.persistPositionToStore();
-  };
-
-  private updateSectionHeight() {
-    this.sectionHeight = Math.max(500, this.boxTop + this.boxHeight + 100);
-    this.containerHeight = this.sectionHeight - 80;
+    if (this.isDragging || this.isResizing) {
+      this.isDragging = false;
+      this.isResizing = false;
+      this.persistPositionToStoreImmediate(); // Save final state immediately
+      document.removeEventListener('mousemove', this.onMouseMove);
+      document.removeEventListener('mouseup', this.onMouseUp);
+    }
   }
 
   private persistPositionToStore() {
@@ -680,16 +671,10 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   private persistPositionToStoreImmediate() {
     const updatedStyles = {
       ...this.section.styles,
-      left: `${this.boxLeft}px`,
-      top: `${this.boxTop}px`,
-      width: `${this.boxWidth}px`,
-      height: `${this.boxHeight}px`,
-      position: 'absolute',
-      backgroundColor: this.currentStyles.backgroundColor,
-      border: `${this.currentStyles.borderWidth}px solid ${this.currentStyles.borderColor}`,
-      borderRadius: `${this.currentStyles.borderRadius}${this.currentStyles.borderRadiusUnit}`,
-      padding: `${this.currentStyles.padding}${this.currentStyles.paddingUnit}`,
-      boxShadow: this.currentStyles.boxShadow
+      left: `${this.boxLeft}`,
+      top: `${this.boxTop}`,
+      width: `${this.boxWidth}`,
+      height: `${this.boxHeight}`
     };
 
     const updatedContent = {
