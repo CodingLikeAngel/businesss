@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject } fro
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { UIImageComponent } from '@negocio/ui-components';
 import { AppState } from '../../../../store/state/app.state';
 import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.selectors';
 import { map } from 'rxjs/operators';
@@ -21,7 +20,7 @@ export interface IsolatedModeConfig {
 @Component({
   selector: 'lib-editor-image-isolated-mode',
   standalone: true,
-  imports: [CommonModule, FormsModule, UIImageComponent],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
@@ -249,7 +248,7 @@ export interface IsolatedModeConfig {
       font-size: 12px;
     }
 
-    .mask-grid { display: grid; grid-cols-3; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .mask-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
     .mask-item { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; border: 1px solid transparent; transition: all 0.2s; }
     .mask-item:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
     .mask-item.active { background: rgba(99, 102, 241, 0.1); border-color: #6366f1; }
