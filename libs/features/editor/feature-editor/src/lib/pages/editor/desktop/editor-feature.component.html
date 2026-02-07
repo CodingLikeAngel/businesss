@@ -1200,9 +1200,41 @@
       >
       </lib-editor-showcase-section>
 
+      <!-- UI SHOWCASE (Atom) -->
+      <lib-editor-showcase-section
+        *ngSwitchCase="'ui-showcase'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-showcase-section>
+
       <!-- RESERVATION FORM -->
       <lib-editor-reservation-form-section
         *ngSwitchCase="'reservation-form'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-reservation-form-section>
+
+      <!-- UI RESERVATION FORM (Atom) -->
+      <lib-editor-reservation-form-section
+        *ngSwitchCase="'ui-reservation-form'"
         [section]="section"
         [componentVariants]="componentVariants"
         [globalVariant]="globalVariant"
@@ -1231,6 +1263,54 @@
         (sectionResized)="onSectionResized($event.section, $event.bounds)"
       >
       </lib-editor-cta-section>
+
+      <!-- UI CTA (Atom) -->
+      <lib-editor-cta-section
+        *ngSwitchCase="'ui-cta'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-cta-section>
+
+      <!-- DATE TIME PICKER (Fallback to input for now) -->
+      <lib-editor-input-section
+        *ngSwitchCase="'ui-date-time-picker'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-input-section>
+
+      <!-- FORMS (Fallback to Reservation Form or Generic) -->
+      <lib-editor-reservation-form-section
+        *ngSwitchCase="'ui-forms'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="
+          onElementMoved($event.bounds, $event.elementId, section)
+        "
+        (elementResized)="
+          onElementResized($event.bounds, $event.elementId, section)
+        "
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-reservation-form-section>
 
       <lib-editor-generic-section
         *ngSwitchCase="'generic'"

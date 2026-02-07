@@ -439,6 +439,43 @@
       >
       </lib-editor-showcase-section>
 
+      <!-- UI SHOWCASE (Atom) -->
+      <lib-editor-showcase-section
+        *ngSwitchCase="'ui-showcase'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-showcase-section>
+
+      <!-- RESERVATION FORM -->
+      <lib-editor-reservation-form-section
+        *ngSwitchCase="'reservation-form'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+      >
+      </lib-editor-reservation-form-section>
+
+      <lib-editor-reservation-form-section
+        *ngSwitchCase="'ui-reservation-form'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+      >
+      </lib-editor-reservation-form-section>
+
+      <lib-editor-reservation-form-section
+        *ngSwitchCase="'ui-forms'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+      >
+      </lib-editor-reservation-form-section>
+
       <!-- CTA -->
       <lib-editor-cta-section
         *ngSwitchCase="'cta'"
@@ -450,6 +487,27 @@
         (sectionResized)="onSectionResized($event.section, $event.bounds)"
       >
       </lib-editor-cta-section>
+
+      <!-- UI CTA (Atom) -->
+      <lib-editor-cta-section
+        *ngSwitchCase="'ui-cta'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-cta-section>
+
+      <!-- DATE TIME PICKER -->
+      <lib-editor-input-section
+        *ngSwitchCase="'ui-date-time-picker'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+      >
+      </lib-editor-input-section>
 
       <!-- UI BUTTON (Atom) -->
       <lib-editor-button-section

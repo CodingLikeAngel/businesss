@@ -55,7 +55,7 @@ import { EditorTooltip3SectionComponent } from '../components/tooltip/editor-too
 import { EditorModal1SectionComponent } from '../components/modal/editor-modal-1-section.component';
 import { EditorModal2SectionComponent } from '../components/modal/editor-modal-2-section.component';
 import { EditorModal3SectionComponent } from '../components/modal/editor-modal-3-section.component';
-
+import { EditorReservationFormSectionComponent } from '../components/reservation-form/editor-reservation-form-section.component';
 
 @Component({
   selector: 'lib-editor-mobile-feature',
@@ -116,7 +116,8 @@ import { EditorModal3SectionComponent } from '../components/modal/editor-modal-3
     EditorTooltip3SectionComponent,
     EditorModal1SectionComponent,
     EditorModal2SectionComponent,
-    EditorModal3SectionComponent
+    EditorModal3SectionComponent,
+    EditorReservationFormSectionComponent
   ],
 })
 export class EditorMobileFeatureComponent extends BaseEditorFeatureComponent implements OnInit {
