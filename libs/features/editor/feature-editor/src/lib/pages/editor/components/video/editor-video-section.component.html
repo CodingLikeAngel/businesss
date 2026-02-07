@@ -1,0 +1,37 @@
+<!-- Standardized Video Editor Section -->
+<div #sectionElement
+  class="editor-section cursor-pointer transition-all duration-500 group relative min-h-[400px]"
+  [class.is-selected]="selectedSectionId === section.id"
+  (click)="selectSection($event, section)"
+  [applyDynamicStyles]="section.styles"
+  [enhancedVisualEditable]="getSectionConfig()"
+  sectionId="{{section.id}}"
+  (visualEvents)="handleSectionEvent($event)">
+
+  <!-- Section Quick Actions -->
+  <div class="absolute top-0 left-0 right-0 h-10 bg-white/50 backdrop-blur-sm border-b border-slate-200 flex items-center justify-between px-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+    <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Multimedia / Video</span>
+  </div>
+
+  <div class="container mx-auto px-6 max-w-7xl relative py-20 h-full min-h-[400px]">
+    <lib-ui-video #videoElement
+      [src]="section.content['src'] || 'https://www.w3schools.com/html/mov_bbb.mp4'"
+      [autoplay]="section.content['autoplay'] !== false"
+      [loop]="section.content['loop'] !== false"
+      [muted]="section.content['muted'] !== false"
+      [customStyles]="section.content['videoStyles'] || {}"
+      class="editor-element"
+      [class.is-selected]="selectedElementId === section.id + '_video'"
+      (click)="selectElement($event, getMergedElement(section.id, section.id + '_video', section.content, 'video'))"
+      [enhancedVisualEditable]="getVideoConfig()"
+      elementId="{{section.id + '_video'}}"
+      sectionId="{{section.id}}"
+      (visualEvents)="handleVideoEvent($event)"
+      [style.position]="section.content['videoStyles']?.['position'] || 'relative'"
+      [style.width]="section.content['videoStyles']?.['width'] || '100%'"
+      [style.height]="section.content['videoStyles']?.['height'] || 'auto'"
+      [style.left]="section.content['videoStyles']?.['left']"
+      [style.top]="section.content['videoStyles']?.['top']"
+    ></lib-ui-video>
+  </div>
+</div>

@@ -30,61 +30,30 @@ export class EditorImageSectionComponent extends EnhancedBaseEditorSectionCompon
   @ViewChild('imageElement', { static: true }) imageElement!: ElementRef;
 
   ngAfterViewInit() {
-    // Apply standardized visual editing to elements
-    this.applySectionVisualEditing(this.sectionElement, this.section.id);
-    this.applyElementVisualEditing(this.imageElement, this.section.id + '_image');
+    // Initial height check
+    const imageStyles = this.section.content['imageStyles'] || {};
+    if (imageStyles.top && imageStyles.height) {
+      this.autoExpandSectionHeight({
+        x: parseInt(imageStyles.left) || 0,
+        y: parseInt(imageStyles.top),
+        width: parseInt(imageStyles.width) || 0,
+        height: parseInt(imageStyles.height)
+      });
+    }
   }
 
-  /**
-   * Get configuration for the section container
-   */
   getSectionConfig(): VisualEditingConfig {
-    return this.createElementConfig('section', {
-      constraints: {
-        containment: 'parent',
-        minDistance: { top: 10, right: 10, bottom: 10, left: 10 },
-        collisionDetection: false,
-        safeZones: []
-      },
-      styling: {
-        selectionOutline: '2px solid #6366f1',
-        hoverEffects: true,
-        dimensionLabels: true,
-        resizeHandles: true
-      }
-    });
+    return this.createElementConfig('section');
   }
 
-  /**
-   * Get configuration for the image element
-   */
   getImageConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
       interactions: {
-        touchEnabled: this.platformInfo.isTouch,
-        multiSelect: true,
-        snapToGrid: 5,
-        animationDuration: 150,
-        hapticFeedback: true
-      },
-      constraints: {
-        containment: 'parent',
-        collisionDetection: true,
-        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
-        safeZones: []
-      },
-      styling: {
-        selectionOutline: '2px solid #059669',
-        hoverEffects: !this.platformInfo.isMobile, // Disable hover on mobile
-        dimensionLabels: !this.platformInfo.isMobile, // Reduce clutter on mobile
-        resizeHandles: true
+        snapToGrid: 5
       }
     });
   }
 
-  /**
-   * Handle visual editing events
-   */
   handleSectionEvent(event: VisualEditingEvent): void {
     this.handleVisualEvent(event, this.section.id);
   }
@@ -93,31 +62,36 @@ export class EditorImageSectionComponent extends EnhancedBaseEditorSectionCompon
     this.handleVisualEvent(event, this.section.id + '_image');
   }
 
-  /**
-   * Custom event handling for image-specific logic
-   */
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
     if (elementId === this.section.id + '_image') {
-      // Image-specific visual event handling
-      switch (event.type) {
-        case 'selected':
-          console.log('Image element selected for editing');
-          break;
-        case 'moved':
-          this.updateImagePosition(event.bounds);
-          break;
-        case 'resized':
-          // Handle image resize if needed
-          break;
+      if (['moved', 'resized'].includes(event.type)) {
+        this.updateImageStyles(event.bounds);
       }
     }
   }
 
-  /**
-   * Update image position in section data
-   */
-  private updateImagePosition(bounds: any): void {
-    // This would update the section content with new position
-    console.log('Image position updated:', bounds);
+  private updateImageStyles(bounds: any): void {
+    const currentStyles = this.section.content['imageStyles'] || {};
+    const newStyles = {
+      ...currentStyles,
+      position: 'absolute',
+      width: bounds.width + 'px',
+      height: bounds.height + 'px',
+      left: bounds.x + 'px',
+      top: bounds.y + 'px'
+    };
+
+    if (JSON.stringify(currentStyles) !== JSON.stringify(newStyles)) {
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        content: {
+          ...this.section.content,
+          imageStyles: newStyles,
+          customStyles: newStyles
+        }
+      });
+
+      // Automatically expand section height
+      this.autoExpandSectionHeight(bounds);
+    }
   }
 }

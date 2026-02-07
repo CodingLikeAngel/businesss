@@ -108,3 +108,12 @@ export * from './lib/showcase/gaming-variants-showcase.component';
 
 // Smart Container (Generic Block)
 export * from './lib/smart-container/smart-container.component';
+
+// Shapes
+export * from './lib/shape/shape.component';
+
+// Video
+export * from './lib/video/video.component';
+
+// Map
+export * from './lib/map/map.component';

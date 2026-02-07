@@ -8,18 +8,25 @@
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
 
-  <div class="container mx-auto px-6 max-w-5xl">
+  <div class="container mx-auto px-6 max-w-7xl relative py-20 h-full min-h-[600px]">
     <div #formElement class="editor-element"
          [class.is-selected]="selectedElementId === section.id + '_form_wrapper'"
          (click)="selectElement($event, getMergedElement(section.id, section.id + '_form_wrapper', section.content, 'reservation'))"
          [enhancedVisualEditable]="getFormWrapperConfig()"
          elementId="{{section.id + '_form_wrapper'}}"
          sectionId="{{section.id}}"
-         (visualEvents)="handleFormWrapperEvent($event)">
+         (visualEvents)="handleFormWrapperEvent($event)"
+         [style.position]="section.content['formStyles']?.['position'] || 'relative'"
+         [style.width]="section.content['formStyles']?.['width'] || '100%'"
+         [style.height]="section.content['formStyles']?.['height'] || 'auto'"
+         [style.left]="section.content['formStyles']?.['left']"
+         [style.top]="section.content['formStyles']?.['top']"
+    >
       <lib-reservation-form
         [title]="section.content['title'] || 'Reserva tu Cita'"
         [subtitle]="section.content['subtitle'] || 'Elige tu servicio y horario preferido'"
         [variant]="$any(getVariant(section.id))"
+        [customStyles]="section.content['formStyles'] || {}"
       ></lib-reservation-form>
     </div>
   </div>

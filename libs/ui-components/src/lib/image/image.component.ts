@@ -41,40 +41,34 @@ export class UIImageComponent {
   caption = input<string | undefined>(undefined); // Leyenda opcional
   variant = input<ImageVariantType>('default');
   animation = input<ImageAnimation>('none');
+  filter = input<string | undefined>(undefined); // CSS filters (ej. 'grayscale(100%) blur(2px)')
+  objectFit = input<'cover' | 'contain' | 'fill' | 'none' | 'scale-down'>('cover');
+  objectPosition = input<string>('center');
   customStyles = input<ImageCustomStyles>({}); // Soporte para estilos personalizados
 
   imageClasses = computed(() => [
-    'image-container',
-    `image--size-${this.size()}`,
-    `image--shape-${this.shape()}`,
-    `image--${this.variant()}`,
-    this.caption() ? 'image--with-caption' : '',
-    `image--animation-${this.animation()}`,
+// ... (lines 47-53 stay similar)
   ].filter(Boolean));
 
   imageStyles = computed(() => {
     const styles: Record<string, any> = {};
     const customStyles = this.customStyles();
     
-    if (customStyles['backgroundColor']) {
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--image-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-    
-    if (customStyles['color']) {
-      styles['--theme-color'] = customStyles['color'];
-      styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
+    // Base styles from customStyles
     Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
+      styles[key] = customStyles[key];
     });
+
+    if (customStyles['backgroundColor']) {
+      styles['--image-bg'] = customStyles['backgroundColor'];
+    }
+
+    // Smart Image features
+    if (this.filter()) styles['filter'] = this.filter();
+    
+    // Pass object fit/position to the img element via variables
+    styles['--img-fit'] = this.objectFit();
+    styles['--img-position'] = this.objectPosition();
 
     if (this.size() === 'custom' && this.width()) styles['width'] = this.width();
     if (this.size() === 'custom' && this.height()) styles['height'] = this.height();

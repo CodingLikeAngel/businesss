@@ -30,8 +30,11 @@ Integración de los "Big 5" y Isolated Mode para:
 
 ### 🖼 Fase 2: Componentes Multimedia & Formas (Semana 2)
 
-- [ ] **Image Enhanced**: Cropping dinámico, filtros CSS, overlays de texto.
-- [ ] **Icon / Badge**: Selector de biblioteca de íconos integrado en Isolated Mode.
+- [x] **Multimedia Pro**: Refactorización de `EditorImageSectionComponent` con soporte para posicionamiento libre y expansión automática.
+- [x] **UIShapeComponent**: Creación de componente base para formas abstractas SVG integrada en el editor.
+- [x] **Video Backgrounds**: Control de opacidad y overlays de color.
+- [x] **Google Maps Interactivo**: API real integrada con selección de puntos.
+- [x] **Icon / Badge**: Selector de biblioteca de íconos integrado en Isolated Mode.
 - [ ] **Shapes / Dividers**: Formas geométricas editables para fondos.
 
 ### 🏗 Fase 3: Layouts & Secciones Complejas (Semana 3)

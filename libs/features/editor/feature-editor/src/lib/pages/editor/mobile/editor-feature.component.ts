@@ -43,6 +43,9 @@ import { EditorDraggableBox1SectionComponent } from '../components/draggable-box
 import { EditorDraggableBox2SectionComponent } from '../components/draggable-box/editor-draggable-box-2-section.component';
 import { EditorDraggableBox3SectionComponent } from '../components/draggable-box/editor-draggable-box-3-section.component';
 import { EditorGenericSectionComponent } from '../components/generic/editor-generic-section.component';
+import { EditorShapeSectionComponent } from '../components/shape/editor-shape-section.component';
+import { EditorVideoSectionComponent } from '../components/video/editor-video-section.component';
+import { EditorMapSectionComponent } from '../components/map/editor-map-section.component';
 import { EditorNavBar1SectionComponent } from '../components/nav-bar/editor-nav-bar-1-section.component';
 import { EditorNavBar2SectionComponent } from '../components/nav-bar/editor-nav-bar-2-section.component';
 import { EditorNavBar3SectionComponent } from '../components/nav-bar/editor-nav-bar-3-section.component';
@@ -107,6 +110,9 @@ import { EditorBreadcrumbs3SectionComponent } from '../components/breadcrumbs/ed
     EditorDraggableBox2SectionComponent,
     EditorDraggableBox3SectionComponent,
     EditorGenericSectionComponent,
+    EditorShapeSectionComponent,
+    EditorVideoSectionComponent,
+    EditorMapSectionComponent,
     EditorNavBar1SectionComponent,
     EditorNavBar2SectionComponent,
     EditorNavBar3SectionComponent,

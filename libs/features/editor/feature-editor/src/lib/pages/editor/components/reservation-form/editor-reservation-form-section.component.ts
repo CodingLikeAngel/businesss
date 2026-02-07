@@ -33,30 +33,31 @@ export class EditorReservationFormSectionComponent extends EnhancedBaseEditorSec
   }
 
   ngAfterViewInit() {
-    // Aplicar edición visual técnica
-    this.applySectionVisualEditing(this.sectionElement, this.section.id);
-    this.applyElementVisualEditing(this.formElement, this.section.id + '_form_wrapper');
+    // Initial height check
+    const formStyles = this.section.content['formStyles'] || {};
+    if (formStyles.top && formStyles.height) {
+      this.autoExpandSectionHeight({
+        x: parseInt(formStyles.left) || 0,
+        y: parseInt(formStyles.top),
+        width: parseInt(formStyles.width) || 500,
+        height: parseInt(formStyles.height) || 600
+      });
+    }
+
+    if (this.formElement) {
+       this.applyElementVisualEditing(this.formElement, this.section.id + '_form_wrapper');
+    }
   }
 
   getSectionConfig(): VisualEditingConfig {
-    return this.createElementConfig('section', {
-      styling: {
-        selectionOutline: '2px solid #6366f1',
-        hoverEffects: true,
-        resizeHandles: true,
-        dimensionLabels: true
-      } as any
-    });
+    return this.createElementConfig('section');
   }
 
   getFormWrapperConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
-      styling: {
-        selectionOutline: '2px solid #10b981',
-        hoverEffects: !this.platformInfo.isMobile,
-        resizeHandles: true,
-        dimensionLabels: true
-      } as any
+      interactions: {
+        snapToGrid: 5
+      }
     });
   }
 
@@ -69,7 +70,7 @@ export class EditorReservationFormSectionComponent extends EnhancedBaseEditorSec
   }
 
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_form_wrapper' || elementId === this.section.id) {
+    if (elementId === this.section.id + '_form_wrapper') {
       if (['moved', 'resized'].includes(event.type)) {
         this.updateFormStyles(event.bounds);
       }
@@ -77,14 +78,26 @@ export class EditorReservationFormSectionComponent extends EnhancedBaseEditorSec
   }
 
   private updateFormStyles(bounds: any): void {
-    const currentStyles = this.section.styles || {};
-    this.variantService.updateSectionInCurrentPage(this.section.id, {
-      styles: {
-        ...currentStyles,
-        width: bounds.width + 'px',
-        height: bounds.height + 'px',
-        transform: `translate(${bounds.x}px, ${bounds.y}px)`
-      }
-    });
+    const currentStyles = this.section.content['formStyles'] || {};
+    const newStyles = {
+      ...currentStyles,
+      position: 'absolute',
+      width: bounds.width + 'px',
+      height: bounds.height + 'px',
+      left: bounds.x + 'px',
+      top: bounds.y + 'px'
+    };
+
+    if (JSON.stringify(currentStyles) !== JSON.stringify(newStyles)) {
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        content: {
+          ...this.section.content,
+          formStyles: newStyles,
+          customStyles: newStyles
+        }
+      });
+
+      this.autoExpandSectionHeight(bounds);
+    }
   }
 }

@@ -4,6 +4,8 @@
     [src]="src()"
     [alt]="alt()"
     class="image"
+    [style.object-fit]="'var(--img-fit, cover)'"
+    [style.object-position]="'var(--img-position, center)'"
   />
   <figcaption *ngIf="caption()" class="image-caption">{{ caption() }}</figcaption>
 </div>

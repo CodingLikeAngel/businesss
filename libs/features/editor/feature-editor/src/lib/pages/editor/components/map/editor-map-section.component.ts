@@ -1,51 +1,43 @@
-import { Component, Input, ElementRef, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UIMapComponent } from '@negocio/ui-components';
 import {
-  PricingConfig,
   ApplyDynamicStylesDirective,
   EnhancedVisualEditableDirective,
   VisualEditingConfig,
   VisualEditingEvent
 } from '@negocio/shared-components';
-import {
-  UIPricingTableSectionComponent
-} from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
-/**
- * Enhanced Editor Pricing Section Component
- */
 @Component({
-  selector: 'lib-editor-pricing-section',
+  selector: 'lib-editor-map-section',
   standalone: true,
   imports: [
     CommonModule,
-    UIPricingTableSectionComponent,
+    UIMapComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective
   ],
-  templateUrl: './editor-pricing-section.component.html'
+  templateUrl: './editor-map-section.component.html'
 })
-export class EditorPricingSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit, DoCheck {
-  @Input() pricingConfig!: PricingConfig;
-
+export class EditorMapSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
-  @ViewChild('pricingElement', { static: true }) pricingElement!: ElementRef;
-
-  ngDoCheck() {
-    // Sincronización básica si se edita desde el panel
-  }
+  @ViewChild('mapElement', { static: false }) mapElement?: ElementRef;
 
   ngAfterViewInit() {
     // Initial height check
-    const pricingStyles = this.section.content['pricingStyles'] || {};
-    if (pricingStyles.top && pricingStyles.height) {
+    const mapStyles = this.section.content['mapStyles'] || {};
+    if (mapStyles.top && mapStyles.height) {
       this.autoExpandSectionHeight({
-        x: parseInt(pricingStyles.left) || 0,
-        y: parseInt(pricingStyles.top),
-        width: parseInt(pricingStyles.width) || 0,
-        height: parseInt(pricingStyles.height)
+        x: parseInt(mapStyles.left) || 0,
+        y: parseInt(mapStyles.top),
+        width: parseInt(mapStyles.width) || 600,
+        height: parseInt(mapStyles.height) || 400
       });
+    }
+
+    if (this.mapElement) {
+       this.applyElementVisualEditing(this.mapElement, this.section.id + '_map');
     }
   }
 
@@ -53,7 +45,7 @@ export class EditorPricingSectionComponent extends EnhancedBaseEditorSectionComp
     return this.createElementConfig('section');
   }
 
-  getPricingWrapperConfig(): VisualEditingConfig {
+  getMapConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
       interactions: {
         snapToGrid: 5
@@ -65,20 +57,20 @@ export class EditorPricingSectionComponent extends EnhancedBaseEditorSectionComp
     this.handleVisualEvent(event, this.section.id);
   }
 
-  handlePricingWrapperEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_pricing_wrapper');
+  handleMapEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id + '_map');
   }
 
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_pricing_wrapper') {
+    if (elementId === this.section.id + '_map') {
       if (['moved', 'resized'].includes(event.type)) {
-        this.updatePricingStyles(event.bounds);
+        this.updateMapStyles(event.bounds);
       }
     }
   }
 
-  private updatePricingStyles(bounds: any): void {
-    const currentStyles = this.section.content['pricingStyles'] || {};
+  private updateMapStyles(bounds: any): void {
+    const currentStyles = this.section.content['mapStyles'] || {};
     const newStyles = {
       ...currentStyles,
       position: 'absolute',
@@ -92,12 +84,11 @@ export class EditorPricingSectionComponent extends EnhancedBaseEditorSectionComp
       this.variantService.updateSectionInCurrentPage(this.section.id, {
         content: {
           ...this.section.content,
-          pricingStyles: newStyles,
+          mapStyles: newStyles,
           customStyles: newStyles
         }
       });
 
-      // Automatically expand section height
       this.autoExpandSectionHeight(bounds);
     }
   }

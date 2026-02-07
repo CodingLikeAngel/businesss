@@ -1,51 +1,43 @@
-import { Component, Input, ElementRef, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UIVideoComponent } from '@negocio/ui-components';
 import {
-  PricingConfig,
   ApplyDynamicStylesDirective,
   EnhancedVisualEditableDirective,
   VisualEditingConfig,
   VisualEditingEvent
 } from '@negocio/shared-components';
-import {
-  UIPricingTableSectionComponent
-} from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
-/**
- * Enhanced Editor Pricing Section Component
- */
 @Component({
-  selector: 'lib-editor-pricing-section',
+  selector: 'lib-editor-video-section',
   standalone: true,
   imports: [
     CommonModule,
-    UIPricingTableSectionComponent,
+    UIVideoComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective
   ],
-  templateUrl: './editor-pricing-section.component.html'
+  templateUrl: './editor-video-section.component.html'
 })
-export class EditorPricingSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit, DoCheck {
-  @Input() pricingConfig!: PricingConfig;
-
+export class EditorVideoSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
-  @ViewChild('pricingElement', { static: true }) pricingElement!: ElementRef;
-
-  ngDoCheck() {
-    // Sincronización básica si se edita desde el panel
-  }
+  @ViewChild('videoElement', { static: false }) videoElement?: ElementRef;
 
   ngAfterViewInit() {
     // Initial height check
-    const pricingStyles = this.section.content['pricingStyles'] || {};
-    if (pricingStyles.top && pricingStyles.height) {
+    const videoStyles = this.section.content['videoStyles'] || {};
+    if (videoStyles.top && videoStyles.height) {
       this.autoExpandSectionHeight({
-        x: parseInt(pricingStyles.left) || 0,
-        y: parseInt(pricingStyles.top),
-        width: parseInt(pricingStyles.width) || 0,
-        height: parseInt(pricingStyles.height)
+        x: parseInt(videoStyles.left) || 0,
+        y: parseInt(videoStyles.top),
+        width: parseInt(videoStyles.width) || 300,
+        height: parseInt(videoStyles.height) || 200
       });
+    }
+
+    if (this.videoElement) {
+       this.applyElementVisualEditing(this.videoElement, this.section.id + '_video');
     }
   }
 
@@ -53,7 +45,7 @@ export class EditorPricingSectionComponent extends EnhancedBaseEditorSectionComp
     return this.createElementConfig('section');
   }
 
-  getPricingWrapperConfig(): VisualEditingConfig {
+  getVideoConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
       interactions: {
         snapToGrid: 5
@@ -65,20 +57,20 @@ export class EditorPricingSectionComponent extends EnhancedBaseEditorSectionComp
     this.handleVisualEvent(event, this.section.id);
   }
 
-  handlePricingWrapperEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_pricing_wrapper');
+  handleVideoEvent(event: VisualEditingEvent): void {
+    this.handleVisualEvent(event, this.section.id + '_video');
   }
 
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
-    if (elementId === this.section.id + '_pricing_wrapper') {
+    if (elementId === this.section.id + '_video') {
       if (['moved', 'resized'].includes(event.type)) {
-        this.updatePricingStyles(event.bounds);
+        this.updateVideoStyles(event.bounds);
       }
     }
   }
 
-  private updatePricingStyles(bounds: any): void {
-    const currentStyles = this.section.content['pricingStyles'] || {};
+  private updateVideoStyles(bounds: any): void {
+    const currentStyles = this.section.content['videoStyles'] || {};
     const newStyles = {
       ...currentStyles,
       position: 'absolute',
@@ -92,12 +84,11 @@ export class EditorPricingSectionComponent extends EnhancedBaseEditorSectionComp
       this.variantService.updateSectionInCurrentPage(this.section.id, {
         content: {
           ...this.section.content,
-          pricingStyles: newStyles,
+          videoStyles: newStyles,
           customStyles: newStyles
         }
       });
 
-      // Automatically expand section height
       this.autoExpandSectionHeight(bounds);
     }
   }

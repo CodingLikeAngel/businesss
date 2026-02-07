@@ -487,6 +487,78 @@
       >
       </lib-editor-image-section>
 
+      <!-- SHAPE -->
+      <lib-editor-shape-section
+        *ngSwitchCase="'shape'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-shape-section>
+
+      <!-- UI SHAPE (Atom) -->
+      <lib-editor-shape-section
+        *ngSwitchCase="'ui-shape'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-shape-section>
+
+      <!-- VIDEO -->
+      <lib-editor-video-section
+        *ngSwitchCase="'video'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-video-section>
+
+      <!-- UI VIDEO (Atom) -->
+      <lib-editor-video-section
+        *ngSwitchCase="'ui-video'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-video-section>
+
+      <!-- MAP -->
+      <lib-editor-map-section
+        *ngSwitchCase="'map'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-map-section>
+
+      <!-- UI MAP (Atom) -->
+      <lib-editor-map-section
+        *ngSwitchCase="'ui-map'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (elementMoved)="onElementMoved($event.bounds, $event.elementId)"
+        (elementResized)="onElementResized($event.bounds, $event.elementId)"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-map-section>
+
       <!-- UI INPUT (Atom) -->
       <lib-editor-input-section
         *ngSwitchCase="'ui-input'"
