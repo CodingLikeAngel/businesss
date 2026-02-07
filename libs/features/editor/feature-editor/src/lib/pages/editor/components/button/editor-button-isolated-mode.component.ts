@@ -314,14 +314,10 @@ export interface UndoRedoState {
           </div>
 
           <!-- Canvas Area -->
-          <div class="isolated-canvas" 
-               #canvas
-               [class.ambient-dark]="true"
-               [class.show-grid]="showGrid"
-               [class.grid-snapping]="snapToGrid"
-               (mousedown)="onCanvasMouseDown($event)">
-            
-            <div class="canvas-inner" #canvasInner>
+          <div class="isolated-canvas" #canvas (mousedown)="onCanvasMouseDown($event)">
+            <div class="canvas-inner" #canvasInner
+                 [class.show-grid]="showGrid"
+                 [class.grid-snapping]="snapToGrid">
               <div class="draggable-wrapper"
                    #draggableWrapper
                    [style.left.px]="currentPosition.x"
@@ -462,7 +458,7 @@ export interface UndoRedoState {
     .controls-sidebar {
       width: 320px;
       background: #020617;
-      border-right: 1px solid rgba(255, 255, 255, 0.08);
+      border-right: 1px solid rgba(255, 255, 255, 0.08); 
       overflow-y: auto;
     }
 
@@ -507,8 +503,9 @@ export interface UndoRedoState {
       background: #020617;
       position: relative;
       overflow: auto;
-      padding: 100px;
+      display: block;
       transition: background-color 0.4s ease, background-image 0.4s ease;
+      z-index: 1;
     }
 
     .canvas-inner {
@@ -518,12 +515,12 @@ export interface UndoRedoState {
       flex-shrink: 0;
     }
 
-    .show-grid {
+    .canvas-inner.show-grid {
       background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
       background-size: 20px 20px;
     }
 
-    .grid-snapping.show-grid {
+    .canvas-inner.grid-snapping {
       background-image: radial-gradient(rgba(99, 102, 241, 0.3) 1.5px, transparent 1.5px);
     }
     
@@ -719,8 +716,24 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
 
     this.currentPosition = { ...this.config.position };
     this.currentSize = { ...this.config.size };
-    this.initialPosition = { ...this.config.position };
-    this.initialSize = { ...this.config.size };
+    
+    // Centrar inicialmente si no tiene posición o es 0,0
+    if (!this.config.position || (this.config.position.x === 0 && this.config.position.y === 0)) {
+       // Medidas por defecto razonables para un botón si no viene el tamaño
+       if (!this.currentSize.width) this.currentSize.width = 180;
+       if (!this.currentSize.height) this.currentSize.height = 50;
+
+       this.currentPosition = {
+         x: 2000 - (this.currentSize.width / 2),
+         y: 2000 - (this.currentSize.height / 2)
+       };
+    }
+
+    this.initialPosition = { ...this.currentPosition };
+    this.initialSize = { ...this.currentSize };
+
+    // Sincronizar el scroll después de que el DOM esté listo
+    setTimeout(() => this.scrollToComponent(), 100);
 
     this.saveState();
   }
@@ -826,6 +839,20 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
   }
 
   // --- ACTIONS ---
+  scrollToComponent() {
+    if (this.canvas && this.canvas.nativeElement) {
+      const canvas = this.canvas.nativeElement;
+      const x = this.currentPosition.x + (this.currentSize.width / 2) - (canvas.clientWidth / 2);
+      const y = this.currentPosition.y + (this.currentSize.height / 2) - (canvas.clientHeight / 2);
+      
+      canvas.scrollTo({
+        left: x,
+        top: y,
+        behavior: 'smooth'
+      });
+    }
+  }
+
   saveState() {
     const state = {
       position: { ...this.currentPosition },

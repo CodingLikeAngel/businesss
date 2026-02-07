@@ -140,6 +140,7 @@ export interface UndoRedoState {
                   <p class="variant-hint" *ngIf="!editableContent.variant">
                     Heredando: {{ config.content['globalVariant'] || 'glass' }}
                   </p>
+                </div> <!-- Close first section -->
 
                 <div class="sidebar-section no-border">
                   <div class="section-header">
@@ -168,19 +169,19 @@ export interface UndoRedoState {
                   </div>
                 </div>
 
-              </div>
-            </div>
-          </div>
+              </div> <!-- Close last section -->
+            </div> <!-- Close scroll content -->
+          </div> <!-- Close sidebar -->
 
           <!-- Canvas Area -->
           <div class="isolated-canvas" 
                #canvas
-               [class.ambient-dark]="true"
-               [class.show-grid]="showGrid"
-               [class.grid-snapping]="snapToGrid"
                (mousedown)="onCanvasMouseDown($event)">
             
-            <div class="canvas-inner" #canvasInner>
+            <div class="canvas-inner" #canvasInner
+                 [class.ambient-dark]="true"
+                 [class.show-grid]="showGrid"
+                 [class.grid-snapping]="snapToGrid">
               <div class="draggable-wrapper"
                    #draggableWrapper
                    [style.left.px]="currentPosition.x"
@@ -640,16 +641,12 @@ export interface UndoRedoState {
 
     .isolated-canvas {
       flex: 1;
-      background-color: #f1f5f9;
-      background-size: 40px 40px;
+      background-color: #020617;
       position: relative;
       overflow: auto;
-      padding: 100px;
-      transition: background-color 0.4s ease, background-image 0.4s ease;
-    }
-
-    .isolated-canvas.ambient-dark {
-      background-color: #020617;
+      display: block;
+      transition: background-color 0.4s ease;
+      z-index: 1;
     }
 
     .canvas-inner {
@@ -657,28 +654,23 @@ export interface UndoRedoState {
       height: 4000px;
       position: relative;
       flex-shrink: 0;
+      /* Grid is now on the inner canvas */
+      background-size: 40px 40px;
     }
 
-    .show-grid {
+    .canvas-inner.show-grid {
       background-image: 
-        radial-gradient(rgba(0, 0, 0, 0.2) 1.5px, transparent 1.5px);
+        radial-gradient(rgba(255, 255, 255, 0.1) 1.5px, transparent 1.5px);
     }
 
-    .ambient-dark.show-grid {
-      background-image: 
-        radial-gradient(rgba(255, 255, 255, 0.15) 1.5px, transparent 1.5px);
-    }
-
-    .grid-snapping.show-grid {
+    .canvas-inner.grid-snapping {
       background-image: 
         radial-gradient(var(--primary-accent) 2px, transparent 2px);
       box-shadow: inset 0 0 100px rgba(99, 102, 241, 0.05);
     }
     
-    .grid-snapping.ambient-dark.show-grid {
-        background-image: 
-        radial-gradient(var(--primary-accent) 2.5px, transparent 2.5px);
-        box-shadow: inset 0 0 100px rgba(99, 102, 241, 0.1);
+    .canvas-inner.ambient-dark {
+       background-color: #020617;
     }
 
     .draggable-wrapper {
@@ -917,8 +909,20 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
       width: isWidthValid ? incomingWidth : defaultSize.width, 
       height: isHeightValid ? incomingHeight : defaultSize.height 
     };
+
+    // If position is 0,0 or undefined, center it in the middle of our 4000x4000 canvas
+    if (!this.config.position || (this.config.position.x === 0 && this.config.position.y === 0)) {
+       this.currentPosition = {
+         x: 2000 - (this.currentSize.width / 2),
+         y: 2000 - (this.currentSize.height / 2)
+       };
+    }
+
     this.initialPosition = { ...this.currentPosition };
     this.initialSize = { ...this.currentSize };
+    
+    // Ensure we scroll to the component after view init
+    setTimeout(() => this.scrollToComponent(), 100);
 
     // Load editable content
     this.editableContent = {
@@ -1028,7 +1032,7 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
 
     // Reset position
     if (event.key === 'r' || event.key === 'R') {
-      this.resetPosition();
+      this.resetToCenter();
       return;
     }
 
@@ -1063,6 +1067,36 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
     }
     
     this.onPositionChange();
+  }
+
+  resetToCenter() {
+    this.currentPosition = {
+      x: 2000 - (this.currentSize.width / 2),
+      y: 2000 - (this.currentSize.height / 2)
+    };
+    this.onPositionChange();
+    this.scrollToComponent();
+  }
+
+  scrollToComponent() {
+    if (this.canvasRef && this.canvasRef.nativeElement) {
+      const canvas = this.canvasRef.nativeElement;
+      // Scroll to center the component in the view
+      // Component Center X = currentPosition.x + width/2
+      // Canvas Center X = canvas.clientWidth / 2
+      // Scroll Left = Component Center X - Canvas Center X
+      
+      const x = this.currentPosition.x + (this.currentSize.width / 2) - (canvas.clientWidth / 2);
+      const y = this.currentPosition.y + (this.currentSize.height / 2) - (canvas.clientHeight / 2);
+      
+      console.log('Scrolling to:', x, y);
+
+      canvas.scrollTo({
+        left: x,
+        top: y,
+        behavior: 'smooth'
+      });
+    }
   }
 
   onCanvasMouseDown(event: MouseEvent) {

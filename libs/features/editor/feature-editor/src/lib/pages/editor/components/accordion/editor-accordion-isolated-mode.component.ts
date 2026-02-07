@@ -142,7 +142,8 @@ export interface UndoRedoState {
                 <p class="variant-hint" *ngIf="!editableContent.variant">
                   Heredando: {{ config.content['globalVariant'] || 'glass' }}
                 </p>
-
+              </div> <!-- Close first section -->
+              
               <!-- SECCIÓN: ITEMS DEL ACORDEÓN -->
               <div class="sidebar-section no-border">
                 <div class="section-header">
@@ -171,19 +172,19 @@ export interface UndoRedoState {
                 <button class="add-btn" (click)="addItem()">
                   + Añadir Nuevo Elemento
                 </button>
-              </div>
-            </div>
-          </div>
+              </div> <!-- Close last section -->
+            </div> <!-- Close scroll content -->
+          </div> <!-- Close sidebar -->
 
           <!-- Canvas Area -->
           <div class="isolated-canvas" 
                #canvas
-               [class.ambient-dark]="true"
-               [class.show-grid]="showGrid"
-               [class.grid-snapping]="snapToGrid"
                (mousedown)="onCanvasMouseDown($event)">
             
-            <div class="canvas-inner" #canvasInner>
+            <div class="canvas-inner" #canvasInner
+                 [class.ambient-dark]="true"
+                 [class.show-grid]="showGrid"
+                 [class.grid-snapping]="snapToGrid">
               <div class="draggable-wrapper"
                    #draggableWrapper
                    [style.left.px]="currentPosition.x"
@@ -676,16 +677,12 @@ export interface UndoRedoState {
 
     .isolated-canvas {
       flex: 1;
-      background-color: #f1f5f9;
-      background-size: 40px 40px;
+      background-color: #020617;
       position: relative;
       overflow: auto;
-      padding: 100px;
+      display: block;
       transition: background-color 0.4s ease, background-image 0.4s ease;
-    }
-
-    .isolated-canvas.ambient-dark {
-      background-color: #020617;
+      z-index: 1;
     }
 
     .canvas-inner {
@@ -693,19 +690,19 @@ export interface UndoRedoState {
       height: 4000px;
       position: relative;
       flex-shrink: 0;
+      background-size: 40px 40px;
     }
 
-    .show-grid {
+    .canvas-inner.show-grid {
       background-image: 
-        radial-gradient(rgba(0, 0, 0, 0.2) 1.5px, transparent 1.5px);
+        radial-gradient(rgba(255, 255, 255, 0.1) 1.5px, transparent 1.5px);
     }
 
-    .ambient-dark.show-grid {
-      background-image: 
-        radial-gradient(rgba(255, 255, 255, 0.15) 1.5px, transparent 1.5px);
+    .canvas-inner.ambient-dark {
+      background-color: #020617;
     }
 
-    .grid-snapping.show-grid {
+    .canvas-inner.grid-snapping {
       background-image: 
         radial-gradient(var(--primary-accent) 2px, transparent 2px);
       box-shadow: inset 0 0 100px rgba(16, 185, 129, 0.05);
@@ -913,13 +910,27 @@ export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
     
     const isWidthValid = incomingWidth >= 100 && incomingWidth <= 2500;
     const isHeightValid = incomingHeight >= 50 && incomingHeight <= 2000;
+
+    const defaultSize = { width: 600, height: 450 };
     
     this.currentSize = { 
-      width: isWidthValid ? incomingWidth : 600, 
-      height: isHeightValid ? incomingHeight : 450 
+      width: isWidthValid ? incomingWidth : defaultSize.width, 
+      height: isHeightValid ? incomingHeight : defaultSize.height 
     };
+
+    // Center initially if no position or at 0,0
+    if (!this.config.position || (this.config.position.x === 0 && this.config.position.y === 0)) {
+       this.currentPosition = {
+         x: 2000 - (this.currentSize.width / 2),
+         y: 2000 - (this.currentSize.height / 2)
+       };
+    }
+
     this.initialPosition = { ...this.currentPosition };
     this.initialSize = { ...this.currentSize };
+
+    // Ensure we scroll to the component after view init
+    setTimeout(() => this.scrollToComponent(), 100);
 
     // Load editable content
     this.editableContent = {
@@ -1001,14 +1012,15 @@ export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
       this.toggleGrid();
       return;
     }
-
+    // Toggle snap
     if (event.key === 's' || event.key === 'S') {
       this.toggleSnap();
       return;
     }
 
+    // Reset position
     if (event.key === 'r' || event.key === 'R') {
-      this.resetPosition();
+      this.resetToCenter();
       return;
     }
 
@@ -1022,10 +1034,18 @@ export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
 
   private handleArrowKey(key: string, delta: number) {
     switch (key) {
-      case 'ArrowUp': this.currentPosition.y -= delta; break;
-      case 'ArrowDown': this.currentPosition.y += delta; break;
-      case 'ArrowLeft': this.currentPosition.x -= delta; break;
-      case 'ArrowRight': this.currentPosition.x += delta; break;
+      case 'ArrowUp':
+        this.currentPosition.y -= delta;
+        break;
+      case 'ArrowDown':
+        this.currentPosition.y += delta;
+        break;
+      case 'ArrowLeft':
+        this.currentPosition.x -= delta;
+        break;
+      case 'ArrowRight':
+        this.currentPosition.x += delta;
+        break;
     }
     
     if (this.snapToGrid) {
@@ -1034,6 +1054,29 @@ export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
     }
     
     this.onPositionChange();
+  }
+
+  resetToCenter() {
+    this.currentPosition = {
+      x: 2000 - (this.currentSize.width / 2),
+      y: 2000 - (this.currentSize.height / 2)
+    };
+    this.onPositionChange();
+    this.scrollToComponent();
+  }
+
+  scrollToComponent() {
+    if (this.canvasRef && this.canvasRef.nativeElement) {
+      const canvas = this.canvasRef.nativeElement;
+      const x = this.currentPosition.x + (this.currentSize.width / 2) - (canvas.clientWidth / 2);
+      const y = this.currentPosition.y + (this.currentSize.height / 2) - (canvas.clientHeight / 2);
+      
+      canvas.scrollTo({
+        left: x,
+        top: y,
+        behavior: 'smooth'
+      });
+    }
   }
 
   onCanvasMouseDown(event: MouseEvent) {
