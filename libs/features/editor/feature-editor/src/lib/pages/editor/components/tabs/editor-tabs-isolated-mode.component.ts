@@ -51,8 +51,8 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                       <button (click)="removeItem(i, $event)" class="delete-btn">✕</button>
                     </div>
                     <div *ngIf="selectedIndex === i" class="item-details animate-fade-in">
-                       <label>Contenido (HTML/Texto)</label>
-                       <textarea [(ngModel)]="item.content" class="premium-input-mini h-24 mt-1" placeholder="Contenido de la pestaña..."></textarea>
+                       <label>ID de Sección (Anclaje)</label>
+                       <input type="text" [(ngModel)]="item.sectionId" class="premium-input-mini mt-1" placeholder="Ej: home, service-1...">
                     </div>
                   </div>
                 </div>

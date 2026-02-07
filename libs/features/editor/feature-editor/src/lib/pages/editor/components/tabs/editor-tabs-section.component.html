@@ -27,8 +27,7 @@
        (visualEvents)="handleTabsEvent($event)">
        <lib-ui-components-tabs
          [variant]="section.content['variant'] || getVariant(section.id)"
-         [tabs]="section.content['tabs'] || [{ label: 'Tab 1', content: 'Content for Tab 1' }, { label: 'Tab 2', content: 'Content for Tab 2' }]"
-         [align]="section.content['align'] || 'left'"
+         [tabs]="section.content['tabs'] || [{ label: 'Tab 1', sectionId: 'tab1' }, { label: 'Tab 2', sectionId: 'tab2' }]"
          [orientation]="section.content['orientation'] || 'horizontal'"
          [customStyles]="section.styles || {}"
        ></lib-ui-components-tabs>
