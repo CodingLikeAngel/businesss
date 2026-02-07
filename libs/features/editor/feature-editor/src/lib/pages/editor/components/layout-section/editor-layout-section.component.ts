@@ -23,6 +23,13 @@ import {
 import { EditorButtonIsolatedModeComponent } from '../button/editor-button-isolated-mode.component';
 import { EditorAccordionIsolatedModeComponent } from '../accordion/editor-accordion-isolated-mode.component';
 import { EditorDraggableBoxIsolatedModeComponent } from '../draggable-box/editor-draggable-box-isolated-mode.component';
+import { EditorTitleIsolatedModeComponent } from '../title/editor-title-isolated-mode.component';
+import { EditorImageIsolatedModeComponent } from '../image/editor-image-isolated-mode.component';
+import { EditorCardAnimatedIsolatedModeComponent } from '../card-animated/editor-card-animated-isolated-mode.component';
+import { EditorCardPremiumIsolatedModeComponent } from '../card-premium/editor-card-premium-isolated-mode.component';
+import { EditorListIsolatedModeComponent } from '../list/editor-list-isolated-mode.component';
+import { EditorChipIsolatedModeComponent } from '../chip/editor-chip-isolated-mode.component';
+import { EditorCardProductIsolatedModeComponent } from '../card-product/editor-card-product-isolated-mode.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 import { 
@@ -57,7 +64,14 @@ import {
     UIDraggableBox1Component,
     EditorButtonIsolatedModeComponent,
     EditorAccordionIsolatedModeComponent,
-    EditorDraggableBoxIsolatedModeComponent
+    EditorDraggableBoxIsolatedModeComponent,
+    EditorTitleIsolatedModeComponent,
+    EditorImageIsolatedModeComponent,
+    EditorCardAnimatedIsolatedModeComponent,
+    EditorCardPremiumIsolatedModeComponent,
+    EditorListIsolatedModeComponent,
+    EditorChipIsolatedModeComponent,
+    EditorCardProductIsolatedModeComponent
   ],
   template: `
     <section 
@@ -133,7 +147,7 @@ import {
               <!-- Editing Overlay -->
               <div *ngIf="isEditing" class="slot-controls">
                 <button class="slot-btn" (click)="openIsolatedMode(i, $event)" 
-                        *ngIf="['ui-button', 'ui-accordion', 'draggable-box'].includes(slot.componentType)"
+                        *ngIf="slot.componentType !== 'empty'"
                         title="Modo Aislado">🎯</button>
                 <button class="slot-btn" (click)="openComponentPicker(i, $event)" title="Cambiar">🔄</button>
                 <button class="slot-btn" (click)="editSlotComponent(i, $event)" title="Configurar">⚙️</button>
@@ -146,7 +160,8 @@ import {
                 <!-- UI BUTTON -->
                 <lib-ui-components-button
                   *ngSwitchCase="'ui-button'"
-                  [variant]="$any(slot.componentVariant || globalVariant || 'primary')">
+                  [variant]="$any(slot.componentVariant || globalVariant || 'primary')"
+                  [customStyles]="slot.styles || {}">
                   {{ slot.content?.['text'] || 'Botón' }}
                 </lib-ui-components-button>
 
@@ -154,7 +169,8 @@ import {
                 <lib-ui-components-title
                   *ngSwitchCase="'ui-title'"
                   [text]="slot.content?.['text'] || 'Título'"
-                  [variant]="$any(slot.componentVariant || globalVariant || 'default')">
+                  [variant]="$any(slot.componentVariant || globalVariant || 'default')"
+                  [customStyles]="slot.styles || {}">
                 </lib-ui-components-title>
 
                 <!-- UI IMAGE -->
@@ -162,6 +178,8 @@ import {
                   *ngSwitchCase="'ui-image'"
                   [src]="slot.content?.['src'] || 'assets/placeholder.jpg'"
                   [alt]="slot.content?.['alt'] || 'Imagen'"
+                  [filter]="slot.styles?.['filter']"
+                  [customStyles]="slot.styles || {}"
                   class="slot-image">
                 </lib-ui-image>
 
@@ -171,6 +189,7 @@ import {
                   [variant]="$any(slot.componentVariant || globalVariant || 'glass')"
                   [title]="slot.content?.['title'] || 'Título'"
                   [description]="slot.content?.['description'] || 'Descripción...'"
+                  [customStyles]="slot.styles || {}"
                   class="slot-card">
                 </lib-ui-components-card>
 
@@ -178,6 +197,7 @@ import {
                 <lib-ui-components-card-animated
                   *ngSwitchCase="'ui-card-animated'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
+                  [customStyles]="slot.styles || {}"
                   class="slot-card">
                 </lib-ui-components-card-animated>
 
@@ -185,27 +205,31 @@ import {
                 <lib-ui-components-accordion
                   *ngSwitchCase="'ui-accordion'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [items]="slot.content?.['items'] || [{title:'Item 1', content:'Contenido 1'}]">
+                  [items]="slot.content?.['items'] || [{title:'Item 1', content:'Contenido 1'}]"
+                  [customStyles]="slot.styles || {}">
                 </lib-ui-components-accordion>
 
                 <!-- UI LIST -->
                 <lib-ui-list
                   *ngSwitchCase="'ui-list'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [items]="slot.content?.['items'] || ['Item 1', 'Item 2', 'Item 3']">
+                  [items]="slot.content?.['items'] || ['Item 1', 'Item 2', 'Item 3']"
+                  [customStyles]="slot.styles || {}">
                 </lib-ui-list>
 
                 <!-- UI CARD PRODUCT -->
                 <lib-card-products
                   *ngSwitchCase="'ui-card-product'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [product]="slot.content?.['product'] || { image: '', name: 'Producto', description: 'Descripción...', price: '0.00' }">
+                  [product]="slot.content?.['product'] || { image: '', name: 'Producto', description: 'Descripción...', price: '0.00' }"
+                  [customStyles]="slot.styles || {}">
                 </lib-card-products>
 
                 <!-- UI CHIP -->
                 <lib-ui-components-chip
                   *ngSwitchCase="'ui-chip'"
-                  [variant]="$any(slot.componentVariant || globalVariant || 'default')">
+                  [variant]="$any(slot.componentVariant || globalVariant || 'default')"
+                  [customStyles]="slot.styles || {}">
                   {{ slot.content?.['text'] || 'Chip' }}
                 </lib-ui-components-chip>
 
@@ -214,6 +238,7 @@ import {
                   *ngSwitchCase="'draggable-box'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'secondary')"
                   [content]="slot.content?.['text'] || 'Caja'"
+                  [customStyles]="slot.styles || {}"
                   class="slot-box">
                 </lib-ui-components-draggable-box-1>
 
@@ -370,6 +395,55 @@ import {
           (closed)="onIsolatedModeClosed()"
           (applied)="onIsolatedModeApplied($any($event))">
         </lib-editor-draggable-box-isolated-mode>
+
+        <lib-editor-title-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-title'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-title-isolated-mode>
+
+        <lib-editor-image-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-image'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-image-isolated-mode>
+
+        <lib-editor-card-premium-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-card'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-card-premium-isolated-mode>
+
+        <lib-editor-card-animated-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-card-animated'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-card-animated-isolated-mode>
+
+        <lib-editor-list-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-list'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-list-isolated-mode>
+
+        <lib-editor-chip-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-chip'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-chip-isolated-mode>
+
+        <lib-editor-card-product-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-card-product'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-card-product-isolated-mode>
       </ng-container>
 
     </section>
@@ -939,7 +1013,10 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       content: { ...slot.content },
       styles: { ...slot.styles },
       position: { x: 0, y: 0 },
-      size: { width: 0, height: 0 }
+      size: { 
+        width: parseInt(slot.styles?.['width']) || 400, 
+        height: parseInt(slot.styles?.['height']) || 300 
+      }
     };
     
     this.showIsolatedMode = true;
