@@ -65,7 +65,7 @@ Composiciones complejas que ocupan un bloque completo de la página.
 | **chip**             | ✅ Wrapper Base                   | Medium   |
 | **spinner**          | ✅ Wrapper Base                   | Low      |
 | **visual-spacer**    | ✅ Drag-to-Resize + Decorative    | High     |
-| **card-premium**     | 🛠️ En Proceso                     | High     |
+| **card-premium**     | ✅ Implementado (Isolated Mode)   | High     |
 | **card-rutas**       | �️ En Proceso                     | Medium   |
 
 ---

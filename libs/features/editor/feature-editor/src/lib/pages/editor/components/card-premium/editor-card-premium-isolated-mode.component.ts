@@ -78,8 +78,8 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                   <label>Variante Visual</label>
                   <select [(ngModel)]="editableContent.variant" class="premium-input">
                     <option value="default">Estándar</option>
-                    <option value="primary">Primarios</option>
-                    <option value="secondary">Secundarios</option>
+                    <option value="primary">Primario</option>
+                    <option value="secondary">Secundario</option>
                     <option value="glowing">Brillo (Glowing)</option>
                     <option value="glass">Vidrio (Glass)</option>
                     <option value="neon">Neón</option>
@@ -87,6 +87,9 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                     <option value="luxury">Lujo / Gold</option>
                     <option value="nintendo">Retro Nintendo</option>
                     <option value="zelda">Zelda Theme</option>
+                    <option value="stellar">Estelar</option>
+                    <option value="matrix">Matrix</option>
+                    <option value="holo">Holograma</option>
                   </select>
                 </div>
 

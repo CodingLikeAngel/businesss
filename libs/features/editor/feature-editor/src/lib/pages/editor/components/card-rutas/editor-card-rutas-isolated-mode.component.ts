@@ -84,6 +84,9 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                     <option value="glass">Cristal (Glass)</option>
                     <option value="neon">Neón / Cyber</option>
                     <option value="trailblazer">Trailblazer (Premium)</option>
+                    <option value="mario">Retro (Nintendo)</option>
+                    <option value="rockstar">Gritty (RockStar)</option>
+                    <option value="rayman">Whimsical (Rayman)</option>
                   </select>
                 </div>
 
