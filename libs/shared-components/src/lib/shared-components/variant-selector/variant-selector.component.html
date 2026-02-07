@@ -168,6 +168,63 @@
               </div>
           </div>
         </section>
+
+        <!-- ISOLATED MODE PANEL -->
+        <section class="panel-v2 isolated-mode-panel" *ngIf="currentStep === 'isolated-mode'">
+          <header class="panel-v2-header isolated-mode-header">
+            <button class="back-btn" (click)="onIsolatedModeClosed()">
+              <span class="arrow">←</span> Volver al Editor
+            </button>
+            <h2>🎯 {{ getIsolatedModeTitle() }}</h2>
+            <p>Editor especializado para {{ selectedSection?.label || 'esta sección' }}</p>
+          </header>
+          
+          <div class="isolated-mode-content">
+            <!-- Promotions Isolated Mode -->
+            <lib-editor-promotions-isolated-mode
+              *ngIf="activeIsolatedMode === 'promotions'"
+              [config]="getIsolatedModeConfig()"
+              (applied)="onIsolatedModeClosed($event)"
+              (cancelled)="onIsolatedModeClosed()"
+            ></lib-editor-promotions-isolated-mode>
+
+            <!-- Restaurant Isolated Mode -->
+            <lib-editor-restaurant-isolated-mode
+              *ngIf="activeIsolatedMode === 'restaurant'"
+              [config]="getIsolatedModeConfig()"
+              (applied)="onIsolatedModeClosed($event)"
+              (cancelled)="onIsolatedModeClosed()"
+            ></lib-editor-restaurant-isolated-mode>
+
+            <!-- Gym Isolated Mode -->
+            <lib-editor-gym-isolated-mode
+              *ngIf="activeIsolatedMode === 'gym'"
+              [config]="getIsolatedModeConfig()"
+              (applied)="onIsolatedModeClosed($event)"
+              (cancelled)="onIsolatedModeClosed()"
+            ></lib-editor-gym-isolated-mode>
+
+            <!-- Spa Isolated Mode -->
+            <lib-editor-spa-isolated-mode
+              *ngIf="activeIsolatedMode === 'spa'"
+              [config]="getIsolatedModeConfig()"
+              (applied)="onIsolatedModeClosed($event)"
+              (cancelled)="onIsolatedModeClosed()"
+            ></lib-editor-spa-isolated-mode>
+
+            <!-- Generic Isolated Mode (fallback) -->
+            <div class="generic-isolated-mode" *ngIf="activeIsolatedMode === 'generic'">
+              <div class="mode-info">
+                <span class="icon">✨</span>
+                <h3>Editor Avanzado</h3>
+                <p>Esta sección utiliza el editor estándar con herramientas adicionales.</p>
+              </div>
+              <button class="btn-primary" (click)="onIsolatedModeClosed()">
+                Volver al Editor
+              </button>
+            </div>
+          </div>
+        </section>
         
       </div>
     </div>

@@ -32,6 +32,13 @@ import { DesignEditorComponent } from './design-editor.component';
 import { PresetSelectorComponent } from './preset-selector.component';
 import { ExportPanelComponent } from './export-panel.component';
 import { IsolatedModeTriggerComponent } from './isolated-mode-trigger.component';
+
+// Import Isolated Mode Components
+import { EditorPromotionsIsolatedModeComponent } from './promotions-isolated-mode/editor-promotions-isolated-mode.component';
+import { EditorRestaurantIsolatedModeComponent } from './restaurant-isolated-mode/editor-restaurant-isolated-mode.component';
+import { EditorGymIsolatedModeComponent } from './gym-isolated-mode/editor-gym-isolated-mode.component';
+import { EditorSpaIsolatedModeComponent } from './spa-isolated-mode/editor-spa-isolated-mode.component';
+
 // import { TemplateSelectorComponent } from '../template-selector/template-selector.component';
 
 // Import services
@@ -56,7 +63,11 @@ import { ExportService } from './export.service';
     DesignEditorComponent,
     PresetSelectorComponent,
     ExportPanelComponent,
-    IsolatedModeTriggerComponent
+    IsolatedModeTriggerComponent,
+    EditorPromotionsIsolatedModeComponent,
+    EditorRestaurantIsolatedModeComponent,
+    EditorGymIsolatedModeComponent,
+    EditorSpaIsolatedModeComponent
   ],
   templateUrl: './variant-selector.component.html',
   styleUrl: './variant-selector.component.scss',
@@ -680,5 +691,35 @@ export class VariantSelectorComponent implements OnInit {
     
     // Emit event for parent components
     this.visualEditorService.exitIsolatedMode(result);
+  }
+
+  getIsolatedModeConfig(): any {
+    if (!this.selectedSection) return {};
+    
+    return {
+      id: this.selectedSection.id,
+      type: this.selectedSection.type,
+      label: this.selectedSection.label,
+      content: this.selectedSection.content || {},
+      styles: this.selectedSection.styles || {},
+      metadata: {
+        createdAt: Date.now(),
+        modifiedAt: Date.now(),
+      }
+    };
+  }
+
+  getIsolatedModeTitle(): string {
+    const titles: { [key: string]: string } = {
+      'pricing': 'Editor de Precios',
+      'promotions': 'Editor Promociones',
+      'restaurant': 'Editor de Menú',
+      'gym': 'Editor Gimnasio',
+      'spa': 'Editor Spa',
+      'generic': 'Editor Avanzado',
+      'preview': 'Vista Previa',
+      'duplicate': 'Duplicar Sección'
+    };
+    return titles[this.activeIsolatedMode || ''] || 'Modo Aislado';
   }
 }
