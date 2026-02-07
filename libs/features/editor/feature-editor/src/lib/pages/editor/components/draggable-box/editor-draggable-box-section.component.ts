@@ -533,9 +533,9 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   }
 
   private loadPositionFromStore() {
-    // Define strict valid ranges
-    const MIN_WIDTH = 150, MAX_WIDTH = 400;
-    const MIN_HEIGHT = 80, MAX_HEIGHT = 250;
+    // Define sensible valid ranges
+    const MIN_WIDTH = 50, MAX_WIDTH = 2500;
+    const MIN_HEIGHT = 40, MAX_HEIGHT = 2000;
     const DEFAULT_WIDTH = 280, DEFAULT_HEIGHT = 120;
     
     if (this.section.styles) {

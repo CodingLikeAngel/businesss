@@ -996,18 +996,17 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
 
     // Load initial position with validation
     this.currentPosition = { 
-      x: Math.max(50, Math.min(500, this.config.position?.x || 100)), 
-      y: Math.max(50, Math.min(500, this.config.position?.y || 100)) 
+      x: Math.max(0, Math.min(3000, this.config.position?.x ?? 100)), 
+      y: Math.max(0, Math.min(3000, this.config.position?.y ?? 100)) 
     };
     
-    // ROBUSTNESS: Use STRICT validation - only accept sizes within a very tight range
-    // If the size looks like it came from corrupted data, use defaults
+    // ROBUSTNESS: Use sensible validation - allow wide range of sizes
     const incomingWidth = this.config.size?.width || 0;
     const incomingHeight = this.config.size?.height || 0;
     
-    // Valid range is very tight: width 150-400, height 80-250
-    const isWidthValid = incomingWidth >= 150 && incomingWidth <= 400;
-    const isHeightValid = incomingHeight >= 80 && incomingHeight <= 250;
+    // Sensible range: width 50-2500, height 40-2000
+    const isWidthValid = incomingWidth >= 50 && incomingWidth <= 2500;
+    const isHeightValid = incomingHeight >= 40 && incomingHeight <= 2000;
     
     this.currentSize = { 
       width: isWidthValid ? incomingWidth : defaultSize.width, 
