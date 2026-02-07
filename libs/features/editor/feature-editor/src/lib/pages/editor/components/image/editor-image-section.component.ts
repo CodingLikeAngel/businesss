@@ -8,11 +8,11 @@ import {
   VisualEditingEvent
 } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { EditorImageIsolatedModeComponent, IsolatedModeConfig } from './editor-image-isolated-mode.component';
 
 /**
  * Enhanced Editor Image Section Component
- * Example implementation using the new EnhancedBaseEditorSectionComponent
- * and EnhancedVisualEditableDirective for standardized visual editing
+ * Standardized for visual editing and Smart Image v2 features.
  */
 @Component({
   selector: 'lib-editor-image-section',
@@ -21,7 +21,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UIImageComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorImageIsolatedModeComponent
   ],
   templateUrl: './editor-image-section.component.html'
 })
@@ -29,7 +30,15 @@ export class EditorImageSectionComponent extends EnhancedBaseEditorSectionCompon
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('imageElement', { static: true }) imageElement!: ElementRef;
 
+  // Isolated Mode State
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
+
   ngAfterViewInit() {
+    // Apply standardized visual editing
+    this.applySectionVisualEditing(this.sectionElement, this.section.id);
+    this.applyElementVisualEditing(this.imageElement, this.section.id + '_image');
+
     // Initial height check
     const imageStyles = this.section.content['imageStyles'] || {};
     if (imageStyles.top && imageStyles.height) {
@@ -54,12 +63,8 @@ export class EditorImageSectionComponent extends EnhancedBaseEditorSectionCompon
     });
   }
 
-  handleSectionEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id);
-  }
-
-  handleImageEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_image');
+  handleEventStandalone(event: VisualEditingEvent, elementId: string): void {
+    this.handleVisualEvent(event, elementId);
   }
 
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
@@ -90,8 +95,49 @@ export class EditorImageSectionComponent extends EnhancedBaseEditorSectionCompon
         }
       });
 
-      // Automatically expand section height
       this.autoExpandSectionHeight(bounds);
     }
+  }
+
+  openIsolatedMode(event: MouseEvent): void {
+    event.stopPropagation();
+    const imageStyles = this.section.content['imageStyles'] || {};
+    
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_image',
+      type: 'image',
+      content: {
+        src: this.section.content['src'],
+        alt: this.section.content['alt']
+      },
+      styles: { ...imageStyles },
+      position: {
+        x: parseInt(imageStyles.left) || 0,
+        y: parseInt(imageStyles.top) || 0
+      },
+      size: {
+        width: parseInt(imageStyles.width) || 400,
+        height: parseInt(imageStyles.height) || 300
+      }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    this.showIsolatedMode = false;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: {
+        ...this.section.content,
+        src: config.content.src,
+        alt: config.content.alt,
+        imageStyles: config.styles,
+        customStyles: config.styles
+      }
+    });
+    this.showIsolatedMode = false;
   }
 }

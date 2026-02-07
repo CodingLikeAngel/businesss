@@ -1,18 +1,54 @@
-<div #sectionElement class="editor-section cursor-pointer py-24"
+<div #sectionElement class="editor-section cursor-pointer transition-all duration-500 group relative py-20"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="getSectionConfig()"
   sectionId="{{section.id}}"
-  (visualEvents)="handleSectionEvent($event)">
-    <div #showcaseElement class="container mx-auto px-6 editor-element"
+  (visualEvents)="handleEventStandalone($event, section.id)">
+
+  <!-- Section Quick Actions -->
+  <div class="absolute top-0 left-0 right-0 h-10 bg-white/50 backdrop-blur-sm border-b border-slate-200 flex items-center justify-between px-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
+    <div class="flex items-center gap-4">
+      <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Átomo / Showcase</span>
+      <button 
+        (click)="openIsolatedMode($event)"
+        class="bg-amber-500 hover:bg-amber-600 text-black text-[9px] font-black px-3 py-1 rounded-full shadow-lg shadow-amber-200 transition-all flex items-center gap-2">
+        <span>ASIGNAR ICONO</span>
+        <span class="bg-black/10 px-1.5 py-0.5 rounded text-[8px]">PRO</span>
+      </button>
+    </div>
+  </div>
+
+  <div class="container mx-auto px-6 relative">
+    <div #showcaseElement class="editor-element"
        [class.is-selected]="selectedElementId === section.id + '_showcase'"
        (click)="selectElement($event, getMergedElement(section.id, section.id + '_showcase', section.content, 'showcase'))"
-       [applyDynamicStyles]="section.styles"
        [enhancedVisualEditable]="getShowcaseConfig()"
        elementId="{{section.id + '_showcase'}}"
        sectionId="{{section.id}}"
-       (visualEvents)="handleShowcaseEvent($event)">
-       <lib-ui-gaming-variants-showcase></lib-ui-gaming-variants-showcase>
+       (visualEvents)="handleEventStandalone($event, section.id + '_showcase')"
+       [style.position]="section.content['showcaseStyles']?.['position'] || 'relative'"
+       [style.width]="section.content['showcaseStyles']?.['width'] || '100%'"
+       [style.min-height]="section.content['showcaseStyles']?.['minHeight'] || '150px'"
+       [style.left]="section.content['showcaseStyles']?.['left']"
+       [style.top]="section.content['showcaseStyles']?.['top']"
+    >
+      <lib-ui-showcase-atom
+        [icon]="section.content['icon'] || '✨'"
+        [title]="section.content['title'] || 'Nueva Característica'"
+        [text]="section.content['text'] || 'Explora cómo este beneficio puede mejorar tu flujo de trabajo diario.'"
+        [layout]="section.content['layout'] || 'vertical'"
+        [variant]="section.content['variant'] || 'default'"
+        [customStyles]="section.content['showcaseStyles'] || {}"
+      ></lib-ui-showcase-atom>
     </div>
+  </div>
+
+  <!-- Isolated Mode Component -->
+  <lib-editor-showcase-isolated-mode 
+    *ngIf="showIsolatedMode && isolatedConfig"
+    [config]="isolatedConfig"
+    (closed)="onIsolatedModeClosed()"
+    (applied)="onIsolatedModeApplied($event)">
+  </lib-editor-showcase-isolated-mode>
 </div>

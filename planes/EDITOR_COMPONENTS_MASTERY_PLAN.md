@@ -27,7 +27,7 @@ Integración de los "Big 5" y Isolated Mode para:
 - [x] **Accordion (Suite completa)**: (Completado) Soporte para V1, V2, V3 con auto-expansión.
 - [x] **Buttons (Universal)**: (Completado) Edición de bordes, iconos y modo aislado.
 - [x] **Cards / Pricing Tables**: (Completado) Control de elevación y posicionamiento dinámico.
-- [x] **Smart Images**: (Completado) Filtros, object-fit y foco dinámico.
+- [x] **Smart Images v2**: (Completado) Filtros, máscaras (`clip-path`) y modo aislado.
 
 ### 🖼 Fase 2: Componentes Multimedia & Formas (Semana 2)
 
@@ -49,7 +49,7 @@ Integración de los "Big 5" y Isolated Mode para:
   - [x] Visual registration
   - [x] Style synchronization
 
-### Phase 3: Advanced Atoms & Typography (50% Completion) 🚀
+### Phase 3: Advanced Atoms & Typography (70% Completion) 🚀
 
 - [x] **Title Mastery (H1-H6)**
 
@@ -57,10 +57,14 @@ Integración de los "Big 5" y Isolated Mode para:
   - [x] Support for Gradients, Shadows and Precise Alignment
   - [x] Entrada Animations (Fade, Pulse, Glitch)
 
-- [ ] **Showcase / Feature Atom**
+- [x] **Showcase / Feature Atom**
 
-  - [ ] Standardized icon+text pattern
-  - [ ] Isolated Mode for grid/list toggle
+  - [x] Standardized icon+text pattern (`UIShowcaseAtomComponent`)
+  - [x] Isolated Mode for grid/list toggle, layout and styling.
+
+- [x] **Global Theme Synchronization** (70%)
+
+  - [x] Color palette synchronization in Isolated Modes (Title, Showcase, Image).
 
 - [ ] **Smart Lists**
 
@@ -86,14 +90,7 @@ Integración de los "Big 5" y Isolated Mode para:
 ### 🚀 Fase 5: Ecosistema & Inteligencia (Futuro)
 
 - [ ] **Smart Container integration**: Layouts anidados con auto-ajuste de flujo (Flex/Grid).
-- [ ] **Global Theme Sync**: Propagación de estilos desde modo aislado a toda la página.
 - [ ] **AI Style Generator**: Sugerencia de variantes basadas en el contenido del componente.
-
----
-
-### 3. Registro Dinámico (Arquitectura de Futuro)
-
-Migrar hacia un `ComponentRegistry` para evitar el crecimiento infinito de plantillas.
 
 ---
 
@@ -102,18 +99,18 @@ Migrar hacia un `ComponentRegistry` para evitar el crecimiento infinito de plant
 - [x] Soporta el input `customStyles` y lo aplica al elemento raíz del UI.
 - [x] Implementa `VisualEditingConfig` con constraints de `containment: 'parent'`.
 - [x] El Isolated Mode permite edición de contenido y estilo en tiempo real.
-- [x] La sección se expande automáticamente al mover/redimensionar el elemento.
-- [x] Todas las variantes visuales están mapeadas en el selector de Isolated Mode.
+- [x] La sección se expande automáticamente al mover/redimensionar elementos.
+- [x] Interacción con el Global Theme Store.
 
----
+### Estado Actual: 🚀 70% Completado
 
-## 📅 Próximos Pasos Inmediatos
+#### Próximos Pasos Inmediatos:
 
-1.  **Isolated Mode para Video**: Crear el componente de edición aislada para `EditorVideoSectionComponent`.
-2.  **Isolated Mode para Map**: Crear el componente de edición aislada para `EditorMapSectionComponent`.
-3.  **Title Mastery**: Implementar el editor avanzado de textos y títulos con soporte para gradientes.
+1. Implementar Isolated Mode para el componente de **Botón** (alineación, gradientes, efectos hover).
+2. Crear el componente **Visual Spacer** para control preciso de espacios entre secciones.
+3. Integrar **Google Fonts Dynamic Loader** para previsualización instantánea de fuentes en el editor de títulos.
 
 ---
 
 **Última actualización**: 2026-02-07
-**Estado del Proyecto**: 40% completado
+**Estado del Proyecto**: 70% completado

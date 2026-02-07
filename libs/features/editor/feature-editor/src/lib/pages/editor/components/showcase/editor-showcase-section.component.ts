@@ -7,61 +7,59 @@ import {
   VisualEditingEvent
 } from '@negocio/shared-components';
 import {
-  UIGamingVariantsShowcaseComponent
+  UIShowcaseAtomComponent
 } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { EditorShowcaseIsolatedModeComponent, IsolatedModeConfig } from './editor-showcase-isolated-mode.component';
 
 /**
  * Enhanced Editor Showcase Section Component
- * Uses EnhancedBaseEditorSectionComponent and EnhancedVisualEditableDirective
- * for standardized visual editing with unified styling application
+ * Standardized for icon+text patterns with pro features.
  */
 @Component({
   selector: 'lib-editor-showcase-section',
   standalone: true,
   imports: [
     CommonModule,
-    UIGamingVariantsShowcaseComponent,
+    UIShowcaseAtomComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorShowcaseIsolatedModeComponent
   ],
   templateUrl: './editor-showcase-section.component.html'
 })
 export class EditorShowcaseSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
-  @ViewChild('showcaseElement', { static: true }) showcaseElement!: ElementRef;
+  @ViewChild('showcaseElement', { static: false }) showcaseElement?: ElementRef;
+
+  // Isolated Mode State
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
 
   ngAfterViewInit() {
     // Apply standardized visual editing to elements
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
-    this.applyElementVisualEditing(this.showcaseElement, this.section.id + '_showcase');
+    if (this.showcaseElement) {
+       this.applyElementVisualEditing(this.showcaseElement, this.section.id + '_showcase');
+    }
+
+    // Initial height check
+    const showcaseStyles = this.section.content['showcaseStyles'] || {};
+    if (showcaseStyles.top && showcaseStyles.height) {
+      this.autoExpandSectionHeight({
+        x: parseInt(showcaseStyles.left) || 0,
+        y: parseInt(showcaseStyles.top),
+        width: parseInt(showcaseStyles.width) || 300,
+        height: parseInt(showcaseStyles.height) || 200
+      });
+    }
   }
 
   /**
    * Get configuration for the section container
    */
   getSectionConfig(): VisualEditingConfig {
-    return this.createElementConfig('section', {
-      constraints: {
-        containment: 'parent',
-        minDistance: { top: 10, right: 10, bottom: 10, left: 10 },
-        collisionDetection: false,
-        safeZones: []
-      },
-      styling: {
-        selectionOutline: '2px solid #6366f1',
-        hoverEffects: true,
-        dimensionLabels: true,
-        resizeHandles: true
-      },
-      interactions: {
-        touchEnabled: true,
-        multiSelect: false,
-        snapToGrid: 0,
-        animationDuration: 200,
-        hapticFeedback: false
-      }
-    });
+    return this.createElementConfig('section');
   }
 
   /**
@@ -70,23 +68,7 @@ export class EditorShowcaseSectionComponent extends EnhancedBaseEditorSectionCom
   getShowcaseConfig(): VisualEditingConfig {
     return this.createElementConfig('element', {
       interactions: {
-        snapToGrid: 5,
-        animationDuration: 150,
-        touchEnabled: this.platformInfo.isTouch,
-        multiSelect: true,
-        hapticFeedback: true
-      },
-      constraints: {
-        containment: 'parent',
-        collisionDetection: true,
-        minDistance: { top: 5, right: 5, bottom: 5, left: 5 },
-        safeZones: []
-      },
-      styling: {
-        selectionOutline: '2px solid #10b981',
-        hoverEffects: !this.platformInfo.isMobile,
-        dimensionLabels: !this.platformInfo.isMobile,
-        resizeHandles: true
+        snapToGrid: 5
       }
     });
   }
@@ -94,36 +76,87 @@ export class EditorShowcaseSectionComponent extends EnhancedBaseEditorSectionCom
   /**
    * Handle visual editing events
    */
-  handleSectionEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id);
+  handleEventStandalone(event: VisualEditingEvent, elementId: string): void {
+    this.handleVisualEvent(event, elementId);
   }
 
-  handleShowcaseEvent(event: VisualEditingEvent): void {
-    this.handleVisualEvent(event, this.section.id + '_showcase');
-  }
-
-  /**
-   * Custom event handling for showcase-specific logic
-   */
   protected override onVisualEvent(event: VisualEditingEvent, elementId: string): void {
     if (elementId === this.section.id + '_showcase') {
-      switch (event.type) {
-        case 'selected':
-          console.log('Showcase element selected for editing');
-          break;
-        case 'moved':
-          this.updateShowcasePosition(event.bounds);
-          break;
-        case 'resized':
-          break;
+      if (['moved', 'resized'].includes(event.type)) {
+        this.updateShowcaseStyles(event.bounds);
       }
     }
   }
 
-  /**
-   * Update showcase position in section data
-   */
-  private updateShowcasePosition(bounds: any): void {
-    console.log('Showcase position updated:', bounds);
+  private updateShowcaseStyles(bounds: any): void {
+    const currentStyles = this.section.content['showcaseStyles'] || {};
+    const newStyles = {
+      ...currentStyles,
+      position: 'absolute',
+      width: bounds.width + 'px',
+      minHeight: bounds.height + 'px',
+      left: bounds.x + 'px',
+      top: bounds.y + 'px'
+    };
+
+    if (JSON.stringify(currentStyles) !== JSON.stringify(newStyles)) {
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        content: {
+          ...this.section.content,
+          showcaseStyles: newStyles,
+          customStyles: newStyles
+        }
+      });
+
+      this.autoExpandSectionHeight(bounds);
+    }
+  }
+
+  openIsolatedMode(event: MouseEvent): void {
+    event.stopPropagation();
+    const showcaseStyles = this.section.content['showcaseStyles'] || {};
+    
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_showcase',
+      type: 'showcase',
+      content: {
+        icon: this.section.content['icon'],
+        title: this.section.content['title'],
+        text: this.section.content['text'],
+        layout: this.section.content['layout'],
+        variant: this.section.content['variant']
+      },
+      styles: { ...showcaseStyles },
+      position: {
+        x: parseInt(showcaseStyles.left) || 0,
+        y: parseInt(showcaseStyles.top) || 0
+      },
+      size: {
+        width: parseInt(showcaseStyles.width) || 300,
+        height: parseInt(showcaseStyles.minHeight || showcaseStyles.height) || 150
+      }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    this.showIsolatedMode = false;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: {
+        ...this.section.content,
+        icon: config.content.icon,
+        title: config.content.title,
+        text: config.content.text,
+        layout: config.content.layout,
+        variant: config.content.variant,
+        showcaseStyles: config.styles,
+        customStyles: config.styles
+      }
+    });
+    this.showIsolatedMode = false;
   }
 }

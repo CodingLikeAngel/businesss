@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject } fro
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { UITitleComponent, TitleVariantType, TitleLevel, TitleAnimation } from '@negocio/ui-components';
+import { UIImageComponent } from '@negocio/ui-components';
 import { AppState } from '../../../../store/state/app.state';
 import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.selectors';
 import { map } from 'rxjs/operators';
@@ -19,9 +19,9 @@ export interface IsolatedModeConfig {
 }
 
 @Component({
-  selector: 'lib-editor-title-isolated-mode',
+  selector: 'lib-editor-image-isolated-mode',
   standalone: true,
-  imports: [CommonModule, FormsModule, UITitleComponent],
+  imports: [CommonModule, FormsModule, UIImageComponent],
   template: `
     <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
@@ -30,7 +30,7 @@ export interface IsolatedModeConfig {
           <div class="header-breadcrumb">
             <span class="mode-badge">🎯 MODO AISLADO</span>
             <span class="separator">/</span>
-            <span class="component-name">TÍTULO & TIPOGRAFÍA</span>
+            <span class="component-name">SMART IMAGE v2 - FILTROS & MÁSCARAS</span>
           </div>
           
           <div class="header-actions">
@@ -41,166 +41,152 @@ export interface IsolatedModeConfig {
         <div class="isolated-mode-body">
           <div class="controls-sidebar">
             <div class="sidebar-scroll-content">
+              
+              <!-- Content Section -->
               <div class="sidebar-section">
                 <div class="section-header">
-                  <span class="section-icon">✍️</span>
+                  <span class="section-icon">🔗</span>
                   <h4>CONTENIDO</h4>
                 </div>
-                
                 <div class="control-group">
-                  <label>Texto del Título</label>
-                  <textarea [(ngModel)]="editableContent.text" (ngModelChange)="onContentChange()" class="premium-input h-24" placeholder="Escribe aquí..."></textarea>
+                  <label>URL de Imagen</label>
+                  <input type="text" [(ngModel)]="editableContent.src" (ngModelChange)="onContentChange()" class="premium-input" placeholder="https://...">
                 </div>
-
-                <div class="control-row grid grid-cols-2 gap-2 mt-4">
-                  <div class="control-group">
-                    <label>Nivel SEO</label>
-                    <select [(ngModel)]="editableContent.level" (ngModelChange)="onContentChange()" class="premium-input">
-                      <option value="h1">H1 - Principal</option>
-                      <option value="h2">H2 - Sección</option>
-                      <option value="h3">H3 - Subtítulo</option>
-                      <option value="h4">H4</option>
-                      <option value="h5">H5</option>
-                      <option value="h6">H6</option>
-                    </select>
-                  </div>
-                  <div class="control-group">
-                    <label>Alineación</label>
-                    <div class="flex bg-slate-800 p-1 rounded-lg gap-1">
-                      <button (click)="editableContent.align = 'left'; onContentChange()" [class.active]="editableContent.align === 'left'" class="align-btn">L</button>
-                      <button (click)="editableContent.align = 'center'; onContentChange()" [class.active]="editableContent.align === 'center'" class="align-btn">C</button>
-                      <button (click)="editableContent.align = 'right'; onContentChange()" [class.active]="editableContent.align === 'right'" class="align-btn">R</button>
-                    </div>
-                  </div>
+                <div class="control-group">
+                  <label>Texto Alt / SEO</label>
+                  <input type="text" [(ngModel)]="editableContent.alt" (ngModelChange)="onContentChange()" class="premium-input" placeholder="Descripción de la imagen...">
                 </div>
               </div>
 
+              <!-- Filters Section -->
               <div class="sidebar-section">
                 <div class="section-header">
-                  <span class="section-icon">✨</span>
-                  <h4>ESTILO & VARIANTE</h4>
+                  <span class="section-icon">🪄</span>
+                  <h4>FILTROS PRO</h4>
                 </div>
                 
                 <div class="control-group">
-                  <label>Variante Visual</label>
-                  <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()" class="premium-input">
-                    <option value="default">Estándar</option>
-                    <option value="luxury">Luxury (Gold)</option>
-                    <option value="cyberpunk">Cyberpunk (Neon)</option>
-                    <option value="arcade">Arcade (Retro)</option>
-                    <option value="minimal">Minimalista</option>
-                    <option value="jungle">Bosque</option>
-                  </select>
+                  <label>Brillo: {{ filters.brightness }}%</label>
+                  <input type="range" min="0" max="200" [(ngModel)]="filters.brightness" (ngModelChange)="onFilterChange()" class="w-full">
                 </div>
 
                 <div class="control-group">
-                  <label>Animación de Entrada</label>
-                  <select [(ngModel)]="editableContent.animation" (ngModelChange)="onContentChange()" class="premium-input">
-                    <option value="none">Sin animación</option>
-                    <option value="fade">Aparecer (Fade)</option>
-                    <option value="pulse">Pulso (Pulse)</option>
-                    <option value="glitch">Error (Glitch)</option>
-                    <option value="bounce">Rebote (Bounce)</option>
-                  </select>
+                  <label>Contraste: {{ filters.contrast }}%</label>
+                  <input type="range" min="0" max="200" [(ngModel)]="filters.contrast" (ngModelChange)="onFilterChange()" class="w-full">
+                </div>
+
+                <div class="control-group">
+                  <label>Grayscale: {{ filters.grayscale }}%</label>
+                  <input type="range" min="0" max="100" [(ngModel)]="filters.grayscale" (ngModelChange)="onFilterChange()" class="w-full">
+                </div>
+
+                <div class="control-group">
+                  <label>Sepia: {{ filters.sepia }}%</label>
+                  <input type="range" min="0" max="100" [(ngModel)]="filters.sepia" (ngModelChange)="onFilterChange()" class="w-full">
+                </div>
+
+                <div class="control-group">
+                  <label>Desenfoque (Blur): {{ filters.blur }}px</label>
+                  <input type="range" min="0" max="20" [(ngModel)]="filters.blur" (ngModelChange)="onFilterChange()" class="w-full">
                 </div>
               </div>
 
+              <!-- Masks Section -->
               <div class="sidebar-section">
+                <div class="section-header">
+                  <span class="section-icon">🎭</span>
+                  <h4>MÁSCARAS & FORMAS</h4>
+                </div>
+                <div class="mask-grid">
+                  <div *ngFor="let m of maskPresets" 
+                       class="mask-item" 
+                       [class.active]="selectedMask === m.id"
+                       (click)="applyMask(m.id, m.value)">
+                    <div class="mask-preview" [style.clip-path]="m.value"></div>
+                    <span>{{ m.label }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Borders Section -->
+              <div class="sidebar-section no-border">
                 <div class="section-header">
                   <span class="section-icon">🎨</span>
-                  <h4>COLORES PERSONALIZADOS</h4>
+                  <h4>BORDES & SOMBRAS</h4>
                 </div>
                 
                 <div class="control-group">
-                  <label>Color de Texto</label>
+                  <label>Color de Borde</label>
                   <div class="color-control-wrapper">
                     <div class="color-input-wrapper">
-                      <div class="color-preview" [style.background-color]="editableStyles.color">
-                        <input type="color" [(ngModel)]="editableStyles.color" (ngModelChange)="onStyleChange()">
+                      <div class="color-preview" [style.background-color]="editableStyles.borderColor">
+                        <input type="color" [(ngModel)]="editableStyles.borderColor" (ngModelChange)="onStyleChange()">
                       </div>
-                      <input type="text" [(ngModel)]="editableStyles.color" (ngModelChange)="onStyleChange()" class="premium-input hex-input">
+                      <input type="text" [(ngModel)]="editableStyles.borderColor" (ngModelChange)="onStyleChange()" class="premium-input hex-input">
                     </div>
                     <div class="theme-palette" *ngIf="globalColors$ | async as colors">
                        <div *ngFor="let c of colors" 
                             class="palette-swatch" 
                             [style.background-color]="c"
                             [title]="c"
-                            (click)="editableStyles.color = c; onStyleChange()"></div>
+                            (click)="editableStyles.borderColor = c; onStyleChange()"></div>
                     </div>
                   </div>
                 </div>
 
-                <div class="control-group">
-                  <label>Sombra del Texto (CSS)</label>
-                  <input type="text" [(ngModel)]="editableStyles['text-shadow']" (ngModelChange)="onStyleChange()" class="premium-input" placeholder="2px 2px 4px rgba(0,0,0,0.5)">
+                <div class="control-row grid grid-cols-2 gap-2 mt-4">
+                  <div class="control-group">
+                    <label>Ancho (px)</label>
+                    <input type="number" [(ngModel)]="borderWidth" (ngModelChange)="onStyleChange()" class="premium-input">
+                  </div>
+                  <div class="control-group">
+                     <label>Radio (px)</label>
+                     <input type="number" [(ngModel)]="borderRadius" (ngModelChange)="onStyleChange()" class="premium-input">
+                  </div>
                 </div>
               </div>
 
-              <div class="sidebar-section no-border">
-                <div class="section-header">
-                  <span class="section-icon">📐</span>
-                  <h4>DIMENSIONES (PX)</h4>
-                </div>
-                <div class="control-row grid grid-cols-2 gap-2">
-                  <div class="control-group">
-                    <label>X</label>
-                    <input type="number" [(ngModel)]="currentPosition.x" (ngModelChange)="onPositionChange()" class="premium-input">
-                  </div>
-                  <div class="control-group">
-                    <label>Y</label>
-                    <input type="number" [(ngModel)]="currentPosition.y" (ngModelChange)="onPositionChange()" class="premium-input">
-                  </div>
-                </div>
-                <div class="control-row grid grid-cols-2 gap-2">
-                  <div class="control-group">
-                    <label>Ancho Máximo</label>
-                    <input type="number" [(ngModel)]="currentSize.width" (ngModelChange)="onSizeChange()" class="premium-input">
-                  </div>
-                  <div class="control-group">
-                    <label>Alto (Min)</label>
-                    <input type="number" [(ngModel)]="currentSize.height" (ngModelChange)="onSizeChange()" class="premium-input">
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
 
+          <!-- Canvas area -->
           <div class="isolated-canvas">
-            <div class="canvas-inner" [style.text-align]="editableContent.align">
-              <div class="draggable-wrapper"
+            <div class="canvas-inner">
+               <div class="draggable-wrapper"
                    [style.left.px]="currentPosition.x"
                    [style.top.px]="currentPosition.y"
                    [style.width.px]="currentSize.width"
-                   [style.min-height.px]="currentSize.height"
+                   [style.height.px]="currentSize.height"
                    (mousedown)="onMouseDown($event)">
                 
-                <lib-ui-components-title
-                  [text]="editableContent.text"
-                  [level]="editableContent.level"
-                  [variant]="editableContent.variant"
-                  [animation]="editableContent.animation"
-                  [align]="editableContent.align"
-                  [customStyles]="getMergedStyles()"
-                  style="display: block;">
-                </lib-ui-components-title>
+                  <div class="image-mask-container" [style.clip-path]="currentMaskValue">
+                    <img [src]="editableContent.src" 
+                         [alt]="editableContent.alt"
+                         [style.filter]="currentFilterString"
+                         [style.border-color]="editableStyles.borderColor"
+                         [style.border-width.px]="borderWidth"
+                         [style.border-style]="borderWidth > 0 ? 'solid' : 'none'"
+                         [style.border-radius.px]="borderRadius"
+                         class="isolated-image">
+                  </div>
 
-                <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
-              </div>
+                  <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
+               </div>
             </div>
-            
+
             <div class="modern-position-dock">
-              <div class="dock-item"><span class="label">TXT</span><span class="value">{{ editableContent.text.length }} chars</span></div>
+              <div class="dock-item"><span class="label">FILTER</span><span class="value text-amber-400">ACTIVE</span></div>
               <div class="dock-divider"></div>
-              <div class="dock-item"><span class="label">VAR</span><span class="value text-indigo-400 capitalize">{{ editableContent.variant }}</span></div>
+              <div class="dock-item"><span class="label">MASK</span><span class="value capitalize text-indigo-400">{{ selectedMask }}</span></div>
             </div>
           </div>
         </div>
 
         <div class="isolated-mode-footer">
-          <div class="footer-hint">Usa el editor de estilo para crear jerarquía visual con tipografía.</div>
+          <div class="footer-hint">Smart Image v2: Experimenta con máscaras geométricas para diseños vanguardistas.</div>
           <div class="footer-actions-btns">
             <button class="btn-clean secondary" (click)="cancel()">Descartar cambios</button>
-            <button class="btn-clean primary" (click)="apply()">Aplicar al Diseño</button>
+            <button class="btn-clean primary" (click)="apply()">Aplicar Filtros</button>
           </div>
         </div>
       </div>
@@ -238,7 +224,7 @@ export interface IsolatedModeConfig {
       align-items: center;
       justify-content: space-between;
     }
-    .mode-badge { font-size: 10px; font-weight: 800; color: #818cf8; background: rgba(129, 140, 248, 0.1); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(129, 140, 248, 0.2); }
+    .mode-badge { font-size: 10px; font-weight: 800; color: #10b981; background: rgba(16, 185, 129, 0.1); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.2); }
     .component-name { color: white; font-size: 13px; font-weight: 600; margin-left: 8px; font-family: 'Inter', sans-serif; letter-spacing: 0.5px; }
     .close-main-btn { background: rgba(239, 68, 68, 0.1); color: #f87171; border: none; width: 32px; height: 32px; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
     .close-main-btn:hover { background: #ef4444; color: white; transform: rotate(90deg); }
@@ -246,14 +232,12 @@ export interface IsolatedModeConfig {
     .isolated-mode-body { flex: 1; display: flex; overflow: hidden; }
     .controls-sidebar { width: 320px; background: #020617; border-right: 1px solid rgba(255,255,255,0.1); overflow-y: auto; }
     .sidebar-scroll-content { padding: 1.5rem; }
-    .sidebar-section { margin-bottom: 2rem; }
+    .sidebar-section { margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1.5rem; }
+    .sidebar-section.no-border { border-bottom: none; }
     .section-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.2rem; color: #94a3b8; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
     
-    .control-group { margin-bottom: 1rem; }
+    .control-group { margin-bottom: 1.2rem; }
     .control-group label { display: block; font-size: 10px; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase; font-weight: 700; }
-    
-    .align-btn { flex: 1; padding: 4px; color: #64748b; font-size: 10px; font-weight: 800; border-radius: 6px; transition: all 0.2s; }
-    .align-btn.active { background: #6366f1; color: white; }
     
     .premium-input {
       width: 100%;
@@ -264,7 +248,14 @@ export interface IsolatedModeConfig {
       border-radius: 10px;
       font-size: 12px;
     }
-    
+
+    .mask-grid { display: grid; grid-cols-3; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    .mask-item { background: rgba(255,255,255,0.05); border-radius: 12px; padding: 10px; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 5px; border: 1px solid transparent; transition: all 0.2s; }
+    .mask-item:hover { background: rgba(255,255,255,0.1); transform: translateY(-2px); }
+    .mask-item.active { background: rgba(99, 102, 241, 0.1); border-color: #6366f1; }
+    .mask-preview { width: 30px; height: 30px; background: #6366f1; }
+    .mask-item span { font-size: 9px; color: #94a3b8; font-weight: 700; }
+
     .color-control-wrapper { display: flex; flex-direction: column; gap: 0.5rem; }
     .color-input-wrapper { display: flex; gap: 0.8rem; }
     .color-preview { width: 38px; height: 38px; border-radius: 10px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
@@ -275,10 +266,12 @@ export interface IsolatedModeConfig {
     .palette-swatch:hover { transform: scale(1.2); z-index: 10; border-color: white; }
 
     .isolated-canvas { flex: 1; background: #020617; position: relative; overflow: hidden; background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 20px 20px; }
-    .canvas-inner { width: 100%; height: 100%; position: relative; padding: 100px; display: flex; align-items: center; justify-content: center; }
+    .canvas-inner { width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; }
     
-    .draggable-wrapper { position: relative; cursor: move; border: 1px dashed rgba(99, 102, 241, 0.5); padding: 10px; }
-    .resize-handle { position: absolute; width: 10px; height: 10px; background: #6366f1; border: 1.5px solid white; border-radius: 3px; bottom: -5px; right: -5px; cursor: se-resize; }
+    .draggable-wrapper { position: relative; cursor: move; border: 1px dashed rgba(16, 185, 129, 0.5); padding: 5px; }
+    .image-mask-container { width: 100%; height: 100%; overflow: hidden; }
+    .isolated-image { width: 100%; height: 100%; object-fit: cover; }
+    .resize-handle { position: absolute; width: 10px; height: 10px; background: #10b981; border: 1.5px solid white; border-radius: 3px; bottom: -5px; right: -5px; cursor: se-resize; }
 
     .modern-position-dock { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); padding: 0.6rem 1.2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); display: flex; gap: 1.5rem; color: white; font-size: 11px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
     .dock-divider { width: 1px; background: rgba(255,255,255,0.1); }
@@ -288,12 +281,12 @@ export interface IsolatedModeConfig {
     .isolated-mode-footer { height: 72px; padding: 0 2rem; background: #1e293b; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); }
     .footer-hint { font-size: 12px; color: #94a3b8; font-style: italic; }
     .btn-clean { padding: 0.6rem 1.5rem; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; font-size: 13px; transition: all 0.2s; }
-    .btn-clean.primary { background: #6366f1; color: white; }
+    .btn-clean.primary { background: #10b981; color: #fff; }
     .btn-clean.secondary { background: transparent; color: #94a3b8; }
     .btn-clean:hover { transform: translateY(-1px); opacity: 0.9; }
   `]
 })
-export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
+export class EditorImageIsolatedModeComponent implements OnInit, OnDestroy {
   @Input() config!: IsolatedModeConfig;
   @Output() closed = new EventEmitter<void>();
   @Output() applied = new EventEmitter<IsolatedModeConfig>();
@@ -314,6 +307,22 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
 
   editableContent: any = {};
   editableStyles: any = {};
+  filters = { brightness: 100, contrast: 100, grayscale: 0, sepia: 0, blur: 0 };
+  
+  selectedMask = 'none';
+  currentMaskValue = 'none';
+  maskPresets = [
+    { id: 'none', label: 'Cuadrado', value: 'none' },
+    { id: 'circle', label: 'Círculo', value: 'circle(50% at 50% 50%)' },
+    { id: 'ellipse', label: 'Elipse', value: 'ellipse(25% 40% at 50% 50%)' },
+    { id: 'inset', label: 'Inset', value: 'inset(10% 10% 10% 10% round 20px)' },
+    { id: 'hexagon', label: 'Hexágono', value: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)' },
+    { id: 'star', label: 'Estrella', value: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)' },
+  ];
+
+  borderWidth = 0;
+  borderRadius = 0;
+
   currentPosition = { x: 0, y: 0 };
   currentSize = { width: 0, height: 0 };
 
@@ -328,13 +337,29 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.editableContent = {
-      text: this.config.content.text || '',
-      level: this.config.content.level || 'h1',
-      variant: this.config.content.variant || 'default',
-      animation: this.config.content.animation || 'none',
-      align: this.config.content.align || 'left'
+      src: this.config.content.src || '',
+      alt: this.config.content.alt || ''
     };
     this.editableStyles = { ...this.config.styles };
+    
+    // Load current filters and masks from styles if they exist
+    if (this.editableStyles.filter) {
+        // Simple parser for demonstration (could be more robust)
+        const f = this.editableStyles.filter;
+        this.filters.brightness = this.parseFilter(f, 'brightness', 100);
+        this.filters.contrast = this.parseFilter(f, 'contrast', 100);
+        this.filters.grayscale = this.parseFilter(f, 'grayscale', 0);
+        this.filters.sepia = this.parseFilter(f, 'sepia', 0);
+        this.filters.blur = this.parseFilter(f, 'blur', 0);
+    }
+
+    this.currentMaskValue = this.editableStyles['clip-path'] || 'none';
+    const activeMask = this.maskPresets.find(m => m.value === this.currentMaskValue);
+    this.selectedMask = activeMask ? activeMask.id : 'none';
+
+    this.borderWidth = parseInt(this.editableStyles['border-width']) || 0;
+    this.borderRadius = parseInt(this.editableStyles['border-radius']) || 0;
+
     this.currentPosition = { ...this.config.position };
     this.currentSize = { ...this.config.size };
 
@@ -345,6 +370,22 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     window.removeEventListener('mousemove', this.onMouseMove);
     window.removeEventListener('mouseup', this.onMouseUp);
+  }
+
+  private parseFilter(filterStr: string, name: string, defaultValue: number): number {
+    const match = filterStr.match(new RegExp(`${name}\\(([^)]+)\\)`));
+    if (!match) return defaultValue;
+    return parseInt(match[1]);
+  }
+
+  get currentFilterString() {
+    return `brightness(${this.filters.brightness}%) contrast(${this.filters.contrast}%) grayscale(${this.filters.grayscale}%) sepia(${this.filters.sepia}%) blur(${this.filters.blur}px)`;
+  }
+
+  applyMask(id: string, value: string) {
+    this.selectedMask = id;
+    this.currentMaskValue = value;
+    this.onStyleChange();
   }
 
   onMouseDown(e: MouseEvent) {
@@ -369,8 +410,8 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
       this.currentPosition.x = this.startPosX + (e.clientX - this.dragStartX);
       this.currentPosition.y = this.startPosY + (e.clientY - this.dragStartY);
     } else if (this.isResizing) {
-      this.currentSize.width = Math.max(100, this.startW + (e.clientX - this.dragStartX));
-      this.currentSize.height = Math.max(20, this.startH + (e.clientY - this.dragStartY));
+      this.currentSize.width = Math.max(50, this.startW + (e.clientX - this.dragStartX));
+      this.currentSize.height = Math.max(50, this.startH + (e.clientY - this.dragStartY));
     }
   }
 
@@ -379,16 +420,9 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
     this.isResizing = false;
   }
 
-  getMergedStyles() {
-    return {
-      ...this.editableStyles
-    };
-  }
-
   onContentChange() {}
   onStyleChange() {}
-  onPositionChange() {}
-  onSizeChange() {}
+  onFilterChange() {}
 
   close() { this.closed.emit(); }
   cancel() { this.closed.emit(); }
@@ -399,11 +433,15 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
       ...this.config,
       content: { ...this.editableContent },
       styles: {
-        ...this.getMergedStyles(),
+        ...this.editableStyles,
+        filter: this.currentFilterString,
+        'clip-path': this.currentMaskValue,
+        'border-width': this.borderWidth + 'px',
+        'border-radius': this.borderRadius + 'px',
         left: this.currentPosition.x + 'px',
         top: this.currentPosition.y + 'px',
         width: this.currentSize.width + 'px',
-        minHeight: this.currentSize.height + 'px',
+        height: this.currentSize.height + 'px',
         position: 'absolute'
       },
       position: { ...this.currentPosition },

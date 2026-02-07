@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject } fro
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { UITitleComponent, TitleVariantType, TitleLevel, TitleAnimation } from '@negocio/ui-components';
+import { UIShowcaseAtomComponent, ShowcaseLayout, ShowcaseVariant } from '@negocio/ui-components';
 import { AppState } from '../../../../store/state/app.state';
 import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.selectors';
 import { map } from 'rxjs/operators';
@@ -19,9 +19,9 @@ export interface IsolatedModeConfig {
 }
 
 @Component({
-  selector: 'lib-editor-title-isolated-mode',
+  selector: 'lib-editor-showcase-isolated-mode',
   standalone: true,
-  imports: [CommonModule, FormsModule, UITitleComponent],
+  imports: [CommonModule, FormsModule, UIShowcaseAtomComponent],
   template: `
     <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
@@ -30,7 +30,7 @@ export interface IsolatedModeConfig {
           <div class="header-breadcrumb">
             <span class="mode-badge">🎯 MODO AISLADO</span>
             <span class="separator">/</span>
-            <span class="component-name">TÍTULO & TIPOGRAFÍA</span>
+            <span class="component-name">SHOWCASE ATOM - DISEÑO</span>
           </div>
           
           <div class="header-actions">
@@ -43,64 +43,49 @@ export interface IsolatedModeConfig {
             <div class="sidebar-scroll-content">
               <div class="sidebar-section">
                 <div class="section-header">
-                  <span class="section-icon">✍️</span>
+                  <span class="section-icon">📝</span>
                   <h4>CONTENIDO</h4>
                 </div>
                 
                 <div class="control-group">
-                  <label>Texto del Título</label>
-                  <textarea [(ngModel)]="editableContent.text" (ngModelChange)="onContentChange()" class="premium-input h-24" placeholder="Escribe aquí..."></textarea>
+                  <label>Icono (Emoji / SVG Path)</label>
+                  <input type="text" [(ngModel)]="editableContent.icon" (ngModelChange)="onContentChange()" class="premium-input" placeholder="✨">
                 </div>
 
-                <div class="control-row grid grid-cols-2 gap-2 mt-4">
-                  <div class="control-group">
-                    <label>Nivel SEO</label>
-                    <select [(ngModel)]="editableContent.level" (ngModelChange)="onContentChange()" class="premium-input">
-                      <option value="h1">H1 - Principal</option>
-                      <option value="h2">H2 - Sección</option>
-                      <option value="h3">H3 - Subtítulo</option>
-                      <option value="h4">H4</option>
-                      <option value="h5">H5</option>
-                      <option value="h6">H6</option>
-                    </select>
-                  </div>
-                  <div class="control-group">
-                    <label>Alineación</label>
-                    <div class="flex bg-slate-800 p-1 rounded-lg gap-1">
-                      <button (click)="editableContent.align = 'left'; onContentChange()" [class.active]="editableContent.align === 'left'" class="align-btn">L</button>
-                      <button (click)="editableContent.align = 'center'; onContentChange()" [class.active]="editableContent.align === 'center'" class="align-btn">C</button>
-                      <button (click)="editableContent.align = 'right'; onContentChange()" [class.active]="editableContent.align === 'right'" class="align-btn">R</button>
-                    </div>
-                  </div>
+                <div class="control-group">
+                  <label>Título</label>
+                  <input type="text" [(ngModel)]="editableContent.title" (ngModelChange)="onContentChange()" class="premium-input" placeholder="Título...">
+                </div>
+
+                <div class="control-group">
+                  <label>Texto descriptivo</label>
+                  <textarea [(ngModel)]="editableContent.text" (ngModelChange)="onContentChange()" class="premium-input h-20" placeholder="Descripción..."></textarea>
                 </div>
               </div>
 
               <div class="sidebar-section">
                 <div class="section-header">
-                  <span class="section-icon">✨</span>
-                  <h4>ESTILO & VARIANTE</h4>
+                  <span class="section-icon">📐</span>
+                  <h4>LAYOUT & VARIANTE</h4>
                 </div>
                 
                 <div class="control-group">
-                  <label>Variante Visual</label>
-                  <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()" class="premium-input">
-                    <option value="default">Estándar</option>
-                    <option value="luxury">Luxury (Gold)</option>
-                    <option value="cyberpunk">Cyberpunk (Neon)</option>
-                    <option value="arcade">Arcade (Retro)</option>
-                    <option value="minimal">Minimalista</option>
-                    <option value="jungle">Bosque</option>
+                  <label>Disposición (Layout)</label>
+                  <select [(ngModel)]="editableContent.layout" (ngModelChange)="onContentChange()" class="premium-input">
+                    <option value="vertical">Vertical</option>
+                    <option value="horizontal">Horizontal</option>
+                    <option value="centered">Centrado</option>
                   </select>
                 </div>
 
                 <div class="control-group">
-                  <label>Animación de Entrada</label>
-                  <select [(ngModel)]="editableContent.animation" (ngModelChange)="onContentChange()" class="premium-input">
-                    <option value="none">Sin animación</option>
-                    <option value="fade">Aparecer (Fade)</option>
-                    <option value="pulse">Pulso (Pulse)</option>
-                    <option value="glitch">Error (Glitch)</option>
-                    <option value="bounce">Rebote (Bounce)</option>
+                  <label>Variante Visual</label>
+                  <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()" class="premium-input">
+                    <option value="default">Estándar</option>
+                    <option value="glass">Glassmorphism</option>
+                    <option value="neon">Neon Glow</option>
+                    <option value="cyberpunk">Cyberpunk</option>
+                    <option value="minimal">Minimal</option>
                   </select>
                 </div>
               </div>
@@ -108,52 +93,62 @@ export interface IsolatedModeConfig {
               <div class="sidebar-section">
                 <div class="section-header">
                   <span class="section-icon">🎨</span>
-                  <h4>COLORES PERSONALIZADOS</h4>
+                  <h4>COLORES & ESTILOS</h4>
                 </div>
                 
                 <div class="control-group">
-                  <label>Color de Texto</label>
+                  <label>Color de Icono</label>
                   <div class="color-control-wrapper">
                     <div class="color-input-wrapper">
-                      <div class="color-preview" [style.background-color]="editableStyles.color">
-                        <input type="color" [(ngModel)]="editableStyles.color" (ngModelChange)="onStyleChange()">
+                      <div class="color-preview" [style.background-color]="editableStyles.iconColor">
+                        <input type="color" [(ngModel)]="editableStyles.iconColor" (ngModelChange)="onStyleChange()">
                       </div>
-                      <input type="text" [(ngModel)]="editableStyles.color" (ngModelChange)="onStyleChange()" class="premium-input hex-input">
+                      <input type="text" [(ngModel)]="editableStyles.iconColor" (ngModelChange)="onStyleChange()" class="premium-input hex-input">
                     </div>
                     <div class="theme-palette" *ngIf="globalColors$ | async as colors">
                        <div *ngFor="let c of colors" 
                             class="palette-swatch" 
                             [style.background-color]="c"
                             [title]="c"
-                            (click)="editableStyles.color = c; onStyleChange()"></div>
+                            (click)="editableStyles.iconColor = c; onStyleChange()"></div>
                     </div>
                   </div>
                 </div>
 
                 <div class="control-group">
-                  <label>Sombra del Texto (CSS)</label>
-                  <input type="text" [(ngModel)]="editableStyles['text-shadow']" (ngModelChange)="onStyleChange()" class="premium-input" placeholder="2px 2px 4px rgba(0,0,0,0.5)">
+                  <label>Fondo de Tarjeta</label>
+                  <div class="color-control-wrapper">
+                    <div class="color-input-wrapper">
+                      <div class="color-preview" [style.background-color]="editableStyles.backgroundColor">
+                        <input type="color" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()">
+                      </div>
+                      <input type="text" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()" class="premium-input hex-input">
+                    </div>
+                    <div class="theme-palette" *ngIf="globalColors$ | async as colors">
+                       <div *ngFor="let c of colors" 
+                            class="palette-swatch" 
+                            [style.background-color]="c"
+                            [title]="c"
+                            (click)="editableStyles.backgroundColor = c; onStyleChange()"></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label>Radio de Borde (px)</label>
+                  <input type="range" min="0" max="40" step="2" [(ngModel)]="borderRadiusValue" (ngModelChange)="onBorderRadiusChange()" class="w-full">
+                  <div class="text-right text-[10px] text-white/50">{{ borderRadiusValue }}px</div>
                 </div>
               </div>
 
               <div class="sidebar-section no-border">
                 <div class="section-header">
-                  <span class="section-icon">📐</span>
+                  <span class="section-icon">📏</span>
                   <h4>DIMENSIONES (PX)</h4>
                 </div>
                 <div class="control-row grid grid-cols-2 gap-2">
                   <div class="control-group">
-                    <label>X</label>
-                    <input type="number" [(ngModel)]="currentPosition.x" (ngModelChange)="onPositionChange()" class="premium-input">
-                  </div>
-                  <div class="control-group">
-                    <label>Y</label>
-                    <input type="number" [(ngModel)]="currentPosition.y" (ngModelChange)="onPositionChange()" class="premium-input">
-                  </div>
-                </div>
-                <div class="control-row grid grid-cols-2 gap-2">
-                  <div class="control-group">
-                    <label>Ancho Máximo</label>
+                    <label>Ancho</label>
                     <input type="number" [(ngModel)]="currentSize.width" (ngModelChange)="onSizeChange()" class="premium-input">
                   </div>
                   <div class="control-group">
@@ -166,7 +161,7 @@ export interface IsolatedModeConfig {
           </div>
 
           <div class="isolated-canvas">
-            <div class="canvas-inner" [style.text-align]="editableContent.align">
+            <div class="canvas-inner">
               <div class="draggable-wrapper"
                    [style.left.px]="currentPosition.x"
                    [style.top.px]="currentPosition.y"
@@ -174,33 +169,33 @@ export interface IsolatedModeConfig {
                    [style.min-height.px]="currentSize.height"
                    (mousedown)="onMouseDown($event)">
                 
-                <lib-ui-components-title
+                <lib-ui-showcase-atom
+                  [icon]="editableContent.icon"
+                  [title]="editableContent.title"
                   [text]="editableContent.text"
-                  [level]="editableContent.level"
+                  [layout]="editableContent.layout"
                   [variant]="editableContent.variant"
-                  [animation]="editableContent.animation"
-                  [align]="editableContent.align"
                   [customStyles]="getMergedStyles()"
                   style="display: block;">
-                </lib-ui-components-title>
+                </lib-ui-showcase-atom>
 
                 <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
               </div>
             </div>
             
             <div class="modern-position-dock">
-              <div class="dock-item"><span class="label">TXT</span><span class="value">{{ editableContent.text.length }} chars</span></div>
+              <div class="dock-item"><span class="label">ATOM</span><span class="value">{{ editableContent.layout }}</span></div>
               <div class="dock-divider"></div>
-              <div class="dock-item"><span class="label">VAR</span><span class="value text-indigo-400 capitalize">{{ editableContent.variant }}</span></div>
+              <div class="dock-item"><span class="label">W</span><span class="value">{{ currentSize.width }}px</span></div>
             </div>
           </div>
         </div>
 
         <div class="isolated-mode-footer">
-          <div class="footer-hint">Usa el editor de estilo para crear jerarquía visual con tipografía.</div>
+          <div class="footer-hint">Controla el impacto visual de cada característica en tu diseño.</div>
           <div class="footer-actions-btns">
             <button class="btn-clean secondary" (click)="cancel()">Descartar cambios</button>
-            <button class="btn-clean primary" (click)="apply()">Aplicar al Diseño</button>
+            <button class="btn-clean primary" (click)="apply()">Guardar Feature</button>
           </div>
         </div>
       </div>
@@ -238,7 +233,7 @@ export interface IsolatedModeConfig {
       align-items: center;
       justify-content: space-between;
     }
-    .mode-badge { font-size: 10px; font-weight: 800; color: #818cf8; background: rgba(129, 140, 248, 0.1); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(129, 140, 248, 0.2); }
+    .mode-badge { font-size: 10px; font-weight: 800; color: #fbbf24; background: rgba(251, 191, 36, 0.1); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(251, 191, 36, 0.2); }
     .component-name { color: white; font-size: 13px; font-weight: 600; margin-left: 8px; font-family: 'Inter', sans-serif; letter-spacing: 0.5px; }
     .close-main-btn { background: rgba(239, 68, 68, 0.1); color: #f87171; border: none; width: 32px; height: 32px; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
     .close-main-btn:hover { background: #ef4444; color: white; transform: rotate(90deg); }
@@ -251,9 +246,6 @@ export interface IsolatedModeConfig {
     
     .control-group { margin-bottom: 1rem; }
     .control-group label { display: block; font-size: 10px; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase; font-weight: 700; }
-    
-    .align-btn { flex: 1; padding: 4px; color: #64748b; font-size: 10px; font-weight: 800; border-radius: 6px; transition: all 0.2s; }
-    .align-btn.active { background: #6366f1; color: white; }
     
     .premium-input {
       width: 100%;
@@ -275,10 +267,10 @@ export interface IsolatedModeConfig {
     .palette-swatch:hover { transform: scale(1.2); z-index: 10; border-color: white; }
 
     .isolated-canvas { flex: 1; background: #020617; position: relative; overflow: hidden; background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 20px 20px; }
-    .canvas-inner { width: 100%; height: 100%; position: relative; padding: 100px; display: flex; align-items: center; justify-content: center; }
+    .canvas-inner { width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; }
     
-    .draggable-wrapper { position: relative; cursor: move; border: 1px dashed rgba(99, 102, 241, 0.5); padding: 10px; }
-    .resize-handle { position: absolute; width: 10px; height: 10px; background: #6366f1; border: 1.5px solid white; border-radius: 3px; bottom: -5px; right: -5px; cursor: se-resize; }
+    .draggable-wrapper { position: relative; cursor: move; border: 1px dashed rgba(251, 191, 36, 0.5); padding: 5px; }
+    .resize-handle { position: absolute; width: 10px; height: 10px; background: #fbbf24; border: 1.5px solid white; border-radius: 3px; bottom: -5px; right: -5px; cursor: se-resize; }
 
     .modern-position-dock { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); padding: 0.6rem 1.2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); display: flex; gap: 1.5rem; color: white; font-size: 11px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
     .dock-divider { width: 1px; background: rgba(255,255,255,0.1); }
@@ -288,12 +280,12 @@ export interface IsolatedModeConfig {
     .isolated-mode-footer { height: 72px; padding: 0 2rem; background: #1e293b; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); }
     .footer-hint { font-size: 12px; color: #94a3b8; font-style: italic; }
     .btn-clean { padding: 0.6rem 1.5rem; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; font-size: 13px; transition: all 0.2s; }
-    .btn-clean.primary { background: #6366f1; color: white; }
+    .btn-clean.primary { background: #fbbf24; color: #000; }
     .btn-clean.secondary { background: transparent; color: #94a3b8; }
     .btn-clean:hover { transform: translateY(-1px); opacity: 0.9; }
   `]
 })
-export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
+export class EditorShowcaseIsolatedModeComponent implements OnInit, OnDestroy {
   @Input() config!: IsolatedModeConfig;
   @Output() closed = new EventEmitter<void>();
   @Output() applied = new EventEmitter<IsolatedModeConfig>();
@@ -314,6 +306,7 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
 
   editableContent: any = {};
   editableStyles: any = {};
+  borderRadiusValue = 16;
   currentPosition = { x: 0, y: 0 };
   currentSize = { width: 0, height: 0 };
 
@@ -328,13 +321,14 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.editableContent = {
+      icon: this.config.content.icon || '✨',
+      title: this.config.content.title || '',
       text: this.config.content.text || '',
-      level: this.config.content.level || 'h1',
-      variant: this.config.content.variant || 'default',
-      animation: this.config.content.animation || 'none',
-      align: this.config.content.align || 'left'
+      layout: this.config.content.layout || 'vertical',
+      variant: this.config.content.variant || 'default'
     };
     this.editableStyles = { ...this.config.styles };
+    this.borderRadiusValue = parseInt(this.editableStyles.borderRadius) || 16;
     this.currentPosition = { ...this.config.position };
     this.currentSize = { ...this.config.size };
 
@@ -370,13 +364,17 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
       this.currentPosition.y = this.startPosY + (e.clientY - this.dragStartY);
     } else if (this.isResizing) {
       this.currentSize.width = Math.max(100, this.startW + (e.clientX - this.dragStartX));
-      this.currentSize.height = Math.max(20, this.startH + (e.clientY - this.dragStartY));
+      this.currentSize.height = Math.max(50, this.startH + (e.clientY - this.dragStartY));
     }
   }
 
   onMouseUp = () => {
     this.isDragging = false;
     this.isResizing = false;
+  }
+
+  onBorderRadiusChange() {
+    this.editableStyles.borderRadius = this.borderRadiusValue + 'px';
   }
 
   getMergedStyles() {

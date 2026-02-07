@@ -105,6 +105,7 @@ export * from './lib/draggable-box/draggable-box-3/draggable-box-3.component';
 
 // Showcase Components
 export * from './lib/showcase/gaming-variants-showcase.component';
+export * from './lib/showcase-atom/showcase-atom.component';
 
 // Smart Container (Generic Block)
 export * from './lib/smart-container/smart-container.component';
