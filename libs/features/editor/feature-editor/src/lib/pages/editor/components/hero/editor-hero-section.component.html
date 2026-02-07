@@ -106,3 +106,9 @@
     </div>
   </section>
 </ng-container>
+<lib-editor-hero-isolated-mode 
+  *ngIf="showIsolatedMode && isolatedConfig"
+  [config]="isolatedConfig"
+  (closed)="closeIsolatedMode()"
+  (applied)="applyIsolatedChanges($event)">
+</lib-editor-hero-isolated-mode>

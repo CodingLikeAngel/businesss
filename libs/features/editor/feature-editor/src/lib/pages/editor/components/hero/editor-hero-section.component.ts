@@ -16,6 +16,8 @@ import {
   UIHeroSplitComponent
 } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { EditorHeroIsolatedModeComponent, IsolatedModeConfig } from './editor-hero-isolated-mode.component';
+import { HostListener } from '@angular/core';
 
 /**
  * Enhanced Editor Hero Section Component
@@ -31,7 +33,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     UICardAnimatedComponent,
     UIHeroMinimalComponent,
     UIHeroSplitComponent,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorHeroIsolatedModeComponent
   ],
   templateUrl: './editor-hero-section.component.html',
   styleUrls: ['./editor-hero-section.component.scss']
@@ -55,6 +58,10 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
   private matrixInterval: any;
   activeCarouselIndex = 0;
   activeRetroIndex = 0;
+
+  // Isolated Mode State
+  showIsolatedMode = false;
+  isolatedConfig: IsolatedModeConfig | null = null;
 
   ngDoCheck() {
     // Sync logic for array items (cards) being edited in isolation
@@ -452,5 +459,65 @@ export class EditorHeroSectionComponent extends EnhancedBaseEditorSectionCompone
       }
     };
     this.matrixInterval = setInterval(draw, 33);
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if ((event.key === 'i' || event.key === 'I') && !event.ctrlKey && !event.metaKey) {
+      // Open if this section or any of its elements are selected
+      if (this.selectedSectionId === this.section.id || (this.selectedElementId && this.selectedElementId.startsWith(this.section.id))) {
+        const activeElement = document.activeElement as HTMLElement;
+        if (activeElement.tagName !== 'INPUT' && activeElement.tagName !== 'TEXTAREA') {
+          this.openIsolatedMode();
+        }
+      }
+    }
+  }
+
+  openIsolatedMode(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+    
+    const currentVariant = this.getVariant(this.section.id);
+    
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_hero',
+      variant: currentVariant,
+      globalVariant: this.globalVariant,
+      content: { ...this.section.content },
+      styles: { ...this.section.styles },
+      position: { x: 50, y: 50 },
+      size: { 
+        width: parseInt(String(this.section.styles?.['width'] || 1200)), 
+        height: parseInt(String(this.section.styles?.['height'] || 600)) 
+      }
+    };
+
+    document.body.classList.add('isolated-mode-active');
+    this.showIsolatedMode = true;
+  }
+
+  closeIsolatedMode() {
+    document.body.classList.remove('isolated-mode-active');
+    this.showIsolatedMode = false;
+    this.isolatedConfig = null;
+  }
+
+  applyIsolatedChanges(config: IsolatedModeConfig) {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: {
+        ...this.section.content,
+        ...config.content
+      },
+      styles: {
+        ...this.section.styles,
+        ...config.styles
+      }
+    });
+
+    this.closeIsolatedMode();
   }
 }

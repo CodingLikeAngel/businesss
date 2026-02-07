@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, ViewChild, ViewChildren, QueryList, AfterViewInit, OnDestroy, Inject, PLATFORM_ID, DoCheck } from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, ViewChildren, QueryList, AfterViewInit, OnDestroy, Inject, PLATFORM_ID, DoCheck, HostListener } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   FeaturesConfig,
@@ -158,8 +158,23 @@ export class EditorFeaturesSectionComponent extends EnhancedBaseEditorSectionCom
   showIsolatedMode = false;
   isolatedConfig?: IsolatedModeConfig;
 
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if ((event.key === 'i' || event.key === 'I') && !event.ctrlKey && !event.metaKey) {
+      if (this.selectedSectionId === this.section.id || (this.selectedElementId && this.selectedElementId.startsWith(this.section.id))) {
+        const activeElement = document.activeElement as HTMLElement;
+        if (activeElement.tagName !== 'INPUT' && activeElement.tagName !== 'TEXTAREA') {
+          this.openIsolatedMode(event as any);
+        }
+      }
+    }
+  }
+
   openIsolatedMode(event: MouseEvent) {
-    event.stopPropagation();
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
     
     this.isolatedConfig = {
       sectionId: this.section.id,
@@ -168,13 +183,14 @@ export class EditorFeaturesSectionComponent extends EnhancedBaseEditorSectionCom
       content: { 
         ...this.section.content,
         gridCols: this.section.content['gridCols'] || 3,
-        gridGap: this.section.content['gridGap'] || 10
+        gridGap: this.section.content['gridGap'] || 20
       },
       styles: { ...this.section.styles },
       position: { x: 0, y: 0 },
       size: { width: 0, height: 0 }
     };
     
+    document.body.classList.add('isolated-mode-active');
     this.showIsolatedMode = true;
   }
 
@@ -182,11 +198,15 @@ export class EditorFeaturesSectionComponent extends EnhancedBaseEditorSectionCom
     this.variantService.updateSectionInCurrentPage(this.section.id, {
       content: {
         ...this.section.content,
-        items: config.content.items,
-        gridCols: config.content.gridCols,
-        gridGap: config.content.gridGap
+        ...config.content
       }
     });
+    this.closeIsolatedMode();
+  }
+
+  closeIsolatedMode() {
+    document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
+    this.isolatedConfig = undefined;
   }
 }

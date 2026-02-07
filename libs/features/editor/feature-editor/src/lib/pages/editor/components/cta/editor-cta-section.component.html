@@ -25,3 +25,10 @@
 
   </div>
 </div>
+
+<lib-editor-cta-isolated-mode 
+  *ngIf="showIsolatedMode && isolatedConfig"
+  [config]="isolatedConfig"
+  (closed)="closeIsolatedMode()"
+  (applied)="onIsolatedModeApplied($event)">
+</lib-editor-cta-isolated-mode>

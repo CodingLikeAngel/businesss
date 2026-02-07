@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, DoCheck, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ApplyDynamicStylesDirective,
@@ -6,8 +6,10 @@ import {
   VisualEditingConfig,
   VisualEditingEvent
 } from '@negocio/shared-components';
-import { CTASectionComponent } from '@negocio/featured-components';
+import { UITitleComponent } from '@negocio/ui-components';
+import { CTASectionComponent as UICTASectionComponent } from '@negocio/featured-components'; // Renamed to avoid conflict with CTASectionComponent in imports array
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { EditorCTAIsolatedModeComponent, IsolatedModeConfig } from './editor-cta-isolated-mode.component';
 
 /**
  * Enhanced Editor CTA Section Component
@@ -18,9 +20,10 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
   standalone: true,
   imports: [
     CommonModule,
-    CTASectionComponent,
+    UICTASectionComponent, // Changed from CTASectionComponent
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorCTAIsolatedModeComponent
   ],
   templateUrl: './editor-cta-section.component.html'
 })
@@ -123,5 +126,61 @@ export class EditorCtaSectionComponent extends EnhancedBaseEditorSectionComponen
         transform: `translate(${bounds.x}px, ${bounds.y}px)`
       }
     });
+  }
+
+  /**
+   * ISOLATED MODE SUPPORT
+   */
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if ((event.key === 'i' || event.key === 'I') && !event.ctrlKey && !event.metaKey) {
+      if (this.selectedSectionId === this.section.id || (this.selectedElementId && this.selectedElementId.startsWith(this.section.id))) {
+        const activeElement = document.activeElement as HTMLElement;
+        if (activeElement.tagName !== 'INPUT' && activeElement.tagName !== 'TEXTAREA') {
+          this.openIsolatedMode(event as any);
+        }
+      }
+    }
+  }
+
+  openIsolatedMode(event: MouseEvent) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+    
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_cta',
+      type: 'cta',
+      content: { 
+        ...this.section.content
+      },
+      styles: { ...this.section.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 0, height: 0 }
+    };
+    
+    document.body.classList.add('isolated-mode-active');
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig) {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: {
+        ...this.section.content,
+        ...config.content
+      }
+    });
+    this.closeIsolatedMode();
+  }
+
+  closeIsolatedMode() {
+    document.body.classList.remove('isolated-mode-active');
+    this.showIsolatedMode = false;
+    this.isolatedConfig = undefined;
   }
 }

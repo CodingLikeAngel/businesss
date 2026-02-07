@@ -9,6 +9,8 @@ import {
 } from '@negocio/shared-components';
 import { UITestimonialsSectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { EditorTestimonialsIsolatedModeComponent, IsolatedModeConfig } from './editor-testimonials-isolated-mode.component';
+import { HostListener } from '@angular/core';
 
 /**
  * Enhanced Editor Testimonials Section Component
@@ -20,7 +22,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UITestimonialsSectionComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorTestimonialsIsolatedModeComponent
   ],
   templateUrl: './editor-testimonials-section.component.html'
 })
@@ -113,5 +116,61 @@ export class EditorTestimonialsSectionComponent extends EnhancedBaseEditorSectio
         transform: `translate(${bounds.x}px, ${bounds.y}px)`
       }
     });
+  }
+
+  /**
+   * ISOLATED MODE SUPPORT
+   */
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if ((event.key === 'i' || event.key === 'I') && !event.ctrlKey && !event.metaKey) {
+      if (this.selectedSectionId === this.section.id || (this.selectedElementId && this.selectedElementId.startsWith(this.section.id))) {
+        const activeElement = document.activeElement as HTMLElement;
+        if (activeElement.tagName !== 'INPUT' && activeElement.tagName !== 'TEXTAREA') {
+          this.openIsolatedMode(event as any);
+        }
+      }
+    }
+  }
+
+  openIsolatedMode(event: MouseEvent) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+    
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_testimonials',
+      type: 'testimonials',
+      content: { 
+        ...this.section.content
+      },
+      styles: { ...this.section.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 0, height: 0 }
+    };
+    
+    document.body.classList.add('isolated-mode-active');
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig) {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: {
+        ...this.section.content,
+        ...config.content
+      }
+    });
+    this.closeIsolatedMode();
+  }
+
+  closeIsolatedMode() {
+    document.body.classList.remove('isolated-mode-active');
+    this.showIsolatedMode = false;
+    this.isolatedConfig = undefined;
   }
 }

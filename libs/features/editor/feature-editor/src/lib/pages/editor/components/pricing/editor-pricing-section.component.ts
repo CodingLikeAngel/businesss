@@ -1,4 +1,4 @@
-import { Component, Input, ElementRef, ViewChild, AfterViewInit, DoCheck } from '@angular/core';
+import { Component, Input, ElementRef, ViewChild, AfterViewInit, DoCheck, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   PricingConfig,
@@ -7,10 +7,12 @@ import {
   VisualEditingConfig,
   VisualEditingEvent
 } from '@negocio/shared-components';
+import { UITitleComponent } from '@negocio/ui-components';
 import {
   UIPricingTableSectionComponent
 } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { EditorPricingIsolatedModeComponent, IsolatedModeConfig } from './editor-pricing-isolated-mode.component';
 
 /**
  * Enhanced Editor Pricing Section Component
@@ -22,7 +24,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UIPricingTableSectionComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorPricingIsolatedModeComponent
   ],
   templateUrl: './editor-pricing-section.component.html'
 })
@@ -59,6 +62,62 @@ export class EditorPricingSectionComponent extends EnhancedBaseEditorSectionComp
         snapToGrid: 5
       }
     });
+  }
+
+  /**
+   * ISOLATED MODE SUPPORT
+   */
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyDown(event: KeyboardEvent) {
+    if ((event.key === 'i' || event.key === 'I') && !event.ctrlKey && !event.metaKey) {
+      if (this.selectedSectionId === this.section.id || (this.selectedElementId && this.selectedElementId.startsWith(this.section.id))) {
+        const activeElement = document.activeElement as HTMLElement;
+        if (activeElement.tagName !== 'INPUT' && activeElement.tagName !== 'TEXTAREA') {
+          this.openIsolatedMode(event as any);
+        }
+      }
+    }
+  }
+
+  openIsolatedMode(event: MouseEvent) {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+    
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_pricing',
+      type: 'pricing',
+      content: { 
+        ...this.section.content
+      },
+      styles: { ...this.section.styles },
+      position: { x: 0, y: 0 },
+      size: { width: 0, height: 0 }
+    };
+    
+    document.body.classList.add('isolated-mode-active');
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig) {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: {
+        ...this.section.content,
+        ...config.content
+      }
+    });
+    this.closeIsolatedMode();
+  }
+
+  closeIsolatedMode() {
+    document.body.classList.remove('isolated-mode-active');
+    this.showIsolatedMode = false;
+    this.isolatedConfig = undefined;
   }
 
   handleSectionEvent(event: VisualEditingEvent): void {

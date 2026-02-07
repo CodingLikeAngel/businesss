@@ -33,3 +33,10 @@
     </div>
   </div>
 </div>
+
+<lib-editor-pricing-isolated-mode 
+  *ngIf="showIsolatedMode && isolatedConfig"
+  [config]="isolatedConfig"
+  (closed)="closeIsolatedMode()"
+  (applied)="onIsolatedModeApplied($event)">
+</lib-editor-pricing-isolated-mode>
