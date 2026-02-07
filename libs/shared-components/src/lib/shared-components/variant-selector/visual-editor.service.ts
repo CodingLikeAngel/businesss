@@ -1796,6 +1796,38 @@ export class VisualEditorService {
     return this.isEditMode;
   }
 
+  // === ISOLATED MODE SUPPORT ===
+  
+  /**
+   * Observable for isolated mode events
+   */
+  public isolatedModeEntered$ = new Subject<{ mode: string; section: any }>();
+  public isolatedModeExited$ = new Subject<any>();
+  
+  /**
+   * Enter isolated mode for a specific section type
+   */
+  enterIsolatedMode(mode: string, section: any) {
+    console.log('🎯 VisualEditorService: Entering isolated mode:', mode);
+    this.isolatedModeEntered$.next({ mode, section });
+    
+    // Disable edit mode while in isolated mode
+    if (this.isEditMode) {
+      this.disableEditMode();
+    }
+  }
+  
+  /**
+   * Exit isolated mode
+   */
+  exitIsolatedMode(result?: any) {
+    console.log('🔄 VisualEditorService: Exiting isolated mode', result);
+    this.isolatedModeExited$.next(result);
+    
+    // Re-enable edit mode
+    this.enableEditMode();
+  }
+
   /**
    * Updates overlay position to match element
    */

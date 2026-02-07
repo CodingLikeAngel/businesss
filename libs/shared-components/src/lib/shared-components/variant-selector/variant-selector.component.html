@@ -84,6 +84,10 @@
 
         <!-- CONTENT PANEL -->
         <section class="panel-v2" *ngIf="activeTab === 'content'">
+          <lib-isolated-mode-trigger
+            [selectedSection]="selectedSection"
+            (openIsolatedMode)="onIsolatedModeRequested($event)"
+          ></lib-isolated-mode-trigger>
           <lib-content-editor
             [selectedSection]="selectedSection"
             [selectedElement]="selectedElement"
@@ -93,6 +97,10 @@
 
         <!-- DESIGN PANEL -->
         <section class="panel-v2" *ngIf="activeTab === 'design'">
+          <lib-isolated-mode-trigger
+            [selectedSection]="selectedSection"
+            (openIsolatedMode)="onIsolatedModeRequested($event)"
+          ></lib-isolated-mode-trigger>
           <lib-design-editor
             [selectedSection]="selectedSection"
             [selectedElement]="selectedElement"

@@ -31,6 +31,7 @@ import { ContentEditorComponent } from './content-editor.component';
 import { DesignEditorComponent } from './design-editor.component';
 import { PresetSelectorComponent } from './preset-selector.component';
 import { ExportPanelComponent } from './export-panel.component';
+import { IsolatedModeTriggerComponent } from './isolated-mode-trigger.component';
 // import { TemplateSelectorComponent } from '../template-selector/template-selector.component';
 
 // Import services
@@ -54,7 +55,8 @@ import { ExportService } from './export.service';
     ContentEditorComponent,
     DesignEditorComponent,
     PresetSelectorComponent,
-    ExportPanelComponent
+    ExportPanelComponent,
+    IsolatedModeTriggerComponent
   ],
   templateUrl: './variant-selector.component.html',
   styleUrl: './variant-selector.component.scss',
@@ -89,15 +91,18 @@ export class VariantSelectorComponent implements OnInit {
   chartConfig: ChartConfig;
 
   // UI state
-  private _currentStep: 'welcome' | 'editor' | 'preview' = 'welcome';
+  private _currentStep: 'welcome' | 'editor' | 'preview' | 'isolated-mode' = 'welcome';
   mockElement: any;
   mockSection: any;
-  get currentStep(): 'welcome' | 'editor' | 'preview' {
+  get currentStep(): 'welcome' | 'editor' | 'preview' | 'isolated-mode' {
     return this._currentStep;
   }
-  set currentStep(val: 'welcome' | 'editor' | 'preview') {
+  set currentStep(val: 'welcome' | 'editor' | 'preview' | 'isolated-mode') {
     this._currentStep = val;
   }
+
+  // Isolated mode state
+  activeIsolatedMode: string | null = null;
 
   @Input() isCollapsed = false;
   @Output() toggleCollapse = new EventEmitter<void>();
@@ -234,13 +239,16 @@ export class VariantSelectorComponent implements OnInit {
     this.variantService.chartConfig$.subscribe(c => this.chartConfig = c);
   }
 
-  setStep(step: 'welcome' | 'editor' | 'preview') {
+  setStep(step: 'welcome' | 'editor' | 'preview' | 'isolated-mode') {
     this.currentStep = step;
 
     // Fix NG0100: Defer the service update to the next macrotask
     setTimeout(() => {
       // Allow the layout to know exactly which step we are in
-      this.variantService.setBuilderStep(step);
+      // Only pass valid steps to the service
+      if (step !== 'isolated-mode') {
+        this.variantService.setBuilderStep(step);
+      }
     });
   }
 
@@ -645,5 +653,32 @@ export class VariantSelectorComponent implements OnInit {
       }
       this.onStyleChanged();
     }
+  }
+
+  // Isolated Mode Handlers
+  onIsolatedModeRequested(mode: string) {
+    console.log('🎯 Opening isolated mode:', mode);
+    this.activeIsolatedMode = mode;
+    
+    // Close sidebar when entering isolated mode
+    this.isCollapsed = true;
+    
+    // Enter isolated mode step
+    this.setStep('isolated-mode');
+    
+    // Emit event for parent components to handle
+    this.visualEditorService.enterIsolatedMode(mode, this.selectedSection);
+  }
+
+  onIsolatedModeClosed(result?: any) {
+    console.log('🔄 Closing isolated mode', result);
+    this.activeIsolatedMode = null;
+    
+    // Exit isolated mode and return to editor
+    this.setStep('editor');
+    this.isCollapsed = false;
+    
+    // Emit event for parent components
+    this.visualEditorService.exitIsolatedMode(result);
   }
 }

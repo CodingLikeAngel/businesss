@@ -50,3 +50,6 @@ export * from './lib/shared-components/variant-selector/spa-isolated-mode';
 // Isolated Mode Integration Service
 export * from './lib/shared-components/variant-selector/isolated-mode-integration.service';
 export { IsolatedModeComponentType, ComponentRegistrationConfig, RegisteredComponent, IsolatedModeSession, IsolatedModeDiagnostics } from './lib/shared-components/variant-selector/isolated-mode-integration.service';
+
+// Isolated Mode Trigger Component
+export * from './lib/shared-components/variant-selector/isolated-mode-trigger.component';
