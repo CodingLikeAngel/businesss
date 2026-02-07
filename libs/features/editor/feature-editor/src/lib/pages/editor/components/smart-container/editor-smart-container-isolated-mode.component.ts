@@ -2,7 +2,6 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject } fro
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { SmartContainerComponent, SmartContainerConfig } from '@negocio/ui-components';
 import { AppState } from '../../../../store/state/app.state';
 import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.selectors';
@@ -13,7 +12,7 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 @Component({
   selector: 'lib-editor-smart-container-isolated-mode',
   standalone: true,
-  imports: [CommonModule, FormsModule, DragDropModule, SmartContainerComponent],
+  imports: [CommonModule, FormsModule, SmartContainerComponent],
   template: `
     <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
@@ -41,13 +40,19 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                   <h4>STRUCTURE & ORDER</h4>
                 </div>
 
-                <div class="layer-list" cdkDropList (cdkDropListDropped)="drop($event)">
+                <div class="layer-list">
                   <div *ngIf="editableElements.length === 0" class="empty-state">
                     No elements yet
                   </div>
                   
-                  <div *ngFor="let el of editableElements; let i = index" class="layer-item" cdkDrag>
-                    <div class="layer-handle" cdkDragHandle>
+                  <div *ngFor="let el of editableElements; let i = index" 
+                       class="layer-item" 
+                       draggable="true"
+                       (dragstart)="onDragStart($event, i)"
+                       (dragover)="onDragOver($event)"
+                       (drop)="onDrop($event, i)"
+                       (dragend)="onDragEnd()">
+                    <div class="layer-handle">
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 8h16M4 16h16" stroke-linecap="round"/>
                       </svg>
@@ -360,8 +365,34 @@ export class EditorSmartContainerIsolatedModeComponent implements OnInit, OnDest
     window.removeEventListener('mouseup', this.onMouseUp);
   }
 
-  public drop(event: CdkDragDrop<string[]>) {
-    moveItemInArray(this.editableElements, event.previousIndex, event.currentIndex);
+  private draggedIndex: number | null = null;
+
+  public onDragStart(event: DragEvent, index: number) {
+    this.draggedIndex = index;
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/html', index.toString());
+    }
+  }
+
+  public onDragOver(event: DragEvent) {
+    event.preventDefault();
+    if (event.dataTransfer) {
+      event.dataTransfer.dropEffect = 'move';
+    }
+  }
+
+  public onDrop(event: DragEvent, dropIndex: number) {
+    event.preventDefault();
+    if (this.draggedIndex !== null && this.draggedIndex !== dropIndex) {
+      const item = this.editableElements[this.draggedIndex];
+      this.editableElements.splice(this.draggedIndex, 1);
+      this.editableElements.splice(dropIndex, 0, item);
+    }
+  }
+
+  public onDragEnd() {
+    this.draggedIndex = null;
   }
 
   public startResize(e: MouseEvent) {
