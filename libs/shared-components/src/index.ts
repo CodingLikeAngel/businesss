@@ -41,3 +41,7 @@ export * from './lib/shared-components/variant-selector/faq-isolated-mode/editor
 export * from './lib/shared-components/variant-selector/steps-isolated-mode/editor-steps-isolated-mode.component';
 export * from './lib/shared-components/variant-selector/reservation-isolated-mode/editor-reservation-isolated-mode.component';
 export * from './lib/shared-components/variant-selector/promotions-isolated-mode/editor-promotions-isolated-mode.component';
+
+// Isolated Mode Integration Service
+export * from './lib/shared-components/variant-selector/isolated-mode-integration.service';
+export { IsolatedModeComponentType, ComponentRegistrationConfig, RegisteredComponent, IsolatedModeSession, IsolatedModeDiagnostics } from './lib/shared-components/variant-selector/isolated-mode-integration.service';
