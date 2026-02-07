@@ -118,3 +118,6 @@ export * from './lib/video/video.component';
 
 // Map
 export * from './lib/map/map.component';
+
+// Spacer
+export * from './lib/spacer/spacer.component';

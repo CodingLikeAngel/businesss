@@ -53,6 +53,7 @@ import { EditorGenericSectionComponent } from '../components/generic/editor-gene
 import { EditorShapeSectionComponent } from '../components/shape/editor-shape-section.component';
 import { EditorVideoSectionComponent } from '../components/video/editor-video-section.component';
 import { EditorMapSectionComponent } from '../components/map/editor-map-section.component';
+import { EditorSpacerSectionComponent } from '../components/spacer/editor-spacer-section.component';
 import { ShortcutsGuideComponent } from '../components/shortcuts-guide/shortcuts-guide.component';
 
 
@@ -112,6 +113,7 @@ import { ShortcutsGuideComponent } from '../components/shortcuts-guide/shortcuts
     EditorShapeSectionComponent,
     EditorVideoSectionComponent,
     EditorMapSectionComponent,
+    EditorSpacerSectionComponent,
     ShortcutsGuideComponent
   ],
 

@@ -106,7 +106,8 @@ import {
   UIBreadcrumbs3Component,
   UIDraggableBox1Component,
   UIDraggableBox2Component,
-  UIDraggableBox3Component
+  UIDraggableBox3Component,
+  UISpacerComponent
 } from '@negocio/ui-components';
 
 interface SectionVariant {
@@ -225,7 +226,8 @@ interface SectionVariant {
     UIBreadcrumbs3Component,
     UIDraggableBox1Component,
     UIDraggableBox2Component,
-    UIDraggableBox3Component
+    UIDraggableBox3Component,
+    UISpacerComponent
   ],
   template: `
     <div class="explorer-container">
@@ -451,6 +453,13 @@ interface SectionVariant {
                    <div *ngSwitchCase="'generic'" class="p-4 flex flex-col items-center justify-center h-full min-h-[200px] text-center">
                      <h2 class="text-white text-xl font-semibold mb-2">Librería de Componentes</h2>
                      <p class="text-white/70 text-sm">Pulsa sobre un componente para previsualizarlo y añadirlo a tu lienzo.</p>
+                   </div>
+                   <!-- SPACER PREVIEWS -->
+                   <div *ngSwitchCase="'spacer'" class="p-4 flex items-center justify-center min-h-[150px]">
+                      <lib-ui-spacer [variant]="$any(selectedVariant)" height="60px"></lib-ui-spacer>
+                   </div>
+                   <div *ngSwitchCase="'ui-spacer'" class="p-4 flex items-center justify-center min-h-[150px]">
+                      <lib-ui-spacer [variant]="$any(selectedVariant)" height="40px"></lib-ui-spacer>
                    </div>
                    <!-- NEW COMPONENT TYPES PREVIEWS -->
                    <div *ngSwitchCase="'button-new'" class="flex gap-4 justify-center items-center h-full min-h-[200px]">
@@ -1307,6 +1316,24 @@ export class ComponentExplorerComponent implements OnInit {
       description: 'Muestra destacada de productos o servicios',
       category: 'content',
       libraryType: 'section'
+    },
+    {
+      type: 'spacer',
+      label: 'Espaciador Visual',
+      icon: '↔️',
+      variants: ['empty', 'decorative', 'gradient', 'glass', 'primary', 'secondary'],
+      description: 'Añade espacio vertical entre secciones con opciones decorativas',
+      category: 'content',
+      libraryType: 'section'
+    },
+    {
+      type: 'ui-spacer',
+      label: 'Espaciador UI',
+      icon: '↔️',
+      variants: ['empty', 'decorative', 'gradient', 'glass', 'primary', 'secondary'],
+      description: 'Espacio vertical atomizado',
+      category: 'interactive',
+      libraryType: 'component'
     },
     {
       type: 'testimonials',

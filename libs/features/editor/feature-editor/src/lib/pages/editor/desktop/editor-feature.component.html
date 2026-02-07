@@ -995,6 +995,22 @@
       >
       </lib-editor-generic-section>
 
+      <!-- VISUAL SPACER -->
+      <lib-editor-spacer-section
+        *ngSwitchCase="'spacer'"
+        [section]="section"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-spacer-section>
+
+      <!-- UI SPACER (Atom) -->
+      <lib-editor-spacer-section
+        *ngSwitchCase="'ui-spacer'"
+        [section]="section"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
+      >
+      </lib-editor-spacer-section>
+
       <div
         *ngSwitchDefault
         class="editor-section cursor-pointer p-10 border border-dashed border-white/20 rounded-xl m-4 bg-white/5"

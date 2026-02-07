@@ -2,11 +2,12 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject } fro
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { UITitleComponent, TitleVariantType, TitleLevel, TitleAnimation } from '@negocio/ui-components';
+import { UITitleComponent } from '@negocio/ui-components';
 import { AppState } from '../../../../store/state/app.state';
 import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.selectors';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { GoogleFontsService } from '../../../../services/google-fonts.service';
 
 export interface IsolatedModeConfig {
   sectionId: string;
@@ -71,6 +72,51 @@ export interface IsolatedModeConfig {
                       <button (click)="editableContent.align = 'center'; onContentChange()" [class.active]="editableContent.align === 'center'" class="align-btn">C</button>
                       <button (click)="editableContent.align = 'right'; onContentChange()" [class.active]="editableContent.align === 'right'" class="align-btn">R</button>
                     </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- TYPOGRAPHY SECTION -->
+              <div class="sidebar-section">
+                <div class="section-header">
+                  <span class="section-icon">🔡</span>
+                  <h4>TIPOGRAFÍA</h4>
+                </div>
+                
+                <div class="control-group">
+                  <label>Familia de Fuente (Google Fonts)</label>
+                  <select [(ngModel)]="editableStyles['font-family']" (ngModelChange)="onFontChange($event)" class="premium-input">
+                    <option value="inherit">Por defecto del sitio</option>
+                    <option *ngFor="let font of availableFonts()" [value]="font.family">
+                      {{ font.family }}
+                    </option>
+                  </select>
+                </div>
+
+                <div class="control-row grid grid-cols-2 gap-2">
+                  <div class="control-group">
+                    <label>Tamaño (px)</label>
+                    <input type="number" [(ngModel)]="fontSize" (ngModelChange)="onSizeStyleChange()" class="premium-input">
+                  </div>
+                  <div class="control-group">
+                    <label>Grosor (Weight)</label>
+                    <select [(ngModel)]="editableStyles['font-weight']" (ngModelChange)="onStyleChange()" class="premium-input">
+                      <option value="300">Fino (300)</option>
+                      <option value="400">Normal (400)</option>
+                      <option value="600">Semi-Bold (600)</option>
+                      <option value="700">Bold (700)</option>
+                      <option value="900">Black (900)</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label>Espaciado entre letras (px)</label>
+                  <input type="range" min="-2" max="10" step="0.5" [(ngModel)]="letterSpacing" (ngModelChange)="onSpacingChange()" class="w-full h-1 mt-2 accent-indigo-500 bg-slate-800 rounded-lg appearance-none cursor-pointer">
+                  <div class="flex justify-between text-[8px] text-slate-500 mt-1 uppercase font-bold">
+                    <span>-2px</span>
+                    <span>{{ letterSpacing }}px</span>
+                    <span>10px</span>
                   </div>
                 </div>
               </div>
@@ -299,6 +345,10 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
   @Output() applied = new EventEmitter<IsolatedModeConfig>();
 
   private store = inject(Store<AppState>);
+  private fontsService = inject(GoogleFontsService);
+
+  public availableFonts = this.fontsService.availableFonts;
+
   globalColors$: Observable<string[]> = this.store.select(selectCurrentPageGlobalStyles).pipe(
     map(styles => {
       if (!styles) return [];
@@ -312,10 +362,14 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
     })
   );
 
-  editableContent: any = {};
-  editableStyles: any = {};
-  currentPosition = { x: 0, y: 0 };
-  currentSize = { width: 0, height: 0 };
+  public editableContent: any = {};
+  public editableStyles: any = {};
+  public currentPosition = { x: 0, y: 0 };
+  public currentSize = { width: 0, height: 0 };
+  
+  // Typography helpers
+  public fontSize: number = 32;
+  public letterSpacing: number = 0;
 
   isDragging = false;
   isResizing = false;
@@ -337,6 +391,15 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
     this.editableStyles = { ...this.config.styles };
     this.currentPosition = { ...this.config.position };
     this.currentSize = { ...this.config.size };
+    
+    // Parse numeric values
+    this.fontSize = parseInt(this.editableStyles['font-size']) || 32;
+    this.letterSpacing = parseFloat(this.editableStyles['letter-spacing']) || 0;
+
+    // Load current font if any
+    if (this.editableStyles['font-family'] && this.editableStyles['font-family'] !== 'inherit') {
+      this.fontsService.loadFont(this.editableStyles['font-family']);
+    }
 
     window.addEventListener('mousemove', this.onMouseMove);
     window.addEventListener('mouseup', this.onMouseUp);
@@ -389,6 +452,23 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
   onStyleChange() {}
   onPositionChange() {}
   onSizeChange() {}
+
+  onFontChange(family: string) {
+    if (family !== 'inherit') {
+      this.fontsService.loadFont(family);
+    }
+    this.onStyleChange();
+  }
+
+  onSizeStyleChange() {
+    this.editableStyles['font-size'] = this.fontSize + 'px';
+    this.onStyleChange();
+  }
+
+  onSpacingChange() {
+    this.editableStyles['letter-spacing'] = this.letterSpacing + 'px';
+    this.onStyleChange();
+  }
 
   close() { this.closed.emit(); }
   cancel() { this.closed.emit(); }
