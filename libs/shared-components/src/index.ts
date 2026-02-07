@@ -36,3 +36,8 @@ export * from './lib/shared-components/variant-selector/contact-isolated-mode/ed
 export * from './lib/shared-components/variant-selector/cta-isolated-mode/editor-cta-isolated-mode.component';
 export * from './lib/shared-components/variant-selector/stats-isolated-mode/editor-stats-isolated-mode.component';
 export * from './lib/shared-components/variant-selector/products-isolated-mode/editor-products-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/newsletter-isolated-mode/editor-newsletter-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/faq-isolated-mode/editor-faq-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/steps-isolated-mode/editor-steps-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/reservation-isolated-mode/editor-reservation-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/promotions-isolated-mode/editor-promotions-isolated-mode.component';
