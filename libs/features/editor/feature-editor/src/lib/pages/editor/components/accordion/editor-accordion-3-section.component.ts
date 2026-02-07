@@ -112,7 +112,12 @@ export class EditorAccordion3SectionComponent extends EnhancedBaseEditorSectionC
   showIsolatedMode = false;
   isolatedConfig: IsolatedModeConfig | null = null;
 
+  // Layout state for overflow prevention
+  sectionHeight = 600;
+  containerHeight = 550;
+
   ngAfterViewInit() {
+    this.updateSectionHeight();
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
     this.applyElementVisualEditing(this.componentElement, this.section.id + '_accordion-3');
   }
@@ -209,6 +214,33 @@ export class EditorAccordion3SectionComponent extends EnhancedBaseEditorSectionC
       }
     });
 
+    this.updateSectionHeight();
     this.closeIsolatedMode();
+  }
+
+  private updateSectionHeight() {
+    const accordionStyles = this.section.content['accordionStyles'] || {};
+    const top = parseInt(accordionStyles.top) || 120;
+    const height = parseInt(accordionStyles.height) || 450;
+    
+    // Calculate required height with safety margin
+    const minHeight = top + height + 100;
+    
+    // Update local state
+    if (minHeight > this.sectionHeight) {
+      this.sectionHeight = minHeight;
+    }
+    
+    // Sync with section styles in the store if it's significantly different
+    const currentStoreHeight = parseInt(this.section.styles['height'] || '0');
+    if (Math.abs(currentStoreHeight - this.sectionHeight) > 20) {
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        styles: {
+          ...this.section.styles,
+          height: `${this.sectionHeight}px`,
+          minHeight: `${this.sectionHeight}px`
+        }
+      });
+    }
   }
 }

@@ -49,12 +49,13 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
   /** Items for the accordion */
   @Input() items: { title: string; content: string }[] = [];
 
-  /** Emit when items change */
-  @Output() itemsChanged = new EventEmitter<any[]>();
-
   // Isolated Mode State
   showIsolatedMode = false;
   isolatedConfig: IsolatedModeConfig | null = null;
+  
+  // Layout state for overflow prevention
+  sectionHeight = 600;
+  containerHeight = 550;
 
   ngAfterViewInit() {
     // Initialize items from section content if not provided via input
@@ -64,6 +65,8 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
         { title: 'Item 2', content: 'Contenido del item 2' }
       ];
     }
+    
+    this.updateSectionHeight();
     
     // Apply standardized visual editing to elements
     this.applySectionVisualEditing(this.sectionElement, this.section.id);
@@ -380,6 +383,7 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
         ...this.section.content,
         items: config.content.items,
         variant: config.content.variant,
+        accordionVariant: config.content.accordionVariant,
         rounded: config.content.rounded,
         size: config.content.size,
         dark: config.content.dark,
@@ -388,6 +392,33 @@ export class EditorAccordionSectionComponent extends EnhancedBaseEditorSectionCo
       }
     });
 
+    this.updateSectionHeight();
     this.closeIsolatedMode();
+  }
+
+  private updateSectionHeight() {
+    const accordionStyles = this.section.content['accordionStyles'] || {};
+    const top = parseInt(accordionStyles.top) || 120;
+    const height = parseInt(accordionStyles.height) || 450;
+    
+    // Calculate required height with safety margin
+    const minHeight = top + height + 100;
+    
+    // Update local state
+    if (minHeight > this.sectionHeight) {
+      this.sectionHeight = minHeight;
+    }
+    
+    // Sync with section styles in the store if it's significantly different
+    const currentStoreHeight = parseInt(this.section.styles['height'] || '0');
+    if (Math.abs(currentStoreHeight - this.sectionHeight) > 20) {
+      this.variantService.updateSectionInCurrentPage(this.section.id, {
+        styles: {
+          ...this.section.styles,
+          height: `${this.sectionHeight}px`,
+          minHeight: `${this.sectionHeight}px`
+        }
+      });
+    }
   }
 }
