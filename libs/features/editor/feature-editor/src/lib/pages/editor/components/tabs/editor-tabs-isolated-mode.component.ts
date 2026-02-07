@@ -118,13 +118,12 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                    [style.top.px]="currentPosition.y"
                    (mousedown)="onMouseDown($event)">
                 
-                  <lib-ui-tabs
+                  <lib-ui-components-tabs
                     [variant]="editableContent.variant"
-                    [align]="editableContent.align"
                     [orientation]="editableContent.orientation"
-                    [items]="editableItems"
+                    [tabs]="editableItems"
                     [customStyles]="getMergedStyles()"
-                  ></lib-ui-tabs>
+                  ></lib-ui-components-tabs>
 
                </div>
             </div>

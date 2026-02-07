@@ -25,14 +25,11 @@
        elementId="{{section.id + '_steps'}}"
        sectionId="{{section.id}}"
        (visualEvents)="handleStepsEvent($event)">
-       <lib-ui-steps-section
-         [variant]="$any(section.content['variant'] || getVariant(section.id))"
-         [steps]="section.content['steps'] || []"
-         [orientation]="section.content['orientation'] || 'horizontal'"
-         [showNumbers]="section.content['showNumbers'] !== false"
-         [accentColor]="section.styles['accentColor'] || '#10b981'"
-         [customStyles]="section.styles || {}"
-       ></lib-ui-steps-section>
+        <lib-ui-steps-section
+          [variant]="$any(section.content['variant'] || getVariant(section.id))"
+          [steps]="section.content['steps'] || []"
+          [customStyles]="section.styles || {}"
+        ></lib-ui-steps-section>
     </div>
 
   <!-- Isolated Mode Component -->

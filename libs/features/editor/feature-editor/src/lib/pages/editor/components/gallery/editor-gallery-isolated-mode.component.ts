@@ -117,9 +117,13 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                    [style.left.px]="currentPosition.x"
                    [style.top.px]="currentPosition.y">
                 
-                  <lib-ui-gallery-section
-                    [galleryConfig]="getGalleryConfig()"
-                  ></lib-ui-gallery-section>
+                  <lib-ui-components-gallery-section
+                    [title]="editableContent.title || 'Galería'"
+                    [subtitle]="editableContent.subtitle || ''"
+                    [variant]="editableContent.variant || 'grid'"
+                    [images]="editableItems"
+                    [customStyles]="config.styles"
+                  ></lib-ui-components-gallery-section>
 
                </div>
             </div>

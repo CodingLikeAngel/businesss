@@ -121,9 +121,7 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                   <lib-ui-steps-section
                     [variant]="editableContent.variant"
                     [steps]="editableSteps"
-                    [orientation]="editableContent.orientation"
-                    [showNumbers]="editableContent.showNumbers"
-                    [accentColor]="editableStyles.accentColor"
+                    [customStyles]="editableStyles"
                   ></lib-ui-steps-section>
 
                </div>
