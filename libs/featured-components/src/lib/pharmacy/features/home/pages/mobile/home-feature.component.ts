@@ -21,9 +21,6 @@ import {
 } from '@negocio/ui-components';
 import {
   UIHeroSectionComponent,
-  UIFaqSectionComponent,
-  UIGallerySectionComponent,
-  UIPricingTableSectionComponent,
   PromotionsSectionComponent,
   ReservationFormComponent,
   ServiceSectionComponent
@@ -56,9 +53,6 @@ type VariantType = typeof VARIANTS[number];
     UITabsComponent,
     ReservationFormComponent,
     // ServiceSectionComponent,
-    UIFaqSectionComponent,
-    UIPricingTableSectionComponent,
-    UIGallerySectionComponent,
     PromotionsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,

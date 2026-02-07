@@ -21,9 +21,7 @@ import {
   BubbleConfig as BubbleAnimationConfig,
   UIFooterComponent,
 } from '@negocio/ui-components';
-import { FaqSectionComponent } from '../../components/faq-section/faq-section.component';
-import { GallerySectionComponent } from '../../components/gallery-section/gallery-section.component';
-import { PricingSectionComponent } from '../../components/pricing-section/pricing-section.component';
+
 import { PromotionsSectionComponent } from '../../components/promotions-section/promotions-section.component';
 import { ReservationFormComponent } from '../../components/reservation-form/reservation-form.component';
 import { ServiceSectionComponent } from '../../components/service-section/service-section.component';
@@ -38,9 +36,6 @@ import { ServiceSectionComponent } from '../../components/service-section/servic
     UIHeroSectionComponent,
     ReservationFormComponent,
    // ServiceSectionComponent,
-    FaqSectionComponent,
-    PricingSectionComponent,
-    GallerySectionComponent,
     PromotionsSectionComponent,
     UIModalComponent,
     UICardRutasComponent,

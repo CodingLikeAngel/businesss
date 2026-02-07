@@ -21,7 +21,7 @@ export interface VideoCustomStyles {
         [autoplay]="autoplay()"
         [loop]="loop()"
         [muted]="muted()"
-        [playsinline]="true"
+        playsinline
         class="video-element"
         [ngStyle]="videoStyles()"
       ></video>

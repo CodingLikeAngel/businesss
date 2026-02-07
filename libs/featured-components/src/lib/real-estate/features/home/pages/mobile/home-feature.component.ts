@@ -21,9 +21,6 @@ import {
 } from '@negocio/ui-components';
 import {
   UIHeroSectionComponent,
-  UIFaqSectionComponent,
-  UIGallerySectionComponent,
-  UIPricingTableSectionComponent,
   PromotionsSectionComponent,
   ReservationFormComponent,
   ServiceSectionComponent
@@ -38,9 +35,6 @@ import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
     RouterModule,
     UINavBarComponent,
     ReservationFormComponent,
-    UIFaqSectionComponent,
-    UIPricingTableSectionComponent,
-    UIGallerySectionComponent,
     PromotionsSectionComponent,
     UICardRutasComponent,
     BubbleAnimationComponent,

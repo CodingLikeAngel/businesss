@@ -16,7 +16,7 @@
        sectionId="{{section.id}}"
        (visualEvents)="handleFooterEvent($event)">
     
-    <ng-container [ngSwitch]="section.config?.['subtype']">
+    <ng-container [ngSwitch]="section.config['subtype']">
       <!-- MEGA FOOTER -->
       <lib-ui-footer-mega *ngSwitchCase="'mega'"
         [variant]="$any(section.content['variant'] || getVariant(section.id))"

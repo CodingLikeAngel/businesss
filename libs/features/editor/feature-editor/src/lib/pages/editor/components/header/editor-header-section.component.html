@@ -6,7 +6,7 @@
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
     
-    <ng-container [ngSwitch]="section.config?.['subtype']">
+    <ng-container [ngSwitch]="section.config['subtype']">
       <!-- CLASSIC HEADER -->
       <lib-ui-header-classic *ngSwitchCase="'classic'"
         [variant]="$any(section.content['variant'] || getVariant(section.id))"
