@@ -360,8 +360,7 @@ export class EditorPromotionsIsolatedModeComponent implements OnInit, OnDestroy 
         createdAt: this.config?.metadata?.createdAt || Date.now(),
         modifiedAt: Date.now(),
         modifiedBy: this.config?.metadata?.modifiedBy,
-      }
-}
- },
+      },
     });
- 
+  }
+}
