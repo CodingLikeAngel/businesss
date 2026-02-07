@@ -181,6 +181,7 @@ export class EditorCardRutasSectionComponent extends EnhancedBaseEditorSectionCo
       content: {
         items: this.section.content['items'] || [...this.defaultItems],
         variant: this.getVariant(this.section.id),
+        globalVariant: this.globalVariant,
         backgroundColor: this.section.content['backgroundColor'],
         textColor: this.section.content['textColor'],
         accentColor: this.section.content['accentColor'],

@@ -91,6 +91,9 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                     <option value="matrix">Matrix</option>
                     <option value="holo">Holograma</option>
                   </select>
+                  <p class="variant-hint" *ngIf="!editableContent.variant">
+                    Heredando: {{ config.content['globalVariant'] || 'glass' }}
+                  </p>
                 </div>
 
                 <div class="control-group">

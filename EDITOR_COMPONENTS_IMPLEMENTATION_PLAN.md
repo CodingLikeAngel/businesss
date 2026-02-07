@@ -62,7 +62,7 @@ Composiciones complejas que ocupan un bloque completo de la página.
 | **card-animated**    | ✅ Implementado                   | High     |
 | **card-product**     | ✅ Implementado                   | High     |
 | **card-testimonial** | ✅ Implementado                   | High     |
-| **chip**             | ✅ Wrapper Base                   | Medium   |
+| **chip**             | ✅ Isolated Mode                  | Medium   |
 | **spinner**          | ✅ Wrapper Base                   | Low      |
 | **visual-spacer**    | ✅ Drag-to-Resize + Decorative    | High     |
 | **card-premium**     | ✅ Implementado (Isolated Mode)   | High     |

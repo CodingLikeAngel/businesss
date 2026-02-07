@@ -174,7 +174,11 @@ export class EditorCardPremiumSectionComponent extends EnhancedBaseEditorSection
       sectionId: this.section.id,
       elementId: this.section.id + '_card',
       type: 'card-premium',
-      content: { ...this.getCardConfigData(), variant: this.getVariant(this.section.id) },
+      content: { 
+        ...this.getCardConfigData(), 
+        variant: this.getVariant(this.section.id),
+        globalVariant: this.globalVariant
+      },
       styles: { ...cardStyles },
       position: {
         x: parseInt(cardStyles.left) || 0,

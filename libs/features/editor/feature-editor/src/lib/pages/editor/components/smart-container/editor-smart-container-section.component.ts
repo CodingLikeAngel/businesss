@@ -206,7 +206,10 @@ export class EditorSmartContainerSectionComponent extends EnhancedBaseEditorSect
       sectionId: this.section.id,
       elementId: this.section.id + '_container',
       type: 'container',
-      content: { ...currentConfig },
+      content: { 
+        ...currentConfig,
+        elements: this.section.elements || [] 
+      },
       styles: { ...this.section.styles },
       position: { x: 0, y: 0 },
       size: {
@@ -221,8 +224,9 @@ export class EditorSmartContainerSectionComponent extends EnhancedBaseEditorSect
     this.variantService.updateSectionInCurrentPage(this.section.id, {
       content: {
         ...this.section.content,
-        config: config.content
+        config: config.content,
       },
+      elements: config.content['elements'] || this.section.elements,
       styles: config.styles
     });
     this.showIsolatedMode = false;
