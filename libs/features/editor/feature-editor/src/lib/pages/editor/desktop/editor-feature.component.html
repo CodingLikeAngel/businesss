@@ -907,6 +907,13 @@
         (sectionResized)="onSectionResized($event.section, $event.bounds)">
       </lib-editor-smart-container-section>
 
+      <!-- LAYOUT SECTION (Flexible container with slots) -->
+      <lib-editor-layout-section *ngSwitchCase="'layout-section'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant">
+      </lib-editor-layout-section>
+
       <!-- DRAGGABLE BOX (standalone - handles events internally) -->
       <lib-editor-draggable-box-section *ngSwitchCase="'draggable-box'"
         [section]="section"

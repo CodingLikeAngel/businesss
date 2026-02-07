@@ -56,6 +56,7 @@ import { EditorModal1SectionComponent } from '../components/modal/editor-modal-1
 import { EditorModal2SectionComponent } from '../components/modal/editor-modal-2-section.component';
 import { EditorModal3SectionComponent } from '../components/modal/editor-modal-3-section.component';
 import { EditorReservationFormSectionComponent } from '../components/reservation-form/editor-reservation-form-section.component';
+import { EditorLayoutSectionComponent } from '../components/layout-section/editor-layout-section.component';
 
 @Component({
   selector: 'lib-editor-mobile-feature',
@@ -117,7 +118,8 @@ import { EditorReservationFormSectionComponent } from '../components/reservation
     EditorModal1SectionComponent,
     EditorModal2SectionComponent,
     EditorModal3SectionComponent,
-    EditorReservationFormSectionComponent
+    EditorReservationFormSectionComponent,
+    EditorLayoutSectionComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

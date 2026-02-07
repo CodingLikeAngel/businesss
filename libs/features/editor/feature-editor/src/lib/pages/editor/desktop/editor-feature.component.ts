@@ -66,6 +66,7 @@ import { EditorModal1SectionComponent } from '../components/modal/editor-modal-1
 import { EditorModal2SectionComponent } from '../components/modal/editor-modal-2-section.component';
 import { EditorModal3SectionComponent } from '../components/modal/editor-modal-3-section.component';
 import { ShortcutsGuideComponent } from '../components/shortcuts-guide/shortcuts-guide.component';
+import { EditorLayoutSectionComponent } from '../components/layout-section/editor-layout-section.component';
 
 
 
@@ -136,7 +137,8 @@ import { ShortcutsGuideComponent } from '../components/shortcuts-guide/shortcuts
     EditorModal1SectionComponent,
     EditorModal2SectionComponent,
     EditorModal3SectionComponent,
-    ShortcutsGuideComponent
+    ShortcutsGuideComponent,
+    EditorLayoutSectionComponent
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

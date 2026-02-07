@@ -1209,6 +1209,22 @@ export class ComponentExplorerComponent implements OnInit {
   ];
 
   availableComponents: SectionVariant[] = [
+    // --- LAYOUT SECTION (Flexible Container) ---
+    {
+      type: 'layout-section',
+      label: 'Sección Flexible',
+      icon: '🧩',
+      variants: ['default'],
+      description: 'Contenedor flexible con layouts (columnas, grids) y slots para añadir componentes',
+      category: 'content',
+      libraryType: 'section',
+      subtypes: [
+        { id: 'single', label: 'Una columna' },
+        { id: 'two-columns', label: 'Dos columnas' },
+        { id: 'grid-2x2', label: 'Grid 2x2' },
+        { id: 'sidebar-left', label: 'Sidebar izquierda' }
+      ]
+    },
     // --- WRAPPED SECTIONS (Organisms) ---
     {
       type: 'hero',
