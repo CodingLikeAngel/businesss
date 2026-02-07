@@ -8,6 +8,7 @@ import {
   VisualEditingEvent
 } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { EditorVideoIsolatedModeComponent, IsolatedModeConfig } from './editor-video-isolated-mode.component';
 
 @Component({
   selector: 'lib-editor-video-section',
@@ -16,13 +17,18 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UIVideoComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorVideoIsolatedModeComponent
   ],
   templateUrl: './editor-video-section.component.html'
 })
 export class EditorVideoSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('videoElement', { static: false }) videoElement?: ElementRef;
+
+  // Isolated Mode State
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
 
   ngAfterViewInit() {
     // Initial height check
@@ -91,5 +97,49 @@ export class EditorVideoSectionComponent extends EnhancedBaseEditorSectionCompon
 
       this.autoExpandSectionHeight(bounds);
     }
+  }
+
+  openIsolatedMode(event: MouseEvent): void {
+    event.stopPropagation();
+    const videoStyles = this.section.content['videoStyles'] || {};
+    
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_video',
+      type: 'video',
+      content: {
+        videoUrl: this.section.content['videoUrl'],
+        autoplay: this.section.content['autoplay'],
+        loop: this.section.content['loop']
+      },
+      styles: { ...videoStyles },
+      position: {
+        x: parseInt(videoStyles.left) || 0,
+        y: parseInt(videoStyles.top) || 0
+      },
+      size: {
+        width: parseInt(videoStyles.width) || 300,
+        height: parseInt(videoStyles.height) || 200
+      }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    this.showIsolatedMode = false;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: {
+        ...this.section.content,
+        videoUrl: config.content.videoUrl,
+        autoplay: config.content.autoplay,
+        loop: config.content.loop,
+        videoStyles: config.styles,
+        customStyles: config.styles
+      }
+    });
+    this.showIsolatedMode = false;
   }
 }

@@ -8,6 +8,7 @@ import {
   VisualEditingEvent
 } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
+import { EditorMapIsolatedModeComponent, IsolatedModeConfig } from './editor-map-isolated-mode.component';
 
 @Component({
   selector: 'lib-editor-map-section',
@@ -16,13 +17,18 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     CommonModule,
     UIMapComponent,
     ApplyDynamicStylesDirective,
-    EnhancedVisualEditableDirective
+    EnhancedVisualEditableDirective,
+    EditorMapIsolatedModeComponent
   ],
   templateUrl: './editor-map-section.component.html'
 })
 export class EditorMapSectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit {
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('mapElement', { static: false }) mapElement?: ElementRef;
+
+  // Isolated Mode State
+  showIsolatedMode = false;
+  isolatedConfig?: IsolatedModeConfig;
 
   ngAfterViewInit() {
     // Initial height check
@@ -31,8 +37,8 @@ export class EditorMapSectionComponent extends EnhancedBaseEditorSectionComponen
       this.autoExpandSectionHeight({
         x: parseInt(mapStyles.left) || 0,
         y: parseInt(mapStyles.top),
-        width: parseInt(mapStyles.width) || 600,
-        height: parseInt(mapStyles.height) || 400
+        width: parseInt(mapStyles.width) || 400,
+        height: parseInt(mapStyles.height) || 300
       });
     }
 
@@ -91,5 +97,49 @@ export class EditorMapSectionComponent extends EnhancedBaseEditorSectionComponen
 
       this.autoExpandSectionHeight(bounds);
     }
+  }
+
+  openIsolatedMode(event: MouseEvent): void {
+    event.stopPropagation();
+    const mapStyles = this.section.content['mapStyles'] || {};
+
+    this.isolatedConfig = {
+      sectionId: this.section.id,
+      elementId: this.section.id + '_map',
+      type: 'map',
+      content: {
+        address: this.section.content['address'],
+        zoom: this.section.content['zoom'],
+        showOverlay: this.section.content['showOverlay']
+      },
+      styles: { ...mapStyles },
+      position: {
+        x: parseInt(mapStyles.left) || 0,
+        y: parseInt(mapStyles.top) || 0
+      },
+      size: {
+        width: parseInt(mapStyles.width) || 400,
+        height: parseInt(mapStyles.height) || 300
+      }
+    };
+    this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    this.showIsolatedMode = false;
+  }
+
+  onIsolatedModeApplied(config: IsolatedModeConfig): void {
+    this.variantService.updateSectionInCurrentPage(this.section.id, {
+      content: {
+        ...this.section.content,
+        address: config.content.address,
+        zoom: config.content.zoom,
+        showOverlay: config.content.showOverlay,
+        mapStyles: config.styles,
+        customStyles: config.styles
+      }
+    });
+    this.showIsolatedMode = false;
   }
 }
