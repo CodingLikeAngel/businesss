@@ -146,11 +146,12 @@ import {
             <div class="slot-component">
               <!-- Editing Overlay -->
               <div *ngIf="isEditing" class="slot-controls">
-                <button class="slot-btn" (click)="openIsolatedMode(i, $event)" 
-                        *ngIf="slot.componentType !== 'empty'"
-                        title="Modo Aislado">🎯</button>
-                <button class="slot-btn" (click)="openComponentPicker(i, $event)" title="Cambiar">🔄</button>
-                <button class="slot-btn" (click)="editSlotComponent(i, $event)" title="Configurar">⚙️</button>
+                <button class="slot-btn edit-btn" 
+                        (click)="editSlotComponent(i, $event)" 
+                        [title]="hasIsolatedMode(slot.componentType) ? 'Editar en Modo Aislado' : 'Configurar'">
+                  {{ hasIsolatedMode(slot.componentType) ? '🎯' : '⚙️' }}
+                </button>
+                <button class="slot-btn" (click)="openComponentPicker(i, $event)" title="Cambiar Componente">🔄</button>
                 <button class="slot-btn danger" (click)="clearSlot(i, $event)" title="Eliminar">🗑️</button>
               </div>
 
@@ -947,6 +948,9 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.persistConfig();
   }
 
+  // Components that support isolated mode editing
+  private isolatedModeComponents: SlotComponentType[] = ['ui-button', 'ui-accordion', 'draggable-box'];
+
   editSlotComponent(index: number, event: Event) {
     event.stopPropagation();
     if (index < 0 || index >= this.config.slots.length) return;
@@ -954,6 +958,13 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     const slot = this.config.slots[index];
     if (slot.componentType === 'empty') return;
 
+    // If the component supports isolated mode, open it directly
+    if (this.isolatedModeComponents.includes(slot.componentType)) {
+      this.openIsolatedMode(index, event);
+      return;
+    }
+
+    // Otherwise, use the generic configuration modal
     this.editingSlotIndex = index;
     this.editingSlot = { ...slot, content: { ...(slot.content || {}) } };
     this.showSlotConfig = true;
@@ -964,6 +975,11 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.editingSlot = null;
     this.editingSlotIndex = -1;
   }
+
+  hasIsolatedMode(componentType: SlotComponentType): boolean {
+    return this.isolatedModeComponents.includes(componentType);
+  }
+
 
   getSlotComponentLabel(): string {
     if (!this.editingSlot) return '';
