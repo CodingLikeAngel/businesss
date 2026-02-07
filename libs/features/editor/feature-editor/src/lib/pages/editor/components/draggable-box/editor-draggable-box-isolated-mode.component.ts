@@ -141,8 +141,56 @@ export interface UndoRedoState {
                     Heredando: {{ config.content['globalVariant'] || 'glass' }}
                   </p>
 
-<!-- ... skipping ... -->
+                <div class="sidebar-section no-border">
+                  <div class="section-header">
+                    <span class="section-icon">📏</span>
+                    <h4>DIMENSIONES</h4>
+                  </div>
+                  <div class="control-row grid grid-cols-2 gap-2">
+                    <div class="control-group">
+                      <label>Posición X</label>
+                      <input type="number" [(ngModel)]="currentPosition.x" (ngModelChange)="onPositionChange()" class="premium-input text-center">
+                    </div>
+                    <div class="control-group">
+                      <label>Posición Y</label>
+                      <input type="number" [(ngModel)]="currentPosition.y" (ngModelChange)="onPositionChange()" class="premium-input text-center">
+                    </div>
+                  </div>
+                  <div class="control-row grid grid-cols-2 gap-2">
+                    <div class="control-group">
+                      <label>Ancho (W)</label>
+                      <input type="number" [(ngModel)]="currentSize.width" (ngModelChange)="onSizeChange()" class="premium-input text-center">
+                    </div>
+                    <div class="control-group">
+                      <label>Alto (H)</label>
+                      <input type="number" [(ngModel)]="currentSize.height" (ngModelChange)="onSizeChange()" class="premium-input text-center">
+                    </div>
+                  </div>
+                </div>
 
+              </div>
+            </div>
+          </div>
+
+          <!-- Canvas Area -->
+          <div class="isolated-canvas" 
+               #canvas
+               [class.ambient-dark]="true"
+               [class.show-grid]="showGrid"
+               [class.grid-snapping]="snapToGrid"
+               (mousedown)="onCanvasMouseDown($event)">
+            
+            <div class="canvas-inner" #canvasInner>
+              <div class="draggable-wrapper"
+                   #draggableWrapper
+                   [style.left.px]="currentPosition.x"
+                   [style.top.px]="currentPosition.y"
+                   [style.width.px]="currentSize.width"
+                   [style.height.px]="currentSize.height"
+                   [class.is-dragging]="isDragging"
+                   [class.is-resizing]="isResizing"
+                   (mousedown)="onMouseDown($event)">
+                
                 <lib-ui-components-draggable-box-1
                   *ngIf="editableContent.boxVariant === 'draggable-box-1'"
                   [variant]="editableContent.variant || config.content['globalVariant'] || 'secondary'"
@@ -150,7 +198,8 @@ export interface UndoRedoState {
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
                   [content]="editableContent.content || editableContent.title || 'Drag me'"
-                  [customStyles]="getCustomStyles()">
+                  [customStyles]="getCustomStyles()"
+                  style="width: 100%; height: 100%; display: block;">
                 </lib-ui-components-draggable-box-1>
 
                 <lib-ui-components-draggable-box-2
@@ -160,7 +209,8 @@ export interface UndoRedoState {
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
                   [content]="editableContent.content || editableContent.title || 'Drag me'"
-                  [customStyles]="getCustomStyles()">
+                  [customStyles]="getCustomStyles()"
+                  style="width: 100%; height: 100%; display: block;">
                 </lib-ui-components-draggable-box-2>
 
                 <lib-ui-components-draggable-box-3
@@ -170,7 +220,8 @@ export interface UndoRedoState {
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
                   [content]="editableContent.content || editableContent.title || 'Drag me'"
-                  [customStyles]="getCustomStyles()">
+                  [customStyles]="getCustomStyles()"
+                  style="width: 100%; height: 100%; display: block;">
                 </lib-ui-components-draggable-box-3>
 
                 <!-- Resize Handles -->
@@ -615,7 +666,7 @@ export interface UndoRedoState {
 
     .ambient-dark.show-grid {
       background-image: 
-        radial-gradient(rgba(255, 255, 255, 0.3) 1.5px, transparent 1.5px);
+        radial-gradient(rgba(255, 255, 255, 0.15) 1.5px, transparent 1.5px);
     }
 
     .grid-snapping.show-grid {
@@ -637,7 +688,8 @@ export interface UndoRedoState {
       /* ROBUSTNESS: Outline is separate from content styling */
       outline: 2px solid transparent;
       outline-offset: 0;
-      transition: outline-color 0.15s ease;
+      transition: outline-color 0.15s ease, box-shadow 0.3s ease;
+      background: rgba(255, 255, 255, 0.01);
     }
 
     .draggable-wrapper:hover {
@@ -648,6 +700,7 @@ export interface UndoRedoState {
     .draggable-wrapper.is-resizing {
       outline-color: var(--primary-accent);
       outline-width: 3px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     }
 
     /* Ensure inner components fill the wrapper - PIERCE ENCAPSULATION */
@@ -676,25 +729,25 @@ export interface UndoRedoState {
     /* RESIZE HANDLES */
     .resize-handle {
       position: absolute;
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       background: #fff;
       border: 2px solid var(--primary-accent);
-      border-radius: 50%;
+      border-radius: 4px;
       z-index: 10;
+      transition: all 0.2s;
     }
 
     .resize-handle:hover {
       background: var(--primary-accent);
-      transform: translate(0, 0) scale(1.5) !important;
+      transform: scale(1.3);
       box-shadow: 0 0 10px var(--primary-accent-glow);
     }
     
     .resize-handle.active {
       background: var(--primary-accent);
       border-color: #fff;
-      transform: translate(0, 0) scale(1.8) !important;
-      box-shadow: 0 0 15px var(--primary-accent-glow);
+      transform: scale(1.5);
     }
 
     .resize-handle.nw { top: -6px; left: -6px; cursor: nw-resize; }
@@ -706,54 +759,53 @@ export interface UndoRedoState {
     .resize-handle.sw { bottom: -6px; left: -6px; cursor: sw-resize; }
     .resize-handle.w { top: 50%; left: -6px; transform: translateY(-50%); cursor: w-resize; }
 
-    /* Adjust n/s handles for hovering override */
-    .resize-handle.n:hover, .resize-handle.s:hover, .resize-handle.n.active, .resize-handle.s.active { transform: translateX(-50%) scale(1.5) !important; }
-    .resize-handle.e:hover, .resize-handle.w:hover, .resize-handle.e.active, .resize-handle.w.active { transform: translateY(-50%) scale(1.5) !important; }
-
     /* POSITION DOCK */
     .modern-position-dock {
       position: absolute;
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(15, 23, 42, 0.8);
+      background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 50px;
-      padding: 8px 12px;
+      padding: 8px 20px;
       display: flex;
       align-items: center;
       gap: 1.5rem;
       box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      pointer-events: none;
     }
 
     .dock-item {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
 
     .dock-item .label {
-      font-size: 8px;
+      font-size: 9px;
       font-weight: 900;
       color: var(--primary-accent);
-      background: rgba(99, 102, 241, 0.1);
-      padding: 2px 6px;
-      border-radius: 4px;
+      background: rgba(99, 102, 241, 0.15);
+      padding: 2px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
     }
 
-    .dock-item .value { color: #fff; font-size: 11px; font-weight: 600; font-family: monospace; }
-    .dock-divider { width: 1px; height: 16px; background: var(--border-color); }
+    .dock-item .value { color: #fff; font-size: 12px; font-weight: 700; font-family: 'JetBrains Mono', 'Courier New', monospace; }
+    .dock-divider { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.1); }
 
     /* FOOTER */
     .isolated-mode-footer {
-      height: 60px;
+      height: 70px;
       background: var(--bg-header);
       border-top: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.5rem;
+      padding: 0 2rem;
       flex-shrink: 0;
     }
 
@@ -761,13 +813,13 @@ export interface UndoRedoState {
     .footer-hint b { color: var(--primary-accent); }
 
     .btn-clean {
-      padding: 0.75rem 2rem;
+      padding: 0.8rem 2rem;
       border-radius: 12px;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       border: none;
-      transition: all 0.2s;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .btn-clean.secondary {
@@ -1013,6 +1065,10 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
     this.onPositionChange();
   }
 
+  onCanvasMouseDown(event: MouseEvent) {
+    // Deselect or other canvas actions
+  }
+
   onMouseDown(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
@@ -1022,6 +1078,8 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
     this.dragStartY = event.clientY;
     this.startPositionX = this.currentPosition.x;
     this.startPositionY = this.currentPosition.y;
+
+    this.setupMouseListeners();
   }
 
   startResize(event: MouseEvent, handle: string) {

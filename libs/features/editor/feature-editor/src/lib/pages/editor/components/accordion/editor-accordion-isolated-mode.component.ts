@@ -143,13 +143,63 @@ export interface UndoRedoState {
                   Heredando: {{ config.content['globalVariant'] || 'glass' }}
                 </p>
 
-<!-- ... skipping ... -->
+              <!-- SECCIÓN: ITEMS DEL ACORDEÓN -->
+              <div class="sidebar-section no-border">
+                <div class="section-header">
+                  <span class="section-icon">📋</span>
+                  <h4>ELEMENTOS</h4>
+                  <button class="add-btn-mini" (click)="addItem()" title="Añadir Item">+</button>
+                </div>
 
+                <div class="accordion-items-list">
+                  <div *ngFor="let item of editableContent.items; let i = index" class="accordion-item-editor">
+                    <div class="item-header">
+                      <span>ITEM #{{ i + 1 }}</span>
+                      <button class="remove-btn" (click)="removeItem(i)">✕</button>
+                    </div>
+                    <div class="control-group">
+                      <label>Título</label>
+                      <input type="text" [(ngModel)]="item.title" (ngModelChange)="onContentChange()" class="premium-input">
+                    </div>
+                    <div class="control-group">
+                      <label>Contenido</label>
+                      <textarea [(ngModel)]="item.content" (ngModelChange)="onContentChange()" class="premium-textarea"></textarea>
+                    </div>
+                  </div>
+                </div>
+
+                <button class="add-btn" (click)="addItem()">
+                  + Añadir Nuevo Elemento
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Canvas Area -->
+          <div class="isolated-canvas" 
+               #canvas
+               [class.ambient-dark]="true"
+               [class.show-grid]="showGrid"
+               [class.grid-snapping]="snapToGrid"
+               (mousedown)="onCanvasMouseDown($event)">
+            
+            <div class="canvas-inner" #canvasInner>
+              <div class="draggable-wrapper"
+                   #draggableWrapper
+                   [style.left.px]="currentPosition.x"
+                   [style.top.px]="currentPosition.y"
+                   [style.width.px]="currentSize.width"
+                   [style.height.px]="currentSize.height"
+                   [class.is-dragging]="isDragging"
+                   [class.is-resizing]="isResizing"
+                   (mousedown)="onMouseDown($event)">
+                
                 <lib-ui-components-accordion
                   *ngIf="editableContent.accordionVariant === 'accordion' || !editableContent.accordionVariant"
                   [variant]="editableContent.variant || config.content['globalVariant'] || 'secondary'"
                   [items]="editableContent.items || []"
-                  [customStyles]="getCustomStyles()">
+                  [customStyles]="getCustomStyles()"
+                  style="width: 100%; height: 100%; display: block;">
                 </lib-ui-components-accordion>
 
                 <lib-ui-components-accordion-1
@@ -159,7 +209,8 @@ export interface UndoRedoState {
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
                   [items]="editableContent.items || []"
-                  [customStyles]="getCustomStyles()">
+                  [customStyles]="getCustomStyles()"
+                  style="width: 100%; height: 100%; display: block;">
                 </lib-ui-components-accordion-1>
 
                 <lib-ui-components-accordion-2
@@ -169,7 +220,8 @@ export interface UndoRedoState {
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
                   [items]="editableContent.items || []"
-                  [customStyles]="getCustomStyles()">
+                  [customStyles]="getCustomStyles()"
+                  style="width: 100%; height: 100%; display: block;">
                 </lib-ui-components-accordion-2>
 
                 <lib-ui-components-accordion-3
@@ -179,7 +231,8 @@ export interface UndoRedoState {
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
                   [items]="editableContent.items || []"
-                  [customStyles]="getCustomStyles()">
+                  [customStyles]="getCustomStyles()"
+                  style="width: 100%; height: 100%; display: block;">
                 </lib-ui-components-accordion-3>
 
                 <!-- Resize Handles -->
@@ -628,6 +681,7 @@ export interface UndoRedoState {
       position: relative;
       overflow: auto;
       padding: 100px;
+      transition: background-color 0.4s ease, background-image 0.4s ease;
     }
 
     .isolated-canvas.ambient-dark {
@@ -638,6 +692,7 @@ export interface UndoRedoState {
       width: 4000px;
       height: 4000px;
       position: relative;
+      flex-shrink: 0;
     }
 
     .show-grid {
@@ -647,20 +702,30 @@ export interface UndoRedoState {
 
     .ambient-dark.show-grid {
       background-image: 
-        radial-gradient(rgba(255, 255, 255, 0.3) 1.5px, transparent 1.5px);
+        radial-gradient(rgba(255, 255, 255, 0.15) 1.5px, transparent 1.5px);
     }
 
     .grid-snapping.show-grid {
       background-image: 
         radial-gradient(var(--primary-accent) 2px, transparent 2px);
+      box-shadow: inset 0 0 100px rgba(16, 185, 129, 0.05);
+    }
+    
+    .grid-snapping.ambient-dark.show-grid {
+        background-image: 
+        radial-gradient(var(--primary-accent) 2.5px, transparent 2.5px);
+        box-shadow: inset 0 0 100px rgba(16, 185, 129, 0.1);
     }
 
     .draggable-wrapper {
       position: absolute !important;
       cursor: move;
       z-index: 100;
+      /* ROBUSTNESS: Outline is separate from content styling */
       outline: 2px solid transparent;
-      transition: outline-color 0.15s ease;
+      outline-offset: 0;
+      transition: outline-color 0.15s ease, box-shadow 0.3s ease;
+      background: rgba(255, 255, 255, 0.01);
     }
 
     .draggable-wrapper:hover {
@@ -671,20 +736,30 @@ export interface UndoRedoState {
     .draggable-wrapper.is-resizing {
       outline-color: var(--primary-accent);
       outline-width: 3px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
     }
 
+    /* RESIZE HANDLES */
     .resize-handle {
       position: absolute;
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       background: #fff;
       border: 2px solid var(--primary-accent);
-      border-radius: 50%;
+      border-radius: 4px;
       z-index: 10;
+      transition: all 0.2s;
     }
 
-    .resize-handle:hover, .resize-handle.active {
+    .resize-handle:hover {
       background: var(--primary-accent);
+      transform: scale(1.3);
+      box-shadow: 0 0 10px var(--primary-accent-glow);
+    }
+    
+    .resize-handle.active {
+      background: var(--primary-accent);
+      border-color: #fff;
       transform: scale(1.5);
     }
 
@@ -697,60 +772,66 @@ export interface UndoRedoState {
     .resize-handle.sw { bottom: -6px; left: -6px; cursor: sw-resize; }
     .resize-handle.w { top: 50%; left: -6px; transform: translateY(-50%); cursor: w-resize; }
 
+    /* POSITION DOCK */
     .modern-position-dock {
       position: absolute;
       bottom: 24px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(15, 23, 42, 0.8);
+      background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(12px);
       border: 1px solid var(--border-color);
       border-radius: 50px;
-      padding: 8px 12px;
+      padding: 8px 20px;
       display: flex;
       align-items: center;
       gap: 1.5rem;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      pointer-events: none;
     }
 
     .dock-item {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.6rem;
     }
 
     .dock-item .label {
-      font-size: 8px;
+      font-size: 9px;
       font-weight: 900;
       color: var(--primary-accent);
-      background: rgba(16, 185, 129, 0.1);
-      padding: 2px 6px;
-      border-radius: 4px;
+      background: rgba(16, 185, 129, 0.15);
+      padding: 2px 8px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
     }
 
-    .dock-item .value { color: #fff; font-size: 11px; font-weight: 600; font-family: monospace; }
-    .dock-divider { width: 1px; height: 16px; background: var(--border-color); }
+    .dock-item .value { color: #fff; font-size: 12px; font-weight: 700; font-family: 'JetBrains Mono', 'Courier New', monospace; }
+    .dock-divider { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.1); }
 
     .isolated-mode-footer {
-      height: 60px;
+      height: 70px;
       background: var(--bg-header);
       border-top: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 1.5rem;
+      padding: 0 2rem;
+      flex-shrink: 0;
     }
 
     .footer-hint { font-size: 11px; color: var(--text-dim); }
     .footer-hint b { color: var(--primary-accent); }
 
     .btn-clean {
-      padding: 0.75rem 2rem;
+      padding: 0.8rem 2rem;
       border-radius: 12px;
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 700;
       cursor: pointer;
       border: none;
-      transition: all 0.2s;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .btn-clean.secondary {
@@ -762,8 +843,9 @@ export interface UndoRedoState {
     .btn-clean.primary {
       background: var(--primary-accent);
       color: white;
+      box-shadow: 0 8px 20px -5px var(--primary-accent-glow);
     }
-    .btn-clean.primary:hover { transform: translateY(-2px); }
+    .btn-clean.primary:hover { transform: translateY(-2px); box-shadow: 0 12px 25px -5px var(--primary-accent-glow); }
   `]
 })
 export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
@@ -954,6 +1036,10 @@ export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
     this.onPositionChange();
   }
 
+  onCanvasMouseDown(event: MouseEvent) {
+    // Deselect or other canvas actions
+  }
+
   onMouseDown(event: MouseEvent) {
     event.preventDefault();
     event.stopPropagation();
@@ -963,6 +1049,8 @@ export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
     this.dragStartY = event.clientY;
     this.startPositionX = this.currentPosition.x;
     this.startPositionY = this.currentPosition.y;
+    
+    this.setupMouseListeners();
   }
 
   startResize(event: MouseEvent, handle: string) {

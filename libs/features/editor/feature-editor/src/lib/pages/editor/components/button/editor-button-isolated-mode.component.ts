@@ -48,6 +48,14 @@ export interface UndoRedoState {
           
           <div class="header-actions">
             <div class="action-group">
+            <div class="action-group">
+              <button class="icon-btn" (click)="showGrid = !showGrid" [class.active]="showGrid" title="Cuadrícula (G)">
+                <span class="icon">#</span>
+              </button>
+              <button class="icon-btn" (click)="snapToGrid = !snapToGrid" [class.active]="snapToGrid" title="Ajustar a Cuadrícula (S)">
+                <span class="icon">⇶</span>
+              </button>
+              <div class="divider"></div>
               <button class="icon-btn" (click)="undo()" [disabled]="!canUndo" title="Deshacer (Ctrl+Z)">
                 <span class="icon">↶</span>
               </button>
@@ -115,27 +123,97 @@ export interface UndoRedoState {
                     <option value="secondary">Secundario</option>
                     <option value="accent">Acento</option>
                     <option value="glass">Glassmorphism</option>
-                    <option value="ghost">Ghost</option>
-                    <option value="outline">Outline</option>
+                    <option value="outline">Contorno</option>
+                    <option value="glass">Cristal</option>
+                    <option value="ghost">Fantasma</option>
+                    <option value="neon">Neon</option>
+                    <option value="cyber">Cyberpunk</option>
                   </select>
                 </div>
 
-                <div class="control-row grid grid-cols-2 gap-2 mt-4">
-                  <div class="control-group">
-                    <label>Redondeado</label>
-                    <select [(ngModel)]="editableContent.rounded" (ngModelChange)="onContentChange()" class="premium-input">
-                      <option value="none">Recto</option>
-                      <option value="md">Suave</option>
-                      <option value="full">Cápsula</option>
-                    </select>
-                  </div>
+                <div class="control-row grid grid-cols-2 gap-2">
                   <div class="control-group">
                     <label>Tamaño</label>
                     <select [(ngModel)]="editableContent.size" (ngModelChange)="onContentChange()" class="premium-input">
+                      <option value="xs">Extra Pequeño</option>
                       <option value="sm">Pequeño</option>
                       <option value="md">Medio</option>
                       <option value="lg">Grande</option>
+                      <option value="xl">Extra Grande</option>
                     </select>
+                  </div>
+                  <div class="control-group">
+                    <label>Redondeo</label>
+                    <select [(ngModel)]="editableContent.rounded" (ngModelChange)="onContentChange()" class="premium-input">
+                      <option value="none">Ninguno</option>
+                      <option value="sm">Suave</option>
+                      <option value="md">Medio</option>
+                      <option value="lg">Pronunciado</option>
+                      <option value="full">Cápsula</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div class="flex items-center justify-between p-2 bg-slate-900/40 rounded-xl border border-white/5">
+                  <span class="text-[11px] text-slate-300 font-bold uppercase">Modo Oscuro</span>
+                  <div class="toggle-switch" [class.active]="editableContent.dark" (click)="editableContent.dark = !editableContent.dark; onContentChange()">
+                    <div class="toggle-thumb"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- SECCIÓN: COLORES PERSONALIZADOS -->
+              <div class="sidebar-section">
+                <div class="section-header">
+                  <span class="section-icon">🌈</span>
+                  <h4>COLORES</h4>
+                </div>
+                
+                <div class="control-group">
+                  <label>Fondo</label>
+                  <div class="flex gap-2 p-1 bg-slate-900/50 rounded-lg mb-2">
+                    <button class="sub-tab-btn" [class.active]="bgType === 'solid'" (click)="bgType = 'solid'; onStyleChange()">SÓLIDO</button>
+                    <button class="sub-tab-btn" [class.active]="bgType === 'gradient'" (click)="bgType = 'gradient'; onStyleChange()">GRADIENTE</button>
+                  </div>
+
+                  <div *ngIf="bgType === 'solid'" class="color-input-wrapper">
+                    <div class="color-preview">
+                      <input type="color" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()">
+                    </div>
+                    <input type="text" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()" class="premium-input font-mono" placeholder="#hex">
+                  </div>
+
+                  <div *ngIf="bgType === 'gradient'" class="flex flex-col gap-2">
+                    <div class="color-input-wrapper">
+                      <div class="color-preview" [style.background]="gradColor1">
+                        <input type="color" [(ngModel)]="gradColor1" (ngModelChange)="onStyleChange()">
+                      </div>
+                      <input type="text" [(ngModel)]="gradColor1" (ngModelChange)="onStyleChange()" class="premium-input font-mono">
+                    </div>
+                    <div class="color-input-wrapper">
+                      <div class="color-preview" [style.background]="gradColor2">
+                        <input type="color" [(ngModel)]="gradColor2" (ngModelChange)="onStyleChange()">
+                      </div>
+                      <input type="text" [(ngModel)]="gradColor2" (ngModelChange)="onStyleChange()" class="premium-input font-mono">
+                    </div>
+                  </div>
+
+                  <div class="theme-palette" *ngIf="globalColors$ | async as colors">
+                    <div *ngFor="let c of colors" 
+                         class="palette-swatch" 
+                         [style.background]="c" 
+                         (click)="bgType === 'solid' ? editableStyles.backgroundColor = c : gradColor1 = c; onStyleChange()">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="control-group">
+                  <label>Texto</label>
+                  <div class="color-input-wrapper">
+                    <div class="color-preview" [style.background]="editableStyles.color">
+                      <input type="color" [(ngModel)]="editableStyles.color" (ngModelChange)="onStyleChange()">
+                    </div>
+                    <input type="text" [(ngModel)]="editableStyles.color" (ngModelChange)="onStyleChange()" class="premium-input font-mono">
                   </div>
                 </div>
               </div>
@@ -160,68 +238,6 @@ export interface UndoRedoState {
                       <option value="700">Bold</option>
                       <option value="800">Black</option>
                     </select>
-                  </div>
-                </div>
-              </div>
-
-              <!-- SECCIÓN: COLORES & GRADIENTES -->
-              <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">🎨</span>
-                  <h4>FONDO & GRADIENTE</h4>
-                </div>
-                
-                <div class="control-group mb-4">
-                  <label>Tipo de Fondo</label>
-                  <div class="flex bg-slate-900/50 p-1 rounded-lg gap-1 border border-white/5">
-                    <button (click)="bgType = 'solid'; onStyleChange()" [class.active]="bgType === 'solid'" class="sub-tab-btn">Sólido</button>
-                    <button (click)="bgType = 'gradient'; onStyleChange()" [class.active]="bgType === 'gradient'" class="sub-tab-btn">Gradiente</button>
-                  </div>
-                </div>
-
-                <div *ngIf="bgType === 'solid'">
-                  <div class="control-group">
-                    <label>Color de Fondo</label>
-                    <div class="color-control-wrapper">
-                      <div class="color-input-wrapper">
-                        <div class="color-preview" [style.background-color]="editableStyles.backgroundColor">
-                          <input type="color" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()">
-                        </div>
-                        <input type="text" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()" class="premium-input hex-input">
-                      </div>
-                      <div class="theme-palette" *ngIf="globalColors$ | async as colors">
-                        <div *ngFor="let c of colors" class="palette-swatch" [style.background-color]="c" (click)="editableStyles.backgroundColor = c; onStyleChange()"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div *ngIf="bgType === 'gradient'" class="space-y-4">
-                  <div class="control-group">
-                    <label>Color 1</label>
-                    <div class="color-input-wrapper">
-                      <div class="color-preview" [style.background-color]="gradColor1">
-                        <input type="color" [(ngModel)]="gradColor1" (ngModelChange)="onStyleChange()">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <label>Color 2</label>
-                    <div class="color-input-wrapper">
-                      <div class="color-preview" [style.background-color]="gradColor2">
-                        <input type="color" [(ngModel)]="gradColor2" (ngModelChange)="onStyleChange()">
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="control-group mt-4">
-                  <label>Color del Texto</label>
-                  <div class="color-input-wrapper">
-                    <div class="color-preview" [style.background-color]="editableStyles.color">
-                      <input type="color" [(ngModel)]="editableStyles.color" (ngModelChange)="onStyleChange()">
-                    </div>
-                    <input type="text" [(ngModel)]="editableStyles.color" (ngModelChange)="onStyleChange()" class="premium-input hex-input">
                   </div>
                 </div>
               </div>
@@ -300,7 +316,10 @@ export interface UndoRedoState {
           <!-- Canvas Area -->
           <div class="isolated-canvas" 
                #canvas
-             [class.ambient-dark]="true">
+               [class.ambient-dark]="true"
+               [class.show-grid]="showGrid"
+               [class.grid-snapping]="snapToGrid"
+               (mousedown)="onCanvasMouseDown($event)">
             
             <div class="canvas-inner" #canvasInner>
               <div class="draggable-wrapper"
@@ -309,6 +328,8 @@ export interface UndoRedoState {
                    [style.top.px]="currentPosition.y"
                    [style.width.px]="currentSize.width"
                    [style.height.px]="currentSize.height"
+                   [class.is-dragging]="isDragging"
+                   [class.is-resizing]="isResizing"
                    (mousedown)="onMouseDown($event)">
                 
                 <lib-ui-components-button
@@ -328,15 +349,31 @@ export interface UndoRedoState {
                 </lib-ui-components-button>
 
                 <!-- Resize Handles -->
-                <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
+                <div class="resize-handle nw" [class.active]="resizeHandle === 'nw'" (mousedown)="startResize($event, 'nw')"></div>
+                <div class="resize-handle n" [class.active]="resizeHandle === 'n'" (mousedown)="startResize($event, 'n')"></div>
+                <div class="resize-handle ne" [class.active]="resizeHandle === 'ne'" (mousedown)="startResize($event, 'ne')"></div>
+                <div class="resize-handle e" [class.active]="resizeHandle === 'e'" (mousedown)="startResize($event, 'e')"></div>
+                <div class="resize-handle se" [class.active]="resizeHandle === 'se'" (mousedown)="startResize($event, 'se')"></div>
+                <div class="resize-handle s" [class.active]="resizeHandle === 's'" (mousedown)="startResize($event, 's')"></div>
+                <div class="resize-handle sw" [class.active]="resizeHandle === 'sw'" (mousedown)="startResize($event, 'sw')"></div>
+                <div class="resize-handle w" [class.active]="resizeHandle === 'w'" (mousedown)="startResize($event, 'w')"></div>
               </div>
             </div>
 
             <div class="modern-position-dock">
-              <div class="dock-item"><span class="label">X</span><span class="value">{{ currentPosition.x }}px</span></div>
-              <div class="dock-item"><span class="label">Y</span><span class="value">{{ currentPosition.y }}px</span></div>
+              <div class="dock-item">
+                <span class="label">X</span>
+                <span class="value">{{ currentPosition.x }}px</span>
+              </div>
+              <div class="dock-item">
+                <span class="label">Y</span>
+                <span class="value">{{ currentPosition.y }}px</span>
+              </div>
               <div class="dock-divider"></div>
-              <div class="dock-item"><span class="label">SIZE</span><span class="value">{{ currentSize.width }}x{{ currentSize.height }}</span></div>
+              <div class="dock-item">
+                <span class="label">SIZE</span>
+                <span class="value">{{ currentSize.width }}x{{ currentSize.height }}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -465,24 +502,119 @@ export interface UndoRedoState {
     .palette-swatch { width: 20px; height: 20px; border-radius: 4px; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.08); transition: transform 0.2s; }
     .palette-swatch:hover { transform: scale(1.2); z-index: 10; border-color: white; }
 
-    .isolated-canvas { flex: 1; background: #020617; position: relative; overflow: hidden; background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px); background-size: 20px 20px; }
-    .canvas-inner { width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; }
+    .isolated-canvas {
+      flex: 1;
+      background: #020617;
+      position: relative;
+      overflow: auto;
+      padding: 100px;
+      transition: background-color 0.4s ease, background-image 0.4s ease;
+    }
+
+    .canvas-inner {
+      width: 4000px;
+      height: 4000px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .show-grid {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+      background-size: 20px 20px;
+    }
+
+    .grid-snapping.show-grid {
+      background-image: radial-gradient(rgba(99, 102, 241, 0.3) 1.5px, transparent 1.5px);
+    }
     
-    .draggable-wrapper { position: relative; cursor: move; border: 1px dashed rgba(99, 102, 241, 0.5); padding: 5px; }
-    .resize-handle { position: absolute; width: 10px; height: 10px; background: #6366f1; border: 1.5px solid white; border-radius: 3px; bottom: -5px; right: -5px; cursor: se-resize; }
-    .preview-btn { transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .draggable-wrapper {
+      position: absolute !important;
+      cursor: move;
+      z-index: 100;
+      outline: 2px solid transparent;
+      outline-offset: 4px;
+      transition: outline-color 0.15s ease, box-shadow 0.3s ease;
+      background: rgba(255, 255, 255, 0.01);
+    }
 
-    .modern-position-dock { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); padding: 0.6rem 1.2rem; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); display: flex; gap: 1.5rem; color: white; font-size: 11px; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3); }
-    .dock-divider { width: 1px; background: rgba(255, 255, 255, 0.1); }
-    .dock-item { display: flex; align-items: center; gap: 0.5rem; }
-    .dock-item .label { color: #64748b; font-weight: 800; }
+    .draggable-wrapper:hover {
+      outline-color: rgba(99, 102, 241, 0.5);
+    }
 
-    .isolated-mode-footer { height: 72px; padding: 0 2rem; background: #1e293b; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255, 255, 255, 0.08); }
+    .draggable-wrapper.is-dragging,
+    .draggable-wrapper.is-resizing {
+      outline-color: #6366f1;
+      outline-width: 3px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    }
+
+    .preview-btn {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    /* RESIZE HANDLES */
+    .resize-handle {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      background: #fff;
+      border: 2px solid #6366f1;
+      border-radius: 4px;
+      z-index: 10;
+      transition: all 0.2s;
+    }
+
+    .resize-handle:hover {
+      background: #6366f1;
+      transform: scale(1.3);
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
+    }
+    
+    .resize-handle.active {
+      background: #6366f1;
+      border-color: #fff;
+      transform: scale(1.5);
+    }
+
+    .resize-handle.nw { top: -8px; left: -8px; cursor: nw-resize; }
+    .resize-handle.n { top: -8px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
+    .resize-handle.ne { top: -8px; right: -8px; cursor: ne-resize; }
+    .resize-handle.e { top: 50%; right: -8px; transform: translateY(-50%); cursor: e-resize; }
+    .resize-handle.se { bottom: -8px; right: -8px; cursor: se-resize; }
+    .resize-handle.s { bottom: -8px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
+    .resize-handle.sw { bottom: -8px; left: -8px; cursor: sw-resize; }
+    .resize-handle.w { top: 50%; left: -8px; transform: translateY(-50%); cursor: w-resize; }
+
+    .modern-position-dock {
+      position: absolute;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(8px);
+      padding: 0.6rem 2rem;
+      border-radius: 50px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      gap: 1.5rem;
+      color: white;
+      font-size: 11px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .dock-divider { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.1); }
+    .dock-item { display: flex; align-items: center; gap: 0.6rem; }
+    .dock-item .label { color: #6366f1; font-weight: 900; background: rgba(99, 102, 241, 0.15); padding: 2px 8px; border-radius: 6px; font-size: 9px; }
+    .dock-item .value { font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+
+    .isolated-mode-footer { height: 72px; padding: 0 2rem; background: #1e293b; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-shrink: 0; }
     .footer-hint { font-size: 12px; color: #94a3b8; font-style: italic; }
     .btn-clean { padding: 0.6rem 1.5rem; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; font-size: 13px; transition: all 0.2s; }
-    .btn-clean.primary { background: #6366f1; color: white; }
+    .btn-clean.primary { background: #6366f1; color: white; box-shadow: 0 8px 20px -5px rgba(99, 102, 241, 0.4); }
     .btn-clean.secondary { background: transparent; color: #94a3b8; }
-    .btn-clean:hover { transform: translateY(-1px); opacity: 0.9; }
+    .btn-clean:hover { transform: translateY(-2px); }
   `]
 })
 export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
@@ -537,6 +669,11 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
 
   private destroy$ = new Subject<void>();
   private saveTimeout: any;
+
+  // Grid Settings
+  showGrid = true;
+  snapToGrid = true;
+  gridSize = 20;
 
   get canUndo() { return this.undoStack.length > 1; }
   get canRedo() { return this.redoStack.length > 0; }
@@ -601,8 +738,13 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  onCanvasMouseDown(event: MouseEvent) {
+    // Deselect if needed
+  }
+
   onMouseDown(event: MouseEvent) {
     event.preventDefault();
+    event.stopPropagation();
     this.isDragging = true;
     this.dragStartX = event.clientX;
     this.dragStartY = event.clientY;
@@ -627,19 +769,51 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
     if (this.isDragging) {
       const dx = event.clientX - this.dragStartX;
       const dy = event.clientY - this.dragStartY;
-      this.currentPosition.x = this.startPositionX + dx;
-      this.currentPosition.y = this.startPositionY + dy;
+      
+      let nx = this.startPositionX + dx;
+      let ny = this.startPositionY + dy;
+
+      if (this.snapToGrid) {
+        nx = Math.round(nx / this.gridSize) * this.gridSize;
+        ny = Math.round(ny / this.gridSize) * this.gridSize;
+      }
+
+      this.currentPosition.x = nx;
+      this.currentPosition.y = ny;
+      this.onPositionChange();
     } else if (this.isResizing) {
       const dx = event.clientX - this.dragStartX;
       const dy = event.clientY - this.dragStartY;
       let nw = this.startSizeWidth;
       let nh = this.startSizeHeight;
+      let nx = this.currentPosition.x;
+      let ny = this.currentPosition.y;
 
       if (this.resizeHandle.includes('e')) nw = this.startSizeWidth + dx;
       if (this.resizeHandle.includes('s')) nh = this.startSizeHeight + dy;
+      if (this.resizeHandle.includes('w')) {
+        nw = this.startSizeWidth - dx;
+        nx = this.startPositionX + dx;
+      }
+      if (this.resizeHandle.includes('n')) {
+        nh = this.startSizeHeight - dy;
+        ny = this.startPositionY + dy;
+      }
+
+      if (this.snapToGrid) {
+        nw = Math.round(nw / this.gridSize) * this.gridSize;
+        nh = Math.round(nh / this.gridSize) * this.gridSize;
+        nx = Math.round(nx / this.gridSize) * this.gridSize;
+        ny = Math.round(ny / this.gridSize) * this.gridSize;
+      }
 
       this.currentSize.width = Math.max(40, nw);
-      this.currentSize.height = Math.max(30, nh);
+      this.currentSize.height = Math.max(20, nh);
+      this.currentPosition.x = nx;
+      this.currentPosition.y = ny;
+      
+      this.onPositionChange();
+      this.onSizeChange();
     }
   }
 
