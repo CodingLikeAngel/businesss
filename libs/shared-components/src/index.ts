@@ -30,3 +30,9 @@ export * from './lib/shared-components/variant-selector/element-group.directive'
 export * from './lib/shared-components/variant-selector/hero-isolated-mode/editor-hero-isolated-mode.component';
 export * from './lib/shared-components/variant-selector/features-isolated-mode/editor-features-isolated-mode.component';
 export * from './lib/shared-components/variant-selector/testimonials-isolated-mode/editor-testimonials-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/pricing-isolated-mode/editor-pricing-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/gallery-isolated-mode/editor-gallery-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/contact-isolated-mode/editor-contact-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/cta-isolated-mode/editor-cta-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/stats-isolated-mode/editor-stats-isolated-mode.component';
+export * from './lib/shared-components/variant-selector/products-isolated-mode/editor-products-isolated-mode.component';
