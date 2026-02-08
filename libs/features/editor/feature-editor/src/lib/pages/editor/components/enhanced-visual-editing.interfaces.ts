@@ -10,6 +10,7 @@ export interface IsolatedModeConfig {
   styles: any;
   position: { x: number; y: number };
   size: { width: number; height: number };
+  canvasSize?: { width: number; height: number };
 }
 
 /**

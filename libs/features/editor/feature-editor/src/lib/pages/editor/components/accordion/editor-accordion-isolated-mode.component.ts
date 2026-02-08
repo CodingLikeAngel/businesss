@@ -182,6 +182,8 @@ export interface UndoRedoState {
                (mousedown)="onCanvasMouseDown($event)">
             
             <div class="canvas-inner" #canvasInner
+                 [style.width.px]="config.canvasSize?.width || 4000"
+                 [style.height.px]="config.canvasSize?.height || 4000"
                  [class.ambient-dark]="true"
                  [class.show-grid]="showGrid"
                  [class.grid-snapping]="snapToGrid">
@@ -683,17 +685,21 @@ export interface UndoRedoState {
       background-color: #020617;
       position: relative;
       overflow: auto;
-      display: block;
-      transition: background-color 0.4s ease, background-image 0.4s ease;
+      display: flex; /* CENTER THE SECTION */
+      align-items: center;
+      justify-content: center;
+      padding: 100px;
+      transition: background-color 0.4s ease;
       z-index: 1;
     }
 
     .canvas-inner {
-      width: 4000px;
-      height: 4000px;
       position: relative;
       flex-shrink: 0;
+      background-color: #020617;
       background-size: 40px 40px;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 30px 60px rgba(0,0,0,0.5);
+      border-radius: 4px;
     }
 
     .canvas-inner.show-grid {
@@ -901,33 +907,17 @@ export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
   get canRedo(): boolean { return this.redoStack.length > 0; }
 
   ngOnInit() {
-    // Load initial position with validation
+    // Use exact position from config (now normalized to section)
     this.currentPosition = { 
-      x: Math.max(0, Math.min(3000, this.config.position?.x ?? 100)), 
-      y: Math.max(0, Math.min(3000, this.config.position?.y ?? 100)) 
+      x: this.config.position?.x ?? 0, 
+      y: this.config.position?.y ?? 0 
     };
     
     // Sensible range for accordion
-    const incomingWidth = this.config.size?.width || 0;
-    const incomingHeight = this.config.size?.height || 0;
+    const incomingWidth = this.config.size?.width || 600;
+    const incomingHeight = this.config.size?.height || 450;
     
-    const isWidthValid = incomingWidth >= 100 && incomingWidth <= 2500;
-    const isHeightValid = incomingHeight >= 50 && incomingHeight <= 2000;
-
-    const defaultSize = { width: 600, height: 450 };
-    
-    this.currentSize = { 
-      width: isWidthValid ? incomingWidth : defaultSize.width, 
-      height: isHeightValid ? incomingHeight : defaultSize.height 
-    };
-
-    // Center initially if no position or at 0,0
-    if (!this.config.position || (this.config.position.x === 0 && this.config.position.y === 0)) {
-       this.currentPosition = {
-         x: 2000 - (this.currentSize.width / 2),
-         y: 2000 - (this.currentSize.height / 2)
-       };
-    }
+    this.currentSize = { width: incomingWidth, height: incomingHeight };
 
     this.initialPosition = { ...this.currentPosition };
     this.initialSize = { ...this.currentSize };

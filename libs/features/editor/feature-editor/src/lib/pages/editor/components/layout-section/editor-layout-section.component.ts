@@ -1171,23 +1171,43 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.editingSlotIndex = index;
     this.activeIsolatedType = slot.componentType;
     
-    // Detect visual width and position of the slot
+    // Detect visual width and position of the slot AND its parent grid-container
     let detectedWidth = 400; 
-    let detectedLeft = 380;
-    let detectedTop = 100;
+    let sectionWidth = 1200;
+    let sectionHeight = 800;
+    let localX = 0;
+    let localY = 0;
+
     try {
         const target = event.target as HTMLElement;
-        const slotEl = target.closest('.layout-slot') || target.closest('.slot-wrapper') || target.parentElement;
-        if (slotEl) {
-             const rect = slotEl.getBoundingClientRect();
-             detectedWidth = Math.round(rect.width);
-             detectedLeft = Math.round(rect.left);
-             detectedTop = Math.round(rect.top);
+        const slotEl = target.closest('.slot') || target.closest('.layout-slot');
+        const gridEl = target.closest('.grid-container');
+        
+        if (slotEl && gridEl) {
+             const slotRect = slotEl.getBoundingClientRect();
+             const gridRect = gridEl.getBoundingClientRect();
+             
+             detectedWidth = Math.round(slotRect.width);
+             sectionWidth = Math.round(gridRect.width);
+             sectionHeight = Math.round(gridRect.height);
+             
+             // Local coordinates within the grid-container (1:1 with relative/absolute positioning)
+             localX = Math.round(slotRect.left - gridRect.left);
+             localY = Math.round(slotRect.top - gridRect.top);
         }
-    } catch(e) { console.warn('Slot detection failed', e); }
+    } catch(e) { console.warn('Detection failed, falling back to config', e); }
 
-    // Store origin and width in temp variable to preserve across edit session firmly
-    (this as any).tempEditOrigin = { x: detectedLeft, y: detectedTop, width: detectedWidth };
+    // Use values from config if available and detection failed or yielded zero
+    const currentLeft = parseInt(slot.layoutStyles?.['left']) || localX;
+    const currentTop = parseInt(slot.layoutStyles?.['top']) || localY;
+    
+    // Fix: Handle % widths by defaulting to detected visual width
+    const currentStyleW = slot.layoutStyles?.['width'];
+    const currentStyleH = slot.layoutStyles?.['height'];
+    const safeWidth = (typeof currentStyleW === 'number') ? currentStyleW : 
+                      (currentStyleW && currentStyleW.toString().includes('px') ? parseInt(currentStyleW) : detectedWidth);
+    const safeHeight = (typeof currentStyleH === 'number') ? currentStyleH : 
+                       (currentStyleH && currentStyleH.toString().includes('px') ? parseInt(currentStyleH) : 300);
 
     // Build component-specific content mapping
     let mappedContent: any = { ...slot.content };
@@ -1207,7 +1227,6 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
           haptic: slot.content?.['haptic'] || false,
           soundUrl: slot.content?.['soundUrl'] || ''
         };
-        // Buttons shouldn't default to full container width usually
         defaultSize = { width: Math.min(220, detectedWidth), height: 50 }; 
         break;
 
@@ -1262,55 +1281,15 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
           currency: productData.currency || 'USD',
           onSale: productData.onSale || false
         };
-        // Products usually look better slightly narrower than full width if column is excessively wide?
-        // But detectedWidth is safer.
         defaultSize = { width: Math.min(320, detectedWidth), height: 480 };
-        break;
-
-      case 'ui-chip':
-        mappedContent = {
-          variant: slot.componentVariant || this.globalVariant || 'default',
-          text: slot.content?.['text'] || 'Chip',
-          removable: slot.content?.['removable'] || false
-        };
-        defaultSize = { width: 120, height: 40 };
-        break;
-
-      case 'ui-image':
-        mappedContent = {
-            variant: slot.componentVariant || this.globalVariant || 'default',
-            src: slot.content?.['src'] || 'assets/placeholder.jpg',
-            alt: slot.content?.['alt'] || 'Imagen'
-        };
-        defaultSize = { width: detectedWidth, height: Math.round(detectedWidth * 0.6) }; // Maintain aspect ratio
         break;
         
       default:
-        // Generic mapping for other components
         mappedContent = { 
             ...slot.content,
             variant: slot.componentVariant || this.globalVariant || 'default'
         };
-        if (slot.componentType === 'ui-card' || slot.componentType === 'ui-card-animated') {
-            defaultSize = { width: detectedWidth, height: 400 };
-        }
     }
-    
-    const sidebarWidth = 380;
-    const headerHeight = 70;
-    const currentLeft = parseInt(slot.styles?.['left']) || 0;
-    const currentTop = parseInt(slot.styles?.['top']) || 0;
-    
-    // Fix: Handle % widths by defaulting to detected visual width (avoids 100px bug)
-    const currentStyleW = slot.styles?.['width'];
-    const currentStyleH = slot.styles?.['height'];
-    const safeWidth = (currentStyleW && currentStyleW.includes('px')) ? parseInt(currentStyleW) : defaultSize.width;
-    const safeHeight = (currentStyleH && currentStyleH.includes('px')) ? parseInt(currentStyleH) : defaultSize.height;
-
-    // Calculate Canvas Coordinates: Screen Pos - UI Offsets
-    // Use Math.max(0) to ensure it doesn't default to hidden behind menu/header if slot is scrolled 
-    const canvasX = Math.max(0, (detectedLeft - sidebarWidth) + currentLeft);
-    const canvasY = Math.max(0, (detectedTop - headerHeight) + currentTop);
 
     this.isolatedConfig = {
       sectionId: this.section.id,
@@ -1319,33 +1298,30 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       variant: slot.componentVariant || this.globalVariant,
       globalVariant: this.globalVariant,
       content: mappedContent,
-      styles: { ...slot.styles },
-      position: { x: canvasX, y: canvasY },
+      styles: { ...slot.layoutStyles },
+      position: { x: currentLeft, y: currentTop },
       size: { 
         width: safeWidth, 
         height: safeHeight 
+      },
+      canvasSize: {
+        width: sectionWidth,
+        height: sectionHeight
       }
     };
     
-    // Add body class for proper z-index stacking context
     document.body.classList.add('isolated-mode-active');
-    
     this.showIsolatedMode = true;
     this.cdr.detectChanges();
   }
 
-
-
   onIsolatedModeApplied(updatedConfig: IsolatedModeConfig) {
     if (this.editingSlotIndex < 0) return;
-
-    console.log('Isolated Mode Applied:', updatedConfig);
 
     const slot = this.config.slots[this.editingSlotIndex];
     let mappedContent: any = { ...updatedConfig.content };
     let newVariant: string | undefined = undefined;
     
-    // Map content back to slot format based on component type
     switch (slot.componentType) {
       case 'ui-button':
         mappedContent = {
@@ -1368,19 +1344,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         newVariant = updatedConfig.content.variant;
         break;
 
-      case 'ui-title':
-      case 'ui-chip':
-        mappedContent = {
-           ...updatedConfig.content,
-           text: updatedConfig.content.text || updatedConfig.content.label || updatedConfig.content.title
-        };
-        newVariant = updatedConfig.content.variant;
-        break;
-        
       case 'ui-card-product':
-        mappedContent = {
-          product: { ...updatedConfig.content }
-        };
+        mappedContent = { product: { ...updatedConfig.content } };
         newVariant = updatedConfig.content.variant;
         break;
         
@@ -1389,53 +1354,30 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         newVariant = updatedConfig.content?.variant;
     }
 
-    // Use extracted variant, or fallback to config.variant, or keep existing
     const finalVariant = newVariant || updatedConfig.variant || slot.componentVariant;
-
-    console.log('Variant Update Debug:', {
-        type: slot.componentType,
-        extractedNewVariant: newVariant,
-        configVariant: updatedConfig.variant,
-        originalVariant: slot.componentVariant,
-        SELECTED_FINAL: finalVariant
-    });
-
     const newSlots = [...this.config.slots];
     
-    // Sync Size & Position - Strict WYSIWYG
+    // Position & Style Sync
     const finalStyles = { ...updatedConfig.styles };
-    const origin = (this as any).tempEditOrigin || { x: 380 };
-    const originX = origin.x;
-
+    
     if (updatedConfig.size) {
         finalStyles['width'] = updatedConfig.size.width + 'px';
-        
-        // Smart-Adapt: Components that flow (Accordions, Cards, Lists) should have auto height
-        // to prevent clipping when content changes. Media components keep fixed height.
-        const currentSlot = this.config.slots[this.editingSlotIndex];
         const flowComponents = ['accordion', 'card', 'list', 'title', 'chip', 'button', 'draggable-box', 'text'];
-        const isFlow = currentSlot && flowComponents.some(type => currentSlot.componentType.includes(type));
+        const isFlow = flowComponents.some(type => slot.componentType.includes(type));
 
         if (isFlow) {
              finalStyles['height'] = 'auto';
              finalStyles['min-height'] = updatedConfig.size.height + 'px';
-             finalStyles['display'] = 'block';
         } else {
              finalStyles['height'] = updatedConfig.size.height + 'px';
         }
     }
     
-    // Normalize position: Canvas Coordinates -> Local Slot Coordinates
-    if (finalStyles['left']) {
-        const sidebarWidth = 380;
-        const rawLeftCanvas = parseInt(finalStyles['left']);
-        
-        const screenX = rawLeftCanvas + sidebarWidth;
-        let localLeft = screenX - originX;
-
-        // Snap to zero if very close
-        if (Math.abs(localLeft) < 10) localLeft = 0;
-        finalStyles['left'] = localLeft + 'px';
+    // Direct position sync: coordinates from isolated mode are now 1:1 with section
+    if (updatedConfig.position) {
+        finalStyles['left'] = updatedConfig.position.x + 'px';
+        finalStyles['top'] = updatedConfig.position.y + 'px';
+        finalStyles['position'] = 'absolute';
     }
 
     newSlots[this.editingSlotIndex] = {
@@ -1453,8 +1395,6 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.persistConfig();
     this.onIsolatedModeClosed();
   }
-
-
 
   onIsolatedModeClosed() {
     // Remove body class for proper z-index stacking context
