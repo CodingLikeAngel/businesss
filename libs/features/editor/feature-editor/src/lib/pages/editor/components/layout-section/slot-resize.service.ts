@@ -142,6 +142,27 @@ export class SlotResizeService {
     newWidth = this.clampWidth(newWidth);
     newHeight = this.clampHeight(newHeight);
 
+    // --- Lógica de Colisión / Evitar Colapso ---
+    const collidingSlotIndex = this.checkCollisions(index, {
+      width: newWidth,
+      height: newHeight,
+      left: this.startPosition.left + deltaLeft,
+      top: this.startPosition.top + deltaTop
+    });
+
+    if (collidingSlotIndex !== -1) {
+      // Si hay colisión, bloqueamos el avance en esa dirección o ajustamos
+      // Por ahora, aplicamos un "soft clamp": si detectamos colisión, revertimos al último estado válido
+      // o limitamos el crecimiento.
+      
+      // Intentamos un ajuste fino: reducimos el delta hasta que no colisione (simplificado)
+      if (Math.abs(delta.dx) > Math.abs(delta.dy)) {
+        newWidth = this.startSize.width; // Bloquear horizontal
+      } else {
+        newHeight = this.startSize.height; // Bloquear vertical
+      }
+    }
+
     // Actualizar store (Incluyendo posición si es necesario)
     const sizes = this.customSizes();
     sizes.set(index, { 
@@ -151,6 +172,30 @@ export class SlotResizeService {
       top: this.startPosition.top + deltaTop
     });
     this.customSizes.set(new Map(sizes));
+  }
+
+  /**
+   * Verifica si el slot actual colisiona con otros slots
+   */
+  private checkCollisions(currentIndex: number, rect: { width: number, height: number, left: number, top: number }): number {
+    const allSizes = this.customSizes();
+    
+    for (const [index, otherRect] of allSizes.entries()) {
+      if (index === currentIndex) continue;
+
+      // AABB Collision detection
+      const buffer = 4; // Pequeño margen de seguridad
+      const collides = (
+        rect.left < (otherRect.left || 0) + otherRect.width - buffer &&
+        rect.left + rect.width > (otherRect.left || 0) + buffer &&
+        rect.top < (otherRect.top || 0) + otherRect.height - buffer &&
+        rect.top + rect.height > (otherRect.top || 0) + buffer
+      );
+
+      if (collides) return index;
+    }
+    
+    return -1;
   }
 
   /**
