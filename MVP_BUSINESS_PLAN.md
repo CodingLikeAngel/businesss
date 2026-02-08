@@ -2,7 +2,10 @@
 
 ## 📋 Resumen Ejecutivo
 
-**Visión:** Convertir Anto Studios en una plataforma SaaS de creación de webs para pequeños negocios locales, con herramientas especializadas por industria y modelo de ingresos múltiple.
+**Visión:** Convertir Anto Studios en una plataforma multi-modelo que:
+1. SaaS para pequeños negocios locales
+2. Herramienta interna para agencias/freelancers
+3. Marketplace de templates premium
 
 ---
 
@@ -13,219 +16,289 @@
 **Propuesta:** "Tu web profesional en 30 minutos, sin saber código"
 **Precio:** €29-49/mes
 
-### 2. Herramienta Interna para Agencias/Freelancers
-**Target:** Agencies, freelancers web developers
+### 2. Herramienta Interna para Agencias/Freelancers ⭐
+**Target:** Agencies, freelancers web developers, consultores digitales
 **Propuesta:** "Entrega proyectos 5x más rápido con templates premium"
-**Precio:** €99-299/mes (por usuario o licencia)
+**Precio:** €99-299/mes (por usuario) o €999/año (licencia perpetua con updates)
 
-### 3. Marketplace de Templates
-**Target:** Usuarios finales y agencias
-**Propuesta:** "Templates premium listos para usar"
+#### Features Exclusivos para Agencias:
+- **White-label export** - Sin logo de Anto Studios
+- **Custom domains** ilimitados
+- **API access** - Integra en tus propios sistemas
+- **Multi-user** - Tu equipo colabora
+- **Client mode** - Demo links para clientes
+- **Branding kit** - Templates con tu marca
+- **Priority support** - Soporte en 4h
+- **Template requests** - Pedimos templates que necesitas
+
+#### Caso de Uso Agencias:
+```
+1. Cliente pide web para restaurant
+2. Agency descarga template "Restaurant Premium"
+3. Personaliza con editor (30 min)
+4. Exporta con white-label
+5. Entrega al cliente
+6. Cliente mantiene con plan básico o agency mantiene
+```
+
+### 3. Marketplace de Templates ⭐
+**Target:** Usuarios finales, agencias junior, non-technical entrepreneurs
+**Propuesta:** "Templates premium listos para usar - solo personaliza y publica"
 **Precio:** €49-199 por template (venta única)
 
----
+#### Tipos de Templates en Marketplace:
+| Categoría | Precio | Includes |
+|-----------|--------|----------|
+| **Basic Landing** | €49 | HTML/CSS/JS, imágenes placeholder |
+| **Professional** | €99 | + variantes, animations, SEO optimizado |
+| **Premium Industry** | €149 | + isolated modes, multi-page, CMS setup |
+| **Full Business** | €199 | + todo lo anterior + documentación + soporte 1h |
 
-## 🚀 Roadmap MVP - Fase 1 (3-4 meses)
+#### Templates por Industria (Target):
+- Restaurantes/Menús (€99-149)
+- Gyms/Fitness (€99-149)
+- Spas/Wellness (€99-149)
+- Clínicas Médicas (€149)
+- Barberías/Peluquerías (€79-99)
+- Hoteles/B&Bs (€149-199)
+- Estudios Profesionales (€99-149)
+- E-commerce básico (€149-199)
+- Portfolios creativos (€79-99)
+- Eventos/Bodas (€99)
 
-### Semanas 1-4: Producto Mínimo Viable
-
-#### 1.1 Editor Core (Completar)
-- [ ] Sistema de isolated modes funcional para:
-  - [x] Promociones ✓
-  - [x] Restaurant/Menú ✓
-  - [x] Gym/Fitness ✓
-  - [x] Spa/Wellness ✓
-  - [ ] Pricing (pendiente)
-  - [ ] Contact/Reservation (pendiente)
-
-#### 1.2 Templates Demo
-- [ ] Landing page completa para Restaurant (demo funcional)
-- [ ] Landing page completa para Gym (demo funcional)
-- [ ] Landing page completa para Spa (demo funcional)
-
-#### 1.3 Sistema de Exportación
-- [ ] Exportar a HTML/CSS/JS funcional
-- [ ] Exportar a JSON (backup/import)
-- [ ] Preview mode funcional
-
-### Semanas 5-8: UI/UX y Experiencia
-
-#### 1.4 Editor Interface
-- [ ] Fluid sidebar con tabs funcionales
-- [ ] Component explorer con búsqueda
-- [ ] Page management (múltiples páginas)
-- [ ] Undo/Redo system
-
-#### 1.5 Variants System
-- [ ] 10+ variants funcionales (glass, neon, cyberpunk, etc.)
-- [ ] Custom styles por componente
-- [ ] Global theme selector
-
-### Semanas 9-12: Lanzamiento Beta
-
-#### 1.6 Landing Page de Producto
-- [ ] Demo interactivo del editor
-- [ ] Showcase de templates
-- [ ] Pricing page
-- [ ] Blog/Content marketing basics
-
-#### 1.7 Autenticación Basic
-- [ ] User signup/login
-- [ ] Project saving (localStorage + Firebase)
-- [ ] Project listing
+#### Revenue Share Marketplace:
+```
+Venta de template (€99)
+├── Anto Studios (30%) - €29.70
+├── Creador del template (70%) - €69.30
+```
 
 ---
 
-## 💰 Estrategia de Monetización
+## 💰 Estrategia de Monetización Completa
 
-### Opción A: SaaS Subscription (Principal)
+### Modelo Híbrido: Suscripción + Marketplace
 
-| Tier | Precio | Features |
-|------|--------|----------|
-| **Free** | €0 | 1 proyecto, watermark, exportación básica |
-| **Starter** | €29/mes | 5 proyectos, sin watermark, soporte email |
-| **Pro** | €79/mes | Proyectos ilimitados, dominios propios, priority support |
-| **Agency** | €299/mes | Multi-user, API access, white-label export |
+#### Tier 1: Free (€0)
+- Editor basic
+- 1 proyecto guardado localmente
+- Exportación con watermark
+- 5 templates básicos
 
-### Opción B: Licencias de Templates (Upsell)
+#### Tier 2: Creator (€29/mes)
+- Proyectos ilimitados cloud
+- Sin watermark
+- 20 templates profesionales
+- Email support
 
-- Template basic: €49
-- Template premium (con isolated modes): €149
-- Bundle industry (3 templates): €299
+#### Tier 3: Agency (€99/mes por usuario)
+- Todo Creator
+- White-label export
+- API access
+- 50 templates premium
+- Priority support (24h)
+- Multi-user (hasta 5)
 
-### Opción C: Agency License
+#### Tier 4: Enterprise (€299/mes)
+- Todo Agency
+- Multi-user ilimitado
+- Client demo links
+- Custom integrations
+- Dedicated account manager
+- SLA garantizado
 
-- Licencia para uso interno: €999/año
-- Incluyen updates y nuevos templates
-
----
-
-## 🎨 Diferenciadores Competitivos
-
-### vs Webflow/Wix/Framer
-
-| Aspecto | Competidores | Anto Studios |
-|---------|--------------|--------------|
-| Tiempo setup | 2-4 horas | 30 minutos |
-| Templates por industria | Genéricos | Especializados por sector |
-| Curva aprendizaje | Media-alta | Baja |
-| Herramientas específicas | No | Sí (menús, schedules, bookings) |
-| Exportación código | Limitada | Full HTML/CSS/JS |
-
-### Propuesta Única de Valor (UVP)
-
-> "Anto Studios es el primer builder diseñado específicamente para negocios locales. Olvídate de configurar formularios de reserva o menús desde cero - todo viene preparado para tu industria."
+#### Marketplace Upsells (una vez):
+- Template adicional: €49-99
+- Pack industria (3 templates): €199
+- Custom template request: €499
 
 ---
 
-## 📦 Feature Priority Matrix
+## 🛠️ Roadmap Técnico: Features por Modelo
 
-### Must-Have (MVP)
-- [x] Editor visual con drag-drop básico
-- [x] 5+ templates completos
-- [x] Sistema de variants (estilos predefinidos)
-- [x] Isolated modes para 4 industrias
-- [ ] Exportación HTML funcional
-- [ ] Preview mode
-- [ ] User auth básico
+### Para Agencias/Freelancers (Interno)
 
-### Should-Have (Beta)
-- [ ] API para integraciones (webhooks)
-- [ ] Formularios con submissions por email
-- [ ] SEO basic (meta tags, sitemap)
-- [ ] Analytics basic integrado
-- [ ] Custom domains
+#### v1.0 (Meses 1-2)
+- [ ] **White-label export** - Eliminar watermarks y branding
+- [ ] **Custom CSS/JS injection** - Para personalizaciones advanced
+- [ ] **Project cloning** - Duplica templates para nuevos clientes
+- [ ] **Client preview links** - Comparte demos sin dar acceso al editor
+- [ ] **Export to ZIP** - Todo el código en un ZIP listo para deploy
 
-### Nice-to-Have (V2)
-- [ ] Colaboración multi-user en tiempo real
-- [ ] AI content generation (GPT integration)
-- [ ] Stock photos integrado
-- [ ] A/B testing
-- [ ] Integrations marketplace (Zapier, Mailchimp, etc.)
+#### v1.2 (Meses 2-3)
+- [ ] **API REST** - Endpoint para crear/editar proyectos programáticamente
+- [ ] **Webhook notifications** - Alertas cuando cliente modifica proyecto
+- [ ] **Team collaboration** - Múltiples usuarios en mismo proyecto
+- [ ] **Role-based access** - Admin, Editor, Viewer roles
+
+#### v1.5 (Meses 3-4)
+- [ ] **Client portal** - Dashboard limitado para que clientes gestionen su web
+- [ ] ** recurring billing integration** - Tus clientes pagan a través de tu cuenta
+- [ ] **White-label subdomain** - `tuagencia.antostudios.com`
+
+### Para Marketplace (Templates)
+
+#### v1.0
+- [ ] **Template export format** - JSON schema para templates portable
+- [ ] **Template validation** - QA automatizado antes de publicar
+- [ ] **Template marketplace UI** - Browsing, search, filtering
+- [ ] **Purchase flow** - Stripe integration para one-time payments
+- [ ] **Creator dashboard** - Stats de ventas, payout management
+
+#### v2.0
+- [ ] **Template API** - Others can build on top
+- [ ] **Template bundles** - Paquetes con descuento
+- [ ] **Subscription marketplace** - Templates como servicio mensual
 
 ---
 
-## 📊 Métricas de Éxito MVP
+## 📈 Proyección de Ingresos
 
-### Month 1 (Beta Launch)
-- 100 usuarios registrados
-- 50 proyectos creados
-- 10 templates completados
-- NPS Score > 40
+### Escenario Conservador (Año 1)
 
-### Month 3 (Product Hunt Launch)
-- 1,000 usuarios registrados
-- 500 proyectos creados
-- 50 templates en library
-- Conversion to paid: 3%
+| Fuente | Usuarios | ARPU | MRR | Anual |
+|--------|----------|------|-----|-------|
+| SaaS Creator | 200 | €29 | €5,800 | €69,600 |
+| SaaS Agency | 50 | €99 | €4,950 | €59,400 |
+| SaaS Enterprise | 5 | €299 | €1,495 | €17,940 |
+| Marketplace | 100 ventas/mes | €99 avg | €9,900* | €118,800 |
+| **TOTAL** | - | - | **€22,145** | **€265,740** |
 
-### Month 6
-- 5,000 usuarios activos
+*Marketplace revenue share (70%)
+
+### Escenario Optimista (Año 1)
+- **€500K-800K ARR** con marketing activo y 10+ templates
+
+---
+
+## 🎯 Plan de Marketing por Modelo
+
+### Para Agencias (B2B)
+- **LinkedIn ads** - Targeting web developers, digital agencies
+- **Cold outreach** - Agencias small/mid que aún usan desarrollo custom
+- **Case studies** - "Cómo X agency redujo tiempo de entrega 70%"
+- **Partnerships** - Consultants, digital marketing agencies
+- **Affiliate program** - 20% de comisión por referral
+
+### Para Marketplace (Crea tu propio)
+- **Product Hunt** - Launch de templates individuales
+- **Facebook groups** - Entrepreneurs, small business owners
+- **Freelance platforms** - Upwork, Fiverr - Upsell a clientes
+- **Gumroad integration** - Direct sales
+- **Email list** - Newsletter con nuevos templates
+
+### Para SaaS (B2C)
+- **SEO** - "Como hacer web para restaurante"
+- **Content marketing** - Blog con guías
+- **Referral program** - 1 mes gratis por referral
+- **Free tier** - Viral loop para usuarios gratuitos
+
+---
+
+## 📊 Métricas Objetivo
+
+### Month 1-3 (Beta)
+- 50 usuarios registrados
+- 20 proyectos creados
+- 5 templates en marketplace
+- 2 agencias piloto (feedback)
+
+### Month 4-6 (Launch)
+- 500 usuarios registrados
+- 200 proyectos/mes
+- 20 templates marketplace
+- 10 ventas marketplace/mes
+- €2K MRR
+
+### Month 7-12 (Growth)
+- 2,000 usuarios activos
 - 500 proyectos/mes
-- 10% conversion to paid
-- €10K MRR
+- 50 templates marketplace
+- 100 ventas marketplace/mes
+- €15K MRR
+
+### Año 2
+- €50K-100K MRR
+- 10,000 usuarios
+- 200 templates marketplace
 
 ---
 
-## 🛠️ Tech Stack Recomendado
+## 🏃 Próximos Pasos Inmediatos
 
-### Frontend (Ya implementado)
-- Angular 18+ (standalone components)
-- Nx monorepo
-- TypeScript strict
+### Esta Semana
+1. [ ] Completar isolated mode de Pricing
+2. [ ] Crear template "Restaurant Premium" funcional
+3. [ ] Implementar white-label export (remove watermark)
 
-### Backend (Por implementar)
-- Firebase (Auth + Firestore) - Recomendado MVP
-- Opcional: Supabase, Appwrite
+### Próximas 2 Semanas
+4. [ ] Template "Gym Premium" funcional
+5. [ ] Template "Spa Premium" funcional
+6. [ ] Landing page con demo navegable
 
-### Hosting
-- Vercel/Netlify (frontend)
-- Firebase Hosting
+### Este Mes
+7. [ ] Sistema de autenticación (Firebase)
+8. [ ] Project saving/loading
+9. [ ] Pricing page con 3 tiers
+10. [ ] Video demo de 2 minutos
 
-### Payments
-- Stripe (subscription + one-time)
-
----
-
-## 📅 Timeline de Lanzamiento
-
-```
-FASE 1 (Meses 1-3)
-├── Mes 1: Completar editor core + 3 templates
-├── Mes 2: UI/UX polish + beta testing
-└── Mes 3: Soft launch + feedback loop
-
-FASE 2 (Meses 4-6)
-├── Mes 4: Auth + project saving + subscriptions
-├── Mes 5: Marketing push + content
-└── Mes 6: Product Hunt + scaling
-
-FASE 3 (Meses 7-12)
-├── Mes 7-9: Features should-have
-├── Mes 10-12: Marketplace + API
-└── Año 1: Expand to 20+ industries
-```
+### Para Agencias (Quick Wins)
+- [ ] "Export without watermark" feature - Prioridad máxima
+- [ ] Client preview link sharing
+- [ ] Template cloning (duplicate project)
 
 ---
 
-## 🎯 Próximos Pasos Inmediatos
+## 🏆 Ventajas Competitivas Sostenibles
 
-1. **Hoy:** Decidir si enfocamos en SaaS o modelo híbrido
-2. **Esta semana:** Completar isolated mode de Pricing
-3. **Próxima semana:** Crear 3 templates completos y funcionales
-4. **Este mes:** Tener demo navegable para potential users
+### 1. Isolated Modes
+- Nadie tiene esto - es nuestro IP
+- Cada industria puede tener su propio isolated mode
+- Templates se crean 5x más rápido
+
+### 2. Code Quality
+- Código limpio, exportable, mantenible
+- Los devs profesionales valoran esto
+- Pueden extender/modificar el código exportado
+
+### 3. Templates por Industria
+- No es "templates genéricos"
+- Cada template tiene herramientas específicas para su industria
+- El cliente ve valor inmediato
+
+### 4. Multi-modelo de Negocio
+- No dependemos de solo SaaS
+- Marketplace da ingresos recurrentes de una vez
+- Agencies pagan premium por white-label
 
 ---
 
-## 📝 Notas del Equipo
+## ⚠️ Riesgos y Mitigaciones
 
-> El proyecto tiene una base técnica sólida. La clave del éxito será:
-> 1. Make it work - tener algo funcional rápidamente
-> 2. Make it pretty - UI/UX es crítico para este tipo de producto
-> 3. Make it sell - marketing y posicionamiento
+| Riesgo | Probabilidad | Impacto | Mitigación |
+|--------|--------------|---------|------------|
+| Competidores copian isolated modes | Media | Alto | Patent provisional, move fast |
+| Templates low-quality en marketplace | Media | Medio | QA estrictos, ratings |
+| Churn alto en SaaS | Alta | Alto | Customer success, onboarding |
+| Scaling infrastructure costs | Baja | Medio | Firebase tiene pricing escalable |
+
+---
+
+## 📝 Notas
+
+**El modelo agencies es el más alcanzable inicialmente porque:**
+1. Pagan más (€99-299 vs €29)
+2. Menor volumen pero mayor valor
+3. Feedback más valioso
+4. Pueden ser ambassadors del producto
+
+**El marketplace complementa perfectamente:**
+5. Ingresos sin costo de adquisición de usuarios
+6. Crea ecosystem de creadores
+7. Traffic viral a través de templates
 
 ---
 
 **Documento creado:** Febrero 2026  
 **Última actualización:** 2026-02-08  
-**Versión:** 1.0
+**Versión:** 2.0 - Multi-Model Business Strategy
