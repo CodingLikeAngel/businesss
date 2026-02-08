@@ -82,6 +82,7 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
       [id]="section.id" 
       class="layout-section"
       [class.editing]="isEditing"
+      [class.isolated-mode]="showIsolatedMode"
       [style.minHeight.px]="config.minHeight"
       [style.padding.px]="config.padding"
       [style.backgroundColor]="config.backgroundColor"
@@ -488,6 +489,11 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
       border-radius: 12px;
       overflow: hidden; /* CRITICAL: Prevent components from leaking out */
       z-index: 1; /* Establish stacking context */
+    }
+
+    .layout-section.isolated-mode {
+      z-index: 10000001 !important; /* Above everything when editing */
+      overflow: visible !important; /* Ensure overlay can expand to full screen if needed */
     }
 
     .layout-section.editing {
@@ -1348,6 +1354,15 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
       case 'ui-card-product':
         mappedContent = { product: { ...updatedConfig.content } };
+        newVariant = updatedConfig.content.variant;
+        break;
+
+      case 'ui-title':
+      case 'ui-chip':
+        mappedContent = {
+           ...updatedConfig.content,
+           text: updatedConfig.content.text || updatedConfig.content.label || updatedConfig.content.title
+        };
         newVariant = updatedConfig.content.variant;
         break;
         
