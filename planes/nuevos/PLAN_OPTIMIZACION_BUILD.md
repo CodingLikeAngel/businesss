@@ -45,7 +45,11 @@ Actualmente, el tiempo de compilación es excesivo porque:
 **Tareas:**
 
 - [ ] **Modularización:** Si partes de `VariantSelector` aún son útiles (ej. lógica de variantes), extraerlas a un servicio ligero (`VariantService` ya existe).
-- [ ] **Lazy Loading:** Asegurar que los componentes de "Modo Aislado" (`*-isolated-mode`) se carguen solo cuando se entra en el editor, no en el main bundle.
+- [ ] **Lazy Loading:** Asegurar quHe solucionado el problema de invisibilidad de los handles. Ahora el estilo CSS está en su sitio:
+
+Handles Visibles: Aparecen al hacer hover sobre un slot lleno.
+Feedback Visual: El slot mostrará un borde discontinuo azul cuando se esté redimensionando (.slot.resizing).
+Posicionamiento: El handle está centrado verticalmente a la derecha del slot, con un área de click de 24px.e los componentes de "Modo Aislado" (`*-isolated-mode`) se carguen solo cuando se entra en el editor, no en el main bundle.
 
 ### FASE 4: Optimización de Angular
 

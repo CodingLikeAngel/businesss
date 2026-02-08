@@ -776,6 +776,51 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
     .btn-secondary:hover { background: rgba(255, 255, 255, 0.2); }
     .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
     .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4); }
+
+    /* Resize Handles */
+    .slot { position: relative; transition: border-color 0.2s, width 0.1s; } 
+    
+    .resize-handle {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: -12px;
+      width: 24px; 
+      height: 24px;
+      cursor: col-resize;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity 0.2s;
+      pointer-events: auto; /* Ensure clickable */
+    }
+
+    .slot:hover .resize-handle,
+    .resize-handle:hover,
+    .slot.resizing .resize-handle {
+      opacity: 1;
+    }
+
+    .resize-icon {
+      background: #6366f1;
+      color: white;
+      border-radius: 4px;
+      width: 16px; 
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      content: '↔'; /* Fallback icon */
+    }
+
+    .slot.resizing {
+      border: 2px dashed #6366f1 !important;
+      z-index: 10;
+    }
   `]
 })
 export class EditorLayoutSectionComponent extends BaseEditorSectionComponent implements OnInit, OnDestroy, OnChanges {
