@@ -138,12 +138,12 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
           [class.selected]="selectedSlotIndex === i"
           [class.resizing]="resizeService.isResizing() && resizeService.activeSlotIndex() === i"
           [class.flow-component]="isFlowComponent(slot)"
-          [style.width.px]="getSlotWidth(i) || slot.layoutStyles?.['width']"
-          [style.height.px]="!isFlowComponent(slot) ? (getSlotHeight(i) || slot.layoutStyles?.['height']) : null"
-          [style.minHeight.px]="isFlowComponent(slot) ? (getSlotHeight(i) || slot.layoutStyles?.['height']) : null"
-          [style.left.px]="getSlotLeft(i) ?? slot.layoutStyles?.['left']"
-          [style.top.px]="getSlotTop(i) ?? slot.layoutStyles?.['top']"
-          [style.position]="(getSlotLeft(i) !== null || slot.layoutStyles?.['left']) ? 'absolute' : (slot.layoutStyles?.['position'] || 'relative')"
+          [style.width]="getSlotWidth(i) ? getSlotWidth(i) + 'px' : slot.layoutStyles?.['width']"
+          [style.height]="!isFlowComponent(slot) ? (getSlotHeight(i) ? getSlotHeight(i) + 'px' : slot.layoutStyles?.['height']) : null"
+          [style.minHeight]="isFlowComponent(slot) ? (getSlotHeight(i) ? getSlotHeight(i) + 'px' : slot.layoutStyles?.['height']) : null"
+          [style.left]="getSlotLeft(i) !== null ? getSlotLeft(i) + 'px' : slot.layoutStyles?.['left']"
+          [style.top]="getSlotTop(i) !== null ? getSlotTop(i) + 'px' : slot.layoutStyles?.['top']"
+          [style.position]="isPositioned(i, slot) ? 'absolute' : (slot.layoutStyles?.['position'] || 'relative')"
           (click)="selectSlot(i, $event)">
           
           <!-- Empty Slot -->
@@ -871,10 +871,18 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
       flex-direction: column;
     }
 
-    /* Force children to respect parent boundaries */
-    .slot > * {
+    /* Force children to respect parent boundaries but allow auto height for flow */
+    .slot:not(.flow-component) > * {
       width: 100% !important;
       height: 100% !important;
+    }
+    
+    .slot.flow-component > * {
+      width: 100% !important;
+      height: auto !important;
+    }
+
+    .slot > * {
       max-width: 100%;
       max-height: 100%;
     }
@@ -997,19 +1005,20 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     for (let i = 0; i < Math.min(oldSlots.length, newSlots.length); i++) {
       const oldSlot = oldSlots[i];
       const newStyles = { ...(oldSlot.styles || {}) };
+      const newLayoutStyles = { ...(oldSlot.layoutStyles || {}) };
       
       // Remove fixed dimensions and positioning to allow re-flow into new grid
-      delete newStyles['width'];
-      delete newStyles['height'];
-      delete newStyles['left'];
-      delete newStyles['top'];
-      delete newStyles['position'];
-      delete newStyles['transform'];
+      const keysToRemove = ['width', 'height', 'min-height', 'left', 'top', 'position', 'transform'];
+      keysToRemove.forEach(k => {
+        delete newStyles[k];
+        delete newLayoutStyles[k];
+      });
 
       newSlots[i] = { 
         ...oldSlot, 
         id: newSlots[i].id,
-        styles: newStyles
+        styles: newStyles,
+        layoutStyles: newLayoutStyles
       };
     }
 
@@ -1616,5 +1625,11 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.config = this.resizeService.clearSlotSize(this.config, index);
     this.persistConfig();
     this.cdr.detectChanges();
+  }
+
+  isPositioned(index: number, slot: SlotConfig): boolean {
+    if (this.getSlotLeft(index) !== null || this.getSlotTop(index) !== null) return true;
+    if (slot.layoutStyles?.['left'] || slot.layoutStyles?.['top']) return true;
+    return slot.layoutStyles?.['position'] === 'absolute';
   }
 }
