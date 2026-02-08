@@ -48,6 +48,30 @@ import {
 import { SlotResizeService } from './slot-resize.service';
 import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
 
+// Interfaces for better type safety
+interface SlotEditOrigin {
+  x: number;
+  y: number;
+  width: number;
+}
+
+interface ComponentContentMap {
+  [key: string]: any;
+}
+
+interface SlotMetrics {
+  width: number;
+  sectionWidth: number;
+  sectionHeight: number;
+  localX: number;
+  localY: number;
+}
+
+interface ComponentDefaultSize {
+  width: number;
+  height: number;
+}
+
 @Component({
   selector: 'lib-editor-layout-section',
   standalone: true,
@@ -144,6 +168,7 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
           [style.left]="getSlotLeft(i) !== null ? getSlotLeft(i) + 'px' : slot.layoutStyles?.['left']"
           [style.top]="getSlotTop(i) !== null ? getSlotTop(i) + 'px' : slot.layoutStyles?.['top']"
           [style.position]="isPositioned(i, slot) ? 'absolute' : (slot.layoutStyles?.['position'] || 'relative')"
+          [attr.data-slot-index]="i"
           (click)="selectSlot(i, $event)">
           
           <!-- Empty Slot -->
@@ -891,17 +916,23 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
     .slot.flow-component {
       overflow: visible;
     }
+
+    /* Track changes in layout-section */
+    .layout-section {
+      transition: all 0.3s ease;
+    }
   `]
 })
 export class EditorLayoutSectionComponent extends BaseEditorSectionComponent implements OnInit, OnDestroy, OnChanges {
+  // Dependency Injection
   readonly store = inject(Store);
   readonly cdr = inject(ChangeDetectorRef);
   readonly resizeService = inject(SlotResizeService);
+  
+  // Lifecycle Management
   private destroy$ = new Subject<void>();
   private persistSubject$ = new Subject<void>();
-  // Local property to track browser platform
-  private localIsBrowser: boolean;
-
+  
   config: LayoutSectionConfig = createDefaultLayoutConfig();
   isEditing = false;
   showLayoutPicker = false;
@@ -926,11 +957,11 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     super(platformId);
-    this.localIsBrowser = isPlatformBrowser(platformId);
   }
 
   ngOnInit() {
     this.loadConfigFromSection();
+    this.setupPersistence();
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -953,12 +984,49 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         slots: (rawConfig.slots || []).map((s: any) => ({
           ...s,
           content: s.content ? { ...s.content } : {},
-          styles: s.styles ? { ...s.styles } : {}
+          styles: s.styles ? { ...s.styles } : {},
+          layoutStyles: s.layoutStyles ? { ...s.layoutStyles } : {}
         }))
       };
     } else {
       this.config = createDefaultLayoutConfig();
     }
+    this.cdr.detectChanges();
+  }
+
+  /**
+   * Setup debounced persistence
+   */
+  private setupPersistence(): void {
+    this.persistSubject$
+      .pipe(
+        debounceTime(300),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => this.dispatchUpdate());
+  }
+
+  /**
+   * Trigger config persistence
+   */
+  private persistConfig(): void {
+    this.persistSubject$.next();
+  }
+
+  /**
+   * Dispatch update to store
+   */
+  private dispatchUpdate(): void {
+    const updatedContent = {
+      ...this.section.content,
+      layoutConfig: this.config
+    } as any;
+
+    this.store.dispatch(PageActions.updateSection({
+      sectionId: this.section.id,
+      changes: { content: updatedContent }
+    }));
+
     this.cdr.detectChanges();
   }
 
@@ -1165,6 +1233,50 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     size: { width: 0, height: 0 }
   };
 
+  /**
+   * Component Type Constants
+   */
+  private readonly ISOLATED_MODE_COMPONENTS: readonly SlotComponentType[] = [
+    'ui-button', 
+    'ui-accordion', 
+    'draggable-box', 
+    'ui-title', 
+    'ui-image', 
+    'ui-card', 
+    'ui-card-animated', 
+    'ui-list', 
+    'ui-card-product', 
+    'ui-chip'
+  ] as const;
+
+  private readonly TEXT_COMPONENTS: readonly SlotComponentType[] = [
+    'ui-button', 
+    'ui-title', 
+    'ui-chip', 
+    'draggable-box'
+  ] as const;
+
+  private readonly FLOW_COMPONENTS: readonly string[] = [
+    'accordion', 
+    'card', 
+    'list', 
+    'title', 
+    'chip', 
+    'button', 
+    'draggable-box', 
+    'text'
+  ] as const;
+
+  // Default Content Constants
+  readonly DEFAULT_ACCORDION_ITEMS = [{ title: 'Item 1', content: 'Contenido 1' }];
+  readonly DEFAULT_LIST_ITEMS = ['Item 1', 'Item 2', 'Item 3'];
+  readonly DEFAULT_PRODUCT = { 
+    image: '', 
+    name: 'Producto', 
+    description: 'Descripción...', 
+    price: '0.00' 
+  };
+
   getComponentStyles(slot: any): Record<string, any> {
     const styles = { ...(slot.styles || {}) };
     
@@ -1207,124 +1319,19 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.activeIsolatedType = slot.componentType;
     
     // Detect visual width and position of the slot AND its parent section
-    let detectedWidth = 400; 
-    let sectionWidth = 1200;
-    let sectionHeight = 800;
-    let localX = 0;
-    let localY = 0;
-
-    try {
-        const target = event.target as HTMLElement;
-        const slotEl = target.closest('.slot') || target.closest('.layout-slot');
-        const gridEl = target.closest('.grid-container');
-        
-        if (slotEl && gridEl) {
-             const slotRect = slotEl.getBoundingClientRect();
-             const gridRect = gridEl.getBoundingClientRect();
-             
-             detectedWidth = Math.round(slotRect.width);
-             sectionWidth = Math.round(gridRect.width);
-             sectionHeight = Math.round(gridRect.height);
-             
-             // Local coordinates within the grid-container (1:1 with relative/absolute positioning context)
-             localX = Math.round(slotRect.left - gridRect.left);
-             localY = Math.round(slotRect.top - gridRect.top);
-        }
-    } catch(e) { console.warn('Detection failed, falling back to config', e); }
-
-    // Use values from config if available and detection failed or yielded zero
-    const currentLeft = parseInt(slot.layoutStyles?.['left']) || localX;
-    const currentTop = parseInt(slot.layoutStyles?.['top']) || localY;
+    const metrics = this.detectSlotMetrics(event);
     
-    // Fix: Handle % widths by defaulting to detected visual width
-    const currentStyleW = slot.layoutStyles?.['width'];
-    const currentStyleH = slot.layoutStyles?.['height'];
-    const safeWidth = (typeof currentStyleW === 'number') ? currentStyleW : 
-                      (currentStyleW && currentStyleW.toString().includes('px') ? parseInt(currentStyleW) : detectedWidth);
-    const safeHeight = (typeof currentStyleH === 'number') ? currentStyleH : 
-                       (currentStyleH && currentStyleH.toString().includes('px') ? parseInt(currentStyleH) : 300);
+    // Use values from config if available and detection failed or yielded zero
+    const currentLeft = parseInt(slot.layoutStyles?.['left']) || metrics.localX;
+    const currentTop = parseInt(slot.layoutStyles?.['top']) || metrics.localY;
+    
+    const currentSize = this.extractCurrentSize(
+      slot.layoutStyles,
+      this.getDefaultSize(slot.componentType, metrics.width)
+    );
 
     // Build component-specific content mapping
-    let mappedContent: any = { ...slot.content };
-    let defaultSize = { width: detectedWidth, height: 300 }; // Use detected width as base default
-    
-    // Map content fields based on component type
-    switch (slot.componentType) {
-      case 'ui-button':
-        mappedContent = {
-          variant: slot.componentVariant || this.globalVariant || 'primary',
-          rounded: slot.content?.['rounded'] || 'md',
-          size: slot.content?.['size'] || 'md',
-          dark: slot.content?.['dark'] || false,
-          label: slot.content?.['text'] || slot.content?.['label'] || 'Botón',
-          leadingIcon: slot.content?.['leadingIcon'],
-          trailingIcon: slot.content?.['trailingIcon'],
-          haptic: slot.content?.['haptic'] || false,
-          soundUrl: slot.content?.['soundUrl'] || ''
-        };
-        defaultSize = { width: Math.min(220, detectedWidth), height: 50 }; 
-        break;
-
-      case 'ui-title':
-        mappedContent = {
-          variant: slot.componentVariant || this.globalVariant || 'default',
-          text: slot.content?.['text'] || 'Título',
-          level: slot.content?.['level'] || 'h2',
-          align: slot.content?.['align'] || 'left'
-        };
-        defaultSize = { width: detectedWidth, height: 100 };
-        break;
-        
-      case 'ui-accordion':
-        mappedContent = {
-          variant: slot.componentVariant || this.globalVariant || 'default',
-          items: slot.content?.['items'] || [{ title: 'Item 1', content: 'Contenido 1' }],
-          multiOpen: slot.content?.['multiOpen'] || false,
-          animation: slot.content?.['animation'] || 'smooth'
-        };
-        defaultSize = { width: detectedWidth, height: 250 };
-        break;
-        
-      case 'draggable-box':
-        mappedContent = {
-          variant: slot.componentVariant || this.globalVariant || 'secondary',
-          rounded: slot.content?.['rounded'] || 'md',
-          size: slot.content?.['size'] || 'md',
-          dark: slot.content?.['dark'] || false,
-          text: slot.content?.['text'] || 'Draggable Box'
-        };
-        defaultSize = { width: Math.min(280, detectedWidth), height: 120 };
-        break;
-
-      case 'ui-list':
-        mappedContent = {
-          variant: slot.componentVariant || this.globalVariant || 'default',
-          items: slot.content?.['items'] || ['Item 1', 'Item 2', 'Item 3'],
-          listVariant: slot.content?.['listVariant'] || 'default'
-        };
-        defaultSize = { width: detectedWidth, height: 300 };
-        break;
-
-      case 'ui-card-product':
-        const productData = slot.content?.['product'] || {};
-        mappedContent = {
-          variant: slot.componentVariant || this.globalVariant || 'default',
-          name: productData.name || 'Producto',
-          price: productData.price || '0.00',
-          image: productData.image || '',
-          description: productData.description || 'Descripción...',
-          currency: productData.currency || 'USD',
-          onSale: productData.onSale || false
-        };
-        defaultSize = { width: Math.min(320, detectedWidth), height: 480 };
-        break;
-        
-      default:
-        mappedContent = { 
-            ...slot.content,
-            variant: slot.componentVariant || this.globalVariant || 'default'
-        };
-    }
+    const mappedContent = this.buildIsolatedContent(slot, metrics);
 
     this.isolatedConfig = {
       sectionId: this.section.id,
@@ -1335,19 +1342,197 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       content: mappedContent,
       styles: { ...slot.layoutStyles },
       position: { x: currentLeft, y: currentTop },
-      size: { 
-        width: safeWidth, 
-        height: safeHeight 
-      },
+      size: currentSize,
       canvasSize: {
-        width: sectionWidth,
-        height: sectionHeight
+        width: metrics.sectionWidth,
+        height: metrics.sectionHeight
       }
     };
     
-    document.body.classList.add('isolated-mode-active');
+    if (this.isBrowser) {
+      document.body.classList.add('isolated-mode-active');
+    }
+    
     this.showIsolatedMode = true;
     this.cdr.detectChanges();
+  }
+
+  /**
+   * Detect slot visual metrics
+   */
+  private detectSlotMetrics(event: Event): SlotMetrics {
+    let detectedWidth = 400;
+    let sectionWidth = 1200;
+    let sectionHeight = 800;
+    let localX = 0;
+    let localY = 0;
+
+    try {
+      const target = event.target as HTMLElement;
+      const slotEl = target.closest('.slot') || target.closest('.layout-slot');
+      const gridEl = target.closest('.grid-container');
+      
+      if (slotEl && gridEl) {
+        const slotRect = slotEl.getBoundingClientRect();
+        const gridRect = gridEl.getBoundingClientRect();
+        
+        detectedWidth = Math.round(slotRect.width);
+        sectionWidth = Math.round(gridRect.width);
+        sectionHeight = Math.round(gridRect.height);
+        
+        localX = Math.round(slotRect.left - gridRect.left);
+        localY = Math.round(slotRect.top - gridRect.top);
+      }
+    } catch (error) {
+      console.warn('Slot metrics detection failed', error);
+    }
+
+    return {
+      width: detectedWidth,
+      sectionWidth,
+      sectionHeight,
+      localX,
+      localY
+    };
+  }
+
+  /**
+   * Build isolated mode content map
+   */
+  private buildIsolatedContent(
+    slot: SlotConfig, 
+    metrics: SlotMetrics
+  ): ComponentContentMap {
+    const contentBuilders: Record<SlotComponentType, () => ComponentContentMap> = {
+      'ui-button': () => ({
+        variant: slot.componentVariant || this.globalVariant || 'primary',
+        rounded: slot.content?.['rounded'] || 'md',
+        size: slot.content?.['size'] || 'md',
+        dark: slot.content?.['dark'] || false,
+        label: slot.content?.['text'] || slot.content?.['label'] || 'Botón',
+        leadingIcon: slot.content?.['leadingIcon'],
+        trailingIcon: slot.content?.['trailingIcon'],
+        haptic: slot.content?.['haptic'] || false,
+        soundUrl: slot.content?.['soundUrl'] || ''
+      }),
+
+      'ui-title': () => ({
+        variant: slot.componentVariant || this.globalVariant || 'default',
+        text: slot.content?.['text'] || 'Título',
+        level: slot.content?.['level'] || 'h2',
+        align: slot.content?.['align'] || 'left'
+      }),
+        
+      'ui-accordion': () => ({
+        variant: slot.componentVariant || this.globalVariant || 'default',
+        items: slot.content?.['items'] || [{ title: 'Item 1', content: 'Contenido 1' }],
+        multiOpen: slot.content?.['multiOpen'] || false,
+        animation: slot.content?.['animation'] || 'smooth'
+      }),
+        
+      'draggable-box': () => ({
+        variant: slot.componentVariant || this.globalVariant || 'secondary',
+        rounded: slot.content?.['rounded'] || 'md',
+        size: slot.content?.['size'] || 'md',
+        dark: slot.content?.['dark'] || false,
+        text: slot.content?.['text'] || 'Draggable Box'
+      }),
+
+      'ui-list': () => ({
+        variant: slot.componentVariant || this.globalVariant || 'default',
+        items: slot.content?.['items'] || ['Item 1', 'Item 2', 'Item 3'],
+        listVariant: slot.content?.['listVariant'] || 'default'
+      }),
+
+      'ui-card-product': () => {
+        const productData = slot.content?.['product'] || {};
+        return {
+          variant: slot.componentVariant || this.globalVariant || 'default',
+          name: productData.name || 'Producto',
+          price: productData.price || '0.00',
+          image: productData.image || '',
+          description: productData.description || 'Descripción...',
+          currency: productData.currency || 'USD',
+          onSale: productData.onSale || false
+        };
+      },
+
+      'ui-chip': () => ({
+        variant: slot.componentVariant || this.globalVariant || 'default',
+        text: slot.content?.['text'] || 'Chip',
+        removable: slot.content?.['removable'] || false
+      }),
+
+      'ui-image': () => ({
+        variant: slot.componentVariant || this.globalVariant || 'default',
+        src: slot.content?.['src'] || 'assets/placeholder.jpg',
+        alt: slot.content?.['alt'] || 'Imagen'
+      }),
+
+      'ui-card': () => ({ 
+        ...slot.content,
+        variant: slot.componentVariant || this.globalVariant || 'default'
+      }),
+
+      'ui-card-animated': () => ({ 
+        ...slot.content,
+        variant: slot.componentVariant || this.globalVariant || 'default'
+      }),
+
+      'empty': () => ({}),
+    };
+
+    const builder = contentBuilders[slot.componentType];
+    return builder ? builder() : { 
+      ...slot.content,
+      variant: slot.componentVariant || this.globalVariant || 'default'
+    };
+  }
+
+  /**
+   * Get default size for component type
+   */
+  private getDefaultSize(
+    componentType: SlotComponentType, 
+    detectedWidth: number
+  ): ComponentDefaultSize {
+    const sizeMap: Record<SlotComponentType, ComponentDefaultSize> = {
+      'ui-button': { width: Math.min(220, detectedWidth), height: 50 },
+      'ui-title': { width: detectedWidth, height: 100 },
+      'ui-accordion': { width: detectedWidth, height: 250 },
+      'draggable-box': { width: Math.min(280, detectedWidth), height: 120 },
+      'ui-list': { width: detectedWidth, height: 300 },
+      'ui-card-product': { width: Math.min(320, detectedWidth), height: 480 },
+      'ui-chip': { width: 120, height: 40 },
+      'ui-image': { width: detectedWidth, height: Math.round(detectedWidth * 0.6) },
+      'ui-card': { width: detectedWidth, height: 400 },
+      'ui-card-animated': { width: detectedWidth, height: 400 },
+      'empty': { width: detectedWidth, height: 300 }
+    };
+
+    return sizeMap[componentType] || { width: detectedWidth, height: 300 };
+  }
+
+  /**
+   * Extract current size from styles
+   */
+  private extractCurrentSize(
+    layoutStyles: Record<string, any> | undefined,
+    defaultSize: ComponentDefaultSize
+  ): ComponentDefaultSize {
+    const currentStyleW = layoutStyles?.['width'];
+    const currentStyleH = layoutStyles?.['height'];
+    
+    const parseSize = (value: any, fallback: number): number => {
+      if (typeof value === 'number') return value;
+      if (value && value.toString().includes('px')) return parseInt(value);
+      return fallback;
+    };
+
+    return {
+      width: parseSize(currentStyleW, defaultSize.width),
+      height: parseSize(currentStyleH, defaultSize.height)
+    };
   }
 
   onIsolatedModeApplied(updatedConfig: IsolatedModeConfig) {
@@ -1499,20 +1684,6 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
     this.persistConfig();
     this.closeSlotConfig();
-  }
-
-  private persistConfig() {
-    const updatedContent = {
-      ...this.section.content,
-      layoutConfig: this.config
-    } as any;
-
-    this.store.dispatch(PageActions.updateSection({
-      sectionId: this.section.id,
-      changes: { content: updatedContent }
-    }));
-
-    this.cdr.detectChanges();
   }
 
   // ========== SLOT RESIZE METHODS ==========
