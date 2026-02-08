@@ -5,6 +5,7 @@ import { BaseEditorSectionComponent } from '../base-editor-section.component';
 import { Store } from '@ngrx/store';
 import * as PageActions from '../../../../store/actions/page.actions';
 import { Subject, takeUntil, debounceTime } from 'rxjs';
+import { VariantService } from '@negocio/shared-components';
 
 // UI Components imports
 import {
@@ -107,13 +108,14 @@ interface ComponentDefaultSize {
       class="layout-section"
       [class.editing]="isEditing"
       [class.isolated-mode]="showIsolatedMode"
+      [class.preview-mode]="isPreviewMode"
       [style.minHeight.px]="config.minHeight"
       [style.padding.px]="config.padding"
       [style.backgroundColor]="config.backgroundColor"
       [style.borderRadius.px]="config.borderRadius">
       
       <!-- Section Header -->
-      <div class="section-header">
+      <div *ngIf="!isPreviewMode" class="section-header">
         <div class="section-label">
           <span class="label-icon">🧩</span>
           <span class="label-text">Layout: {{ getLayoutLabel() }}</span>
@@ -162,6 +164,7 @@ interface ComponentDefaultSize {
           [class.selected]="selectedSlotIndex === i"
           [class.resizing]="resizeService.isResizing() && resizeService.activeSlotIndex() === i"
           [class.flow-component]="isFlowComponent(slot)"
+          [class.preview-mode]="isPreviewMode"
           [style.width]="getSlotWidth(i) ? getSlotWidth(i) + 'px' : slot.layoutStyles?.['width']"
           [style.height]="!isFlowComponent(slot) ? (getSlotHeight(i) ? getSlotHeight(i) + 'px' : slot.layoutStyles?.['height']) : null"
           [style.minHeight]="isFlowComponent(slot) ? (getSlotHeight(i) ? getSlotHeight(i) + 'px' : slot.layoutStyles?.['height']) : null"
@@ -172,7 +175,7 @@ interface ComponentDefaultSize {
           (click)="selectSlot(i, $event)">
           
           <!-- Empty Slot -->
-          <div *ngIf="slot.componentType === 'empty'" class="empty-slot">
+          <div *ngIf="slot.componentType === 'empty' && !isPreviewMode" class="empty-slot">
             <div class="empty-content" (click)="openComponentPicker(i, $event)">
               <span class="plus-icon">+</span>
               <span class="slot-label">Añadir Componente</span>
@@ -183,7 +186,7 @@ interface ComponentDefaultSize {
           <ng-container *ngIf="slot.componentType !== 'empty'">
             <div class="slot-component" style="height: auto; min-height: 100%;">
               <!-- Editing Overlay -->
-              <div *ngIf="isEditing" class="slot-controls">
+              <div *ngIf="isEditing && !isPreviewMode" class="slot-controls">
                 <button *ngIf="isPositioned(i, slot)"
                         class="slot-btn" 
                         (click)="resetSlotPosition(i)" 
@@ -303,7 +306,7 @@ interface ComponentDefaultSize {
             </div>
 
             <!-- Resize Anchors (8 points) -->
-          <div *ngIf="isEditing && isSlotFilled(slot)" class="resize-anchors">
+          <div *ngIf="isEditing && !isPreviewMode && isSlotFilled(slot)" class="resize-anchors">
             <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
             <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
             <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
@@ -525,6 +528,12 @@ interface ComponentDefaultSize {
       box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
     }
 
+    .layout-section.preview-mode {
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
     .layout-section.isolated-mode {
       z-index: 10000001 !important;
       overflow: visible !important;
@@ -611,6 +620,10 @@ interface ComponentDefaultSize {
       background-size: 24px 24px;
     }
 
+    .layout-section.preview-mode .grid-container {
+      background-image: none;
+    }
+
     /* Slots */
     .slot {
       position: relative;
@@ -619,6 +632,11 @@ interface ComponentDefaultSize {
       border-radius: 12px;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       background: rgba(15, 23, 42, 0.2);
+    }
+
+    .slot.preview-mode {
+      border: none !important;
+      background: transparent !important;
     }
 
     .slot:hover { 
@@ -1038,10 +1056,14 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   readonly store = inject(Store);
   readonly cdr = inject(ChangeDetectorRef);
   readonly resizeService = inject(SlotResizeService);
+  override readonly variantService = inject(VariantService);
   
   // Lifecycle Management
   private destroy$ = new Subject<void>();
   private persistSubject$ = new Subject<void>();
+  
+  // Preview mode state
+  isPreviewMode = false;
   
   config: LayoutSectionConfig = createDefaultLayoutConfig();
   isEditing = false;
@@ -1073,6 +1095,14 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   ngOnInit() {
     this.loadConfigFromSection();
     this.setupPersistence();
+    
+    // Subscribe to builder step changes to detect preview mode
+    this.variantService.builderStep$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(step => {
+        this.isPreviewMode = step === 'preview';
+        this.cdr.detectChanges();
+      });
   }
 
   ngOnChanges(changes: SimpleChanges) {
