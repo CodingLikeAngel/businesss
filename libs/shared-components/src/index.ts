@@ -53,3 +53,6 @@ export { IsolatedModeComponentType, ComponentRegistrationConfig, RegisteredCompo
 
 // Isolated Mode Trigger Component
 export * from './lib/shared-components/variant-selector/isolated-mode-trigger.component';
+
+// Component Export System
+export * from './services/export/index';
