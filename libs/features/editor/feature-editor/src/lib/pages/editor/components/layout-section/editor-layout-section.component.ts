@@ -184,6 +184,10 @@ interface ComponentDefaultSize {
             <div class="slot-component" style="height: auto; min-height: 100%;">
               <!-- Editing Overlay -->
               <div *ngIf="isEditing" class="slot-controls">
+                <button *ngIf="isPositioned(i, slot)"
+                        class="slot-btn" 
+                        (click)="resetSlotPosition(i)" 
+                        title="Resetear Posición (Centrar en Grid)">🎯</button>
                 <button class="slot-btn drag-handle" 
                         appResizeHandle [slotIndex]="i" anchor="move"
                         title="Mover Componente">⠿</button>
@@ -512,154 +516,240 @@ interface ComponentDefaultSize {
     
     .layout-section {
       position: relative;
-      background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8));
-      border: 1px solid rgba(99, 102, 241, 0.2);
-      border-radius: 12px;
-      overflow: hidden; /* CRITICAL: Prevent components from leaking out */
-      z-index: 1; /* Establish stacking context */
+      background: linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      border-radius: 16px;
+      overflow: hidden;
+      z-index: 1;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
     }
 
     .layout-section.isolated-mode {
-      z-index: 10000001 !important; /* Above everything when editing */
-      overflow: visible !important; /* Ensure overlay can expand to full screen if needed */
+      z-index: 10000001 !important;
+      overflow: visible !important;
     }
 
     .layout-section.editing {
-      border-color: rgba(99, 102, 241, 0.5);
-      box-shadow: 0 0 20px rgba(99, 102, 241, 0.2);
+      border-color: rgba(99, 102, 241, 0.4);
+      box-shadow: 0 0 30px rgba(99, 102, 241, 0.15), 0 10px 40px -10px rgba(0, 0, 0, 0.5);
     }
 
     .section-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0.75rem 1rem;
-      background: rgba(0, 0, 0, 0.3);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 12px 12px 0 0;
+      padding: 0.85rem 1.25rem;
+      background: rgba(15, 23, 42, 0.6);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px 16px 0 0;
     }
 
     .section-label {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      color: white;
-      font-weight: 600;
-      font-size: 0.875rem;
+      gap: 0.75rem;
+      color: #f1f5f9;
+      font-weight: 700;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .label-icon {
+      font-size: 1.1rem;
+      filter: drop-shadow(0 0 8px rgba(99, 102, 241, 0.6));
     }
 
     .section-actions {
       display: flex;
-      gap: 0.5rem;
+      gap: 0.75rem;
     }
 
     .action-btn {
       display: flex;
       align-items: center;
-      gap: 0.25rem;
-      padding: 0.35rem 0.75rem;
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 6px;
-      color: white;
-      font-size: 0.75rem;
+      gap: 0.5rem;
+      padding: 0.45rem 1rem;
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 8px;
+      color: #94a3b8;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .action-btn:hover { background: rgba(99, 102, 241, 0.3); }
-    .action-btn.active { background: rgba(99, 102, 241, 0.5); border-color: rgba(99, 102, 241, 0.7); }
+    .action-btn:hover { 
+      background: rgba(99, 102, 241, 0.15); 
+      color: white;
+      border-color: #6366f1;
+      transform: translateY(-1px);
+    }
+
+    .action-btn.active { 
+      background: rgba(99, 102, 241, 0.4); 
+      color: white;
+      border-color: #818cf8;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+    }
+
     .btn-text { display: none; }
     @media (min-width: 640px) { .btn-text { display: inline; } }
 
     /* Grid Container */
     .grid-container {
       display: grid;
-      padding: 1rem;
-      position: relative; /* CRITICAL: Keep absolute slots inside */
+      padding: 1.5rem;
+      position: relative;
       min-height: inherit;
-      overflow: hidden; /* Prevent slots from leaking outside the grid area */
+      overflow: visible;
+      background-image: radial-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+      background-size: 24px 24px;
     }
 
     /* Slots */
     .slot {
       position: relative;
-      min-height: 120px;
-      border: 2px dashed rgba(255, 255, 255, 0.1);
-      border-radius: 8px;
-      transition: all 0.2s;
+      min-height: 100px;
+      border: 1px dashed rgba(99, 102, 241, 0.15);
+      border-radius: 12px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: rgba(15, 23, 42, 0.2);
     }
 
-    .slot:hover { border-color: rgba(99, 102, 241, 0.4); }
-    .slot.selected { border-color: rgba(99, 102, 241, 0.8); background: rgba(99, 102, 241, 0.05); }
-    .slot.empty { background: rgba(0, 0, 0, 0.2); }
+    .slot:hover { 
+      border-color: rgba(99, 102, 241, 0.4); 
+      background: rgba(15, 23, 42, 0.3);
+    }
 
-    .empty-slot {
+    .slot.selected { 
+      border-color: #6366f1; 
+      background: rgba(99, 102, 241, 0.08); 
+      box-shadow: inset 0 0 20px rgba(99, 102, 241, 0.05);
+    }
+
+    .slot.empty { 
+      background: rgba(2, 6, 23, 0.3); 
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 100%;
-      min-height: 120px;
     }
 
     .empty-content {
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 0.5rem;
-      padding: 1rem;
+      gap: 0.75rem;
+      padding: 1.5rem;
       cursor: pointer;
-      color: rgba(255, 255, 255, 0.5);
-      transition: all 0.2s;
+      color: #64748b;
+      transition: all 0.3s;
     }
 
-    .empty-content:hover { color: rgba(99, 102, 241, 0.8); transform: scale(1.05); }
-    .plus-icon { font-size: 2rem; }
-    .slot-label { font-size: 0.75rem; }
+    .empty-content:hover { 
+      color: #818cf8; 
+      transform: scale(1.02);
+    }
+
+    .plus-icon { 
+      font-size: 1.75rem; 
+      background: rgba(99, 102, 241, 0.1);
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .slot-label { 
+      font-size: 0.65rem; 
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
 
     /* Slot Component */
     .slot-component {
       position: relative;
       width: 100%;
       min-height: 100%;
-      /* Block display ensures reliable height growth */
-      padding: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      box-sizing: border-box;
     }
 
     .slot-controls {
       position: absolute;
-      top: 4px;
-      right: 4px;
+      top: 10px;
+      right: 10px;
       display: flex;
-      gap: 4px;
-      z-index: 10;
+      gap: 6px;
+      z-index: 100;
       opacity: 0;
-      transition: opacity 0.2s;
+      transform: translateY(-5px);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .slot:hover .slot-controls { opacity: 1; }
+    .slot:hover .slot-controls, .slot.selected .slot-controls { 
+      opacity: 1; 
+      transform: translateY(0);
+    }
 
     .slot-btn {
-      width: 28px;
-      height: 28px;
+      width: 34px;
+      height: 34px;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: rgba(0, 0, 0, 0.7);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      border-radius: 4px;
-      color: white;
+      background: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 10px;
+      color: #e2e8f0;
       cursor: pointer;
-      font-size: 0.75rem;
+      font-size: 0.9rem;
       transition: all 0.2s;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
     }
 
-    .slot-btn:hover { background: rgba(99, 102, 241, 0.8); }
-    .slot-btn.drag-handle { cursor: grab; background: rgba(99, 102, 241, 0.2); border-color: rgba(99, 102, 241, 0.4); }
-    .slot-btn.drag-handle:hover { background: rgba(99, 102, 241, 0.7); }
-    .slot-btn.danger:hover { background: rgba(239, 68, 68, 0.8); }
+    .slot-btn:hover { 
+      background: #6366f1; 
+      color: white; 
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-2px);
+    }
 
-    .slot-image, .slot-video, .slot-map { width: 100%; height: 100%; object-fit: cover; }
+    .slot-btn.drag-handle { 
+      cursor: grab; 
+      background: rgba(99, 102, 241, 0.15); 
+      border-color: rgba(99, 102, 241, 0.4); 
+      color: #818cf8;
+    }
+
+    .slot-btn.drag-handle:hover { 
+      background: #6366f1; 
+      color: white; 
+    }
+
+    .slot-btn.danger:hover { 
+      background: #ef4444; 
+    }
+
+    .slot-image { 
+      width: 100%; 
+      height: 100%; 
+      object-fit: cover; 
+      border-radius: inherit;
+    }
+
     .slot-card, .slot-box { width: 100%; }
 
     .unknown-component {
@@ -837,16 +927,36 @@ interface ComponentDefaultSize {
     
     .resize-anchor {
       position: absolute;
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       background: #ffffff;
-      border: 2px solid #10b981; /* Green border like the screenshot */
-      border-radius: 2px;
+      border: 2px solid #10b981;
+      border-radius: 4px;
       z-index: 2000;
       opacity: 0;
-      transition: opacity 0.2s, transform 0.2s, background 0.2s;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
       pointer-events: auto;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
+    
+    .slot.selected .resize-anchor, .slot.resizing .resize-anchor {
+      opacity: 1;
+    }
+
+    .resize-anchor:hover {
+      background: #10b981;
+      transform: scale(1.3);
+      box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
+    }
+
+    .resize-anchor.nw { top: -6px; left: -6px; cursor: nwse-resize; }
+    .resize-anchor.n  { top: -6px; left: 50%; transform: translateX(-50%); cursor: ns-resize; }
+    .resize-anchor.ne { top: -6px; right: -6px; cursor: nesw-resize; }
+    .resize-anchor.e  { top: 50%; right: -6px; transform: translateY(-50%); cursor: ew-resize; }
+    .resize-anchor.se { bottom: -6px; right: -6px; cursor: nwse-resize; }
+    .resize-anchor.s  { bottom: -6px; left: 50%; transform: translateX(-50%); cursor: ns-resize; }
+    .resize-anchor.sw { bottom: -6px; left: -6px; cursor: nesw-resize; }
+    .resize-anchor.w  { top: 50%; left: -6px; transform: translateY(-50%); cursor: ew-resize; }
 
     .slot:hover .resize-anchor,
     .slot.selected .resize-anchor,
@@ -1282,33 +1392,53 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
   getComponentStyles(slot: any): Record<string, any> {
     const styles = { ...(slot.styles || {}) };
+    const componentType = slot.componentType as SlotComponentType;
     
-    // Draggable box handles its own size/position
-    if (slot.componentType === 'draggable-box') {
+    // 1. Draggable box handles its own style merging
+    if (componentType === 'draggable-box') {
       return styles;
     }
 
-    // For flow components, we want to respect the visual positioning defined in isolated mode.
-    // By using 'relative' positioning, 'left' and 'top' values act as offsets from the 
-    // component's natural flow position (top-left of the slot).
-    if (styles['left'] || styles['top'] || styles['transform']) {
-         styles['position'] = 'relative';
+    // 2. Position logic: Relative offsets vs absolute
+    // Flow components use relative positioning to act as offsets from grid cell
+    const hasCoordinates = !!styles['left'] || !!styles['top'] || !!styles['transform'];
+    const isAbsolute = slot.layoutStyles?.['position'] === 'absolute' || styles['position'] === 'absolute';
+    
+    if (isAbsolute) {
+      styles['position'] = 'absolute';
+    } else if (hasCoordinates) {
+      styles['position'] = 'relative';
     } else {
-         // Only remove explicit absolute if no coordinates are set, to fallback to flow
-         if (styles['position'] === 'absolute') delete styles['position'];
+      if (styles['position'] === 'absolute') delete styles['position'];
     }
     
-    // We keep 'width', 'height', 'left', 'top', 'transform' to respect user config.
-    
-    // Ensure display block so dimensions apply naturally
-    // Add max-width to prevent components from breaking out of containers
-    // Margin auto centers the component in the new block layout
+    // 3. Size enforcement
+    // If no explicit width/height in styles, use layoutStyles if provided
+    if (!styles['width'] && slot.layoutStyles?.['width']) styles['width'] = slot.layoutStyles['width'];
+    if (!styles['height'] && slot.layoutStyles?.['height']) styles['height'] = slot.layoutStyles['height'];
+
+    // 4. Default Alignment (Centered for small components)
+    if (!styles['display'] && !isAbsolute) {
+      styles['display'] = 'flex';
+      styles['align-items'] = 'center';
+      styles['justify-content'] = 'center';
+      styles['width'] = styles['width'] || '100%';
+    }
+
+    // 5. Special Component Rules
+    if (componentType === 'ui-accordion' || componentType === 'ui-list') {
+      styles['width'] = '100%';
+      styles['justify-content'] = 'stretch';
+      styles['align-items'] = 'stretch';
+    }
+
+    if (componentType === 'ui-button' || componentType === 'ui-chip') {
+      styles['align-self'] = 'center';
+    }
+
     return {
-      display: 'block',
       'max-width': '100%',
       'box-sizing': 'border-box',
-      'margin-left': 'auto',
-      'margin-right': 'auto',
       ...styles
     };
   }
@@ -1550,13 +1680,20 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       case 'ui-button':
         mappedContent = {
           ...updatedConfig.content,
-          text: updatedConfig.content.label || updatedConfig.content.text || 'Botón'
+          text: updatedConfig.content.text || updatedConfig.content.label || 'Botón'
         };
         newVariant = updatedConfig.content.variant;
+        // Fix for button expanded state if width is 100%
+        if (updatedConfig.styles?.['width'] === '100%') {
+          mappedContent['expanded'] = true;
+        }
         break;
         
       case 'ui-accordion':
-        mappedContent = { ...updatedConfig.content };
+        mappedContent = { 
+          ...updatedConfig.content,
+          items: updatedConfig.content.items || this.DEFAULT_ACCORDION_ITEMS 
+        };
         newVariant = updatedConfig.content.variant || updatedConfig.content.accordionVariant;
         break;
         
@@ -1810,7 +1947,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   isFlowComponent(slot: SlotConfig): boolean {
     if (!slot) return false;
     const flowTypes = ['accordion', 'card', 'list', 'title', 'chip', 'button', 'draggable-box', 'text'];
-    return flowTypes.some(type => slot.componentType.includes(type));
+    const type = slot.componentType.toLowerCase();
+    return flowTypes.some(ft => type.includes(ft));
   }
 
   /**
@@ -1825,6 +1963,32 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   isPositioned(index: number, slot: SlotConfig): boolean {
     if (this.getSlotLeft(index) !== null || this.getSlotTop(index) !== null) return true;
     if (slot.layoutStyles?.['left'] || slot.layoutStyles?.['top']) return true;
-    return slot.layoutStyles?.['position'] === 'absolute';
+    return slot.layoutStyles?.['position'] === 'absolute' || slot.styles?.['position'] === 'absolute';
+  }
+
+  resetSlotPosition(index: number): void {
+    const slots = [...this.config.slots];
+    const slot = { ...slots[index] };
+    
+    if (slot.layoutStyles) {
+      const newLayout = { ...slot.layoutStyles };
+      delete newLayout['left'];
+      delete newLayout['top'];
+      delete newLayout['position'];
+      slot.layoutStyles = newLayout;
+    }
+    
+    if (slot.styles) {
+      const newStyles = { ...slot.styles };
+      delete newStyles['left'];
+      delete newStyles['top'];
+      delete newStyles['position'];
+      slot.styles = newStyles;
+    }
+
+    slots[index] = slot;
+    this.config = { ...this.config, slots };
+    this.persistConfig();
+    this.cdr.detectChanges();
   }
 }

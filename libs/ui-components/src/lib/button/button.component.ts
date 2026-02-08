@@ -74,6 +74,10 @@ export class UIButtonComponent {
       }
     });
 
+    if (this.expanded()) {
+      styles['width'] = '100%';
+    }
+
     return styles;
   });
 
@@ -86,6 +90,7 @@ export class UIButtonComponent {
     if (this.dark()) classes.push('dark');
     if (this.disabled()) classes.push('btn-disabled');
     if (this.rounded() === 'full' && !this.leadingIcon() && !this.trailingIcon()) classes.push('no-icons');
+    if (this.expanded()) classes.push('btn-expanded');
     return classes.join(' ');
   });
 
