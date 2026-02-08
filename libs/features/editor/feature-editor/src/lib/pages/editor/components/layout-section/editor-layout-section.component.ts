@@ -131,7 +131,7 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
         
         <!-- Slots -->
         <div 
-          *ngFor="let slot of config.slots; let i = index" 
+          *ngFor="let slot of config.slots; let i = index; trackBy: trackBySlotIndex" 
           class="slot"
           [class.empty]="slot.componentType === 'empty'"
           [class.selected]="selectedSlotIndex === i"
@@ -270,6 +270,7 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
                  [slotIndex]="i"
                  [direction]="'horizontal'"
                  [minWidth]="80"
+                 (resizeMove)="onResizeMoving()"
                  (resized)="onSlotResized(i, $event)">
               <span class="resize-icon">⤡</span>
             </div>
@@ -1361,12 +1362,16 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     if (updatedConfig.size) {
         finalStyles['width'] = updatedConfig.size.width + 'px';
         
-        // Fix: Accordions must use auto height to expand with content
-        // Fixed height causes clipping. Use min-height from isolated resizing.
+        // Smart-Adapt: Components that flow (Accordions, Cards, Lists) should have auto height
+        // to prevent clipping when content changes. Media components keep fixed height.
         const currentSlot = this.config.slots[this.editingSlotIndex];
-        if (currentSlot && currentSlot.componentType.includes('accordion')) {
+        const flowComponents = ['accordion', 'card', 'list', 'title', 'chip', 'button', 'draggable-box', 'text'];
+        const isFlow = currentSlot && flowComponents.some(type => currentSlot.componentType.includes(type));
+
+        if (isFlow) {
              finalStyles['height'] = 'auto';
              finalStyles['min-height'] = updatedConfig.size.height + 'px';
+             finalStyles['display'] = 'block';
         } else {
              finalStyles['height'] = updatedConfig.size.height + 'px';
         }
@@ -1413,6 +1418,13 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.cdr.detectChanges();
   }
 
+  /**
+   * TrackBy function for slots to prevent re-rendering during resize
+   */
+  trackBySlotIndex(index: number): number {
+    return index;
+  }
+
 
   applySlotConfig() {
     if (!this.editingSlot || this.editingSlotIndex < 0) return;
@@ -1444,6 +1456,13 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   }
 
   // ========== SLOT RESIZE METHODS ==========
+
+  /**
+   * Handle resize move to update UI (force CD)
+   */
+  onResizeMoving(): void {
+    this.cdr.detectChanges();
+  }
 
   /**
    * Get effective slot width (custom or auto)
@@ -1487,6 +1506,15 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
    */
   isSlotFilled(slot: SlotConfig): boolean {
     return slot.componentType !== 'empty';
+  }
+
+  /**
+   * Check if slot contains a flow component (needs auto-height)
+   */
+  isFlowComponent(slot: SlotConfig): boolean {
+    if (!slot) return false;
+    const flowTypes = ['accordion', 'card', 'list', 'title', 'chip', 'button', 'draggable-box', 'text'];
+    return flowTypes.some(type => slot.componentType.includes(type));
   }
 
   /**
