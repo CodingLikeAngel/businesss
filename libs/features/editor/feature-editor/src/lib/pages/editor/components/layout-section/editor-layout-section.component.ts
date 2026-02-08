@@ -1056,18 +1056,21 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.editingSlotIndex = index;
     this.activeIsolatedType = slot.componentType;
     
-    // Detect visual width of the slot to initialize isolated mode size
+    // Detect visual width and position of the slot
     let detectedWidth = 400; 
+    let detectedLeft = 380;
     try {
         const target = event.target as HTMLElement;
         const slotEl = target.closest('.layout-slot') || target.closest('.slot-wrapper') || target.parentElement;
         if (slotEl) {
              const rect = slotEl.getBoundingClientRect();
              detectedWidth = Math.round(rect.width);
-             // Safety adjustment: Subtracting padding/border if needed. 
-             // We'll use the raw rect width as a good approximation of "available visual width".
+             detectedLeft = Math.round(rect.left);
         }
-    } catch(e) { console.warn('Slot width detection failed', e); }
+    } catch(e) { console.warn('Slot detection failed', e); }
+
+    // Store origin in temp variable to preserve across edit session firmly
+    (this as any).tempEditOrigin = { x: detectedLeft, y: 0 };
 
     // Build component-specific content mapping
     let mappedContent: any = { ...slot.content };
@@ -1176,7 +1179,6 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         }
     }
     
-    const sidebarOffset = 380;
     const currentLeft = parseInt(slot.styles?.['left']) || 0;
     const currentTop = parseInt(slot.styles?.['top']) || 0;
 
@@ -1188,7 +1190,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       globalVariant: this.globalVariant,
       content: mappedContent,
       styles: { ...slot.styles },
-      position: { x: currentLeft + sidebarOffset, y: currentTop },
+      position: { x: detectedLeft + currentLeft, y: currentTop },
       size: { 
         width: parseInt(slot.styles?.['width']) || defaultSize.width, 
         height: parseInt(slot.styles?.['height']) || defaultSize.height 
@@ -1272,17 +1274,17 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     
     // Ensure size and position are synced correctly
     const finalStyles = { ...updatedConfig.styles };
-    const sidebarOffset = 380;
+    const originX = (this as any).tempEditOrigin?.x || 380;
 
     if (updatedConfig.size) {
         finalStyles['width'] = updatedConfig.size.width + 'px';
         finalStyles['height'] = updatedConfig.size.height + 'px';
     }
     
-    // Normalize position by removing sidebar offset
+    // Normalize position: Global -> Local
     if (finalStyles['left']) {
-        const rawLeft = parseInt(finalStyles['left']);
-        finalStyles['left'] = (rawLeft - sidebarOffset) + 'px';
+        const rawLeftGlobal = parseInt(finalStyles['left']);
+        finalStyles['left'] = (rawLeftGlobal - originX) + 'px';
     }
 
     newSlots[this.editingSlotIndex] = {
