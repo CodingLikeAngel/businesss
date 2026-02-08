@@ -161,7 +161,6 @@ import {
                 <!-- UI BUTTON -->
                 <lib-ui-components-button
                   *ngSwitchCase="'ui-button'"
-                  style="width: 100%; display: block;"
                   [variant]="$any(slot.componentVariant || globalVariant || 'primary')"
                   [customStyles]="getComponentStyles(slot)">
                   {{ slot.content?.['text'] || 'Botón' }}
@@ -208,7 +207,6 @@ import {
                 <!-- UI ACCORDION -->
                 <lib-ui-components-accordion
                   *ngSwitchCase="'ui-accordion'"
-                  style="width: 100%; display: block;"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
                   [items]="slot.content?.['items'] || [{title:'Item 1', content:'Contenido 1'}]"
                   [customStyles]="getComponentStyles(slot)">
@@ -1028,22 +1026,18 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       return styles;
     }
 
-    // For flow components, strip isolated positioning and force full width
-    // This removes "air" gaps and ensures component fills the slot
+    // For flow components, remove absolute positioning but RESPECT dimensions
+    // from isolated mode resize.
     delete styles['position'];
     delete styles['left'];
     delete styles['top'];
     delete styles['transform'];
     
-    // Remove fixed width/height from isolated mode unless it's a percentage
-    if (styles['width'] && typeof styles['width'] === 'string' && styles['width'].includes('px')) delete styles['width'];
-    if (styles['height'] && typeof styles['height'] === 'string' && styles['height'].includes('px')) delete styles['height'];
-
+    // Ensure display block so dimensions apply naturally
+    // If user set a specific width in isolated mode, it will be in 'styles.width'
     return {
-      ...styles,
-      width: '100%',
-      height: 'auto',
-      maxWidth: '100%'
+      display: 'block', 
+      ...styles
     };
   }
 
