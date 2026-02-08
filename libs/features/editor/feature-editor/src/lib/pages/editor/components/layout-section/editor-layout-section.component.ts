@@ -159,6 +159,9 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
             <div class="slot-component" style="height: auto; min-height: 100%;">
               <!-- Editing Overlay -->
               <div *ngIf="isEditing" class="slot-controls">
+                <button class="slot-btn drag-handle" 
+                        appResizeHandle [slotIndex]="i" anchor="move"
+                        title="Mover Componente">⠿</button>
                 <button class="slot-btn edit-btn" 
                         (click)="editSlotComponent(i, $event)" 
                         [title]="hasIsolatedMode(slot.componentType) ? 'Editar en Modo Aislado' : 'Configurar'">
@@ -627,6 +630,8 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
     }
 
     .slot-btn:hover { background: rgba(99, 102, 241, 0.8); }
+    .slot-btn.drag-handle { cursor: grab; background: rgba(99, 102, 241, 0.2); border-color: rgba(99, 102, 241, 0.4); }
+    .slot-btn.drag-handle:hover { background: rgba(99, 102, 241, 0.7); }
     .slot-btn.danger:hover { background: rgba(239, 68, 68, 0.8); }
 
     .slot-image, .slot-video, .slot-map { width: 100%; height: 100%; object-fit: cover; }

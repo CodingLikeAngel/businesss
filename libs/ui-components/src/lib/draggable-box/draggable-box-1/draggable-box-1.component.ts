@@ -68,37 +68,6 @@ export class UIDraggableBox1Component implements AfterViewInit {
   });
 
   ngAfterViewInit(): void {
-    this.initDraggable();
-  }
-
-  private initDraggable(): void {
-    const element = this.draggableBox.nativeElement;
-    let isDragging = false;
-    let startX = 0;
-    let startY = 0;
-    let initialX = 0;
-    let initialY = 0;
-
-    element.addEventListener('mousedown', (e: MouseEvent) => {
-      isDragging = true;
-      startX = e.clientX;
-      startY = e.clientY;
-      initialX = element.offsetLeft;
-      initialY = element.offsetTop;
-      element.style.cursor = 'grabbing';
-    });
-
-    document.addEventListener('mousemove', (e: MouseEvent) => {
-      if (!isDragging) return;
-      const dx = e.clientX - startX;
-      const dy = e.clientY - startY;
-      element.style.left = `${initialX + dx}px`;
-      element.style.top = `${initialY + dy}px`;
-    });
-
-    document.addEventListener('mouseup', () => {
-      isDragging = false;
-      element.style.cursor = 'grab';
-    });
+    // Dragging is now handled by the editor layer using appResizeHandle 'move' anchor
   }
 }

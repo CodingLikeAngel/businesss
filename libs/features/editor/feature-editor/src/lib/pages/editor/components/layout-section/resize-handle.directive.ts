@@ -11,7 +11,7 @@ export interface ResizeEvent {
   deltaY: number;
 }
 
-export type ResizeAnchor = 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se';
+export type ResizeAnchor = 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se' | 'move';
 
 @Directive({
   selector: '[appResizeHandle]',
@@ -262,7 +262,8 @@ export class ResizeHandleDirective {
         'nw': 'nwse-resize',
         'se': 'nwse-resize',
         'ne': 'nesw-resize',
-        'sw': 'nesw-resize'
+        'sw': 'nesw-resize',
+        'move': 'move'
       };
       document.body.style.cursor = cursorMap[this.anchor] || 'pointer';
     } else {

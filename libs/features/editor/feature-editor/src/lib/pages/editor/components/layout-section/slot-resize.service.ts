@@ -4,7 +4,8 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { SlotConfig, LayoutSectionConfig, LayoutType } from './layout-section.interfaces';
 
-export type ResizeDirection = 'horizontal' | 'vertical' | 'both' | 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se';
+export type ResizeDirection = 'horizontal' | 'vertical' | 'both' | 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se' | 'move';
+export type ResizeAnchor = 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se' | 'move';
 export type ResizeMode = 'auto-distribute' | 'fixed-total' | 'flexible';
 
 @Injectable({ providedIn: 'root' })
@@ -131,6 +132,10 @@ export class SlotResizeService {
       case 'both':
         newWidth += delta.dx;
         newHeight += delta.dy;
+        break;
+      case 'move':
+        deltaLeft = delta.dx;
+        deltaTop = delta.dy;
         break;
     }
 
