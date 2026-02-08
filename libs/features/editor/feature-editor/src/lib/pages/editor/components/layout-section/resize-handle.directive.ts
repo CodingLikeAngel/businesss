@@ -11,6 +11,8 @@ export interface ResizeEvent {
   deltaY: number;
 }
 
+export type ResizeAnchor = 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se';
+
 @Directive({
   selector: '[appResizeHandle]',
   standalone: true
@@ -20,6 +22,7 @@ export class ResizeHandleDirective {
 
   @Input() slotIndex: number = 0;
   @Input() direction: ResizeDirection = 'horizontal';
+  @Input() anchor: ResizeAnchor = 'e'; // Punto de anclaje
   @Input() minWidth: number = 80;
   @Input() minHeight: number = 40;
   @Input() snapEnabled: boolean = true;
@@ -92,7 +95,7 @@ export class ResizeHandleDirective {
     this.startHeight = rect.height;
 
     // Iniciar servicio con el tamaño actual capturado por rect
-    this.resizeService.startResize(this.slotIndex, this.direction, { 
+    this.resizeService.startResize(this.slotIndex, this.anchor, { 
       width: rect.width, 
       height: rect.height 
     });
@@ -146,8 +149,8 @@ export class ResizeHandleDirective {
       deltaY: dy
     });
 
-    // Actualizar servicio
-    this.resizeService.onResizeMove(this.slotIndex, { dx, dy });
+    // Actualizar servicio pasando el ancla específica
+    this.resizeService.onResizeMove(this.slotIndex, { dx, dy }, this.anchor);
   }
 
   private onMouseUp(): void {
@@ -251,9 +254,17 @@ export class ResizeHandleDirective {
 
   private updateCursor(isResizing: boolean): void {
     if (isResizing) {
-      const cursor = this.direction === 'horizontal' ? 'ew-resize' :
-                     this.direction === 'vertical' ? 'ns-resize' : 'nwse-resize';
-      document.body.style.cursor = cursor;
+      const cursorMap: Record<ResizeAnchor, string> = {
+        'n': 'ns-resize',
+        's': 'ns-resize',
+        'e': 'ew-resize',
+        'w': 'ew-resize',
+        'nw': 'nwse-resize',
+        'se': 'nwse-resize',
+        'ne': 'nesw-resize',
+        'sw': 'nesw-resize'
+      };
+      document.body.style.cursor = cursorMap[this.anchor] || 'pointer';
     } else {
       document.body.style.cursor = '';
     }

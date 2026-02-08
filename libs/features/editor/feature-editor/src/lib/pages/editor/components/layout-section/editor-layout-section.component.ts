@@ -268,18 +268,18 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
               </ng-container>
             </div>
 
-            <!-- Resize Handle (only in edit mode and for filled slots) -->
-            <div *ngIf="isEditing && isSlotFilled(slot)"
-                 class="resize-handle"
-                 appResizeHandle
-                 [slotIndex]="i"
-                 [direction]="'horizontal'"
-                 [minWidth]="80"
-                 (resizeMove)="onResizeMoving()"
-                 (resized)="onSlotResized(i, $event)">
-              <span class="resize-icon">⤡</span>
-            </div>
-          </ng-container>
+            <!-- Resize Anchors (8 points) -->
+          <div *ngIf="isEditing && isSlotFilled(slot)" class="resize-anchors">
+            <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+          </div>
+        </ng-container>
         </div>
       </div>
 
@@ -783,45 +783,54 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
     .btn-primary { background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; }
     .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4); }
 
-    /* Resize Handles */
-    .slot { position: relative; transition: border-color 0.2s, width 0.1s; } 
+    /* Premium Resize Anchors (8 points) */
+    .slot { 
+      position: relative; 
+      transition: border-color 0.2s, width 0.1s; 
+      z-index: 1;
+    } 
     
-    .resize-handle {
+    .slot:hover, .slot.selected, .slot.resizing {
+      z-index: 100;
+    }
+    
+    .resize-anchor {
       position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      right: -12px;
-      width: 24px; 
-      height: 24px;
-      cursor: col-resize;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
+      width: 10px;
+      height: 10px;
+      background: #ffffff;
+      border: 2px solid #10b981; /* Green border like the screenshot */
+      border-radius: 2px;
+      z-index: 2000;
       opacity: 0;
-      transition: opacity 0.2s;
-      pointer-events: auto; /* Ensure clickable */
+      transition: opacity 0.2s, transform 0.2s, background 0.2s;
+      pointer-events: auto;
     }
 
-    .slot:hover .resize-handle,
-    .resize-handle:hover,
-    .slot.resizing .resize-handle {
+    .slot:hover .resize-anchor,
+    .slot.selected .resize-anchor,
+    .slot.resizing .resize-anchor {
       opacity: 1;
     }
 
-    .resize-icon {
-      background: #6366f1;
-      color: white;
-      border-radius: 4px;
-      width: 16px; 
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-      content: '↔'; /* Fallback icon */
+    .resize-anchor:hover {
+      transform: scale(1.4);
+      background: #10b981;
+      border-color: #ffffff;
+      box-shadow: 0 0 8px rgba(16, 185, 129, 0.5);
     }
+
+    /* Corner positions */
+    .resize-anchor.nw { top: -6px; left: -6px; cursor: nw-resize; }
+    .resize-anchor.ne { top: -6px; right: -6px; cursor: ne-resize; }
+    .resize-anchor.sw { bottom: -6px; left: -6px; cursor: sw-resize; }
+    .resize-anchor.se { bottom: -6px; right: -6px; cursor: se-resize; }
+
+    /* Mid positions */
+    .resize-anchor.n { top: -6px; left: calc(50% - 5px); cursor: ns-resize; }
+    .resize-anchor.s { bottom: -6px; left: calc(50% - 5px); cursor: ns-resize; }
+    .resize-anchor.e { right: -6px; top: calc(50% - 5px); cursor: ew-resize; }
+    .resize-anchor.w { left: -6px; top: calc(50% - 5px); cursor: ew-resize; }
 
     .slot.resizing {
       border: 2px dashed #6366f1 !important;

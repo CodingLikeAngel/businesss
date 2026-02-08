@@ -4,7 +4,7 @@
 import { Injectable, signal, computed } from '@angular/core';
 import { SlotConfig, LayoutSectionConfig, LayoutType } from './layout-section.interfaces';
 
-export type ResizeDirection = 'horizontal' | 'vertical' | 'both';
+export type ResizeDirection = 'horizontal' | 'vertical' | 'both' | 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se';
 export type ResizeMode = 'auto-distribute' | 'fixed-total' | 'flexible';
 
 @Injectable({ providedIn: 'root' })
@@ -20,11 +20,14 @@ export class SlotResizeService {
   // Si está en proceso de resize
   readonly isResizing = signal(false);
   
-  // Dirección del resize
-  readonly resizeDirection = signal<ResizeDirection>('horizontal');
+  // Dirección o ancla del resize
+  readonly resizeDirection = signal<ResizeDirection>('e');
   
-  // Slot widths/heights personalizados (cuando no son auto)
-  readonly customSizes = signal<Map<number, { width: number; height: number }>>(new Map());
+  // Posición inicial del slot al empezar el resize
+  private startPosition = { left: 0, top: 0 };
+  
+  // Slot widths/heights/positions personalizados
+  readonly customSizes = signal<Map<number, { width: number; height: number; left?: number; top?: number }>>(new Map());
   
   // Modo de distribución de espacio
   readonly resizeMode: ResizeMode = 'auto-distribute';
@@ -50,41 +53,85 @@ export class SlotResizeService {
   /**
    * Iniciar el proceso de resize
    */
-  startResize(index: number, direction: ResizeDirection = 'horizontal', currentSize?: { width: number, height: number }): void {
+  startResize(index: number, direction: ResizeDirection = 'e', currentSize?: { width: number, height: number }, currentPos?: { left: number, top: number }): void {
     this.activeSlotIndex.set(index);
     this.resizeDirection.set(direction);
     this.isResizing.set(true);
 
-    // Capturar tamaño inicial para el cálculo de deltas
+    // Capturar tamaño inicial
     if (currentSize) {
       this.startSize = { ...currentSize };
     } else {
       const existing = this.customSizes().get(index);
       this.startSize = existing ? { ...existing } : { width: 400, height: 300 };
     }
+
+    // Capturar posición inicial
+    this.startPosition = currentPos || { left: 0, top: 0 };
     
     // Inicializar tamaño en los signals si no existe
     const sizes = this.customSizes();
     if (!sizes.has(index)) {
-      sizes.set(index, { ...this.startSize });
+      sizes.set(index, { ...this.startSize, ...this.startPosition });
       this.customSizes.set(new Map(sizes));
     }
   }
 
-  onResizeMove(index: number, delta: { dx: number; dy: number }): void {
+  onResizeMove(index: number, delta: { dx: number; dy: number }, anchor?: ResizeDirection): void {
     if (this.activeSlotIndex() !== index) return;
 
-    // EL ERROR ESTABA AQUÍ: No hay que sumar delta al tamaño corriente (acumulativo),
-    // sino sumarlo al tamaño INICIAL para evitar crecimiento triangular/exponencial.
+    const currentAnchor = anchor || this.resizeDirection();
     let newWidth = this.startSize.width;
     let newHeight = this.startSize.height;
+    let deltaLeft = 0;
+    let deltaTop = 0;
 
-    // Aplicar delta total acumulado desde el inicio del drag
-    if (this.resizeDirection() === 'horizontal' || this.resizeDirection() === 'both') {
-      newWidth += delta.dx;
-    }
-    if (this.resizeDirection() === 'vertical' || this.resizeDirection() === 'both') {
-      newHeight += delta.dy;
+    // Lógica avanzada de 8 puntos
+    switch (currentAnchor) {
+      case 'e':
+        newWidth += delta.dx;
+        break;
+      case 'w':
+        newWidth -= delta.dx;
+        deltaLeft = delta.dx;
+        break;
+      case 's':
+        newHeight += delta.dy;
+        break;
+      case 'n':
+        newHeight -= delta.dy;
+        deltaTop = delta.dy;
+        break;
+      case 'se':
+        newWidth += delta.dx;
+        newHeight += delta.dy;
+        break;
+      case 'sw':
+        newWidth -= delta.dx;
+        newHeight += delta.dy;
+        deltaLeft = delta.dx;
+        break;
+      case 'ne':
+        newWidth += delta.dx;
+        newHeight -= delta.dy;
+        deltaTop = delta.dy;
+        break;
+      case 'nw':
+        newWidth -= delta.dx;
+        newHeight -= delta.dy;
+        deltaLeft = delta.dx;
+        deltaTop = delta.dy;
+        break;
+      case 'horizontal':
+        newWidth += delta.dx;
+        break;
+      case 'vertical':
+        newHeight += delta.dy;
+        break;
+      case 'both':
+        newWidth += delta.dx;
+        newHeight += delta.dy;
+        break;
     }
 
     // Snap to grid
@@ -95,9 +142,14 @@ export class SlotResizeService {
     newWidth = this.clampWidth(newWidth);
     newHeight = this.clampHeight(newHeight);
 
-    // Actualizar store
+    // Actualizar store (Incluyendo posición si es necesario)
     const sizes = this.customSizes();
-    sizes.set(index, { width: newWidth, height: newHeight });
+    sizes.set(index, { 
+      width: newWidth, 
+      height: newHeight, 
+      left: this.startPosition.left + deltaLeft,
+      top: this.startPosition.top + deltaTop
+    });
     this.customSizes.set(new Map(sizes));
   }
 
@@ -169,8 +221,19 @@ export class SlotResizeService {
     slot.layoutStyles = {
       ...slot.layoutStyles,
       width: newWidth,
-      ...(newHeight ? { height: newHeight } : {})
+      ...(newHeight ? { height: newHeight } : {}),
+      ...(config.slots[index].layoutStyles?.['left'] !== undefined || newWidth !== this.startSize.width ? { 
+          left: (slot.layoutStyles?.['left'] || 0) + (newWidth - this.startSize.width) 
+      } : {})
     };
+
+    // Si el service tiene posición calculada, usarla
+    const custom = this.customSizes().get(index);
+    if (custom && custom.left !== undefined) {
+      slot.layoutStyles['left'] = custom.left;
+      slot.layoutStyles['top'] = custom.top;
+      slot.layoutStyles['position'] = 'absolute';
+    }
 
     // Mantener compatibilidad con estilos directos si el componente los usa
     slot.styles = {
