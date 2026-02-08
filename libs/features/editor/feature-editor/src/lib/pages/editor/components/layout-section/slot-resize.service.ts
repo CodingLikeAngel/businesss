@@ -6,6 +6,12 @@ import { SlotConfig, LayoutSectionConfig, LayoutType } from './layout-section.in
 
 export type ResizeDirection = 'horizontal' | 'vertical' | 'both';
 export type ResizeMode = 'auto-distribute' | 'fixed-total' | 'flexible';
+export interface ResizeEvent {
+  width: number;
+  height: number;
+  deltaX: number;
+  deltaY: number;
+}
 
 @Injectable({ providedIn: 'root' })
 export class SlotResizeService {

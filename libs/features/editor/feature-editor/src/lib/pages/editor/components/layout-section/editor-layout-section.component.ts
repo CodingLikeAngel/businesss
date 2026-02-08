@@ -45,6 +45,9 @@ import {
   ComponentCatalogItem
 } from './layout-section.interfaces';
 
+import { SlotResizeService, ResizeEvent } from './slot-resize.service';
+import { ResizeHandleDirective } from './resize-handle.directive';
+
 @Component({
   selector: 'lib-editor-layout-section',
   standalone: true,
@@ -71,7 +74,8 @@ import {
     EditorCardPremiumIsolatedModeComponent,
     EditorListIsolatedModeComponent,
     EditorChipIsolatedModeComponent,
-    EditorCardProductIsolatedModeComponent
+    EditorCardProductIsolatedModeComponent,
+    ResizeHandleDirective
   ],
   template: `
     <section 
@@ -131,6 +135,8 @@ import {
           class="slot"
           [class.empty]="slot.componentType === 'empty'"
           [class.selected]="selectedSlotIndex === i"
+          [class.resizing]="resizeService.isResizing() && resizeService.activeSlotIndex() === i"
+          [style.width.px]="getSlotWidth(i)"
           (click)="selectSlot(i, $event)">
           
           <!-- Empty Slot -->
@@ -255,6 +261,17 @@ import {
                 </div>
 
               </ng-container>
+            </div>
+
+            <!-- Resize Handle (only in edit mode and for filled slots) -->
+            <div *ngIf="isEditing && isSlotFilled(slot)"
+                 class="resize-handle"
+                 appResizeHandle
+                 [slotIndex]="i"
+                 [direction]="'horizontal'"
+                 [minWidth]="80"
+                 (resized)="onSlotResized(i, $event)">
+              <span class="resize-icon">⤡</span>
             </div>
           </ng-container>
         </div>
@@ -762,8 +779,9 @@ import {
   `]
 })
 export class EditorLayoutSectionComponent extends BaseEditorSectionComponent implements OnInit, OnDestroy, OnChanges {
-  private store = inject(Store);
-  private cdr = inject(ChangeDetectorRef);
+  readonly store = inject(Store);
+  readonly cdr = inject(ChangeDetectorRef);
+  readonly resizeService = inject(SlotResizeService);
   private destroy$ = new Subject<void>();
   private persistSubject$ = new Subject<void>();
   // Local property to track browser platform
@@ -1377,6 +1395,61 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       changes: { content: updatedContent }
     }));
 
+    this.cdr.detectChanges();
+  }
+
+  // ========== SLOT RESIZE METHODS ==========
+
+  /**
+   * Get effective slot width (custom or auto)
+   */
+  getSlotWidth(index: number): number | null {
+    const customSize = this.resizeService.customSizes().get(index);
+    if (customSize && customSize.width > 0) {
+      return customSize.width;
+    }
+    return null; // Use CSS Grid auto
+  }
+
+  /**
+   * Handle slot resize event
+   */
+  onSlotResized(index: number, event: ResizeEvent): void {
+    const newWidth = event.width;
+    const newHeight = event.height;
+    
+    // Apply resize to slot
+    this.config = this.resizeService.resizeSlot(this.config, index, newWidth, newHeight);
+    
+    // Optionally auto-distribute remaining space
+    if (this.resizeService.resizeMode === 'auto-distribute') {
+      this.config = this.resizeService.calculateAutoDistribution(this.config, index, newWidth);
+    }
+    
+    this.persistConfig();
+    this.cdr.detectChanges();
+  }
+
+  /**
+   * Check if slot has custom size
+   */
+  hasCustomSize(index: number): boolean {
+    return this.resizeService.hasCustomSize(index);
+  }
+
+  /**
+   * Check if slot is not empty (helper for template)
+   */
+  isSlotFilled(slot: SlotConfig): boolean {
+    return slot.componentType !== 'empty';
+  }
+
+  /**
+   * Reset slot to auto size
+   */
+  resetSlotSize(index: number): void {
+    this.config = this.resizeService.clearSlotSize(this.config, index);
+    this.persistConfig();
     this.cdr.detectChanges();
   }
 }
