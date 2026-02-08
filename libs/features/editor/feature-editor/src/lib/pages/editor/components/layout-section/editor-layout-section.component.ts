@@ -1049,9 +1049,22 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.editingSlotIndex = index;
     this.activeIsolatedType = slot.componentType;
     
+    // Detect visual width of the slot to initialize isolated mode size
+    let detectedWidth = 400; 
+    try {
+        const target = event.target as HTMLElement;
+        const slotEl = target.closest('.layout-slot') || target.closest('.slot-wrapper') || target.parentElement;
+        if (slotEl) {
+             const rect = slotEl.getBoundingClientRect();
+             detectedWidth = Math.round(rect.width);
+             // Safety adjustment: Subtracting padding/border if needed. 
+             // We'll use the raw rect width as a good approximation of "available visual width".
+        }
+    } catch(e) { console.warn('Slot width detection failed', e); }
+
     // Build component-specific content mapping
     let mappedContent: any = { ...slot.content };
-    let defaultSize = { width: 400, height: 300 };
+    let defaultSize = { width: detectedWidth, height: 300 }; // Use detected width as base default
     
     // Map content fields based on component type
     switch (slot.componentType) {
@@ -1067,7 +1080,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
           haptic: slot.content?.['haptic'] || false,
           soundUrl: slot.content?.['soundUrl'] || ''
         };
-        defaultSize = { width: 180, height: 50 };
+        // Buttons shouldn't default to full container width usually
+        defaultSize = { width: Math.min(220, detectedWidth), height: 50 }; 
         break;
 
       case 'ui-title':
@@ -1077,7 +1091,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
           level: slot.content?.['level'] || 'h2',
           align: slot.content?.['align'] || 'left'
         };
-        defaultSize = { width: 350, height: 100 };
+        defaultSize = { width: detectedWidth, height: 100 };
         break;
         
       case 'ui-accordion':
@@ -1087,7 +1101,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
           multiOpen: slot.content?.['multiOpen'] || false,
           animation: slot.content?.['animation'] || 'smooth'
         };
-        defaultSize = { width: 350, height: 250 };
+        defaultSize = { width: detectedWidth, height: 250 };
         break;
         
       case 'draggable-box':
@@ -1098,7 +1112,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
           dark: slot.content?.['dark'] || false,
           text: slot.content?.['text'] || 'Draggable Box'
         };
-        defaultSize = { width: 280, height: 120 };
+        defaultSize = { width: Math.min(280, detectedWidth), height: 120 };
         break;
 
       case 'ui-list':
@@ -1107,7 +1121,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
           items: slot.content?.['items'] || ['Item 1', 'Item 2', 'Item 3'],
           listVariant: slot.content?.['listVariant'] || 'default'
         };
-        defaultSize = { width: 300, height: 300 };
+        defaultSize = { width: detectedWidth, height: 300 };
         break;
 
       case 'ui-card-product':
@@ -1121,7 +1135,9 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
           currency: productData.currency || 'USD',
           onSale: productData.onSale || false
         };
-        defaultSize = { width: 300, height: 480 };
+        // Products usually look better slightly narrower than full width if column is excessively wide?
+        // But detectedWidth is safer.
+        defaultSize = { width: Math.min(320, detectedWidth), height: 480 };
         break;
 
       case 'ui-chip':
@@ -1139,16 +1155,17 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
             src: slot.content?.['src'] || 'assets/placeholder.jpg',
             alt: slot.content?.['alt'] || 'Imagen'
         };
-        defaultSize = { width: 300, height: 200 };
+        defaultSize = { width: detectedWidth, height: Math.round(detectedWidth * 0.6) }; // Maintain aspect ratio
         break;
         
       default:
+        // Generic mapping for other components
         mappedContent = { 
             ...slot.content,
             variant: slot.componentVariant || this.globalVariant || 'default'
         };
         if (slot.componentType === 'ui-card' || slot.componentType === 'ui-card-animated') {
-            defaultSize = { width: 320, height: 400 };
+            defaultSize = { width: detectedWidth, height: 400 };
         }
     }
     
