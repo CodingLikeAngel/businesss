@@ -162,7 +162,7 @@ import {
                 <lib-ui-components-button
                   *ngSwitchCase="'ui-button'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'primary')"
-                  [customStyles]="slot.styles || {}">
+                  [customStyles]="getComponentStyles(slot)">
                   {{ slot.content?.['text'] || 'Botón' }}
                 </lib-ui-components-button>
 
@@ -171,7 +171,7 @@ import {
                   *ngSwitchCase="'ui-title'"
                   [text]="slot.content?.['text'] || 'Título'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [customStyles]="slot.styles || {}">
+                  [customStyles]="getComponentStyles(slot)">
                 </lib-ui-components-title>
 
                 <!-- UI IMAGE -->
@@ -181,7 +181,7 @@ import {
                   [alt]="slot.content?.['alt'] || 'Imagen'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
                   [filter]="slot.styles?.['filter']"
-                  [customStyles]="slot.styles || {}"
+                  [customStyles]="getComponentStyles(slot)"
                   class="slot-image">
                 </lib-ui-image>
 
@@ -192,7 +192,7 @@ import {
                   [variant]="$any(slot.componentVariant || globalVariant || 'glass')"
                   [title]="slot.content?.['title'] || 'Título'"
                   [description]="slot.content?.['description'] || 'Descripción...'"
-                  [customStyles]="slot.styles || {}"
+                  [customStyles]="getComponentStyles(slot)"
                   class="slot-card">
                 </lib-ui-components-card>
 
@@ -200,7 +200,7 @@ import {
                 <lib-ui-components-card-animated
                   *ngSwitchCase="'ui-card-animated'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [customStyles]="slot.styles || {}"
+                  [customStyles]="getComponentStyles(slot)"
                   class="slot-card">
                 </lib-ui-components-card-animated>
 
@@ -209,7 +209,7 @@ import {
                   *ngSwitchCase="'ui-accordion'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
                   [items]="slot.content?.['items'] || [{title:'Item 1', content:'Contenido 1'}]"
-                  [customStyles]="slot.styles || {}">
+                  [customStyles]="getComponentStyles(slot)">
                 </lib-ui-components-accordion>
 
                 <!-- UI LIST -->
@@ -217,7 +217,7 @@ import {
                   *ngSwitchCase="'ui-list'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
                   [items]="slot.content?.['items'] || ['Item 1', 'Item 2', 'Item 3']"
-                  [customStyles]="slot.styles || {}">
+                  [customStyles]="getComponentStyles(slot)">
                 </lib-ui-list>
 
                 <!-- UI CARD PRODUCT -->
@@ -225,14 +225,14 @@ import {
                   *ngSwitchCase="'ui-card-product'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
                   [product]="slot.content?.['product'] || { image: '', name: 'Producto', description: 'Descripción...', price: '0.00' }"
-                  [customStyles]="slot.styles || {}">
+                  [customStyles]="getComponentStyles(slot)">
                 </lib-card-products>
 
                 <!-- UI CHIP -->
                 <lib-ui-components-chip
                   *ngSwitchCase="'ui-chip'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [customStyles]="slot.styles || {}">
+                  [customStyles]="getComponentStyles(slot)">
                   {{ slot.content?.['text'] || 'Chip' }}
                 </lib-ui-components-chip>
 
@@ -1017,6 +1017,33 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     position: { x: 0, y: 0 },
     size: { width: 0, height: 0 }
   };
+
+  getComponentStyles(slot: any): Record<string, any> {
+    const styles = { ...(slot.styles || {}) };
+    
+    // Draggable box handles its own size/position
+    if (slot.componentType === 'draggable-box') {
+      return styles;
+    }
+
+    // For flow components, strip isolated positioning and force full width
+    // This removes "air" gaps and ensures component fills the slot
+    delete styles['position'];
+    delete styles['left'];
+    delete styles['top'];
+    delete styles['transform'];
+    
+    // Remove fixed width/height from isolated mode unless it's a percentage
+    if (styles['width'] && typeof styles['width'] === 'string' && styles['width'].includes('px')) delete styles['width'];
+    if (styles['height'] && typeof styles['height'] === 'string' && styles['height'].includes('px')) delete styles['height'];
+
+    return {
+      ...styles,
+      width: '100%',
+      height: 'auto',
+      maxWidth: '100%'
+    };
+  }
 
   openIsolatedMode(index: number, event: Event) {
     event.stopPropagation();

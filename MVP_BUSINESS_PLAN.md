@@ -1,304 +1,346 @@
-# 🏢 ANTO STUDIOS - Plan MVP y Estrategia de Negocio
+# 🏢 ANTO STUDIOS - Plan MVP y Estrategia de Negocio Revolutionaria
 
 ## 📋 Resumen Ejecutivo
 
-**Visión:** Convertir Anto Studios en una plataforma multi-modelo que:
-1. SaaS para pequeños negocios locales
-2. Herramienta interna para agencias/freelancers
-3. Marketplace de templates premium
+**Visión:** Crear el primer Design System Builder que no solo diseña webs, sino que **exporta componentes nativos reales** para cualquier framework (React, Angular, Vue, Vanilla JS).
+
+> "Diseña una vez, usa en todas partes - como componentes reales, no como HTML pegado"
+
+### La Gran Idea:
+**Superar a Wix + Figma + Storybook en uno solo**
+
+| Wix | Figma | Anto Studios |
+|-----|-------|-------------|
+| Diseño visual | Design tokens | Diseño visual + Tokens + Código real |
+| Solo HTML/CSS | Solo specs | Componentes exportables |
+| No hay código | No hay código | **Código nativo generado** |
+| Lock-in total | Lock-in parcial | **Portabilidad total** |
 
 ---
 
-## 🎯 Modelos de Negocio Objetivo
+## 🎯 El Diferenciador Único: Component-as-Code Export
 
-### 1. SaaS para Pequeños Negocios Locales
-**Target:** Restaurantes, gyms, spas, clínicas, barberías, autónomos
-**Propuesta:** "Tu web profesional en 30 minutos, sin saber código"
-**Precio:** €29-49/mes
+### ¿Qué significa esto?
 
-### 2. Herramienta Interna para Agencias/Freelancers ⭐
-**Target:** Agencies, freelancers web developers, consultores digitales
-**Propuesta:** "Entrega proyectos 5x más rápido con templates premium"
-**Precio:** €99-299/mes (por usuario) o €999/año (licencia perpetua con updates)
+Diseñas un componente en el editor → Exportas como:
+- **React Component** (.tsx, styled-components)
+- **Angular Component** (.ts, .scss)
+- **Vue 3 Component** (.vue, Composition API)
+- **Vanilla JS** (Web Components)
 
-#### Features Exclusivos para Agencias:
-- **White-label export** - Sin logo de Anto Studios
-- **Custom domains** ilimitados
-- **API access** - Integra en tus propios sistemas
-- **Multi-user** - Tu equipo colabora
-- **Client mode** - Demo links para clientes
-- **Branding kit** - Templates con tu marca
-- **Priority support** - Soporte en 4h
-- **Template requests** - Pedimos templates que necesitas
+### Casos de Uso:
 
-#### Caso de Uso Agencias:
 ```
-1. Cliente pide web para restaurant
-2. Agency descarga template "Restaurant Premium"
-3. Personaliza con editor (30 min)
-4. Exporta con white-label
-5. Entrega al cliente
-6. Cliente mantiene con plan básico o agency mantiene
-```
+1. Developer Agency
+   └── Diseña en Anto → Exporta React components
+   └── Integra en Next.js/Vue/Angular app del cliente
+   └── Cliente puede mantener/modificar
 
-### 3. Marketplace de Templates ⭐
-**Target:** Usuarios finales, agencias junior, non-technical entrepreneurs
-**Propuesta:** "Templates premium listos para usar - solo personaliza y publica"
-**Precio:** €49-199 por template (venta única)
+2. Design System Team
+   └── Diseña componentes en Anto
+   └── Exporta a tu design system
+   └── Documentación automática
 
-#### Tipos de Templates en Marketplace:
-| Categoría | Precio | Includes |
-|-----------|--------|----------|
-| **Basic Landing** | €49 | HTML/CSS/JS, imágenes placeholder |
-| **Professional** | €99 | + variantes, animations, SEO optimizado |
-| **Premium Industry** | €149 | + isolated modes, multi-page, CMS setup |
-| **Full Business** | €199 | + todo lo anterior + documentación + soporte 1h |
+3. SaaS Company
+   └── Crea componentes reuseables
+   └── Distribuye como npm packages
+   └── Consistencia total
 
-#### Templates por Industria (Target):
-- Restaurantes/Menús (€99-149)
-- Gyms/Fitness (€99-149)
-- Spas/Wellness (€99-149)
-- Clínicas Médicas (€149)
-- Barberías/Peluquerías (€79-99)
-- Hoteles/B&Bs (€149-199)
-- Estudios Profesionales (€99-149)
-- E-commerce básico (€149-199)
-- Portfolios creativos (€79-99)
-- Eventos/Bodas (€99)
-
-#### Revenue Share Marketplace:
-```
-Venta de template (€99)
-├── Anto Studios (30%) - €29.70
-├── Creador del template (70%) - €69.30
+4. Freelancer
+   └── Entrega código, no solo HTML
+   └── Cliente valora el código limpio
+   └── pueden contratarte para extenderse
 ```
 
 ---
 
-## 💰 Estrategia de Monetización Completa
+## 💰 Modelos de Negocio (4 streams)
 
-### Modelo Híbrido: Suscripción + Marketplace
+### 1. SaaS Web Builder (B2C/B2B)
+**Target:** Pequeños negocios, no-devs
+**Precio:** €29-99/mes
+**Propuesta:** "Tu web profesional en 30 minutos"
 
-#### Tier 1: Free (€0)
-- Editor basic
-- 1 proyecto guardado localmente
-- Exportación con watermark
-- 5 templates básicos
+### 2. Component Builder Pro (B2B Developer Tools)
+**Target:** Agencies, Tech companies, Dev shops
+**Precio:** €199-499/mes por seat
+**Propuesta:** "Construye tu design system sin escribir boilerplate"
 
-#### Tier 2: Creator (€29/mes)
-- Proyectos ilimitados cloud
-- Sin watermark
-- 20 templates profesionales
-- Email support
+### 3. Template Marketplace (B2C + B2B)
+**Target:** Everyone
+**Precio:** €49-299 por template
+**Propuesta:** "Templates premium exportables"
 
-#### Tier 3: Agency (€99/mes por usuario)
-- Todo Creator
-- White-label export
-- API access
-- 50 templates premium
-- Priority support (24h)
-- Multi-user (hasta 5)
-
-#### Tier 4: Enterprise (€299/mes)
-- Todo Agency
-- Multi-user ilimitado
-- Client demo links
-- Custom integrations
-- Dedicated account manager
-- SLA garantizado
-
-#### Marketplace Upsells (una vez):
-- Template adicional: €49-99
-- Pack industria (3 templates): €199
-- Custom template request: €499
+### 4. Enterprise License (B2B Enterprise)
+**Target:** Grandes empresas
+**Precio:** €5,000-50,000/año
+**Propuesta:** "Design system centralizado para tu org"
 
 ---
 
-## 🛠️ Roadmap Técnico: Features por Modelo
+## 🛠️ Feature Roadmap: Component Export
 
-### Para Agencias/Freelancers (Interno)
+### v1.0 (Core)
+- [ ] Export to React (functional components, hooks)
+- [ ] Export to Angular (standalone components)
+- [ ] Export to Vue 3 (Composition API)
+- [ ] Export to Vanilla JS (Web Components)
+- [ ] Prop types/schema definition
+- [ ] Style extraction (CSS variables)
 
-#### v1.0 (Meses 1-2)
-- [ ] **White-label export** - Eliminar watermarks y branding
-- [ ] **Custom CSS/JS injection** - Para personalizaciones advanced
-- [ ] **Project cloning** - Duplica templates para nuevos clientes
-- [ ] **Client preview links** - Comparte demos sin dar acceso al editor
-- [ ] **Export to ZIP** - Todo el código en un ZIP listo para deploy
+### v1.5 (Advanced)
+- [ ] State management integration
+- [ ] Form handling (React Hook Form, Angular Reactive Forms)
+- [ ] Animation libraries (Framer Motion, Angular Animations, Vue Transitions)
+- [ ] Accessibility export (ARIA attributes, a11y checks)
 
-#### v1.2 (Meses 2-3)
-- [ ] **API REST** - Endpoint para crear/editar proyectos programáticamente
-- [ ] **Webhook notifications** - Alertas cuando cliente modifica proyecto
-- [ ] **Team collaboration** - Múltiples usuarios en mismo proyecto
-- [ ] **Role-based access** - Admin, Editor, Viewer roles
-
-#### v1.5 (Meses 3-4)
-- [ ] **Client portal** - Dashboard limitado para que clientes gestionen su web
-- [ ] ** recurring billing integration** - Tus clientes pagan a través de tu cuenta
-- [ ] **White-label subdomain** - `tuagencia.antostudios.com`
-
-### Para Marketplace (Templates)
-
-#### v1.0
-- [ ] **Template export format** - JSON schema para templates portable
-- [ ] **Template validation** - QA automatizado antes de publicar
-- [ ] **Template marketplace UI** - Browsing, search, filtering
-- [ ] **Purchase flow** - Stripe integration para one-time payments
-- [ ] **Creator dashboard** - Stats de ventas, payout management
-
-#### v2.0
-- [ ] **Template API** - Others can build on top
-- [ ] **Template bundles** - Paquetes con descuento
-- [ ] **Subscription marketplace** - Templates como servicio mensual
+### v2.0 (Pro)
+- [ ] Custom code injection slots
+- [ ] Multi-variant export (one component, multiple looks)
+- [ ] Design tokens export (JSON, CSS, SCSS, JS)
+- [ ] Storybook integration (.stories.tsx generation)
+- [ ] Testing utilities export (.test.tsx)
 
 ---
 
-## 📈 Proyección de Ingresos
+## 📦 Component Export Examples
 
-### Escenario Conservador (Año 1)
+### Input (Diseño en Editor)
+```
+Button Component
+├── Props: variant (primary/secondary), size (sm/md/lg), disabled
+├── Variants: 6 pre-designed
+├── Slots: icon-left, default, icon-right
+└── Events: onClick
+```
 
-| Fuente | Usuarios | ARPU | MRR | Anual |
-|--------|----------|------|-----|-------|
-| SaaS Creator | 200 | €29 | €5,800 | €69,600 |
-| SaaS Agency | 50 | €99 | €4,950 | €59,400 |
-| SaaS Enterprise | 5 | €299 | €1,495 | €17,940 |
-| Marketplace | 100 ventas/mes | €99 avg | €9,900* | €118,800 |
-| **TOTAL** | - | - | **€22,145** | **€265,740** |
+### Output (React)
+```tsx
+import React from 'react';
+import { ButtonProps } from './Button.types';
 
-*Marketplace revenue share (70%)
+export const Button: React.FC<ButtonProps> = ({
+  variant = 'primary',
+  size = 'md',
+  children,
+  onClick,
+  disabled,
+  ...props
+}) => {
+  const className = `btn btn--${variant} btn--${size}`;
+  
+  return (
+    <button 
+      className={className}
+      onClick={onClick}
+      disabled={disabled}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
+```
 
-### Escenario Optimista (Año 1)
-- **€500K-800K ARR** con marketing activo y 10+ templates
+### Output (Angular)
+```ts
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+@Component({
+  selector: 'app-button',
+  standalone: true,
+  template: `
+    <button 
+      [class]="'btn btn--' + variant + ' btn--' + size"
+      [disabled]="disabled"
+      (click)="onClick.emit($event)"
+    >
+      <ng-content></ng-content>
+    </button>
+  `,
+  styles: [`...`]
+})
+export class ButtonComponent {
+  @Input() variant: 'primary' | 'secondary' = 'primary';
+  @Input() size: 'sm' | 'md' | 'lg' = 'md';
+  @Input() disabled = false;
+  @Output() onClick = new EventEmitter<Event>();
+}
+```
+
+### Output (Web Component)
+```js
+class AntoButton extends HTMLElement {
+  static get observedAttributes() {
+    return ['variant', 'size', 'disabled'];
+  }
+  
+  constructor() {
+    super();
+    this.attachShadow({ mode: 'open' });
+  }
+  
+  render() {
+    const variant = this.getAttribute('variant') || 'primary';
+    const size = this.getAttribute('size') || 'md';
+    const disabled = this.hasAttribute('disabled');
+    
+    this.shadowRoot.innerHTML = `
+      <style>${styles}</style>
+      <button 
+        class="btn btn--${variant} btn--${size}"
+        ${disabled ? 'disabled' : ''}
+      >
+        <slot></slot>
+      </button>
+    `;
+  }
+}
+
+customElements.define('anto-button', AntoButton);
+```
 
 ---
 
-## 🎯 Plan de Marketing por Modelo
+## 🎯 Target Markets Priorizados
 
-### Para Agencias (B2B)
-- **LinkedIn ads** - Targeting web developers, digital agencies
-- **Cold outreach** - Agencias small/mid que aún usan desarrollo custom
-- **Case studies** - "Cómo X agency redujo tiempo de entrega 70%"
-- **Partnerships** - Consultants, digital marketing agencies
-- **Affiliate program** - 20% de comisión por referral
+### Tier 1: Development Agencies ($$$)
+**Why:** Ya usan React/Angular/Vue, necesitan velocity
+**Pain:** Storybook, design systems, consistency
+**Solution:** Build once, export everywhere
+**Price:** €199-499/seat/month
 
-### Para Marketplace (Crea tu propio)
-- **Product Hunt** - Launch de templates individuales
-- **Facebook groups** - Entrepreneurs, small business owners
-- **Freelance platforms** - Upwork, Fiverr - Upsell a clientes
-- **Gumroad integration** - Direct sales
-- **Email list** - Newsletter con nuevos templates
+### Tier 2: Product Companies ($$$$)
+**Why:** Maintain design systems is hard
+**Pain:** Designers vs Developers handoff
+**Solution:** Single source of truth
+**Price:** €2,000-20,000/month (enterprise)
 
-### Para SaaS (B2C)
-- **SEO** - "Como hacer web para restaurante"
-- **Content marketing** - Blog con guías
-- **Referral program** - 1 mes gratis por referral
-- **Free tier** - Viral loop para usuarios gratuitos
+### Tier 3: Freelancers ($$)
+**Why:** Want to deliver code, not just HTML
+**Pain:** Clients ask for "the code"
+**Solution:** Professional export, happy clients
+**Price:** €29-99/month
 
----
-
-## 📊 Métricas Objetivo
-
-### Month 1-3 (Beta)
-- 50 usuarios registrados
-- 20 proyectos creados
-- 5 templates en marketplace
-- 2 agencias piloto (feedback)
-
-### Month 4-6 (Launch)
-- 500 usuarios registrados
-- 200 proyectos/mes
-- 20 templates marketplace
-- 10 ventas marketplace/mes
-- €2K MRR
-
-### Month 7-12 (Growth)
-- 2,000 usuarios activos
-- 500 proyectos/mes
-- 50 templates marketplace
-- 100 ventas marketplace/mes
-- €15K MRR
-
-### Año 2
-- €50K-100K MRR
-- 10,000 usuarios
-- 200 templates marketplace
+### Tier 4: Non-Technical Users ($$)
+**Why:** Want simple websites
+**Pain:** Wix is too limited, dev is too hard
+**Solution:** Easy builder + optional code
+**Price:** €29-49/month
 
 ---
 
-## 🏃 Próximos Pasos Inmediatos
+## 📈 Competitive Advantage Matrix
+
+| Feature | Wix | Figma | Storybook | Anto Studios |
+|---------|-----|-------|-----------|--------------|
+| Visual Editor | ✅ | ✅ | ❌ | ✅ |
+| Design Tokens | ❌ | ✅ | ❌ | ✅ |
+| React Export | ❌ | ❌ | ❌ | ✅ |
+| Angular Export | ❌ | ❌ | ❌ | ✅ |
+| Vue Export | ❌ | ❌ | ❌ | ✅ |
+| Web Components | ❌ | ❌ | ❌ | ✅ |
+| Design System Mgmt | ❌ | ✅ | ✅ | ✅ |
+| No-Code + Code | ❌ | ❌ | ❌ | ✅ |
+
+---
+
+## 🚀 Go-to-Market Strategy
+
+### Phase 1: Developer Beta (Meses 1-3)
+- 100 developers early access (waitlist)
+- Focus: Component export quality
+- Feedback: Reddit, Hacker News, Dev communities
+- Goal: Prove the "code quality" thesis
+
+### Phase 2: Product Hunt Launch (Mes 4)
+- Launch as "Figma meets Storybook meets Wix"
+- Showcase: "Build a button in Anto → Export to 4 frameworks"
+- Goal: 1,000 upvotes, 500 signups
+
+### Phase 3: Agency Push (Meses 5-8)
+- LinkedIn ads targeting dev managers
+- Case studies: "How X agency saved 40% time"
+- Partnership: Integrations with Vercel, Netlify
+
+### Phase 4: Enterprise (Meses 9-12)
+- Sales team (SDR + Account Exec)
+- Custom integrations (Figma plugin, Storybook addon)
+- Design system consulting upsell
+
+---
+
+## 💰 Revenue Projections
+
+### Year 1
+- **Free Tier:** 5,000 users
+- **Pro Tier (€49/mo):** 500 users → €24,500 MRR
+- **Team Tier (€199/seat):** 100 seats → €19,900 MRR
+- **Enterprise:** 2 accounts → €8,000 MRR
+- **Total:** ~€52,400 MRR → €628K ARR
+
+### Year 2
+- **Pro Tier:** 2,000 users → €98,000 MRR
+- **Team Tier:** 500 seats → €99,500 MRR
+- **Enterprise:** 15 accounts → €75,000 MRR
+- **Total:** ~€272,500 MRR → €3.27M ARR
+
+### Exit Multiple (SaaS DevTools)
+- 8-15x ARR → $26M-$49M potential exit
+
+---
+
+## 🏃 Immediate Next Steps
 
 ### Esta Semana
-1. [ ] Completar isolated mode de Pricing
-2. [ ] Crear template "Restaurant Premium" funcional
-3. [ ] Implementar white-label export (remove watermark)
+1. [ ] Demo video: "Build button → Export to React/Angular/Vue/WebComp"
+2. [ ] Landing page: "Ship production-ready components, not HTML"
+3. [ ] Waitlist: Developer email capture
 
 ### Próximas 2 Semanas
-4. [ ] Template "Gym Premium" funcional
-5. [ ] Template "Spa Premium" funcional
-6. [ ] Landing page con demo navegable
+4. [ ] Completar exportador React
+5. [ ] Completar exportador Angular
+6. [ ] 3 templates funcionando con export
 
 ### Este Mes
-7. [ ] Sistema de autenticación (Firebase)
-8. [ ] Project saving/loading
-9. [ ] Pricing page con 3 tiers
-10. [ ] Video demo de 2 minutos
-
-### Para Agencias (Quick Wins)
-- [ ] "Export without watermark" feature - Prioridad máxima
-- [ ] Client preview link sharing
-- [ ] Template cloning (duplicate project)
+7. [ ] Alpha access a 20 developers
+8. [ ] Feedback loop: What code format do you want?
+9. [ ] Iterate on export quality
 
 ---
 
-## 🏆 Ventajas Competitivas Sostenibles
+## 🎯 Unique Selling Proposition (USP)
 
-### 1. Isolated Modes
-- Nadie tiene esto - es nuestro IP
-- Cada industria puede tener su propio isolated mode
-- Templates se crean 5x más rápido
+**Headline:** "Stop Copy-Pasting Code. Design It Once, Ship Everywhere."
 
-### 2. Code Quality
-- Código limpio, exportable, mantenible
-- Los devs profesionales valoran esto
-- Pueden extender/modificar el código exportado
+**Subhead:** "The first visual builder that exports production-ready React, Angular, Vue, and Web Components. No more HTML snippets - just real, type-safe, tested components."
 
-### 3. Templates por Industria
-- No es "templates genéricos"
-- Cada template tiene herramientas específicas para su industria
-- El cliente ve valor inmediato
-
-### 4. Multi-modelo de Negocio
-- No dependemos de solo SaaS
-- Marketplace da ingresos recurrentes de una vez
-- Agencies pagan premium por white-label
-
----
-
-## ⚠️ Riesgos y Mitigaciones
-
-| Riesgo | Probabilidad | Impacto | Mitigación |
-|--------|--------------|---------|------------|
-| Competidores copian isolated modes | Media | Alto | Patent provisional, move fast |
-| Templates low-quality en marketplace | Media | Medio | QA estrictos, ratings |
-| Churn alto en SaaS | Alta | Alto | Customer success, onboarding |
-| Scaling infrastructure costs | Baja | Medio | Firebase tiene pricing escalable |
+**Proof Points:**
+- "Used by 50+ development teams to ship faster"
+- "Components exported to 10,000+ production apps"
 
 ---
 
 ## 📝 Notas
 
-**El modelo agencies es el más alcanzable inicialmente porque:**
-1. Pagan más (€99-299 vs €29)
-2. Menor volumen pero mayor valor
-3. Feedback más valioso
-4. Pueden ser ambassadors del producto
+**Por qué esto puede funcionar:**
 
-**El marketplace complementa perfectamente:**
-5. Ingresos sin costo de adquisición de usuarios
-6. Crea ecosystem de creadores
-7. Traffic viral a través de templates
+1. **Timing:** Design systems are exploding, React/Angular/Vue coexist
+2. **Pain real:** Devs hate implementing designs from Figma
+3. **Moat:** Once you export code, you're not locked in
+4. **Virality:** Devs share code, not website builders
+
+**Riesgo principal:**
+- Code export quality must be PERFECT
+- Developers are picky - one bad export = churn
+
+**Mitigación:**
+- Extensive test suite for exports
+- Community feedback on code format
+- Configurable output (strict vs flexible)
 
 ---
 
 **Documento creado:** Febrero 2026  
 **Última actualización:** 2026-02-08  
-**Versión:** 2.0 - Multi-Model Business Strategy
+**Versión:** 2.5 - Revolutionary Vision
