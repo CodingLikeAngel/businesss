@@ -1069,8 +1069,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         }
     } catch(e) { console.warn('Slot detection failed', e); }
 
-    // Store origin in temp variable to preserve across edit session firmly
-    (this as any).tempEditOrigin = { x: detectedLeft, y: 0 };
+    // Store origin and width in temp variable to preserve across edit session firmly
+    (this as any).tempEditOrigin = { x: detectedLeft, width: detectedWidth };
 
     // Build component-specific content mapping
     let mappedContent: any = { ...slot.content };
@@ -1272,19 +1272,33 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
     const newSlots = [...this.config.slots];
     
-    // Ensure size and position are synced correctly
+    // Ensure size and position are synced correctly with Smart Adapt logic
     const finalStyles = { ...updatedConfig.styles };
-    const originX = (this as any).tempEditOrigin?.x || 380;
+    const origin = (this as any).tempEditOrigin || { x: 380, width: 1000 };
+    const originX = origin.x;
+    const originW = origin.width;
 
+    let newWidthPx = originW; // Default base
     if (updatedConfig.size) {
-        finalStyles['width'] = updatedConfig.size.width + 'px';
+        newWidthPx = updatedConfig.size.width;
+        finalStyles['width'] = newWidthPx + 'px';
         finalStyles['height'] = updatedConfig.size.height + 'px';
+    } else if (finalStyles['width'] && finalStyles['width'].includes('px')) {
+        newWidthPx = parseInt(finalStyles['width']);
     }
-    
-    // Normalize position: Global -> Local
-    if (finalStyles['left']) {
+
+    // Smart Adapt: If width is close to (95%) or larger than original slot width, use 100%
+    // This handles the case where user stretches to full 'red' canvas area -> map to full 'green' slot
+    if (newWidthPx >= originW * 0.95) {
+        finalStyles['width'] = '100%';
+        finalStyles['left'] = '0px'; // Reset position for full width components
+    } else if (finalStyles['left']) {
+        // Normalize position: Global -> Local only if not full width
         const rawLeftGlobal = parseInt(finalStyles['left']);
-        finalStyles['left'] = (rawLeftGlobal - originX) + 'px';
+        let localLeft = rawLeftGlobal - originX;
+        // Snap to edge if very close
+        if (Math.abs(localLeft) < 15) localLeft = 0;
+        finalStyles['left'] = localLeft + 'px';
     }
 
     newSlots[this.editingSlotIndex] = {
