@@ -136,12 +136,12 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
           [class.empty]="slot.componentType === 'empty'"
           [class.selected]="selectedSlotIndex === i"
           [class.resizing]="resizeService.isResizing() && resizeService.activeSlotIndex() === i"
-          [style.width.px]="getSlotWidth(i) || slot.layoutStyles?.width"
-          [style.height.px]="!isFlowComponent(slot) ? (getSlotHeight(i) || slot.layoutStyles?.height) : null"
-          [style.minHeight.px]="isFlowComponent(slot) ? (getSlotHeight(i) || slot.layoutStyles?.height) : null"
-          [style.left.px]="slot.layoutStyles?.left"
-          [style.top.px]="slot.layoutStyles?.top"
-          [style.position]="slot.layoutStyles?.position || (slot.layoutStyles?.left ? 'absolute' : 'relative')"
+          [style.width.px]="getSlotWidth(i) || slot.layoutStyles?.['width']"
+          [style.height.px]="!isFlowComponent(slot) ? (getSlotHeight(i) || slot.layoutStyles?.['height']) : null"
+          [style.minHeight.px]="isFlowComponent(slot) ? (getSlotHeight(i) || slot.layoutStyles?.['height']) : null"
+          [style.left.px]="slot.layoutStyles?.['left']"
+          [style.top.px]="slot.layoutStyles?.['top']"
+          [style.position]="slot.layoutStyles?.['position'] || (slot.layoutStyles?.['left'] ? 'absolute' : 'relative')"
           (click)="selectSlot(i, $event)">
           
           <!-- Empty Slot -->
@@ -1489,6 +1489,17 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       return customSize.width;
     }
     return null; // Use CSS Grid auto
+  }
+
+  /**
+   * Get effective slot height (custom or auto)
+   */
+  getSlotHeight(index: number): number | null {
+    const customSize = this.resizeService.customSizes().get(index);
+    if (customSize && customSize.height > 0) {
+      return customSize.height;
+    }
+    return null;
   }
 
   /**
