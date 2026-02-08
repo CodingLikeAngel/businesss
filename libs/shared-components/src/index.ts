@@ -25,6 +25,14 @@ export * from './lib/shared-components/variant-selector/visual-editor.service';
 export * from './lib/shared-components/variant-selector/variant-registry';
 export * from './lib/shared-components/variant-selector/unified-styling.service';
 
+// Visual Editor System (Directives & Utilities)
+export * from './lib/shared-components/variant-selector/visual-editable.directive';
+export * from './lib/shared-components/variant-selector/enhanced-visual-editable.directive';
+export * from './lib/shared-components/variant-selector/apply-dynamic-styles.directive';
+export * from './lib/shared-components/variant-selector/boundary-constraint.service';
+export * from './lib/shared-components/variant-selector/element-group.service';
+export * from './lib/shared-components/variant-selector/element-group.directive';
+
 // Export System (Multi-framework)
 export * from './lib/services/export/index';
 
