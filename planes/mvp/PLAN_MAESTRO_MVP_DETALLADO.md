@@ -10,107 +10,122 @@ _No se puede vender si el editor "rompe" el diseño. Esta fase es innegociable._
 
 ### 1.1. 🔴 Reparación del Sistema de Exportación (CRÍTICO)
 
-- [ ] **Fix Imports:** Corregir rutas rotas en `libs/shared-components/src/index.ts` (apunta a `./services/export` inexistente).
-- [ ] **Verify Export Service:** Asegurar que `WebComponentExporter` y `HtmlExporter` funcionan y generan código limpio.
-- [ ] **Smoke Test:** Ejecutar `nx build` y verificar que genera el bundle de producción sin errores.
+- [ ] **Fix Imports:** Corregir rutas rotas en `libs/shared-components/src/index.ts`.
+- [ ] **Verify Export Service:** Asegurar generación de código limpio en `WebComponentExporter`.
+- [ ] **Smoke Test:** Ejecutar `nx build` exitoso para producción.
 
 ### 1.2. 🟡 Extensión "Smart-Adapt" (Layout Fluido)
 
-_Aplicar la lógica del Acordeón a TODOS los componentes para evitar cortes._
+_Aplicar lógica de `height: auto` y `min-height` preservado a:_
 
-- [ ] **Template Cleanup:** En `editor-layout-section.component.ts`, recorrer el `ngSwitch` y cambiar `style="height: 100%"` por `style="height: auto; min-height: 100%; display: block;"` para:
-  - `ui-card` (todas las variantes)
-  - `ui-list`
-  - `ui-text / ui-title`
-  - `ui-button`
-  - `ui-chip`
-- [ ] **Logic Update:** En `onIsolatedModeApplied`, generalizar la lógica de guardado:
-  ```typescript
-  if (isFlowComponent(type)) {
-    styles.height = 'auto';
-    styles.minHeight = detectedHeight + 'px';
-  }
-  ```
+- [ ] `ui-card` (todas las variantes: Animated, Glass, Premium).
+- [ ] `ui-list`, `ui-text`, `ui-button`, `ui-chip`.
+- [ ] **Acción:** Template cleanup en `editor-layout-section` y lógica de guardado en `onIsolatedModeApplied`.
 
 ### 1.3. 🟢 Sistema de Redimensión (Resize)
 
-- [ ] **Integración Visual:** Asegurar que los handles de resize (ya añadidos) se ven bien y no tapan contenido.
-- [ ] **Persistencia:** Verificar que al redimensionar un slot, el valor se guarda en el JSON del layout y se restaura al recargar la página.
+- [ ] **Handles:** Verificar integración visual y usabilidad.
+- [ ] **Persistencia:** Guardar y restaurar dimensiones personalizadas en JSON.
 
 ---
 
-## 🧹 FASE 2: LIMPIEZA ARQUITECTÓNICA (Deuda Técnica)
+## 🎨 FASE 2: PULIDO DE COMPONENTES UI (The "Wow" Factor)
+
+_Asegurar que cada pieza del lego sea perfecta, editable y visualmente impactante._
+
+### 2.1. 🧩 Librería Base (`libs/ui-components`)
+
+**Objetivo:** Que los átomos de diseño sean consistentes y bellos.
+
+- [ ] **Button:** Variantes (Glitch, Neon, Glass), estados hover/active, iconos.
+- [ ] **Card:** Soportar contenido dinámico real, bordes animados, efectos glassmorphism.
+- [ ] **Accordion:** Transiciones suaves, iconos personalizables.
+- [ ] **Input/Form:** Estilos unificados con la estética global (dark/cyberpunk).
+- [ ] **Gallery:** Grid masonry real, lightbox funcional.
+- [ ] **Map:** Integración real (o placeholder estético), estilos custom (dark mode map).
+
+### 2.2. 🏢 Componentes de Negocio (`libs/featured-components`)
+
+**Objetivo:** Que los bloques de construcción complejos sean útiles para negocios reales.
+
+- [ ] **Hero Section:** Soportar vídeo de fondo, tipografía masiva, CTAs claros. Isolated Mode debe permitir editar TODO (texto, imagen, vídeo).
+- [ ] **Pricing Table:** Toggle mensual/anual funcional, destacar opción "Recomendada".
+- [ ] **Testimonials:** Carrusel funcional, avatares, estrellas.
+- [ ] **Contact Form:** Validación real, feedback visual de envío.
+- [ ] **Restaurant Menu:** Estructura de items/precios clara, fotos apetecibles.
+- [ ] **Gym Schedule:** Tabla horaria responsive.
+- [ ] **Stats/Steps:** Animaciones de conteo (count-up) y flujo visual.
+
+### 2.3. 🛠️ Estandarización de "Isolated Mode"
+
+**Objetivo:** Que editar un Hero se sienta igual que editar un Footer.
+
+- [ ] **Interfaz Unificada:** Sidebar de edición a la derecha con pestañas (Contenido | Estilo | Avanzado).
+- [ ] **Live Preview:** Que los cambios en el sidebar se reflejen instantáneamente en el canvas aislado.
+- [ ] **Save Logic:** Todos deben emitir el evento `applied` con dimensiones correctas para el Layout Section.
+
+---
+
+## 🧹 FASE 3: LIMPIEZA ARQUITECTÓNICA (Deuda Técnica)
 
 _Eliminar lo viejo para que el mantenimiento sea barato y rápido._
 
-### 2.1. 🗑️ Eliminación de Legacy Wrappers
+### 3.1. 🗑️ Eliminación de Legacy Wrappers
 
 _Ejecutar `PLAN_DELETION_LEGACY_COMPONENTS.md`_
 
-- [ ] **Borrado Seguro:** Eliminar `editor-hero-section.component.ts`, `editor-features-section.component.ts`, etc.
-- [ ] **Redirección de Catálogo:** Asegurar que el catálogo de componentes apunta solo a los UI Components puros (`lib-ui-components-*`) o sus equivalentes en Isolated Mode.
+- [ ] **Borrado Seguro:** Eliminar `editor-hero-section.component.ts`, etc.
+- [ ] **Redirección:** Usar exclusivamente la arquitectura de Layout Flexible.
 
-### 2.2. ⚡ Optimización de Imports
+### 3.2. ⚡ Optimización
 
-- [ ] **Tree Shaking:** Revisar `layout-section.module.ts` (o imports standalone) para quitar referencias a componentes borrados.
-
----
-
-## 📱 FASE 3: EXPERIENCIA MÓVIL Y UX
-
-_El 80% del tráfico de los clientes será móvil. El editor debe garantizar que se vea bien._
-
-### 3.1. 📲 Lógica de Colapso Móvil
-
-- [ ] **Auto-Stacking:** En `editor-layout-section.component.ts`, implementar lógica CSS media query:
-  ```css
-  @media (max-width: 768px) {
-    .grid-container {
-      grid-template-columns: 1fr !important;
-    }
-    .slot {
-      width: 100% !important;
-      min-height: auto;
-    }
-  }
-  ```
-- [ ] **Preview Móvil:** Verificar que el botón de "Vista Móvil" del editor aplica correctamente las clases para simular este comportamiento.
-
-### 3.2. 🎨 UI Polish (Pulido Visual)
-
-- [ ] **Empty States:** Que los slots vacíos tengan un diseño "invitador" (dashed border suave, icono +).
-- [ ] **Hover Effects:** Feedback visual claro al pasar el ratón sobre un slot editable (borde de color de marca).
+- [ ] **Tree Shaking:** Limpiar módulos no usados.
+- [ ] **Lazy Loading:** Cargar componentes de edición pesados solo bajo demanda.
 
 ---
 
-## 💰 FASE 4: PREPARACIÓN DE NEGOCIO (Go-To-Market)
+## 📱 FASE 4: EXPERIENCIA MÓVIL Y UX
+
+_El 80% del tráfico es móvil. El editor debe garantizarlo._
+
+### 4.1. 📲 Lógica Responsive
+
+- [ ] **Auto-Stacking:** Grid a 1 columna en móvil.
+- [ ] **Font Scaling:** Ajuste automático de tamaños de fuente en viewport pequeño.
+- [ ] **Touch Targets:** Botones y enlaces usables con el dedo.
+
+### 4.2. 🎨 UI Polish del Editor
+
+- [ ] **Empty States:** Diseño amigable para slots vacíos.
+- [ ] **Drag & Drop:** Feedback visual claro al arrastrar componentes.
+
+---
+
+## 💰 FASE 5: PREPARACIÓN DE NEGOCIO (Go-To-Market)
 
 _Empaquetar la tecnología como producto vendible._
 
-### 4.1. 📦 Producto "Demo"
+### 5.1. 📦 Producto "Demo"
 
-- [ ] **Landing Page:** Crear una landing page _usando el propio editor_ que explique el producto. "Creado con Anto Studios".
-- [ ] **Plantillas de Nicho:** Dejar listas 3 plantillas "Perfectas":
-  1.  **Gym/Crossfit:** Oscura, Neon, fuerte en video/imagen.
-  2.  **Restaurante:** Elegante, serif fonts, menú accordion.
-  3.  **Portfolio/Agencia:** Minimal, grid asimétrico.
+- [ ] **Landing Page:** Creada con Anto Studios.
+- [ ] **Plantillas Nicho:** Gym (Dark/Neon), Restaurant (Elegant), Portfolio (Minimal).
 
-### 4.2. 💵 Modelo de Exportación/Venta
+### 5.2. 💵 Modelo de Exportación
 
-- [ ] **Botón "Premium Export":** Implementar un flujo donde "Exportar" sea una acción que simule pago (o valide licencia).
-- [ ] **Generador de ZIP:** Que el export genere un ZIP con: `index.html`, `styles.css`, `assets/`. Código limpio, sin basura de Angular/Editor.
+- [ ] **Botón Premium:** Flujo de pago/validación.
+- [ ] **ZIP Generator:** HTML/CSS/Assets limpios.
 
 ---
 
 ## 📅 Calendario de Ejecución Sugerido
 
-| Semana | Foco           | Tarea Principal                              |
-| :----- | :------------- | :------------------------------------------- |
-| **S1** | **Core Fixes** | Fix Export + Smart-Adapt (Fase 1)            |
-| **S2** | **Cleanup**    | Borrar Legacy + Resize Polish (Fase 2 + 1.3) |
-| **S3** | **Móvil/UX**   | Responsive Logic + UI Polish (Fase 3)        |
-| **S4** | **Launch**     | Crear Plantillas Demo + Landing (Fase 4)     |
+| Semana | Foco               | Tarea Principal                                |
+| :----- | :----------------- | :--------------------------------------------- |
+| **S1** | **Core Fixes**     | Fix Export + Smart-Adapt (Fase 1)              |
+| **S2** | **UI Polish**      | Pulido UI Components + Isolated Modes (Fase 2) |
+| **S3** | **Cleanup/Mobile** | Borrar Legacy + Responsive Logic (Fase 3+4)    |
+| **S4** | **Launch**         | Plantillas Demo + Landing (Fase 5)             |
 
 ---
 
-**Siguiente Paso Recomendado:** Empezar inmediatamente con **Fase 1.1 (Fix Export)** y **1.2 (Smart-Adapt)**. Son bloqueantes.
+**Siguiente Paso Inmediato:** Volver a Fase 1.1 y 1.2 para tener la base sólida antes de pulir la estética.
