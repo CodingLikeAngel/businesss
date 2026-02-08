@@ -143,11 +143,22 @@ export class SlotResizeService {
     newHeight = this.clampHeight(newHeight);
 
     // --- Lógica de Colisión / Evitar Colapso ---
+    let finalLeft = Math.max(0, this.startPosition.left + deltaLeft);
+    let finalTop = Math.max(0, this.startPosition.top + deltaTop);
+
+    // Ajustar tamaño si chocamos con el borde superior/izquierdo (clamping)
+    if (this.startPosition.left + deltaLeft < 0) {
+        newWidth += (this.startPosition.left + deltaLeft); // Reducir crecimiento si bloqueamos movimiento
+    }
+    if (this.startPosition.top + deltaTop < 0) {
+        newHeight += (this.startPosition.top + deltaTop);
+    }
+
     const collidingSlotIndex = this.checkCollisions(index, {
       width: newWidth,
       height: newHeight,
-      left: this.startPosition.left + deltaLeft,
-      top: this.startPosition.top + deltaTop
+      left: finalLeft,
+      top: finalTop
     });
 
     if (collidingSlotIndex !== -1) {
@@ -168,8 +179,8 @@ export class SlotResizeService {
     sizes.set(index, { 
       width: newWidth, 
       height: newHeight, 
-      left: this.startPosition.left + deltaLeft,
-      top: this.startPosition.top + deltaTop
+      left: finalLeft,
+      top: finalTop
     });
     this.customSizes.set(new Map(sizes));
   }
@@ -257,7 +268,9 @@ export class SlotResizeService {
     config: LayoutSectionConfig,
     index: number,
     newWidth: number,
-    newHeight?: number
+    newHeight?: number,
+    left?: number,
+    top?: number
   ): LayoutSectionConfig {
     const slots = [...config.slots];
     const slot = { ...slots[index] };
@@ -266,10 +279,10 @@ export class SlotResizeService {
     slot.layoutStyles = {
       ...slot.layoutStyles,
       width: newWidth,
-      ...(newHeight ? { height: newHeight } : {}),
-      ...(config.slots[index].layoutStyles?.['left'] !== undefined || newWidth !== this.startSize.width ? { 
-          left: (slot.layoutStyles?.['left'] || 0) + (newWidth - this.startSize.width) 
-      } : {})
+      ...(newHeight !== undefined ? { height: newHeight } : {}),
+      ...(left !== undefined ? { left } : {}),
+      ...(top !== undefined ? { top } : {}),
+      position: (left !== undefined || top !== undefined) ? 'absolute' : (slot.layoutStyles?.['position'] || 'relative')
     };
 
     // Si el service tiene posición calculada, usarla

@@ -541,6 +541,8 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
     .grid-container {
       display: grid;
       padding: 1rem;
+      position: relative; /* CRITICAL: Keep absolute slots inside */
+      min-height: inherit;
     }
 
     /* Slots */
@@ -1536,15 +1538,23 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
    * Handle slot resize event
    */
   onSlotResized(index: number, event: ResizeEvent): void {
-    const newWidth = event.width;
-    const newHeight = event.height;
-    
-    // Apply resize to slot
-    this.config = this.resizeService.resizeSlot(this.config, index, newWidth, newHeight);
+    const custom = this.resizeService.customSizes().get(index);
+    if (!custom) return;
+
+    // Apply exact dimensions and position from the service state
+    this.config = this.resizeService.resizeSlot(
+      this.config, 
+      index, 
+      custom.width, 
+      custom.height, 
+      custom.left, 
+      custom.top
+    );
     
     // Optionally auto-distribute remaining space
     if (this.resizeService.resizeMode === 'auto-distribute') {
-      this.config = this.resizeService.calculateAutoDistribution(this.config, index, newWidth);
+      // newWidth is not available here, assuming custom.width is the intended value
+      this.config = this.resizeService.calculateAutoDistribution(this.config, index, custom.width);
     }
     
     this.persistConfig();

@@ -94,11 +94,11 @@ export class ResizeHandleDirective {
     this.startWidth = rect.width;
     this.startHeight = rect.height;
 
-    // Iniciar servicio con el tamaño actual capturado por rect
-    this.resizeService.startResize(this.slotIndex, this.anchor, { 
-      width: rect.width, 
-      height: rect.height 
-    });
+    // Iniciar servicio con el tamaño y posicion local
+    this.resizeService.startResize(this.slotIndex, this.anchor, 
+      { width: rect.width, height: rect.height },
+      { left: parent.offsetLeft, top: parent.offsetTop }
+    );
 
     // Emitir evento de inicio
     this.resizeStart.emit();
