@@ -942,6 +942,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   editingSlotIndex = -1;
   editingSlot: SlotConfig | null = null;
   selectedCategory: string = 'all';
+  private editingOriginMetrics: SlotMetrics | null = null;
 
   availableLayouts = LAYOUT_DEFINITIONS;
   componentCatalog = COMPONENT_CATALOG;
@@ -1332,6 +1333,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
     // Build component-specific content mapping
     const mappedContent = this.buildIsolatedContent(slot, metrics);
+    this.editingOriginMetrics = metrics;
 
     this.isolatedConfig = {
       sectionId: this.section.id,
@@ -1626,14 +1628,34 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         if (finalX + widthVal > canvasW) finalX = Math.max(0, canvasW - widthVal);
         if (finalY + heightVal > canvasH) finalY = Math.max(0, canvasH - heightVal);
 
-        layoutStyles['left'] = finalX + 'px';
-        layoutStyles['top'] = finalY + 'px';
-        layoutStyles['position'] = 'absolute';
-        
-        // Remove from appearance styles
-        delete finalAppearanceStyles['left'];
-        delete finalAppearanceStyles['top'];
-        delete finalAppearanceStyles['position'];
+        // Position logic refinement:
+        // Only force absolute positioning if it was already absolute 
+        // OR if the position has meaningfully changed (user dragged it)
+        const wasAbsolute = slot.layoutStyles?.['position'] === 'absolute' || 
+                           !!slot.layoutStyles?.['left'] || 
+                           !!slot.layoutStyles?.['top'];
+                           
+        const hasMoved = this.editingOriginMetrics && (
+          Math.abs(finalX - this.editingOriginMetrics.localX) > 5 ||
+          Math.abs(finalY - this.editingOriginMetrics.localY) > 5
+        );
+
+        if (wasAbsolute || hasMoved) {
+          layoutStyles['left'] = finalX + 'px';
+          layoutStyles['top'] = finalY + 'px';
+          layoutStyles['position'] = 'absolute';
+          
+          // Remove from appearance styles
+          delete finalAppearanceStyles['left'];
+          delete finalAppearanceStyles['top'];
+          delete finalAppearanceStyles['position'];
+        } else {
+          // If not moved and wasn't absolute, ensure we don't have orphan coordinates
+          delete layoutStyles['left'];
+          delete layoutStyles['top'];
+          // Keep it flow-relative
+          if (layoutStyles['position'] === 'absolute') delete layoutStyles['position'];
+        }
     }
 
     newSlots[this.editingSlotIndex] = {
