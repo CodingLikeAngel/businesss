@@ -1059,6 +1059,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     // Detect visual width and position of the slot
     let detectedWidth = 400; 
     let detectedLeft = 380;
+    let detectedTop = 100;
     try {
         const target = event.target as HTMLElement;
         const slotEl = target.closest('.layout-slot') || target.closest('.slot-wrapper') || target.parentElement;
@@ -1066,11 +1067,12 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
              const rect = slotEl.getBoundingClientRect();
              detectedWidth = Math.round(rect.width);
              detectedLeft = Math.round(rect.left);
+             detectedTop = Math.round(rect.top);
         }
     } catch(e) { console.warn('Slot detection failed', e); }
 
     // Store origin and width in temp variable to preserve across edit session firmly
-    (this as any).tempEditOrigin = { x: detectedLeft, width: detectedWidth };
+    (this as any).tempEditOrigin = { x: detectedLeft, y: detectedTop, width: detectedWidth };
 
     // Build component-specific content mapping
     let mappedContent: any = { ...slot.content };
@@ -1179,8 +1181,21 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         }
     }
     
+    const sidebarWidth = 380;
+    const headerHeight = 70;
     const currentLeft = parseInt(slot.styles?.['left']) || 0;
     const currentTop = parseInt(slot.styles?.['top']) || 0;
+    
+    // Fix: Handle % widths by defaulting to detected visual width (avoids 100px bug)
+    const currentStyleW = slot.styles?.['width'];
+    const currentStyleH = slot.styles?.['height'];
+    const safeWidth = (currentStyleW && currentStyleW.includes('px')) ? parseInt(currentStyleW) : defaultSize.width;
+    const safeHeight = (currentStyleH && currentStyleH.includes('px')) ? parseInt(currentStyleH) : defaultSize.height;
+
+    // Calculate Canvas Coordinates: Screen Pos - UI Offsets
+    // Use Math.max(0) to ensure it doesn't default to hidden behind menu/header if slot is scrolled 
+    const canvasX = Math.max(0, (detectedLeft - sidebarWidth) + currentLeft);
+    const canvasY = Math.max(0, (detectedTop - headerHeight) + currentTop);
 
     this.isolatedConfig = {
       sectionId: this.section.id,
@@ -1190,10 +1205,10 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       globalVariant: this.globalVariant,
       content: mappedContent,
       styles: { ...slot.styles },
-      position: { x: detectedLeft + currentLeft, y: currentTop },
+      position: { x: canvasX, y: canvasY },
       size: { 
-        width: parseInt(slot.styles?.['width']) || defaultSize.width, 
-        height: parseInt(slot.styles?.['height']) || defaultSize.height 
+        width: safeWidth, 
+        height: safeHeight 
       }
     };
     
@@ -1272,32 +1287,26 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
     const newSlots = [...this.config.slots];
     
-    // Ensure size and position are synced correctly with Smart Adapt logic
+    // Sync Size & Position - Strict WYSIWYG
     const finalStyles = { ...updatedConfig.styles };
-    const origin = (this as any).tempEditOrigin || { x: 380, width: 1000 };
+    const origin = (this as any).tempEditOrigin || { x: 380 };
     const originX = origin.x;
-    const originW = origin.width;
 
-    let newWidthPx = originW; // Default base
     if (updatedConfig.size) {
-        newWidthPx = updatedConfig.size.width;
-        finalStyles['width'] = newWidthPx + 'px';
+        finalStyles['width'] = updatedConfig.size.width + 'px';
         finalStyles['height'] = updatedConfig.size.height + 'px';
-    } else if (finalStyles['width'] && finalStyles['width'].includes('px')) {
-        newWidthPx = parseInt(finalStyles['width']);
     }
+    
+    // Normalize position: Canvas Coordinates -> Local Slot Coordinates
+    if (finalStyles['left']) {
+        const sidebarWidth = 380;
+        const rawLeftCanvas = parseInt(finalStyles['left']);
+        
+        const screenX = rawLeftCanvas + sidebarWidth;
+        let localLeft = screenX - originX;
 
-    // Smart Adapt: If width is close to (95%) or larger than original slot width, use 100%
-    // This handles the case where user stretches to full 'red' canvas area -> map to full 'green' slot
-    if (newWidthPx >= originW * 0.95) {
-        finalStyles['width'] = '100%';
-        finalStyles['left'] = '0px'; // Reset position for full width components
-    } else if (finalStyles['left']) {
-        // Normalize position: Global -> Local only if not full width
-        const rawLeftGlobal = parseInt(finalStyles['left']);
-        let localLeft = rawLeftGlobal - originX;
-        // Snap to edge if very close
-        if (Math.abs(localLeft) < 15) localLeft = 0;
+        // Snap to zero if very close
+        if (Math.abs(localLeft) < 10) localLeft = 0;
         finalStyles['left'] = localLeft + 'px';
     }
 
