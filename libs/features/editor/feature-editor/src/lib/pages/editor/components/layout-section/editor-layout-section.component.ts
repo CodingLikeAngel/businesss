@@ -161,6 +161,7 @@ import {
                 <!-- UI BUTTON -->
                 <lib-ui-components-button
                   *ngSwitchCase="'ui-button'"
+                  style="width: 100%; display: block;"
                   [variant]="$any(slot.componentVariant || globalVariant || 'primary')"
                   [customStyles]="getComponentStyles(slot)">
                   {{ slot.content?.['text'] || 'Botón' }}
@@ -207,6 +208,7 @@ import {
                 <!-- UI ACCORDION -->
                 <lib-ui-components-accordion
                   *ngSwitchCase="'ui-accordion'"
+                  style="width: 100%; display: block;"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
                   [items]="slot.content?.['items'] || [{title:'Item 1', content:'Contenido 1'}]"
                   [customStyles]="getComponentStyles(slot)">
