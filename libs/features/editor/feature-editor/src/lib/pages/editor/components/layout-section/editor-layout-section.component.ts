@@ -1176,6 +1176,10 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         }
     }
     
+    const sidebarOffset = 380;
+    const currentLeft = parseInt(slot.styles?.['left']) || 0;
+    const currentTop = parseInt(slot.styles?.['top']) || 0;
+
     this.isolatedConfig = {
       sectionId: this.section.id,
       elementId: slot.id,
@@ -1184,7 +1188,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       globalVariant: this.globalVariant,
       content: mappedContent,
       styles: { ...slot.styles },
-      position: { x: 0, y: 0 },
+      position: { x: currentLeft + sidebarOffset, y: currentTop },
       size: { 
         width: parseInt(slot.styles?.['width']) || defaultSize.width, 
         height: parseInt(slot.styles?.['height']) || defaultSize.height 
@@ -1266,11 +1270,19 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
     const newSlots = [...this.config.slots];
     
-    // Ensure size is synced to styles so it persists in layout
+    // Ensure size and position are synced correctly
     const finalStyles = { ...updatedConfig.styles };
+    const sidebarOffset = 380;
+
     if (updatedConfig.size) {
         finalStyles['width'] = updatedConfig.size.width + 'px';
         finalStyles['height'] = updatedConfig.size.height + 'px';
+    }
+    
+    // Normalize position by removing sidebar offset
+    if (finalStyles['left']) {
+        const rawLeft = parseInt(finalStyles['left']);
+        finalStyles['left'] = (rawLeft - sidebarOffset) + 'px';
     }
 
     newSlots[this.editingSlotIndex] = {
