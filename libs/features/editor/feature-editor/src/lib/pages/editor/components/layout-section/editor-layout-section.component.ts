@@ -136,6 +136,7 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
           [class.empty]="slot.componentType === 'empty'"
           [class.selected]="selectedSlotIndex === i"
           [class.resizing]="resizeService.isResizing() && resizeService.activeSlotIndex() === i"
+          [class.flow-component]="isFlowComponent(slot)"
           [style.width.px]="getSlotWidth(i) || slot.layoutStyles?.['width']"
           [style.height.px]="!isFlowComponent(slot) ? (getSlotHeight(i) || slot.layoutStyles?.['height']) : null"
           [style.minHeight.px]="isFlowComponent(slot) ? (getSlotHeight(i) || slot.layoutStyles?.['height']) : null"
@@ -846,6 +847,26 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
       border: 1px solid #6366f1;
       background: rgba(99, 102, 241, 0.05);
       box-shadow: inset 0 0 10px rgba(99, 102, 241, 0.1);
+    }
+
+    /* Containment & Overflow Protection */
+    .slot {
+      overflow: hidden; /* Prevent children from breaking the grid */
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Force children to respect parent boundaries */
+    .slot > * {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 100%;
+      max-height: 100%;
+    }
+
+    /* Flow components should allow vertical overflow if auto-height is active */
+    .slot.flow-component {
+      overflow: visible;
     }
   `]
 })
