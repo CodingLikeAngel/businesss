@@ -1156,6 +1156,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   onIsolatedModeApplied(updatedConfig: IsolatedModeConfig) {
     if (this.editingSlotIndex < 0) return;
 
+    console.log('Isolated Mode Applied:', updatedConfig);
+
     const slot = this.config.slots[this.editingSlotIndex];
     let mappedContent: any = { ...updatedConfig.content };
     let newVariant: string | undefined = undefined;
@@ -1207,7 +1209,16 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     // Use extracted variant, or fallback to config.variant, or keep existing
     const finalVariant = newVariant || updatedConfig.variant || slot.componentVariant;
 
+    console.log('Variant Update Debug:', {
+        type: slot.componentType,
+        extractedNewVariant: newVariant,
+        configVariant: updatedConfig.variant,
+        originalVariant: slot.componentVariant,
+        SELECTED_FINAL: finalVariant
+    });
+
     const newSlots = [...this.config.slots];
+
     newSlots[this.editingSlotIndex] = {
       ...newSlots[this.editingSlotIndex],
       componentVariant: finalVariant,
