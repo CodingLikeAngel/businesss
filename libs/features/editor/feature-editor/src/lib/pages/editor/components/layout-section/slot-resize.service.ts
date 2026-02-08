@@ -14,6 +14,9 @@ export class SlotResizeService {
   // Slot activo siendo redimensionado
   readonly activeSlotIndex = signal<number | null>(null);
   
+  // Tamaño inicial capturado al empezar el resize
+  private startSize = { width: 0, height: 0 };
+  
   // Si está en proceso de resize
   readonly isResizing = signal(false);
   
@@ -47,30 +50,36 @@ export class SlotResizeService {
   /**
    * Iniciar el proceso de resize
    */
-  startResize(index: number, direction: ResizeDirection = 'horizontal'): void {
+  startResize(index: number, direction: ResizeDirection = 'horizontal', currentSize?: { width: number, height: number }): void {
     this.activeSlotIndex.set(index);
     this.resizeDirection.set(direction);
     this.isResizing.set(true);
+
+    // Capturar tamaño inicial para el cálculo de deltas
+    if (currentSize) {
+      this.startSize = { ...currentSize };
+    } else {
+      const existing = this.customSizes().get(index);
+      this.startSize = existing ? { ...existing } : { width: 400, height: 300 };
+    }
     
-    // Inicializar tamaño si no existe
+    // Inicializar tamaño en los signals si no existe
     const sizes = this.customSizes();
     if (!sizes.has(index)) {
-      sizes.set(index, { width: 0, height: 0 });
+      sizes.set(index, { ...this.startSize });
       this.customSizes.set(new Map(sizes));
     }
   }
 
-  /**
-   * Durante el movimiento del mouse
-   */
   onResizeMove(index: number, delta: { dx: number; dy: number }): void {
     if (this.activeSlotIndex() !== index) return;
 
-    const currentSize = this.customSizes().get(index) || { width: 0, height: 0 };
-    let newWidth = currentSize.width;
-    let newHeight = currentSize.height;
+    // EL ERROR ESTABA AQUÍ: No hay que sumar delta al tamaño corriente (acumulativo),
+    // sino sumarlo al tamaño INICIAL para evitar crecimiento triangular/exponencial.
+    let newWidth = this.startSize.width;
+    let newHeight = this.startSize.height;
 
-    // Aplicar delta según dirección
+    // Aplicar delta total acumulado desde el inicio del drag
     if (this.resizeDirection() === 'horizontal' || this.resizeDirection() === 'both') {
       newWidth += delta.dx;
     }
