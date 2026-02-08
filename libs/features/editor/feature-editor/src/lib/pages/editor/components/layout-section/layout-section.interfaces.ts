@@ -42,6 +42,7 @@ export interface SlotConfig {
   content?: Record<string, any>;
   styles?: Record<string, any>;
   customStyles?: Record<string, any>;
+  layoutStyles?: Record<string, any>;
 }
 
 // Layout section configuration

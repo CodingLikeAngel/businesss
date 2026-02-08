@@ -156,15 +156,18 @@ export class SlotResizeService {
     const slots = [...config.slots];
     const slot = { ...slots[index] };
 
-    // Actualizar estilos del slot
-    slot.styles = {
-      ...slot.styles,
-      width: `${newWidth}px`,
-      ...(newHeight ? { height: `${newHeight}px` } : {})
+    // Actualizar estilos de layout del slot (contenedor padre)
+    slot.layoutStyles = {
+      ...slot.layoutStyles,
+      width: newWidth,
+      ...(newHeight ? { height: newHeight } : {})
     };
 
-    // Marcar como no-auto para CSS Grid
-    slot.styles['--custom-width'] = `${newWidth}px`;
+    // Mantener compatibilidad con estilos directos si el componente los usa
+    slot.styles = {
+      ...slot.styles,
+      '--custom-width': `${newWidth}px`
+    };
 
     slots[index] = slot;
 
@@ -206,12 +209,15 @@ export class SlotResizeService {
       return config;
     }
 
-    // Aplicar nuevo ancho al vecino
+    // Aplicar nuevo ancho al vecino en layoutStyles
     slots[neighborIndex] = {
       ...slots[neighborIndex],
+      layoutStyles: {
+        ...slots[neighborIndex].layoutStyles,
+        width: newNeighborWidth
+      },
       styles: {
         ...slots[neighborIndex].styles,
-        width: `${newNeighborWidth}px`,
         '--custom-width': `${newNeighborWidth}px`
       }
     };

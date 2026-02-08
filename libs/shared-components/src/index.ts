@@ -25,4 +25,7 @@ export * from './lib/shared-components/variant-selector/visual-editor.service';
 export * from './lib/shared-components/variant-selector/variant-registry';
 export * from './lib/shared-components/variant-selector/unified-styling.service';
 
+// Export System (Multi-framework)
+export * from './lib/services/export/index';
+
 // Component Export System

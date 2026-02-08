@@ -136,7 +136,12 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
           [class.empty]="slot.componentType === 'empty'"
           [class.selected]="selectedSlotIndex === i"
           [class.resizing]="resizeService.isResizing() && resizeService.activeSlotIndex() === i"
-          [style.width.px]="getSlotWidth(i)"
+          [style.width.px]="getSlotWidth(i) || slot.layoutStyles?.width"
+          [style.height.px]="!isFlowComponent(slot) ? (getSlotHeight(i) || slot.layoutStyles?.height) : null"
+          [style.minHeight.px]="isFlowComponent(slot) ? (getSlotHeight(i) || slot.layoutStyles?.height) : null"
+          [style.left.px]="slot.layoutStyles?.left"
+          [style.top.px]="slot.layoutStyles?.top"
+          [style.position]="slot.layoutStyles?.position || (slot.layoutStyles?.left ? 'absolute' : 'relative')"
           (click)="selectSlot(i, $event)">
           
           <!-- Empty Slot -->
@@ -821,6 +826,17 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
     .slot.resizing {
       border: 2px dashed #6366f1 !important;
       z-index: 10;
+    }
+
+    .layout-section.editing .slot:hover {
+      border: 1px dashed rgba(99, 102, 241, 0.5);
+      background: rgba(99, 102, 241, 0.02);
+    }
+
+    .layout-section.editing .slot.selected {
+      border: 1px solid #6366f1;
+      background: rgba(99, 102, 241, 0.05);
+      box-shadow: inset 0 0 10px rgba(99, 102, 241, 0.1);
     }
   `]
 })
