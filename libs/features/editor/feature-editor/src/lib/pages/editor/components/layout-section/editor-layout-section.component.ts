@@ -205,12 +205,15 @@ import {
                 </lib-ui-components-card-animated>
 
                 <!-- UI ACCORDION -->
-                <lib-ui-components-accordion
-                  *ngSwitchCase="'ui-accordion'"
-                  [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [items]="slot.content?.['items'] || [{title:'Item 1', content:'Contenido 1'}]"
-                  [customStyles]="getComponentStyles(slot)">
-                </lib-ui-components-accordion>
+                <div 
+                  *ngSwitchCase="'ui-accordion'" 
+                  [ngStyle]="getComponentStyles(slot)">
+                  <lib-ui-components-accordion
+                    style="width: 100%; height: 100%; display: block;"
+                    [variant]="$any(slot.componentVariant || globalVariant || 'default')"
+                    [items]="slot.content?.['items'] || [{title:'Item 1', content:'Contenido 1'}]">
+                  </lib-ui-components-accordion>
+                </div>
 
                 <!-- UI LIST -->
                 <lib-ui-list
@@ -1026,15 +1029,19 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       return styles;
     }
 
-    // For flow components, remove absolute positioning but RESPECT dimensions
-    // from isolated mode resize.
-    delete styles['position'];
-    delete styles['left'];
-    delete styles['top'];
-    delete styles['transform'];
+    // For flow components, we want to respect the visual positioning defined in isolated mode.
+    // By using 'relative' positioning, 'left' and 'top' values act as offsets from the 
+    // component's natural flow position (top-left of the slot).
+    if (styles['left'] || styles['top'] || styles['transform']) {
+         styles['position'] = 'relative';
+    } else {
+         // Only remove explicit absolute if no coordinates are set, to fallback to flow
+         if (styles['position'] === 'absolute') delete styles['position'];
+    }
+    
+    // We keep 'width', 'height', 'left', 'top', 'transform' to respect user config.
     
     // Ensure display block so dimensions apply naturally
-    // If user set a specific width in isolated mode, it will be in 'styles.width'
     return {
       display: 'block', 
       ...styles
