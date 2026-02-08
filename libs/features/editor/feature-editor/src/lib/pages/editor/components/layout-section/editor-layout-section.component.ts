@@ -45,8 +45,8 @@ import {
   ComponentCatalogItem
 } from './layout-section.interfaces';
 
-import { SlotResizeService, ResizeEvent } from './slot-resize.service';
-import { ResizeHandleDirective } from './resize-handle.directive';
+import { SlotResizeService } from './slot-resize.service';
+import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
 
 @Component({
   selector: 'lib-editor-layout-section',
