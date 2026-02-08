@@ -1,123 +1,161 @@
-# 🏢 ANTO STUDIOS - Plan MVP y Estrategia de Negocio Revolutionaria
+# 🏢 ANTO STUDIOS - Plan de Negocio y Estrategia Revolutionary
 
-## 📋 Resumen Ejecutivo
+## 🎯 Visión del Producto
 
-**Visión:** Crear el primer Design System Builder que no solo diseña webs, sino que **exporta componentes nativos reales** para cualquier framework (React, Angular, Vue, Vanilla JS).
+**"Diseña una vez, usa en todas partes"**
 
-> "Diseña una vez, usa en todas partes - como componentes reales, no como HTML pegado"
-
-### La Gran Idea:
-**Superar a Wix + Figma + Storybook en uno solo**
-
-| Wix | Figma | Anto Studios |
-|-----|-------|-------------|
-| Diseño visual | Design tokens | Diseño visual + Tokens + Código real |
-| Solo HTML/CSS | Solo specs | Componentes exportables |
-| No hay código | No hay código | **Código nativo generado** |
-| Lock-in total | Lock-in parcial | **Portabilidad total** |
+El primer builder visual que **no solo diseña webs**, sino que **exporta componentes nativos reales** para cualquier framework.
 
 ---
 
-## 🎯 El Diferenciador Único: Component-as-Code Export
+## 🆚 Comparativa Competitiva
 
-### ¿Qué significa esto?
-
-Diseñas un componente en el editor → Exportas como:
-- **React Component** (.tsx, styled-components)
-- **Angular Component** (.ts, .scss)
-- **Vue 3 Component** (.vue, Composition API)
-- **Vanilla JS** (Web Components)
-
-### Casos de Uso:
-
-```
-1. Developer Agency
-   └── Diseña en Anto → Exporta React components
-   └── Integra en Next.js/Vue/Angular app del cliente
-   └── Cliente puede mantener/modificar
-
-2. Design System Team
-   └── Diseña componentes en Anto
-   └── Exporta a tu design system
-   └── Documentación automática
-
-3. SaaS Company
-   └── Crea componentes reuseables
-   └── Distribuye como npm packages
-   └── Consistencia total
-
-4. Freelancer
-   └── Entrega código, no solo HTML
-   └── Cliente valora el código limpio
-   └── pueden contratarte para extenderse
-```
+| Feature | Wix | Figma | Storybook | **Anto Studios** |
+|---------|-----|-------|-----------|------------------|
+| Editor Visual | ✅ | ✅ | ❌ | ✅ |
+| Design Tokens | ❌ | ✅ | ❌ | ✅ |
+| Export React | ❌ | ❌ | ❌ | ✅ |
+| Export Angular | ❌ | ❌ | ❌ | ✅ |
+| Export Vue | ❌ | ❌ | ❌ | ✅ |
+| Export Web Components | ❌ | ❌ | ❌ | ✅ |
+| No-Code + Code | ❌ | ❌ | ❌ | ✅ |
 
 ---
 
-## 💰 Modelos de Negocio (4 streams)
+## 💰 Modelos de Ingreso (4 Streams)
 
-### 1. SaaS Web Builder (B2C/B2B)
-**Target:** Pequeños negocios, no-devs
-**Precio:** €29-99/mes
+### 1. SaaS Web Builder (B2C)
+**Target:** Pequeños negocios, emprendedores
+**Precio:** €29-49/mes
 **Propuesta:** "Tu web profesional en 30 minutos"
+**Features:**
+- Templates por industria
+- Editor visual drag-and-drop
+- Hosting incluido
+- SEO básico
 
-### 2. Component Builder Pro (B2B Developer Tools)
-**Target:** Agencies, Tech companies, Dev shops
-**Precio:** €199-499/mes por seat
+### 2. Component Builder Pro (B2B Dev Tools)
+**Target:** Agencies, product companies, dev shops
+**Precio:** €99-299/mes por seat
 **Propuesta:** "Construye tu design system sin escribir boilerplate"
+**Features:**
+- ✅ Export sin watermark
+- ✅ React / Angular / Vue / Web Components
+- ✅ API access
+- ✅ Client preview links
+- ✅ Template cloning
+- ✅ Custom CSS/JS injection
+- ✅ Multi-user collaboration
+- ✅ Storybook integration
 
 ### 3. Template Marketplace (B2C + B2B)
-**Target:** Everyone
-**Precio:** €49-299 por template
-**Propuesta:** "Templates premium exportables"
+**Target:** Freelancers, devs, pequeñas empresas
+**Revenue Share:** 70% creador, 30% Anto Studios
+**Precios:**
+- Basic: €49
+- Industry: €99-149
+- Full Business: €199
 
-### 4. Enterprise License (B2B Enterprise)
+### 4. Enterprise License
 **Target:** Grandes empresas
 **Precio:** €5,000-50,000/año
-**Propuesta:** "Design system centralizado para tu org"
+**Propuesta:** "Design system centralizado para tu organización"
+**Features:**
+- Instancia dedicada
+- SSO / SAML
+- Custom integrations
+- Priority support
+- Training incluido
 
 ---
 
-## 🛠️ Feature Roadmap: Component Export
+## 🎯 Mercados Prioritarios
 
-### v1.0 (Core)
-- [ ] Export to React (functional components, hooks)
-- [ ] Export to Angular (standalone components)
-- [ ] Export to Vue 3 (Composition API)
-- [ ] Export to Vanilla JS (Web Components)
-- [ ] Prop types/schema definition
-- [ ] Style extraction (CSS variables)
+### Tier 1: Development Agencies ⭐
+**Por qué:** Ya usan React/Angular/Vue, necesitan velocity
+**Problema:** Storybook, design systems, consistencia
+**Solución:** Build once, export everywhere
+**Precio:** €199-499/seat/mes
 
-### v1.5 (Advanced)
-- [ ] State management integration
-- [ ] Form handling (React Hook Form, Angular Reactive Forms)
-- [ ] Animation libraries (Framer Motion, Angular Animations, Vue Transitions)
-- [ ] Accessibility export (ARIA attributes, a11y checks)
+### Tier 2: Product Companies
+**Por qué:** Mantener design systems es difícil
+**Problema:** Designers vs Developers handoff
+**Solución:** Single source of truth
+**Precio:** €2,000-20,000/mes
 
-### v2.0 (Pro)
-- [ ] Custom code injection slots
-- [ ] Multi-variant export (one component, multiple looks)
-- [ ] Design tokens export (JSON, CSS, SCSS, JS)
-- [ ] Storybook integration (.stories.tsx generation)
-- [ ] Testing utilities export (.test.tsx)
+### Tier 3: Freelancers
+**Por qué:** Quieren entregar código, no solo HTML
+**Problema:** Clientes piden "el código"
+**Solución:** Export profesional
+**Precio:** €29-99/mes
+
+### Tier 4: Non-Technical Users
+**Por qué:** Wix es muy limitado, dev es muy difícil
+**Solución:** Easy builder + opcional código
+**Precio:** €29-49/mes
 
 ---
 
-## 📦 Component Export Examples
+## 🚀 Ventaja Competitiva Única: Component-as-Code
 
-### Input (Diseño en Editor)
+### ¿Qué significa?
+
+Diseñas en el editor → Exportas como:
+- **React** (.tsx, functional components + hooks)
+- **Angular** (.ts, standalone components)
+- **Vue 3** (.vue, Composition API)
+- **Vanilla JS** (Web Components)
+- **Design Tokens** (JSON, CSS, SCSS)
+
+### Casos de Uso Reales
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│ 1. AGENCY → Next.js App                                     │
+│    Diseña en Anto → Exporta React                           │
+│    Integra en proyecto del cliente                          │
+│    Cliente puede mantener                                   │
+├─────────────────────────────────────────────────────────────┤
+│ 2. DESIGN SYSTEM TEAM → NPM Package                        │
+│    Diseña componentes                                       │
+│    Exporta como library                                     │
+│    Distribuye internamente                                  │
+├─────────────────────────────────────────────────────────────┤
+│ 3. SAAS COMPANY → Multi-product                            │
+│    Crea componentes reuseables                             │
+│    Comparte entre productos                                │
+│    Consistencia total                                      │
+├─────────────────────────────────────────────────────────────┤
+│ 4. FREELANCER → Código profesional                        │
+│    Entrega componentes reales                              │
+│    Cliente valora código limpio                            │
+│    Upsell: extensiones y features                          │
+└─────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 📦 Ejemplos de Export
+
+### Input (Diseño)
 ```
 Button Component
-├── Props: variant (primary/secondary), size (sm/md/lg), disabled
+├── Props: variant (primary/secondary), size, disabled
 ├── Variants: 6 pre-designed
-├── Slots: icon-left, default, icon-right
 └── Events: onClick
 ```
 
-### Output (React)
+### Output React
 ```tsx
 import React from 'react';
-import { ButtonProps } from './Button.types';
+
+interface ButtonProps {
+  variant?: 'primary' | 'secondary';
+  size?: 'sm' | 'md' | 'lg';
+  children: React.ReactNode;
+  onClick?: () => void;
+  disabled?: boolean;
+}
 
 export const Button: React.FC<ButtonProps> = ({
   variant = 'primary',
@@ -125,24 +163,17 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   onClick,
   disabled,
-  ...props
 }) => {
   const className = `btn btn--${variant} btn--${size}`;
-  
   return (
-    <button 
-      className={className}
-      onClick={onClick}
-      disabled={disabled}
-      {...props}
-    >
+    <button className={className} onClick={onClick} disabled={disabled}>
       {children}
     </button>
   );
 };
 ```
 
-### Output (Angular)
+### Output Angular
 ```ts
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
@@ -157,8 +188,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
     >
       <ng-content></ng-content>
     </button>
-  `,
-  styles: [`...`]
+  `
 })
 export class ButtonComponent {
   @Input() variant: 'primary' | 'secondary' = 'primary';
@@ -168,7 +198,7 @@ export class ButtonComponent {
 }
 ```
 
-### Output (Web Component)
+### Output Web Component
 ```js
 class AntoButton extends HTMLElement {
   static get observedAttributes() {
@@ -183,164 +213,163 @@ class AntoButton extends HTMLElement {
   render() {
     const variant = this.getAttribute('variant') || 'primary';
     const size = this.getAttribute('size') || 'md';
-    const disabled = this.hasAttribute('disabled');
-    
-    this.shadowRoot.innerHTML = `
-      <style>${styles}</style>
-      <button 
-        class="btn btn--${variant} btn--${size}"
-        ${disabled ? 'disabled' : ''}
-      >
-        <slot></slot>
-      </button>
-    `;
+    this.shadowRoot.innerHTML = `<button class="btn btn--${variant} btn--${size}"><slot></slot></button>`;
   }
 }
-
 customElements.define('anto-button', AntoButton);
 ```
 
 ---
 
-## 🎯 Target Markets Priorizados
+## 🛠️ Roadmap de Features
 
-### Tier 1: Development Agencies ($$$)
-**Why:** Ya usan React/Angular/Vue, necesitan velocity
-**Pain:** Storybook, design systems, consistency
-**Solution:** Build once, export everywhere
-**Price:** €199-499/seat/month
+### v1.0 (Core - Meses 1-2)
+- [ ] Export to React (functional components)
+- [ ] Export to Angular (standalone components)
+- [ ] Export to Vue 3 (Composition API)
+- [ ] Export to Web Components
+- [ ] Prop types/schema definition
+- [ ] CSS variables extraction
+- [ ] Basic styling preservation
 
-### Tier 2: Product Companies ($$$$)
-**Why:** Maintain design systems is hard
-**Pain:** Designers vs Developers handoff
-**Solution:** Single source of truth
-**Price:** €2,000-20,000/month (enterprise)
+### v1.5 (Advanced - Meses 3-4)
+- [ ] State management integration
+- [ ] Form handling (React Hook Form, Angular Reactive)
+- [ ] Animation libraries support
+- [ ] Accessibility (ARIA) export
+- [ ] Custom slots definition
+- [ ] Icon library integration
 
-### Tier 3: Freelancers ($$)
-**Why:** Want to deliver code, not just HTML
-**Pain:** Clients ask for "the code"
-**Solution:** Professional export, happy clients
-**Price:** €29-99/month
+### v2.0 (Pro - Meses 5-6)
+- [ ] Multi-variant export
+- [ ] Design tokens export (JSON/CSS/SCSS/JS)
+- [ ] Storybook generation (.stories.tsx)
+- [ ] Testing utilities (.test.tsx)
+- [ ] TypeScript strict mode
+- [ ] Custom code injection slots
 
-### Tier 4: Non-Technical Users ($$)
-**Why:** Want simple websites
-**Pain:** Wix is too limited, dev is too hard
-**Solution:** Easy builder + optional code
-**Price:** €29-49/month
-
----
-
-## 📈 Competitive Advantage Matrix
-
-| Feature | Wix | Figma | Storybook | Anto Studios |
-|---------|-----|-------|-----------|--------------|
-| Visual Editor | ✅ | ✅ | ❌ | ✅ |
-| Design Tokens | ❌ | ✅ | ❌ | ✅ |
-| React Export | ❌ | ❌ | ❌ | ✅ |
-| Angular Export | ❌ | ❌ | ❌ | ✅ |
-| Vue Export | ❌ | ❌ | ❌ | ✅ |
-| Web Components | ❌ | ❌ | ❌ | ✅ |
-| Design System Mgmt | ❌ | ✅ | ✅ | ✅ |
-| No-Code + Code | ❌ | ❌ | ❌ | ✅ |
+### v2.5 (Enterprise - Meses 7-9)
+- [ ] Figma plugin import
+- [ ] GitHub/GitLab integration
+- [ ] CI/CD pipeline export
+- [ ] Design system documentation
+- [ ] Team collaboration
+- [ ] Custom themes export
 
 ---
 
-## 🚀 Go-to-Market Strategy
+## 💵 Proyecciones de Ingresos
 
-### Phase 1: Developer Beta (Meses 1-3)
+### Año 1
+| Tier | Usuarios | MRR |
+|------|----------|-----|
+| Free | 5,000 | €0 |
+| Pro (€49) | 500 | €24,500 |
+| Team (€199) | 100 | €19,900 |
+| Enterprise | 2 | €8,000 |
+| **Total** | - | **€52,400 MRR** |
+
+### Año 2
+| Tier | Usuarios | MRR |
+|------|----------|-----|
+| Pro (€49) | 2,000 | €98,000 |
+| Team (€199) | 500 | €99,500 |
+| Enterprise | 15 | €75,000 |
+| **Total** | - | **€272,500 MRR** |
+
+### Exit Potential
+- SaaS DevTools multiple: 8-15x ARR
+- Año 2 ARR: €3.27M
+- Potential exit: $26M-$49M
+
+---
+
+## 🎯 Go-to-Market
+
+### Fase 1: Developer Beta (Meses 1-3)
 - 100 developers early access (waitlist)
-- Focus: Component export quality
-- Feedback: Reddit, Hacker News, Dev communities
-- Goal: Prove the "code quality" thesis
+- Focus: Export quality
+- Canales: Reddit, Hacker News, Dev communities
+- Goal: Prove "code quality" thesis
 
-### Phase 2: Product Hunt Launch (Mes 4)
-- Launch as "Figma meets Storybook meets Wix"
-- Showcase: "Build a button in Anto → Export to 4 frameworks"
+### Fase 2: Product Hunt (Mes 4)
+- Launch: "Figma meets Storybook meets Wix"
+- Demo: "Build button → Export to 4 frameworks"
 - Goal: 1,000 upvotes, 500 signups
 
-### Phase 3: Agency Push (Meses 5-8)
+### Fase 3: Agency Push (Meses 5-8)
 - LinkedIn ads targeting dev managers
-- Case studies: "How X agency saved 40% time"
-- Partnership: Integrations with Vercel, Netlify
+- Case studies: "X agency saved 40% time"
+- Partners: Vercel, Netlify integrations
 
-### Phase 4: Enterprise (Meses 9-12)
+### Fase 4: Enterprise (Meses 9-12)
 - Sales team (SDR + Account Exec)
-- Custom integrations (Figma plugin, Storybook addon)
-- Design system consulting upsell
+- Figma plugin
+- Storybook addon
+- Design system consulting
 
 ---
 
-## 💰 Revenue Projections
+## 📋 Quick Wins Prioritarios
 
-### Year 1
-- **Free Tier:** 5,000 users
-- **Pro Tier (€49/mo):** 500 users → €24,500 MRR
-- **Team Tier (€199/seat):** 100 seats → €19,900 MRR
-- **Enterprise:** 2 accounts → €8,000 MRR
-- **Total:** ~€52,400 MRR → €628K ARR
-
-### Year 2
-- **Pro Tier:** 2,000 users → €98,000 MRR
-- **Team Tier:** 500 seats → €99,500 MRR
-- **Enterprise:** 15 accounts → €75,000 MRR
-- **Total:** ~€272,500 MRR → €3.27M ARR
-
-### Exit Multiple (SaaS DevTools)
-- 8-15x ARR → $26M-$49M potential exit
+1. **Export sin watermark** → Vende a agencies
+2. **Client preview links** → Freelancers pagan más
+3. **Template cloning** → Multi-site clients
+4. **React export** → Biggest market
+5. **Design tokens** → Enterprise buyers
 
 ---
 
-## 🏃 Immediate Next Steps
+## 🏃 Próximos Pasos Inmediatos
 
 ### Esta Semana
-1. [ ] Demo video: "Build button → Export to React/Angular/Vue/WebComp"
+1. [ ] Demo video: "Build button → Export React/Angular/Vue/WebComp"
 2. [ ] Landing page: "Ship production-ready components, not HTML"
 3. [ ] Waitlist: Developer email capture
 
 ### Próximas 2 Semanas
-4. [ ] Completar exportador React
+4. [ ] Completar exportador React (MVP funcional)
 5. [ ] Completar exportador Angular
 6. [ ] 3 templates funcionando con export
 
 ### Este Mes
 7. [ ] Alpha access a 20 developers
-8. [ ] Feedback loop: What code format do you want?
+8. [ ] Feedback: What code format?
 9. [ ] Iterate on export quality
 
 ---
 
-## 🎯 Unique Selling Proposition (USP)
+## 🎯 Unique Selling Proposition
 
 **Headline:** "Stop Copy-Pasting Code. Design It Once, Ship Everywhere."
 
-**Subhead:** "The first visual builder that exports production-ready React, Angular, Vue, and Web Components. No more HTML snippets - just real, type-safe, tested components."
+**Subhead:** "The first visual builder that exports production-ready React, Angular, Vue, and Web Components. No HTML snippets - just real, type-safe, tested components."
 
 **Proof Points:**
-- "Used by 50+ development teams to ship faster"
 - "Components exported to 10,000+ production apps"
+- "Used by 50+ dev teams to ship faster"
 
 ---
 
 ## 📝 Notas
 
-**Por qué esto puede funcionar:**
+### Por qué esto puede funcionar:
+1. **Timing:** Design systems están explotando
+2. **Pain real:** Devs odian implementar diseños de Figma
+3. **Moat:** Una vez exportas código, no hay lock-in
+4. **Virality:** Devs comparten código, no website builders
 
-1. **Timing:** Design systems are exploding, React/Angular/Vue coexist
-2. **Pain real:** Devs hate implementing designs from Figma
-3. **Moat:** Once you export code, you're not locked in
-4. **Virality:** Devs share code, not website builders
+### Riesgos:
+- **Calidad del código:** Developers son muy exigentes
+- **Soporte:** 4 frameworks = mucho testing
 
-**Riesgo principal:**
-- Code export quality must be PERFECT
-- Developers are picky - one bad export = churn
-
-**Mitigación:**
-- Extensive test suite for exports
-- Community feedback on code format
+### Mitigación:
+- Extensive test suite para exports
+- Community feedback en formato de código
 - Configurable output (strict vs flexible)
 
 ---
 
-**Documento creado:** Febrero 2026  
+**Creado:** Febrero 2026  
 **Última actualización:** 2026-02-08  
-**Versión:** 2.5 - Revolutionary Vision
+**Versión:** 3.0 - Revolutionary Vision Complete
