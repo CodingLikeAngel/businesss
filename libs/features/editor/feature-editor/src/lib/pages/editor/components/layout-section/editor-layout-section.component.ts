@@ -1265,12 +1265,19 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     });
 
     const newSlots = [...this.config.slots];
+    
+    // Ensure size is synced to styles so it persists in layout
+    const finalStyles = { ...updatedConfig.styles };
+    if (updatedConfig.size) {
+        finalStyles['width'] = updatedConfig.size.width + 'px';
+        finalStyles['height'] = updatedConfig.size.height + 'px';
+    }
 
     newSlots[this.editingSlotIndex] = {
       ...newSlots[this.editingSlotIndex],
       componentVariant: finalVariant,
       content: mappedContent,
-      styles: { ...updatedConfig.styles }
+      styles: finalStyles
     };
 
     this.config = {
