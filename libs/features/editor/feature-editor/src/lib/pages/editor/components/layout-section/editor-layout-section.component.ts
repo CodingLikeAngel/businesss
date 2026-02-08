@@ -141,9 +141,9 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
           [style.width.px]="getSlotWidth(i) || slot.layoutStyles?.['width']"
           [style.height.px]="!isFlowComponent(slot) ? (getSlotHeight(i) || slot.layoutStyles?.['height']) : null"
           [style.minHeight.px]="isFlowComponent(slot) ? (getSlotHeight(i) || slot.layoutStyles?.['height']) : null"
-          [style.left.px]="slot.layoutStyles?.['left']"
-          [style.top.px]="slot.layoutStyles?.['top']"
-          [style.position]="slot.layoutStyles?.['position'] || (slot.layoutStyles?.['left'] ? 'absolute' : 'relative')"
+          [style.left.px]="getSlotLeft(i) ?? slot.layoutStyles?.['left']"
+          [style.top.px]="getSlotTop(i) ?? slot.layoutStyles?.['top']"
+          [style.position]="(getSlotLeft(i) !== null || slot.layoutStyles?.['left']) ? 'absolute' : (slot.layoutStyles?.['position'] || 'relative')"
           (click)="selectSlot(i, $event)">
           
           <!-- Empty Slot -->
@@ -992,11 +992,24 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     const oldSlots = this.config.slots;
     const newSlots = createInitialSlots(type);
 
-    // Preserve existing slot content where possible
+    // Preserve existing slot content where possible but reset dimensions 
+    // to allow them to re-flow into the new grid structure
     for (let i = 0; i < Math.min(oldSlots.length, newSlots.length); i++) {
+      const oldSlot = oldSlots[i];
+      const newStyles = { ...(oldSlot.styles || {}) };
+      
+      // Remove fixed dimensions and positioning to allow re-flow into new grid
+      delete newStyles['width'];
+      delete newStyles['height'];
+      delete newStyles['left'];
+      delete newStyles['top'];
+      delete newStyles['position'];
+      delete newStyles['transform'];
+
       newSlots[i] = { 
-        ...oldSlots[i], 
-        id: newSlots[i].id // Keep the type and content but use new ID if needed or keep it
+        ...oldSlot, 
+        id: newSlots[i].id,
+        styles: newStyles
       };
     }
 
@@ -1380,45 +1393,61 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     const newSlots = [...this.config.slots];
     
     // Position & Style Sync
-    const finalStyles = { ...updatedConfig.styles };
+    // We separate 'box' styles (layout) from 'content' styles (appearance)
+    const finalAppearanceStyles = { ...updatedConfig.styles };
+    const layoutStyles = { ...(newSlots[this.editingSlotIndex].layoutStyles || {}) };
     
     if (updatedConfig.size) {
-        finalStyles['width'] = updatedConfig.size.width + 'px';
+        const slotW = updatedConfig.size.width;
+        const slotH = updatedConfig.size.height;
+        
+        layoutStyles['width'] = slotW + 'px';
+        
         const flowComponents = ['accordion', 'card', 'list', 'title', 'chip', 'button', 'draggable-box', 'text'];
         const isFlow = flowComponents.some(type => slot.componentType.includes(type));
 
         if (isFlow) {
-             finalStyles['height'] = 'auto';
-             finalStyles['min-height'] = updatedConfig.size.height + 'px';
+             layoutStyles['height'] = 'auto';
+             layoutStyles['min-height'] = slotH + 'px';
         } else {
-             finalStyles['height'] = updatedConfig.size.height + 'px';
+             layoutStyles['height'] = slotH + 'px';
         }
+        
+        // Remove from appearance styles to avoid duplication/conflicts
+        delete finalAppearanceStyles['width'];
+        delete finalAppearanceStyles['height'];
     }
     
     // Direct position sync with clamping to prevent overflow
     if (updatedConfig.position && updatedConfig.canvasSize) {
         const canvasW = updatedConfig.canvasSize.width;
         const canvasH = updatedConfig.canvasSize.height;
-        const slotW = updatedConfig.size?.width || 0;
-        const slotH = updatedConfig.size?.height || 0;
+        const widthVal = updatedConfig.size?.width || 0;
+        const heightVal = updatedConfig.size?.height || 0;
 
         // Clamp X and Y to parent boundaries
         let finalX = Math.max(0, updatedConfig.position.x);
         let finalY = Math.max(0, updatedConfig.position.y);
         
-        if (finalX + slotW > canvasW) finalX = Math.max(0, canvasW - slotW);
-        if (finalY + slotH > canvasH) finalY = Math.max(0, canvasH - slotH);
+        if (finalX + widthVal > canvasW) finalX = Math.max(0, canvasW - widthVal);
+        if (finalY + heightVal > canvasH) finalY = Math.max(0, canvasH - heightVal);
 
-        finalStyles['left'] = finalX + 'px';
-        finalStyles['top'] = finalY + 'px';
-        finalStyles['position'] = 'absolute';
+        layoutStyles['left'] = finalX + 'px';
+        layoutStyles['top'] = finalY + 'px';
+        layoutStyles['position'] = 'absolute';
+        
+        // Remove from appearance styles
+        delete finalAppearanceStyles['left'];
+        delete finalAppearanceStyles['top'];
+        delete finalAppearanceStyles['position'];
     }
 
     newSlots[this.editingSlotIndex] = {
       ...newSlots[this.editingSlotIndex],
       componentVariant: finalVariant,
       content: mappedContent,
-      styles: finalStyles
+      styles: finalAppearanceStyles,
+      layoutStyles: layoutStyles
     };
 
     this.config = {
@@ -1504,6 +1533,28 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     const customSize = this.resizeService.customSizes().get(index);
     if (customSize && customSize.height > 0) {
       return customSize.height;
+    }
+    return null;
+  }
+
+  /**
+   * Get reactive slot left position
+   */
+  getSlotLeft(index: number): number | null {
+    const customSize = this.resizeService.customSizes().get(index);
+    if (customSize && customSize.left !== undefined) {
+      return customSize.left;
+    }
+    return null;
+  }
+
+  /**
+   * Get reactive slot top position
+   */
+  getSlotTop(index: number): number | null {
+    const customSize = this.resizeService.customSizes().get(index);
+    if (customSize && customSize.top !== undefined) {
+      return customSize.top;
     }
     return null;
   }
