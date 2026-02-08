@@ -1116,8 +1116,12 @@ export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
         newY = Math.round(newY / this.gridSize) * this.gridSize;
       }
       
-      this.currentPosition.x = newX;
-      this.currentPosition.y = newY;
+      // Strict Containment Clamping
+      const canvasW = this.config.canvasSize?.width || 4000;
+      const canvasH = this.config.canvasSize?.height || 4000;
+      this.currentPosition.x = Math.max(0, Math.min(newX, canvasW - this.currentSize.width));
+      this.currentPosition.y = Math.max(0, Math.min(newY, canvasH - this.currentSize.height));
+
       this.onPositionChange();
     }
     
@@ -1130,15 +1134,26 @@ export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
       let newX = this.startPositionX;
       let newY = this.startPositionY;
       
-      if (this.resizeHandle.includes('e')) newWidth = this.startSizeWidth + deltaX;
-      if (this.resizeHandle.includes('w')) {
-        newWidth = this.startSizeWidth - deltaX;
-        newX = this.startPositionX + deltaX;
+      const canvasW = this.config.canvasSize?.width || 4000;
+      const canvasH = this.config.canvasSize?.height || 4000;
+
+      if (this.resizeHandle.includes('e')) {
+        newWidth = Math.min(this.startSizeWidth + deltaX, canvasW - this.startPositionX);
       }
-      if (this.resizeHandle.includes('s')) newHeight = this.startSizeHeight + deltaY;
+      if (this.resizeHandle.includes('w')) {
+        const maxDeltaX = this.startPositionX;
+        const safeDeltaX = Math.max(-maxDeltaX, deltaX);
+        newWidth = this.startSizeWidth - safeDeltaX;
+        newX = this.startPositionX + safeDeltaX;
+      }
+      if (this.resizeHandle.includes('s')) {
+        newHeight = Math.min(this.startSizeHeight + deltaY, canvasH - this.startPositionY);
+      }
       if (this.resizeHandle.includes('n')) {
-        newHeight = this.startSizeHeight - deltaY;
-        newY = this.startPositionY + deltaY;
+        const maxDeltaY = this.startPositionY;
+        const safeDeltaY = Math.max(-maxDeltaY, deltaY);
+        newHeight = this.startSizeHeight - safeDeltaY;
+        newY = this.startPositionY + safeDeltaY;
       }
       
       newWidth = Math.max(100, newWidth);

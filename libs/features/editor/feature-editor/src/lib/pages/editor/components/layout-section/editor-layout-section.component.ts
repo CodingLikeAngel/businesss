@@ -486,7 +486,8 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
       background: linear-gradient(145deg, rgba(15, 23, 42, 0.9), rgba(30, 41, 59, 0.8));
       border: 1px solid rgba(99, 102, 241, 0.2);
       border-radius: 12px;
-      overflow: visible;
+      overflow: hidden; /* CRITICAL: Prevent components from leaking out */
+      z-index: 1; /* Establish stacking context */
     }
 
     .layout-section.editing {
@@ -543,6 +544,7 @@ import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
       padding: 1rem;
       position: relative; /* CRITICAL: Keep absolute slots inside */
       min-height: inherit;
+      overflow: hidden; /* Prevent slots from leaking outside the grid area */
     }
 
     /* Slots */
@@ -1171,7 +1173,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.editingSlotIndex = index;
     this.activeIsolatedType = slot.componentType;
     
-    // Detect visual width and position of the slot AND its parent grid-container
+    // Detect visual width and position of the slot AND its parent section
     let detectedWidth = 400; 
     let sectionWidth = 1200;
     let sectionHeight = 800;
@@ -1191,7 +1193,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
              sectionWidth = Math.round(gridRect.width);
              sectionHeight = Math.round(gridRect.height);
              
-             // Local coordinates within the grid-container (1:1 with relative/absolute positioning)
+             // Local coordinates within the grid-container (1:1 with relative/absolute positioning context)
              localX = Math.round(slotRect.left - gridRect.left);
              localY = Math.round(slotRect.top - gridRect.top);
         }
@@ -1373,10 +1375,22 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         }
     }
     
-    // Direct position sync: coordinates from isolated mode are now 1:1 with section
-    if (updatedConfig.position) {
-        finalStyles['left'] = updatedConfig.position.x + 'px';
-        finalStyles['top'] = updatedConfig.position.y + 'px';
+    // Direct position sync with clamping to prevent overflow
+    if (updatedConfig.position && updatedConfig.canvasSize) {
+        const canvasW = updatedConfig.canvasSize.width;
+        const canvasH = updatedConfig.canvasSize.height;
+        const slotW = updatedConfig.size?.width || 0;
+        const slotH = updatedConfig.size?.height || 0;
+
+        // Clamp X and Y to parent boundaries
+        let finalX = Math.max(0, updatedConfig.position.x);
+        let finalY = Math.max(0, updatedConfig.position.y);
+        
+        if (finalX + slotW > canvasW) finalX = Math.max(0, canvasW - slotW);
+        if (finalY + slotH > canvasH) finalY = Math.max(0, canvasH - slotH);
+
+        finalStyles['left'] = finalX + 'px';
+        finalStyles['top'] = finalY + 'px';
         finalStyles['position'] = 'absolute';
     }
 
