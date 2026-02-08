@@ -108,14 +108,14 @@ interface ComponentDefaultSize {
       class="layout-section"
       [class.editing]="isEditing"
       [class.isolated-mode]="showIsolatedMode"
-      [class.preview-mode]="isPreviewMode"
+      [class.preview-mode]="isPreviewMode && !showEditorControls"
       [style.minHeight.px]="config.minHeight"
       [style.padding.px]="config.padding"
       [style.backgroundColor]="config.backgroundColor"
       [style.borderRadius.px]="config.borderRadius">
       
       <!-- Section Header -->
-      <div *ngIf="!isPreviewMode" class="section-header">
+      <div *ngIf="!isPreviewMode || showEditorControls" class="section-header">
         <div class="section-label">
           <span class="label-icon">🧩</span>
           <span class="label-text">Layout: {{ getLayoutLabel() }}</span>
@@ -131,6 +131,16 @@ interface ComponentDefaultSize {
           </button>
         </div>
       </div>
+
+      <!-- Floating Toggle Button for Preview Mode -->
+      <button *ngIf="isPreviewMode" 
+              class="preview-toggle-btn" 
+              (click)="showEditorControls = !showEditorControls"
+              [class.active]="showEditorControls"
+              title="Mostrar/Ocultar opciones de edición">
+        <span class="toggle-icon">{{ showEditorControls ? '✕' : '✏️' }}</span>
+        <span class="toggle-text">{{ showEditorControls ? 'Ocultar edición' : 'Editar' }}</span>
+      </button>
 
       <!-- Layout Picker Modal -->
       <div *ngIf="showLayoutPicker" class="layout-picker-overlay" (click)="closeLayoutPicker()">
@@ -164,7 +174,7 @@ interface ComponentDefaultSize {
           [class.selected]="selectedSlotIndex === i"
           [class.resizing]="resizeService.isResizing() && resizeService.activeSlotIndex() === i"
           [class.flow-component]="isFlowComponent(slot)"
-          [class.preview-mode]="isPreviewMode"
+          [class.preview-mode]="isPreviewMode && !showEditorControls"
           [style.width]="getSlotWidth(i) ? getSlotWidth(i) + 'px' : slot.layoutStyles?.['width']"
           [style.height]="!isFlowComponent(slot) ? (getSlotHeight(i) ? getSlotHeight(i) + 'px' : slot.layoutStyles?.['height']) : null"
           [style.minHeight]="isFlowComponent(slot) ? (getSlotHeight(i) ? getSlotHeight(i) + 'px' : slot.layoutStyles?.['height']) : null"
@@ -175,7 +185,7 @@ interface ComponentDefaultSize {
           (click)="selectSlot(i, $event)">
           
           <!-- Empty Slot -->
-          <div *ngIf="slot.componentType === 'empty' && !isPreviewMode" class="empty-slot">
+          <div *ngIf="slot.componentType === 'empty' && (!isPreviewMode || showEditorControls)" class="empty-slot">
             <div class="empty-content" (click)="openComponentPicker(i, $event)">
               <span class="plus-icon">+</span>
               <span class="slot-label">Añadir Componente</span>
@@ -186,7 +196,7 @@ interface ComponentDefaultSize {
           <ng-container *ngIf="slot.componentType !== 'empty'">
             <div class="slot-component" style="height: auto; min-height: 100%;">
               <!-- Editing Overlay -->
-              <div *ngIf="isEditing && !isPreviewMode" class="slot-controls">
+              <div *ngIf="isEditing && (!isPreviewMode || showEditorControls)" class="slot-controls">
                 <button *ngIf="isPositioned(i, slot)"
                         class="slot-btn" 
                         (click)="resetSlotPosition(i)" 
@@ -306,7 +316,7 @@ interface ComponentDefaultSize {
             </div>
 
             <!-- Resize Anchors (8 points) -->
-          <div *ngIf="isEditing && !isPreviewMode && isSlotFilled(slot)" class="resize-anchors">
+          <div *ngIf="isEditing && (!isPreviewMode || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
             <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
             <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
             <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
@@ -534,6 +544,12 @@ interface ComponentDefaultSize {
       box-shadow: none !important;
     }
 
+    .layout-section:not(.preview-mode) {
+      border: 1px solid rgba(99, 102, 241, 0.25);
+      background: linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+      box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
+    }
+
     .layout-section.isolated-mode {
       z-index: 10000001 !important;
       overflow: visible !important;
@@ -609,6 +625,45 @@ interface ComponentDefaultSize {
     .btn-text { display: none; }
     @media (min-width: 640px) { .btn-text { display: inline; } }
 
+    /* Preview Toggle Button */
+    .preview-toggle-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.25rem;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      border-radius: 50px;
+      color: white;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 9999;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+    }
+
+    .preview-toggle-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 25px rgba(99, 102, 241, 0.6);
+    }
+
+    .preview-toggle-btn.active {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    .toggle-icon {
+      font-size: 1.1rem;
+    }
+
+    .toggle-text {
+      font-size: 0.875rem;
+    }
+
     /* Grid Container */
     .grid-container {
       display: grid;
@@ -624,6 +679,10 @@ interface ComponentDefaultSize {
       background-image: none;
     }
 
+    .layout-section:not(.preview-mode) .grid-container {
+      background-image: radial-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px);
+    }
+
     /* Slots */
     .slot {
       position: relative;
@@ -637,6 +696,11 @@ interface ComponentDefaultSize {
     .slot.preview-mode {
       border: none !important;
       background: transparent !important;
+    }
+
+    .slot:not(.preview-mode) {
+      border: 1px dashed rgba(99, 102, 241, 0.15);
+      background: rgba(15, 23, 42, 0.2);
     }
 
     .slot:hover { 
@@ -1064,6 +1128,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   
   // Preview mode state
   isPreviewMode = false;
+  showEditorControls = false; // Toggle to show/hide editor controls in preview mode
   
   config: LayoutSectionConfig = createDefaultLayoutConfig();
   isEditing = false;
@@ -1101,6 +1166,10 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       .pipe(takeUntil(this.destroy$))
       .subscribe(step => {
         this.isPreviewMode = step === 'preview';
+        // Reset editor controls toggle when exiting preview mode
+        if (!this.isPreviewMode) {
+          this.showEditorControls = false;
+        }
         this.cdr.detectChanges();
       });
   }
