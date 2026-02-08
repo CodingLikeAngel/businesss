@@ -179,10 +179,12 @@ import {
                   *ngSwitchCase="'ui-image'"
                   [src]="slot.content?.['src'] || 'assets/placeholder.jpg'"
                   [alt]="slot.content?.['alt'] || 'Imagen'"
+                  [variant]="$any(slot.componentVariant || globalVariant || 'default')"
                   [filter]="slot.styles?.['filter']"
                   [customStyles]="slot.styles || {}"
                   class="slot-image">
                 </lib-ui-image>
+
 
                 <!-- UI CARD -->
                 <lib-ui-components-card
@@ -949,7 +951,11 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   }
 
   // Components that support isolated mode editing
-  private isolatedModeComponents: SlotComponentType[] = ['ui-button', 'ui-accordion', 'draggable-box'];
+  private isolatedModeComponents: SlotComponentType[] = [
+    'ui-button', 'ui-accordion', 'draggable-box', 
+    'ui-title', 'ui-image', 'ui-card', 
+    'ui-card-animated', 'ui-list', 'ui-card-product', 'ui-chip'
+  ];
 
   editSlotComponent(index: number, event: Event) {
     event.stopPropagation();
@@ -1040,6 +1046,16 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         };
         defaultSize = { width: 180, height: 50 };
         break;
+
+      case 'ui-title':
+        mappedContent = {
+          variant: slot.componentVariant || this.globalVariant || 'default',
+          text: slot.content?.['text'] || 'Título',
+          level: slot.content?.['level'] || 'h2',
+          align: slot.content?.['align'] || 'left'
+        };
+        defaultSize = { width: 350, height: 100 };
+        break;
         
       case 'ui-accordion':
         mappedContent = {
@@ -1061,10 +1077,56 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         };
         defaultSize = { width: 280, height: 120 };
         break;
+
+      case 'ui-list':
+        mappedContent = {
+          variant: slot.componentVariant || this.globalVariant || 'default',
+          items: slot.content?.['items'] || ['Item 1', 'Item 2', 'Item 3'],
+          listVariant: slot.content?.['listVariant'] || 'default'
+        };
+        defaultSize = { width: 300, height: 300 };
+        break;
+
+      case 'ui-card-product':
+        const productData = slot.content?.['product'] || {};
+        mappedContent = {
+          variant: slot.componentVariant || this.globalVariant || 'default',
+          name: productData.name || 'Producto',
+          price: productData.price || '0.00',
+          image: productData.image || '',
+          description: productData.description || 'Descripción...',
+          currency: productData.currency || 'USD',
+          onSale: productData.onSale || false
+        };
+        defaultSize = { width: 300, height: 480 };
+        break;
+
+      case 'ui-chip':
+        mappedContent = {
+          variant: slot.componentVariant || this.globalVariant || 'default',
+          text: slot.content?.['text'] || 'Chip',
+          removable: slot.content?.['removable'] || false
+        };
+        defaultSize = { width: 120, height: 40 };
+        break;
+
+      case 'ui-image':
+        mappedContent = {
+            variant: slot.componentVariant || this.globalVariant || 'default',
+            src: slot.content?.['src'] || 'assets/placeholder.jpg',
+            alt: slot.content?.['alt'] || 'Imagen'
+        };
+        defaultSize = { width: 300, height: 200 };
+        break;
         
       default:
-        // Generic mapping for other components
-        mappedContent = { ...slot.content };
+        mappedContent = { 
+            ...slot.content,
+            variant: slot.componentVariant || this.globalVariant || 'default'
+        };
+        if (slot.componentType === 'ui-card' || slot.componentType === 'ui-card-animated') {
+            defaultSize = { width: 320, height: 400 };
+        }
     }
     
     this.isolatedConfig = {
@@ -1096,6 +1158,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
     const slot = this.config.slots[this.editingSlotIndex];
     let mappedContent: any = { ...updatedConfig.content };
+    let newVariant: string | undefined = undefined;
     
     // Map content back to slot format based on component type
     switch (slot.componentType) {
@@ -1104,6 +1167,12 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
           ...updatedConfig.content,
           text: updatedConfig.content.label || updatedConfig.content.text || 'Botón'
         };
+        newVariant = updatedConfig.content.variant;
+        break;
+        
+      case 'ui-accordion':
+        mappedContent = { ...updatedConfig.content };
+        newVariant = updatedConfig.content.variant || updatedConfig.content.accordionVariant;
         break;
         
       case 'draggable-box':
@@ -1111,16 +1180,37 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
           ...updatedConfig.content,
           text: updatedConfig.content.text || 'Draggable Box'
         };
+        newVariant = updatedConfig.content.variant;
+        break;
+
+      case 'ui-title':
+      case 'ui-chip':
+        mappedContent = {
+           ...updatedConfig.content,
+           text: updatedConfig.content.text || updatedConfig.content.label || updatedConfig.content.title
+        };
+        newVariant = updatedConfig.content.variant;
+        break;
+        
+      case 'ui-card-product':
+        mappedContent = {
+          product: { ...updatedConfig.content }
+        };
+        newVariant = updatedConfig.content.variant;
         break;
         
       default:
         mappedContent = { ...updatedConfig.content };
+        newVariant = updatedConfig.content?.variant;
     }
+
+    // Use extracted variant, or fallback to config.variant, or keep existing
+    const finalVariant = newVariant || updatedConfig.variant || slot.componentVariant;
 
     const newSlots = [...this.config.slots];
     newSlots[this.editingSlotIndex] = {
       ...newSlots[this.editingSlotIndex],
-      componentVariant: updatedConfig.variant || slot.componentVariant,
+      componentVariant: finalVariant,
       content: mappedContent,
       styles: { ...updatedConfig.styles }
     };
@@ -1133,6 +1223,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.persistConfig();
     this.onIsolatedModeClosed();
   }
+
 
 
   onIsolatedModeClosed() {
