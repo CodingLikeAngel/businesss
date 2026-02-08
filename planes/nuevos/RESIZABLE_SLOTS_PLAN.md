@@ -80,7 +80,26 @@ Ver plan detallado en: `PLAN_DELETION_LEGACY_COMPONENTS.md`.
 
 ---
 
-## 5. Referencias de Código
+---
+
+## 5. Fase D: Container Resize Intelligence (Nuevo)
+
+_Solicitud: El contenedor padre debe usar los resize handlers y ser capaz de usar el size y position definidos._
+
+**Objetivo:** Permitir que los slots no solo sean Grid Cells automáticas, sino que acepten tamaños y posiciones personalizadas (persistidas).
+
+**Acciones:**
+
+1.  **Actualizar `SlotConfig`:** Añadir propiedad opcional `containerStyles` (width, height, left, top).
+2.  **Persistencia:** Modificar `onSlotResized` para que guarde el nuevo tamaño en `containerStyles` del slot, no solo en un mapa temporal.
+3.  **Template Binding:**
+    ```html
+    <div class="slot" [style.width.px]="getSlotWidth(i) || slot.containerStyles?.width" [style.height.px]="getSlotHeight(i) || slot.containerStyles?.height" [style.position]="slot.containerStyles?.position || 'relative'"></div>
+    ```
+
+---
+
+## 6. Referencias de Código
 
 ### Smart-Adapt Pattern (Ejemplo)
 
