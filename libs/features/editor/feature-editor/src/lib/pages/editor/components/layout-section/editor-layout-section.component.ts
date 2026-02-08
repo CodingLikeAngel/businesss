@@ -135,11 +135,11 @@ interface ComponentDefaultSize {
       <!-- Floating Toggle Button for Preview Mode -->
       <button *ngIf="isPreviewMode" 
               class="preview-toggle-btn" 
-              (click)="showEditorControls = !showEditorControls"
+              (click)="toggleEditorControlsInPreview()"
               [class.active]="showEditorControls"
               title="Mostrar/Ocultar opciones de edición">
         <span class="toggle-icon">{{ showEditorControls ? '✕' : '✏️' }}</span>
-        <span class="toggle-text">{{ showEditorControls ? 'Ocultar edición' : 'Editar' }}</span>
+        <span class="toggle-text">{{ showEditorControls ? 'Ocultar edición' : 'Editar (activar modo aislado)' }}</span>
       </button>
 
       <!-- Layout Picker Modal -->
@@ -196,7 +196,7 @@ interface ComponentDefaultSize {
           <ng-container *ngIf="slot.componentType !== 'empty'">
             <div class="slot-component" style="height: auto; min-height: 100%;">
               <!-- Editing Overlay -->
-              <div *ngIf="isEditing && (!isPreviewMode || showEditorControls)" class="slot-controls">
+              <div *ngIf="(!isPreviewMode && isEditing) || showEditorControls" class="slot-controls">
                 <button *ngIf="isPositioned(i, slot)"
                         class="slot-btn" 
                         (click)="resetSlotPosition(i)" 
@@ -316,7 +316,7 @@ interface ComponentDefaultSize {
             </div>
 
             <!-- Resize Anchors (8 points) -->
-          <div *ngIf="isEditing && (!isPreviewMode || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
+          <div *ngIf="((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
             <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
             <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
             <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
@@ -450,7 +450,7 @@ interface ComponentDefaultSize {
       </div>
 
       <!-- Isolated Mode Components -->
-      <ng-container *ngIf="showIsolatedMode && activeIsolatedType">
+      <ng-container *ngIf="showIsolatedMode && activeIsolatedType && (!isPreviewMode || showEditorControls)">
         <lib-editor-button-isolated-mode
           *ngIf="activeIsolatedType === 'ui-button'"
           [config]="$any(isolatedConfig)"
@@ -1165,7 +1165,14 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.variantService.builderStep$
       .pipe(takeUntil(this.destroy$))
       .subscribe(step => {
+        const wasPreviewMode = this.isPreviewMode;
         this.isPreviewMode = step === 'preview';
+        
+        // When entering preview mode, disable editing mode
+        if (!wasPreviewMode && this.isPreviewMode) {
+          this.isEditing = false;
+        }
+        
         // Reset editor controls toggle when exiting preview mode
         if (!this.isPreviewMode) {
           this.showEditorControls = false;
@@ -1920,6 +1927,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.showIsolatedMode = false;
     this.activeIsolatedType = null;
     this.editingSlotIndex = -1;
+    // Reset editor controls toggle when closing isolated mode
+    this.showEditorControls = false;
     this.cdr.detectChanges();
   }
 
@@ -2088,6 +2097,26 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     slots[index] = slot;
     this.config = { ...this.config, slots };
     this.persistConfig();
+    this.cdr.detectChanges();
+  }
+
+  /**
+   * Toggle editor controls in preview mode
+   * When in preview mode, this toggles the editor controls visibility
+   * and also enables/disables isolated mode accordingly
+   */
+  toggleEditorControlsInPreview(): void {
+    this.showEditorControls = !this.showEditorControls;
+    
+    // If enabling editor controls in preview mode, also enable editing mode and isolated mode
+    if (this.showEditorControls) {
+      this.isEditing = true;
+      this.showIsolatedMode = true;
+    } else {
+      // When disabling, also disable editing mode
+      this.isEditing = false;
+    }
+    
     this.cdr.detectChanges();
   }
 }
