@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject, Inject, PLATFORM_ID, ViewContainerRef, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
@@ -449,8 +449,14 @@ interface ComponentDefaultSize {
         </div>
       </div>
 
-      <!-- Isolated Mode Components -->
-      <ng-container *ngIf="showIsolatedMode && activeIsolatedType && (!isPreviewMode || showEditorControls)">
+      /* Isolated Mode Components - Rendered at body level via dynamic container */
+      <div #isolatedModeContainer class="isolated-mode-dynamic-container"></div>
+
+      <!-- Alternative: Direct overlay (backup for when dynamic approach fails) -->
+      <div *ngIf="showIsolatedMode && activeIsolatedType && (!isPreviewMode || showEditorControls)" 
+           class="isolated-mode-fullscreen-overlay" 
+           [class]="'isolated-mode-overlay-' + (activeIsolatedType || '')">
+        <div class="isolated-mode-overlay-content">
         <lib-editor-button-isolated-mode
           *ngIf="activeIsolatedType === 'ui-button'"
           [config]="$any(isolatedConfig)"
@@ -520,13 +526,46 @@ interface ComponentDefaultSize {
           (closed)="onIsolatedModeClosed()"
           (applied)="onIsolatedModeApplied($any($event))">
         </lib-editor-card-product-isolated-mode>
-      </ng-container>
+      </div>
 
     </section>
   `,
   styles: [`
     :host { display: block; width: 100%; }
-    
+
+    /* When isolated mode is active, ensure host doesn't clip the overlay */
+    :host:has(.layout-section.isolated-mode) {
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+    }
+
+    /* Aggressive fix: ensure isolated mode overlay is not clipped by any ancestor */
+    :host:has(.layout-section.isolated-mode),
+    :host:has(.layout-section.isolated-mode) * {
+      overflow: visible !important;
+      max-height: none !important;
+      height: auto !important;
+      clip: none !important;
+      clip-path: none !important;
+    }
+
+    /* Also fix any parent elements */
+    :host:has(.layout-section.isolated-mode) :not(script):not(style):not(link) {
+      overflow: visible !important;
+    }
+
+    /* Also force overflow visible for any parent containers when isolated mode is active */
+    .isolated-mode-active .layout-section {
+      overflow: visible !important;
+      transform: none !important;
+    }
+
+    /* Force body-level overflow when isolated mode is active */
+    body.isolated-mode-active {
+      overflow: hidden !important;
+    }
+
     .layout-section {
       position: relative;
       background: linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
@@ -552,6 +591,39 @@ interface ComponentDefaultSize {
 
     .layout-section.isolated-mode {
       z-index: 10000001 !important;
+      overflow: visible !important;
+    }
+
+    /* When isolated mode is active, ensure overflow is visible for the section */
+    .layout-section.isolated-mode {
+      overflow: visible !important;
+      transform: none !important;
+    }
+
+    /* Also force overflow visible for any parent containers when isolated mode is active */
+    .isolated-mode-active .layout-section {
+      overflow: visible !important;
+      transform: none !important;
+    }
+
+    /* Ensure the isolated mode container can break out of parent overflow constraints */
+    .layout-section .isolated-mode-fullscreen-overlay {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      max-width: none !important;
+      max-height: none !important;
+      z-index: 9999999 !important;
+      background: rgba(2, 6, 23, 0.95) !important;
+      backdrop-filter: blur(16px) !important;
+    }
+
+    .isolated-mode-overlay-content {
+      width: 100% !important;
+      height: 100% !important;
+      max-width: none !important;
+      max-height: none !important;
       overflow: visible !important;
     }
 
