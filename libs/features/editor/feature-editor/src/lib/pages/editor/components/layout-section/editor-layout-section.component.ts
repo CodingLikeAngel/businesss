@@ -1097,6 +1097,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       slots: newSlots
     };
     
+    this.resizeService.resetCustomSizes();
     this.persistConfig();
     this.closeLayoutPicker();
   }
@@ -1141,6 +1142,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       slots: newSlots
     };
 
+    this.resizeService.clearSlotSize(this.config, this.editingSlotIndex);
     this.persistConfig();
     this.closeComponentPicker();
   }

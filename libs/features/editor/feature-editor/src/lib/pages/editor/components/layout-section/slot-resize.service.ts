@@ -90,48 +90,48 @@ export class SlotResizeService {
     // Lógica avanzada de 8 puntos
     switch (currentAnchor) {
       case 'e':
-        newWidth += delta.dx;
+        newWidth = this.startSize.width + delta.dx;
         break;
       case 'w':
-        newWidth -= delta.dx;
+        newWidth = this.startSize.width - delta.dx;
         deltaLeft = delta.dx;
         break;
       case 's':
-        newHeight += delta.dy;
+        newHeight = this.startSize.height + delta.dy;
         break;
       case 'n':
-        newHeight -= delta.dy;
+        newHeight = this.startSize.height - delta.dy;
         deltaTop = delta.dy;
         break;
       case 'se':
-        newWidth += delta.dx;
-        newHeight += delta.dy;
+        newWidth = this.startSize.width + delta.dx;
+        newHeight = this.startSize.height + delta.dy;
         break;
       case 'sw':
-        newWidth -= delta.dx;
-        newHeight += delta.dy;
+        newWidth = this.startSize.width - delta.dx;
+        newHeight = this.startSize.height + delta.dy;
         deltaLeft = delta.dx;
         break;
       case 'ne':
-        newWidth += delta.dx;
-        newHeight -= delta.dy;
+        newWidth = this.startSize.width + delta.dx;
+        newHeight = this.startSize.height - delta.dy;
         deltaTop = delta.dy;
         break;
       case 'nw':
-        newWidth -= delta.dx;
-        newHeight -= delta.dy;
+        newWidth = this.startSize.width - delta.dx;
+        newHeight = this.startSize.height - delta.dy;
         deltaLeft = delta.dx;
         deltaTop = delta.dy;
         break;
       case 'horizontal':
-        newWidth += delta.dx;
+        newWidth = this.startSize.width + delta.dx;
         break;
       case 'vertical':
-        newHeight += delta.dy;
+        newHeight = this.startSize.height + delta.dy;
         break;
       case 'both':
-        newWidth += delta.dx;
-        newHeight += delta.dy;
+        newWidth = this.startSize.width + delta.dx;
+        newHeight = this.startSize.height + delta.dy;
         break;
       case 'move':
         deltaLeft = delta.dx;
