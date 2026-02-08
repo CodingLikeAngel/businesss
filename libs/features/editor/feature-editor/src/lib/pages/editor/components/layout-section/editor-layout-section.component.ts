@@ -143,7 +143,7 @@ import {
 
           <!-- Filled Slot - Component Renderer -->
           <ng-container *ngIf="slot.componentType !== 'empty'">
-            <div class="slot-component">
+            <div class="slot-component" style="height: auto; min-height: 100%;">
               <!-- Editing Overlay -->
               <div *ngIf="isEditing" class="slot-controls">
                 <button class="slot-btn edit-btn" 
@@ -209,7 +209,7 @@ import {
                   *ngSwitchCase="'ui-accordion'" 
                   [ngStyle]="getComponentStyles(slot)">
                   <lib-ui-components-accordion
-                    style="width: 100%; height: 100%; display: block;"
+                    style="width: 100%; height: auto; display: block;"
                     [variant]="$any(slot.componentVariant || globalVariant || 'default')"
                     [items]="slot.content?.['items'] || [{title:'Item 1', content:'Contenido 1'}]">
                   </lib-ui-components-accordion>
@@ -526,7 +526,6 @@ import {
       border: 2px dashed rgba(255, 255, 255, 0.1);
       border-radius: 8px;
       transition: all 0.2s;
-      overflow: hidden;
     }
 
     .slot:hover { border-color: rgba(99, 102, 241, 0.4); }
@@ -559,11 +558,9 @@ import {
     /* Slot Component */
     .slot-component {
       position: relative;
-      height: 100%;
-      min-height: 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 100%;
+      min-height: 100%;
+      /* Block display ensures reliable height growth */
       padding: 0.5rem;
     }
 
@@ -1042,8 +1039,14 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     // We keep 'width', 'height', 'left', 'top', 'transform' to respect user config.
     
     // Ensure display block so dimensions apply naturally
+    // Add max-width to prevent components from breaking out of containers
+    // Margin auto centers the component in the new block layout
     return {
-      display: 'block', 
+      display: 'block',
+      'max-width': '100%',
+      'box-sizing': 'border-box',
+      'margin-left': 'auto',
+      'margin-right': 'auto',
       ...styles
     };
   }
@@ -1294,7 +1297,16 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
     if (updatedConfig.size) {
         finalStyles['width'] = updatedConfig.size.width + 'px';
-        finalStyles['height'] = updatedConfig.size.height + 'px';
+        
+        // Fix: Accordions must use auto height to expand with content
+        // Fixed height causes clipping. Use min-height from isolated resizing.
+        const currentSlot = this.config.slots[this.editingSlotIndex];
+        if (currentSlot && currentSlot.componentType.includes('accordion')) {
+             finalStyles['height'] = 'auto';
+             finalStyles['min-height'] = updatedConfig.size.height + 'px';
+        } else {
+             finalStyles['height'] = updatedConfig.size.height + 'px';
+        }
     }
     
     // Normalize position: Canvas Coordinates -> Local Slot Coordinates
