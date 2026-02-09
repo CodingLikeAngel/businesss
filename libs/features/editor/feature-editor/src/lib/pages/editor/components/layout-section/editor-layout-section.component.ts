@@ -194,25 +194,25 @@ interface ComponentDefaultSize {
 
           <!-- Filled Slot - Component Renderer -->
           <ng-container *ngIf="slot.componentType !== 'empty'">
-            <!-- Slot Toolbar (Fixed to Slot Corners) -->
-            <div *ngIf="(!isPreviewMode && isEditing) || showEditorControls" class="slot-controls">
-              <button *ngIf="isPositioned(i, slot)"
-                      class="slot-btn" 
-                      (click)="resetSlotPosition(i)" 
-                      title="Resetear Posición (Centrar en Grid)">🎯</button>
-              <button class="slot-btn drag-handle" 
-                      appResizeHandle [slotIndex]="i" anchor="move"
-                      title="Mover Componente">⠿</button>
-              <button class="slot-btn edit-btn" 
-                      (click)="editSlotComponent(i, $event)" 
-                      [title]="hasIsolatedMode(slot.componentType) ? 'Editar en Modo Aislado' : 'Configurar'">
-                {{ hasIsolatedMode(slot.componentType) ? '🎯' : '⚙️' }}
-              </button>
-              <button class="slot-btn" (click)="openComponentPicker(i, $event)" title="Cambiar Componente">🔄</button>
-              <button class="slot-btn danger" (click)="clearSlot(i, $event)" title="Eliminar">🗑️</button>
-            </div>
-
+            <!-- Slot Toolbar (Fixed to Slot Corners) - Moved INSIDE .slot-component for better anchoring -->
             <div class="slot-component">
+              <div *ngIf="(!isPreviewMode && isEditing) || showEditorControls" class="slot-toolbar-right">
+                <button *ngIf="isPositioned(i, slot)"
+                        class="slot-btn" 
+                        (click)="resetSlotPosition(i)" 
+                        title="Resetear Posición (Centrar en Grid)">🎯</button>
+                <button class="slot-btn drag-handle" 
+                        appResizeHandle [slotIndex]="i" anchor="move"
+                        title="Mover Componente">⠿</button>
+                <button class="slot-btn edit-btn" 
+                        (click)="editSlotComponent(i, $event)" 
+                        [title]="hasIsolatedMode(slot.componentType) ? 'Editar en Modo Aislado' : 'Configurar'">
+                  {{ hasIsolatedMode(slot.componentType) ? '🎯' : '⚙️' }}
+                </button>
+                <button class="slot-btn" (click)="openComponentPicker(i, $event)" title="Cambiar Componente">🔄</button>
+                <button class="slot-btn danger" (click)="clearSlot(i, $event)" title="Eliminar">🗑️</button>
+              </div>
+
               <!-- Component Content -->
               <ng-container [ngSwitch]="slot.componentType">
 
@@ -823,20 +823,22 @@ interface ComponentDefaultSize {
       box-sizing: border-box;
     }
 
-    .slot-controls {
+    .slot-toolbar-right {
       position: absolute !important;
-      top: 12px !important;
-      right: 32px !important;
+      top: 10px !important;
+      right: 16px !important;
       left: auto !important;
       display: flex !important;
-      gap: 8px !important;
+      gap: 6px !important;
       z-index: 1000 !important;
       opacity: 0;
       transform: translateY(-5px);
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      width: auto !important;
+      pointer-events: auto !important;
     }
 
-    .slot:hover .slot-controls, .slot.selected .slot-controls { 
+    .slot:hover .slot-toolbar-right, .slot.selected .slot-toolbar-right { 
       opacity: 1; 
       transform: translateY(0);
     }
