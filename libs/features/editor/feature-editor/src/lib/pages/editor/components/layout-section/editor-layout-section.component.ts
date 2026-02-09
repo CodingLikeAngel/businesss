@@ -524,46 +524,98 @@ interface ComponentDefaultSize {
           (closed)="onIsolatedModeClosed()"
           (applied)="onIsolatedModeApplied($any($event))">
         </lib-editor-card-product-isolated-mode>
+        </section>
+
+      <!-- Isolated Mode Overlay - Outside section to prevent clipping -->
+      <div 
+        *ngIf="showIsolatedMode && activeIsolatedType" 
+        class="isolated-mode-fullscreen-overlay" 
+        [class]="'isolated-mode-overlay-' + (activeIsolatedType || '')">
+        <div class="isolated-mode-overlay-content">
+        <lib-editor-button-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-button'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-button-isolated-mode>
+
+        <lib-editor-accordion-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-accordion'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-accordion-isolated-mode>
+
+        <lib-editor-draggable-box-isolated-mode
+          *ngIf="activeIsolatedType === 'draggable-box'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-draggable-box-isolated-mode>
+
+        <lib-editor-title-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-title'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-title-isolated-mode>
+
+        <lib-editor-image-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-image'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-image-isolated-mode>
+
+        <lib-editor-card-premium-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-card'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-card-premium-isolated-mode>
+
+        <lib-editor-card-animated-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-card-animated'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-card-animated-isolated-mode>
+
+        <lib-editor-list-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-list'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-list-isolated-mode>
+
+        <lib-editor-chip-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-chip'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-chip-isolated-mode>
+
+        <lib-editor-card-product-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-card-product'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-card-product-isolated-mode>
         </div>
       </div>
-
-    </section>
+    </ng-container>
   `,
-  styles: [`
-    :host { display: block; width: 100%; }
+  styles: [`:host { 
+    display: block; 
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
 
-    /* When isolated mode is active, ensure host doesn't clip the overlay */
-    :host:has(.layout-section.isolated-mode) {
-      overflow: visible !important;
-      max-height: none !important;
-      height: auto !important;
-    }
-
-    /* Aggressive fix: ensure isolated mode overlay is not clipped by any ancestor */
-    :host:has(.layout-section.isolated-mode),
-    :host:has(.layout-section.isolated-mode) * {
-      overflow: visible !important;
-      max-height: none !important;
-      height: auto !important;
-      clip: none !important;
-      clip-path: none !important;
-    }
-
-    /* Also fix any parent elements */
-    :host:has(.layout-section.isolated-mode) :not(script):not(style):not(link) {
-      overflow: visible !important;
-    }
-
-    /* Also force overflow visible for any parent containers when isolated mode is active */
-    .isolated-mode-active .layout-section {
-      overflow: visible !important;
-      transform: none !important;
-    }
-
-    /* Force body-level overflow when isolated mode is active */
-    body.isolated-mode-active {
-      overflow: hidden !important;
-    }
+  /* Cuando isolated mode está activo, el host no debe restringir */
+  :host:has(.isolated-mode-fullscreen-overlay) {
+    position: static !important;
+  }
 
     .layout-section {
       position: relative;
@@ -605,17 +657,22 @@ interface ComponentDefaultSize {
       transform: none !important;
     }
 
-    /* Ensure the isolated mode container can break out of parent overflow constraints */
-    .layout-section .isolated-mode-fullscreen-overlay {
+    /* Isolated Mode Overlay - Fixed position with maximum priority */
+    .isolated-mode-fullscreen-overlay {
       position: fixed !important;
-      inset: 0 !important;
+      top: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      bottom: 0 !important;
       width: 100vw !important;
       height: 100vh !important;
-      max-width: none !important;
-      max-height: none !important;
-      z-index: 9999999 !important;
+      z-index: 999999 !important;
       background: rgba(2, 6, 23, 0.95) !important;
       backdrop-filter: blur(16px) !important;
+      overflow: auto !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .isolated-mode-overlay-content {
@@ -624,6 +681,7 @@ interface ComponentDefaultSize {
       max-width: none !important;
       max-height: none !important;
       overflow: visible !important;
+      position: relative;
     }
 
     .layout-section.editing {
@@ -2174,17 +2232,15 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   /**
    * Toggle editor controls in preview mode
    * When in preview mode, this toggles the editor controls visibility
-   * and also enables/disables isolated mode accordingly
    */
   toggleEditorControlsInPreview(): void {
     this.showEditorControls = !this.showEditorControls;
     
-    // If enabling editor controls in preview mode, also enable editing mode and isolated mode
     if (this.showEditorControls) {
       this.isEditing = true;
-      this.showIsolatedMode = true;
+      // showIsolatedMode only activates when user clicks
+      // the edit button on a specific slot
     } else {
-      // When disabling, also disable editing mode
       this.isEditing = false;
     }
     
