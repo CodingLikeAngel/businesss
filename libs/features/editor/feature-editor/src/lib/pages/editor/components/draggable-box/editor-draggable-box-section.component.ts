@@ -22,11 +22,12 @@ import * as PageActions from '../../../../store/actions/page.actions';
     <section 
       [id]="section.id" 
       class="editor-section"
+      [class.preview-mode]="isPreviewMode && !showEditorControls"
       [style.minHeight.px]="sectionHeight"
       [style.position]="'relative'">
       
       <!-- Section Header -->
-      <div class="section-header">
+      <div *ngIf="!isPreviewMode || showEditorControls" class="section-header">
         <div class="section-label">
           <span class="label-icon">📦</span>
           <span class="label-text">Draggable Box</span>
@@ -42,9 +43,20 @@ import * as PageActions from '../../../../store/actions/page.actions';
         </div>
       </div>
 
+      <!-- Floating Toggle Button for Preview Mode -->
+      <button *ngIf="isPreviewMode" 
+              class="preview-toggle-btn" 
+              (click)="toggleEditorControlsInPreview()"
+              [class.active]="showEditorControls"
+              title="Mostrar/Ocultar opciones de edición">
+        <span class="toggle-icon">{{ showEditorControls ? '✕' : '✏️' }}</span>
+        <span class="toggle-text">{{ showEditorControls ? 'Ocultar edición' : 'Editar (activar modo aislado)' }}</span>
+      </button>
+
       <!-- Draggable/Resizable Box Container -->
       <div 
         class="box-container"
+        [class.preview-mode]="isPreviewMode && !showEditorControls"
         [style.position]="'relative'"
         [style.minHeight.px]="containerHeight"
         [style.padding.px]="40">
@@ -54,6 +66,7 @@ import * as PageActions from '../../../../store/actions/page.actions';
           #editableBox
           [id]="boxId"
           class="draggable-box"
+          [class.preview-mode]="isPreviewMode && !showEditorControls"
           [class.is-dragging]="isDragging"
           [class.is-resizing]="isResizing"
           [style.position]="'absolute'"
@@ -65,19 +78,21 @@ import * as PageActions from '../../../../store/actions/page.actions';
           (mousedown)="onMouseDown($event)">
           
           <!-- Resize Handles -->
-          <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>
-          <div class="resize-handle n" (mousedown)="startResize($event, 'n')"></div>
-          <div class="resize-handle ne" (mousedown)="startResize($event, 'ne')"></div>
-          <div class="resize-handle e" (mousedown)="startResize($event, 'e')"></div>
-          <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
-          <div class="resize-handle s" (mousedown)="startResize($event, 's')"></div>
-          <div class="resize-handle sw" (mousedown)="startResize($event, 'sw')"></div>
-          <div class="resize-handle w" (mousedown)="startResize($event, 'w')"></div>
+          <ng-container *ngIf="!isPreviewMode || showEditorControls">
+            <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>
+            <div class="resize-handle n" (mousedown)="startResize($event, 'n')"></div>
+            <div class="resize-handle ne" (mousedown)="startResize($event, 'ne')"></div>
+            <div class="resize-handle e" (mousedown)="startResize($event, 'e')"></div>
+            <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
+            <div class="resize-handle s" (mousedown)="startResize($event, 's')"></div>
+            <div class="resize-handle sw" (mousedown)="startResize($event, 'sw')"></div>
+            <div class="resize-handle w" (mousedown)="startResize($event, 'w')"></div>
+          </ng-container>
           
           <!-- Box Content - UI Components FILL THE WRAPPER -->
-          <div class="box-content-wrapper" (dblclick)="openIsolatedMode()">
+          <div class="box-content-wrapper" (dblclick)="!isPreviewMode || showEditorControls ? openIsolatedMode() : null">
             <!-- Quick Action Floating Button -->
-            <button class="quick-isolated-btn" (click)="openIsolatedMode($event)" title="Editar en Modo Aislado (I)">
+            <button *ngIf="!isPreviewMode || showEditorControls" class="quick-isolated-btn" (click)="openIsolatedMode($event)" title="Editar en Modo Aislado (I)">
               🎯
             </button>
 
@@ -114,7 +129,7 @@ import * as PageActions from '../../../../store/actions/page.actions';
         </div>
 
         <!-- Position/Size Info -->
-        <div class="info-panel">
+        <div *ngIf="!isPreviewMode || showEditorControls" class="info-panel">
           <div class="info-row">
             <span class="info-label">Posición</span>
             <span class="info-value">{{ boxLeft }}px × {{ boxTop }}px</span>
@@ -162,6 +177,52 @@ import * as PageActions from '../../../../store/actions/page.actions';
       z-index: 1 !important;
       background: transparent !important;
     }
+
+      .editor-section.preview-mode {
+        padding-top: 0 !important;
+      }
+      
+      .box-container.preview-mode {
+        padding: 0 !important;
+      }
+
+      .draggable-box.preview-mode {
+        border: none !important;
+        box-shadow: none !important;
+        cursor: default !important;
+      }
+
+      .preview-toggle-btn {
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1.25rem;
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        border-radius: 50px;
+        color: white;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        z-index: 9999;
+        box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+      }
+
+      .preview-toggle-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(99, 102, 241, 0.6);
+      }
+
+      .preview-toggle-btn.active {
+        background: linear-gradient(135deg, #ef4444, #dc2626);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+
+      .toggle-icon { font-size: 1.1rem; }
+      .toggle-text { font-size: 0.875rem; }
 
     .section-header {
       display: flex;
@@ -451,6 +512,10 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   isDragging = false;
   isResizing = false;
   resizeHandle = '';
+  
+  // Preview mode state
+  isPreviewMode = false;
+  showEditorControls = false;
   dragStartX = 0;
   dragStartY = 0;
   startLeft = 0;
@@ -461,6 +526,20 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   ngOnInit() {
     this.loadPositionFromStore();
     this.mergeContentAndStyles();
+
+    // Subscribe to builder step changes to detect preview mode
+    this.variantService.builderStep$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(step => {
+        const wasPreviewMode = this.isPreviewMode;
+        this.isPreviewMode = step === 'preview';
+        
+        // Reset editor controls toggle when exiting preview mode
+        if (!this.isPreviewMode) {
+          this.showEditorControls = false;
+        }
+        this.cdr.detectChanges();
+      });
   }
 
   ngAfterViewInit() {
@@ -502,6 +581,8 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   }
 
   private handleArrowKey(key: string, delta: number) {
+    if (this.isPreviewMode && !this.showEditorControls) return; // Prevent movement in preview mode if controls are hidden
+
     switch (key) {
       case 'ArrowUp': this.boxTop -= delta; break;
       case 'ArrowDown': this.boxTop += delta; break;
@@ -601,7 +682,16 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
     }
   }
 
+  /**
+   * Toggle editor controls in preview mode
+   */
+  toggleEditorControlsInPreview(): void {
+    this.showEditorControls = !this.showEditorControls;
+    this.cdr.detectChanges();
+  }
+
   onMouseDown(event: MouseEvent) {
+    if (this.isPreviewMode && !this.showEditorControls) return;
     if ((event.target as HTMLElement).classList.contains('resize-handle')) return;
     
     event.preventDefault();
