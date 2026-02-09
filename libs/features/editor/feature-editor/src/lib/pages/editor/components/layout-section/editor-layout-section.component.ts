@@ -743,6 +743,7 @@ interface ComponentDefaultSize {
     /* Slots */
     .slot {
       position: relative;
+      width: 100%;
       min-height: 100px;
       border: 1px dashed rgba(99, 102, 241, 0.15);
       border-radius: 12px;
@@ -825,7 +826,8 @@ interface ComponentDefaultSize {
     .slot-controls {
       position: absolute;
       top: 10px;
-      right: 10px;
+      right: 20px;
+      left: auto;
       display: flex;
       gap: 6px;
       z-index: 100;
