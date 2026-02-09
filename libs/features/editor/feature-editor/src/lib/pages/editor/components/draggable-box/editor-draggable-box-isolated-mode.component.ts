@@ -192,6 +192,15 @@ export interface UndoRedoState {
                    [class.show-grid]="showGrid"
                    [class.grid-snapping]="snapToGrid">
                 
+                <!-- Slot Boundary Guide (Flexible Layouts) -->
+                <div class="slot-guide" *ngIf="config.content['slotBounds']"
+                     [style.left.px]="config.content['slotBounds'].x"
+                     [style.top.px]="config.content['slotBounds'].y"
+                     [style.width.px]="config.content['slotBounds'].width"
+                     [style.height.px]="config.content['slotBounds'].height">
+                  <span class="slot-label">ÁREA DEL SLOT</span>
+                </div>
+                
                 <div class="draggable-wrapper"
                      #draggableWrapper
                      [style.left.px]="currentPosition.x"
@@ -733,8 +742,30 @@ export interface UndoRedoState {
 
     .canvas-inner.grid-snapping {
       background-image: 
-        radial-gradient(var(--primary-accent) 2px, transparent 2px);
+        radial-gradient(rgba(99, 102, 241, 0.2) 1.5px, transparent 1.5px);
       box-shadow: inset 0 0 100px rgba(99, 102, 241, 0.05);
+    }
+
+    .slot-guide {
+      position: absolute;
+      border: 2px dashed rgba(99, 102, 241, 0.3);
+      pointer-events: none;
+      z-index: 10;
+      background: rgba(99, 102, 241, 0.02);
+      border-radius: 4px;
+    }
+
+    .slot-label {
+      position: absolute;
+      top: -22px;
+      left: 0;
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--primary-accent);
+      padding: 2px 0;
+      letter-spacing: 0.12em;
+      opacity: 0.8;
+      text-shadow: 0 1px 4px rgba(0,0,0,0.5);
     }
     
     .canvas-inner.ambient-dark {

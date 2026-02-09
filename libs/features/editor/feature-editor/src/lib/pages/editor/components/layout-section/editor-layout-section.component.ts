@@ -194,25 +194,25 @@ interface ComponentDefaultSize {
 
           <!-- Filled Slot - Component Renderer -->
           <ng-container *ngIf="slot.componentType !== 'empty'">
-            <div class="slot-component" style="height: auto; min-height: 100%;">
-              <!-- Editing Overlay -->
-              <div *ngIf="(!isPreviewMode && isEditing) || showEditorControls" class="slot-controls">
-                <button *ngIf="isPositioned(i, slot)"
-                        class="slot-btn" 
-                        (click)="resetSlotPosition(i)" 
-                        title="Resetear Posición (Centrar en Grid)">🎯</button>
-                <button class="slot-btn drag-handle" 
-                        appResizeHandle [slotIndex]="i" anchor="move"
-                        title="Mover Componente">⠿</button>
-                <button class="slot-btn edit-btn" 
-                        (click)="editSlotComponent(i, $event)" 
-                        [title]="hasIsolatedMode(slot.componentType) ? 'Editar en Modo Aislado' : 'Configurar'">
-                  {{ hasIsolatedMode(slot.componentType) ? '🎯' : '⚙️' }}
-                </button>
-                <button class="slot-btn" (click)="openComponentPicker(i, $event)" title="Cambiar Componente">🔄</button>
-                <button class="slot-btn danger" (click)="clearSlot(i, $event)" title="Eliminar">🗑️</button>
-              </div>
+            <!-- Slot Toolbar (Fixed to Slot Corners) -->
+            <div *ngIf="(!isPreviewMode && isEditing) || showEditorControls" class="slot-controls">
+              <button *ngIf="isPositioned(i, slot)"
+                      class="slot-btn" 
+                      (click)="resetSlotPosition(i)" 
+                      title="Resetear Posición (Centrar en Grid)">🎯</button>
+              <button class="slot-btn drag-handle" 
+                      appResizeHandle [slotIndex]="i" anchor="move"
+                      title="Mover Componente">⠿</button>
+              <button class="slot-btn edit-btn" 
+                      (click)="editSlotComponent(i, $event)" 
+                      [title]="hasIsolatedMode(slot.componentType) ? 'Editar en Modo Aislado' : 'Configurar'">
+                {{ hasIsolatedMode(slot.componentType) ? '🎯' : '⚙️' }}
+              </button>
+              <button class="slot-btn" (click)="openComponentPicker(i, $event)" title="Cambiar Componente">🔄</button>
+              <button class="slot-btn danger" (click)="clearSlot(i, $event)" title="Eliminar">🗑️</button>
+            </div>
 
+            <div class="slot-component">
               <!-- Component Content -->
               <ng-container [ngSwitch]="slot.componentType">
 
@@ -313,20 +313,20 @@ interface ComponentDefaultSize {
                 </div>
 
               </ng-container>
-
-              <!-- Resize Anchors (8 points) -->
-              <div *ngIf="((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
-                <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-              </div>
             </div>
           </ng-container>
+
+          <!-- Resize Anchors (Fixed to Slot Boundaries) -->
+          <div *ngIf="slot.componentType !== 'empty' && ((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
+            <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+          </div>
         </div>
       </div>
 
@@ -817,11 +817,8 @@ interface ComponentDefaultSize {
     .slot-component {
       position: relative;
       width: 100%;
-      min-height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
+      height: 100%;
+      min-height: inherit;
       box-sizing: border-box;
     }
 
@@ -1064,18 +1061,23 @@ interface ComponentDefaultSize {
       z-index: 100;
     }
     
+    .resize-anchors {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 105;
+    }
+
     .resize-anchor {
       position: absolute;
-      width: 12px;
-      height: 12px;
+      width: 10px;
+      height: 10px;
       background: #ffffff;
-      border: 2px solid #10b981;
-      border-radius: 4px;
-      z-index: 2000;
+      border: 2px solid #6366f1;
+      border-radius: 2px;
       opacity: 0;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      pointer-events: auto;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      pointer-events: all;
+      transition: all 0.2s;
     }
     
     .slot.selected .resize-anchor, .slot.resizing .resize-anchor {
@@ -1140,6 +1142,7 @@ interface ComponentDefaultSize {
 
     /* Containment & Overflow Protection */
     .slot {
+      position: relative;
       overflow: hidden; /* Prevent children from breaking the grid */
       display: flex;
       flex-direction: column;
@@ -1616,17 +1619,26 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.editingSlotIndex = index;
     this.activeIsolatedType = slot.componentType;
     
-    // Detect visual width and position of the slot AND its parent section
+    // DETECT METRICS & NORMALIZE TO 1200px REFERENCE GRID
     const metrics = this.detectSlotMetrics(event);
+    const REFERENCE_WIDTH = 1200;
+    const scaleFactor = REFERENCE_WIDTH / metrics.sectionWidth;
     
-    // Use values from config if available and detection failed or yielded zero
-    const currentLeft = parseInt(slot.layoutStyles?.['left']) || metrics.localX;
-    const currentTop = parseInt(slot.layoutStyles?.['top']) || metrics.localY;
+    // Normalize position relative to SECTION start for isolated mode
+    // (slot position + component offset) * scale
+    const rawLeft = parseInt(slot.layoutStyles?.['left']) || 0;
+    const rawTop = parseInt(slot.layoutStyles?.['top']) || 0;
     
+    const normalizedX = (metrics.localX + rawLeft) * scaleFactor;
+    const normalizedY = (metrics.localY + rawTop) * scaleFactor;
+    
+    // Normalize size
     const currentSize = this.extractCurrentSize(
       slot.layoutStyles,
       this.getDefaultSize(slot.componentType, metrics.width)
     );
+    const normalizedWidth = currentSize.width * scaleFactor;
+    const normalizedHeight = currentSize.height * scaleFactor;
 
     // Build component-specific content mapping
     const mappedContent = this.buildIsolatedContent(slot, metrics);
@@ -1638,13 +1650,22 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       type: slot.componentType,
       variant: slot.componentVariant || this.globalVariant,
       globalVariant: this.globalVariant,
-      content: mappedContent,
+      content: {
+        ...mappedContent,
+        currentScale: scaleFactor, // Store exact scale for perfect inverse mapping
+        slotBounds: {
+          x: metrics.localX * scaleFactor,
+          y: metrics.localY * scaleFactor,
+          width: metrics.width * scaleFactor,
+          height: metrics.sectionHeight * scaleFactor 
+        }
+      },
       styles: { ...slot.layoutStyles },
-      position: { x: currentLeft, y: currentTop },
-      size: currentSize,
+      position: { x: Math.round(normalizedX), y: Math.round(normalizedY) },
+      size: { width: Math.round(normalizedWidth), height: Math.round(normalizedHeight) },
       canvasSize: {
-        width: metrics.sectionWidth,
-        height: metrics.sectionHeight
+        width: REFERENCE_WIDTH,
+        height: Math.round(metrics.sectionHeight * scaleFactor)
       }
     };
     
@@ -1897,40 +1918,47 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     const finalAppearanceStyles = { ...updatedConfig.styles };
     const layoutStyles = { ...(newSlots[this.editingSlotIndex].layoutStyles || {}) };
     
-    if (updatedConfig.size) {
-        const slotW = updatedConfig.size.width;
-        const slotH = updatedConfig.size.height;
+    // Coordinate Re-Mapping Flow:
+    // 1. Config -> Normalized (already done in Isolated Mode)
+    // 2. Normalized -> Real Section Pixels (based on current viewport width)
+    // 3. Real Section Pixels -> Slot-Relative Pixels (Subtract localX/localY)
+    
+    if (updatedConfig.position && updatedConfig.canvasSize && this.editingOriginMetrics) {
+        const REFERENCE_WIDTH = 1200;
+        // Use stored scale factor for 100% precision, fallback to detection
+        const activeScale = updatedConfig.content?.['currentScale'] || (REFERENCE_WIDTH / this.editingOriginMetrics.sectionWidth);
+        const invScale = 1 / activeScale;
         
-        layoutStyles['width'] = slotW + 'px';
+        // Convert normalized isolated coordinates back to real section pixels
+        const realX = updatedConfig.position.x * invScale;
+        const realY = updatedConfig.position.y * invScale;
+        const realW = updatedConfig.size?.width ? updatedConfig.size.width * invScale : 0;
+        const realH = updatedConfig.size?.height ? updatedConfig.size.height * invScale : 0;
+
+        // Clamp to SECTION boundaries
+        let clampedX = Math.max(0, realX);
+        let clampedY = Math.max(0, realY);
+        
+        if (clampedX + realW > this.editingOriginMetrics.sectionWidth) {
+          clampedX = Math.max(0, this.editingOriginMetrics.sectionWidth - realW);
+        }
+
+        // Convert SECTION-RELATIVE coordinates to SLOT-RELATIVE coordinates
+        let finalX = clampedX - this.editingOriginMetrics.localX;
+        let finalY = clampedY - this.editingOriginMetrics.localY;
+
+        // Sync back width/height
+        layoutStyles['width'] = Math.round(realW) + 'px';
         
         const flowComponents = ['accordion', 'card', 'list', 'title', 'chip', 'button', 'draggable-box', 'text'];
         const isFlow = flowComponents.some(type => slot.componentType.includes(type));
-
+        
         if (isFlow) {
-             layoutStyles['height'] = 'auto';
-             layoutStyles['min-height'] = slotH + 'px';
+            layoutStyles['height'] = 'auto';
+            layoutStyles['min-height'] = Math.round(realH) + 'px';
         } else {
-             layoutStyles['height'] = slotH + 'px';
+            layoutStyles['height'] = Math.round(realH) + 'px';
         }
-        
-        // Remove from appearance styles to avoid duplication/conflicts
-        delete finalAppearanceStyles['width'];
-        delete finalAppearanceStyles['height'];
-    }
-    
-    // Direct position sync with clamping to prevent overflow
-    if (updatedConfig.position && updatedConfig.canvasSize) {
-        const canvasW = updatedConfig.canvasSize.width;
-        const canvasH = updatedConfig.canvasSize.height;
-        const widthVal = updatedConfig.size?.width || 0;
-        const heightVal = updatedConfig.size?.height || 0;
-
-        // Clamp X and Y to parent boundaries
-        let finalX = Math.max(0, updatedConfig.position.x);
-        let finalY = Math.max(0, updatedConfig.position.y);
-        
-        if (finalX + widthVal > canvasW) finalX = Math.max(0, canvasW - widthVal);
-        if (finalY + heightVal > canvasH) finalY = Math.max(0, canvasH - heightVal);
 
         // Position logic refinement:
         // Only force absolute positioning if it was already absolute 
@@ -1940,13 +1968,13 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
                            !!slot.layoutStyles?.['top'];
                            
         const hasMoved = this.editingOriginMetrics && (
-          Math.abs(finalX - this.editingOriginMetrics.localX) > 5 ||
-          Math.abs(finalY - this.editingOriginMetrics.localY) > 5
+          Math.abs(finalX - (parseInt(slot.layoutStyles?.['left']) || 0)) > 5 ||
+          Math.abs(finalY - (parseInt(slot.layoutStyles?.['top']) || 0)) > 5
         );
 
         if (wasAbsolute || hasMoved) {
-          layoutStyles['left'] = finalX + 'px';
-          layoutStyles['top'] = finalY + 'px';
+          layoutStyles['left'] = Math.round(finalX) + 'px';
+          layoutStyles['top'] = Math.round(finalY) + 'px';
           layoutStyles['position'] = 'absolute';
           
           // Remove from appearance styles
