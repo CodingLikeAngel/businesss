@@ -132,9 +132,12 @@ export interface UndoRedoState {
                   <select [(ngModel)]="editableContent.variant" (ngModelChange)="onVariantChange()" class="premium-select">
                     <option value="">Página (Heredar)</option>
                     <option value="default">Caja Estándar (Blanca)</option>
-                    <option *ngFor="let v of availableVariants" [value]="v">
-                      {{ v | titlecase }}
-                    </option>
+                    <option value="primary">Primaria (Color Accent)</option>
+                    <option value="secondary">Secundaria (Verde)</option>
+                    <option value="glass">Cristal (Glass)</option>
+                    <option value="neon">Neón (Glow)</option>
+                    <option value="cyberpunk">Cyberpunk</option>
+                    <option value="gradient">Gradiente</option>
                   </select>
                   </div>
                   <p class="variant-hint" *ngIf="!editableContent.variant">
@@ -194,7 +197,7 @@ export interface UndoRedoState {
                    (mousedown)="onMouseDown($event)">
                 
                 <lib-ui-components-draggable-box-1
-                  *ngIf="editableContent.boxVariant === 'draggable-box-1'"
+                  *ngIf="editableContent.boxVariant === 'draggable-box-1' || !editableContent.boxVariant"
                   [variant]="editableContent.variant || config.content['globalVariant'] || 'secondary'"
                   [rounded]="editableContent.rounded || 'md'"
                   [size]="editableContent.size || 'md'"
@@ -596,7 +599,7 @@ export interface UndoRedoState {
       box-shadow: 0 0 0 2px var(--primary-accent), 0 0 20px var(--primary-accent-glow) !important;
     }
 
-    /* Pierce encapsulation to ensure inner components fill the wrapper */
+    /* Pierce encapsulation at root level to ensure inner components fill the wrapper */
     ::ng-deep {
       .draggable-wrapper {
         lib-ui-components-draggable-box-1,
@@ -605,24 +608,34 @@ export interface UndoRedoState {
           display: block !important;
           width: 100% !important;
           height: 100% !important;
+          position: relative !important;
         }
         
         .draggable-box-1,
         .draggable-box-2,
         .draggable-box-3 {
-          display: block !important;
-          width: 100% !important;
-          height: 100% !important;
           position: absolute !important;
           inset: 0 !important;
+          width: 100% !important;
+          height: 100% !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          visibility: visible !important;
+          opacity: 1 !important;
         }
-
+        
         .draggable-box-1-content,
         .draggable-box-2-content,
         .draggable-box-3-content {
            display: block !important;
+           color: inherit !important;
         }
       }
+    }
+
+    .draggable-wrapper.snapping {
+      box-shadow: 0 0 0 2px var(--primary-accent), 0 0 20px var(--primary-accent-glow) !important;
     }
 
     .toggle-wrapper span {
@@ -677,10 +690,7 @@ export interface UndoRedoState {
       background-color: #020617;
       position: relative;
       overflow: auto;
-      display: flex; /* CENTER THE SECTION */
-      align-items: center;
-      justify-content: center;
-      padding: 100px;
+      padding: 0; /* No padding to avoid offsetting scroll coordinates */
       transition: background-color 0.4s ease;
       z-index: 1;
     }
@@ -712,58 +722,45 @@ export interface UndoRedoState {
     .draggable-wrapper {
       position: absolute !important;
       cursor: move;
-      z-index: 100;
-      /* ROBUSTNESS: Outline is separate from content styling */
-      outline: 2px solid transparent;
-      outline-offset: 0;
-      transition: outline-color 0.15s ease, box-shadow 0.3s ease;
-      background: rgba(255, 255, 255, 0.01);
+      z-index: 1000 !important;
+      /* ROBUSTNESS: Ensure visibility even if component fails */
+      outline: 2px solid rgba(99, 102, 241, 0.5) !important;
+      outline-offset: 1px;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.02);
+      min-width: 40px;
+      min-height: 40px;
     }
 
     .draggable-wrapper:hover {
-      outline-color: rgba(99, 102, 241, 0.5);
+      outline-color: var(--primary-accent) !important;
+      outline-width: 3px !important;
     }
 
-    .draggable-wrapper.is-dragging,
-    .draggable-wrapper.is-resizing {
-      outline-color: var(--primary-accent);
-      outline-width: 3px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-    }
-
-    /* Ensure inner components fill the wrapper - PIERCE ENCAPSULATION */
+    /* Draggable Wrapper */
     .draggable-wrapper {
-      ::ng-deep {
-        lib-ui-components-draggable-box-1,
-        lib-ui-components-draggable-box-2,
-        lib-ui-components-draggable-box-3 {
-          display: block !important;
-          width: 100% !important;
-          height: 100% !important;
-          position: relative !important;
-        }
-        
-        .draggable-box-1,
-        .draggable-box-2,
-        .draggable-box-3 {
-          position: absolute !important;
-          inset: 0 !important;
-          width: 100% !important;
-          height: 100% !important;
-        }
-      }
+      position: absolute !important;
+      cursor: move;
+      z-index: 1000 !important;
+      outline: 2px solid rgba(99, 102, 241, 0.5) !important;
+      outline-offset: 1px;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.02);
+      min-width: 40px;
+      min-height: 40px;
     }
 
-    /* RESIZE HANDLES */
+    /* RESIZE HANDLES - EXTREMELY VISIBLE */
     .resize-handle {
       position: absolute;
-      width: 12px;
-      height: 12px;
-      background: #fff;
-      border: 2px solid var(--primary-accent);
+      width: 14px;
+      height: 14px;
+      background: #ffffff !important;
+      border: 2px solid var(--primary-accent) !important;
       border-radius: 4px;
-      z-index: 10;
-      transition: all 0.2s;
+      z-index: 3000 !important;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      pointer-events: all;
     }
 
     .resize-handle:hover {
@@ -925,14 +922,21 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
     };
     
     // Normalize variant name (handles 'box-1' -> 'draggable-box-1', etc.)
-    let v = this.config.content['boxVariant'] || 'draggable-box-1';
-    if (v === 'box-1' || v === '1') v = 'draggable-box-1';
-    else if (v === 'box-2' || v === '2') v = 'draggable-box-2';
-    else if (v === 'box-3' || v === '3') v = 'draggable-box-3';
+    let v = this.config.content['boxVariant'] || this.config.type || 'draggable-box-1';
+    
+    // Normalize common shorthand names exhaustively
+    const vLower = String(v).toLowerCase();
+    if (vLower.includes('box-1') || vLower === '1' || vLower === 'draggable-box' || vLower === 'box' || vLower === 'card' || vLower === 'default') {
+      v = 'draggable-box-1';
+    } else if (vLower.includes('box-2') || vLower === '2' || vLower === 'widget') {
+      v = 'draggable-box-2';
+    } else if (vLower.includes('box-3') || vLower === '3' || vLower === 'glass') {
+      v = 'draggable-box-3';
+    }
     
     // Ensure it's a valid variant, otherwise default to 1
     const validVariants = ['draggable-box-1', 'draggable-box-2', 'draggable-box-3'];
-    const variant = validVariants.includes(v) ? v : 'draggable-box-1';
+    const variant = validVariants.includes(v as string) ? (v as string) : 'draggable-box-1';
     
     const defaultSize = defaultSizes[variant] || { width: 280, height: 120 };
 
@@ -957,7 +961,7 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
     // Load editable content
     this.editableContent = {
       ...this.config.content,
-      title: this.config.content['title'] || 'Draggable Box',
+      title: this.config.content['title'] || this.config.content['text'] || 'Draggable Box',
       description: this.config.content['description'] || 'Arrastra y redimensiona este elemento',
       variant: this.config.content['variant'] || '',
       boxVariant: variant,
@@ -1351,26 +1355,34 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
   getCustomStyles(): any {
     const styles: any = {};
     
-    // Only add styles if they are specifically set, otherwise let variants handle it
-    if (this.editableStyles.backgroundColor !== undefined && this.editableStyles.backgroundColor !== '') {
-      styles.backgroundColor = this.editableStyles.backgroundColor;
+    // Determine background color with robust fallbacks
+    const hasVariant = !!this.editableContent.variant && this.editableContent.variant !== 'default';
+    let bgColor = this.editableStyles.backgroundColor;
+    
+    // Fallback if empty and no variant
+    if (!hasVariant && !bgColor) {
+      bgColor = '#10b981';
+    }
+
+    if (bgColor) {
+      styles.backgroundColor = bgColor;
+      styles.background = bgColor;
     }
     
-    if (this.editableStyles.borderColor !== undefined && this.editableStyles.borderColor !== '') {
-      styles.border = `${this.editableStyles.borderWidth || 0}px solid ${this.editableStyles.borderColor}`;
-    } else if (this.editableStyles.borderWidth) {
-      // If we have width but no color, we might still want to respect the width if the variant has a color
-      styles.borderWidth = `${this.editableStyles.borderWidth}px`;
+    // Border logic
+    if (this.editableStyles.borderColor || this.editableStyles.borderWidth) {
+      const bWidth = this.editableStyles.borderWidth || 2;
+      const bColor = this.editableStyles.borderColor || '#059669';
+      styles.border = `${bWidth}px solid ${bColor}`;
     }
     
     // Only apply manual border-radius if the preset is 'md' (standard/manual).
-    // If 'none' or 'full' is selected, we let the component's CSS classes handle it.
     if (this.editableContent.rounded === 'md') {
-      styles.borderRadius = `${this.editableStyles.borderRadius}${this.borderRadiusUnit}`;
+      styles.borderRadius = `${this.editableStyles.borderRadius || 12}${this.borderRadiusUnit}`;
     }
     
-    styles.padding = `${this.editableStyles.padding}${this.paddingUnit}`;
-    styles.boxShadow = this.editableStyles.boxShadow;
+    styles.padding = `${this.editableStyles.padding || 20}${this.paddingUnit}`;
+    styles.boxShadow = this.editableStyles.boxShadow || '0 10px 30px rgba(0,0,0,0.3)';
     
     return styles;
   }

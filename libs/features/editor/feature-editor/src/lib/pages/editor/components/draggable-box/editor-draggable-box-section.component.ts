@@ -144,8 +144,8 @@ import * as PageActions from '../../../../store/actions/page.actions';
     }
 
     :host.isolated-mode-active-host {
-      position: static !important;
-      z-index: 9999999 !important;
+      position: relative !important;
+      z-index: 1000 !important;
     }
 
     .editor-section {
@@ -513,12 +513,17 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   }
 
   private mergeContentAndStyles() {
+    let bVariant = this.section.content?.['boxVariant'] || this.section.config?.['subtype'] || 'draggable-box-1';
+    if (bVariant === 'box-1' || bVariant === '1' || bVariant === 'default') bVariant = 'draggable-box-1';
+    else if (bVariant === 'box-2' || bVariant === '2') bVariant = 'draggable-box-2';
+    else if (bVariant === 'box-3' || bVariant === '3') bVariant = 'draggable-box-3';
+
     this.currentContent = {
       ...this.section.content,
       title: this.section.content?.['title'] || 'Draggable Box',
       description: this.section.content?.['description'] || 'Arrastra y redimensiona este elemento',
       variant: this.section.content?.['variant'] || '',
-      boxVariant: this.section.content?.['boxVariant'] || this.section.config?.['subtype'] || 'draggable-box-1'
+      boxVariant: bVariant
     };
 
     const hasVariant = !!this.currentContent.variant && this.currentContent.variant !== 'default';
@@ -725,10 +730,11 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
     this.isolatedConfig = {
       sectionId: this.section.id,
       elementId: this.boxId,
-      type: 'draggable-box',
+      type: this.section.config?.['subtype'] || 'draggable-box-1',
       content: { 
         ...this.currentContent,
-        globalVariant: this.globalVariant
+        globalVariant: this.globalVariant,
+        boxVariant: this.currentContent.boxVariant || 'draggable-box-1'
       },
       styles: {
         ...this.section.styles,
