@@ -313,20 +313,20 @@ interface ComponentDefaultSize {
                 </div>
 
               </ng-container>
-            </div>
 
-            <!-- Resize Anchors (8 points) -->
-          <div *ngIf="((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
-            <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-          </div>
-        </ng-container>
+              <!-- Resize Anchors (8 points) -->
+              <div *ngIf="((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
+                <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+              </div>
+            </div>
+          </ng-container>
         </div>
       </div>
 
@@ -449,13 +449,11 @@ interface ComponentDefaultSize {
         </div>
       </div>
 
-      /* Isolated Mode Components - Rendered at body level via dynamic container */
-      <div #isolatedModeContainer class="isolated-mode-dynamic-container"></div>
-
-      <!-- Alternative: Direct overlay (backup for when dynamic approach fails) -->
-      <div *ngIf="showIsolatedMode && activeIsolatedType && (!isPreviewMode || showEditorControls)" 
-           class="isolated-mode-fullscreen-overlay" 
-           [class]="'isolated-mode-overlay-' + (activeIsolatedType || '')">
+      <!-- Isolated Mode Overlay -->
+      <div 
+        *ngIf="showIsolatedMode && activeIsolatedType && (!isPreviewMode || showEditorControls)" 
+        class="isolated-mode-fullscreen-overlay" 
+        [class]="'isolated-mode-overlay-' + (activeIsolatedType || '')">
         <div class="isolated-mode-overlay-content">
         <lib-editor-button-isolated-mode
           *ngIf="activeIsolatedType === 'ui-button'"
@@ -526,6 +524,7 @@ interface ComponentDefaultSize {
           (closed)="onIsolatedModeClosed()"
           (applied)="onIsolatedModeApplied($any($event))">
         </lib-editor-card-product-isolated-mode>
+        </div>
       </div>
 
     </section>
