@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, inject, OnDestroy, ChangeDetectorRef, HostListener, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, inject, OnDestroy, ChangeDetectorRef, HostListener, Inject, PLATFORM_ID, HostBinding } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
@@ -136,12 +136,31 @@ import * as PageActions from '../../../../store/actions/page.actions';
     </lib-editor-draggable-box-isolated-mode>
   `,
   styles: [`
+    :host { 
+      display: block; 
+      width: 100%;
+      position: relative;
+      z-index: 1;
+    }
+
+    :host.isolated-mode-active-host {
+      position: static !important;
+      z-index: 9999999 !important;
+    }
+
     .editor-section {
       width: 100%;
       height: 100%;
       position: relative;
       overflow: hidden;
       background: #f8fafc;
+      z-index: 1;
+    }
+
+    .isolated-mode-active .editor-section {
+      overflow: visible !important;
+      z-index: 1 !important;
+      background: transparent !important;
     }
 
     .section-header {
@@ -405,6 +424,8 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     super(platformId);
   }
+
+  @HostBinding('class.isolated-mode-active-host') get isIsolatedModeActive() { return this.showIsolatedMode; }
 
   // Box ID
   get boxId(): string { return this.section.id + '_box'; }

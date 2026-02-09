@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject, Inject, PLATFORM_ID, ViewContainerRef, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject, Inject, PLATFORM_ID, ViewContainerRef, TemplateRef, ViewChild, HostBinding } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
@@ -449,9 +449,87 @@ interface ComponentDefaultSize {
         </div>
       </div>
 
-      </div>
+
 
     </section>
+
+    <!-- Isolated Mode Overlay - Outside section to prevent clipping -->
+    <div 
+      *ngIf="showIsolatedMode && activeIsolatedType" 
+      class="isolated-mode-fullscreen-overlay" 
+      [class]="'isolated-mode-overlay-' + (activeIsolatedType || '')">
+      <div class="isolated-mode-overlay-content">
+        <lib-editor-button-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-button'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-button-isolated-mode>
+
+        <lib-editor-accordion-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-accordion'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-accordion-isolated-mode>
+
+        <lib-editor-draggable-box-isolated-mode
+          *ngIf="activeIsolatedType === 'draggable-box'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-draggable-box-isolated-mode>
+
+        <lib-editor-title-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-title'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-title-isolated-mode>
+
+        <lib-editor-image-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-image'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-image-isolated-mode>
+
+        <lib-editor-card-premium-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-card'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-card-premium-isolated-mode>
+
+        <lib-editor-card-animated-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-card-animated'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-card-animated-isolated-mode>
+
+        <lib-editor-list-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-list'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-list-isolated-mode>
+
+        <lib-editor-chip-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-chip'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-chip-isolated-mode>
+
+        <lib-editor-card-product-isolated-mode
+          *ngIf="activeIsolatedType === 'ui-card-product'"
+          [config]="$any(isolatedConfig)"
+          (closed)="onIsolatedModeClosed()"
+          (applied)="onIsolatedModeApplied($any($event))">
+        </lib-editor-card-product-isolated-mode>
+      </div>
+    </div>
   `,
   styles: [`:host { 
     display: block; 
@@ -460,9 +538,11 @@ interface ComponentDefaultSize {
     z-index: 1;
   }
 
-  /* Cuando isolated mode está activo, el host no debe restringir */
-  :host:has(.isolated-mode-fullscreen-overlay) {
+  /* Cuando isolated mode está activo, el host no debe restringir y debe estar arriba */
+  :host:has(.isolated-mode-fullscreen-overlay),
+  :host.isolated-mode-active-host {
     position: static !important;
+    z-index: 9999999 !important;
   }
 
     .layout-section {
@@ -493,16 +573,16 @@ interface ComponentDefaultSize {
       overflow: visible !important;
     }
 
-    /* When isolated mode is active, ensure overflow is visible for the section */
-    .layout-section.isolated-mode {
-      overflow: visible !important;
-      transform: none !important;
-    }
-
-    /* Also force overflow visible for any parent containers when isolated mode is active */
+    /* When isolated mode is active, ensure overflow is visible and no clipping contexts exist */
+    /* When isolated mode is active, ensure overflow is visible and no clipping contexts exist */
+    /* Lower z-index so it doesn't cover the overlay (which is a sibling) */
+    .layout-section.isolated-mode,
     .isolated-mode-active .layout-section {
       overflow: visible !important;
       transform: none !important;
+      backdrop-filter: none !important;
+      filter: none !important;
+      z-index: 1 !important;
     }
 
     /* Isolated Mode Overlay - Fixed position with maximum priority */
@@ -514,7 +594,7 @@ interface ComponentDefaultSize {
       bottom: 0 !important;
       width: 100vw !important;
       height: 100vh !important;
-      z-index: 999999 !important;
+      z-index: 10000005 !important;
       background: rgba(2, 6, 23, 0.95) !important;
       backdrop-filter: blur(16px) !important;
       overflow: auto !important;
@@ -1099,6 +1179,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   readonly resizeService = inject(SlotResizeService);
   override readonly variantService = inject(VariantService);
   
+  @HostBinding('class.isolated-mode-active-host') get isIsolatedModeActive() { return this.showIsolatedMode; }
+
   // Lifecycle Management
   private destroy$ = new Subject<void>();
   private persistSubject$ = new Subject<void>();

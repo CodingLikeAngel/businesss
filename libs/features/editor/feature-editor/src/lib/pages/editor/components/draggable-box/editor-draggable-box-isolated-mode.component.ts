@@ -199,7 +199,7 @@ export interface UndoRedoState {
                   [rounded]="editableContent.rounded || 'md'"
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
-                  [content]="editableContent.content || editableContent.title || 'Drag me'"
+                  [content]="editableContent.content || editableContent.title || editableContent.text || 'Drag me'"
                   [customStyles]="getCustomStyles()"
                   style="width: 100%; height: 100%; display: block;">
                 </lib-ui-components-draggable-box-1>
@@ -210,7 +210,7 @@ export interface UndoRedoState {
                   [rounded]="editableContent.rounded || 'md'"
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
-                  [content]="editableContent.content || editableContent.title || 'Drag me'"
+                  [content]="editableContent.content || editableContent.title || editableContent.text || 'Drag me'"
                   [customStyles]="getCustomStyles()"
                   style="width: 100%; height: 100%; display: block;">
                 </lib-ui-components-draggable-box-2>
@@ -221,7 +221,7 @@ export interface UndoRedoState {
                   [rounded]="editableContent.rounded || 'md'"
                   [size]="editableContent.size || 'md'"
                   [dark]="editableContent.dark || false"
-                  [content]="editableContent.content || editableContent.title || 'Drag me'"
+                  [content]="editableContent.content || editableContent.title || editableContent.text || 'Drag me'"
                   [customStyles]="getCustomStyles()"
                   style="width: 100%; height: 100%; display: block;">
                 </lib-ui-components-draggable-box-3>
@@ -291,7 +291,7 @@ export interface UndoRedoState {
       inset: 0 !important;
       background: rgba(2, 6, 23, 0.95);
       backdrop-filter: blur(16px) saturate(180%);
-      z-index: 9999999 !important; /* Extremely high to beat any sidebar */
+      z-index: 10000005 !important; /* Extremely high to beat any sidebar */
       display: flex;
       align-items: center;
       justify-content: center;
@@ -596,6 +596,35 @@ export interface UndoRedoState {
       box-shadow: 0 0 0 2px var(--primary-accent), 0 0 20px var(--primary-accent-glow) !important;
     }
 
+    /* Pierce encapsulation to ensure inner components fill the wrapper */
+    ::ng-deep {
+      .draggable-wrapper {
+        lib-ui-components-draggable-box-1,
+        lib-ui-components-draggable-box-2,
+        lib-ui-components-draggable-box-3 {
+          display: block !important;
+          width: 100% !important;
+          height: 100% !important;
+        }
+        
+        .draggable-box-1,
+        .draggable-box-2,
+        .draggable-box-3 {
+          display: block !important;
+          width: 100% !important;
+          height: 100% !important;
+          position: absolute !important;
+          inset: 0 !important;
+        }
+
+        .draggable-box-1-content,
+        .draggable-box-2-content,
+        .draggable-box-3-content {
+           display: block !important;
+        }
+      }
+    }
+
     .toggle-wrapper span {
       font-size: 11px;
       font-weight: 700;
@@ -895,7 +924,16 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
       'draggable-box-3': { width: 320, height: 180 }
     };
     
-    const variant = this.config.content['boxVariant'] || 'draggable-box-1';
+    // Normalize variant name (handles 'box-1' -> 'draggable-box-1', etc.)
+    let v = this.config.content['boxVariant'] || 'draggable-box-1';
+    if (v === 'box-1' || v === '1') v = 'draggable-box-1';
+    else if (v === 'box-2' || v === '2') v = 'draggable-box-2';
+    else if (v === 'box-3' || v === '3') v = 'draggable-box-3';
+    
+    // Ensure it's a valid variant, otherwise default to 1
+    const validVariants = ['draggable-box-1', 'draggable-box-2', 'draggable-box-3'];
+    const variant = validVariants.includes(v) ? v : 'draggable-box-1';
+    
     const defaultSize = defaultSizes[variant] || { width: 280, height: 120 };
 
     // Use exact position from config (now normalized to section)
