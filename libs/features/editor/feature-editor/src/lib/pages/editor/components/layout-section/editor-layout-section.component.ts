@@ -824,13 +824,13 @@ interface ComponentDefaultSize {
     }
 
     .slot-controls {
-      position: absolute;
-      top: 10px;
-      right: 20px;
-      left: auto;
-      display: flex;
-      gap: 6px;
-      z-index: 100;
+      position: absolute !important;
+      top: 12px !important;
+      right: 32px !important;
+      left: auto !important;
+      display: flex !important;
+      gap: 8px !important;
+      z-index: 1000 !important;
       opacity: 0;
       transform: translateY(-5px);
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
