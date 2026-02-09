@@ -280,29 +280,51 @@ export class SlotResizeService {
     const slots = [...config.slots];
     const slot = { ...slots[index] };
 
+    const isStrictGrid = this.isStrictGrid(config.layoutType);
+    
+    // Solo permitir position: absolute si NO es un grid estricto
+    const allowAbsolute = !isStrictGrid;
+    const shouldBeAbsolute = allowAbsolute && (left !== undefined || top !== undefined);
+    
     // Actualizar estilos de layout del slot (contenedor padre)
     slot.layoutStyles = {
       ...slot.layoutStyles,
       width: newWidth,
       ...(newHeight !== undefined ? { height: newHeight } : {}),
-      ...(left !== undefined ? { left } : {}),
-      ...(top !== undefined ? { top } : {}),
-      position: (left !== undefined || top !== undefined) ? 'absolute' : (slot.layoutStyles?.['position'] || 'relative')
+      
+      // Solo aplicar coordenadas si se permite absoluto
+      ...(shouldBeAbsolute && left !== undefined ? { left } : {}),
+      ...(shouldBeAbsolute && top !== undefined ? { top } : {}),
+      
+      position: shouldBeAbsolute ? 'absolute' : (slot.layoutStyles?.['position'] || 'relative')
     };
 
-    // Si el service tiene posición calculada, usarla
-    const custom = this.customSizes().get(index);
-    if (custom && custom.left !== undefined) {
-      slot.layoutStyles['left'] = custom.left;
-      slot.layoutStyles['top'] = custom.top;
-      slot.layoutStyles['position'] = 'absolute';
+    // Si es grid estricto, asegurar limpieza de posicionamiento
+    if (isStrictGrid) {
+      delete slot.layoutStyles['left'];
+      delete slot.layoutStyles['top'];
+      slot.layoutStyles['position'] = 'relative';
+      slot.styles = {
+        ...slot.styles,
+        '--custom-width': `${newWidth}px`,
+        // Asegurar que no haya márgenes negativos ni offsets
+        transform: 'none'
+      };
+    } else {
+        const custom = this.customSizes().get(index);
+        if (custom && custom.left !== undefined) {
+          // Si el service tiene posición calculada Y está permitido
+          slot.layoutStyles['left'] = custom.left;
+          slot.layoutStyles['top'] = custom.top;
+          slot.layoutStyles['position'] = 'absolute';
+        } else {
+            // Mantener compatibilidad con estilos directos si el componente los usa
+            slot.styles = {
+            ...slot.styles,
+            '--custom-width': `${newWidth}px`
+            };
+        }
     }
-
-    // Mantener compatibilidad con estilos directos si el componente los usa
-    slot.styles = {
-      ...slot.styles,
-      '--custom-width': `${newWidth}px`
-    };
 
     slots[index] = slot;
 
@@ -539,5 +561,19 @@ export class SlotResizeService {
       'masonry': '1fr 1fr 1fr'
     };
     return templates[layoutType] || '1fr';
+  }
+
+  /**
+   * Determina si el layout debe adherirse estrictamente al grid
+   */
+  public isStrictGrid(layoutType: LayoutType): boolean {
+    const strictLayouts: LayoutType[] = [
+      'grid-2x2', 'grid-3x2', 'grid-3x3',
+      'two-columns', 'three-columns', 
+      'two-columns-left', 'two-columns-right',
+      'sidebar-left', 'sidebar-right',
+      'hero-banner'
+    ];
+    return strictLayouts.includes(layoutType);
   }
 }

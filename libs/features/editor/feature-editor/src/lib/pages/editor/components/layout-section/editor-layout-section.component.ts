@@ -2160,6 +2160,9 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   }
 
   isPositioned(index: number, slot: SlotConfig): boolean {
+    // Strictly disable absolute positioning for grid layouts to prevent structure breaking
+    if (this.resizeService.isStrictGrid(this.config.layoutType)) return false;
+
     if (this.getSlotLeft(index) !== null || this.getSlotTop(index) !== null) return true;
     if (slot.layoutStyles?.['left'] || slot.layoutStyles?.['top']) return true;
     return slot.layoutStyles?.['position'] === 'absolute' || slot.styles?.['position'] === 'absolute';
