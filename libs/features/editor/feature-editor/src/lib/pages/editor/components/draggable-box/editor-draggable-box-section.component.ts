@@ -745,7 +745,8 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
         boxShadow: this.currentStyles.boxShadow
       },
       position: { x: this.boxLeft, y: this.boxTop },
-      size: { width: this.boxWidth, height: this.boxHeight }
+      size: { width: this.boxWidth, height: this.boxHeight },
+      canvasSize: { width: 1200, height: Math.max(800, this.containerHeight) }
     };
 
     this.showIsolatedMode = true;

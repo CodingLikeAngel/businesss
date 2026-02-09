@@ -180,66 +180,75 @@ export interface UndoRedoState {
                #canvas
                (mousedown)="onCanvasMouseDown($event)">
             
-            <div class="canvas-inner" #canvasInner
-                 [style.width.px]="config.canvasSize?.width || 4000"
-                 [style.height.px]="config.canvasSize?.height || 4000"
-                 [class.ambient-dark]="true"
-                 [class.show-grid]="showGrid"
-                 [class.grid-snapping]="snapToGrid">
-              <div class="draggable-wrapper"
-                   #draggableWrapper
-                   [style.left.px]="currentPosition.x"
-                   [style.top.px]="currentPosition.y"
-                   [style.width.px]="currentSize.width"
-                   [style.height.px]="currentSize.height"
-                   [class.is-dragging]="isDragging"
-                   [class.is-resizing]="isResizing"
-                   (mousedown)="onMouseDown($event)">
+            <div class="canvas-viewport"
+                 [style.width.px]="(config.canvasSize?.width || 1200) * viewportScale"
+                 [style.height.px]="(config.canvasSize?.height || 800) * viewportScale">
+              
+              <div class="canvas-inner" #canvasInner
+                   [style.width.px]="config.canvasSize?.width || 1200"
+                   [style.height.px]="config.canvasSize?.height || 800"
+                   [style.transform]="'scale(' + viewportScale + ')'"
+                   [class.ambient-dark]="true"
+                   [class.show-grid]="showGrid"
+                   [class.grid-snapping]="snapToGrid">
                 
-                <lib-ui-components-draggable-box-1
-                  *ngIf="editableContent.boxVariant === 'draggable-box-1' || !editableContent.boxVariant"
-                  [variant]="editableContent.variant || config.content['globalVariant'] || 'secondary'"
-                  [rounded]="editableContent.rounded || 'md'"
-                  [size]="editableContent.size || 'md'"
-                  [dark]="editableContent.dark || false"
-                  [content]="editableContent.content || editableContent.title || editableContent.text || 'Drag me'"
-                  [customStyles]="getCustomStyles()"
-                  style="width: 100%; height: 100%; display: block;">
-                </lib-ui-components-draggable-box-1>
+                <div class="draggable-wrapper"
+                     #draggableWrapper
+                     [style.left.px]="currentPosition.x"
+                     [style.top.px]="currentPosition.y"
+                     [style.width.px]="currentSize.width"
+                     [style.height.px]="currentSize.height"
+                     [class.is-dragging]="isDragging"
+                     [class.is-resizing]="isResizing"
+                     (mousedown)="onMouseDown($event)">
+                  
+                  <lib-ui-components-draggable-box-1
+                    *ngIf="editableContent.boxVariant === 'draggable-box-1' || !editableContent.boxVariant"
+                    [variant]="editableContent.variant || config.content['globalVariant'] || 'secondary'"
+                    [rounded]="editableContent.rounded || 'md'"
+                    [size]="editableContent.size || 'md'"
+                    [dark]="editableContent.dark || false"
+                    [content]="editableContent.content || editableContent.title || editableContent.text || 'Drag me'"
+                    [customStyles]="getCustomStyles()"
+                    style="width: 100%; height: 100%; display: block;">
+                  </lib-ui-components-draggable-box-1>
 
-                <lib-ui-components-draggable-box-2
-                  *ngIf="editableContent.boxVariant === 'draggable-box-2'"
-                  [variant]="editableContent.variant || config.content['globalVariant'] || 'secondary'"
-                  [rounded]="editableContent.rounded || 'md'"
-                  [size]="editableContent.size || 'md'"
-                  [dark]="editableContent.dark || false"
-                  [content]="editableContent.content || editableContent.title || editableContent.text || 'Drag me'"
-                  [customStyles]="getCustomStyles()"
-                  style="width: 100%; height: 100%; display: block;">
-                </lib-ui-components-draggable-box-2>
+                  <lib-ui-components-draggable-box-2
+                    *ngIf="editableContent.boxVariant === 'draggable-box-2'"
+                    [variant]="editableContent.variant || config.content['globalVariant'] || 'secondary'"
+                    [rounded]="editableContent.rounded || 'md'"
+                    [size]="editableContent.size || 'md'"
+                    [dark]="editableContent.dark || false"
+                    [content]="editableContent.content || editableContent.title || editableContent.text || 'Drag me'"
+                    [customStyles]="getCustomStyles()"
+                    style="width: 100%; height: 100%; display: block;">
+                  </lib-ui-components-draggable-box-2>
 
-                <lib-ui-components-draggable-box-3
-                  *ngIf="editableContent.boxVariant === 'draggable-box-3'"
-                  [variant]="editableContent.variant || config.content['globalVariant'] || 'secondary'"
-                  [rounded]="editableContent.rounded || 'md'"
-                  [size]="editableContent.size || 'md'"
-                  [dark]="editableContent.dark || false"
-                  [content]="editableContent.content || editableContent.title || editableContent.text || 'Drag me'"
-                  [customStyles]="getCustomStyles()"
-                  style="width: 100%; height: 100%; display: block;">
-                </lib-ui-components-draggable-box-3>
+                  <lib-ui-components-draggable-box-3
+                    *ngIf="editableContent.boxVariant === 'draggable-box-3'"
+                    [variant]="editableContent.variant || config.content['globalVariant'] || 'secondary'"
+                    [rounded]="editableContent.rounded || 'md'"
+                    [size]="editableContent.size || 'md'"
+                    [dark]="editableContent.dark || false"
+                    [content]="editableContent.content || editableContent.title || editableContent.text || 'Drag me'"
+                    [customStyles]="getCustomStyles()"
+                    style="width: 100%; height: 100%; display: block;">
+                  </lib-ui-components-draggable-box-3>
 
-                <!-- Resize Handles -->
-                <div class="resize-handle nw" [class.active]="resizeHandle === 'nw'" (mousedown)="startResize($event, 'nw')"></div>
-                <div class="resize-handle n" [class.active]="resizeHandle === 'n'" (mousedown)="startResize($event, 'n')"></div>
-                <div class="resize-handle ne" [class.active]="resizeHandle === 'ne'" (mousedown)="startResize($event, 'ne')"></div>
-                <div class="resize-handle e" [class.active]="resizeHandle === 'e'" (mousedown)="startResize($event, 'e')"></div>
-                <div class="resize-handle se" [class.active]="resizeHandle === 'se'" (mousedown)="startResize($event, 'se')"></div>
-                <div class="resize-handle s" [class.active]="resizeHandle === 's'" (mousedown)="startResize($event, 's')"></div>
-                <div class="resize-handle sw" [class.active]="resizeHandle === 'sw'" (mousedown)="startResize($event, 'sw')"></div>
-                <div class="resize-handle w" [class.active]="resizeHandle === 'w'" (mousedown)="startResize($event, 'w')"></div>
+                  <!-- Resize Handles -->
+                  <div class="resize-handle nw" [class.active]="resizeHandle === 'nw'" (mousedown)="startResize($event, 'nw')"></div>
+                  <div class="resize-handle n" [class.active]="resizeHandle === 'n'" (mousedown)="startResize($event, 'n')"></div>
+                  <div class="resize-handle ne" [class.active]="resizeHandle === 'ne'" (mousedown)="startResize($event, 'ne')"></div>
+                  <div class="resize-handle e" [class.active]="resizeHandle === 'e'" (mousedown)="startResize($event, 'e')"></div>
+                  <div class="resize-handle se" [class.active]="resizeHandle === 'se'" (mousedown)="startResize($event, 'se')"></div>
+                  <div class="resize-handle s" [class.active]="resizeHandle === 's'" (mousedown)="startResize($event, 's')"></div>
+                  <div class="resize-handle sw" [class.active]="resizeHandle === 'sw'" (mousedown)="startResize($event, 'sw')"></div>
+                  <div class="resize-handle w" [class.active]="resizeHandle === 'w'" (mousedown)="startResize($event, 'w')"></div>
+                </div>
               </div>
             </div>
+
+            <!-- Enhanced Position Info -->
 
             <!-- Enhanced Position Info -->
             <div class="modern-position-dock">
@@ -599,7 +608,7 @@ export interface UndoRedoState {
       box-shadow: 0 0 0 2px var(--primary-accent), 0 0 20px var(--primary-accent-glow) !important;
     }
 
-    /* Pierce encapsulation at root level to ensure inner components fill the wrapper */
+    /* PIERCE ENCAPSULATION */
     ::ng-deep {
       .draggable-wrapper {
         lib-ui-components-draggable-box-1,
@@ -624,7 +633,7 @@ export interface UndoRedoState {
           visibility: visible !important;
           opacity: 1 !important;
         }
-        
+
         .draggable-box-1-content,
         .draggable-box-2-content,
         .draggable-box-3-content {
@@ -690,18 +699,31 @@ export interface UndoRedoState {
       background-color: #020617;
       position: relative;
       overflow: auto;
-      padding: 0; /* No padding to avoid offsetting scroll coordinates */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
       transition: background-color 0.4s ease;
       z-index: 1;
     }
 
-    .canvas-inner {
+    .canvas-viewport {
       position: relative;
+      box-shadow: 0 50px 100px rgba(0,0,0,0.5);
+      border-radius: 8px;
+      background: #000;
       flex-shrink: 0;
+    }
+
+    .canvas-inner {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform-origin: top left;
       background-color: #020617;
       background-size: 40px 40px;
-      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1), 0 30px 60px rgba(0,0,0,0.5);
       border-radius: 4px;
+      box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1);
     }
 
     .canvas-inner.show-grid {
@@ -903,6 +925,9 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
   private startPositionY = 0;
   private startSizeWidth = 0;
   private startSizeHeight = 0;
+
+  // Scaling System
+  public viewportScale: number = 0.5;
 
   // Undo/Redo
   private undoStack: UndoRedoState[] = [];
@@ -1166,8 +1191,8 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
 
   private onMouseMove = (event: MouseEvent) => {
     if (this.isDragging) {
-      const deltaX = event.clientX - this.dragStartX;
-      const deltaY = event.clientY - this.dragStartY;
+      const deltaX = (event.clientX - this.dragStartX) / this.viewportScale;
+      const deltaY = (event.clientY - this.dragStartY) / this.viewportScale;
       
       let newX = this.startPositionX + deltaX;
       let newY = this.startPositionY + deltaY;
@@ -1187,16 +1212,16 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
     }
     
     if (this.isResizing) {
-      const deltaX = event.clientX - this.dragStartX;
-      const deltaY = event.clientY - this.dragStartY;
+      const deltaX = (event.clientX - this.dragStartX) / this.viewportScale;
+      const deltaY = (event.clientY - this.dragStartY) / this.viewportScale;
       
       let newWidth = this.startSizeWidth;
       let newHeight = this.startSizeHeight;
       let newX = this.startPositionX;
       let newY = this.startPositionY;
       
-      const canvasW = this.config.canvasSize?.width || 4000;
-      const canvasH = this.config.canvasSize?.height || 4000;
+      const canvasW = this.config.canvasSize?.width || 1200;
+      const canvasH = this.config.canvasSize?.height || 800;
 
       if (this.resizeHandle.includes('e')) {
         newWidth = Math.min(this.startSizeWidth + deltaX, canvasW - this.startPositionX);
