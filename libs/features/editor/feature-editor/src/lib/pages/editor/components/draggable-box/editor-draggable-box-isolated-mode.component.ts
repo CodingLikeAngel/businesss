@@ -138,6 +138,13 @@ export interface UndoRedoState {
                     <option value="neon">Neón (Glow)</option>
                     <option value="cyberpunk">Cyberpunk</option>
                     <option value="gradient">Gradiente</option>
+                    
+                    <!-- All other variants -->
+                    <ng-container *ngFor="let v of availableVariants">
+                      <option *ngIf="!['default', 'primary', 'secondary', 'glass', 'neon', 'cyberpunk', 'gradient'].includes(v)" [value]="v">
+                        {{ formatVariantName(v) }}
+                      </option>
+                    </ng-container>
                   </select>
                   </div>
                   <p class="variant-hint" *ngIf="!editableContent.variant">
@@ -922,7 +929,7 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
   @ViewChild('draggableWrapper') draggableWrapperRef!: ElementRef;
   @ViewChild('canvasInner') canvasInnerRef!: ElementRef;
 
-  availableVariants = variants.filter(v => v !== 'default');
+  availableVariants = variants;
 
   private visualEditor = inject(SimpleVisualEditorService);
   private destroy$ = new Subject<void>();
@@ -1484,5 +1491,14 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
       size: { ...this.currentSize }
     };
     this.applied.emit(updatedConfig);
+  }
+
+  formatVariantName(variant: string): string {
+    if (!variant) return '';
+    // Handle special cases or generic formatting
+    return variant
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   }
 }
