@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UITitleComponent } from '@negocio/ui-components';
+import { UITitleComponent, variants } from '@negocio/ui-components';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 @Component({
@@ -69,6 +69,14 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                     <option value="glitch">Glitch Effect</option>
                     <option value="neon">Neon Glow</option>
                     <option value="3d">3D Depth</option>
+                    
+                    <option disabled>──────────────</option>
+                    
+                    <ng-container *ngFor="let v of availableVariants">
+                      <option *ngIf="!['default', 'gradient', 'outline', 'glitch', 'neon', '3d'].includes(v)" [value]="v">
+                        {{ formatVariantName(v) }}
+                      </option>
+                    </ng-container>
                   </select>
                 </div>
 
@@ -262,6 +270,7 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
   public editableContent: any = {};
   public editableStyles: any = {};
   public currentSize = { width: 0, height: 0 };
+  public availableVariants = variants;
   
   private isResizing = false;
   private dragStartX = 0;
@@ -276,6 +285,14 @@ export class EditorTitleIsolatedModeComponent implements OnInit, OnDestroy {
 
     window.addEventListener('mousemove', this.onMouseMove);
     window.addEventListener('mouseup', this.onMouseUp);
+  }
+
+  formatVariantName(variant: string): string {
+    if (!variant) return '';
+    return variant
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
   }
 
   ngOnDestroy() {

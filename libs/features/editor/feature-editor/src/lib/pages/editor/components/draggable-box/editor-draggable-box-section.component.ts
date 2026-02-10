@@ -488,13 +488,6 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
 
   @HostBinding('class.isolated-mode-active-host') get isIsolatedModeActive() { return this.showIsolatedMode; }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['globalVariant'] || changes['section']) {
-      this.mergeContentAndStyles();
-      this.cdr.detectChanges();
-    }
-  }
-
   // Box ID
   get boxId(): string { return this.section.id + '_box'; }
 
@@ -600,7 +593,30 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
     this.persistPositionToStore();
   }
 
+  ngOnChanges(changes: SimpleChanges) {
+    const globalChange = changes['globalVariant'];
+    const sectionChange = changes['section'];
+
+    if (sectionChange) {
+      this.loadContentFromSection();
+      this.computeStyles();
+    }
+
+    if (globalChange && !globalChange.isFirstChange()) {
+      // User changed global theme: Reset local variant override to allow global theme to take precedence
+      this.currentContent.variant = ''; 
+      this.computeStyles();
+    }
+    
+    this.cdr.detectChanges();
+  }
+
   private mergeContentAndStyles() {
+    this.loadContentFromSection();
+    this.computeStyles();
+  }
+
+  private loadContentFromSection() {
     let bVariant = this.section.content?.['boxVariant'] || this.section.config?.['subtype'] || 'draggable-box-1';
     if (bVariant === 'box-1' || bVariant === '1' || bVariant === 'default') bVariant = 'draggable-box-1';
     else if (bVariant === 'box-2' || bVariant === '2') bVariant = 'draggable-box-2';
@@ -613,14 +629,16 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
       variant: this.section.content?.['variant'] || '',
       boxVariant: bVariant
     };
+  }
 
+  private computeStyles() {
     const hasVariant = !!this.currentContent.variant && this.currentContent.variant !== 'default';
     const borderStyle = this.section.styles?.['border'] || '';
 
     this.currentStyles = {
       backgroundColor: this.section.styles?.['backgroundColor'] !== undefined 
         ? this.section.styles?.['backgroundColor'] 
-        : (hasVariant ? '' : ''), // Removed hardcoded green
+        : (hasVariant ? '' : ''), 
       borderColor: this.section.styles?.['borderColor'] !== undefined 
         ? this.section.styles?.['borderColor'] 
         : (hasVariant ? '' : this.extractBorderColor(borderStyle)),
@@ -631,7 +649,7 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
       borderRadiusUnit: 'px',
       padding: parseInt(this.section.styles?.['padding'] as string || '20') || 20,
       paddingUnit: 'px',
-      boxShadow: this.section.styles?.['boxShadow'] || '' // Removed default shadow to let variant decide
+      boxShadow: this.section.styles?.['boxShadow'] || ''
     };
   }
 

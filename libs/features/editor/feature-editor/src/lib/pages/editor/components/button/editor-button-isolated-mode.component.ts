@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject, View
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { UIButtonComponent } from '@negocio/ui-components';
+import { UIButtonComponent, variants } from '@negocio/ui-components';
 import { AppState } from '../../../../store/state/app.state';
 import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.selectors';
 import { map } from 'rxjs/operators';
@@ -107,7 +107,7 @@ export interface UndoRedoState {
                   <h4>ESTILO BASE</h4>
                 </div>
                 
-                <div class="control-group">
+                  <div class="control-group">
                   <label>Variante</label>
                   <select [(ngModel)]="editableContent.variant" (ngModelChange)="onVariantChange()" class="premium-input">
                     <option value="primary">Primario</option>
@@ -115,10 +115,17 @@ export interface UndoRedoState {
                     <option value="accent">Acento</option>
                     <option value="glass">Glassmorphism</option>
                     <option value="outline">Contorno</option>
-                    <option value="glass">Cristal</option>
                     <option value="ghost">Fantasma</option>
                     <option value="neon">Neon</option>
-                    <option value="cyber">Cyberpunk</option>
+                    <option value="cyberpunk">Cyberpunk</option>
+                    
+                    <option disabled>──────────────</option>
+                    
+                    <ng-container *ngFor="let v of availableVariants">
+                      <option *ngIf="!['primary', 'secondary', 'accent', 'glass', 'outline', 'ghost', 'neon', 'cyberpunk'].includes(v)" [value]="v">
+                        {{ formatVariantName(v) }}
+                      </option>
+                    </ng-container>
                   </select>
                 </div>
 
@@ -646,6 +653,7 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
   gradColor1 = '#6366f1';
   gradColor2 = '#a855f7';
   hoverScale = 1;
+  availableVariants = variants;
 
   // Undo/Redo
   undoStack: UndoRedoState[] = [];
@@ -676,6 +684,20 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.initializeState();
     this.setupMouseListeners();
+  }
+
+  formatVariantName(variant: string): string {
+    if (!variant) return '';
+    return variant
+      .split('-')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  }
+
+  onVariantChange() {
+    // Optional: Clear custom colors if a variant is selected to avoid confusion
+    // but we allow overrides if user explicitly changes color afterwards
+    this.onContentChange();
   }
 
   private initializeState() {
@@ -742,6 +764,21 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
     setTimeout(() => this.scrollToComponent(), 100);
 
     this.saveState();
+  }
+
+  private scrollToComponent() {
+    if (!this.canvas?.nativeElement) return;
+    
+    // Center the component in the viewport
+    const container = this.canvas.nativeElement;
+    const scrollLeft = Math.max(0, this.currentPosition.x - (container.clientWidth / 2) + (this.currentSize.width / 2));
+    const scrollTop = Math.max(0, this.currentPosition.y - (container.clientHeight / 2) + (this.currentSize.height / 2));
+    
+    container.scrollTo({
+      left: scrollLeft,
+      top: scrollTop,
+      behavior: 'smooth'
+    });
   }
 
   // --- MOUSE HANDLERS ---
@@ -845,19 +882,7 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
   }
 
   // --- ACTIONS ---
-  scrollToComponent() {
-    if (this.canvas && this.canvas.nativeElement) {
-      const canvas = this.canvas.nativeElement;
-      const x = this.currentPosition.x + (this.currentSize.width / 2) - (canvas.clientWidth / 2);
-      const y = this.currentPosition.y + (this.currentSize.height / 2) - (canvas.clientHeight / 2);
-      
-      canvas.scrollTo({
-        left: x,
-        top: y,
-        behavior: 'smooth'
-      });
-    }
-  }
+
 
   saveState() {
     const state = {
@@ -902,7 +927,7 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
     this.saveTimeout = setTimeout(() => this.saveState(), 1000);
   }
 
-  onVariantChange() { this.onContentChange(); }
+
   
   getCustomStyles() {
     const s: any = { ...this.editableStyles };

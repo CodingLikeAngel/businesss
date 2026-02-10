@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject } from '@angular/core';
+import { UIImageComponent, variants } from '@negocio/ui-components';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -12,7 +13,7 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 @Component({
   selector: 'lib-editor-image-isolated-mode',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, UIImageComponent],
   template: `
     <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
@@ -46,6 +47,31 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                 <div class="control-group">
                   <label>Texto Alt / SEO</label>
                   <input type="text" [(ngModel)]="editableContent.alt" (ngModelChange)="onContentChange()" class="premium-input" placeholder="Descripción de la imagen...">
+                </div>
+              </div>
+
+              <!-- Base Style Section (New) -->
+              <div class="sidebar-section">
+                <div class="section-header">
+                  <span class="section-icon">✨</span>
+                  <h4>ESTILO BASE</h4>
+                </div>
+                <div class="control-group">
+                  <label>Variante Visual</label>
+                  <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()" class="premium-input">
+                    <option value="default">Estándar</option>
+                    <option value="polaroid">Polaroid (Exclusivo)</option>
+                    <option value="glass">Glassmorphism</option>
+                    <option value="neon">Neon Glow</option>
+                    
+                    <option disabled>──────────────</option>
+                    
+                    <ng-container *ngFor="let v of availableVariants">
+                      <option *ngIf="!['default', 'polaroid', 'glass', 'neon'].includes(v)" [value]="v">
+                        {{ formatVariantName(v) }}
+                      </option>
+                    </ng-container>
+                  </select>
                 </div>
               </div>
 
@@ -151,14 +177,19 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                    (mousedown)="onMouseDown($event)">
                 
                   <div class="image-mask-container" [style.clip-path]="currentMaskValue">
-                    <img [src]="editableContent.src" 
+                    <lib-ui-image 
+                         [src]="editableContent.src" 
                          [alt]="editableContent.alt"
-                         [style.filter]="currentFilterString"
-                         [style.border-color]="editableStyles.borderColor"
-                         [style.border-width.px]="borderWidth"
-                         [style.border-style]="borderWidth > 0 ? 'solid' : 'none'"
-                         [style.border-radius.px]="borderRadius"
-                         class="isolated-image">
+                         [variant]="editableContent.variant || 'default'"
+                         [filter]="currentFilterString"
+                         [customStyles]="{
+                           'border-color': editableStyles.borderColor,
+                           'border-width': borderWidth + 'px',
+                           'border-style': borderWidth > 0 ? 'solid' : 'none',
+                           'border-radius': borderRadius + 'px'
+                         }"
+                         style="width: 100%; height: 100%; display: block;">
+                    </lib-ui-image>
                   </div>
 
                   <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
@@ -309,6 +340,8 @@ export class EditorImageIsolatedModeComponent implements OnInit, OnDestroy {
     })
   );
 
+  availableVariants = variants;
+
   editableContent: any = {};
   editableStyles: any = {};
   filters = { brightness: 100, contrast: 100, grayscale: 0, sepia: 0, blur: 0 };
@@ -323,6 +356,11 @@ export class EditorImageIsolatedModeComponent implements OnInit, OnDestroy {
     { id: 'hexagon', label: 'Hexágono', value: 'polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%)' },
     { id: 'star', label: 'Estrella', value: 'polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%)' },
   ];
+
+  formatVariantName(variant: string): string {
+    if (!variant) return '';
+    return variant.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  }
 
   borderWidth = 0;
   borderRadius = 0;

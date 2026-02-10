@@ -129,20 +129,33 @@ export interface UndoRedoState {
                 </div>
 
                 <div class="control-group">
-                  <label>Variante de Estilo</label>
+                  <label>Variante Visual</label>
                   <div class="select-wrapper">
-                  <select [(ngModel)]="editableContent.variant" (ngModelChange)="onVariantChange()" class="premium-select">
-                    <option value="">Página (Heredar)</option>
-                    <option value="default">Estándar (Blanco)</option>
-                    <option *ngFor="let v of availableVariants" [value]="v">
-                      {{ v | titlecase }}
-                    </option>
-                  </select>
+                    <select [(ngModel)]="editableContent.variant" (ngModelChange)="onVariantChange()" class="premium-select">
+                      <option value="">Página (Heredar)</option>
+                      <option value="default">Estándar (Blanco)</option>
+                      <option value="primary">Primaria</option>
+                      <option value="secondary">Secundaria</option>
+                      <option value="transparent">Transparente</option>
+                      <option value="glass">Glassmorphism</option>
+                      <option value="neon">Neon Glow</option>
+                      <option value="cyberpunk">Cyberpunk</option>
+                      <option value="minimal">Minimalista</option>
+                      
+                      <option disabled>──────────────</option>
+                      
+                      <ng-container *ngFor="let v of availableVariants">
+                        <option *ngIf="!['primary', 'secondary', 'transparent', 'glass', 'neon', 'cyberpunk', 'minimal', 'default'].includes(v)" [value]="v">
+                          {{ formatVariantName(v) }}
+                        </option>
+                      </ng-container>
+                    </select>
                   </div>
-                <p class="variant-hint" *ngIf="!editableContent.variant">
-                  Heredando: {{ config.content['globalVariant'] || 'glass' }}
-                </p>
-              </div></div> <!-- Close control-group AND first sidebar-section -->
+                  <p class="variant-hint" *ngIf="!editableContent.variant">
+                    Heredando: {{ config.content['globalVariant'] || 'glass' }}
+                  </p>
+                </div>
+              </div> <!-- Close control-group AND first sidebar-section -->
               
               <!-- SECCIÓN: ITEMS DEL ACORDEÓN -->
               <div class="sidebar-section no-border">
@@ -862,7 +875,7 @@ export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
   @ViewChild('draggableWrapper') draggableWrapperRef!: ElementRef;
   @ViewChild('canvasInner') canvasInnerRef!: ElementRef;
 
-  availableVariants = variants.filter(v => v !== 'default');
+  availableVariants = variants;
 
   private visualEditor = inject(SimpleVisualEditorService);
   private destroy$ = new Subject<void>();
@@ -886,8 +899,8 @@ export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
 
   // Grid settings
   showGrid = true;
-  snapToGrid = false;
-  gridSize = 40;
+  snapToGrid = true;
+  gridSize = 20;
 
   // Drag/Resize state
   private dragStartX = 0;

@@ -63,7 +63,7 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                 <div class="control-group">
                   <label>Variante de Color</label>
                   <select [(ngModel)]="editableContent.variant" class="premium-select">
-                    <option *ngFor="let v of variants" [value]="v">{{ v | titlecase }}</option>
+                     <option *ngFor="let v of variants" [value]="v">{{ formatVariantName(v) }}</option>
                   </select>
                 </div>
 
@@ -247,6 +247,11 @@ export class EditorChipIsolatedModeComponent implements OnInit {
 
   variants = chipVariants;
   editableContent: any = {};
+
+  formatVariantName(variant: string): string {
+    if (!variant) return '';
+    return variant.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  }
   
   currentPosition = { x: 0, y: 0 };
   
