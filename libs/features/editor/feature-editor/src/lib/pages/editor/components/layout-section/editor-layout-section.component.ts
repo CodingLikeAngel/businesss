@@ -745,6 +745,8 @@ interface ComponentDefaultSize {
       position: relative;
       width: 100%;
       min-height: 100px;
+      max-width: 100%;
+      overflow: hidden;
       border: 1px dashed rgba(99, 102, 241, 0.15);
       border-radius: 12px;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -1936,6 +1938,10 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     // Position & Style Sync
     // We separate 'box' styles (layout) from 'content' styles (appearance)
     const finalAppearanceStyles = { ...updatedConfig.styles };
+    // Always remove dimensions from component styles, as the slot takes care of them
+    delete finalAppearanceStyles['width'];
+    delete finalAppearanceStyles['height'];
+    
     const layoutStyles = { ...(newSlots[this.editingSlotIndex].layoutStyles || {}) };
     
     // Coordinate Re-Mapping Flow:
@@ -1997,7 +2003,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
           layoutStyles['top'] = Math.round(finalY) + 'px';
           layoutStyles['position'] = 'absolute';
           
-          // Remove from appearance styles
+          // Remove from appearance styles to allow component to fill slot 100%/100%
           delete finalAppearanceStyles['left'];
           delete finalAppearanceStyles['top'];
           delete finalAppearanceStyles['position'];
