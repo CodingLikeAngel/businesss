@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, inject, OnDestroy, ChangeDetectorRef, HostListener, Inject, PLATFORM_ID, HostBinding } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ElementRef, ViewChild, inject, OnDestroy, ChangeDetectorRef, HostListener, Inject, PLATFORM_ID, HostBinding, OnChanges, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
@@ -474,7 +474,7 @@ import * as PageActions from '../../../../store/actions/page.actions';
     }
   `]
 })
-export class EditorDraggableBoxSectionComponent extends BaseEditorSectionComponent implements OnInit, AfterViewInit, OnDestroy {
+export class EditorDraggableBoxSectionComponent extends BaseEditorSectionComponent implements OnInit, AfterViewInit, OnDestroy, OnChanges {
   @ViewChild('editableBox') editableBox!: ElementRef;
   
   private store = inject(Store);
@@ -487,6 +487,13 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   }
 
   @HostBinding('class.isolated-mode-active-host') get isIsolatedModeActive() { return this.showIsolatedMode; }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['globalVariant'] || changes['section']) {
+      this.mergeContentAndStyles();
+      this.cdr.detectChanges();
+    }
+  }
 
   // Box ID
   get boxId(): string { return this.section.id + '_box'; }
