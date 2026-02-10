@@ -980,6 +980,11 @@ export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
     }
   }
 
+  formatVariantName(variant: string): string {
+    if (!variant) return '';
+    return variant.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+  }
+
   private setupMouseListeners() {
     if (typeof document !== 'undefined') {
       document.addEventListener('mousemove', this.onMouseMove);
