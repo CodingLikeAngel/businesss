@@ -613,7 +613,7 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
     this.currentStyles = {
       backgroundColor: this.section.styles?.['backgroundColor'] !== undefined 
         ? this.section.styles?.['backgroundColor'] 
-        : (hasVariant ? '' : '#10b981'),
+        : (hasVariant ? '' : ''), // Removed hardcoded green
       borderColor: this.section.styles?.['borderColor'] !== undefined 
         ? this.section.styles?.['borderColor'] 
         : (hasVariant ? '' : this.extractBorderColor(borderStyle)),
@@ -624,7 +624,7 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
       borderRadiusUnit: 'px',
       padding: parseInt(this.section.styles?.['padding'] as string || '20') || 20,
       paddingUnit: 'px',
-      boxShadow: this.section.styles?.['boxShadow'] || '0 10px 30px rgba(0,0,0,0.3)'
+      boxShadow: this.section.styles?.['boxShadow'] || '' // Removed default shadow to let variant decide
     };
   }
 
@@ -865,13 +865,30 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
       dark: config.content.dark
     };
 
+    // LOGIC FIX: If a variant is selected (and it's not 'default'), 
+    // we MUST clear specific inline styles to allow the CSS class to work.
+    // Inline styles have higher specificity and will override the variant's CSS.
+    const hasActiveVariant = !!config.content.variant && config.content.variant !== 'default';
+
     const borderStyle = config.styles.border || '';
-    this.currentStyles.backgroundColor = config.styles.backgroundColor;
-    this.currentStyles.borderColor = config.styles.borderColor || this.extractBorderColor(borderStyle);
-    this.currentStyles.borderWidth = parseInt(config.styles.borderWidth as string) || this.extractBorderWidth(borderStyle);
+    
+    if (hasActiveVariant) {
+        // Clear conflicting styles to let the variant take over
+        this.currentStyles.backgroundColor = '';
+        this.currentStyles.borderColor = '';
+        this.currentStyles.borderWidth = '';
+        this.currentStyles.boxShadow = '';
+    } else {
+        // Apply manual styles only if no variant is active (or it's default)
+        this.currentStyles.backgroundColor = config.styles.backgroundColor;
+        this.currentStyles.borderColor = config.styles.borderColor || this.extractBorderColor(borderStyle);
+        this.currentStyles.borderWidth = parseInt(config.styles.borderWidth as string) || this.extractBorderWidth(borderStyle);
+        this.currentStyles.boxShadow = config.styles.boxShadow;
+    }
+
+    // Always apply neutral structural styles
     this.currentStyles.borderRadius = parseInt(config.styles.borderRadius as string || '12') || 12;
     this.currentStyles.padding = parseInt(config.styles.padding as string || '20') || 20;
-    this.currentStyles.boxShadow = config.styles.boxShadow;
 
     this.updateSectionHeight();
     this.cdr.detectChanges();
