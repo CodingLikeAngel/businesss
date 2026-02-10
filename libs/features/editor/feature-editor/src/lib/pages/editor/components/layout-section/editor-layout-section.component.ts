@@ -318,14 +318,14 @@ interface ComponentDefaultSize {
 
           <!-- Resize Anchors (Fixed to Slot Boundaries) -->
           <div *ngIf="slot.componentType !== 'empty' && ((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
-            <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
           </div>
         </div>
       </div>
@@ -745,8 +745,6 @@ interface ComponentDefaultSize {
       position: relative;
       width: 100%;
       min-height: 100px;
-      max-width: 100%;
-      overflow: hidden;
       border: 1px dashed rgba(99, 102, 241, 0.15);
       border-radius: 12px;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -823,6 +821,7 @@ interface ComponentDefaultSize {
       height: 100%;
       min-height: inherit;
       box-sizing: border-box;
+      overflow: hidden;
     }
 
     .slot-toolbar-right {
@@ -2113,6 +2112,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
    * Get reactive slot left position
    */
   getSlotLeft(index: number): number | null {
+    if (this.resizeService.isStrictGrid(this.config.layoutType)) return null;
+
     const customSize = this.resizeService.customSizes().get(index);
     if (customSize && customSize.left !== undefined) {
       return customSize.left;
@@ -2124,6 +2125,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
    * Get reactive slot top position
    */
   getSlotTop(index: number): number | null {
+    if (this.resizeService.isStrictGrid(this.config.layoutType)) return null;
+
     const customSize = this.resizeService.customSizes().get(index);
     if (customSize && customSize.top !== undefined) {
       return customSize.top;

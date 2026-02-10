@@ -21,8 +21,9 @@ export class ResizeHandleDirective {
   // ========== INPUTS ==========
 
   @Input() slotIndex: number = 0;
-  @Input() direction: ResizeDirection = 'horizontal';
+  @Input() direction: ResizeDirection = 'both';
   @Input() anchor: ResizeAnchor = 'e'; // Punto de anclaje
+  @Input() isStrictGrid: boolean = false;
   @Input() minWidth: number = 80;
   @Input() minHeight: number = 40;
   @Input() snapEnabled: boolean = true;
@@ -150,7 +151,7 @@ export class ResizeHandleDirective {
     });
 
     // Actualizar servicio pasando el ancla específica
-    this.resizeService.onResizeMove(this.slotIndex, { dx, dy }, this.anchor);
+    this.resizeService.onResizeMove(this.slotIndex, { dx, dy }, this.anchor, this.isStrictGrid);
   }
 
   private onMouseUp(): void {

@@ -38,7 +38,7 @@ export class SlotResizeService {
   readonly minSlotWidth = 80;    // px mínimo
   readonly maxSlotWidth = 1200;  // px máximo
   readonly minSlotHeight = 40;   // px mínimo
-  readonly maxSlotHeight = 800;  // px máximo
+  readonly maxSlotHeight = 840;  // px máximo
   readonly snapIncrement = 8;   // px para snap
 
   // ========== COMPUTED ==========
@@ -78,7 +78,7 @@ export class SlotResizeService {
     }
   }
 
-  onResizeMove(index: number, delta: { dx: number; dy: number }, anchor?: ResizeDirection): void {
+  onResizeMove(index: number, delta: { dx: number; dy: number }, anchor?: ResizeAnchor, isStrictGrid: boolean = false): void {
     if (this.activeSlotIndex() !== index) return;
 
     const currentAnchor = anchor || this.resizeDirection();
@@ -88,20 +88,29 @@ export class SlotResizeService {
     let deltaTop = 0;
 
     // Lógica avanzada de 8 puntos
-    switch (currentAnchor) {
+    switch (currentAnchor as any) {
       case 'e':
         newWidth = this.startSize.width + delta.dx;
         break;
       case 'w':
-        newWidth = this.startSize.width - delta.dx;
-        deltaLeft = delta.dx;
+        if (isStrictGrid) {
+            // En grids estrictos, 'w' solo reduce el ancho por la derecha para simular resize sin mover
+            newWidth = this.startSize.width - delta.dx;
+        } else {
+            newWidth = this.startSize.width - delta.dx;
+            deltaLeft = delta.dx;
+        }
         break;
       case 's':
         newHeight = this.startSize.height + delta.dy;
         break;
       case 'n':
-        newHeight = this.startSize.height - delta.dy;
-        deltaTop = delta.dy;
+        if (isStrictGrid) {
+            newHeight = this.startSize.height - delta.dy;
+        } else {
+            newHeight = this.startSize.height - delta.dy;
+            deltaTop = delta.dy;
+        }
         break;
       case 'se':
         newWidth = this.startSize.width + delta.dx;
@@ -110,18 +119,20 @@ export class SlotResizeService {
       case 'sw':
         newWidth = this.startSize.width - delta.dx;
         newHeight = this.startSize.height + delta.dy;
-        deltaLeft = delta.dx;
+        if (!isStrictGrid) deltaLeft = delta.dx;
         break;
       case 'ne':
         newWidth = this.startSize.width + delta.dx;
         newHeight = this.startSize.height - delta.dy;
-        deltaTop = delta.dy;
+        if (!isStrictGrid) deltaTop = delta.dy;
         break;
       case 'nw':
         newWidth = this.startSize.width - delta.dx;
         newHeight = this.startSize.height - delta.dy;
-        deltaLeft = delta.dx;
-        deltaTop = delta.dy;
+        if (!isStrictGrid) {
+            deltaLeft = delta.dx;
+            deltaTop = delta.dy;
+        }
         break;
       case 'horizontal':
         newWidth = this.startSize.width + delta.dx;
@@ -134,8 +145,10 @@ export class SlotResizeService {
         newHeight = this.startSize.height + delta.dy;
         break;
       case 'move':
-        deltaLeft = delta.dx;
-        deltaTop = delta.dy;
+        if (!isStrictGrid) {
+            deltaLeft = delta.dx;
+            deltaTop = delta.dy;
+        }
         break;
     }
 
@@ -147,45 +160,36 @@ export class SlotResizeService {
     newWidth = this.clampWidth(newWidth);
     newHeight = this.clampHeight(newHeight);
 
-    // --- Lógica de Colisión / Evitar Colapso ---
-    let finalLeft = Math.max(0, this.startPosition.left + deltaLeft);
-    let finalTop = Math.max(0, this.startPosition.top + deltaTop);
+    // --- Lógica de Colisión (SOLO si NO es grid estricto) ---
+    let finalLeft = isStrictGrid ? 0 : Math.max(0, this.startPosition.left + deltaLeft);
+    let finalTop = isStrictGrid ? 0 : Math.max(0, this.startPosition.top + deltaTop);
 
-    // Ajustar tamaño si chocamos con el borde superior/izquierdo (clamping)
-    if (this.startPosition.left + deltaLeft < 0) {
-        newWidth += (this.startPosition.left + deltaLeft); // Reducir crecimiento si bloqueamos movimiento
-    }
-    if (this.startPosition.top + deltaTop < 0) {
-        newHeight += (this.startPosition.top + deltaTop);
-    }
+    if (!isStrictGrid) {
+        // Solo chequear colisiones para layouts libres (posicionamiento absoluto)
+        // En CSS Grids la colisión visual es parte de la naturaleza del layout
+        const collidingSlotIndex = this.checkCollisions(index, {
+            width: newWidth,
+            height: newHeight,
+            left: finalLeft,
+            top: finalTop
+        });
 
-    const collidingSlotIndex = this.checkCollisions(index, {
-      width: newWidth,
-      height: newHeight,
-      left: finalLeft,
-      top: finalTop
-    });
-
-    if (collidingSlotIndex !== -1) {
-      // Si hay colisión, bloqueamos el avance en esa dirección o ajustamos
-      // Por ahora, aplicamos un "soft clamp": si detectamos colisión, revertimos al último estado válido
-      // o limitamos el crecimiento.
-      
-      // Intentamos un ajuste fino: reducimos el delta hasta que no colisione (simplificado)
-      if (Math.abs(delta.dx) > Math.abs(delta.dy)) {
-        newWidth = this.startSize.width; // Bloquear horizontal
-      } else {
-        newHeight = this.startSize.height; // Bloquear vertical
-      }
+        if (collidingSlotIndex !== -1) {
+            if (Math.abs(delta.dx) > Math.abs(delta.dy)) {
+                newWidth = this.startSize.width;
+            } else {
+                newHeight = this.startSize.height;
+            }
+        }
     }
 
-    // Actualizar store (Incluyendo posición si es necesario)
+    // Actualizar signal
     const sizes = this.customSizes();
     sizes.set(index, { 
       width: newWidth, 
       height: newHeight, 
-      left: finalLeft,
-      top: finalTop
+      left: isStrictGrid ? undefined : finalLeft,
+      top: isStrictGrid ? undefined : finalTop
     });
     this.customSizes.set(new Map(sizes));
   }
@@ -207,6 +211,9 @@ export class SlotResizeService {
     
     for (const [index, otherRect] of allSizes.entries()) {
       if (index === currentIndex) continue;
+
+      // Solo colisionar con elementos que tengan posición conocida
+      if (otherRect.left === undefined || otherRect.top === undefined) continue;
 
       // AABB Collision detection
       const buffer = 4; // Pequeño margen de seguridad
@@ -236,13 +243,6 @@ export class SlotResizeService {
    * Cancelar resize sin guardar
    */
   cancelResize(): void {
-    // Revertir cambios temporales
-    const sizes = this.customSizes();
-    const index = this.activeSlotIndex();
-    if (index !== null) {
-      // Restaurar al tamaño original antes del resize
-      // Por ahora solo limpiamos el estado
-    }
     this.endResize();
   }
 
@@ -316,18 +316,15 @@ export class SlotResizeService {
       slot.styles = {
         ...slot.styles,
         '--custom-width': `${newWidth}px`,
-        // Asegurar que no haya márgenes negativos ni offsets
         transform: 'none'
       };
     } else {
         const custom = this.customSizes().get(index);
         if (custom && custom.left !== undefined) {
-          // Si el service tiene posición calculada Y está permitido
           slot.layoutStyles['left'] = custom.left;
           slot.layoutStyles['top'] = custom.top;
           slot.layoutStyles['position'] = 'absolute';
         } else {
-            // Mantener compatibilidad con estilos directos si el componente los usa
             slot.styles = {
             ...slot.styles,
             '--custom-width': `${newWidth}px`
@@ -339,7 +336,12 @@ export class SlotResizeService {
 
     // Actualizar custom sizes
     const sizes = this.customSizes();
-    sizes.set(index, { width: newWidth, height: newHeight || 0 });
+    sizes.set(index, { 
+        width: newWidth, 
+        height: newHeight || 0,
+        left: isStrictGrid ? undefined : left,
+        top: isStrictGrid ? undefined : top
+    });
     this.customSizes.set(new Map(sizes));
 
     return {
@@ -371,7 +373,6 @@ export class SlotResizeService {
 
     // Verificar límites del vecino
     if (newNeighborWidth < this.minSlotWidth) {
-      // No permitir que el vecino sea muy pequeño
       return config;
     }
 
@@ -406,7 +407,6 @@ export class SlotResizeService {
       if (size && size.width > 0) {
         parts.push(`${size.width}px`);
       } else {
-        // Usar distribución automática basada en layout type
         const autoTemplate = this.getDefaultGridTemplate(config.layoutType);
         const partsAuto = autoTemplate.split(' ');
         parts.push(partsAuto[i] || '1fr');
@@ -430,14 +430,12 @@ export class SlotResizeService {
   clearSlotSize(config: LayoutSectionConfig, index: number): LayoutSectionConfig {
     const slots = [...config.slots];
     
-    // Limpiar estilos de tamaño
     const slot = { ...slots[index] };
     delete slot.styles?.['width'];
     delete slot.styles?.['height'];
     delete slot.styles?.['--custom-width'];
     slots[index] = slot;
 
-    // Limpiar del store
     const sizes = this.customSizes();
     sizes.delete(index);
     this.customSizes.set(new Map(sizes));
@@ -450,47 +448,29 @@ export class SlotResizeService {
 
   // ========== PRIVATE HELPERS ==========
 
-  /**
-   * Snap a grid
-   */
   private snapToGrid(value: number): number {
     return Math.round(value / this.snapIncrement) * this.snapIncrement;
   }
 
-  /**
-   * Clamp width a límites
-   */
   private clampWidth(value: number): number {
     return Math.max(this.minSlotWidth, Math.min(this.maxSlotWidth, value));
   }
 
-  /**
-   * Clamp height a límites
-   */
   private clampHeight(value: number): number {
     return Math.max(this.minSlotHeight, Math.min(this.maxSlotHeight, value));
   }
 
-  /**
-   * Obtener width actual de un slot
-   */
   private getCurrentSlotWidth(config: LayoutSectionConfig, index: number): number {
     const slot = config.slots[index];
     if (slot?.styles?.['width']) {
       return parseInt(slot.styles['width'], 10);
     }
-    // Calcular basado en distribución del layout
     return this.estimateSlotWidth(config, index);
   }
 
-  /**
-   * Estimar width basado en layout type
-   */
   private estimateSlotWidth(config: LayoutSectionConfig, index: number): number {
-    const totalSlots = config.slots.length;
-    const baseWidth = 400; // Estimación base
+    const baseWidth = 400; 
 
-    // Ajustar según tipo de layout
     switch (config.layoutType) {
       case 'two-columns':
       case 'two-columns-left':
@@ -511,28 +491,13 @@ export class SlotResizeService {
     }
   }
 
-  /**
-   * Encontrar índice del vecino para ajustar
-   */
   private findNeighborIndex(layoutType: LayoutType, changedIndex: number): number {
     const totalSlots = this.getSlotCountForLayout(layoutType);
-    
-    // Vecino a la derecha
-    if (changedIndex < totalSlots - 1) {
-      return changedIndex + 1;
-    }
-    
-    // Vecino a la izquierda (si es el último)
-    if (changedIndex > 0) {
-      return changedIndex - 1;
-    }
-    
+    if (changedIndex < totalSlots - 1) return changedIndex + 1;
+    if (changedIndex > 0) return changedIndex - 1;
     return -1;
   }
 
-  /**
-   * Obtener número de slots para un layout type
-   */
   private getSlotCountForLayout(layoutType: LayoutType): number {
     const counts: Record<LayoutType, number> = {
       'single': 1,
@@ -546,14 +511,11 @@ export class SlotResizeService {
       'sidebar-left': 2,
       'sidebar-right': 2,
       'hero-banner': 2,
-      'masonry': 3 // Variable, usar 3 como default
+      'masonry': 3 
     };
     return counts[layoutType] || 2;
   }
 
-  /**
-   * Obtener template de grid default para un layout type
-   */
   private getDefaultGridTemplate(layoutType: LayoutType): string {
     const templates: Record<LayoutType, string> = {
       'single': '1fr',
@@ -572,9 +534,6 @@ export class SlotResizeService {
     return templates[layoutType] || '1fr';
   }
 
-  /**
-   * Determina si el layout debe adherirse estrictamente al grid
-   */
   public isStrictGrid(layoutType: LayoutType): boolean {
     const strictLayouts: LayoutType[] = [
       'grid-2x2', 'grid-3x2', 'grid-3x3',
