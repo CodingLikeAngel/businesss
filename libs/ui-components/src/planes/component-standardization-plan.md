@@ -1,88 +1,152 @@
-# Plan de Estandarización de Componentes - Anto Studios Editor
+# Plan de Estandarización Total de Componentes (v2.0) - Anto Studios
 
-## 1. Objetivo
+> **Estado**: EN PROGRESO  
+> **Objetivo**: Elevar TODOS los componentes de la biblioteca al nivel "Gold Standard" definido por los editores de _Accordion_ y _Draggable Box_. La meta es una experiencia de edición visual unificada, exhaustiva y premium.
 
-Elevar todos los componentes de la librería `libs/ui-components` al nivel de excelencia técnica y capacidades de edición del **Accordion** y la **Draggable Box**. Se busca una experiencia WYSIWYG total, persistente y visualmente premium.
+## 1. El "Gold Standard" de Edición Aislada
 
-## 2. El "Estándar Anto Studios"
+Para dar por "completado" un componente, su editor (`Editor[...]IsolatedModeComponent`) debe cumplir estrictamente con:
 
-Para que un componente se considere estandarizado, debe cumplir con los siguientes cuatro pilares:
-
-### A. Comunicación Unificada (`IsolatedModeConfig`)
-
-Todos los componentes deben intercambiar datos a través de la interfaz `IsolatedModeConfig`, que incluye:
-
-- **Position**: Coordenadas `x, y` precisas en el lienzo.
-- **Size**: Dimensiones `width, height` dinámicas.
-- **Content**: Datos puros (textos, items, imágenes).
-- **Styles**: Apariencia (colores, bordes, efectos).
-
-### B. Modo Aislado Premium
-
-Cada componente debe tener un editor dedicado que herede del sistema de "Glassmorphism":
-
-- **Lienzo Infinito**: Canvas de 4000x4000px con rejilla inteligente.
-- **Drag & Resize**: Manipulación directa en el canvas con snapping.
-- **Undo/Redo**: Historial de cambios local en la sesión de edición.
-- **Sidebar de Control**: Paneles colapsables para variantes, estilo y contenido.
-
-### C. Soporte de Variantes y Estilos Custom
-
-Implementación obligatoria de inputs reactivos (Signals):
-
-- `variant`: `primary | secondary | glass | neon | cyberpunk`.
-- `customStyles`: Objeto para inyectar CSS específico (background, color, etc.).
-- `rounded`: `none | md | full`.
-- `dark`: Boolean para modo noche.
-
-### D. Persistencia en Layout Section
-
-Los componentes deben soportar el sistema de **LayoutStyles**:
-
-- Separación de estilos físicos (posicionamiento) de estilos visuales.
-- No desborde: Respeto absoluto a los límites del contenedor grid cuando no están en modo "absolute".
+1.  **Acceso Total a Variantes**: No limitar a 3-4 opciones. Usar el selector híbrido (Presets + Lista Completa del Sistema).
+2.  **Formato de Nombres**: Usar `formatVariantName` para mostrar "Cyberpunk Neon" en lugar de `cyberpunk-neon`.
+3.  **Feedback Visual Inmediato**: El canvas debe reflejar los cambios en tiempo real (WYSIWYG 100%).
+4.  **Controles Completos**:
+    - **Contenido**: Textos, iconos, imágenes, listas.
+    - **Estilo Base**: Variante, tamaño, redondeo, modo oscuro.
+    - **Estilo Avanzado**: Colores (sólido/gradiente), tipografía, espaciado.
+    - **Posición/Tamaño**: Drag & drop, resize, inputs numéricos, snapping a grid.
+5.  **Persistencia Robusta**: Guardar cambios sin romper el layout (respetar `isStrictGrid` fuera del modo aislado).
 
 ---
 
-## 3. Hoja de Ruta de Migración
+## 2. Inventario y Estado de Actualización
 
-### Fase 1: Componentes Esenciales (Priority: High)
+Hay **32 componentes** con editor aislado.
 
-_Objetivo: Estabilizar el contenido básico de cualquier página._
+- ✅ **Completados (Gold Standard)**: `draggable-box`.
+- ⚠️ **Parciales (Funcionales pero limitados)**: `accordion` (falta formateo nombres).
+- ❌ **Pendientes (Lista variantes hardcoded)**: 30 componentes.
 
-- [ ] **Title**: Unificar todas las variantes de títulos con control de tipografía y tamaño.
-- [ ] **Image**: Editor con filtros (blur, brightness) y controles de object-fit.
-- [ ] **Chip/Badge**: Sistema de colores dinámicos y variantes de borde.
-- [ ] **Button**: Estandarizar el botón universal con estados hover y sombras.
+### Grupo A: UI Crítica (Prioridad Alta)
 
-### Fase 2: Contenedores y Layout (Priority: Medium)
+Estos componentes forman el 80% del contenido de una web.
 
-_Objetivo: Controlar la estructura espacial._
+- [ ] **Button**: `editor-button-isolated-mode`
+- [ ] **Title**: `editor-title-isolated-mode`
+- [ ] **Image**: `editor-image-isolated-mode`
+- [ ] **Video**: `editor-video-isolated-mode`
+- [ ] **Chip**: `editor-chip-isolated-mode`
 
-- [ ] **UICard**: Soporte para slots internos y variantes de cristal.
-- [ ] **List**: Editor de items con reordenamiento por drag-and-drop.
-- [ ] **Spacer**: Control visual de espaciado mediante resize vertical/horizontal.
-- [ ] **Smart Container**: Implementar anidamiento coordinado.
+### Grupo B: Cards & Contenedores (Prioridad Media)
 
-### Fase 3: Interactividad y Datos (Priority: Low)
+Elementos estructurales y de diseño.
 
-_Objetivo: Añadir funcionalidad avanzada._
+- [ ] **Card Animated**: `editor-card-animated-isolated-mode`
+- [ ] **Card Premium**: `editor-card-premium-isolated-mode`
+- [ ] **Card Product**: `editor-card-product-isolated-mode`
+- [ ] **Card Rutas**: `editor-card-rutas-isolated-mode`
+- [ ] **Card Testimonial**: `editor-card-testimonial-isolated-mode`
+- [ ] **Smart Container**: `editor-smart-container-isolated-mode`
 
-- [ ] **Forms/Inputs**: Estandarizar estilos de campos y botones de envío.
-- [ ] **Tabs/FAQ**: Lógica de expansión similar al Accordion.
-- [ ] **Chart/Table**: Editores de datos crudos integrados en la sidebar.
+### Grupo C: Secciones Completas (Prioridad Media-Alta)
+
+Bloques grandes de página.
+
+- [ ] **Hero**: `editor-hero-isolated-mode`
+- [ ] **Footer**: `editor-footer-isolated-mode`
+- [ ] **Features**: `editor-features-isolated-mode`
+- [ ] **Services**: `editor-services-isolated-mode`
+- [ ] **CTA**: `editor-cta-isolated-mode`
+- [ ] **Contact**: `editor-contact-isolated-mode`
+- [ ] **FAQ**: `editor-faq-isolated-mode`
+
+### Grupo D: Datos y Marketing (Prioridad Baja)
+
+Componentes especializados.
+
+- [ ] **List**: `editor-list-isolated-mode`
+- [ ] **Table**: `editor-table-isolated-mode`
+- [ ] **Pricing**: `editor-pricing-isolated-mode`
+- [ ] **Stats**: `editor-stats-isolated-mode`
+- [ ] **Steps**: `editor-steps-isolated-mode`
+- [ ] **Tabs**: `editor-tabs-isolated-mode`
+- [ ] **Gallery**: `editor-gallery-isolated-mode`
+- [ ] **Showcase**: `editor-showcase-isolated-mode`
+- [ ] **Promotions**: `editor-promotions-isolated-mode`
+- [ ] **Testimonials**: `editor-testimonials-isolated-mode`
+- [ ] **Shape**: `editor-shape-isolated-mode`
+- [ ] **Map**: `editor-map-isolated-mode`
 
 ---
 
-## 4. Guía Técnica para Nuevos Editores
+## 3. Estrategia de Ejecución
 
-1. **Ubicación del Editor**: Crear en `libs/features/editor/feature-editor/src/lib/pages/editor/components/[nombre-comp]`.
-2. **Componente UI**: Mantenerlo agnóstico al editor en `libs/ui-components`.
-3. **Mapeo en Section**: Actualizar `isolatedModeComponents` en `EditorLayoutSectionComponent` para registrar el nuevo tipo.
-4. **Reseteo de Estilos**: Asegurar que `delete newStyles['width']` se ejecute al cambiar layouts globales para evitar rotura de estructura.
+Aplicaremos los cambios en **Lotes** para mantener el control de calidad.
+
+### Paso 1: Estandarización UI Crítica (Grupo A + Accordion)
+
+- **Acción**: Actualizar `availableVariants`, `formatVariantName` y el template HTML `<select>` en los componentes del Grupo A.
+- **Validación**: Verificar que el dropdown muestra todas las variantes y se aplican correctamente.
+
+### Paso 2: Estandarización Cards (Grupo B)
+
+- **Acción**: Replicar la lógica en todos los editores de Cards.
+- **Atención Especial**: Verificar si las cards complejas (ej. `card-product`) requieren mapeo adicional de estilos internos.
+
+### Paso 3: Estandarización Secciones (Grupo C)
+
+- **Acción**: Actualizar los editores de secciones completas.
+- **Nota**: Estos componentes suelen tener variantes que afectan a múltiples sub-elementos. Asegurar que la variante global se propaga.
+
+### Paso 4: Estandarización Restante (Grupo D)
+
+- **Acción**: Barrido final para los componentes de nicho.
 
 ---
 
-**Responsable**: Antigravity AI
-**Estado**: En Progreso
-**Versión**: 1.0.0
+## 4. Snippet de Referencia (Gold Standard)
+
+**TypeScript:**
+
+```typescript
+import { variants } from '@negocio/ui-components';
+
+// En la clase:
+availableVariants = variants;
+
+formatVariantName(variant: string): string {
+  if (!variant) return '';
+  return variant
+    .split('-')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+}
+```
+
+**HTML Template:**
+
+```html
+<div class="control-group">
+  <label>Variante de Estilo</label>
+  <div class="select-wrapper">
+    <select [(ngModel)]="editableContent.variant" (ngModelChange)="onVariantChange()" class="premium-select">
+      <!-- Presets Comunes -->
+      <option value="">Página (Heredar)</option>
+      <option value="default">Estándar (Blanco)</option>
+      <option value="primary">Primario (Primary)</option>
+      <option value="secondary">Secundario (Secondary)</option>
+      <option value="glass">Cristal (Glass)</option>
+      <option value="neon">Neón (Glow)</option>
+      <option value="cyberpunk">Cyberpunk</option>
+
+      <option disabled>──────────────</option>
+
+      <!-- Lista Completa Dinámica (Excluyendo presets) -->
+      <ng-container *ngFor="let v of availableVariants">
+        <option *ngIf="!['default', 'primary', 'secondary', 'glass', 'neon', 'cyberpunk'].includes(v)" [value]="v">{{ formatVariantName(v) }}</option>
+      </ng-container>
+    </select>
+  </div>
+  <p class="variant-hint" *ngIf="!editableContent.variant">Heredando: {{ config.content['globalVariant'] || 'glass' }}</p>
+</div>
+```
