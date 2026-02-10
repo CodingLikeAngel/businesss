@@ -406,6 +406,20 @@ export class SlotResizeService {
     return strictLayouts.includes(layoutType);
   }
 
+  /**
+   * Calcular distribución automática de anchos (Legacy wrapper for Component compatibility)
+   */
+  calculateAutoDistribution(
+    config: LayoutSectionConfig,
+    changedIndex: number,
+    newWidth: number
+  ): LayoutSectionConfig {
+    // This logic is already handled in onResizeMove and resizeSlot, 
+    // but we restore this method to fix the compilation error in the component.
+    // It will return the updated config by applying the resize to the slot and its neighbors.
+    return this.resizeSlot(config, changedIndex, newWidth);
+  }
+
   private snapToGrid(value: number): number {
     return Math.round(value / this.snapIncrement) * this.snapIncrement;
   }

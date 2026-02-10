@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject, Inject, PLATFORM_ID, ViewContainerRef, TemplateRef, ViewChild, HostBinding } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject, Inject, PLATFORM_ID, ViewContainerRef, TemplateRef, ViewChild } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
@@ -194,9 +194,9 @@ interface ComponentDefaultSize {
 
           <!-- Filled Slot - Component Renderer -->
           <ng-container *ngIf="slot.componentType !== 'empty'">
-            <!-- Slot Toolbar (Fixed to Slot Corners) - Moved INSIDE .slot-component for better anchoring -->
-            <div class="slot-component">
-              <div *ngIf="(!isPreviewMode && isEditing) || showEditorControls" class="slot-toolbar-right">
+            <div class="slot-component" style="height: auto; min-height: 100%;">
+              <!-- Editing Overlay -->
+              <div *ngIf="(!isPreviewMode && isEditing) || showEditorControls" class="slot-controls">
                 <button *ngIf="isPositioned(i, slot)"
                         class="slot-btn" 
                         (click)="resetSlotPosition(i)" 
@@ -313,20 +313,20 @@ interface ComponentDefaultSize {
                 </div>
 
               </ng-container>
+
+              <!-- Resize Anchors (8 points) -->
+              <div *ngIf="((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
+                <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+              </div>
             </div>
           </ng-container>
-
-          <!-- Resize Anchors (Fixed to Slot Boundaries) -->
-          <div *ngIf="slot.componentType !== 'empty' && ((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
-            <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-          </div>
         </div>
       </div>
 
@@ -449,8 +449,6 @@ interface ComponentDefaultSize {
         </div>
       </div>
 
-
-
     </section>
 
     <!-- Isolated Mode Overlay - Outside section to prevent clipping -->
@@ -538,11 +536,9 @@ interface ComponentDefaultSize {
     z-index: 1;
   }
 
-  /* Cuando isolated mode está activo, el host no debe restringir y debe estar arriba */
-  :host:has(.isolated-mode-fullscreen-overlay),
-  :host.isolated-mode-active-host {
+  /* Cuando isolated mode está activo, el host no debe restringir */
+  :host:has(.isolated-mode-fullscreen-overlay) {
     position: static !important;
-    z-index: 9999999 !important;
   }
 
     .layout-section {
@@ -573,16 +569,16 @@ interface ComponentDefaultSize {
       overflow: visible !important;
     }
 
-    /* When isolated mode is active, ensure overflow is visible and no clipping contexts exist */
-    /* When isolated mode is active, ensure overflow is visible and no clipping contexts exist */
-    /* Lower z-index so it doesn't cover the overlay (which is a sibling) */
-    .layout-section.isolated-mode,
+    /* When isolated mode is active, ensure overflow is visible for the section */
+    .layout-section.isolated-mode {
+      overflow: visible !important;
+      transform: none !important;
+    }
+
+    /* Also force overflow visible for any parent containers when isolated mode is active */
     .isolated-mode-active .layout-section {
       overflow: visible !important;
       transform: none !important;
-      backdrop-filter: none !important;
-      filter: none !important;
-      z-index: 1 !important;
     }
 
     /* Isolated Mode Overlay - Fixed position with maximum priority */
@@ -594,7 +590,7 @@ interface ComponentDefaultSize {
       bottom: 0 !important;
       width: 100vw !important;
       height: 100vh !important;
-      z-index: 10000005 !important;
+      z-index: 999999 !important;
       background: rgba(2, 6, 23, 0.95) !important;
       backdrop-filter: blur(16px) !important;
       overflow: auto !important;
@@ -743,7 +739,6 @@ interface ComponentDefaultSize {
     /* Slots */
     .slot {
       position: relative;
-      width: 100%;
       min-height: 100px;
       border: 1px dashed rgba(99, 102, 241, 0.15);
       border-radius: 12px;
@@ -818,28 +813,27 @@ interface ComponentDefaultSize {
     .slot-component {
       position: relative;
       width: 100%;
-      height: 100%;
-      min-height: inherit;
+      min-height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
       box-sizing: border-box;
-      overflow: hidden;
     }
 
-    .slot-toolbar-right {
-      position: absolute !important;
-      top: 10px !important;
-      right: 16px !important;
-      left: auto !important;
-      display: flex !important;
-      gap: 6px !important;
-      z-index: 1000 !important;
+    .slot-controls {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      display: flex;
+      gap: 6px;
+      z-index: 100;
       opacity: 0;
       transform: translateY(-5px);
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      width: auto !important;
-      pointer-events: auto !important;
     }
 
-    .slot:hover .slot-toolbar-right, .slot.selected .slot-toolbar-right { 
+    .slot:hover .slot-controls, .slot.selected .slot-controls { 
       opacity: 1; 
       transform: translateY(0);
     }
@@ -1066,23 +1060,18 @@ interface ComponentDefaultSize {
       z-index: 100;
     }
     
-    .resize-anchors {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      z-index: 105;
-    }
-
     .resize-anchor {
       position: absolute;
-      width: 10px;
-      height: 10px;
+      width: 12px;
+      height: 12px;
       background: #ffffff;
-      border: 2px solid #6366f1;
-      border-radius: 2px;
+      border: 2px solid #10b981;
+      border-radius: 4px;
+      z-index: 2000;
       opacity: 0;
-      pointer-events: all;
-      transition: all 0.2s;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      pointer-events: auto;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
     }
     
     .slot.selected .resize-anchor, .slot.resizing .resize-anchor {
@@ -1147,7 +1136,6 @@ interface ComponentDefaultSize {
 
     /* Containment & Overflow Protection */
     .slot {
-      position: relative;
       overflow: hidden; /* Prevent children from breaking the grid */
       display: flex;
       flex-direction: column;
@@ -1187,8 +1175,6 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   readonly resizeService = inject(SlotResizeService);
   override readonly variantService = inject(VariantService);
   
-  @HostBinding('class.isolated-mode-active-host') get isIsolatedModeActive() { return this.showIsolatedMode; }
-
   // Lifecycle Management
   private destroy$ = new Subject<void>();
   private persistSubject$ = new Subject<void>();
@@ -1275,23 +1261,6 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     } else {
       this.config = createDefaultLayoutConfig();
     }
-
-    // Sync resize service state from loaded config
-    if (this.config.slots) {
-      this.config.slots.forEach((slot, index) => {
-        if (slot.layoutStyles && (slot.layoutStyles['width'] || slot.layoutStyles['height'])) {
-          const w = parseInt(slot.layoutStyles['width']?.toString() || '0');
-          const h = parseInt(slot.layoutStyles['height']?.toString() || '0');
-          const l = slot.layoutStyles['left'] ? parseInt(slot.layoutStyles['left'].toString()) : undefined;
-          const t = slot.layoutStyles['top'] ? parseInt(slot.layoutStyles['top'].toString()) : undefined;
-          
-          if (w > 0 || h > 0) {
-            this.resizeService.updateSlotSize(index, w, h, l, t);
-          }
-        }
-      });
-    }
-
     this.cdr.detectChanges();
   }
 
@@ -1337,7 +1306,16 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   }
 
   getGridTemplate(): string {
-    return this.resizeService.getCustomGridTemplate(this.config);
+    const layout = getLayoutDefinition(this.config.layoutType);
+    if (!layout) return '1fr';
+    
+    // Handle special layouts with rows
+    if (this.config.layoutType === 'grid-2x2') return 'repeat(2, 1fr)';
+    if (this.config.layoutType === 'grid-3x2') return 'repeat(3, 1fr)';
+    if (this.config.layoutType === 'grid-3x3') return 'repeat(3, 1fr)';
+    if (this.config.layoutType === 'hero-banner') return '1fr';
+    
+    return layout.gridTemplate;
   }
 
   toggleEditing() {
@@ -1557,6 +1535,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     'title', 
     'chip', 
     'button', 
+    'draggable-box', 
     'text'
   ] as const;
 
@@ -1631,26 +1610,17 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.editingSlotIndex = index;
     this.activeIsolatedType = slot.componentType;
     
-    // DETECT METRICS & NORMALIZE TO 1200px REFERENCE GRID
+    // Detect visual width and position of the slot AND its parent section
     const metrics = this.detectSlotMetrics(event);
-    const REFERENCE_WIDTH = 1200;
-    const scaleFactor = REFERENCE_WIDTH / metrics.sectionWidth;
     
-    // Normalize position relative to SECTION start for isolated mode
-    // (slot position + component offset) * scale
-    const rawLeft = parseInt(slot.layoutStyles?.['left']) || 0;
-    const rawTop = parseInt(slot.layoutStyles?.['top']) || 0;
+    // Use values from config if available and detection failed or yielded zero
+    const currentLeft = parseInt(slot.layoutStyles?.['left']) || metrics.localX;
+    const currentTop = parseInt(slot.layoutStyles?.['top']) || metrics.localY;
     
-    const normalizedX = (metrics.localX + rawLeft) * scaleFactor;
-    const normalizedY = (metrics.localY + rawTop) * scaleFactor;
-    
-    // Normalize size
     const currentSize = this.extractCurrentSize(
       slot.layoutStyles,
       this.getDefaultSize(slot.componentType, metrics.width)
     );
-    const normalizedWidth = currentSize.width * scaleFactor;
-    const normalizedHeight = currentSize.height * scaleFactor;
 
     // Build component-specific content mapping
     const mappedContent = this.buildIsolatedContent(slot, metrics);
@@ -1662,22 +1632,13 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       type: slot.componentType,
       variant: slot.componentVariant || this.globalVariant,
       globalVariant: this.globalVariant,
-      content: {
-        ...mappedContent,
-        currentScale: scaleFactor, // Store exact scale for perfect inverse mapping
-        slotBounds: {
-          x: metrics.localX * scaleFactor,
-          y: metrics.localY * scaleFactor,
-          width: metrics.width * scaleFactor,
-          height: metrics.sectionHeight * scaleFactor 
-        }
-      },
+      content: mappedContent,
       styles: { ...slot.layoutStyles },
-      position: { x: Math.round(normalizedX), y: Math.round(normalizedY) },
-      size: { width: Math.round(normalizedWidth), height: Math.round(normalizedHeight) },
+      position: { x: currentLeft, y: currentTop },
+      size: currentSize,
       canvasSize: {
-        width: REFERENCE_WIDTH,
-        height: Math.round(metrics.sectionHeight * scaleFactor)
+        width: metrics.sectionWidth,
+        height: metrics.sectionHeight
       }
     };
     
@@ -1928,53 +1889,42 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     // Position & Style Sync
     // We separate 'box' styles (layout) from 'content' styles (appearance)
     const finalAppearanceStyles = { ...updatedConfig.styles };
-    // Always remove dimensions from component styles, as the slot takes care of them
-    delete finalAppearanceStyles['width'];
-    delete finalAppearanceStyles['height'];
-    
     const layoutStyles = { ...(newSlots[this.editingSlotIndex].layoutStyles || {}) };
     
-    // Coordinate Re-Mapping Flow:
-    // 1. Config -> Normalized (already done in Isolated Mode)
-    // 2. Normalized -> Real Section Pixels (based on current viewport width)
-    // 3. Real Section Pixels -> Slot-Relative Pixels (Subtract localX/localY)
-    
-    if (updatedConfig.position && updatedConfig.canvasSize && this.editingOriginMetrics) {
-        const REFERENCE_WIDTH = 1200;
-        // Use stored scale factor for 100% precision, fallback to detection
-        const activeScale = updatedConfig.content?.['currentScale'] || (REFERENCE_WIDTH / this.editingOriginMetrics.sectionWidth);
-        const invScale = 1 / activeScale;
+    if (updatedConfig.size) {
+        const slotW = updatedConfig.size.width;
+        const slotH = updatedConfig.size.height;
         
-        // Convert normalized isolated coordinates back to real section pixels
-        const realX = updatedConfig.position.x * invScale;
-        const realY = updatedConfig.position.y * invScale;
-        const realW = updatedConfig.size?.width ? updatedConfig.size.width * invScale : 0;
-        const realH = updatedConfig.size?.height ? updatedConfig.size.height * invScale : 0;
-
-        // Clamp to SECTION boundaries
-        let clampedX = Math.max(0, realX);
-        let clampedY = Math.max(0, realY);
-        
-        if (clampedX + realW > this.editingOriginMetrics.sectionWidth) {
-          clampedX = Math.max(0, this.editingOriginMetrics.sectionWidth - realW);
-        }
-
-        // Convert SECTION-RELATIVE coordinates to SLOT-RELATIVE coordinates
-        let finalX = clampedX - this.editingOriginMetrics.localX;
-        let finalY = clampedY - this.editingOriginMetrics.localY;
-
-        // Sync back width/height
-        layoutStyles['width'] = Math.round(realW) + 'px';
+        layoutStyles['width'] = slotW + 'px';
         
         const flowComponents = ['accordion', 'card', 'list', 'title', 'chip', 'button', 'draggable-box', 'text'];
         const isFlow = flowComponents.some(type => slot.componentType.includes(type));
-        
+
         if (isFlow) {
-            layoutStyles['height'] = 'auto';
-            layoutStyles['min-height'] = Math.round(realH) + 'px';
+             layoutStyles['height'] = 'auto';
+             layoutStyles['min-height'] = slotH + 'px';
         } else {
-            layoutStyles['height'] = Math.round(realH) + 'px';
+             layoutStyles['height'] = slotH + 'px';
         }
+        
+        // Remove from appearance styles to avoid duplication/conflicts
+        delete finalAppearanceStyles['width'];
+        delete finalAppearanceStyles['height'];
+    }
+    
+    // Direct position sync with clamping to prevent overflow
+    if (updatedConfig.position && updatedConfig.canvasSize) {
+        const canvasW = updatedConfig.canvasSize.width;
+        const canvasH = updatedConfig.canvasSize.height;
+        const widthVal = updatedConfig.size?.width || 0;
+        const heightVal = updatedConfig.size?.height || 0;
+
+        // Clamp X and Y to parent boundaries
+        let finalX = Math.max(0, updatedConfig.position.x);
+        let finalY = Math.max(0, updatedConfig.position.y);
+        
+        if (finalX + widthVal > canvasW) finalX = Math.max(0, canvasW - widthVal);
+        if (finalY + heightVal > canvasH) finalY = Math.max(0, canvasH - heightVal);
 
         // Position logic refinement:
         // Only force absolute positioning if it was already absolute 
@@ -1984,16 +1934,16 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
                            !!slot.layoutStyles?.['top'];
                            
         const hasMoved = this.editingOriginMetrics && (
-          Math.abs(finalX - (parseInt(slot.layoutStyles?.['left']) || 0)) > 5 ||
-          Math.abs(finalY - (parseInt(slot.layoutStyles?.['top']) || 0)) > 5
+          Math.abs(finalX - this.editingOriginMetrics.localX) > 5 ||
+          Math.abs(finalY - this.editingOriginMetrics.localY) > 5
         );
 
         if (wasAbsolute || hasMoved) {
-          layoutStyles['left'] = Math.round(finalX) + 'px';
-          layoutStyles['top'] = Math.round(finalY) + 'px';
+          layoutStyles['left'] = finalX + 'px';
+          layoutStyles['top'] = finalY + 'px';
           layoutStyles['position'] = 'absolute';
           
-          // Remove from appearance styles to allow component to fill slot 100%/100%
+          // Remove from appearance styles
           delete finalAppearanceStyles['left'];
           delete finalAppearanceStyles['top'];
           delete finalAppearanceStyles['position'];
@@ -2018,16 +1968,6 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       ...this.config,
       slots: newSlots
     };
-
-    // Sync with resize service to ensure getSlotWidth/Height priority
-    if (layoutStyles['width']) {
-      const w = parseInt(layoutStyles['width'] as string);
-      const h = layoutStyles['height'] && layoutStyles['height'] !== 'auto' ? parseInt(layoutStyles['height'] as string) : 0;
-      const l = layoutStyles['left'] ? parseInt(layoutStyles['left'] as string) : undefined;
-      const t = layoutStyles['top'] ? parseInt(layoutStyles['top'] as string) : undefined;
-      
-      this.resizeService.updateSlotSize(this.editingSlotIndex, w, h, l, t);
-    }
 
     this.persistConfig();
     this.onIsolatedModeClosed();
@@ -2103,8 +2043,6 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
    * Get reactive slot left position
    */
   getSlotLeft(index: number): number | null {
-    if (this.resizeService.isStrictGrid(this.config.layoutType)) return null;
-
     const customSize = this.resizeService.customSizes().get(index);
     if (customSize && customSize.left !== undefined) {
       return customSize.left;
@@ -2116,8 +2054,6 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
    * Get reactive slot top position
    */
   getSlotTop(index: number): number | null {
-    if (this.resizeService.isStrictGrid(this.config.layoutType)) return null;
-
     const customSize = this.resizeService.customSizes().get(index);
     if (customSize && customSize.top !== undefined) {
       return customSize.top;
@@ -2142,6 +2078,12 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       custom.top
     );
     
+    // Optionally auto-distribute remaining space
+    if (this.resizeService.resizeMode === 'auto-distribute') {
+      // newWidth is not available here, assuming custom.width is the intended value
+      this.config = this.resizeService.calculateAutoDistribution(this.config, index, custom.width);
+    }
+    
     this.persistConfig();
     this.cdr.detectChanges();
   }
@@ -2165,8 +2107,9 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
    */
   isFlowComponent(slot: SlotConfig): boolean {
     if (!slot) return false;
+    const flowTypes = ['accordion', 'card', 'list', 'title', 'chip', 'button', 'draggable-box', 'text'];
     const type = slot.componentType.toLowerCase();
-    return this.FLOW_COMPONENTS.some(ft => type.includes(ft));
+    return flowTypes.some(ft => type.includes(ft));
   }
 
   /**
@@ -2179,9 +2122,6 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   }
 
   isPositioned(index: number, slot: SlotConfig): boolean {
-    // Strictly disable absolute positioning for grid layouts to prevent structure breaking
-    if (this.resizeService.isStrictGrid(this.config.layoutType)) return false;
-
     if (this.getSlotLeft(index) !== null || this.getSlotTop(index) !== null) return true;
     if (slot.layoutStyles?.['left'] || slot.layoutStyles?.['top']) return true;
     return slot.layoutStyles?.['position'] === 'absolute' || slot.styles?.['position'] === 'absolute';
