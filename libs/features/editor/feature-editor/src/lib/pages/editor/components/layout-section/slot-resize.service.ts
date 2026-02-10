@@ -191,6 +191,15 @@ export class SlotResizeService {
   }
 
   /**
+   * Actualizar manualmente el tamaño de un slot (desde Isolated Mode u otra fuente extern)
+   */
+  updateSlotSize(index: number, width: number, height: number, left?: number, top?: number): void {
+    const sizes = this.customSizes();
+    sizes.set(index, { width, height, left, top });
+    this.customSizes.set(new Map(sizes));
+  }
+
+  /**
    * Verifica si el slot actual colisiona con otros slots
    */
   private checkCollisions(currentIndex: number, rect: { width: number, height: number, left: number, top: number }): number {

@@ -1274,6 +1274,23 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     } else {
       this.config = createDefaultLayoutConfig();
     }
+
+    // Sync resize service state from loaded config
+    if (this.config.slots) {
+      this.config.slots.forEach((slot, index) => {
+        if (slot.layoutStyles && (slot.layoutStyles['width'] || slot.layoutStyles['height'])) {
+          const w = parseInt(slot.layoutStyles['width']?.toString() || '0');
+          const h = parseInt(slot.layoutStyles['height']?.toString() || '0');
+          const l = slot.layoutStyles['left'] ? parseInt(slot.layoutStyles['left'].toString()) : undefined;
+          const t = slot.layoutStyles['top'] ? parseInt(slot.layoutStyles['top'].toString()) : undefined;
+          
+          if (w > 0 || h > 0) {
+            this.resizeService.updateSlotSize(index, w, h, l, t);
+          }
+        }
+      });
+    }
+
     this.cdr.detectChanges();
   }
 
@@ -2005,6 +2022,16 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       ...this.config,
       slots: newSlots
     };
+
+    // Sync with resize service to ensure getSlotWidth/Height priority
+    if (layoutStyles['width']) {
+      const w = parseInt(layoutStyles['width'] as string);
+      const h = layoutStyles['height'] && layoutStyles['height'] !== 'auto' ? parseInt(layoutStyles['height'] as string) : 0;
+      const l = layoutStyles['left'] ? parseInt(layoutStyles['left'] as string) : undefined;
+      const t = layoutStyles['top'] ? parseInt(layoutStyles['top'] as string) : undefined;
+      
+      this.resizeService.updateSlotSize(this.editingSlotIndex, w, h, l, t);
+    }
 
     this.persistConfig();
     this.onIsolatedModeClosed();
