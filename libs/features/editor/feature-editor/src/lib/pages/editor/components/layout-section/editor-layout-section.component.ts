@@ -1548,7 +1548,6 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     'title', 
     'chip', 
     'button', 
-    'draggable-box', 
     'text'
   ] as const;
 
@@ -2145,9 +2144,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
    */
   isFlowComponent(slot: SlotConfig): boolean {
     if (!slot) return false;
-    const flowTypes = ['accordion', 'card', 'list', 'title', 'chip', 'button', 'draggable-box', 'text'];
     const type = slot.componentType.toLowerCase();
-    return flowTypes.some(ft => type.includes(ft));
+    return this.FLOW_COMPONENTS.some(ft => type.includes(ft));
   }
 
   /**
