@@ -318,14 +318,14 @@ interface ComponentDefaultSize {
 
           <!-- Resize Anchors (Fixed to Slot Boundaries) -->
           <div *ngIf="slot.componentType !== 'empty' && ((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
-            <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-            <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  [isStrictGrid]="resizeService.isStrictGrid(config.layoutType)" [layoutType]="config.layoutType" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
           </div>
         </div>
       </div>
@@ -1337,16 +1337,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   }
 
   getGridTemplate(): string {
-    const layout = getLayoutDefinition(this.config.layoutType);
-    if (!layout) return '1fr';
-    
-    // Handle special layouts with rows
-    if (this.config.layoutType === 'grid-2x2') return 'repeat(2, 1fr)';
-    if (this.config.layoutType === 'grid-3x2') return 'repeat(3, 1fr)';
-    if (this.config.layoutType === 'grid-3x3') return 'repeat(3, 1fr)';
-    if (this.config.layoutType === 'hero-banner') return '1fr';
-    
-    return layout.gridTemplate;
+    return this.resizeService.getCustomGridTemplate(this.config);
   }
 
   toggleEditing() {
@@ -2150,12 +2141,6 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       custom.left, 
       custom.top
     );
-    
-    // Optionally auto-distribute remaining space
-    if (this.resizeService.resizeMode === 'auto-distribute') {
-      // newWidth is not available here, assuming custom.width is the intended value
-      this.config = this.resizeService.calculateAutoDistribution(this.config, index, custom.width);
-    }
     
     this.persistConfig();
     this.cdr.detectChanges();
