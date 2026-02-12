@@ -1550,49 +1550,44 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     const styles = { ...(slot.styles || {}) };
     const componentType = slot.componentType as SlotComponentType;
     
-    // 1. Draggable box merges styles its own way in isolated mode, 
-    // but here we want it to respect the slot boundary during resize
-    
     // Detect if we have a custom size active in the service (reactive via signals)
     const customSizeMap = this.resizeService.customSizes();
     const activeSize = customSizeMap.get(index);
     
-    // Size enforcement: prioritize active resize dimensions, then layoutStyles (persisted), then defaults
+    // Size enforcement: prioritize active resize dimensions, then layoutStyles (persisted)
     const currentWidth = activeSize?.width ? `${activeSize.width}px` : slot.layoutStyles?.['width'];
     const currentHeight = activeSize?.height ? `${activeSize.height}px` : slot.layoutStyles?.['height'];
 
-    // 2. Position logic: Relative offsets vs absolute
-    // Flow components use relative positioning to act as offsets from grid cell
-    const hasCoordinates = !!styles['left'] || !!styles['top'] || !!styles['transform'];
+    // Position logic: Relative offsets vs absolute
     const isAbsolute = slot.layoutStyles?.['position'] === 'absolute' || styles['position'] === 'absolute';
     
     if (isAbsolute) {
       styles['position'] = 'absolute';
-    } else if (hasCoordinates) {
-      styles['position'] = 'relative';
-    } else {
-      if (styles['position'] === 'absolute') delete styles['position'];
+      if (slot.layoutStyles?.['left']) styles['left'] = slot.layoutStyles['left'];
+      if (slot.layoutStyles?.['top']) styles['top'] = slot.layoutStyles['top'];
     }
     
-    // 3. Size enforcement
+    // Size enforcement
     if (currentWidth) styles['width'] = currentWidth;
     if (currentHeight) styles['height'] = currentHeight;
 
-    // 4. Default Alignment (Centered for small components)
-    if (!styles['display'] && !isAbsolute) {
+    // Default Alignment / Display rules
+    if (!styles['display']) {
       styles['display'] = 'flex';
       styles['align-items'] = 'center';
       styles['justify-content'] = 'center';
       styles['width'] = styles['width'] || '100%';
     }
 
-    // 5. Special Component Rules
-    if (componentType === 'ui-accordion' || componentType === 'ui-list') {
+    // Component-specific structural overrides
+    const fullWidthComponents = ['ui-accordion', 'ui-list', 'ui-card', 'ui-card-animated', 'ui-card-product'];
+    if (fullWidthComponents.some(type => componentType.includes(type))) {
       styles['width'] = '100%';
       styles['justify-content'] = 'stretch';
       styles['align-items'] = 'stretch';
     }
 
+    // Centering for buttons and chips
     if (componentType === 'ui-button' || componentType === 'ui-chip') {
       styles['align-self'] = 'center';
     }
@@ -1837,6 +1832,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     let mappedContent: any = { ...updatedConfig.content };
     let newVariant: string | undefined = undefined;
     
+    // 1. Map content specialized per component type
     switch (slot.componentType) {
       case 'ui-button':
         mappedContent = {
@@ -1844,12 +1840,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
           text: updatedConfig.content.text || updatedConfig.content.label || 'Botón'
         };
         newVariant = updatedConfig.content.variant;
-        // Fix for button expanded state if width is 100%
-        if (updatedConfig.styles?.['width'] === '100%') {
-          mappedContent['expanded'] = true;
-        }
+        if (updatedConfig.styles?.['width'] === '100%') mappedContent['expanded'] = true;
         break;
-        
       case 'ui-accordion':
         mappedContent = { 
           ...updatedConfig.content,
@@ -1857,107 +1849,83 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         };
         newVariant = updatedConfig.content.variant || updatedConfig.content.accordionVariant;
         break;
-        
-      case 'draggable-box':
-        mappedContent = {
-          ...updatedConfig.content,
-          text: updatedConfig.content.text || 'Draggable Box'
-        };
-        newVariant = updatedConfig.content.variant;
-        break;
-
       case 'ui-card-product':
         mappedContent = { product: { ...updatedConfig.content } };
         newVariant = updatedConfig.content.variant;
         break;
-
       case 'ui-title':
       case 'ui-chip':
+      case 'draggable-box':
         mappedContent = {
            ...updatedConfig.content,
-           text: updatedConfig.content.text || updatedConfig.content.label || updatedConfig.content.title
+           text: updatedConfig.content.text || updatedConfig.content.label || 'Contenido'
         };
-        newVariant = updatedConfig.content.variant;
+        newVariant = updatedConfig.variant || updatedConfig.content.variant;
         break;
-        
       default:
         mappedContent = { ...updatedConfig.content };
-        newVariant = updatedConfig.content?.variant;
+        newVariant = updatedConfig.variant || updatedConfig.content?.variant;
     }
 
-    const finalVariant = newVariant || updatedConfig.variant || slot.componentVariant;
+    const finalVariant = newVariant || slot.componentVariant;
     const newSlots = [...this.config.slots];
-    
-    // Position & Style Sync
-    // We separate 'box' styles (layout) from 'content' styles (appearance)
     const finalAppearanceStyles = { ...updatedConfig.styles };
     const layoutStyles = { ...(newSlots[this.editingSlotIndex].layoutStyles || {}) };
     
+    // 2. Standardized Size Sync (Robust)
     if (updatedConfig.size) {
-        const slotW = updatedConfig.size.width;
-        const slotH = updatedConfig.size.height;
+        const validated = this.resizeService.validateDimensions(updatedConfig.size.width, updatedConfig.size.height);
+        layoutStyles['width'] = validated.width + 'px';
         
-        layoutStyles['width'] = slotW + 'px';
-        
-        const flowComponents = ['accordion', 'card', 'list', 'title', 'chip', 'button', 'draggable-box', 'text'];
-        const isFlow = flowComponents.some(type => slot.componentType.includes(type));
+        const isFlow = this.FLOW_COMPONENTS.some(type => slot.componentType.includes(type));
 
         if (isFlow) {
              layoutStyles['height'] = 'auto';
-             layoutStyles['min-height'] = slotH + 'px';
+             layoutStyles['min-height'] = validated.height + 'px';
         } else {
-             layoutStyles['height'] = slotH + 'px';
+             layoutStyles['height'] = validated.height + 'px';
         }
         
-        // Remove from appearance styles to avoid duplication/conflicts
         delete finalAppearanceStyles['width'];
         delete finalAppearanceStyles['height'];
     }
     
-    // Direct position sync with clamping to prevent overflow
+    // 3. Standardized Position Sync (Robust)
     if (updatedConfig.position && updatedConfig.canvasSize) {
-        const canvasW = updatedConfig.canvasSize.width;
-        const canvasH = updatedConfig.canvasSize.height;
-        const widthVal = updatedConfig.size?.width || 0;
-        const heightVal = updatedConfig.size?.height || 0;
-
-        // Clamp X and Y to parent boundaries
-        let finalX = Math.max(0, updatedConfig.position.x);
-        let finalY = Math.max(0, updatedConfig.position.y);
+        const itemW = updatedConfig.size?.width || 200;
+        const itemH = updatedConfig.size?.height || 100;
         
-        if (finalX + widthVal > canvasW) finalX = Math.max(0, canvasW - widthVal);
-        if (finalY + heightVal > canvasH) finalY = Math.max(0, canvasH - heightVal);
+        const validatedPos = this.resizeService.validatePosition(
+          updatedConfig.position.x, 
+          updatedConfig.position.y,
+          updatedConfig.canvasSize.width,
+          updatedConfig.canvasSize.height,
+          itemW,
+          itemH
+        );
 
-        // Position logic refinement:
-        // Only force absolute positioning if it was already absolute 
-        // OR if the position has meaningfully changed (user dragged it)
-        const wasAbsolute = slot.layoutStyles?.['position'] === 'absolute' || 
-                           !!slot.layoutStyles?.['left'] || 
-                           !!slot.layoutStyles?.['top'];
-                           
+        const wasAbsolute = slot.layoutStyles?.['position'] === 'absolute' || !!slot.layoutStyles?.['left'];
         const hasMoved = this.editingOriginMetrics && (
-          Math.abs(finalX - this.editingOriginMetrics.localX) > 5 ||
-          Math.abs(finalY - this.editingOriginMetrics.localY) > 5
+          Math.abs(validatedPos.left - this.editingOriginMetrics.localX) > 10 ||
+          Math.abs(validatedPos.top - this.editingOriginMetrics.localY) > 10
         );
 
         if (wasAbsolute || hasMoved) {
-          layoutStyles['left'] = finalX + 'px';
-          layoutStyles['top'] = finalY + 'px';
+          layoutStyles['left'] = validatedPos.left + 'px';
+          layoutStyles['top'] = validatedPos.top + 'px';
           layoutStyles['position'] = 'absolute';
           
-          // Remove from appearance styles
           delete finalAppearanceStyles['left'];
           delete finalAppearanceStyles['top'];
           delete finalAppearanceStyles['position'];
         } else {
-          // If not moved and wasn't absolute, ensure we don't have orphan coordinates
           delete layoutStyles['left'];
           delete layoutStyles['top'];
-          // Keep it flow-relative
           if (layoutStyles['position'] === 'absolute') delete layoutStyles['position'];
         }
     }
 
+    // 4. Update the slot in the config
     newSlots[this.editingSlotIndex] = {
       ...newSlots[this.editingSlotIndex],
       componentVariant: finalVariant,
@@ -1966,13 +1934,10 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       layoutStyles: layoutStyles
     };
 
-    this.config = {
-      ...this.config,
-      slots: newSlots
-    };
-
+    this.config = { ...this.config, slots: newSlots };
     this.persistConfig();
     this.onIsolatedModeClosed();
+    this.cdr.detectChanges();
   }
 
   onIsolatedModeClosed() {

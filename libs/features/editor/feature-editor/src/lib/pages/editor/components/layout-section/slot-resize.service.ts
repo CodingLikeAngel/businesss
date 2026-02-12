@@ -38,19 +38,47 @@ export class SlotResizeService {
 
   // ========== CONFIGURATION ==========
 
-  readonly minSlotWidth = 80;    // Reduced from 100
-  readonly maxSlotWidth = 1400;  // Increased from 1200
-  readonly minSlotHeight = 20;   // Reduced from 40
-  readonly maxSlotHeight = 1200; // Increased
-  readonly snapIncrement = 4;    // Reduced from 8 for "less fast/jumpy" feel
+  readonly minSlotWidth = 80;    
+  readonly maxSlotWidth = 1400;  
+  readonly minSlotHeight = 20;   
+  readonly maxSlotHeight = 1200; 
+  readonly snapIncrement = 4;    
 
-  // ========== COMPUTED ==========
+  // ========== UTILS & VALIDATION ==========
 
-  readonly activeSlotSize = computed(() => {
-    const index = this.activeSlotIndex();
-    if (index === null) return null;
-    return this.customSizes().get(index) || null;
-  });
+  /**
+   * Clamp a value between min and max
+   */
+  public clamp(value: number, min: number, max: number): number {
+    return Math.max(min, Math.min(max, value));
+  }
+
+  /**
+   * Snap a value to the grid increment
+   */
+  public snap(value: number): number {
+    return Math.round(value / this.snapIncrement) * this.snapIncrement;
+  }
+
+  /**
+   * Validate and return safe dimensions
+   */
+  public validateDimensions(width: number, height: number): { width: number; height: number } {
+    return {
+      width: this.clamp(this.snap(width), this.minSlotWidth, this.maxSlotWidth),
+      height: this.clamp(this.snap(height), this.minSlotHeight, this.maxSlotHeight)
+    };
+  }
+
+  /**
+   * Validate and return safe position within parent boundaries
+   */
+  public validatePosition(left: number, top: number, parentW: number, parentH: number, itemW: number, itemH: number): { left: number; top: number } {
+    return {
+      left: this.clamp(this.snap(left), 0, Math.max(0, parentW - itemW)),
+      top: this.clamp(this.snap(top), 0, Math.max(0, parentH - itemH))
+    };
+  }
 
   // ========== METHODS ==========
 
@@ -62,35 +90,30 @@ export class SlotResizeService {
     this.resizeDirection.set(direction);
     this.isResizing.set(true);
 
-    // Capturar tamaño inicial del slot principal
-    if (currentSize) {
-      this.startSize = { ...currentSize };
-    } else {
-      const existing = this.customSizes().get(index);
-      this.startSize = existing ? { ...existing } : { width: 400, height: 300 };
-    }
-
-    // Capturar tamaños iniciales de todos los slots actuales para distribución balanceada
-    this.neighborStartSizes.clear();
     const sizes = this.customSizes();
-    // Nota: Deberíamos tener los tamaños de todos los slots incluso si son 'auto'
-    // Para simplificar, asumimos que si no están en customSizes, usaremos una estimación o el rect actual si lo pasara el componente
-    
-    // Capturar posición inicial
-    this.startPosition = currentPos || { left: 0, top: 0 };
-    
-    // Inicializar tamaño en los signals si no existe
-    if (!sizes.has(index)) {
-      sizes.set(index, { ...this.startSize, ...this.startPosition });
-      this.customSizes.set(new Map(sizes));
-    }
+    const existing = sizes.get(index);
 
-    // Guardar estados iniciales de los vecinos actuales en customSizes
+    // Capture initial size with fallback to current visual rect
+    this.startSize = currentSize 
+      ? { ...currentSize } 
+      : (existing ? { width: existing.width, height: existing.height } : { width: 400, height: 300 });
+
+    // Capture initial position
+    this.startPosition = currentPos || (existing ? { left: existing.left || 0, top: existing.top || 0 } : { left: 0, top: 0 });
+
+    // Capture neighbor start sizes for proportional distribution
+    this.neighborStartSizes.clear();
     sizes.forEach((val, idx) => {
         if (idx !== index) {
             this.neighborStartSizes.set(idx, { width: val.width, height: val.height });
         }
     });
+    
+    // Ensure active slot is in customSizes
+    if (!existing) {
+      sizes.set(index, { ...this.startSize, ...this.startPosition });
+      this.customSizes.set(new Map(sizes));
+    }
   }
 
   onResizeMove(index: number, delta: { dx: number; dy: number }, anchor?: ResizeAnchor, isStrictGrid: boolean = false, layoutType?: LayoutType): void {
@@ -102,29 +125,25 @@ export class SlotResizeService {
     let deltaLeft = 0;
     let deltaTop = 0;
 
-    // Lógica avanzada de 8 puntos
+    // Advanced 8-point and move logic
     switch (currentAnchor as any) {
+      case 'move':
+        deltaLeft = delta.dx;
+        deltaTop = delta.dy;
+        break;
       case 'e':
         newWidth = this.startSize.width + delta.dx;
         break;
       case 'w':
-        if (isStrictGrid) {
-            newWidth = this.startSize.width - delta.dx;
-        } else {
-            newWidth = this.startSize.width - delta.dx;
-            deltaLeft = delta.dx;
-        }
+        newWidth = this.startSize.width - delta.dx;
+        if (!isStrictGrid) deltaLeft = delta.dx;
         break;
       case 's':
         newHeight = this.startSize.height + delta.dy;
         break;
       case 'n':
-        if (isStrictGrid) {
-            newHeight = this.startSize.height - delta.dy;
-        } else {
-            newHeight = this.startSize.height - delta.dy;
-            deltaTop = delta.dy;
-        }
+        newHeight = this.startSize.height - delta.dy;
+        if (!isStrictGrid) deltaTop = delta.dy;
         break;
       case 'se':
         newWidth = this.startSize.width + delta.dx;
@@ -148,71 +167,54 @@ export class SlotResizeService {
             deltaTop = delta.dy;
         }
         break;
-      case 'move':
-        if (!isStrictGrid) {
-            deltaLeft = delta.dx;
-            deltaTop = delta.dy;
-        }
-        break;
     }
 
-    // Snap to grid
-    newWidth = this.snapToGrid(newWidth);
-    newHeight = this.snapToGrid(newHeight);
+    // Apply Snapping & Clamping (Robust)
+    const validDim = this.validateDimensions(newWidth, newHeight);
+    newWidth = validDim.width;
+    newHeight = validDim.height;
 
-    // Aplicar límites
-    newWidth = this.clampWidth(newWidth);
-    newHeight = this.clampHeight(newHeight);
-
-    // --- Lógica de Distribución en Grid (Resizing uno afecta al otro) ---
     const sizes = new Map(this.customSizes());
     
+    // --- Grid Distribution Logic ---
     if (isStrictGrid && layoutType) {
         const neighborIdx = this.getHorizontalNeighborIndex(layoutType, index);
         if (neighborIdx !== -1) {
             const neighborStart = this.neighborStartSizes.get(neighborIdx);
             if (neighborStart) {
-                // El cambio de ancho del principal es proporcional al del vecino
-                // deltaW = currentNewWidth - startWidth
+                // If we are shrinking/growing, neighbor must compensate
                 const deltaW = newWidth - this.startSize.width;
                 let neighborNewWidth = neighborStart.width - deltaW;
 
-                // Si el vecino llega al límite mínimo, bloqueamos el crecimiento del actual
+                // Clamp neighbor and adjust current width if neighbor hits limit
                 if (neighborNewWidth < this.minSlotWidth) {
                     neighborNewWidth = this.minSlotWidth;
-                    // Recalculamos newWidth basado en lo que el vecino pudo ceder
                     newWidth = this.startSize.width + (neighborStart.width - this.minSlotWidth);
+                } else if (neighborNewWidth > this.maxSlotWidth) {
+                    neighborNewWidth = this.maxSlotWidth;
+                    newWidth = this.startSize.width - (this.maxSlotWidth - neighborStart.width);
                 }
 
-                sizes.set(neighborIdx, { 
-                    ...sizes.get(neighborIdx)!, 
-                    width: neighborNewWidth 
-                });
+                const neighborData = sizes.get(neighborIdx);
+                if (neighborData) {
+                    sizes.set(neighborIdx, { ...neighborData, width: neighborNewWidth });
+                }
             }
         }
     }
 
-    // Actualizar principal
-    let finalLeft = isStrictGrid ? 0 : Math.max(0, this.startPosition.left + deltaLeft);
-    let finalTop = isStrictGrid ? 0 : Math.max(0, this.startPosition.top + deltaTop);
+    // Apply Position
+    const finalLeft = isStrictGrid ? 0 : Math.max(0, this.startPosition.left + deltaLeft);
+    const finalTop = isStrictGrid ? 0 : Math.max(0, this.startPosition.top + deltaTop);
 
     sizes.set(index, { 
       width: newWidth, 
       height: newHeight, 
-      left: isStrictGrid ? undefined : finalLeft,
-      top: isStrictGrid ? undefined : finalTop
+      left: isStrictGrid ? undefined : this.snap(finalLeft),
+      top: isStrictGrid ? undefined : this.snap(finalTop)
     });
 
     this.customSizes.set(sizes);
-  }
-
-  /**
-   * Actualizar manualmente el tamaño de un slot
-   */
-  updateSlotSize(index: number, width: number, height: number, left?: number, top?: number): void {
-    const sizes = this.customSizes();
-    sizes.set(index, { width, height, left, top });
-    this.customSizes.set(new Map(sizes));
   }
 
   /**
@@ -230,17 +232,6 @@ export class SlotResizeService {
 
   resetCustomSizes(): void {
     this.customSizes.set(new Map());
-  }
-
-  /**
-   * Obtener el width efectivo de un slot
-   */
-  getEffectiveWidth(config: LayoutSectionConfig, index: number): string {
-    const customSize = this.customSizes().get(index);
-    if (customSize && customSize.width > 0) {
-      return `${customSize.width}px`;
-    }
-    return '1fr'; 
   }
 
   /**
@@ -276,7 +267,6 @@ export class SlotResizeService {
     const customSizesMap = this.customSizes();
     const layoutType = config.layoutType;
 
-    // Helper para obtener el ancho de un slot, priorizando el signal de resize pero cayendo al config
     const getW = (idx: number): number | undefined => {
       const custom = customSizesMap.get(idx)?.width;
       if (typeof custom === 'number' && custom > 0) return custom;
@@ -286,11 +276,9 @@ export class SlotResizeService {
         const p = parseInt(saved);
         return isNaN(p) ? undefined : p;
       }
-      
       return undefined;
     };
 
-    // Lógica para 2 columnas (la más común donde se pide este comportamiento)
     if (layoutType.includes('two-columns') || layoutType.includes('sidebar-left') || layoutType.includes('sidebar-right')) {
         const w0 = getW(0);
         const w1 = getW(1);
@@ -299,7 +287,6 @@ export class SlotResizeService {
         if (w1) return `1fr ${w1}px`;
     }
 
-    // Para grids de más columnas o complejos
     if (layoutType === 'three-columns') {
         const parts = [];
         for (let i = 0; i < 3; i++) {
@@ -309,7 +296,6 @@ export class SlotResizeService {
         return parts.join(' ');
     }
 
-    // Para grids 2x2 etc, solemos redimensionar columnas, no todo el grid simultáneamente
     if (layoutType === 'grid-2x2') {
         const w0 = getW(0) || getW(2);
         const w1 = getW(1) || getW(3);
@@ -343,11 +329,10 @@ export class SlotResizeService {
         return currentIndex === 0 ? 1 : (currentIndex === 1 ? 0 : -1);
       case 'three-columns':
         if (currentIndex === 0) return 1;
-        if (currentIndex === 1) return 2;
+        if (currentIndex === 1) return (this.resizeDirection() === 'w' ? 0 : 2);
         if (currentIndex === 2) return 1;
         break;
       case 'grid-2x2':
-        // Slots 0-1 están juntos, 2-3 están juntos
         if (currentIndex === 0) return 1;
         if (currentIndex === 1) return 0;
         if (currentIndex === 2) return 3;
@@ -358,7 +343,7 @@ export class SlotResizeService {
   }
 
   /**
-   * Aplicar resize a un slot específico
+   * Aplicar resize a un slot específico y devolver nueva config
    */
   resizeSlot(
     config: LayoutSectionConfig,
@@ -369,45 +354,52 @@ export class SlotResizeService {
     top?: number
   ): LayoutSectionConfig {
     const slots = [...config.slots];
-    const slot = { ...slots[index] };
     const isStrictGrid = this.isStrictGrid(config.layoutType);
     
-    // Actualizar estilos de layout
-    slot.layoutStyles = {
-      ...slot.layoutStyles,
-      width: `${newWidth}px`,
-      ...(newHeight !== undefined ? { height: `${newHeight}px` } : {}),
-      position: (!isStrictGrid && (left !== undefined || top !== undefined)) ? 'absolute' : (slot.layoutStyles?.['position'] || 'relative')
+    const updateSlot = (idx: number, w: number, h?: number, l?: number, t?: number) => {
+      const slot = { ...slots[idx] };
+      slot.layoutStyles = {
+        ...slot.layoutStyles,
+        width: `${w}px`,
+        ...(h !== undefined ? { height: `${h}px` } : {}),
+        position: (!isStrictGrid && (l !== undefined || t !== undefined)) ? 'absolute' : (slot.layoutStyles?.['position'] || 'relative')
+      };
+
+      if (isStrictGrid) {
+        delete slot.layoutStyles['left'];
+        delete slot.layoutStyles['top'];
+        slot.layoutStyles['position'] = 'relative';
+        if (slot.styles) slot.styles = { ...slot.styles, transform: 'none' };
+      } else {
+        if (l !== undefined) slot.layoutStyles['left'] = `${l}px`;
+        if (t !== undefined) slot.layoutStyles['top'] = `${t}px`;
+      }
+      slots[idx] = slot;
     };
 
-    if (isStrictGrid) {
-      delete slot.layoutStyles['left'];
-      delete slot.layoutStyles['top'];
-      slot.layoutStyles['position'] = 'relative';
-      slot.styles = { ...slot.styles, transform: 'none' };
+    updateSlot(index, newWidth, newHeight, left, top);
 
-      // Si es un grid y hemos redimensionado un vecino, también debemos persistir el tamaño del vecino
+    // If grid, also update neighbor persisted width
+    if (isStrictGrid) {
       const neighborIdx = this.getHorizontalNeighborIndex(config.layoutType, index);
       if (neighborIdx !== -1) {
           const neighborSize = this.customSizes().get(neighborIdx);
           if (neighborSize) {
-              slots[neighborIdx] = {
-                  ...slots[neighborIdx],
-                  layoutStyles: {
-                      ...slots[neighborIdx].layoutStyles,
-                      width: `${neighborSize.width}px`
-                  }
-              };
+              updateSlot(neighborIdx, neighborSize.width);
           }
       }
-    } else {
-        if (left !== undefined) slot.layoutStyles['left'] = `${left}px`;
-        if (top !== undefined) slot.layoutStyles['top'] = `${top}px`;
     }
 
-    slots[index] = slot;
-
     return { ...config, slots };
+  }
+
+  /**
+   * Actualizar manualmente el tamaño de un slot
+   */
+  updateSlotSize(index: number, width: number, height: number, left?: number, top?: number): void {
+    const sizes = new Map(this.customSizes());
+    sizes.set(index, { width, height, left, top });
+    this.customSizes.set(sizes);
   }
 
   /**
@@ -425,7 +417,6 @@ export class SlotResizeService {
     const slots = [...config.slots];
     const slot = { ...slots[index] };
     
-    // Limpiar estilos de layout
     if (slot.layoutStyles) {
         delete slot.layoutStyles['width'];
         delete slot.layoutStyles['height'];
@@ -435,11 +426,9 @@ export class SlotResizeService {
     }
 
     slots[index] = slot;
-
-    // Limpiar del store reactivo
-    const sizes = this.customSizes();
+    const sizes = new Map(this.customSizes());
     sizes.delete(index);
-    this.customSizes.set(new Map(sizes));
+    this.customSizes.set(sizes);
 
     return { ...config, slots };
   }
@@ -455,30 +444,8 @@ export class SlotResizeService {
     return strictLayouts.includes(layoutType);
   }
 
-  /**
-   * Calcular distribución automática de anchos (Legacy wrapper for Component compatibility)
-   */
-  calculateAutoDistribution(
-    config: LayoutSectionConfig,
-    changedIndex: number,
-    newWidth: number
-  ): LayoutSectionConfig {
-    // This logic is already handled in onResizeMove and resizeSlot, 
-    // but we restore this method to fix the compilation error in the component.
-    // It will return the updated config by applying the resize to the slot and its neighbors.
-    return this.resizeSlot(config, changedIndex, newWidth);
-  }
-
-  private snapToGrid(value: number): number {
-    return Math.round(value / this.snapIncrement) * this.snapIncrement;
-  }
-
-  private clampWidth(value: number): number {
-    return Math.max(this.minSlotWidth, Math.min(this.maxSlotWidth, value));
-  }
-
-  private clampHeight(value: number): number {
-    return Math.max(this.minSlotHeight, Math.min(this.maxSlotHeight, value));
+  calculateAutoDistribution(config: LayoutSectionConfig, idx: number, w: number): LayoutSectionConfig {
+    return this.resizeSlot(config, idx, w);
   }
 
   private getDefaultGridTemplate(layoutType: LayoutType): string {
