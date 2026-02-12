@@ -1,13 +1,9 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../../store/state/app.state';
-import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.selectors';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
 import { UIChipComponent, chipVariants } from '@negocio/ui-components';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES, ResizeHandleType } from '../base-isolated-mode.component';
 
 @Component({
   selector: 'lib-editor-chip-isolated-mode',
@@ -17,19 +13,54 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
     <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
         
+        <!-- ===== HEADER ===== -->
         <div class="isolated-mode-header">
           <div class="header-breadcrumb">
-            <span class="mode-badge">ATOM EDITOR</span>
+            <span class="mode-badge">🎯 MODO AISLADO</span>
             <span class="separator">/</span>
             <span class="component-name">SMART CHIP</span>
           </div>
           
           <div class="header-actions">
-            <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
+            <div class="action-group">
+              <button class="icon-btn" (click)="undo()" [disabled]="!canUndo" title="Deshacer (Ctrl+Z)">
+                <span>↶</span>
+              </button>
+              <button class="icon-btn" (click)="redo()" [disabled]="!canRedo" title="Rehacer (Ctrl+Y)">
+                <span>↷</span>
+              </button>
+            </div>
+            
+            <div class="header-divider"></div>
+            
+            <div class="action-group">
+              <button class="icon-btn" (click)="toggleGrid()" 
+                      [class.active]="showGrid" 
+                      title="Cuadrícula (G)">
+                <span>#</span>
+              </button>
+              <button class="icon-btn" (click)="toggleSnap()" 
+                      [class.active]="snapToGrid" 
+                      title="Snap (S)">
+                <span>⊞</span>
+              </button>
+              <button class="icon-btn" (click)="resetPosition()" title="Reset (R)">
+                <span>↺</span>
+              </button>
+            </div>
+
+            <div class="header-divider"></div>
+
+            <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">
+              ✕
+            </button>
           </div>
         </div>
 
+        <!-- ===== BODY ===== -->
         <div class="isolated-mode-body">
+          
+          <!-- Sidebar Controls -->
           <div class="controls-sidebar">
             <div class="sidebar-scroll-content">
               
@@ -45,11 +76,11 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                 </div>
                 <div class="control-group">
                    <label>Icono (Nombre)</label>
-                   <input type="text" [(ngModel)]="editableContent.iconName" class="premium-input" placeholder="e.g. check, star...">
+                   <input type="text" [(ngModel)]="editableContent.iconName" (ngModelChange)="onContentChange()" class="premium-input" placeholder="e.g. check, star...">
                 </div>
                 <div class="control-group">
                    <label>Avatar URL (Opcional)</label>
-                   <input type="text" [(ngModel)]="editableContent.avatarSrc" class="premium-input" placeholder="https://...">
+                   <input type="text" [(ngModel)]="editableContent.avatarSrc" (ngModelChange)="onContentChange()" class="premium-input" placeholder="https://...">
                 </div>
               </div>
 
@@ -62,42 +93,50 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                 
                 <div class="control-group">
                   <label>Variante de Color</label>
-                  <select [(ngModel)]="editableContent.variant" class="premium-select">
-                     <option *ngFor="let v of variants" [value]="v">{{ formatVariantName(v) }}</option>
-                  </select>
+                  <div class="select-wrapper">
+                    <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()" class="premium-select">
+                       <option *ngFor="let v of variants" [value]="v">{{ formatVariantName(v) }}</option>
+                    </select>
+                  </div>
                 </div>
 
                 <div class="control-group">
                   <label>Estilo Visual</label>
-                  <select [(ngModel)]="editableContent.variantSystem" class="premium-select">
-                    <option value="filled">Relleno (Filled)</option>
-                    <option value="outlined">Bordeado (Outlined)</option>
-                    <option value="ghost">Fantasma (Ghost)</option>
-                  </select>
+                  <div class="select-wrapper">
+                    <select [(ngModel)]="editableContent.variantSystem" (ngModelChange)="onContentChange()" class="premium-select">
+                      <option value="filled">Relleno (Filled)</option>
+                      <option value="outlined">Bordeado (Outlined)</option>
+                      <option value="ghost">Fantasma (Ghost)</option>
+                    </select>
+                  </div>
                 </div>
 
                 <div class="control-row">
                    <div class="control-group half">
                       <label>Tamaño</label>
-                      <select [(ngModel)]="editableContent.size" class="premium-select">
-                        <option value="sm">Pequeño</option>
-                        <option value="md">Mediano</option>
-                        <option value="lg">Grande</option>
-                      </select>
+                      <div class="select-wrapper">
+                        <select [(ngModel)]="editableContent.size" (ngModelChange)="onContentChange()" class="premium-select">
+                          <option value="sm">Pequeño</option>
+                          <option value="md">Mediano</option>
+                          <option value="lg">Grande</option>
+                        </select>
+                      </div>
                    </div>
                    <div class="control-group half">
                       <label>Redondeo</label>
-                      <select [(ngModel)]="editableContent.rounded" class="premium-select">
-                        <option value="none">Cuadrado</option>
-                        <option value="md">Suave</option>
-                        <option value="full">Total</option>
-                      </select>
+                      <div class="select-wrapper">
+                        <select [(ngModel)]="editableContent.rounded" (ngModelChange)="onContentChange()" class="premium-select">
+                          <option value="none">Cuadrado</option>
+                          <option value="md">Suave</option>
+                          <option value="full">Total</option>
+                        </select>
+                      </div>
                    </div>
                 </div>
 
-                 <div class="control-group">
+                <div class="control-group">
                   <label>Modo de Iluminación</label>
-                  <div class="toggle-wrapper" (click)="editableContent.dark = !editableContent.dark" [class.active]="editableContent.dark">
+                  <div class="toggle-wrapper" (click)="editableContent.dark = !editableContent.dark; onContentChange()" [class.active]="editableContent.dark">
                     <div class="toggle-track"><div class="toggle-thumb"></div></div>
                     <span>{{ editableContent.dark ? 'OSCURO' : 'CLARO' }}</span>
                   </div>
@@ -105,7 +144,7 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
               </div>
 
               <!-- Features Section -->
-              <div class="sidebar-section no-border">
+              <div class="sidebar-section">
                 <div class="section-header">
                   <span class="section-icon">⚙️</span>
                   <h4>COMPORTAMIENTO</h4>
@@ -113,32 +152,73 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                 
                 <div class="checkbox-group">
                    <label>
-                     <input type="checkbox" [(ngModel)]="editableContent.removable"> Removible (Botón X)
+                     <input type="checkbox" [(ngModel)]="editableContent.removable" (ngModelChange)="onContentChange()"> Removible (Botón X)
                    </label>
                 </div>
                  <div class="checkbox-group">
                    <label>
-                     <input type="checkbox" [(ngModel)]="editableContent.selected"> Seleccionado (Active)
+                     <input type="checkbox" [(ngModel)]="editableContent.selected" (ngModelChange)="onContentChange()"> Seleccionado (Active)
                    </label>
                 </div>
                 <div class="checkbox-group">
                    <label>
-                     <input type="checkbox" [(ngModel)]="editableContent.disabled"> Deshabilitado
+                     <input type="checkbox" [(ngModel)]="editableContent.disabled" (ngModelChange)="onContentChange()"> Deshabilitado
                    </label>
+                </div>
+              </div>
+
+              <!-- Dimensions Section -->
+              <div class="sidebar-section no-border">
+                <div class="section-header">
+                  <span class="section-icon">📏</span>
+                  <h4>POSICIÓN & TAMAÑO</h4>
+                </div>
+                <div class="control-row">
+                  <div class="control-group half">
+                    <label>Posición X</label>
+                    <input type="number" [(ngModel)]="currentPosition.x" (ngModelChange)="onPositionChange()" class="premium-input text-center">
+                  </div>
+                  <div class="control-group half">
+                    <label>Posición Y</label>
+                    <input type="number" [(ngModel)]="currentPosition.y" (ngModelChange)="onPositionChange()" class="premium-input text-center">
+                  </div>
+                </div>
+                <div class="control-row">
+                  <div class="control-group half">
+                    <label>Ancho (W)</label>
+                    <input type="number" [(ngModel)]="currentSize.width" (ngModelChange)="onSizeChange()" class="premium-input text-center">
+                  </div>
+                  <div class="control-group half">
+                    <label>Alto (H)</label>
+                    <input type="number" [(ngModel)]="currentSize.height" (ngModelChange)="onSizeChange()" class="premium-input text-center">
+                  </div>
                 </div>
               </div>
 
             </div>
           </div>
 
-          <!-- Canvas area -->
-          <div class="isolated-canvas" [class.dark-mode]="editableContent.dark">
-            <div class="canvas-inner">
-               <div class="draggable-wrapper"
-                   [style.left.px]="currentPosition.x"
-                   [style.top.px]="currentPosition.y"
-                   (mousedown)="onMouseDown($event)">
+          <!-- Canvas Area -->
+          <div class="isolated-canvas" #canvas (mousedown)="onCanvasMouseDown($event)">
+            <div class="canvas-viewport"
+                 [style.width.px]="(config.canvasSize?.width || 1200) * viewportScale"
+                 [style.height.px]="(config.canvasSize?.height || 800) * viewportScale">
+              <div class="canvas-inner" #canvasInner
+                   [style.width.px]="config.canvasSize?.width || 1200"
+                   [style.height.px]="config.canvasSize?.height || 800"
+                   [style.transform]="'scale(' + viewportScale + ')'"
+                   [class.show-grid]="showGrid"
+                   [class.grid-snapping]="snapToGrid">
                 
+                <div class="draggable-wrapper"
+                     [style.left.px]="currentPosition.x"
+                     [style.top.px]="currentPosition.y"
+                     [style.width.px]="currentSize.width"
+                     [style.height.px]="currentSize.height"
+                     [class.is-dragging]="isDragging"
+                     [class.is-resizing]="isResizing"
+                     (mousedown)="onMouseDown($event)">
+                  
                   <lib-ui-components-chip
                     [variant]="editableContent.variant"
                     [variantSystem]="editableContent.variantSystem"
@@ -150,159 +230,128 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                     [disabled]="editableContent.disabled"
                     [iconName]="editableContent.iconName"
                     [avatarSrc]="editableContent.avatarSrc"
-                  >
+                    style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
                     {{ editableContent.label }}
                   </lib-ui-components-chip>
 
-               </div>
+                  <!-- 8-point Resize Handles -->
+                  <div class="resize-handle nw" [class.active]="resizeHandle === 'nw'" (mousedown)="startResize($event, 'nw')"></div>
+                  <div class="resize-handle n"  [class.active]="resizeHandle === 'n'"  (mousedown)="startResize($event, 'n')"></div>
+                  <div class="resize-handle ne" [class.active]="resizeHandle === 'ne'" (mousedown)="startResize($event, 'ne')"></div>
+                  <div class="resize-handle e"  [class.active]="resizeHandle === 'e'"  (mousedown)="startResize($event, 'e')"></div>
+                  <div class="resize-handle se" [class.active]="resizeHandle === 'se'" (mousedown)="startResize($event, 'se')"></div>
+                  <div class="resize-handle s"  [class.active]="resizeHandle === 's'"  (mousedown)="startResize($event, 's')"></div>
+                  <div class="resize-handle sw" [class.active]="resizeHandle === 'sw'" (mousedown)="startResize($event, 'sw')"></div>
+                  <div class="resize-handle w"  [class.active]="resizeHandle === 'w'"  (mousedown)="startResize($event, 'w')"></div>
+
+                  <!-- Dimension labels during resize -->
+                  <div class="dimension-label width-label" *ngIf="isResizing">{{ currentSize.width }}px</div>
+                  <div class="dimension-label height-label" *ngIf="isResizing">{{ currentSize.height }}px</div>
+                </div>
+              </div>
             </div>
 
+            <!-- Position Dock -->
             <div class="modern-position-dock">
-               <div class="dock-item"><span class="label">VARIANT</span><span class="value text-indigo-400">{{ editableContent.variant | uppercase }}</span></div>
-               <div class="dock-divider"></div>
-               <div class="dock-item"><span class="label">STYLE</span><span class="value text-blue-400">{{ editableContent.variantSystem | uppercase }}</span></div>
+              <div class="dock-item">
+                <span class="label">X</span>
+                <span class="value">{{ currentPosition.x }}px</span>
+              </div>
+              <div class="dock-item">
+                <span class="label">Y</span>
+                <span class="value">{{ currentPosition.y }}px</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">W</span>
+                <span class="value">{{ currentSize.width }}px</span>
+              </div>
+              <div class="dock-item">
+                <span class="label">H</span>
+                <span class="value">{{ currentSize.height }}px</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">VARIANT</span>
+                <span class="value chip-variant">{{ editableContent.variant }}</span>
+              </div>
             </div>
           </div>
         </div>
 
+        <!-- ===== FOOTER ===== -->
         <div class="isolated-mode-footer">
-          <div class="footer-hint">Smart Chip: Elemento interactivo versátil para etiquetas y filtros.</div>
+          <div class="footer-hint">
+            <b>G</b> rejilla · <b>S</b> snap · <b>R</b> reset · <b>Flechas</b> ajuste fino · <b>Ctrl+Z/Y</b> deshacer/rehacer
+          </div>
           <div class="footer-actions-btns">
             <button class="btn-clean secondary" (click)="cancel()">Descartar</button>
-            <button class="btn-clean primary" (click)="apply()">Aplicar Cambios</button>
+            <button class="btn-clean primary" (click)="apply()">Guardar Cambios</button>
           </div>
         </div>
       </div>
     </div>
   `,
-  styles: [`
-    .isolated-mode-overlay { position: fixed; inset: 0; background: rgba(2, 6, 23, 0.95); backdrop-filter: blur(12px); z-index: 9999999; display: flex; align-items: center; justify-content: center; padding: 1.5rem; }
-    .isolated-mode-container { background: #0f172a; border: 1px solid rgba(255,255,255,0.1); border-radius: 24px; width: 100%; height: 100%; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); }
-    .isolated-mode-header { height: 64px; padding: 0 1.5rem; background: #1e293b; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; }
-    .mode-badge { font-size: 10px; font-weight: 800; color: #ec4899; background: rgba(236, 72, 153, 0.1); padding: 4px 10px; border-radius: 8px; border: 1px solid rgba(236, 72, 153, 0.2); }
-    .component-name { color: white; font-size: 13px; font-weight: 600; margin-left: 8px; letter-spacing: 0.5px; }
-    .close-main-btn { background: rgba(239, 68, 68, 0.1); color: #f87171; border: none; width: 32px; height: 32px; border-radius: 10px; cursor: pointer; transition: all 0.2s; }
-    .close-main-btn:hover { background: #ef4444; color: white; transform: rotate(90deg); }
-
-    .isolated-mode-body {
-      flex: 1;
-      display: flex;
-      flex-direction: row; /* Explicit row */
-      overflow: hidden;
-    }
-
-    .controls-sidebar {
-      width: 320px;
-      min-width: 320px; /* Safety */
-      flex-shrink: 0; /* Prevent shrinking */
-      background: #020617;
-      border-right: 1px solid rgba(255,255,255,0.1);
-      overflow-y: auto;
-    }
-    .sidebar-scroll-content { padding: 1.5rem; }
-    .sidebar-section { margin-bottom: 2rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 1.5rem; }
-    .sidebar-section.no-border { border-bottom: none; }
-    .section-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.2rem; color: #94a3b8; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-    
-    .control-group { margin-bottom: 1.2rem; }
-    .control-group label { display: block; font-size: 10px; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase; font-weight: 700; }
-    .control-row { display: flex; gap: 10px; }
-    .control-group.half { flex: 1; }
-    
-    .premium-input, .premium-select { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 0.6rem 0.8rem; border-radius: 10px; font-size: 12px; }
-    
-    .toggle-wrapper { display: flex; align-items: center; gap: 10px; cursor: pointer; padding: 8px; border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; transition: all 0.2s; }
-    .toggle-wrapper.active { border-color: #ec4899; background: rgba(236, 72, 153, 0.1); }
-    .toggle-track { width: 30px; height: 16px; background: #334155; border-radius: 20px; position: relative; transition: all 0.2s; }
-    .toggle-wrapper.active .toggle-track { background: #ec4899; }
-    .toggle-thumb { width: 12px; height: 12px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: all 0.2s; }
-    .toggle-wrapper.active .toggle-thumb { left: 16px; }
-    .toggle-wrapper span { font-size: 10px; font-weight: 700; color: #94a3b8; }
-    .toggle-wrapper.active span { color: white; }
-
+  styles: [ISOLATED_MODE_SHARED_STYLES, `
+    /* Component-specific overrides */
     .checkbox-group { margin-bottom: 0.8rem; }
-    .checkbox-group label { display: flex; align-items: center; gap: 8px; color: #cbd5e1; font-size: 12px; cursor: pointer; }
-
-    .isolated-canvas { flex: 1; background: #f8fafc; position: relative; overflow: hidden; background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 20px 20px; transition: background 0.3s; }
-    .isolated-canvas.dark-mode { background: #0f172a; background-image: radial-gradient(rgba(255,255,255,0.1) 1px, transparent 1px); }
-    
-    .canvas-inner { width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; }
-    .draggable-wrapper { position: relative; cursor: move; }
-    
-    .modern-position-dock { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); padding: 0.6rem 1.2rem; border-radius: 16px; border: 1px solid rgba(255,255,255,0.1); display: flex; gap: 1.5rem; color: white; font-size: 11px; }
-    .dock-divider { width: 1px; background: rgba(255,255,255,0.1); }
-    .dock-item { display: flex; align-items: center; gap: 0.5rem; }
-    
-    .isolated-mode-footer { height: 72px; padding: 0 2rem; background: #1e293b; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255,255,255,0.1); }
-    .footer-hint { font-size: 12px; color: #94a3b8; font-style: italic; }
-    .btn-clean { padding: 0.6rem 1.5rem; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; font-size: 13px; transition: all 0.2s; }
-    .btn-clean.primary { background: #ec4899; color: #fff; }
-    .btn-clean.secondary { background: transparent; color: #94a3b8; }
+    .checkbox-group label { 
+      display: flex; 
+      align-items: center; 
+      gap: 8px; 
+      color: #cbd5e1; 
+      font-size: 12px; 
+      cursor: pointer;
+      text-transform: none;
+      font-weight: 500;
+    }
+    .checkbox-group input[type="checkbox"] {
+      accent-color: var(--iso-primary);
+    }
+    .chip-variant {
+      color: #a78bfa !important;
+      text-transform: capitalize;
+    }
+    .text-center { text-align: center; }
   `]
 })
-export class EditorChipIsolatedModeComponent implements OnInit {
-  @Input() config!: IsolatedModeConfig;
-  @Output() closed = new EventEmitter<void>();
-  @Output() applied = new EventEmitter<IsolatedModeConfig>();
-
+export class EditorChipIsolatedModeComponent extends BaseIsolatedModeComponent {
   variants = chipVariants;
-  editableContent: any = {};
 
-  formatVariantName(variant: string): string {
-    if (!variant) return '';
-    return variant.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-  }
-  
-  currentPosition = { x: 0, y: 0 };
-  
-  isDragging = false;
-  dragStartX = 0;
-  dragStartY = 0;
-  startPosX = 0;
-  startPosY = 0;
+  // ===== BaseIsolatedModeComponent overrides =====
 
-  ngOnInit() {
-    this.editableContent = { ...this.config.content };
-    this.currentPosition = { ...this.config.position };
-    
-    window.addEventListener('mousemove', this.onMouseMove);
-    window.addEventListener('mouseup', this.onMouseUp);
+  getDefaultSize() {
+    return { width: 160, height: 48 };
   }
 
-  ngOnDestroy() {
-    window.removeEventListener('mousemove', this.onMouseMove);
-    window.removeEventListener('mouseup', this.onMouseUp);
+  initializeContent(): void {
+    const c = this.config?.content || {};
+    this.editableContent = {
+      label: c.label || c.text || 'Chip',
+      variant: c.variant || 'default',
+      variantSystem: c.variantSystem || 'filled',
+      rounded: c.rounded || 'full',
+      size: c.size || 'md',
+      dark: c.dark || false,
+      removable: c.removable || false,
+      selected: c.selected || false,
+      disabled: c.disabled || false,
+      iconName: c.iconName || '',
+      avatarSrc: c.avatarSrc || ''
+    };
   }
 
-  onMouseDown(e: MouseEvent) {
-    this.isDragging = true;
-    this.dragStartX = e.clientX;
-    this.dragStartY = e.clientY;
-    this.startPosX = this.currentPosition.x;
-    this.startPosY = this.currentPosition.y;
+  initializeStyles(): void {
+    this.editableStyles = { ...(this.config?.styles || {}) };
   }
 
-  onMouseMove = (e: MouseEvent) => {
-    if (this.isDragging) {
-      this.currentPosition.x = this.startPosX + (e.clientX - this.dragStartX);
-      this.currentPosition.y = this.startPosY + (e.clientY - this.dragStartY);
-    }
-  }
-
-  onMouseUp = () => {
-    this.isDragging = false;
-  }
-
-  onContentChange() {}
-  close() { this.closed.emit(); }
-  cancel() { this.closed.emit(); }
-  onOverlayClick(e: Event) { this.closed.emit(); }
-
-  apply() {
-    this.applied.emit({
+  buildApplyPayload(): IsolatedModeConfig {
+    return {
       ...this.config,
       content: { ...this.editableContent },
-      position: { ...this.currentPosition }
-    });
+      styles: { ...this.editableStyles },
+      position: { ...this.currentPosition },
+      size: { ...this.currentSize }
+    };
   }
 }
