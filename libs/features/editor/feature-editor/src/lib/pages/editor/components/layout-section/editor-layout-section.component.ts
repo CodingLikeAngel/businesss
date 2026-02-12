@@ -220,7 +220,7 @@ interface ComponentDefaultSize {
                 <lib-ui-components-button
                   *ngSwitchCase="'ui-button'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'primary')"
-                  [customStyles]="getComponentStyles(slot)">
+                  [customStyles]="getComponentStyles(slot, i)">
                   {{ slot.content?.['text'] || 'Botón' }}
                 </lib-ui-components-button>
 
@@ -229,7 +229,7 @@ interface ComponentDefaultSize {
                   *ngSwitchCase="'ui-title'"
                   [text]="slot.content?.['text'] || 'Título'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [customStyles]="getComponentStyles(slot)">
+                  [customStyles]="getComponentStyles(slot, i)">
                 </lib-ui-components-title>
 
                 <!-- UI IMAGE -->
@@ -239,7 +239,7 @@ interface ComponentDefaultSize {
                   [alt]="slot.content?.['alt'] || 'Imagen'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
                   [filter]="slot.styles?.['filter']"
-                  [customStyles]="getComponentStyles(slot)"
+                  [customStyles]="getComponentStyles(slot, i)"
                   class="slot-image">
                 </lib-ui-image>
 
@@ -250,7 +250,7 @@ interface ComponentDefaultSize {
                   [variant]="$any(slot.componentVariant || globalVariant || 'glass')"
                   [title]="slot.content?.['title'] || 'Título'"
                   [description]="slot.content?.['description'] || 'Descripción...'"
-                  [customStyles]="getComponentStyles(slot)"
+                  [customStyles]="getComponentStyles(slot, i)"
                   class="slot-card">
                 </lib-ui-components-card>
 
@@ -258,14 +258,14 @@ interface ComponentDefaultSize {
                 <lib-ui-components-card-animated
                   *ngSwitchCase="'ui-card-animated'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [customStyles]="getComponentStyles(slot)"
+                  [customStyles]="getComponentStyles(slot, i)"
                   class="slot-card">
                 </lib-ui-components-card-animated>
 
                 <!-- UI ACCORDION -->
                 <div 
                   *ngSwitchCase="'ui-accordion'" 
-                  [ngStyle]="getComponentStyles(slot)">
+                  [ngStyle]="getComponentStyles(slot, i)">
                   <lib-ui-components-accordion
                     style="width: 100%; height: auto; display: block;"
                     [variant]="$any(slot.componentVariant || globalVariant || 'default')"
@@ -278,7 +278,7 @@ interface ComponentDefaultSize {
                   *ngSwitchCase="'ui-list'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
                   [items]="slot.content?.['items'] || ['Item 1', 'Item 2', 'Item 3']"
-                  [customStyles]="getComponentStyles(slot)">
+                  [customStyles]="getComponentStyles(slot, i)">
                 </lib-ui-list>
 
                 <!-- UI CARD PRODUCT -->
@@ -286,14 +286,14 @@ interface ComponentDefaultSize {
                   *ngSwitchCase="'ui-card-product'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
                   [product]="slot.content?.['product'] || { image: '', name: 'Producto', description: 'Descripción...', price: '0.00' }"
-                  [customStyles]="getComponentStyles(slot)">
+                  [customStyles]="getComponentStyles(slot, i)">
                 </lib-card-products>
 
                 <!-- UI CHIP -->
                 <lib-ui-components-chip
                   *ngSwitchCase="'ui-chip'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [customStyles]="getComponentStyles(slot)">
+                  [customStyles]="getComponentStyles(slot, i)">
                   {{ slot.content?.['text'] || 'Chip' }}
                 </lib-ui-components-chip>
 
@@ -302,7 +302,7 @@ interface ComponentDefaultSize {
                   *ngSwitchCase="'draggable-box'"
                   [variant]="$any(slot.componentVariant || globalVariant || 'secondary')"
                   [content]="slot.content?.['text'] || 'Caja'"
-                  [customStyles]="slot.styles || {}"
+                  [customStyles]="getComponentStyles(slot, i)"
                   class="slot-box">
                 </lib-ui-components-draggable-box-1>
 
@@ -1546,14 +1546,20 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     price: '0.00' 
   };
 
-  getComponentStyles(slot: any): Record<string, any> {
+  getComponentStyles(slot: SlotConfig, index: number): Record<string, any> {
     const styles = { ...(slot.styles || {}) };
     const componentType = slot.componentType as SlotComponentType;
     
-    // 1. Draggable box handles its own style merging
-    if (componentType === 'draggable-box') {
-      return styles;
-    }
+    // 1. Draggable box merges styles its own way in isolated mode, 
+    // but here we want it to respect the slot boundary during resize
+    
+    // Detect if we have a custom size active in the service (reactive via signals)
+    const customSizeMap = this.resizeService.customSizes();
+    const activeSize = customSizeMap.get(index);
+    
+    // Size enforcement: prioritize active resize dimensions, then layoutStyles (persisted), then defaults
+    const currentWidth = activeSize?.width ? `${activeSize.width}px` : slot.layoutStyles?.['width'];
+    const currentHeight = activeSize?.height ? `${activeSize.height}px` : slot.layoutStyles?.['height'];
 
     // 2. Position logic: Relative offsets vs absolute
     // Flow components use relative positioning to act as offsets from grid cell
@@ -1569,9 +1575,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     }
     
     // 3. Size enforcement
-    // If no explicit width/height in styles, use layoutStyles if provided
-    if (!styles['width'] && slot.layoutStyles?.['width']) styles['width'] = slot.layoutStyles['width'];
-    if (!styles['height'] && slot.layoutStyles?.['height']) styles['height'] = slot.layoutStyles['height'];
+    if (currentWidth) styles['width'] = currentWidth;
+    if (currentHeight) styles['height'] = currentHeight;
 
     // 4. Default Alignment (Centered for small components)
     if (!styles['display'] && !isAbsolute) {
@@ -2051,11 +2056,15 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
    * Get effective slot width (custom or auto)
    */
   getSlotWidth(index: number): number | null {
+    // In strict grid mode, column width is set by grid-template-columns.
+    // Setting width on the item itself can cause conflicts with padding/gaps.
+    if (this.resizeService.isStrictGrid(this.config.layoutType)) return null;
+
     const customSize = this.resizeService.customSizes().get(index);
     if (customSize && customSize.width > 0) {
       return customSize.width;
     }
-    return null; // Use CSS Grid auto
+    return null; // Use CSS Grid auto or persisted layoutStyles
   }
 
   /**

@@ -38,11 +38,11 @@ export class SlotResizeService {
 
   // ========== CONFIGURATION ==========
 
-  readonly minSlotWidth = 100;    // px mínimo
-  readonly maxSlotWidth = 1200;  // px máximo
-  readonly minSlotHeight = 40;   // px mínimo
-  readonly maxSlotHeight = 840;  // px máximo
-  readonly snapIncrement = 8;   // px para snap
+  readonly minSlotWidth = 80;    // Reduced from 100
+  readonly maxSlotWidth = 1400;  // Increased from 1200
+  readonly minSlotHeight = 20;   // Reduced from 40
+  readonly maxSlotHeight = 1200; // Increased
+  readonly snapIncrement = 4;    // Reduced from 8 for "less fast/jumpy" feel
 
   // ========== COMPUTED ==========
 
@@ -255,9 +255,12 @@ export class SlotResizeService {
       const t = slot.layoutStyles?.['top'];
       
       if (w || h || l || t) {
+        const parsedW = w ? parseInt(w) : 0;
+        const parsedH = h ? parseInt(h) : 0;
+        
         sizes.set(i, {
-          width: w ? parseInt(w) : 0,
-          height: h ? parseInt(h) : 0,
+          width: isNaN(parsedW) ? 0 : parsedW,
+          height: isNaN(parsedH) ? 0 : parsedH,
           left: l ? parseInt(l) : undefined,
           top: t ? parseInt(t) : undefined
         });
@@ -270,16 +273,19 @@ export class SlotResizeService {
    * Obtener el grid template personalizado basado en customSizes o en la config persistida
    */
   getCustomGridTemplate(config: LayoutSectionConfig): string {
-    const customSizes = this.customSizes();
+    const customSizesMap = this.customSizes();
     const layoutType = config.layoutType;
 
     // Helper para obtener el ancho de un slot, priorizando el signal de resize pero cayendo al config
     const getW = (idx: number): number | undefined => {
-      const custom = customSizes.get(idx)?.width;
-      if (custom && custom > 0) return custom;
+      const custom = customSizesMap.get(idx)?.width;
+      if (typeof custom === 'number' && custom > 0) return custom;
       
       const saved = config.slots[idx]?.layoutStyles?.['width'];
-      if (saved) return parseInt(saved);
+      if (saved && typeof saved === 'string' && saved.includes('px')) {
+        const p = parseInt(saved);
+        return isNaN(p) ? undefined : p;
+      }
       
       return undefined;
     };
