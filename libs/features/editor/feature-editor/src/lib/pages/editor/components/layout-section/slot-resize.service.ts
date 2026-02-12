@@ -252,7 +252,8 @@ export class SlotResizeService {
         const parsedH = h ? parseInt(h) : 0;
         
         // Anti-collapse filter: If we are in a strict grid and the width is huge, skip it
-        if (isStrict && parsedW > 900) {
+        // Lowered to 800px to avoid breaking 3-column layouts with leftover single-column widths
+        if (isStrict && parsedW > 800) {
             parsedW = 0; 
         }
 
@@ -285,45 +286,50 @@ export class SlotResizeService {
       // Prioritize active (ephemeral) resize state
       const custom = customSizesMap.get(idx)?.width;
       if (typeof custom === 'number' && custom > 0) {
-          // If in strict grid, don't allow "captured" full widths to pollute the template
-          if (isStrict && custom > 850) return undefined;
+          // Safety: In strict grids (multi-column), avoid values that would push other columns out of screen
+          // If we are NOT in active resize, be very strict (800px).
+          // If we ARE in active resize, be slightly more lenient (950px).
+          const limit = this.isResizing() ? 950 : 800;
+          if (isStrict && custom > limit) return undefined;
+
+          if (custom > 2500) return undefined;
           return custom;
       }
       
-      // Fallback to persisted layoutStyles
+      // Fallback to persisted layoutStyles (apply stricter cleanup here)
       const saved = config.slots[idx]?.layoutStyles?.['width'];
       if (saved && typeof saved === 'string' && saved.includes('px')) {
         const p = parseInt(saved);
         if (isNaN(p)) return undefined;
-        if (isStrict && p > 850) return undefined;
+        // If it's a multi-column layout and the saved width is almost the full container, 
+        // it's likely a captured error from a 1-column view. Ignore it.
+        if (isStrict && p > 800) return undefined;
         return p;
       }
       return undefined;
     };
 
     // Only consider it an "active resize" if the width is within logical bounds for a column
-    const hasActiveResize = Array.from(customSizesMap.values()).some(s => s.width > 0 && s.width < 1000);
+    // This hasActiveResize triggers the custom template (using px) instead of the default one
+    const hasActiveResize = Array.from(customSizesMap.values()).some(s => {
+        if (s.width <= 0 || s.width > 2500) return false;
+        if (isStrict && s.width > 950) return false;
+        return true;
+    });
 
     if (layoutType === 'three-columns') {
         const w0 = getW(0); const w1 = getW(1); const w2 = getW(2);
-        
-        // Safeguard: Multi-column layouts should NEVER have a column near the full width.
-        // If it's > 800px in a 3rd of a standard 1200px container, it's wrong.
-        const limit = 800; 
-        const isInvalid = (w: any) => w && w > limit;
-
+        // We only use the pixel-based template if we have a valid custom width for at least one column
+        // that isn't breaking the layout.
         if (hasActiveResize || (w0 && w1) || (w1 && w2) || (w0 && w2)) {
-            return `${isInvalid(w0) ? '1fr' : (w0 ? w0 + 'px' : '1fr')} ${isInvalid(w1) ? '1fr' : (w1 ? w1 + 'px' : '1fr')} ${isInvalid(w2) ? '1fr' : (w2 ? w2 + 'px' : '1fr')}`;
+            return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
         }
     }
 
     if (layoutType.includes('two-columns') || layoutType.includes('sidebar-left') || layoutType.includes('sidebar-right')) {
         const w0 = getW(0); const w1 = getW(1);
-        const limit = 1000;
-        const isInvalid = (w: any) => w && w > limit;
-
         if (hasActiveResize || (w0 && w1)) {
-            return `${isInvalid(w0) ? '1fr' : (w0 ? w0 + 'px' : '1fr')} ${isInvalid(w1) ? '1fr' : (w1 ? w1 + 'px' : '1fr')}`;
+            return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
         }
     }
 
@@ -467,14 +473,16 @@ export class SlotResizeService {
   }
 
   public isStrictGrid(layoutType: LayoutType): boolean {
-    const strictLayouts: LayoutType[] = [
+    if (!layoutType) return false;
+    const type = layoutType.toLowerCase();
+    const strictLayouts = [
       'grid-2x2', 'grid-3x2', 'grid-3x3',
       'two-columns', 'three-columns', 
       'two-columns-left', 'two-columns-right',
       'sidebar-left', 'sidebar-right',
       'hero-banner', 'masonry'
     ];
-    return strictLayouts.includes(layoutType);
+    return strictLayouts.some(s => type === s || type.includes('columns') || type.includes('grid-'));
   }
 
   calculateAutoDistribution(config: LayoutSectionConfig, idx: number, w: number): LayoutSectionConfig {

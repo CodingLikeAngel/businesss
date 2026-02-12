@@ -979,44 +979,42 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
   ngOnInit() {
     // Define sensible default sizes per component type - these match the actual visual design
     const defaultSizes: Record<string, { width: number; height: number }> = {
-      'draggable-box-1': { width: 280, height: 120 },
-      'draggable-box-2': { width: 260, height: 100 },
-      'draggable-box-3': { width: 320, height: 180 }
+      'draggable-box-1': { width: 300, height: 120 },
+      'draggable-box-2': { width: 350, height: 140 },
+      'draggable-box-3': { width: 320, height: 160 }
     };
-    
-    // Normalize variant name (handles 'box-1' -> 'draggable-box-1', etc.)
-    let v = this.config.content['boxVariant'] || this.config.type || 'draggable-box-1';
-    
-    // Normalize common shorthand names exhaustively
-    const vLower = String(v).toLowerCase();
-    if (vLower.includes('box-1') || vLower === '1' || vLower === 'draggable-box' || vLower === 'box' || vLower === 'card' || vLower === 'default') {
-      v = 'draggable-box-1';
-    } else if (vLower.includes('box-2') || vLower === '2' || vLower === 'widget') {
-      v = 'draggable-box-2';
-    } else if (vLower.includes('box-3') || vLower === '3' || vLower === 'glass') {
-      v = 'draggable-box-3';
-    }
-    
+
+    const v = this.config.content['boxVariant'] || this.config.content['componentVariant'];
     // Ensure it's a valid variant, otherwise default to 1
     const validVariants = ['draggable-box-1', 'draggable-box-2', 'draggable-box-3'];
     const variant = validVariants.includes(v as string) ? (v as string) : 'draggable-box-1';
     
-    const defaultSize = defaultSizes[variant] || { width: 280, height: 120 };
+    const defSize = defaultSizes[variant] || { width: 300, height: 150 };
 
     // Use exact position from config (now normalized to section)
     this.currentPosition = { 
-      x: this.config.position?.x ?? 0, 
-      y: this.config.position?.y ?? 0 
+      x: this.config.position?.x ?? 100, 
+      y: this.config.position?.y ?? 100 
     };
     
-    // Sensible range: width 50-2500, height 40-2000
-    const incomingWidth = this.config.size?.width || defaultSize.width;
-    const incomingHeight = this.config.size?.height || defaultSize.height;
+    // Robust size initialization
+    const incomingWidth = this.config.size?.width || defSize.width;
+    const incomingHeight = this.config.size?.height || defSize.height;
     
-    this.currentSize = { width: incomingWidth, height: incomingHeight };
+    // Safety check: if width/height are 0 or negative, use default
+    this.currentSize = { 
+        width: (incomingWidth > 20) ? incomingWidth : defSize.width, 
+        height: (incomingHeight > 10) ? incomingHeight : defSize.height 
+    };
 
     this.initialPosition = { ...this.currentPosition };
     this.initialSize = { ...this.currentSize };
+
+    // Auto-scale viewport based on section size
+    const canvasW = this.config.canvasSize?.width || 1200;
+    if (canvasW > 1400) this.viewportScale = 0.4;
+    else if (canvasW > 1000) this.viewportScale = 0.55;
+    else this.viewportScale = 0.7;
     
     // Ensure we scroll to the component after view init
     setTimeout(() => this.scrollToComponent(), 100);

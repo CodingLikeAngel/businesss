@@ -536,9 +536,11 @@ interface ComponentDefaultSize {
     z-index: 1;
   }
 
-  /* Cuando isolated mode está activo, el host no debe restringir */
   :host:has(.isolated-mode-fullscreen-overlay) {
-    position: static !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    z-index: 2147483647 !important;
   }
 
     .layout-section {
@@ -590,9 +592,9 @@ interface ComponentDefaultSize {
       bottom: 0 !important;
       width: 100vw !important;
       height: 100vh !important;
-      z-index: 999999 !important;
-      background: rgba(2, 6, 23, 0.95) !important;
-      backdrop-filter: blur(16px) !important;
+      z-index: 2147483647 !important; /* Max z-index possible */
+      background: rgba(2, 6, 23, 0.98) !important;
+      backdrop-filter: blur(20px) !important;
       overflow: auto !important;
       display: flex;
       align-items: center;
@@ -2036,23 +2038,44 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
    * Get effective slot width (custom or auto)
    */
   getSlotWidth(index: number): number | null {
-    // FORCE NULL for strict grid modes to allow grid-template-columns to take priority
+    // During active resize, ALWAYS return the explicit width from the service
+    // to prevent the "tiny box" jumping effect before the grid re-renders
+    if (this.resizeService.isResizing() && this.resizeService.activeSlotIndex() === index) {
+      const customSize = this.resizeService.customSizes().get(index);
+      if (customSize && customSize.width > 0) {
+        return customSize.width;
+      }
+    }
+
+    // FORCE NULL for strict grid modes to allow grid-template-columns to take priority in idle state
     if (this.resizeService.isStrictGrid(this.config.layoutType)) {
       return null;
     }
     
-    // In free mode, use custom or saved sizes
+    // In free mode or for finalized customizations, use custom or saved sizes
     const customSize = this.resizeService.customSizes().get(index);
     if (customSize && customSize.width > 0) {
       return customSize.width;
     }
-    return null;
+    return null; 
   }
 
   /**
    * Get effective slot height (custom or auto)
    */
   getSlotHeight(index: number): number | null {
+    // During active resize, ALWAYS return the explicit height from the service
+    // to prevent the "tiny box" jumping effect
+    if (this.resizeService.isResizing() && this.resizeService.activeSlotIndex() === index) {
+      const customSize = this.resizeService.customSizes().get(index);
+      if (customSize && customSize.height > 0) {
+        return customSize.height;
+      }
+    }
+
+    if (this.resizeService.isStrictGrid(this.config.layoutType)) {
+      return null;
+    }
     const customSize = this.resizeService.customSizes().get(index);
     if (customSize && customSize.height > 0) {
       return customSize.height;
