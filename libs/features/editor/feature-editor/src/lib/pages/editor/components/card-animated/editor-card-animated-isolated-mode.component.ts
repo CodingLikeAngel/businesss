@@ -97,7 +97,7 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
                 <div class="control-group">
                   <label>Tipo de Animación</label>
                   <div class="select-wrapper">
-                    <select [(ngModel)]="editableContent.animation" (ngModelChange)="onContentChange()" class="premium-select">
+                    <select [(ngModel)]="editableContent['animation']" (ngModelChange)="onContentChange()" class="premium-select">
                       <option value="none">Sin Animación</option>
                       <option value="fade">Fade In</option>
                       <option value="slide">Slide Up</option>
@@ -112,11 +112,11 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
                 <div class="control-row">
                   <div class="control-group half">
                     <label>Duración (ms)</label>
-                    <input type="number" [(ngModel)]="editableContent.duration" (ngModelChange)="onContentChange()" class="premium-input" placeholder="500">
+                    <input type="number" [(ngModel)]="editableContent['duration']" (ngModelChange)="onContentChange()" class="premium-input" placeholder="500">
                   </div>
                   <div class="control-group half">
                     <label>Delay (ms)</label>
-                    <input type="number" [(ngModel)]="editableContent.delay" (ngModelChange)="onContentChange()" class="premium-input" placeholder="0">
+                    <input type="number" [(ngModel)]="editableContent['delay']" (ngModelChange)="onContentChange()" class="premium-input" placeholder="0">
                   </div>
                 </div>
               </div>
@@ -131,7 +131,7 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
                 <div class="control-group">
                   <label>Variante Visual</label>
                   <div class="select-wrapper">
-                    <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()" class="premium-select">
+                    <select [(ngModel)]="editableContent['variant']" (ngModelChange)="onContentChange()" class="premium-select">
                       <option value="default">Estándar</option>
                       <option value="primary">Primario</option>
                       <option value="secondary">Secundario</option>
@@ -140,7 +140,7 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
                       <option value="cyberpunk">Cyberpunk</option>
                     </select>
                   </div>
-                  <p class="variant-hint" *ngIf="!editableContent.variant">
+                  <p class="variant-hint" *ngIf="!editableContent['variant']">
                     Heredando: {{ config.content['globalVariant'] || 'glass' }}
                   </p>
                 </div>
@@ -148,10 +148,10 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
                 <div class="control-group">
                   <label>Color de fondo</label>
                   <div class="color-input-wrapper">
-                    <div class="color-preview" [style.background-color]="editableStyles.backgroundColor">
-                      <input type="color" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()">
+                    <div class="color-preview" [style.background-color]="editableStyles['backgroundColor']">
+                      <input type="color" [(ngModel)]="editableStyles['backgroundColor']" (ngModelChange)="onStyleChange()">
                     </div>
-                    <input type="text" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()" class="premium-input" placeholder="#hex">
+                    <input type="text" [(ngModel)]="editableStyles['backgroundColor']" (ngModelChange)="onStyleChange()" class="premium-input" placeholder="#hex">
                   </div>
                 </div>
               </div>
@@ -209,10 +209,10 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
                      (mousedown)="onMouseDown($event)">
                   
                   <lib-ui-components-card-animated
-                    [title]="editableContent.title || 'Card Title'"
-                    [description]="editableContent.description || 'Card description'"
-                    [image]="editableContent.image || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80'"
-                    [animation]="editableContent.animation || 'fade'"
+                    [title]="editableContent['title'] || 'Card Title'"
+                    [description]="editableContent['description'] || 'Card description'"
+                    [image]="editableContent['image'] || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80'"
+                    [animation]="editableContent['animation'] || 'fade'"
                     [customStyles]="editableStyles"
                     style="width: 100%; height: 100%; display: block;">
                   </lib-ui-components-card-animated>
@@ -252,7 +252,7 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
               <div class="dock-divider"></div>
               <div class="dock-item">
                 <span class="label">ANIM</span>
-                <span class="value anim-tag">{{ editableContent.animation || 'none' }}</span>
+                <span class="value anim-tag">{{ editableContent['animation'] || 'none' }}</span>
               </div>
             </div>
           </div>

@@ -72,15 +72,15 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES, ResizeHandleTyp
                 </div>
                 <div class="control-group">
                   <label>Texto del Chip</label>
-                  <input type="text" [(ngModel)]="editableContent.label" (ngModelChange)="onContentChange()" class="premium-input" placeholder="Etiqueta...">
+                  <input type="text" [(ngModel)]="editableContent['label']" (ngModelChange)="onContentChange()" class="premium-input" placeholder="Etiqueta...">
                 </div>
                 <div class="control-group">
                    <label>Icono (Nombre)</label>
-                   <input type="text" [(ngModel)]="editableContent.iconName" (ngModelChange)="onContentChange()" class="premium-input" placeholder="e.g. check, star...">
+                   <input type="text" [(ngModel)]="editableContent['iconName']" (ngModelChange)="onContentChange()" class="premium-input" placeholder="e.g. check, star...">
                 </div>
                 <div class="control-group">
                    <label>Avatar URL (Opcional)</label>
-                   <input type="text" [(ngModel)]="editableContent.avatarSrc" (ngModelChange)="onContentChange()" class="premium-input" placeholder="https://...">
+                   <input type="text" [(ngModel)]="editableContent['avatarSrc']" (ngModelChange)="onContentChange()" class="premium-input" placeholder="https://...">
                 </div>
               </div>
 
@@ -94,7 +94,7 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES, ResizeHandleTyp
                 <div class="control-group">
                   <label>Variante de Color</label>
                   <div class="select-wrapper">
-                    <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()" class="premium-select">
+                    <select [(ngModel)]="editableContent['variant']" (ngModelChange)="onContentChange()" class="premium-select">
                        <option *ngFor="let v of variants" [value]="v">{{ formatVariantName(v) }}</option>
                     </select>
                   </div>
@@ -103,7 +103,7 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES, ResizeHandleTyp
                 <div class="control-group">
                   <label>Estilo Visual</label>
                   <div class="select-wrapper">
-                    <select [(ngModel)]="editableContent.variantSystem" (ngModelChange)="onContentChange()" class="premium-select">
+                    <select [(ngModel)]="editableContent['variantSystem']" (ngModelChange)="onContentChange()" class="premium-select">
                       <option value="filled">Relleno (Filled)</option>
                       <option value="outlined">Bordeado (Outlined)</option>
                       <option value="ghost">Fantasma (Ghost)</option>
@@ -115,7 +115,7 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES, ResizeHandleTyp
                    <div class="control-group half">
                       <label>Tamaño</label>
                       <div class="select-wrapper">
-                        <select [(ngModel)]="editableContent.size" (ngModelChange)="onContentChange()" class="premium-select">
+                        <select [(ngModel)]="editableContent['size']" (ngModelChange)="onContentChange()" class="premium-select">
                           <option value="sm">Pequeño</option>
                           <option value="md">Mediano</option>
                           <option value="lg">Grande</option>
@@ -125,7 +125,7 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES, ResizeHandleTyp
                    <div class="control-group half">
                       <label>Redondeo</label>
                       <div class="select-wrapper">
-                        <select [(ngModel)]="editableContent.rounded" (ngModelChange)="onContentChange()" class="premium-select">
+                        <select [(ngModel)]="editableContent['rounded']" (ngModelChange)="onContentChange()" class="premium-select">
                           <option value="none">Cuadrado</option>
                           <option value="md">Suave</option>
                           <option value="full">Total</option>
@@ -136,9 +136,9 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES, ResizeHandleTyp
 
                 <div class="control-group">
                   <label>Modo de Iluminación</label>
-                  <div class="toggle-wrapper" (click)="editableContent.dark = !editableContent.dark; onContentChange()" [class.active]="editableContent.dark">
+                  <div class="toggle-wrapper" (click)="editableContent['dark'] = !editableContent['dark']; onContentChange()" [class.active]="editableContent['dark']">
                     <div class="toggle-track"><div class="toggle-thumb"></div></div>
-                    <span>{{ editableContent.dark ? 'OSCURO' : 'CLARO' }}</span>
+                    <span>{{ editableContent['dark'] ? 'OSCURO' : 'CLARO' }}</span>
                   </div>
                 </div>
               </div>
@@ -152,17 +152,17 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES, ResizeHandleTyp
                 
                 <div class="checkbox-group">
                    <label>
-                     <input type="checkbox" [(ngModel)]="editableContent.removable" (ngModelChange)="onContentChange()"> Removible (Botón X)
+                     <input type="checkbox" [(ngModel)]="editableContent['removable']" (ngModelChange)="onContentChange()"> Removible (Botón X)
                    </label>
                 </div>
                  <div class="checkbox-group">
                    <label>
-                     <input type="checkbox" [(ngModel)]="editableContent.selected" (ngModelChange)="onContentChange()"> Seleccionado (Active)
+                     <input type="checkbox" [(ngModel)]="editableContent['selected']" (ngModelChange)="onContentChange()"> Seleccionado (Active)
                    </label>
                 </div>
                 <div class="checkbox-group">
                    <label>
-                     <input type="checkbox" [(ngModel)]="editableContent.disabled" (ngModelChange)="onContentChange()"> Deshabilitado
+                     <input type="checkbox" [(ngModel)]="editableContent['disabled']" (ngModelChange)="onContentChange()"> Deshabilitado
                    </label>
                 </div>
               </div>
@@ -220,18 +220,18 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES, ResizeHandleTyp
                      (mousedown)="onMouseDown($event)">
                   
                   <lib-ui-components-chip
-                    [variant]="editableContent.variant"
-                    [variantSystem]="editableContent.variantSystem"
-                    [rounded]="editableContent.rounded"
-                    [size]="editableContent.size"
-                    [dark]="editableContent.dark"
-                    [removable]="editableContent.removable"
-                    [selected]="editableContent.selected"
-                    [disabled]="editableContent.disabled"
-                    [iconName]="editableContent.iconName"
-                    [avatarSrc]="editableContent.avatarSrc"
+                    [variant]="editableContent['variant']"
+                    [variantSystem]="editableContent['variantSystem']"
+                    [rounded]="editableContent['rounded']"
+                    [size]="editableContent['size']"
+                    [dark]="editableContent['dark']"
+                    [removable]="editableContent['removable']"
+                    [selected]="editableContent['selected']"
+                    [disabled]="editableContent['disabled']"
+                    [iconName]="editableContent['iconName']"
+                    [avatarSrc]="editableContent['avatarSrc']"
                     style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                    {{ editableContent.label }}
+                    {{ editableContent['label'] }}
                   </lib-ui-components-chip>
 
                   <!-- 8-point Resize Handles -->
@@ -273,7 +273,7 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES, ResizeHandleTyp
               <div class="dock-divider"></div>
               <div class="dock-item">
                 <span class="label">VARIANT</span>
-                <span class="value chip-variant">{{ editableContent.variant }}</span>
+                <span class="value chip-variant">{{ editableContent['variant'] }}</span>
               </div>
             </div>
           </div>

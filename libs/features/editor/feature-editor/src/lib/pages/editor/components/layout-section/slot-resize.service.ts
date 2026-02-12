@@ -2,7 +2,7 @@
 // Servicio para manejar el redimensionado de slots en el layout
 
 import { Injectable, signal, computed } from '@angular/core';
-import { SlotConfig, LayoutSectionConfig, LayoutType } from './layout-section.interfaces';
+import { SlotConfig, LayoutSectionConfig, LayoutType, LAYOUT_DEFINITIONS } from './layout-section.interfaces';
 
 export type ResizeDirection = 'horizontal' | 'vertical' | 'both' | 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se' | 'move';
 export type ResizeAnchor = 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se' | 'move';
@@ -239,6 +239,8 @@ export class SlotResizeService {
    */
   syncFromConfig(config: LayoutSectionConfig): void {
     const sizes = new Map<number, { width: number; height: number; left?: number; top?: number }>();
+    const isStrict = this.isStrictGrid(config.layoutType);
+
     config.slots.forEach((slot, i) => {
       const w = slot.layoutStyles?.['width'];
       const h = slot.layoutStyles?.['height'];
@@ -246,15 +248,22 @@ export class SlotResizeService {
       const t = slot.layoutStyles?.['top'];
       
       if (w || h || l || t) {
-        const parsedW = w ? parseInt(w) : 0;
+        let parsedW = w ? parseInt(w) : 0;
         const parsedH = h ? parseInt(h) : 0;
         
-        sizes.set(i, {
-          width: isNaN(parsedW) ? 0 : parsedW,
-          height: isNaN(parsedH) ? 0 : parsedH,
-          left: l ? parseInt(l) : undefined,
-          top: t ? parseInt(t) : undefined
-        });
+        // Anti-collapse filter: If we are in a strict grid and the width is huge, skip it
+        if (isStrict && parsedW > 900) {
+            parsedW = 0; 
+        }
+
+        if (parsedW > 0 || parsedH > 0 || l || t) {
+            sizes.set(i, {
+                width: parsedW,
+                height: isNaN(parsedH) ? 0 : parsedH,
+                left: l ? parseInt(l) : undefined,
+                top: t ? parseInt(t) : undefined
+            });
+        }
       }
     });
     this.customSizes.set(sizes);
@@ -264,55 +273,79 @@ export class SlotResizeService {
    * Obtener el grid template personalizado basado en customSizes o en la config persistida
    */
   getCustomGridTemplate(config: LayoutSectionConfig): string {
-    const customSizesMap = this.customSizes();
     const layoutType = config.layoutType;
+    const def = LAYOUT_DEFINITIONS.find(l => l.type === layoutType);
+    if (!def) return '1fr';
 
+    const customSizesMap = this.customSizes();
+    
+    const isStrict = this.isStrictGrid(layoutType);
+    
     const getW = (idx: number): number | undefined => {
+      // Prioritize active (ephemeral) resize state
       const custom = customSizesMap.get(idx)?.width;
-      if (typeof custom === 'number' && custom > 0) return custom;
+      if (typeof custom === 'number' && custom > 0) {
+          // If in strict grid, don't allow "captured" full widths to pollute the template
+          if (isStrict && custom > 850) return undefined;
+          return custom;
+      }
       
+      // Fallback to persisted layoutStyles
       const saved = config.slots[idx]?.layoutStyles?.['width'];
       if (saved && typeof saved === 'string' && saved.includes('px')) {
         const p = parseInt(saved);
-        return isNaN(p) ? undefined : p;
+        if (isNaN(p)) return undefined;
+        if (isStrict && p > 850) return undefined;
+        return p;
       }
       return undefined;
     };
 
-    if (layoutType.includes('two-columns') || layoutType.includes('sidebar-left') || layoutType.includes('sidebar-right')) {
-        const w0 = getW(0);
-        const w1 = getW(1);
-        if (w0 && w1) return `${w0}px ${w1}px`;
-        if (w0) return `${w0}px 1fr`;
-        if (w1) return `1fr ${w1}px`;
-    }
+    // Only consider it an "active resize" if the width is within logical bounds for a column
+    const hasActiveResize = Array.from(customSizesMap.values()).some(s => s.width > 0 && s.width < 1000);
 
     if (layoutType === 'three-columns') {
-        const parts = [];
-        for (let i = 0; i < 3; i++) {
-            const w = getW(i);
-            parts.push(w ? `${w}px` : '1fr');
-        }
-        return parts.join(' ');
-    }
+        const w0 = getW(0); const w1 = getW(1); const w2 = getW(2);
+        
+        // Safeguard: Multi-column layouts should NEVER have a column near the full width.
+        // If it's > 800px in a 3rd of a standard 1200px container, it's wrong.
+        const limit = 800; 
+        const isInvalid = (w: any) => w && w > limit;
 
-    if (layoutType === 'grid-2x2') {
-        const w0 = getW(0) || getW(2);
-        const w1 = getW(1) || getW(3);
-        if (w0 && w1) return `${w0}px ${w1}px`;
-        return '1fr 1fr';
-    }
-
-    if (layoutType === 'grid-3x2' || layoutType === 'grid-3x3') {
-        const w0 = getW(0) || getW(3) || getW(6);
-        const w1 = getW(1) || getW(4) || getW(7);
-        const w2 = getW(2) || getW(5) || getW(8);
-        if (w0 || w1 || w2) {
-            return `${(w0 !== undefined) ? w0 + 'px' : '1fr'} ${(w1 !== undefined) ? w1 + 'px' : '1fr'} ${(w2 !== undefined) ? w2 + 'px' : '1fr'}`;
+        if (hasActiveResize || (w0 && w1) || (w1 && w2) || (w0 && w2)) {
+            return `${isInvalid(w0) ? '1fr' : (w0 ? w0 + 'px' : '1fr')} ${isInvalid(w1) ? '1fr' : (w1 ? w1 + 'px' : '1fr')} ${isInvalid(w2) ? '1fr' : (w2 ? w2 + 'px' : '1fr')}`;
         }
     }
 
-    return this.getDefaultGridTemplate(layoutType);
+    if (layoutType.includes('two-columns') || layoutType.includes('sidebar-left') || layoutType.includes('sidebar-right')) {
+        const w0 = getW(0); const w1 = getW(1);
+        const limit = 1000;
+        const isInvalid = (w: any) => w && w > limit;
+
+        if (hasActiveResize || (w0 && w1)) {
+            return `${isInvalid(w0) ? '1fr' : (w0 ? w0 + 'px' : '1fr')} ${isInvalid(w1) ? '1fr' : (w1 ? w1 + 'px' : '1fr')}`;
+        }
+    }
+
+    if (layoutType.includes('grid-')) {
+        // Grids usually keep their default distribution unless heavily customized
+        if (hasActiveResize) {
+            if (layoutType === 'grid-2x2') {
+                const w0 = getW(0) || getW(2);
+                const w1 = getW(1) || getW(3);
+                return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
+            }
+            if (layoutType.includes('grid-3x')) {
+                const w0 = getW(0) || getW(3) || getW(6);
+                const w1 = getW(1) || getW(4) || getW(7);
+                const w2 = getW(2) || getW(5) || getW(8);
+                return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
+            }
+        }
+    }
+
+    // Default to the template defined in the catalog
+    return def.gridTemplate || '1fr';
   }
 
   /**
@@ -439,7 +472,7 @@ export class SlotResizeService {
       'two-columns', 'three-columns', 
       'two-columns-left', 'two-columns-right',
       'sidebar-left', 'sidebar-right',
-      'hero-banner'
+      'hero-banner', 'masonry'
     ];
     return strictLayouts.includes(layoutType);
   }

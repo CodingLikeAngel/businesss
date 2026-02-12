@@ -119,9 +119,9 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
                 <div class="control-group">
                   <label>Alineación</label>
                   <div class="alignment-btns">
-                    <button class="align-btn" [class.active]="editableContent.align === 'left'" (click)="editableContent.align = 'left'; onContentChange()">⬅</button>
-                    <button class="align-btn" [class.active]="editableContent.align === 'center'" (click)="editableContent.align = 'center'; onContentChange()">↔</button>
-                    <button class="align-btn" [class.active]="editableContent.align === 'right'" (click)="editableContent.align = 'right'; onContentChange()">➡</button>
+                    <button class="align-btn" [class.active]="editableContent['align'] === 'left'" (click)="editableContent['align'] = 'left'; onContentChange()">⬅</button>
+                    <button class="align-btn" [class.active]="editableContent['align'] === 'center'" (click)="editableContent['align'] = 'center'; onContentChange()">↔</button>
+                    <button class="align-btn" [class.active]="editableContent['align'] === 'right'" (click)="editableContent['align'] = 'right'; onContentChange()">➡</button>
                   </div>
                 </div>
 
@@ -232,11 +232,11 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
                      (mousedown)="onMouseDown($event)">
                   
                   <lib-ui-components-title
-                    [text]="editableContent.text"
-                    [level]="editableContent.level"
-                    [variant]="editableContent.variant"
-                    [align]="editableContent.align"
-                    [animation]="editableContent.animation"
+                    [text]="editableContent['text']"
+                    [level]="editableContent['level']"
+                    [variant]="editableContent['variant']"
+                    [align]="editableContent['align']"
+                    [animation]="editableContent['animation']"
                     [customStyles]="editableStyles"
                     style="width: 100%; height: 100%; display: block;">
                   </lib-ui-components-title>

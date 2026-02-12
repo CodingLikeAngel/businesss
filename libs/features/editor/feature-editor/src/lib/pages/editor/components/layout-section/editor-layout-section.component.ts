@@ -118,7 +118,7 @@ interface ComponentDefaultSize {
       <div *ngIf="!isPreviewMode || showEditorControls" class="section-header">
         <div class="section-label">
           <span class="label-icon">🧩</span>
-          <span class="label-text">Layout: {{ getLayoutLabel() }}</span>
+          <span class="label-text">Layout: {{ getLayoutLabel() }} <small style="opacity: 0.5; margin-left:8px">({{ config.layoutType }} -> {{ getGridTemplate() }})</small></span>
         </div>
         <div class="section-actions">
           <button class="action-btn" (click)="toggleLayoutPicker()" title="Cambiar Layout">
@@ -164,7 +164,7 @@ interface ComponentDefaultSize {
       </div>
 
       <!-- Grid Container -->
-      <div class="grid-container" [style.gridTemplateColumns]="getGridTemplate()" [style.gap.px]="config.gap">
+      <div class="grid-container" [style.grid-template-columns]="getGridTemplate()" [style.gap.px]="config.gap">
         
         <!-- Slots -->
         <div 
@@ -1253,15 +1253,33 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   private loadConfigFromSection() {
     if (this.section?.content?.['layoutConfig']) {
       const rawConfig = this.section.content['layoutConfig'];
+      const layoutType = rawConfig.layoutType || 'single';
+      const isStrict = this.resizeService.isStrictGrid(layoutType);
+
       this.config = {
         ...createDefaultLayoutConfig(),
         ...rawConfig,
-        slots: (rawConfig.slots || []).map((s: any) => ({
-          ...s,
-          content: s.content ? { ...s.content } : {},
-          styles: s.styles ? { ...s.styles } : {},
-          layoutStyles: s.layoutStyles ? { ...s.layoutStyles } : {}
-        }))
+        slots: (rawConfig.slots || []).map((s: any) => {
+          const cleanLayoutStyles = { ...(s.layoutStyles || {}) };
+          
+          // Detect and kill captured full-widths that break column layouts
+          if (isStrict && cleanLayoutStyles['width']) {
+            const w = parseInt(cleanLayoutStyles['width']);
+            if (w > 900) {
+              delete cleanLayoutStyles['width'];
+              delete cleanLayoutStyles['left'];
+              cleanLayoutStyles['position'] = 'relative';
+              console.log(`[Layout] Sanitized slot width ${w}px for strict layout ${layoutType}`);
+            }
+          }
+
+          return {
+            ...s,
+            content: s.content ? { ...s.content } : {},
+            styles: s.styles ? { ...s.styles } : {},
+            layoutStyles: cleanLayoutStyles
+          };
+        })
       };
     } else {
       this.config = createDefaultLayoutConfig();
@@ -1339,25 +1357,27 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     const oldSlots = this.config.slots;
     const newSlots = createInitialSlots(type);
 
-    // Preserve existing slot content where possible but reset dimensions 
-    // to allow them to re-flow into the new grid structure
+    // Filter out size-related styles ALWAYS when switching layout types
+    // to ensure the new grid distribution takes over cleanly
     for (let i = 0; i < Math.min(oldSlots.length, newSlots.length); i++) {
       const oldSlot = oldSlots[i];
-      const newStyles = { ...(oldSlot.styles || {}) };
-      const newLayoutStyles = { ...(oldSlot.layoutStyles || {}) };
       
-      // Remove fixed dimensions and positioning to allow re-flow into new grid
-      const keysToRemove = ['width', 'height', 'min-height', 'left', 'top', 'position', 'transform'];
+      // We carry over content but NOT physical dimensions
+      const cleanStyles = { ...(oldSlot.styles || {}) };
+      const cleanLayoutStyles = {}; // Reset layout styles completely for fresh start
+
+      const keysToRemove = ['width', 'height', 'min-height', 'max-width', 'max-height', 'left', 'top', 'position', 'transform'];
       keysToRemove.forEach(k => {
-        delete newStyles[k];
-        delete newLayoutStyles[k];
+        delete cleanStyles[k];
       });
 
       newSlots[i] = { 
-        ...oldSlot, 
-        id: newSlots[i].id,
-        styles: newStyles,
-        layoutStyles: newLayoutStyles
+        ...newSlots[i], // Keep the fresh ID and empty componentType from initial slots
+        componentType: oldSlot.componentType,
+        componentVariant: oldSlot.componentVariant,
+        content: oldSlot.content ? { ...oldSlot.content } : {},
+        styles: cleanStyles,
+        layoutStyles: cleanLayoutStyles
       };
     }
 
@@ -1367,6 +1387,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       slots: newSlots
     };
     
+    // Clear ephemeral service state so getCustomGridTemplate uses the default
     this.resizeService.resetCustomSizes();
     this.persistConfig();
     this.closeLayoutPicker();
@@ -1860,7 +1881,15 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     // 2. Standardized Size Sync (Robust)
     if (updatedConfig.size) {
         const validated = this.resizeService.validateDimensions(updatedConfig.size.width, updatedConfig.size.height);
-        layoutStyles['width'] = validated.width + 'px';
+        
+        // ONLY save fixed width if NOT in a strict grid layout
+        // In grids, the width is managed by the grid template
+        if (!this.resizeService.isStrictGrid(this.config.layoutType)) {
+            layoutStyles['width'] = validated.width + 'px';
+        } else {
+            // Ensure any legacy width is removed when applying isolated changes in a grid
+            delete layoutStyles['width'];
+        }
         
         const isFlow = this.FLOW_COMPONENTS.some(type => slot.componentType.includes(type));
 
@@ -2007,15 +2036,17 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
    * Get effective slot width (custom or auto)
    */
   getSlotWidth(index: number): number | null {
-    // In strict grid mode, column width is set by grid-template-columns.
-    // Setting width on the item itself can cause conflicts with padding/gaps.
-    if (this.resizeService.isStrictGrid(this.config.layoutType)) return null;
-
+    // FORCE NULL for strict grid modes to allow grid-template-columns to take priority
+    if (this.resizeService.isStrictGrid(this.config.layoutType)) {
+      return null;
+    }
+    
+    // In free mode, use custom or saved sizes
     const customSize = this.resizeService.customSizes().get(index);
     if (customSize && customSize.width > 0) {
       return customSize.width;
     }
-    return null; // Use CSS Grid auto or persisted layoutStyles
+    return null;
   }
 
   /**
