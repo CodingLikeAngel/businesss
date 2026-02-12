@@ -175,12 +175,12 @@ interface ComponentDefaultSize {
           [class.resizing]="resizeService.isResizing() && resizeService.activeSlotIndex() === i"
           [class.flow-component]="isFlowComponent(slot)"
           [class.preview-mode]="isPreviewMode && !showEditorControls"
-          [style.width]="getSlotWidth(i) ? getSlotWidth(i) + 'px' : slot.layoutStyles?.['width']"
-          [style.height]="!isFlowComponent(slot) ? (getSlotHeight(i) ? getSlotHeight(i) + 'px' : slot.layoutStyles?.['height']) : null"
-          [style.minHeight]="isFlowComponent(slot) ? (getSlotHeight(i) ? getSlotHeight(i) + 'px' : slot.layoutStyles?.['height']) : null"
-          [style.left]="getSlotLeft(i) !== null ? getSlotLeft(i) + 'px' : slot.layoutStyles?.['left']"
-          [style.top]="getSlotTop(i) !== null ? getSlotTop(i) + 'px' : slot.layoutStyles?.['top']"
-          [style.position]="isPositioned(i, slot) ? 'absolute' : (slot.layoutStyles?.['position'] || 'relative')"
+          [style.width]="getSlotWidth(i) !== null ? getSlotWidth(i) + 'px' : null"
+          [style.height]="(!isFlowComponent(slot) && getSlotHeight(i) !== null) ? getSlotHeight(i) + 'px' : null"
+          [style.minHeight]="(isFlowComponent(slot) && getSlotHeight(i) !== null) ? getSlotHeight(i) + 'px' : null"
+          [style.left]="getSlotLeft(i) !== null ? getSlotLeft(i) + 'px' : null"
+          [style.top]="getSlotTop(i) !== null ? getSlotTop(i) + 'px' : null"
+          [style.position]="isPositioned(i, slot) ? 'absolute' : 'relative'"
           [attr.data-slot-index]="i"
           (click)="selectSlot(i, $event)">
           
@@ -744,6 +744,10 @@ interface ComponentDefaultSize {
       border-radius: 12px;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       background: rgba(15, 23, 42, 0.2);
+    }
+
+    .slot.resizing {
+      transition: none !important;
     }
 
     .slot.preview-mode {
@@ -1550,39 +1554,20 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     const styles = { ...(slot.styles || {}) };
     const componentType = slot.componentType as SlotComponentType;
     
-    // Detect if we have a custom size active in the service (reactive via signals)
-    const customSizeMap = this.resizeService.customSizes();
-    const activeSize = customSizeMap.get(index);
-    
-    // Size enforcement: prioritize active resize dimensions, then layoutStyles (persisted)
-    const currentWidth = activeSize?.width ? `${activeSize.width}px` : slot.layoutStyles?.['width'];
-    const currentHeight = activeSize?.height ? `${activeSize.height}px` : slot.layoutStyles?.['height'];
-
-    // Position logic: Relative offsets vs absolute
-    const isAbsolute = slot.layoutStyles?.['position'] === 'absolute' || styles['position'] === 'absolute';
-    
-    if (isAbsolute) {
-      styles['position'] = 'absolute';
-      if (slot.layoutStyles?.['left']) styles['left'] = slot.layoutStyles['left'];
-      if (slot.layoutStyles?.['top']) styles['top'] = slot.layoutStyles['top'];
-    }
-    
-    // Size enforcement
-    if (currentWidth) styles['width'] = currentWidth;
-    if (currentHeight) styles['height'] = currentHeight;
-
-    // Default Alignment / Display rules
+    // Default Alignment / Display rules (Appearance Only)
     if (!styles['display']) {
       styles['display'] = 'flex';
       styles['align-items'] = 'center';
       styles['justify-content'] = 'center';
-      styles['width'] = styles['width'] || '100%';
     }
+
+    // Size enforcement - Component should fill its slot wrapper
+    styles['width'] = '100%';
+    styles['height'] = '100%';
 
     // Component-specific structural overrides
     const fullWidthComponents = ['ui-accordion', 'ui-list', 'ui-card', 'ui-card-animated', 'ui-card-product'];
     if (fullWidthComponents.some(type => componentType.includes(type))) {
-      styles['width'] = '100%';
       styles['justify-content'] = 'stretch';
       styles['align-items'] = 'stretch';
     }
@@ -1904,13 +1889,14 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
           itemH
         );
 
+        const isStrictGrid = this.resizeService.isStrictGrid(this.config.layoutType);
         const wasAbsolute = slot.layoutStyles?.['position'] === 'absolute' || !!slot.layoutStyles?.['left'];
         const hasMoved = this.editingOriginMetrics && (
-          Math.abs(validatedPos.left - this.editingOriginMetrics.localX) > 10 ||
-          Math.abs(validatedPos.top - this.editingOriginMetrics.localY) > 10
+          Math.abs(validatedPos.left - this.editingOriginMetrics.localX) > 15 ||
+          Math.abs(validatedPos.top - this.editingOriginMetrics.localY) > 15
         );
 
-        if (wasAbsolute || hasMoved) {
+        if (!isStrictGrid && (wasAbsolute || hasMoved)) {
           layoutStyles['left'] = validatedPos.left + 'px';
           layoutStyles['top'] = validatedPos.top + 'px';
           layoutStyles['position'] = 'absolute';
@@ -1921,7 +1907,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         } else {
           delete layoutStyles['left'];
           delete layoutStyles['top'];
-          if (layoutStyles['position'] === 'absolute') delete layoutStyles['position'];
+          layoutStyles['position'] = 'relative';
         }
     }
 
