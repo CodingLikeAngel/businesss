@@ -34,6 +34,4 @@ export * from './lib/shared-components/variant-selector/element-group.service';
 export * from './lib/shared-components/variant-selector/element-group.directive';
 
 // Export System (Multi-framework)
-export * from './lib/services/export/index';
-
-// Component Export System
+export * from './lib/services/export/index';// Component Export System
