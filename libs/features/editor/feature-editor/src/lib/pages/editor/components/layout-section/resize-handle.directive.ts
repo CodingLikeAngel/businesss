@@ -96,14 +96,14 @@ export class ResizeHandleDirective {
     this.startWidth = rect.width;
     this.startHeight = rect.height;
 
+    // Emitir evento de inicio PRIMERO para que el componente padre pueda inicializar tamaños si es necesario
+    this.resizeStart.emit();
+
     // Iniciar servicio con el tamaño y posicion local
     this.resizeService.startResize(this.slotIndex, this.anchor, 
       { width: rect.width, height: rect.height },
       { left: parent.offsetLeft, top: parent.offsetTop }
     );
-
-    // Emitir evento de inicio
-    this.resizeStart.emit();
 
     // Agregar listeners globales
     this.addGlobalListeners();

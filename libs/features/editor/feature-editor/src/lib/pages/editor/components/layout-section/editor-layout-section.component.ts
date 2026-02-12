@@ -316,14 +316,14 @@ interface ComponentDefaultSize {
 
               <!-- Resize Anchors (8 points) -->
               <div *ngIf="((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
-                <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
               </div>
             </div>
           </ng-container>
@@ -1212,6 +1212,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
   ngOnInit() {
     this.loadConfigFromSection();
+    this.resizeService.syncFromConfig(this.config);
     this.setupPersistence();
     
     // Subscribe to builder step changes to detect preview mode
@@ -1261,6 +1262,11 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     } else {
       this.config = createDefaultLayoutConfig();
     }
+    
+    // Sync service with loaded config
+    if (this.isBrowser) {
+      this.resizeService.syncFromConfig(this.config);
+    }
     this.cdr.detectChanges();
   }
 
@@ -1306,16 +1312,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   }
 
   getGridTemplate(): string {
-    const layout = getLayoutDefinition(this.config.layoutType);
-    if (!layout) return '1fr';
-    
-    // Handle special layouts with rows
-    if (this.config.layoutType === 'grid-2x2') return 'repeat(2, 1fr)';
-    if (this.config.layoutType === 'grid-3x2') return 'repeat(3, 1fr)';
-    if (this.config.layoutType === 'grid-3x3') return 'repeat(3, 1fr)';
-    if (this.config.layoutType === 'hero-banner') return '1fr';
-    
-    return layout.gridTemplate;
+    return this.resizeService.getCustomGridTemplate(this.config);
   }
 
   toggleEditing() {
@@ -2009,6 +2006,39 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   }
 
   // ========== SLOT RESIZE METHODS ==========
+
+  /**
+   * Handle resize start capturing all current slot sizes for accurate proportional resizing
+   */
+  onSlotResizeStart(index: number): void {
+    if (!this.isBrowser) return;
+
+    const sectionEl = document.getElementById(this.section.id);
+    if (!sectionEl) return;
+
+    const slotElements = sectionEl.querySelectorAll('.slot');
+    const sizes = new Map<number, { width: number; height: number; left?: number; top?: number }>();
+    const gridEl = sectionEl.querySelector('.grid-container');
+    const gridRect = gridEl?.getBoundingClientRect();
+
+    slotElements.forEach((el, i) => {
+      const rect = el.getBoundingClientRect();
+      const left = gridRect ? rect.left - gridRect.left : 0;
+      const top = gridRect ? rect.top - gridRect.top : 0;
+      
+      sizes.set(i, {
+        width: Math.round(rect.width),
+        height: Math.round(rect.height),
+        left: Math.round(left),
+        top: Math.round(top)
+      });
+    });
+
+    // We MUST update the service's customSizes BEFORE the directive's startResize logic runs
+    // so it has accurate neighbor dimensions even for '1fr' slots
+    this.resizeService.customSizes.set(sizes);
+    this.cdr.detectChanges();
+  }
 
   /**
    * Handle resize move to update UI (force CD)

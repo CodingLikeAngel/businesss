@@ -244,16 +244,50 @@ export class SlotResizeService {
   }
 
   /**
-   * Obtener el template de grid personalizado basado en customSizes
+   * Sync custom sizes from config
+   */
+  syncFromConfig(config: LayoutSectionConfig): void {
+    const sizes = new Map<number, { width: number; height: number; left?: number; top?: number }>();
+    config.slots.forEach((slot, i) => {
+      const w = slot.layoutStyles?.['width'];
+      const h = slot.layoutStyles?.['height'];
+      const l = slot.layoutStyles?.['left'];
+      const t = slot.layoutStyles?.['top'];
+      
+      if (w || h || l || t) {
+        sizes.set(i, {
+          width: w ? parseInt(w) : 0,
+          height: h ? parseInt(h) : 0,
+          left: l ? parseInt(l) : undefined,
+          top: t ? parseInt(t) : undefined
+        });
+      }
+    });
+    this.customSizes.set(sizes);
+  }
+
+  /**
+   * Obtener el grid template personalizado basado en customSizes o en la config persistida
    */
   getCustomGridTemplate(config: LayoutSectionConfig): string {
     const customSizes = this.customSizes();
     const layoutType = config.layoutType;
 
+    // Helper para obtener el ancho de un slot, priorizando el signal de resize pero cayendo al config
+    const getW = (idx: number): number | undefined => {
+      const custom = customSizes.get(idx)?.width;
+      if (custom && custom > 0) return custom;
+      
+      const saved = config.slots[idx]?.layoutStyles?.['width'];
+      if (saved) return parseInt(saved);
+      
+      return undefined;
+    };
+
     // Lógica para 2 columnas (la más común donde se pide este comportamiento)
-    if (layoutType.includes('two-columns') || layoutType.includes('sidebar')) {
-        const w0 = customSizes.get(0)?.width;
-        const w1 = customSizes.get(1)?.width;
+    if (layoutType.includes('two-columns') || layoutType.includes('sidebar-left') || layoutType.includes('sidebar-right')) {
+        const w0 = getW(0);
+        const w1 = getW(1);
         if (w0 && w1) return `${w0}px ${w1}px`;
         if (w0) return `${w0}px 1fr`;
         if (w1) return `1fr ${w1}px`;
@@ -263,7 +297,7 @@ export class SlotResizeService {
     if (layoutType === 'three-columns') {
         const parts = [];
         for (let i = 0; i < 3; i++) {
-            const w = customSizes.get(i)?.width;
+            const w = getW(i);
             parts.push(w ? `${w}px` : '1fr');
         }
         return parts.join(' ');
@@ -271,10 +305,19 @@ export class SlotResizeService {
 
     // Para grids 2x2 etc, solemos redimensionar columnas, no todo el grid simultáneamente
     if (layoutType === 'grid-2x2') {
-        const w0 = customSizes.get(0)?.width || customSizes.get(2)?.width;
-        const w1 = customSizes.get(1)?.width || customSizes.get(3)?.width;
+        const w0 = getW(0) || getW(2);
+        const w1 = getW(1) || getW(3);
         if (w0 && w1) return `${w0}px ${w1}px`;
         return '1fr 1fr';
+    }
+
+    if (layoutType === 'grid-3x2' || layoutType === 'grid-3x3') {
+        const w0 = getW(0) || getW(3) || getW(6);
+        const w1 = getW(1) || getW(4) || getW(7);
+        const w2 = getW(2) || getW(5) || getW(8);
+        if (w0 || w1 || w2) {
+            return `${(w0 !== undefined) ? w0 + 'px' : '1fr'} ${(w1 !== undefined) ? w1 + 'px' : '1fr'} ${(w2 !== undefined) ? w2 + 'px' : '1fr'}`;
+        }
     }
 
     return this.getDefaultGridTemplate(layoutType);
