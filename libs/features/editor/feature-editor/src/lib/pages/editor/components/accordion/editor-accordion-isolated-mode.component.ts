@@ -1331,6 +1331,8 @@ export class EditorAccordionIsolatedModeComponent implements OnInit, OnDestroy {
   apply() {
     const updatedConfig: IsolatedModeConfig = {
       ...this.config,
+      // FIX: Explicitly set top-level variant
+      variant: this.editableContent.variant,
       content: {
         ...this.config.content,
         items: JSON.parse(JSON.stringify(this.editableContent.items)),

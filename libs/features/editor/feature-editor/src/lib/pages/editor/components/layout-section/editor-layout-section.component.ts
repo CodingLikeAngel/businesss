@@ -1834,14 +1834,15 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     componentType: SlotComponentType, 
     detectedWidth: number
   ): ComponentDefaultSize {
+    // FIX: Remove arbitrary caps (Math.min) so components respect the layout's actual width
     const sizeMap: Record<SlotComponentType, ComponentDefaultSize> = {
-      'ui-button': { width: Math.min(220, detectedWidth), height: 50 },
+      'ui-button': { width: detectedWidth, height: 50 }, // Was min(220)
       'ui-title': { width: detectedWidth, height: 100 },
       'ui-accordion': { width: detectedWidth, height: 250 },
       'draggable-box': { width: detectedWidth, height: 120 },
       'ui-list': { width: detectedWidth, height: 300 },
-      'ui-card-product': { width: Math.min(320, detectedWidth), height: 480 },
-      'ui-chip': { width: 120, height: 40 },
+      'ui-card-product': { width: detectedWidth, height: 480 }, // Was min(320)
+      'ui-chip': { width: 120, height: 40 }, // Chips are naturally small
       'ui-image': { width: detectedWidth, height: Math.round(detectedWidth * 0.6) },
       'ui-card': { width: detectedWidth, height: 400 },
       'ui-card-animated': { width: detectedWidth, height: 400 },

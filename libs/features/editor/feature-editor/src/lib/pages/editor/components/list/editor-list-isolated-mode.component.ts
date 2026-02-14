@@ -255,6 +255,8 @@ export class EditorListIsolatedModeComponent implements OnInit, OnDestroy {
   apply() {
     this.applied.emit({
       ...this.config,
+      // FIX: Explicitly set top-level variant
+      variant: this.editableContent.variant,
       content: { 
         ...this.editableContent, 
         items: this.editableItems

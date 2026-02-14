@@ -373,6 +373,8 @@ export class EditorTitleIsolatedModeComponent extends BaseIsolatedModeComponent 
   buildApplyPayload(): IsolatedModeConfig {
     return {
       ...this.config,
+      // FIX: Explicitly set top-level variant
+      variant: this.editableContent.variant,
       content: { ...this.editableContent },
       styles: {
         ...this.editableStyles,

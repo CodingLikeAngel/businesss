@@ -473,6 +473,8 @@ export class EditorImageIsolatedModeComponent implements OnInit, OnDestroy {
   apply() {
     this.applied.emit({
       ...this.config,
+      // FIX: Explicitly set top-level variant
+      variant: this.editableContent.variant,
       content: { ...this.editableContent },
       styles: {
         ...this.editableStyles,

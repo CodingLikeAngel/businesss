@@ -948,6 +948,8 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
   apply() {
     const config: IsolatedModeConfig = {
       ...this.config,
+      // FIX: Explicitly set top-level variant to ensure it persists in the layout
+      variant: this.editableContent.variant,
       content: { ...this.editableContent },
       styles: {
         ...this.getCustomStyles(),
