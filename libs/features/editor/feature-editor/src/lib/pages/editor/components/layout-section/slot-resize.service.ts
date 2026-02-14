@@ -537,6 +537,10 @@ export class SlotResizeService {
     if (isStrictGridMode) {
       const siblings = this.getColumnSiblings(config.layoutType, index);
       siblings.forEach(sibIdx => {
+         // CRITICAL FIX: Also update the slot state in the array for the sibling
+         // This removes potential inline styles that might conflict with the new grid template
+         updateSlot(sibIdx, newWidth, newHeight, left, top);
+
          const existing = currentSizes.get(sibIdx) || { width: 0, height: 0, left: 0, top: 0 };
          currentSizes.set(sibIdx, { ...existing, width: newWidth });
       });
