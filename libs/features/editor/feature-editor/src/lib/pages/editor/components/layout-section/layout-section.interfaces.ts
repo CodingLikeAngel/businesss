@@ -54,6 +54,7 @@ export interface LayoutSectionConfig {
   backgroundColor?: string;
   borderRadius?: number;
   minHeight?: number;
+  gridTemplateOverride?: string; // Persisted custom grid-template-columns after resize
 }
 
 // Layout definition with slot metadata

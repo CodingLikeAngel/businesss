@@ -297,75 +297,119 @@ export class SlotResizeService {
     if (!def) return '1fr';
 
     const customSizesMap = this.customSizes();
-    const isStrict = this.isStrictGrid(layoutType);
-    
-    // During active resize, use the dynamic sizes from the service
     const isActivelyResizing = this.isResizing();
     
+    // Helper: get width from customSizes or persisted layoutStyles
     const getW = (idx: number): number | undefined => {
-      // During active resize, prioritize the ephemeral resize state
-      if (isActivelyResizing) {
-        const custom = customSizesMap.get(idx)?.width;
-        if (typeof custom === 'number' && custom > 0 && custom < 2500) {
-          return custom;
-        }
-      }
-      
-      // Fallback to persisted layoutStyles (apply stricter cleanup)
-      const saved = config.slots[idx]?.layoutStyles?.['width'];
-      if (saved && typeof saved === 'string' && saved.includes('px')) {
-        const p = parseInt(saved);
-        if (isNaN(p)) return undefined;
-        // If it's a multi-column layout and the saved width is almost the full container, 
-        // it's likely a captured error from a 1-column view. Ignore it.
-        if (isStrict && p > 800) return undefined;
-        return p;
+      const custom = customSizesMap.get(idx)?.width;
+      if (typeof custom === 'number' && custom > 0 && custom < 2500) {
+        return custom;
       }
       return undefined;
     };
 
-    // Build grid template based on layout type
-    if (layoutType === 'three-columns') {
-        const w0 = getW(0); const w1 = getW(1); const w2 = getW(2);
-        // During resize, use pixel values for the resizing column
-        if (isActivelyResizing && (w0 || w1 || w2)) {
-            return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
-        }
-        // Otherwise use default
-        return def.gridTemplate || '1fr 1fr 1fr';
+    // During active resize, build template dynamically from customSizes
+    if (isActivelyResizing) {
+      return this.buildDynamicGridTemplate(layoutType, def, getW);
     }
 
-    if (layoutType.includes('two-columns') || layoutType.includes('sidebar-left') || layoutType.includes('sidebar-right')) {
-        const w0 = getW(0); const w1 = getW(1);
-        // During resize, use pixel values
-        if (isActivelyResizing && (w0 || w1)) {
-            return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
-        }
-        return def.gridTemplate || '1fr 1fr';
-    }
-
-    if (layoutType.includes('grid-')) {
-        if (isActivelyResizing) {
-            if (layoutType === 'grid-2x2') {
-                const w0 = getW(0) || getW(2);
-                const w1 = getW(1) || getW(3);
-                if (w0 || w1) {
-                    return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
-                }
-            }
-            if (layoutType.includes('grid-3x')) {
-                const w0 = getW(0) || getW(3) || getW(6);
-                const w1 = getW(1) || getW(4) || getW(7);
-                const w2 = getW(2) || getW(5) || getW(8);
-                if (w0 || w1 || w2) {
-                    return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
-                }
-            }
-        }
+    // When NOT resizing, use persisted gridTemplateOverride if available
+    if (config.gridTemplateOverride) {
+      return config.gridTemplateOverride;
     }
 
     // Default to the template defined in the catalog
     return def.gridTemplate || '1fr';
+  }
+
+  /**
+   * Build dynamic grid template during active resize
+   */
+  private buildDynamicGridTemplate(
+    layoutType: LayoutType, 
+    def: any, 
+    getW: (idx: number) => number | undefined
+  ): string {
+    if (layoutType === 'three-columns') {
+      const w0 = getW(0); const w1 = getW(1); const w2 = getW(2);
+      if (w0 || w1 || w2) {
+        return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
+      }
+    }
+
+    if (layoutType.includes('two-columns') || layoutType.includes('sidebar-left') || layoutType.includes('sidebar-right')) {
+      const w0 = getW(0); const w1 = getW(1);
+      if (w0 || w1) {
+        return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
+      }
+    }
+
+    if (layoutType.includes('grid-')) {
+      if (layoutType === 'grid-2x2') {
+        const w0 = getW(0) || getW(2);
+        const w1 = getW(1) || getW(3);
+        if (w0 || w1) {
+          return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
+        }
+      }
+      if (layoutType.includes('grid-3x')) {
+        const w0 = getW(0) || getW(3) || getW(6);
+        const w1 = getW(1) || getW(4) || getW(7);
+        const w2 = getW(2) || getW(5) || getW(8);
+        if (w0 || w1 || w2) {
+          return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
+        }
+      }
+    }
+
+    return def.gridTemplate || '1fr';
+  }
+
+  /**
+   * Build grid template override string from current customSizes for persistence
+   */
+  buildGridTemplateOverride(layoutType: LayoutType): string | undefined {
+    const def = LAYOUT_DEFINITIONS.find(l => l.type === layoutType);
+    if (!def) return undefined;
+
+    const sizes = this.customSizes();
+    const getW = (idx: number): number | undefined => {
+      const s = sizes.get(idx);
+      return (s && s.width > 0 && s.width < 2500) ? s.width : undefined;
+    };
+
+    if (layoutType === 'three-columns') {
+      const w0 = getW(0); const w1 = getW(1); const w2 = getW(2);
+      if (w0 || w1 || w2) {
+        return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
+      }
+    }
+
+    if (layoutType.includes('two-columns') || layoutType.includes('sidebar-left') || layoutType.includes('sidebar-right')) {
+      const w0 = getW(0); const w1 = getW(1);
+      if (w0 || w1) {
+        return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
+      }
+    }
+
+    if (layoutType === 'grid-2x2') {
+      const w0 = getW(0) || getW(2);
+      const w1 = getW(1) || getW(3);
+      if (w0 || w1) {
+        return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
+      }
+    }
+
+    if (layoutType.includes('grid-3x')) {
+      const w0 = getW(0) || getW(3) || getW(6);
+      const w1 = getW(1) || getW(4) || getW(7);
+      const w2 = getW(2) || getW(5) || getW(8);
+      if (w0 || w1 || w2) {
+        return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
+      }
+    }
+
+    return undefined;
   }
 
   /**
@@ -407,22 +451,22 @@ export class SlotResizeService {
     top?: number
   ): LayoutSectionConfig {
     const slots = [...config.slots];
-    const isStrictGrid = this.isStrictGrid(config.layoutType);
+    const isStrictGridMode = this.isStrictGrid(config.layoutType);
     
     const updateSlot = (idx: number, w: number, h?: number, l?: number, t?: number) => {
       const slot = { ...slots[idx] };
       slot.layoutStyles = {
         ...slot.layoutStyles,
-        // In strict grid mode, don't persist width - let grid-template-columns control it
-        ...(isStrictGrid ? {} : { width: `${w}px` }),
+        // In strict grid mode, don't persist inline width — gridTemplateOverride controls columns
+        ...(isStrictGridMode ? {} : { width: `${w}px` }),
         ...(h !== undefined ? { height: `${h}px` } : {}),
-        position: (!isStrictGrid && (l !== undefined || t !== undefined)) ? 'absolute' : (slot.layoutStyles?.['position'] || 'relative')
+        position: (!isStrictGridMode && (l !== undefined || t !== undefined)) ? 'absolute' : (slot.layoutStyles?.['position'] || 'relative')
       };
 
-      if (isStrictGrid) {
+      if (isStrictGridMode) {
         delete slot.layoutStyles['left'];
         delete slot.layoutStyles['top'];
-        delete slot.layoutStyles['width']; // Ensure no inline width in strict grid
+        delete slot.layoutStyles['width'];
         slot.layoutStyles['position'] = 'relative';
         if (slot.styles) slot.styles = { ...slot.styles, transform: 'none' };
       } else {
@@ -434,27 +478,28 @@ export class SlotResizeService {
 
     updateSlot(index, newWidth, newHeight, left, top);
 
-    // If grid, also update neighbor persisted width
-    if (isStrictGrid) {
+    // For strict grids, clean up neighbor slots (no inline width/position) 
+    if (isStrictGridMode) {
       const neighborIdx = this.getHorizontalNeighborIndex(config.layoutType, index);
       if (neighborIdx !== -1) {
-          const neighborSize = this.customSizes().get(neighborIdx);
-          if (neighborSize) {
-              // Update neighbor but without width in strict grid
-              const neighborSlot = { ...slots[neighborIdx] };
-              neighborSlot.layoutStyles = {
-                ...neighborSlot.layoutStyles,
-                position: 'relative'
-              };
-              delete neighborSlot.layoutStyles['left'];
-              delete neighborSlot.layoutStyles['top'];
-              delete neighborSlot.layoutStyles['width'];
-              slots[neighborIdx] = neighborSlot;
-          }
+        const neighborSlot = { ...slots[neighborIdx] };
+        neighborSlot.layoutStyles = {
+          ...neighborSlot.layoutStyles,
+          position: 'relative'
+        };
+        delete neighborSlot.layoutStyles['left'];
+        delete neighborSlot.layoutStyles['top'];
+        delete neighborSlot.layoutStyles['width'];
+        slots[neighborIdx] = neighborSlot;
       }
     }
 
-    return { ...config, slots };
+    // Build and persist gridTemplateOverride for strict grids
+    const gridTemplateOverride = isStrictGridMode 
+      ? this.buildGridTemplateOverride(config.layoutType) 
+      : undefined;
+
+    return { ...config, slots, gridTemplateOverride };
   }
 
   /**

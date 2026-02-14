@@ -316,14 +316,15 @@ interface ComponentDefaultSize {
 
               <!-- Resize Anchors (8 points) -->
               <div *ngIf="((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
-                <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="vertical" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="horizontal" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="vertical" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="horizontal" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+
               </div>
             </div>
           </ng-container>
@@ -746,11 +747,17 @@ interface ComponentDefaultSize {
       border-radius: 12px;
       transition: border-color 0.2s ease, background-color 0.2s ease;
       background: rgba(15, 23, 42, 0.2);
-      overflow: hidden;
+      overflow: visible;
     }
 
-    /* Strict grid slots - let grid-template-columns control width */
-    .slot.strict-grid {
+    /* Clip child content so it doesn't spill out */
+    .slot > .slot-component {
+      overflow: hidden;
+      border-radius: inherit;
+    }
+
+    /* Strict grid slots - let grid-template-columns control width, but NOT during resize */
+    .slot.strict-grid:not(.resizing) {
       width: auto !important;
       min-width: 0;
     }
@@ -1157,13 +1164,13 @@ interface ComponentDefaultSize {
 
     /* Containment & Overflow Protection */
     .slot {
-      overflow: hidden;
+      overflow: visible;
       display: flex;
       flex-direction: column;
     }
 
-    /* In strict grid mode, let grid control the width */
-    .slot.strict-grid {
+    /* In strict grid mode, let grid control the width (except during resize) */
+    .slot.strict-grid:not(.resizing) {
       width: auto !important;
     }
 
@@ -1412,7 +1419,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.config = {
       ...this.config,
       layoutType: type,
-      slots: newSlots
+      slots: newSlots,
+      gridTemplateOverride: undefined
     };
     
     // Clear ephemeral service state so getCustomGridTemplate uses the default
