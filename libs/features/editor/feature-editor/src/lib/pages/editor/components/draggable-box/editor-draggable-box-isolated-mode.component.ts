@@ -1463,6 +1463,7 @@ export class EditorDraggableBoxIsolatedModeComponent implements OnInit, OnDestro
   apply() {
     const updatedConfig: IsolatedModeConfig = {
       ...this.config,
+      variant: this.editableContent.variant, // Explicitly update top-level variant
       content: {
         ...this.config.content,
         title: this.editableContent.title,
