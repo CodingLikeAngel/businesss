@@ -441,6 +441,53 @@ export class SlotResizeService {
   }
 
   /**
+   * Helper to find vertical siblings (slots in the same column) for multi-row grids
+   */
+  private getColumnSiblings(layoutType: LayoutType, currentIndex: number): number[] {
+    const siblings: number[] = [];
+    
+    // Grid 2x2 (2 rows, 2 columns)
+    // 0 1
+    // 2 3
+    if (layoutType === 'grid-2x2') {
+      if (currentIndex === 0) siblings.push(2);
+      if (currentIndex === 2) siblings.push(0);
+      if (currentIndex === 1) siblings.push(3);
+      if (currentIndex === 3) siblings.push(1);
+    }
+
+    // Grid 3x2 (2 rows, 3 columns)
+    // 0 1 2
+    // 3 4 5
+    if (layoutType.includes('grid-3x2')) {
+      const col = currentIndex % 3;
+      const row = Math.floor(currentIndex / 3);
+      // Determine sibling in the other row
+      const otherRow = row === 0 ? 1 : 0;
+      const siblingIndex = (otherRow * 3) + col;
+      siblings.push(siblingIndex);
+    }
+
+    // Grid 3x3 (3 rows, 3 columns)
+    // 0 1 2
+    // 3 4 5
+    // 6 7 8
+    if (layoutType.includes('grid-3x3')) {
+      const col = currentIndex % 3;
+      const row = Math.floor(currentIndex / 3);
+      
+      // Add siblings from all other rows
+      [0, 1, 2].forEach(r => {
+        if (r !== row) {
+          siblings.push((r * 3) + col);
+        }
+      });
+    }
+
+    return siblings;
+  }
+
+  /**
    * Aplicar resize a un slot específico y devolver nueva config
    */
   resizeSlot(
@@ -481,7 +528,20 @@ export class SlotResizeService {
 
     // CRITICAL FIX: Update customSizes signal so buildGridTemplateOverride sees the new size
     const currentSizes = new Map(this.customSizes());
-    currentSizes.set(index, { width: newWidth, height: newHeight || 0, left, top });
+    const sizeData = { width: newWidth, height: newHeight || 0, left, top };
+    
+    currentSizes.set(index, sizeData);
+
+    // Also sync width to column siblings in multi-row grids (e.g. grid-2x2)
+    // This ensures resizing row 2 updates the column even if row 1 had a value
+    if (isStrictGridMode) {
+      const siblings = this.getColumnSiblings(config.layoutType, index);
+      siblings.forEach(sibIdx => {
+         const existing = currentSizes.get(sibIdx) || { width: 0, height: 0, left: 0, top: 0 };
+         currentSizes.set(sibIdx, { ...existing, width: newWidth });
+      });
+    }
+
     this.customSizes.set(currentSizes);
 
     // For strict grids, clean up neighbor slots (no inline width/position) 
