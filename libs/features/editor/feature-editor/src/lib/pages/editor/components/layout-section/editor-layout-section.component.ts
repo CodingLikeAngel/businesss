@@ -314,8 +314,10 @@ interface ComponentDefaultSize {
 
               </ng-container>
 
-              <!-- Resize Anchors (8 points) -->
-              <div *ngIf="((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
+            </div>
+
+            <!-- Resize Anchors - OUTSIDE slot-component so they aren't clipped -->
+            <div *ngIf="((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
                 <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
                 <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="vertical" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
                 <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
@@ -324,8 +326,6 @@ interface ComponentDefaultSize {
                 <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="vertical" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
                 <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
                 <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="horizontal" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-
-              </div>
             </div>
           </ng-container>
         </div>
@@ -752,6 +752,8 @@ interface ComponentDefaultSize {
 
     /* Clip child content so it doesn't spill out */
     .slot > .slot-component {
+      width: 100%;
+      min-width: 0; /* Crucial for flex item shrinking */
       overflow: hidden;
       border-radius: inherit;
     }
@@ -1177,7 +1179,10 @@ interface ComponentDefaultSize {
     /* Slot component wrapper fills the slot */
     .slot-component {
       flex: 1 1 auto;
+      width: 100%;
+      min-width: 0;
       min-height: 0;
+      overflow: hidden;
     }
 
     /* Flow components should allow content to expand */
@@ -1199,6 +1204,7 @@ interface ComponentDefaultSize {
     .slot.flow-component .slot-component > * {
       width: 100% !important;
       max-width: 100% !important;
+      box-sizing: border-box;
     }
 
     /* Track changes in layout-section */

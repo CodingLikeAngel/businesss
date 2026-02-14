@@ -366,7 +366,8 @@ export class SlotResizeService {
   }
 
   /**
-   * Build grid template override string from current customSizes for persistence
+   * Build grid template override string from current customSizes for persistence.
+   * Uses proportional fr units (not raw pixels) so columns adapt to container width.
    */
   buildGridTemplateOverride(layoutType: LayoutType): string | undefined {
     const def = LAYOUT_DEFINITIONS.find(l => l.type === layoutType);
@@ -378,35 +379,35 @@ export class SlotResizeService {
       return (s && s.width > 0 && s.width < 2500) ? s.width : undefined;
     };
 
+    // Convert pixel widths to proportional fr values
+    const toFr = (widths: (number | undefined)[]): string | undefined => {
+      const resolvedWidths = widths.map(w => w || 0);
+      const minW = Math.max(1, Math.min(...resolvedWidths.filter(w => w > 0)));
+      const anyValid = resolvedWidths.some(w => w > 0);
+      if (!anyValid) return undefined;
+      
+      return resolvedWidths.map(w => {
+        if (w <= 0) return '1fr';
+        // Round to 2 decimal places for cleaner values
+        const fr = Math.round((w / minW) * 100) / 100;
+        return `${fr}fr`;
+      }).join(' ');
+    };
+
     if (layoutType === 'three-columns') {
-      const w0 = getW(0); const w1 = getW(1); const w2 = getW(2);
-      if (w0 || w1 || w2) {
-        return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
-      }
+      return toFr([getW(0), getW(1), getW(2)]);
     }
 
     if (layoutType.includes('two-columns') || layoutType.includes('sidebar-left') || layoutType.includes('sidebar-right')) {
-      const w0 = getW(0); const w1 = getW(1);
-      if (w0 || w1) {
-        return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
-      }
+      return toFr([getW(0), getW(1)]);
     }
 
     if (layoutType === 'grid-2x2') {
-      const w0 = getW(0) || getW(2);
-      const w1 = getW(1) || getW(3);
-      if (w0 || w1) {
-        return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
-      }
+      return toFr([getW(0) || getW(2), getW(1) || getW(3)]);
     }
 
     if (layoutType.includes('grid-3x')) {
-      const w0 = getW(0) || getW(3) || getW(6);
-      const w1 = getW(1) || getW(4) || getW(7);
-      const w2 = getW(2) || getW(5) || getW(8);
-      if (w0 || w1 || w2) {
-        return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
-      }
+      return toFr([getW(0) || getW(3) || getW(6), getW(1) || getW(4) || getW(7), getW(2) || getW(5) || getW(8)]);
     }
 
     return undefined;
