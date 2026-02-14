@@ -175,12 +175,12 @@ interface ComponentDefaultSize {
           [class.resizing]="resizeService.isResizing() && resizeService.activeSlotIndex() === i"
           [class.flow-component]="isFlowComponent(slot)"
           [class.preview-mode]="isPreviewMode && !showEditorControls"
-          [style.width]="getSlotWidth(i) !== null ? getSlotWidth(i) + 'px' : null"
-          [style.height]="(!isFlowComponent(slot) && getSlotHeight(i) !== null) ? getSlotHeight(i) + 'px' : null"
-          [style.minHeight]="(isFlowComponent(slot) && getSlotHeight(i) !== null) ? getSlotHeight(i) + 'px' : null"
-          [style.left]="getSlotLeft(i) !== null ? getSlotLeft(i) + 'px' : null"
-          [style.top]="getSlotTop(i) !== null ? getSlotTop(i) + 'px' : null"
-          [style.position]="isPositioned(i, slot) ? 'absolute' : 'relative'"
+          [class.strict-grid]="isStrictGridLayout()"
+          [style.height]="getSlotStyleHeight(i, slot)"
+          [style.minHeight]="getSlotStyleMinHeight(i, slot)"
+          [style.left]="getSlotStyleLeft(i)"
+          [style.top]="getSlotStyleTop(i)"
+          [style.position]="getSlotStylePosition(i, slot)"
           [attr.data-slot-index]="i"
           (click)="selectSlot(i, $event)">
           
@@ -300,7 +300,7 @@ interface ComponentDefaultSize {
                 <!-- DRAGGABLE BOX -->
                 <lib-ui-components-draggable-box-1
                   *ngSwitchCase="'draggable-box'"
-                  [variant]="$any(slot.componentVariant || globalVariant || 'secondary')"
+                  [variant]="$any(slot.content?.['variant'] || slot.componentVariant || globalVariant || 'secondary')"
                   [content]="slot.content?.['text'] || 'Caja'"
                   [customStyles]="getComponentStyles(slot, i)"
                   class="slot-box">
@@ -744,12 +744,20 @@ interface ComponentDefaultSize {
       min-height: 100px;
       border: 1px dashed rgba(99, 102, 241, 0.15);
       border-radius: 12px;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: border-color 0.2s ease, background-color 0.2s ease;
       background: rgba(15, 23, 42, 0.2);
+      overflow: hidden;
+    }
+
+    /* Strict grid slots - let grid-template-columns control width */
+    .slot.strict-grid {
+      width: auto !important;
+      min-width: 0;
     }
 
     .slot.resizing {
       transition: none !important;
+      z-index: 100;
     }
 
     .slot.preview-mode {
@@ -819,12 +827,19 @@ interface ComponentDefaultSize {
     .slot-component {
       position: relative;
       width: 100%;
-      min-height: 100%;
+      height: 100%;
+      min-height: inherit;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 1rem;
       box-sizing: border-box;
+    }
+
+    /* Flow components should expand to content */
+    .slot.flow-component .slot-component {
+      height: auto;
+      min-height: 100%;
     }
 
     .slot-controls {
@@ -1142,30 +1157,41 @@ interface ComponentDefaultSize {
 
     /* Containment & Overflow Protection */
     .slot {
-      overflow: hidden; /* Prevent children from breaking the grid */
+      overflow: hidden;
       display: flex;
       flex-direction: column;
     }
 
-    /* Force children to respect parent boundaries but allow auto height for flow */
-    .slot:not(.flow-component) > * {
-      width: 100% !important;
-      height: 100% !important;
-    }
-    
-    .slot.flow-component > * {
-      width: 100% !important;
-      height: auto !important;
+    /* In strict grid mode, let grid control the width */
+    .slot.strict-grid {
+      width: auto !important;
     }
 
-    .slot > * {
-      max-width: 100%;
-      max-height: 100%;
+    /* Slot component wrapper fills the slot */
+    .slot-component {
+      flex: 1 1 auto;
+      min-height: 0;
     }
 
-    /* Flow components should allow vertical overflow if auto-height is active */
+    /* Flow components should allow content to expand */
     .slot.flow-component {
       overflow: visible;
+      flex-shrink: 0;
+    }
+
+    .slot.flow-component .slot-component {
+      flex: 0 0 auto;
+    }
+
+    /* Force children to respect parent boundaries */
+    .slot:not(.flow-component) .slot-component > * {
+      width: 100% !important;
+      max-width: 100% !important;
+    }
+    
+    .slot.flow-component .slot-component > * {
+      width: 100% !important;
+      max-width: 100% !important;
     }
 
     /* Track changes in layout-section */
@@ -1866,7 +1892,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       case 'draggable-box':
         mappedContent = {
            ...updatedConfig.content,
-           text: updatedConfig.content.text || updatedConfig.content.label || 'Contenido'
+           text: updatedConfig.content.text || updatedConfig.content.label || 'Contenido',
+           variant: updatedConfig.content.variant // Ensure variant is preserved in content
         };
         newVariant = updatedConfig.variant || updatedConfig.content.variant;
         break;
@@ -1943,10 +1970,14 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     }
 
     // 4. Update the slot in the config
+    // Ensure variant is stored in BOTH componentVariant AND content.variant for consistency
     newSlots[this.editingSlotIndex] = {
       ...newSlots[this.editingSlotIndex],
       componentVariant: finalVariant,
-      content: mappedContent,
+      content: {
+        ...mappedContent,
+        variant: finalVariant // Ensure variant is also in content for template binding
+      },
       styles: finalAppearanceStyles,
       layoutStyles: layoutStyles
     };
@@ -2035,7 +2066,158 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   }
 
   /**
-   * Get effective slot width (custom or auto)
+   * Check if current layout is a strict grid type
+   */
+  isStrictGridLayout(): boolean {
+    return this.resizeService.isStrictGrid(this.config.layoutType);
+  }
+
+  /**
+   * Get slot height style - returns string for [style.height] binding
+   * In strict grid mode, we don't set inline height to let grid flow naturally
+   */
+  getSlotStyleHeight(index: number, slot: SlotConfig): string | null {
+    const isFlow = this.isFlowComponent(slot);
+    
+    // During active resize, show explicit height
+    if (this.resizeService.isResizing() && this.resizeService.activeSlotIndex() === index) {
+      const customSize = this.resizeService.customSizes().get(index);
+      if (customSize && customSize.height > 0) {
+        return customSize.height + 'px';
+      }
+    }
+    
+    // For flow components, don't set fixed height - let content determine it
+    if (isFlow) {
+      return null;
+    }
+    
+    // Check for persisted height in layoutStyles
+    const savedHeight = slot.layoutStyles?.['height'];
+    if (savedHeight) {
+      const parsed = parseInt(savedHeight);
+      if (!isNaN(parsed) && parsed > 0) {
+        return parsed + 'px';
+      }
+    }
+    
+    return null;
+  }
+
+  /**
+   * Get slot min-height style for flow components
+   */
+  getSlotStyleMinHeight(index: number, slot: SlotConfig): string | null {
+    const isFlow = this.isFlowComponent(slot);
+    
+    if (!isFlow) {
+      return null;
+    }
+    
+    // During active resize, show explicit min-height for flow components
+    if (this.resizeService.isResizing() && this.resizeService.activeSlotIndex() === index) {
+      const customSize = this.resizeService.customSizes().get(index);
+      if (customSize && customSize.height > 0) {
+        return customSize.height + 'px';
+      }
+    }
+    
+    // Check for persisted min-height in layoutStyles
+    const savedMinHeight = slot.layoutStyles?.['min-height'];
+    if (savedMinHeight) {
+      const parsed = parseInt(savedMinHeight);
+      if (!isNaN(parsed) && parsed > 0) {
+        return parsed + 'px';
+      }
+    }
+    
+    return null;
+  }
+
+  /**
+   * Get slot left position style
+   */
+  getSlotStyleLeft(index: number): string | null {
+    // In strict grid mode, no absolute positioning
+    if (this.isStrictGridLayout()) {
+      return null;
+    }
+    
+    // During active resize
+    if (this.resizeService.isResizing() && this.resizeService.activeSlotIndex() === index) {
+      const customSize = this.resizeService.customSizes().get(index);
+      if (customSize && customSize.left !== undefined && customSize.left !== null) {
+        return customSize.left + 'px';
+      }
+    }
+    
+    // Check persisted position
+    const slot = this.config.slots[index];
+    const savedLeft = slot?.layoutStyles?.['left'];
+    if (savedLeft) {
+      const parsed = parseInt(savedLeft);
+      if (!isNaN(parsed)) {
+        return parsed + 'px';
+      }
+    }
+    
+    return null;
+  }
+
+  /**
+   * Get slot top position style
+   */
+  getSlotStyleTop(index: number): string | null {
+    // In strict grid mode, no absolute positioning
+    if (this.isStrictGridLayout()) {
+      return null;
+    }
+    
+    // During active resize
+    if (this.resizeService.isResizing() && this.resizeService.activeSlotIndex() === index) {
+      const customSize = this.resizeService.customSizes().get(index);
+      if (customSize && customSize.top !== undefined && customSize.top !== null) {
+        return customSize.top + 'px';
+      }
+    }
+    
+    // Check persisted position
+    const slot = this.config.slots[index];
+    const savedTop = slot?.layoutStyles?.['top'];
+    if (savedTop) {
+      const parsed = parseInt(savedTop);
+      if (!isNaN(parsed)) {
+        return parsed + 'px';
+      }
+    }
+    
+    return null;
+  }
+
+  /**
+   * Get slot position style
+   */
+  getSlotStylePosition(index: number, slot: SlotConfig): string {
+    // In strict grid mode, always relative
+    if (this.isStrictGridLayout()) {
+      return 'relative';
+    }
+    
+    // Check if has explicit positioning
+    if (this.getSlotStyleLeft(index) !== null || this.getSlotStyleTop(index) !== null) {
+      return 'absolute';
+    }
+    
+    // Check persisted position
+    if (slot.layoutStyles?.['position'] === 'absolute' || slot.styles?.['position'] === 'absolute') {
+      return 'absolute';
+    }
+    
+    return 'relative';
+  }
+
+  /**
+   * Get effective slot width (custom or auto) - kept for backward compatibility
    */
   getSlotWidth(index: number): number | null {
     // During active resize, ALWAYS return the explicit width from the service
@@ -2061,7 +2243,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   }
 
   /**
-   * Get effective slot height (custom or auto)
+   * Get effective slot height (custom or auto) - kept for backward compatibility
    */
   getSlotHeight(index: number): number | null {
     // During active resize, ALWAYS return the explicit height from the service
@@ -2084,7 +2266,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   }
 
   /**
-   * Get reactive slot left position
+   * Get reactive slot left position - kept for backward compatibility
    */
   getSlotLeft(index: number): number | null {
     const customSize = this.resizeService.customSizes().get(index);
@@ -2095,7 +2277,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   }
 
   /**
-   * Get reactive slot top position
+   * Get reactive slot top position - kept for backward compatibility
    */
   getSlotTop(index: number): number | null {
     const customSize = this.resizeService.customSizes().get(index);

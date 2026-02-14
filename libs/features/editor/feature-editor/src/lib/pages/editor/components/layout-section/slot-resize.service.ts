@@ -3,10 +3,13 @@
 
 import { Injectable, signal, computed } from '@angular/core';
 import { SlotConfig, LayoutSectionConfig, LayoutType, LAYOUT_DEFINITIONS } from './layout-section.interfaces';
+import { ResizeAnchor } from './resize-handle.directive';
 
 export type ResizeDirection = 'horizontal' | 'vertical' | 'both' | 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se' | 'move';
-export type ResizeAnchor = 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se' | 'move';
 export type ResizeMode = 'auto-distribute' | 'fixed-total' | 'flexible';
+
+// Re-export ResizeAnchor from resize-handle.directive to avoid duplicate
+export { ResizeAnchor } from './resize-handle.directive';
 
 @Injectable({ providedIn: 'root' })
 export class SlotResizeService {
@@ -203,7 +206,7 @@ export class SlotResizeService {
         }
     }
 
-    // Apply Position
+    // Apply Position (only for non-strict grids)
     const finalLeft = isStrictGrid ? 0 : Math.max(0, this.startPosition.left + deltaLeft);
     const finalTop = isStrictGrid ? 0 : Math.max(0, this.startPosition.top + deltaTop);
 
@@ -247,13 +250,28 @@ export class SlotResizeService {
       const l = slot.layoutStyles?.['left'];
       const t = slot.layoutStyles?.['top'];
       
+      // In strict grid mode, don't sync width - let grid-template-columns control it
+      if (isStrict) {
+        // Only sync height and position info for flow components
+        const parsedH = h ? parseInt(h) : 0;
+        if (parsedH > 0 || l || t) {
+          sizes.set(i, {
+            width: 0, // No width in strict grid
+            height: isNaN(parsedH) ? 0 : parsedH,
+            left: undefined,
+            top: undefined
+          });
+        }
+        return; // Skip width syncing for strict grids
+      }
+      
+      // For non-strict layouts, sync everything
       if (w || h || l || t) {
         let parsedW = w ? parseInt(w) : 0;
         const parsedH = h ? parseInt(h) : 0;
         
-        // Anti-collapse filter: If we are in a strict grid and the width is huge, skip it
-        // Lowered to 800px to avoid breaking 3-column layouts with leftover single-column widths
-        if (isStrict && parsedW > 800) {
+        // Anti-collapse filter: If width is huge, skip it
+        if (parsedW > 800) {
             parsedW = 0; 
         }
 
@@ -279,24 +297,21 @@ export class SlotResizeService {
     if (!def) return '1fr';
 
     const customSizesMap = this.customSizes();
-    
     const isStrict = this.isStrictGrid(layoutType);
     
+    // During active resize, use the dynamic sizes from the service
+    const isActivelyResizing = this.isResizing();
+    
     const getW = (idx: number): number | undefined => {
-      // Prioritize active (ephemeral) resize state
-      const custom = customSizesMap.get(idx)?.width;
-      if (typeof custom === 'number' && custom > 0) {
-          // Safety: In strict grids (multi-column), avoid values that would push other columns out of screen
-          // If we are NOT in active resize, be very strict (800px).
-          // If we ARE in active resize, be slightly more lenient (950px).
-          const limit = this.isResizing() ? 950 : 800;
-          if (isStrict && custom > limit) return undefined;
-
-          if (custom > 2500) return undefined;
+      // During active resize, prioritize the ephemeral resize state
+      if (isActivelyResizing) {
+        const custom = customSizesMap.get(idx)?.width;
+        if (typeof custom === 'number' && custom > 0 && custom < 2500) {
           return custom;
+        }
       }
       
-      // Fallback to persisted layoutStyles (apply stricter cleanup here)
+      // Fallback to persisted layoutStyles (apply stricter cleanup)
       const saved = config.slots[idx]?.layoutStyles?.['width'];
       if (saved && typeof saved === 'string' && saved.includes('px')) {
         const p = parseInt(saved);
@@ -309,43 +324,42 @@ export class SlotResizeService {
       return undefined;
     };
 
-    // Only consider it an "active resize" if the width is within logical bounds for a column
-    // This hasActiveResize triggers the custom template (using px) instead of the default one
-    const hasActiveResize = Array.from(customSizesMap.values()).some(s => {
-        if (s.width <= 0 || s.width > 2500) return false;
-        if (isStrict && s.width > 950) return false;
-        return true;
-    });
-
+    // Build grid template based on layout type
     if (layoutType === 'three-columns') {
         const w0 = getW(0); const w1 = getW(1); const w2 = getW(2);
-        // We only use the pixel-based template if we have a valid custom width for at least one column
-        // that isn't breaking the layout.
-        if (hasActiveResize || (w0 && w1) || (w1 && w2) || (w0 && w2)) {
+        // During resize, use pixel values for the resizing column
+        if (isActivelyResizing && (w0 || w1 || w2)) {
             return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
         }
+        // Otherwise use default
+        return def.gridTemplate || '1fr 1fr 1fr';
     }
 
     if (layoutType.includes('two-columns') || layoutType.includes('sidebar-left') || layoutType.includes('sidebar-right')) {
         const w0 = getW(0); const w1 = getW(1);
-        if (hasActiveResize || (w0 && w1)) {
+        // During resize, use pixel values
+        if (isActivelyResizing && (w0 || w1)) {
             return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
         }
+        return def.gridTemplate || '1fr 1fr';
     }
 
     if (layoutType.includes('grid-')) {
-        // Grids usually keep their default distribution unless heavily customized
-        if (hasActiveResize) {
+        if (isActivelyResizing) {
             if (layoutType === 'grid-2x2') {
                 const w0 = getW(0) || getW(2);
                 const w1 = getW(1) || getW(3);
-                return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
+                if (w0 || w1) {
+                    return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
+                }
             }
             if (layoutType.includes('grid-3x')) {
                 const w0 = getW(0) || getW(3) || getW(6);
                 const w1 = getW(1) || getW(4) || getW(7);
                 const w2 = getW(2) || getW(5) || getW(8);
-                return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
+                if (w0 || w1 || w2) {
+                    return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
+                }
             }
         }
     }
@@ -399,7 +413,8 @@ export class SlotResizeService {
       const slot = { ...slots[idx] };
       slot.layoutStyles = {
         ...slot.layoutStyles,
-        width: `${w}px`,
+        // In strict grid mode, don't persist width - let grid-template-columns control it
+        ...(isStrictGrid ? {} : { width: `${w}px` }),
         ...(h !== undefined ? { height: `${h}px` } : {}),
         position: (!isStrictGrid && (l !== undefined || t !== undefined)) ? 'absolute' : (slot.layoutStyles?.['position'] || 'relative')
       };
@@ -407,6 +422,7 @@ export class SlotResizeService {
       if (isStrictGrid) {
         delete slot.layoutStyles['left'];
         delete slot.layoutStyles['top'];
+        delete slot.layoutStyles['width']; // Ensure no inline width in strict grid
         slot.layoutStyles['position'] = 'relative';
         if (slot.styles) slot.styles = { ...slot.styles, transform: 'none' };
       } else {
@@ -424,7 +440,16 @@ export class SlotResizeService {
       if (neighborIdx !== -1) {
           const neighborSize = this.customSizes().get(neighborIdx);
           if (neighborSize) {
-              updateSlot(neighborIdx, neighborSize.width);
+              // Update neighbor but without width in strict grid
+              const neighborSlot = { ...slots[neighborIdx] };
+              neighborSlot.layoutStyles = {
+                ...neighborSlot.layoutStyles,
+                position: 'relative'
+              };
+              delete neighborSlot.layoutStyles['left'];
+              delete neighborSlot.layoutStyles['top'];
+              delete neighborSlot.layoutStyles['width'];
+              slots[neighborIdx] = neighborSlot;
           }
       }
     }
