@@ -479,6 +479,11 @@ export class SlotResizeService {
 
     updateSlot(index, newWidth, newHeight, left, top);
 
+    // CRITICAL FIX: Update customSizes signal so buildGridTemplateOverride sees the new size
+    const currentSizes = new Map(this.customSizes());
+    currentSizes.set(index, { width: newWidth, height: newHeight || 0, left, top });
+    this.customSizes.set(currentSizes);
+
     // For strict grids, clean up neighbor slots (no inline width/position) 
     if (isStrictGridMode) {
       const neighborIdx = this.getHorizontalNeighborIndex(config.layoutType, index);

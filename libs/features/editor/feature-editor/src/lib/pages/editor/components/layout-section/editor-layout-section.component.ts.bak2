@@ -1838,7 +1838,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       'ui-button': { width: Math.min(220, detectedWidth), height: 50 },
       'ui-title': { width: detectedWidth, height: 100 },
       'ui-accordion': { width: detectedWidth, height: 250 },
-      'draggable-box': { width: detectedWidth, height: 120 },
+      'draggable-box': { width: Math.min(280, detectedWidth), height: 120 },
       'ui-list': { width: detectedWidth, height: 300 },
       'ui-card-product': { width: Math.min(320, detectedWidth), height: 480 },
       'ui-chip': { width: 120, height: 40 },

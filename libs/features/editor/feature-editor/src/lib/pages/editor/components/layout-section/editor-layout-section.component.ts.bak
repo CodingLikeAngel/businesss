@@ -1838,7 +1838,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       'ui-button': { width: Math.min(220, detectedWidth), height: 50 },
       'ui-title': { width: detectedWidth, height: 100 },
       'ui-accordion': { width: detectedWidth, height: 250 },
-      'draggable-box': { width: detectedWidth, height: 120 },
+      'draggable-box': { width: Math.min(280, detectedWidth), height: 120 },
       'ui-list': { width: detectedWidth, height: 300 },
       'ui-card-product': { width: Math.min(320, detectedWidth), height: 480 },
       'ui-chip': { width: 120, height: 40 },
@@ -1919,44 +1919,68 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     const finalVariant = newVariant || slot.componentVariant;
     const newSlots = [...this.config.slots];
     const finalAppearanceStyles = { ...updatedConfig.styles };
-    let layoutStyles = { ...(newSlots[this.editingSlotIndex].layoutStyles || {}) };
+    const layoutStyles = { ...(newSlots[this.editingSlotIndex].layoutStyles || {}) };
     
-    // 2. Standardized Size & Position Sync (Robust) using the Service
-    // This ensures that "strict grids" get their gridTemplateOverride updated
-    // instead of just setting a width that gets ignored.
-    if (updatedConfig.size && updatedConfig.position && updatedConfig.canvasSize) {
+    // 2. Standardized Size Sync (Robust)
+    if (updatedConfig.size) {
         const validated = this.resizeService.validateDimensions(updatedConfig.size.width, updatedConfig.size.height);
         
-        // Calculate validated position
+        // ONLY save fixed width if NOT in a strict grid layout
+        // In grids, the width is managed by the grid template
+        if (!this.resizeService.isStrictGrid(this.config.layoutType)) {
+            layoutStyles['width'] = validated.width + 'px';
+        } else {
+            // Ensure any legacy width is removed when applying isolated changes in a grid
+            delete layoutStyles['width'];
+        }
+        
+        const isFlow = this.FLOW_COMPONENTS.some(type => slot.componentType.includes(type));
+
+        if (isFlow) {
+             layoutStyles['height'] = 'auto';
+             layoutStyles['min-height'] = validated.height + 'px';
+        } else {
+             layoutStyles['height'] = validated.height + 'px';
+        }
+        
+        delete finalAppearanceStyles['width'];
+        delete finalAppearanceStyles['height'];
+    }
+    
+    // 3. Standardized Position Sync (Robust)
+    if (updatedConfig.position && updatedConfig.canvasSize) {
+        const itemW = updatedConfig.size?.width || 200;
+        const itemH = updatedConfig.size?.height || 100;
+        
         const validatedPos = this.resizeService.validatePosition(
           updatedConfig.position.x, 
           updatedConfig.position.y,
           updatedConfig.canvasSize.width,
           updatedConfig.canvasSize.height,
-          validated.width,
-          validated.height
+          itemW,
+          itemH
         );
 
-        // Updates config with new layoutStyles AND gridTemplateOverride if needed
-        this.config = this.resizeService.resizeSlot(
-            this.config,
-            this.editingSlotIndex,
-            validated.width,
-            validated.height,
-            validatedPos.left,
-            validatedPos.top
+        const isStrictGrid = this.resizeService.isStrictGrid(this.config.layoutType);
+        const wasAbsolute = slot.layoutStyles?.['position'] === 'absolute' || !!slot.layoutStyles?.['left'];
+        const hasMoved = this.editingOriginMetrics && (
+          Math.abs(validatedPos.left - this.editingOriginMetrics.localX) > 15 ||
+          Math.abs(validatedPos.top - this.editingOriginMetrics.localY) > 15
         );
 
-        // Re-fetch the updated slot to get the correct layoutStyles
-        const updatedSlot = this.config.slots[this.editingSlotIndex];
-        layoutStyles = { ...updatedSlot.layoutStyles };
-        
-        // Clean up visual styles that shouldn't be there if layout service handled it
-        delete finalAppearanceStyles['width'];
-        delete finalAppearanceStyles['height'];
-        delete finalAppearanceStyles['left'];
-        delete finalAppearanceStyles['top'];
-        delete finalAppearanceStyles['position'];
+        if (!isStrictGrid && (wasAbsolute || hasMoved)) {
+          layoutStyles['left'] = validatedPos.left + 'px';
+          layoutStyles['top'] = validatedPos.top + 'px';
+          layoutStyles['position'] = 'absolute';
+          
+          delete finalAppearanceStyles['left'];
+          delete finalAppearanceStyles['top'];
+          delete finalAppearanceStyles['position'];
+        } else {
+          delete layoutStyles['left'];
+          delete layoutStyles['top'];
+          layoutStyles['position'] = 'relative';
+        }
     }
 
     // 4. Update the slot in the config
