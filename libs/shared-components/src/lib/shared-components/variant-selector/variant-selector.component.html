@@ -2,31 +2,46 @@
   <!-- Sidebar Header -->
   <header class="sidebar-v2-header">
     <div class="brand-v2">
-       <div class="logo-box">
-          <span class="logo-dot"></span>
-       </div>
-       <div class="brand-text" *ngIf="!isCollapsed">
-          <h1>ANTO</h1>
-          <span class="version">STUDIOS v2.0</span>
-       </div>
+      <div class="logo-box">
+        <span class="logo-dot"></span>
+      </div>
+      <div class="brand-text" *ngIf="!isCollapsed">
+        <h1>ANTO</h1>
+        <span class="version">STUDIOS v2.0</span>
+      </div>
     </div>
     <button class="toggle-v2-btn" (click)="toggleCollapse.emit()">
-       <span class="chevron">{{ isCollapsed ? '»' : '«' }}</span>
+      <span class="chevron">{{ isCollapsed ? '»' : '«' }}</span>
     </button>
   </header>
 
   <!-- Sidebar Dock (Primary Navigation) -->
   <nav class="sidebar-v2-dock">
     <div class="dock-top">
-      <button class="dock-item" [class.active]="activeTab === 'pages'" (click)="setActiveTab('pages')" title="Mapa de Sitio">
+      <button
+        class="dock-item"
+        [class.active]="activeTab === 'pages'"
+        (click)="setActiveTab('pages')"
+        title="Mapa de Sitio"
+      >
         <span class="dock-icon">🗺️</span>
         <span class="dock-label" *ngIf="!isCollapsed">Páginas</span>
       </button>
-      <button class="dock-item" [class.active]="activeTab === 'structure'" (click)="setActiveTab('structure')" title="Estructura">
+      <button
+        class="dock-item"
+        [class.active]="activeTab === 'structure'"
+        (click)="setActiveTab('structure')"
+        title="Estructura"
+      >
         <span class="dock-icon">🏗️</span>
         <span class="dock-label" *ngIf="!isCollapsed">Estructura</span>
       </button>
-      <button class="dock-item" [class.active]="activeTab === 'explorer'" (click)="setActiveTab('explorer')" title="Librería">
+      <button
+        class="dock-item"
+        [class.active]="activeTab === 'explorer'"
+        (click)="setActiveTab('explorer')"
+        title="Librería"
+      >
         <span class="dock-icon">🧩</span>
         <span class="dock-label" *ngIf="!isCollapsed">Bloques</span>
       </button>
@@ -35,11 +50,21 @@
     <div class="dock-divider" *ngIf="selectedSection || selectedElement"></div>
 
     <div class="dock-contextual" *ngIf="selectedSection || selectedElement">
-      <button class="dock-item contextual" [class.active]="activeTab === 'content'" (click)="setActiveTab('content')" title="Contenido">
+      <button
+        class="dock-item contextual"
+        [class.active]="activeTab === 'content'"
+        (click)="setActiveTab('content')"
+        title="Contenido"
+      >
         <span class="dock-icon">✍️</span>
         <span class="dock-label" *ngIf="!isCollapsed">Redacción</span>
       </button>
-      <button class="dock-item contextual" [class.active]="activeTab === 'design'" (click)="setActiveTab('design')" title="Diseño">
+      <button
+        class="dock-item contextual"
+        [class.active]="activeTab === 'design'"
+        (click)="setActiveTab('design')"
+        title="Diseño"
+      >
         <span class="dock-icon">🎨</span>
         <span class="dock-label" *ngIf="!isCollapsed">Estilo</span>
       </button>
@@ -47,7 +72,12 @@
 
     <div class="dock-bottom">
       <div class="dock-divider"></div>
-      <button class="dock-item" [class.active]="activeTab === 'general'" (click)="setActiveTab('general')" title="Ajustes">
+      <button
+        class="dock-item"
+        [class.active]="activeTab === 'general'"
+        (click)="setActiveTab('general')"
+        title="Ajustes"
+      >
         <span class="dock-icon">⚙️</span>
         <span class="dock-label" *ngIf="!isCollapsed">Ajustes</span>
       </button>
@@ -59,12 +89,13 @@
     <!-- Scrollable Content Area -->
     <div class="panel-scroll-area">
       <div class="panel-inner-v2">
-        
         <!-- PAGES PANEL -->
         <section class="panel-v2" *ngIf="activeTab === 'pages'">
           <lib-preset-selector></lib-preset-selector>
           <div class="panel-divider"></div>
-          <lib-page-management (pageSelected)="setActiveTab('structure')"></lib-page-management>
+          <lib-page-management
+            (pageSelected)="setActiveTab('structure')"
+          ></lib-page-management>
         </section>
 
         <!-- STRUCTURE PANEL -->
@@ -112,73 +143,145 @@
         <!-- GENERAL PANEL -->
         <section class="panel-v2" *ngIf="activeTab === 'general'">
           <header class="panel-v2-header">
-              <h2>Preferencias Globais</h2>
-              <p>Configura el ADN visual de todo tu proyecto.</p>
+            <h2>Preferencias Globais</h2>
+            <p>Configura el ADN visual de todo tu proyecto.</p>
           </header>
 
           <div class="settings-v2-list">
-              <div class="setting-v2-card">
-                  <label>TEMA PREDETERMINADO</label>
-                  <div class="custom-select-v2">
-                      <lib-ui-components-input
-                          type="select"
-                          [options]="variantOptions"
-                          [(ngModel)]="globalVariant"
-                          (ngModelChange)="onGlobalVariantChange()"
-                      ></lib-ui-components-input>
-                  </div>
+            <div class="setting-v2-card">
+              <label>TEMA PREDETERMINADO</label>
+              <div class="custom-select-v2">
+                <lib-ui-components-input
+                  type="select"
+                  [options]="variantOptions"
+                  [(ngModel)]="globalVariant"
+                  (ngModelChange)="onGlobalVariantChange()"
+                ></lib-ui-components-input>
               </div>
+            </div>
 
-              <div class="actions-v2-group">
-                  <button class="action-v2-btn" (click)="saveAsCustomTemplate()">
-                      <span class="icon">💾</span> 
-                      <div class="txt">
-                          <strong>Guardar Plantilla</strong>
-                          <p>Convierte este diseño en preset</p>
-                      </div>
-                  </button>
-                  <button class="action-v2-btn primary" (click)="exportProject()">
-                      <span class="icon">🚀</span> 
-                      <div class="txt">
-                          <strong>Exportar Código</strong>
-                          <p>Generar bundle de producción</p>
-                      </div>
-                  </button>
-                  <button class="action-v2-btn secondary" (click)="exportAsHtml()">
-                      <span class="icon">🌍</span> 
-                      <div class="txt">
-                          <strong>Descargar Vista</strong>
-                          <p>Generar archivo HTML estático</p>
-                      </div>
-                  </button>
-                  <button class="action-v2-btn" (click)="resetLayout()" *ngIf="selectedSection">
-                      <span class="icon">♻️</span> 
-                      <div class="txt">
-                          <strong>Arreglar Sección</strong>
-                          <p>Recuperar layout original</p>
-                      </div>
-                  </button>
-                  <button class="action-v2-btn danger" (click)="resetConfiguration()">
-                      <span class="icon">⚠️</span> 
-                      <div class="txt">
-                          <strong>Reiniciar Proyecto</strong>
-                          <p>Borrar todo el contenido</p>
-                      </div>
-                  </button>
+            <div class="setting-v2-card">
+              <label>FONDO DE PÁGINA</label>
+              <div
+                class="color-control-group"
+                style="
+                  display: flex;
+                  gap: 8px;
+                  align-items: center;
+                  margin-top: 4px;
+                "
+              >
+                <div
+                  class="color-preview"
+                  [style.backgroundColor]="
+                    globalStyles['backgroundColor'] || '#ffffff'
+                  "
+                  style="
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 6px;
+                    border: 1px solid rgba(255, 255, 255, 0.2);
+                    position: relative;
+                    overflow: hidden;
+                  "
+                >
+                  <input
+                    type="color"
+                    [ngModel]="globalStyles['backgroundColor'] || '#ffffff'"
+                    (ngModelChange)="onGlobalBackgroundChange($event)"
+                    style="
+                      position: absolute;
+                      top: -50%;
+                      left: -50%;
+                      width: 200%;
+                      height: 200%;
+                      opacity: 0;
+                      cursor: pointer;
+                    "
+                  />
+                </div>
+                <input
+                  type="text"
+                  [ngModel]="globalStyles['backgroundColor'] || '#ffffff'"
+                  (ngModelChange)="onGlobalBackgroundChange($event)"
+                  placeholder="#ffffff"
+                  style="
+                    flex: 1;
+                    padding: 0 10px;
+                    height: 36px;
+                    border-radius: 6px;
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    background: rgba(0, 0, 0, 0.2);
+                    color: white;
+                    font-family: monospace;
+                  "
+                />
               </div>
+            </div>
+
+            <div class="actions-v2-group">
+              <button class="action-v2-btn" (click)="saveAsCustomTemplate()">
+                <span class="icon">💾</span>
+                <div class="txt">
+                  <strong>Guardar Plantilla</strong>
+                  <p>Convierte este diseño en preset</p>
+                </div>
+              </button>
+              <button class="action-v2-btn primary" (click)="exportProject()">
+                <span class="icon">🚀</span>
+                <div class="txt">
+                  <strong>Exportar Código</strong>
+                  <p>Generar bundle de producción</p>
+                </div>
+              </button>
+              <button class="action-v2-btn secondary" (click)="exportAsHtml()">
+                <span class="icon">🌍</span>
+                <div class="txt">
+                  <strong>Descargar Vista</strong>
+                  <p>Generar archivo HTML estático</p>
+                </div>
+              </button>
+              <button
+                class="action-v2-btn"
+                (click)="resetLayout()"
+                *ngIf="selectedSection"
+              >
+                <span class="icon">♻️</span>
+                <div class="txt">
+                  <strong>Arreglar Sección</strong>
+                  <p>Recuperar layout original</p>
+                </div>
+              </button>
+              <button
+                class="action-v2-btn danger"
+                (click)="resetConfiguration()"
+              >
+                <span class="icon">⚠️</span>
+                <div class="txt">
+                  <strong>Reiniciar Proyecto</strong>
+                  <p>Borrar todo el contenido</p>
+                </div>
+              </button>
+            </div>
           </div>
         </section>
 
         <!-- ISOLATED MODE PANEL -->
-        <section class="panel-v2 isolated-mode-panel" *ngIf="currentStep === 'isolated-mode'">
+        <section
+          class="panel-v2 isolated-mode-panel"
+          *ngIf="currentStep === 'isolated-mode'"
+        >
           <header class="panel-v2-header isolated-mode-header">
             <button class="back-btn" (click)="onIsolatedModeClosed()">
               <span class="arrow">←</span> Volver al Editor
             </button>
             <h2>🎯 {{ getIsolatedModeTitle() }}</h2>
-            <p>Editor especializado para {{ selectedSection?.label || 'esta sección' }}</p>
+            <p>
+              Editor especializado para
+              {{ selectedSection?.label || 'esta sección' }}
+            </p>
           </header>
-          
+
           <div class="isolated-mode-content">
             <!-- Promotions Isolated Mode -->
             <lib-editor-promotions-isolated-mode
@@ -213,11 +316,17 @@
             ></lib-editor-spa-isolated-mode>
 
             <!-- Generic Isolated Mode (fallback) -->
-            <div class="generic-isolated-mode" *ngIf="activeIsolatedMode === 'generic'">
+            <div
+              class="generic-isolated-mode"
+              *ngIf="activeIsolatedMode === 'generic'"
+            >
               <div class="mode-info">
                 <span class="icon">✨</span>
                 <h3>Editor Avanzado</h3>
-                <p>Esta sección utiliza el editor estándar con herramientas adicionales.</p>
+                <p>
+                  Esta sección utiliza el editor estándar con herramientas
+                  adicionales.
+                </p>
               </div>
               <button class="btn-primary" (click)="onIsolatedModeClosed()">
                 Volver al Editor
@@ -225,7 +334,6 @@
             </div>
           </div>
         </section>
-        
       </div>
     </div>
 

@@ -193,12 +193,17 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
             // Use a simple but effective check to avoid loops
             const storeSectionsStr = JSON.stringify(currentStorePage.sections);
             const vsSectionsStr = JSON.stringify(page.sections);
+            const storeGlobalStylesStr = JSON.stringify(currentStorePage.globalStyles || {});
+            const vsGlobalStylesStr = JSON.stringify(page.globalStyles || {});
             
-            if (storeSectionsStr !== vsSectionsStr) {
-              console.log('🔄 Syncing VariantService -> Store (Sections/Content Update Detected)');
+            if (storeSectionsStr !== vsSectionsStr || storeGlobalStylesStr !== vsGlobalStylesStr) {
+              console.log('🔄 Syncing VariantService -> Store (Update Detected)');
               this.store.dispatch(PageActions.updatePage({ 
                 pageId: page.id, 
-                changes: { sections: page.sections as any } 
+                changes: { 
+                  sections: page.sections as any,
+                  globalStyles: page.globalStyles as any
+                } 
               }));
             }
           }

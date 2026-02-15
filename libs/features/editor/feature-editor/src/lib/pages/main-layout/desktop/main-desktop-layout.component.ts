@@ -1,4 +1,4 @@
-import { Component, HostListener, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, HostListener, CUSTOM_ELEMENTS_SCHEMA, inject } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import {
   UIFooterComponent,
@@ -10,6 +10,9 @@ import { MainLayoutBaseComponent } from '../main-layout-base.component';
 
 import { EditorHeaderSectionComponent } from '../../editor/components/header/editor-header-section.component';
 import { EditorFooterSectionComponent } from '../../editor/components/footer/editor-footer-section.component';
+import { Store } from '@ngrx/store';
+import * as PageSelectors from '../../../store/selectors/page.selectors';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'lib-main-desktop-layout',
@@ -30,6 +33,12 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
   isSidebarCollapsed = false;
   sidebarWidth = 400;
   isResizing = false;
+
+  private store = inject(Store);
+  
+  backgroundColor$ = this.store.select(PageSelectors.selectCurrentPage).pipe(
+    map((page: any) => page?.globalStyles?.backgroundColor || '')
+  );
 
   @HostListener('window:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {

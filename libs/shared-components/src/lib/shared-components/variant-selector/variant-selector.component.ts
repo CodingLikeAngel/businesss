@@ -20,7 +20,8 @@ import {
   TestimonialsConfig,
   FeaturesConfig,
   ChartConfig,
-  StatsConfig
+  StatsConfig,
+  ElementStyles
 } from '../../../services/variant.service';
 
 // Import subcomponents
@@ -76,6 +77,7 @@ export class VariantSelectorComponent implements OnInit {
   // Core properties
   globalVariant: string;
   selectorVariant = 'glass';
+  globalStyles: ElementStyles = {};
 
   // Selected items for content/design editing
   // Selected items synced with UiStateService
@@ -227,6 +229,12 @@ export class VariantSelectorComponent implements OnInit {
       this.globalVariant = variant;
     });
 
+    this.variantService.currentPage$.subscribe(page => {
+      if (page) {
+        this.globalStyles = { ...(page.globalStyles || {}) };
+      }
+    });
+
     this.variantService.builderStep$.subscribe((step) => {
       this.currentStep = step;
     });
@@ -272,6 +280,14 @@ export class VariantSelectorComponent implements OnInit {
     // When changing the global variant manually, we want it to apply everywhere,
     // so we clear specific component overrides that might block it.
     this.configurationService.clearAllComponentVariants();
+  }
+
+  onGlobalBackgroundChange(color: string) {
+    const currentPage = this.variantService.getCurrentPage();
+    if (currentPage) {
+       const newStyles = { ...currentPage.globalStyles, backgroundColor: color };
+       this.variantService.updatePage(currentPage.id, { globalStyles: newStyles });
+    }
   }
 
   clearComponentVariants() {

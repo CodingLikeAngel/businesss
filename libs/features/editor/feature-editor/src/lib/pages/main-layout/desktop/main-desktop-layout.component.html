@@ -110,7 +110,7 @@
             <div class="camera"></div>
           </div>
 
-          <div class="frame-content">
+          <div class="frame-content" [style.backgroundColor]="backgroundColor$ | async">
             <!-- Header -->
             <div *ngIf="headerConfig.visible">
               <lib-editor-header-section
