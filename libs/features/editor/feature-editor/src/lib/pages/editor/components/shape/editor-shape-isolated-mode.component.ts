@@ -3,6 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UIShapeComponent } from '@negocio/ui-components';
 import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+
+// Re-export IsolatedModeConfig for convenience
+export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 @Component({
   selector: 'lib-editor-shape-isolated-mode',
@@ -276,6 +280,6 @@ export class EditorShapeIsolatedModeComponent extends BaseIsolatedModeComponent 
     });
   }
 
-  onCanvasMouseDown(event: MouseEvent) { }
+  override onCanvasMouseDown(event: MouseEvent) { }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

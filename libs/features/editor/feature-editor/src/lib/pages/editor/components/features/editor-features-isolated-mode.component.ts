@@ -102,7 +102,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                 <div class="control-group">
                   <label>Columnas (Desktop)</label>
                   <div class="grid-cols-selector">
-                    <button *for="let n of [1,2,3,4,5,6]" 
+                    <button *ngFor="let n of [1,2,3,4,5,6]" 
                             [class.active]="editableContent.gridCols === n" 
                             (click)="editableContent.gridCols = n; onContentChange()">
                       {{ n }}
@@ -409,6 +409,6 @@ export class EditorFeaturesIsolatedModeComponent extends BaseIsolatedModeCompone
     });
   }
 
-  onCanvasMouseDown(event: MouseEvent) { }
+  override onCanvasMouseDown(event: MouseEvent) { }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

@@ -2,8 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UICardAnimatedComponent } from '@negocio/ui-components';
-import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
-import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-isolated-mode.component';
+import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 
 @Component({
   selector: 'lib-editor-card-animated-isolated-mode',
@@ -16,38 +15,33 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
         <!-- ===== HEADER ===== -->
         <div class="isolated-mode-header">
           <div class="header-breadcrumb">
-            <span class="mode-badge">🎯 MODO AISLADO</span>
+            <span class="mode-badge">✨ ANIMATED CARD</span>
             <span class="separator">/</span>
-            <span class="component-name">CARD ANIMATED</span>
+            <span class="component-name">MOTION GOLD</span>
           </div>
           
           <div class="header-actions">
             <div class="action-group">
               <button class="icon-btn" (click)="undo()" [disabled]="!canUndo" title="Deshacer (Ctrl+Z)">
-                <span>↶</span>
+                <span class="icon">↶</span>
               </button>
               <button class="icon-btn" (click)="redo()" [disabled]="!canRedo" title="Rehacer (Ctrl+Y)">
-                <span>↷</span>
+                <span class="icon">↷</span>
               </button>
             </div>
             
-            <div class="header-divider"></div>
+            <div class="divider"></div>
             
             <div class="action-group">
-              <button class="icon-btn" (click)="toggleGrid()" 
-                      [class.active]="showGrid" title="Cuadrícula (G)">
-                <span>#</span>
+              <button class="icon-btn" (click)="toggleGrid()" [class.active]="showGrid" title="Cuadrícula (G)">
+                <span class="icon">#</span>
               </button>
-              <button class="icon-btn" (click)="toggleSnap()" 
-                      [class.active]="snapToGrid" title="Snap (S)">
-                <span>⊞</span>
-              </button>
-              <button class="icon-btn" (click)="resetPosition()" title="Reset (R)">
-                <span>↺</span>
+              <button class="icon-btn" (click)="toggleSnap()" [class.active]="snapToGrid" title="Snap (S)">
+                <span class="icon">⊞</span>
               </button>
             </div>
 
-            <div class="header-divider"></div>
+            <div class="divider"></div>
 
             <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
           </div>
@@ -58,148 +52,105 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
           
           <!-- Sidebar Controls -->
           <div class="controls-sidebar">
+            <div class="sidebar-tabs">
+              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">CONTENIDO</button>
+              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">DISEÑO</button>
+            </div>
+
             <div class="sidebar-scroll-content">
               
               <!-- CONTENT SECTION -->
-              <div class="sidebar-section">
+              <div class="sidebar-section animate-fade-in" *ngIf="activeTab === 'content'">
                 <div class="section-header">
                   <span class="section-icon">📝</span>
-                  <h4>CONTENIDO</h4>
+                  <h4>DATOS DE LA TARJETA</h4>
                 </div>
                 
                 <div class="control-group">
                   <label>Título</label>
-                  <input type="text" [(ngModel)]="editableContent.title" (ngModelChange)="onContentChange()" class="premium-input" placeholder="Card Title...">
+                  <input type="text" [(ngModel)]="editableContent.title" (ngModelChange)="onContentChange()" class="premium-input" placeholder="Título...">
                 </div>
 
                 <div class="control-group">
                   <label>Descripción</label>
-                  <textarea [(ngModel)]="editableContent.description" (ngModelChange)="onContentChange()" class="premium-textarea" rows="3" placeholder="Card description..."></textarea>
+                  <textarea [(ngModel)]="editableContent.description" (ngModelChange)="onContentChange()" class="premium-textarea h-24" placeholder="Breve texto descriptivo..."></textarea>
                 </div>
 
                 <div class="control-group">
-                  <label>URL de Imagen</label>
+                  <label>Imagen de Fondo (URL)</label>
                   <input type="text" [(ngModel)]="editableContent.image" (ngModelChange)="onContentChange()" class="premium-input" placeholder="https://...">
                 </div>
-
-                <div class="image-preview" *ngIf="editableContent.image">
-                  <img [src]="editableContent.image" alt="Preview" style="width: 100%; height: 120px; object-fit: cover; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1);">
-                </div>
               </div>
 
-              <!-- ANIMATION SECTION -->
-              <div class="sidebar-section">
+              <!-- DESIGN SECTION -->
+              <div class="sidebar-section animate-fade-in" *ngIf="activeTab === 'design'">
                 <div class="section-header">
-                  <span class="section-icon">✨</span>
-                  <h4>ANIMACIÓN</h4>
+                  <span class="section-icon">🎬</span>
+                  <h4>ANIMACIÓN & VARIANTE</h4>
                 </div>
                 
                 <div class="control-group">
-                  <label>Tipo de Animación</label>
-                  <div class="select-wrapper">
-                    <select [(ngModel)]="editableContent['animation']" (ngModelChange)="onContentChange()" class="premium-select">
-                      <option value="none">Sin Animación</option>
-                      <option value="fade">Fade In</option>
-                      <option value="slide">Slide Up</option>
-                      <option value="zoom">Zoom In</option>
-                      <option value="bounce">Bounce</option>
-                      <option value="flip">Flip</option>
-                      <option value="rotate">Rotate</option>
-                    </select>
-                  </div>
+                  <label>Tipo de Entrada</label>
+                  <select [(ngModel)]="editableContent.animation" (ngModelChange)="onContentChange()" class="premium-select">
+                    <option value="fade">Fade In (Suave)</option>
+                    <option value="slide">Slide (Desplazar)</option>
+                    <option value="zoom">Zoom (Escala)</option>
+                    <option value="flip">Flip (Rotar)</option>
+                    <option value="none">Sin Animación</option>
+                  </select>
                 </div>
 
-                <div class="control-row">
-                  <div class="control-group half">
-                    <label>Duración (ms)</label>
-                    <input type="number" [(ngModel)]="editableContent['duration']" (ngModelChange)="onContentChange()" class="premium-input" placeholder="500">
-                  </div>
-                  <div class="control-group half">
-                    <label>Delay (ms)</label>
-                    <input type="number" [(ngModel)]="editableContent['delay']" (ngModelChange)="onContentChange()" class="premium-input" placeholder="0">
-                  </div>
-                </div>
-              </div>
-
-              <!-- APPEARANCE SECTION -->
-              <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">🎨</span>
-                  <h4>APARIENCIA</h4>
-                </div>
-                
                 <div class="control-group">
                   <label>Variante Visual</label>
-                  <div class="select-wrapper">
-                    <select [(ngModel)]="editableContent['variant']" (ngModelChange)="onContentChange()" class="premium-select">
-                      <option value="default">Estándar</option>
-                      <option value="primary">Primario</option>
-                      <option value="secondary">Secundario</option>
-                      <option value="glass">Vidrio (Glass)</option>
-                      <option value="neon">Neón</option>
-                      <option value="cyberpunk">Cyberpunk</option>
-                    </select>
-                  </div>
-                  <p class="variant-hint" *ngIf="!editableContent['variant']">
-                    Heredando: {{ config.content['globalVariant'] || 'glass' }}
-                  </p>
+                  <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()" class="premium-select">
+                    <option value="default">Estándar</option>
+                    <option value="glass">Glassmorphism</option>
+                    <option value="primary">Acento Primario</option>
+                    <option value="neon">Brillo Neón</option>
+                  </select>
+                </div>
+
+                <div class="divider-section"></div>
+
+                <div class="section-header mt-6">
+                  <span class="section-icon">🎨</span>
+                  <h4>CUSTOMLOOK</h4>
                 </div>
 
                 <div class="control-group">
-                  <label>Color de fondo</label>
-                  <div class="color-input-wrapper">
-                    <div class="color-preview" [style.background-color]="editableStyles['backgroundColor']">
-                      <input type="color" [(ngModel)]="editableStyles['backgroundColor']" (ngModelChange)="onStyleChange()">
+                  <label>Color de Superposición</label>
+                  <div class="color-row">
+                    <div class="color-preview" [style.background-color]="editableStyles.backgroundColor">
+                      <input type="color" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onContentChange()">
                     </div>
-                    <input type="text" [(ngModel)]="editableStyles['backgroundColor']" (ngModelChange)="onStyleChange()" class="premium-input" placeholder="#hex">
+                    <input type="text" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onContentChange()" class="premium-input-mini">
+                  </div>
+                </div>
+
+                 <div class="control-row mt-4">
+                  <div class="control-group">
+                    <label>Duración (ms)</label>
+                    <input type="number" [(ngModel)]="editableContent.duration" (ngModelChange)="onContentChange()" class="premium-input-mini">
+                  </div>
+                  <div class="control-group">
+                    <label>Delay (ms)</label>
+                    <input type="number" [(ngModel)]="editableContent.delay" (ngModelChange)="onContentChange()" class="premium-input-mini">
                   </div>
                 </div>
               </div>
-
-              <!-- DIMENSIONS SECTION -->
-              <div class="sidebar-section no-border">
-                <div class="section-header">
-                  <span class="section-icon">📏</span>
-                  <h4>POSICIÓN & TAMAÑO</h4>
-                </div>
-                <div class="control-row">
-                  <div class="control-group half">
-                    <label>Posición X</label>
-                    <input type="number" [(ngModel)]="currentPosition.x" (ngModelChange)="onPositionChange()" class="premium-input text-center">
-                  </div>
-                  <div class="control-group half">
-                    <label>Posición Y</label>
-                    <input type="number" [(ngModel)]="currentPosition.y" (ngModelChange)="onPositionChange()" class="premium-input text-center">
-                  </div>
-                </div>
-                <div class="control-row">
-                  <div class="control-group half">
-                    <label>Ancho (W)</label>
-                    <input type="number" [(ngModel)]="currentSize.width" (ngModelChange)="onSizeChange()" class="premium-input text-center">
-                  </div>
-                  <div class="control-group half">
-                    <label>Alto (H)</label>
-                    <input type="number" [(ngModel)]="currentSize.height" (ngModelChange)="onSizeChange()" class="premium-input text-center">
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
 
           <!-- Canvas Area -->
           <div class="isolated-canvas" #canvas (mousedown)="onCanvasMouseDown($event)">
-            <div class="canvas-viewport"
-                 [style.width.px]="(config.canvasSize?.width || 1200) * viewportScale"
-                 [style.height.px]="(config.canvasSize?.height || 800) * viewportScale">
               <div class="canvas-inner" #canvasInner
-                   [style.width.px]="config.canvasSize?.width || 1200"
-                   [style.height.px]="config.canvasSize?.height || 800"
                    [style.transform]="'scale(' + viewportScale + ')'"
+                   [style.transformOrigin]="'center top'"
                    [class.show-grid]="showGrid"
                    [class.grid-snapping]="snapToGrid">
                 
                 <div class="draggable-wrapper"
+                     #draggableWrapper
                      [style.left.px]="currentPosition.x"
                      [style.top.px]="currentPosition.y"
                      [style.width.px]="currentSize.width"
@@ -209,131 +160,153 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
                      (mousedown)="onMouseDown($event)">
                   
                   <lib-ui-components-card-animated
-                    [title]="editableContent['title'] || 'Card Title'"
-                    [description]="editableContent['description'] || 'Card description'"
-                    [image]="editableContent['image'] || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80'"
-                    [animation]="editableContent['animation'] || 'fade'"
+                    [title]="editableContent.title"
+                    [description]="editableContent.description"
+                    [image]="editableContent.image"
+                    [animation]="editableContent.animation"
                     [customStyles]="editableStyles"
                     style="width: 100%; height: 100%; display: block;">
                   </lib-ui-components-card-animated>
 
-                  <!-- 8-point Resize Handles -->
-                  <div class="resize-handle nw" [class.active]="resizeHandle === 'nw'" (mousedown)="startResize($event, 'nw')"></div>
-                  <div class="resize-handle n"  [class.active]="resizeHandle === 'n'"  (mousedown)="startResize($event, 'n')"></div>
-                  <div class="resize-handle ne" [class.active]="resizeHandle === 'ne'" (mousedown)="startResize($event, 'ne')"></div>
-                  <div class="resize-handle e"  [class.active]="resizeHandle === 'e'"  (mousedown)="startResize($event, 'e')"></div>
-                  <div class="resize-handle se" [class.active]="resizeHandle === 'se'" (mousedown)="startResize($event, 'se')"></div>
-                  <div class="resize-handle s"  [class.active]="resizeHandle === 's'"  (mousedown)="startResize($event, 's')"></div>
-                  <div class="resize-handle sw" [class.active]="resizeHandle === 'sw'" (mousedown)="startResize($event, 'sw')"></div>
-                  <div class="resize-handle w"  [class.active]="resizeHandle === 'w'"  (mousedown)="startResize($event, 'w')"></div>
-
-                  <!-- Dimension labels during resize -->
-                  <div class="dimension-label width-label" *ngIf="isResizing">{{ currentSize.width }}px</div>
-                  <div class="dimension-label height-label" *ngIf="isResizing">{{ currentSize.height }}px</div>
+                  <!-- 8-Point Resizing -->
+                  <div class="resize-handle n"  (mousedown)="startResize($event, 'n')"></div>
+                  <div class="resize-handle s"  (mousedown)="startResize($event, 's')"></div>
+                  <div class="resize-handle e"  (mousedown)="startResize($event, 'e')"></div>
+                  <div class="resize-handle w"  (mousedown)="startResize($event, 'w')"></div>
+                  <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>
+                  <div class="resize-handle ne" (mousedown)="startResize($event, 'ne')"></div>
+                  <div class="resize-handle sw" (mousedown)="startResize($event, 'sw')"></div>
+                  <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
                 </div>
               </div>
-            </div>
 
-            <!-- Position Dock -->
             <div class="modern-position-dock">
-              <div class="dock-item">
-                <span class="label">X</span>
-                <span class="value">{{ currentPosition.x }}px</span>
-              </div>
-              <div class="dock-item">
-                <span class="label">Y</span>
-                <span class="value">{{ currentPosition.y }}px</span>
-              </div>
+              <div class="dock-item"><span class="label">MOTION</span><span class="value uppercase text-fuchsia-400">{{ editableContent.animation }}</span></div>
               <div class="dock-divider"></div>
-              <div class="dock-item">
-                <span class="label">SIZE</span>
-                <span class="value">{{ currentSize.width }}×{{ currentSize.height }}</span>
-              </div>
+              <div class="dock-item"><span class="label">SIZE</span><span class="value">{{ currentSize.width }}x{{ currentSize.height }}</span></div>
               <div class="dock-divider"></div>
-              <div class="dock-item">
-                <span class="label">ANIM</span>
-                <span class="value anim-tag">{{ editableContent['animation'] || 'none' }}</span>
-              </div>
+              <div class="dock-item"><span class="label">POS</span><span class="value">{{ currentPosition.x }},{{ currentPosition.y }}</span></div>
             </div>
           </div>
         </div>
 
-        <!-- ===== FOOTER ===== -->
         <div class="isolated-mode-footer">
-          <div class="footer-hint">
-            <b>G</b> rejilla · <b>S</b> snap · <b>R</b> reset · <b>Flechas</b> ajuste fino · <b>Ctrl+Z/Y</b> deshacer/rehacer
-          </div>
+          <div class="footer-hint">Animated Gold: Las transiciones suaves mejoran la retención visual del usuario.</div>
           <div class="footer-actions-btns">
-            <button class="btn-clean secondary" (click)="cancel()">Descartar</button>
-            <button class="btn-clean primary" (click)="apply()">Aplicar Cambios</button>
+            <button class="btn-clean secondary" (click)="cancel()">Descartar cambios</button>
+            <button class="btn-clean primary" (click)="apply()">Guardar Animación</button>
           </div>
         </div>
       </div>
     </div>
   `,
-  styles: [ISOLATED_MODE_SHARED_STYLES, `
-    /* Component-specific */
-    .variant-hint { 
-      font-size: 10px; 
-      color: #64748b; 
-      margin-top: 0.5rem; 
-      font-style: italic; 
+  styles: [`
+    @import '../_isolated-mode-shared';
+    @include isolated-mode-foundation;
+    @include resize-handles;
+    @include modern-dock;
+
+    .sidebar-tabs { display: flex; background: rgba(15, 23, 42, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      button { flex: 1; padding: 1.2rem 0.5rem; background: transparent; border: none; color: #64748b; font-size: 10px; font-weight: 900; letter-spacing: 1.5px; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        &.active { color: #d946ef; border-bottom-color: #d946ef; background: rgba(217, 70, 239, 0.05); }
+      }
     }
-    .image-preview {
-      margin-top: 0.75rem;
+
+    .canvas-inner { width: 4000px; height: 3000px; position: relative; padding-top: 200px;
+      &.show-grid { background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px); background-size: 40px 40px; }
     }
-    .anim-tag {
-      color: #34d399 !important;
-      text-transform: uppercase;
+
+    .draggable-wrapper { position: absolute !important; cursor: move; z-index: 100; border: 2px dashed transparent; transition: border-color 0.2s;
+      &:hover { border-color: rgba(217, 70, 239, 0.3); }
+      &.is-dragging, &.is-resizing { border-color: #d946ef; background: rgba(217, 70, 239, 0.02); }
     }
-    .text-center { text-align: center; }
-    .premium-textarea {
-      resize: vertical;
-      min-height: 60px;
-      font-family: inherit;
-    }
+
+    .color-row { display: flex; gap: 10px; align-items: center; .color-preview { width: 34px; height: 34px; border-radius: 8px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); input { position: absolute; inset: -5px; width: 150%; height: 150%; cursor: pointer; opacity: 0; } } }
+    
+    .premium-input, .premium-select, .premium-textarea { width: 100%; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 0.8rem 1rem; border-radius: 12px; font-size: 13px; &:focus { border-color: #d946ef; outline: none; } }
+    .premium-input-mini { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-family: monospace; }
+    .premium-range { width: 100%; accent-color: #d946ef; }
+
+    .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
   `]
 })
 export class EditorCardAnimatedIsolatedModeComponent extends BaseIsolatedModeComponent {
+  @ViewChild('canvas') canvasRef!: ElementRef;
 
-  // ===== BaseIsolatedModeComponent overrides =====
+  activeTab: 'content' | 'design' = 'content';
 
-  getDefaultSize() {
-    return { width: 350, height: 420 };
+  protected override getCanvasElement(): HTMLElement | null {
+    return this.canvasRef?.nativeElement;
   }
 
-  initializeContent(): void {
-    const c = this.config?.content || {};
-    this.editableContent = {
-      title: c.title || 'Card Title',
-      description: c.description || 'Card description',
-      image: c.image || 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80',
-      animation: c.animation || 'fade',
-      duration: c.duration || 500,
-      delay: c.delay || 0,
-      variant: c.variant || this.config?.variant || 'default'
+  protected override initializeState() {
+    this.editableContent = { 
+        ...this.config.content,
+        title: this.config.content.title || 'Título de Tarjeta',
+        description: this.config.content.description || 'Descripción animada...',
+        image: this.config.content.image || '',
+        animation: this.config.content.animation || 'fade',
+        duration: this.config.content.duration || 500,
+        delay: this.config.content.delay || 0,
+        variant: this.config.content.variant || 'default'
     };
-  }
-
-  initializeStyles(): void {
-    const s = this.config?.styles || {};
-    this.editableStyles = {
-      backgroundColor: s.backgroundColor || '',
-      ...s
+    
+    this.editableStyles = { 
+        ...this.config.styles,
+        backgroundColor: this.config.styles.backgroundColor || 'transparent'
     };
+    
+    this.currentPosition = { ...(this.config.position || { x: 500, y: 300 }) };
+    this.currentSize = { 
+        width: this.config.size?.width || 350, 
+        height: this.config.size?.height || 450 
+    };
+    
+    this.initialPosition = { ...this.currentPosition };
+    this.initialSize = { ...this.currentSize };
+    this.viewportScale = 0.75;
+
+    this.saveState();
   }
 
-  buildApplyPayload(): IsolatedModeConfig {
-    return {
+  override saveState() {
+    const newState = {
+      position: { ...this.currentPosition },
+      size: { ...this.currentSize },
+      styles: JSON.parse(JSON.stringify(this.editableStyles)),
+      content: JSON.parse(JSON.stringify(this.editableContent))
+    };
+
+    const lastState = this.undoStack[this.undoStack.length - 1];
+    if (lastState && JSON.stringify(lastState) === JSON.stringify(newState)) return;
+
+    this.undoStack.push(newState as any);
+    if (this.undoStack.length > 50) this.undoStack.shift();
+    this.redoStack = [];
+  }
+
+  override apply() {
+    this.applied.emit({
       ...this.config,
       content: { ...this.editableContent },
       styles: {
         ...this.editableStyles,
+        left: this.currentPosition.x + 'px',
+        top: this.currentPosition.y + 'px',
         width: this.currentSize.width + 'px',
-        height: this.currentSize.height + 'px'
+        height: this.currentSize.height + 'px',
+        position: 'absolute'
       },
       position: { ...this.currentPosition },
       size: { ...this.currentSize }
-    };
+    });
   }
+
+  override onContentChange() {
+    this.scheduleSaveState();
+  }
+
+  override onCanvasMouseDown(event: MouseEvent) { }
+  onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

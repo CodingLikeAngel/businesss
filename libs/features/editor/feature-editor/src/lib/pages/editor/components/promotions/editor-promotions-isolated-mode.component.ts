@@ -323,6 +323,6 @@ export class EditorPromotionsIsolatedModeComponent extends BaseIsolatedModeCompo
     this.scheduleSaveState();
   }
 
-  onCanvasMouseDown(event: MouseEvent) { }
+  override onCanvasMouseDown(event: MouseEvent) { }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

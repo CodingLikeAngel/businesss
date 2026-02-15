@@ -351,6 +351,6 @@ export class EditorSmartContainerIsolatedModeComponent extends BaseIsolatedModeC
     this.scheduleSaveState();
   }
 
-  onCanvasMouseDown(event: MouseEvent) { }
+  override onCanvasMouseDown(event: MouseEvent) { }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

@@ -347,6 +347,6 @@ export class EditorServicesIsolatedModeComponent extends BaseIsolatedModeCompone
     });
   }
 
-  onCanvasMouseDown(event: MouseEvent) { }
+  override onCanvasMouseDown(event: MouseEvent) { }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

@@ -233,7 +233,6 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
       </div>
     </div>
   `,
-  styleUrls: ['../_isolated-mode-shared.scss'],
   styles: [`
     @import '../_isolated-mode-shared';
     @include isolated-mode-foundation;
@@ -315,6 +314,6 @@ export class EditorCardProductIsolatedModeComponent extends BaseIsolatedModeComp
     this.applied.emit(finalConfig);
   }
 
-  onCanvasMouseDown(event: MouseEvent) { }
+  override onCanvasMouseDown(event: MouseEvent) { }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

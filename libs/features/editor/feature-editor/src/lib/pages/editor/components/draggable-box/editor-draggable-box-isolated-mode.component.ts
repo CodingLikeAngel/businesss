@@ -274,7 +274,6 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
       </div>
     </div>
   `,
-  styleUrls: ['../_isolated-mode-shared.scss'],
   styles: [`
     @import '../_isolated-mode-shared';
     @include isolated-mode-foundation;

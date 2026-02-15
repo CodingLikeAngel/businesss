@@ -11,6 +11,10 @@ import {
 import { AppState } from '../../../../store/state/app.state';
 import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.selectors';
 import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+
+// Re-export IsolatedModeConfig for convenience
+export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 @Component({
   selector: 'lib-editor-hero-isolated-mode',
@@ -396,6 +400,6 @@ export class EditorHeroIsolatedModeComponent extends BaseIsolatedModeComponent {
     });
   }
 
-  onCanvasMouseDown(event: MouseEvent) { }
+  override onCanvasMouseDown(event: MouseEvent) { }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

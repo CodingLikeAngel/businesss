@@ -259,7 +259,6 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
       </div>
     </div>
   `,
-  styleUrls: ['../_isolated-mode-shared.scss'],
   styles: [`
     @import '../_isolated-mode-shared';
     @include isolated-mode-foundation;
@@ -317,7 +316,7 @@ export class EditorImageIsolatedModeComponent extends BaseIsolatedModeComponent 
 
   availableVariants = variants;
   filters: any = { brightness: 100, contrast: 100, grayscale: 0, sepia: 0, blur: 0 };
-  filterKeys: (keyof typeof this.filters)[] = ['brightness', 'contrast', 'grayscale', 'sepia', 'blur'];
+  filterKeys: string[] = ['brightness', 'contrast', 'grayscale', 'sepia', 'blur'];
   
   selectedMask = 'none';
   currentMaskValue = 'none';
@@ -416,6 +415,6 @@ export class EditorImageIsolatedModeComponent extends BaseIsolatedModeComponent 
     this.applied.emit(finalConfig);
   }
 
-  onCanvasMouseDown(event: MouseEvent) { }
+  override onCanvasMouseDown(event: MouseEvent) { }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

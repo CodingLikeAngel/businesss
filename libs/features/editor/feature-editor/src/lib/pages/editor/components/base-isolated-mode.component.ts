@@ -160,6 +160,7 @@ export abstract class BaseIsolatedModeComponent implements OnInit, OnDestroy {
   onSizeChange() { this.scheduleSaveState(); }
   onStyleChange() { this.scheduleSaveState(); }
   onContentChange() { this.scheduleSaveState(); }
+  onVariantChange() { this.scheduleSaveState(); }
 
   // --- INTERACTION HANDLERS ---
   onMouseDown(event: MouseEvent) {
@@ -170,6 +171,11 @@ export abstract class BaseIsolatedModeComponent implements OnInit, OnDestroy {
     this.startPositionX = this.currentPosition.x;
     this.startPositionY = this.currentPosition.y;
     event.stopPropagation();
+  }
+
+  onCanvasMouseDown(event: MouseEvent) {
+    // Default implementation - can be overridden by child components
+    // Used for canvas-level interactions
   }
 
   startResize(event: MouseEvent, handle: string) {

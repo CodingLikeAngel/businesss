@@ -331,6 +331,6 @@ export class EditorFaqIsolatedModeComponent extends BaseIsolatedModeComponent {
     });
   }
 
-  onCanvasMouseDown(event: MouseEvent) { }
+  override onCanvasMouseDown(event: MouseEvent) { }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

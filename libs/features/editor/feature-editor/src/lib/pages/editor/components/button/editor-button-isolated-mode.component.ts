@@ -8,6 +8,10 @@ import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+
+// Re-export IsolatedModeConfig for convenience
+export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 @Component({
   selector: 'lib-editor-button-isolated-mode',
@@ -372,7 +376,6 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
       </div>
     </div>
   `,
-  styleUrls: ['../_isolated-mode-shared.scss'],
   styles: [`
     @import '../_isolated-mode-shared';
     @include isolated-mode-foundation;

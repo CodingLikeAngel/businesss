@@ -2,6 +2,10 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+
+// Re-export IsolatedModeConfig for convenience
+export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 @Component({
   selector: 'lib-editor-testimonials-isolated-mode',
@@ -157,7 +161,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
           <div class="isolated-canvas" #canvas (mousedown)="onCanvasMouseDown($event)">
               <div class="canvas-inner" #canvasInner
                    [style.transform]="'scale(' + viewportScale + ')'"
-                   [style.transformOrigin]="center top"
+                   [style.transformOrigin]="'center top'"
                    [class.show-grid]="showGrid"
                    [class.grid-snapping]="snapToGrid">
                 
@@ -390,6 +394,6 @@ export class EditorTestimonialsIsolatedModeComponent extends BaseIsolatedModeCom
     });
   }
 
-  onCanvasMouseDown(event: MouseEvent) { }
+  override onCanvasMouseDown(event: MouseEvent) { }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

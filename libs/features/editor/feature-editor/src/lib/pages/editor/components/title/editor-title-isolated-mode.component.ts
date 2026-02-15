@@ -274,7 +274,6 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
       </div>
     </div>
   `,
-  styleUrls: ['../_isolated-mode-shared.scss'],
   styles: [`
     @import '../_isolated-mode-shared';
     @include isolated-mode-foundation;
@@ -366,6 +365,6 @@ export class EditorTitleIsolatedModeComponent extends BaseIsolatedModeComponent 
     this.applied.emit(finalConfig);
   }
 
-  onCanvasMouseDown(event: MouseEvent) { /* Silenciamos */ }
+  override onCanvasMouseDown(event: MouseEvent) { /* Silenciamos */ }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

@@ -158,12 +158,12 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                      [class.is-resizing]="isResizing"
                      (mousedown)="onMouseDown($event)">
                   
-                  <lib-ui-stats-lib-section
+                  <lib-ui-components-stats-section
                     [variant]="editableContent.variant"
-                    [items]="editableItems"
+                    [stats]="editableItems"
                     [customStyles]="editableStyles"
                     style="width: 100%; display: block;">
-                  </lib-ui-stats-lib-section>
+                  </lib-ui-components-stats-section>
 
                   <!-- Lateral handles -->
                   <div class="resize-handle e"  (mousedown)="startResize($event, 'e')"></div>
@@ -339,6 +339,6 @@ export class EditorStatsIsolatedModeComponent extends BaseIsolatedModeComponent 
     this.scheduleSaveState();
   }
 
-  onCanvasMouseDown(event: MouseEvent) { }
+  override onCanvasMouseDown(event: MouseEvent) { }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

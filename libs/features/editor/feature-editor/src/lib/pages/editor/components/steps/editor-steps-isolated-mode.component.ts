@@ -320,6 +320,6 @@ export class EditorStepsIsolatedModeComponent extends BaseIsolatedModeComponent 
     this.scheduleSaveState();
   }
 
-  onCanvasMouseDown(event: MouseEvent) { }
+  override onCanvasMouseDown(event: MouseEvent) { }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

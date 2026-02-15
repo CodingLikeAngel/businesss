@@ -2,6 +2,10 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
+import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+
+// Re-export IsolatedModeConfig for convenience
+export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 @Component({
   selector: 'lib-editor-cta-isolated-mode',
@@ -356,6 +360,6 @@ export class EditorCTAIsolatedModeComponent extends BaseIsolatedModeComponent {
     this.scheduleSaveState();
   }
 
-  onCanvasMouseDown(event: MouseEvent) { }
+  override onCanvasMouseDown(event: MouseEvent) { }
   onOverlayClick(event: MouseEvent) { this.cancel(); }
 }
