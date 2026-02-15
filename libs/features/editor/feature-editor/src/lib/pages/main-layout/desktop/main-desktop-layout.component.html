@@ -97,7 +97,7 @@
     </aside>
 
     <!-- THE CANVAS -->
-    <main class="canvas-area" (click)="onWorkspaceClick($event)" [style.backgroundColor]="backgroundColor$ | async">
+    <main class="canvas-area" (click)="onWorkspaceClick($event)">
       <div class="canvas-wrapper">
         <div
           class="preview-frame"
@@ -110,7 +110,7 @@
             <div class="camera"></div>
           </div>
 
-          <div class="frame-content" [style.backgroundColor]="backgroundColor$ | async">
+          <div class="frame-content">
             <!-- Header -->
             <div *ngIf="headerConfig.visible">
               <lib-editor-header-section

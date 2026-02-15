@@ -209,7 +209,7 @@
 // 🎨 PREMIUM CANVAS AREA
 .canvas-area {
   flex: 1;
-  background-color: transparent; /* Use transparent to show workspace background if needed, or rely on .frame-content */
+  background-color: var(--page-bg, transparent); 
   background-image: radial-gradient(
     rgba(255, 255, 255, 0.05) 1px,
     transparent 0
@@ -384,7 +384,9 @@
 
     .frame-content {
       display: block !important;
+      width: 100%;
       height: auto !important;
+      background-color: var(--page-bg, transparent);
       overflow: visible !important;
       min-height: calc(100vh - 72px);
     }

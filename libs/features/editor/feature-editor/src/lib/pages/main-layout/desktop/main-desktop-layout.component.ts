@@ -114,6 +114,11 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
         document.body.classList.remove('isolated-mode-active');
       }
     });
+
+    // Fix NG0100: Set background color via CSS variable to avoid expression changed error
+    this.backgroundColor$.subscribe(color => {
+      document.documentElement.style.setProperty('--page-bg', color || 'transparent');
+    });
   }
 
   override returnToEditor() {
