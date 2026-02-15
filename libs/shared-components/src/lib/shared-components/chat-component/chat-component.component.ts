@@ -148,9 +148,7 @@ export class ChatComponentComponent implements OnInit {
 
     this.aiService.sendMessage([context]).subscribe({
       next: (response) => {
-        const aiResponse = this.aiService['useGemini']
-          ? response.candidates[0].content.parts[0].text
-          : response.choices[0].message.content;
+        const aiResponse = response.text;
         this.parseAIResponse(aiResponse, command);
       },
       error: (err) => {
