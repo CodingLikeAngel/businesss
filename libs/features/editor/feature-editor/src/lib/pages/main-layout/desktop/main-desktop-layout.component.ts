@@ -36,8 +36,8 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
 
   private store = inject(Store);
   
-  backgroundColor$ = this.store.select(PageSelectors.selectCurrentPage).pipe(
-    map((page: any) => page?.globalStyles?.backgroundColor || '')
+  exportGlobalStyles$ = this.store.select(PageSelectors.selectCurrentPage).pipe(
+    map((page: any) => page?.globalStyles || {})
   );
 
   @HostListener('window:mousemove', ['$event'])
@@ -115,9 +115,41 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
       }
     });
 
-    // Fix NG0100: Set background color via CSS variable to avoid expression changed error
-    this.backgroundColor$.subscribe(color => {
-      document.documentElement.style.setProperty('--page-bg', color || 'transparent');
+    // Fix NG0100: Set background properties via CSS variables
+    this.exportGlobalStyles$.subscribe((styles: any) => {
+      const root = document.documentElement;
+      
+      // Base Background
+      root.style.setProperty('--page-bg', styles.backgroundColor || '#0a0a0b');
+      
+      // Image
+      if (styles.backgroundImage) {
+        root.style.setProperty('--page-bg-image', styles.backgroundImage.startsWith('url') ? styles.backgroundImage : `url(${styles.backgroundImage})`);
+        root.style.setProperty('--page-bg-size', styles.backgroundSize || 'cover');
+        root.style.setProperty('--page-bg-attachment', styles.backgroundAttachment || 'scroll');
+      } else {
+        root.style.setProperty('--page-bg-image', 'none');
+      }
+
+      // Pattern
+      const patternType = styles.patternType || 'none';
+      root.style.setProperty('--pattern-opacity', styles.patternOpacity || '0.05');
+      
+      let patternImage = 'none';
+      let patternSize = 'auto';
+
+      if (patternType === 'stripes') {
+        patternImage = 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,1) 10px, rgba(255,255,255,1) 11px)';
+      } else if (patternType === 'dots') {
+        patternImage = 'radial-gradient(rgba(255,255,255,1) 1px, transparent 0)';
+        patternSize = '24px 24px';
+      } else if (patternType === 'grid') {
+        patternImage = 'linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)';
+        patternSize = '40px 40px';
+      }
+
+      root.style.setProperty('--pattern-image', patternImage);
+      root.style.setProperty('--pattern-size', patternSize);
     });
   }
 

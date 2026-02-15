@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ALL_VARIANTS, getEditableProperties, detectComponentType, VariantCategory } from './variant-registry';
+import { BackgroundEditorComponent } from './background-editor.component';
 
 interface PropertyGroup {
   name: string;
@@ -23,7 +24,7 @@ interface PropertyConfig {
 @Component({
   selector: 'lib-design-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, BackgroundEditorComponent],
   template: `
     <div class="design-editor-v3">
       <!-- Header -->
@@ -91,6 +92,20 @@ interface PropertyConfig {
         <!-- PROPIEDADES ESPECÍFICAS DEL COMPONENTE -->
         <div class="properties-container" *ngIf="targetStyles">
           
+          <div class="property-group">
+            <div class="group-header" (click)="toggleGroup('background')">
+              <span class="icon">🖼️</span>
+              <h4>Fondo & Patrón</h4>
+              <span class="toggle-icon">{{ groupStates['background'] ? '▼' : '▶' }}</span>
+            </div>
+            <div class="group-content" *ngIf="groupStates['background']" style="padding: 1rem;">
+              <lib-background-editor
+                [settings]="targetStyles"
+                (settingsChange)="updateBackgroundSettings($event)"
+              ></lib-background-editor>
+            </div>
+          </div>
+
           <!-- Colores -->
           <div class="property-group">
             <div class="group-header" (click)="toggleGroup('colors')">
@@ -100,23 +115,6 @@ interface PropertyConfig {
             </div>
             <div class="group-content" *ngIf="groupStates['colors']">
               <div class="color-grid">
-                <div class="color-input-group">
-                  <label>Fondo</label>
-                  <div class="color-picker-enhanced">
-                    <input 
-                      type="color" 
-                      [ngModel]="getStyleValue('backgroundColor') || '#000000'" 
-                      (ngModelChange)="updateStyle('backgroundColor', $event)"
-                    >
-                    <input 
-                      type="text" 
-                      class="color-hex-input"
-                      [ngModel]="getStyleValue('backgroundColor') || '#000000'" 
-                      (ngModelChange)="updateStyle('backgroundColor', $event)"
-                      placeholder="#000000"
-                    >
-                  </div>
-                </div>
 
                 <div class="color-input-group">
                   <label>Texto</label>
@@ -446,54 +444,18 @@ interface PropertyConfig {
             </div>
           </div>
 
-          <!-- Fondo (Background) -->
-          <div class="property-group" *ngIf="hasProperty('backgroundImage')">
+          <!-- Fondo Avanzado (Background) -->
+          <div class="property-group">
             <div class="group-header" (click)="toggleGroup('background')">
               <span class="icon">🖼️</span>
-              <h4>Fondo</h4>
+              <h4>Fondo & Patrón</h4>
               <span class="toggle-icon">{{ groupStates['background'] ? '▼' : '▶' }}</span>
             </div>
-            <div class="group-content" *ngIf="groupStates['background']">
-              <div class="property-item">
-                <label>Imagen de Fondo (URL)</label>
-                <input 
-                  type="text" 
-                  class="text-input"
-                  [ngModel]="getStyleValue('backgroundImage')" 
-                  (ngModelChange)="updateStyle('backgroundImage', $event)"
-                  placeholder="url('...')"
-                >
-              </div>
-
-              <div class="grid-2" *ngIf="hasProperty('backgroundSize')">
-                <div class="property-item">
-                  <label>Tamaño</label>
-                  <select 
-                    class="select-input"
-                    [ngModel]="getStyleValue('backgroundSize')" 
-                    (ngModelChange)="updateStyle('backgroundSize', $event)"
-                  >
-                    <option value="cover">Cubrir</option>
-                    <option value="contain">Contener</option>
-                    <option value="auto">Auto</option>
-                  </select>
-                </div>
-
-                <div class="property-item" *ngIf="hasProperty('backgroundPosition')">
-                  <label>Posición</label>
-                  <select 
-                    class="select-input"
-                    [ngModel]="getStyleValue('backgroundPosition')" 
-                    (ngModelChange)="updateStyle('backgroundPosition', $event)"
-                  >
-                    <option value="center">Centro</option>
-                    <option value="top">Arriba</option>
-                    <option value="bottom">Abajo</option>
-                    <option value="left">Izquierda</option>
-                    <option value="right">Derecha</option>
-                  </select>
-                </div>
-              </div>
+            <div class="group-content" *ngIf="groupStates['background']" style="padding: 1rem;">
+              <lib-background-editor
+                [settings]="targetStyles"
+                (settingsChange)="updateBackgroundSettings($event)"
+              ></lib-background-editor>
             </div>
           </div>
 
@@ -1125,6 +1087,20 @@ export class DesignEditorComponent implements OnChanges {
   isFlexContainer(): boolean {
     const display = this.getStyleValue('display');
     return display === 'flex' || display === 'inline-flex';
+  }
+
+  updateBackgroundSettings(settings: any) {
+    const target = this.target;
+    if (!target) return;
+    
+    // Update target styles directly
+    target.styles = { 
+      ...target.styles, 
+      ...settings 
+    };
+    
+    // Emit change to parent
+    this.styleChanged.emit();
   }
 
   resetStyles() {

@@ -16,21 +16,29 @@
 }
 
 // Premium Diagonal Pattern
-@mixin premium-pattern($opacity: 0.02) {
+@mixin premium-pattern($opacity: var(--pattern-opacity, 0.05), $color: rgba(255, 255, 255, 1)) {
   position: relative;
-  &::after {
-    content: "";
+  &::before {
+    content: '';
     position: absolute;
     inset: 0;
-    z-index: 0;
     pointer-events: none;
-    background: repeating-linear-gradient(
-      45deg,
-      transparent,
-      transparent 10px,
-      rgba(255, 255, 255, $opacity) 10px,
-      rgba(255, 255, 255, $opacity) 20px
+    z-index: 0;
+    opacity: #{$opacity};
+
+    // Dynamically choose pattern based on variable
+    background-image: var(--pattern-image,
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        #{$color} 10px,
+        #{$color} 11px
+      )
     );
+
+    // Support for varying background sizes based on pattern
+    background-size: var(--pattern-size, auto);
   }
 }
 

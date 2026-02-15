@@ -42,7 +42,13 @@ export class ApplyDynamicStylesDirective implements OnChanges {
     }
 
     // Validate styles if enabled
-    let processedStyles = styles;
+    let processedStyles = {
+      ...styles,
+      '--pattern-opacity': styles.patternOpacity || '0.05',
+      '--pattern-image': this.getPatternImage(styles.patternType),
+      '--pattern-size': this.getPatternSize(styles.patternType)
+    };
+
     if (this.enableValidation && this.validationService) {
       const report = this.validationService.validateStyles(styles);
       this.validationReport.emit(report);
@@ -157,5 +163,18 @@ export class ApplyDynamicStylesDirective implements OnChanges {
     });
 
     return correctedStyles;
+  }
+
+  private getPatternImage(type?: string): string {
+    if (type === 'stripes') return 'repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,255,255,1) 10px, rgba(255,255,255,1) 11px)';
+    if (type === 'dots') return 'radial-gradient(rgba(255,255,255,1) 1px, transparent 0)';
+    if (type === 'grid') return 'linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px)';
+    return 'none';
+  }
+
+  private getPatternSize(type?: string): string {
+    if (type === 'dots') return '24px 24px';
+    if (type === 'grid') return '40px 40px';
+    return 'auto';
   }
 }

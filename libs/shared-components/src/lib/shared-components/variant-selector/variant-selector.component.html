@@ -161,62 +161,11 @@
             </div>
 
             <div class="setting-v2-card">
-              <label>FONDO DE PÁGINA</label>
-              <div
-                class="color-control-group"
-                style="
-                  display: flex;
-                  gap: 8px;
-                  align-items: center;
-                  margin-top: 4px;
-                "
-              >
-                <div
-                  class="color-preview"
-                  [style.backgroundColor]="
-                    globalStyles['backgroundColor'] || '#ffffff'
-                  "
-                  style="
-                    width: 36px;
-                    height: 36px;
-                    border-radius: 6px;
-                    border: 1px solid rgba(255, 255, 255, 0.2);
-                    position: relative;
-                    overflow: hidden;
-                  "
-                >
-                  <input
-                    type="color"
-                    [ngModel]="globalStyles['backgroundColor'] || '#ffffff'"
-                    (ngModelChange)="onGlobalBackgroundChange($event)"
-                    style="
-                      position: absolute;
-                      top: -50%;
-                      left: -50%;
-                      width: 200%;
-                      height: 200%;
-                      opacity: 0;
-                      cursor: pointer;
-                    "
-                  />
-                </div>
-                <input
-                  type="text"
-                  [ngModel]="globalStyles['backgroundColor'] || '#ffffff'"
-                  (ngModelChange)="onGlobalBackgroundChange($event)"
-                  placeholder="#ffffff"
-                  style="
-                    flex: 1;
-                    padding: 0 10px;
-                    height: 36px;
-                    border-radius: 6px;
-                    border: 1px solid rgba(255, 255, 255, 0.1);
-                    background: rgba(0, 0, 0, 0.2);
-                    color: white;
-                    font-family: monospace;
-                  "
-                />
-              </div>
+              <label>FONDO DE PÁGINA (PULIDO)</label>
+              <lib-background-editor
+                [settings]="globalStyles"
+                (settingsChange)="onGlobalBackgroundSettingsChange($event)"
+              ></lib-background-editor>
             </div>
 
             <div class="actions-v2-group">

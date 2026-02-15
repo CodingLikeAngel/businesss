@@ -33,6 +33,7 @@ import { DesignEditorComponent } from './design-editor.component';
 import { PresetSelectorComponent } from './preset-selector.component';
 import { ExportPanelComponent } from './export-panel.component';
 import { IsolatedModeTriggerComponent } from './isolated-mode-trigger.component';
+import { BackgroundEditorComponent, BackgroundSettings } from './background-editor.component';
 
 // Import Isolated Mode Components
 import { EditorPromotionsIsolatedModeComponent } from './promotions-isolated-mode/editor-promotions-isolated-mode.component';
@@ -68,7 +69,8 @@ import { ExportService } from './export.service';
     EditorPromotionsIsolatedModeComponent,
     EditorRestaurantIsolatedModeComponent,
     EditorGymIsolatedModeComponent,
-    EditorSpaIsolatedModeComponent
+    EditorSpaIsolatedModeComponent,
+    BackgroundEditorComponent
   ],
   templateUrl: './variant-selector.component.html',
   styleUrl: './variant-selector.component.scss',
@@ -286,6 +288,17 @@ export class VariantSelectorComponent implements OnInit {
     const currentPage = this.variantService.getCurrentPage();
     if (currentPage) {
        const newStyles = { ...currentPage.globalStyles, backgroundColor: color };
+       this.variantService.updatePage(currentPage.id, { globalStyles: newStyles });
+    }
+  }
+
+  onGlobalBackgroundSettingsChange(settings: BackgroundSettings) {
+    const currentPage = this.variantService.getCurrentPage();
+    if (currentPage) {
+       const newStyles = { 
+         ...currentPage.globalStyles, 
+         ...settings 
+       };
        this.variantService.updatePage(currentPage.id, { globalStyles: newStyles });
     }
   }

@@ -25,6 +25,9 @@ export interface SectionStyles extends ElementStyles {
   backgroundImage?: string;
   backgroundSize?: string;
   backgroundPosition?: string;
+  backgroundAttachment?: 'scroll' | 'fixed';
+  patternType?: 'none' | 'stripes' | 'dots' | 'grid';
+  patternOpacity?: string;
   minHeight?: string;
 }
 

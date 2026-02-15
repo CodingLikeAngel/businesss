@@ -209,18 +209,29 @@
 // 🎨 PREMIUM CANVAS AREA
 .canvas-area {
   flex: 1;
-  background-color: var(--page-bg, transparent); 
-  background-image: radial-gradient(
-    rgba(255, 255, 255, 0.05) 1px,
-    transparent 0
-  );
-  background-size: 40px 40px;
+  background-color: var(--page-bg, transparent);
+  background-image: var(--page-bg-image, none);
+  background-size: var(--page-bg-size, cover);
+  background-attachment: var(--page-bg-attachment, scroll);
+  background-position: center;
+  position: relative;
   overflow: auto;
   display: flex;
   align-items: flex-start;
   justify-content: center;
   padding: 80px;
   scroll-behavior: smooth;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: var(--pattern-opacity, 0.05);
+    background-image: var(--pattern-image, none);
+    background-size: var(--pattern-size, auto);
+  }
 
   &::-webkit-scrollbar {
     width: 8px;
@@ -319,6 +330,23 @@
     overflow-y: scroll; /* Force always visible scrollbar */
     overflow-x: hidden;
     pointer-events: auto;
+    background-color: var(--page-bg, transparent);
+    background-image: var(--page-bg-image, none);
+    background-size: var(--page-bg-size, cover);
+    background-attachment: var(--page-bg-attachment, scroll);
+    background-position: center;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: var(--pattern-opacity, 0.05);
+      background-image: var(--pattern-image, none);
+      background-size: var(--pattern-size, auto);
+    }
     
     /* Firefox */
     scrollbar-width: thin;
@@ -387,8 +415,24 @@
       width: 100%;
       height: auto !important;
       background-color: var(--page-bg, transparent);
+      background-image: var(--page-bg-image, none);
+      background-size: var(--page-bg-size, cover);
+      background-attachment: var(--page-bg-attachment, scroll);
+      background-position: center;
       overflow: visible !important;
       min-height: calc(100vh - 72px);
+      position: relative;
+
+      &::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 0;
+        opacity: var(--pattern-opacity, 0.05);
+        background-image: var(--pattern-image, none);
+        background-size: var(--pattern-size, auto);
+      }
     }
   }
 
