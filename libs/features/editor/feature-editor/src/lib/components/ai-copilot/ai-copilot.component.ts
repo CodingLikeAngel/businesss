@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AICopilotService, AICopilotResponse } from '../../services/ai-copilot.service';
+import { AIMemoryService } from '../../services/ai-memory.service';
 import { selectSelectedSectionId, selectSelectedElementId } from '../../store/selectors/ui.selectors';
 import { selectCurrentPage } from '../../store/selectors/page.selectors';
 import { updateSection, updateElement } from '../../store/actions/page.actions';
@@ -23,7 +24,8 @@ export class AICopilotComponent implements OnInit {
   
   constructor(
     private store: Store,
-    private aiCopilot: AICopilotService
+    private aiCopilot: AICopilotService,
+    private aiMemory: AIMemoryService
   ) {}
 
   ngOnInit(): void {
@@ -56,6 +58,10 @@ export class AICopilotComponent implements OnInit {
         })
       );
 
+      // Save to memory
+      this.aiMemory.saveMessage({ role: 'user', content: this.prompt, timestamp: Date.now() });
+      this.aiMemory.saveMessage({ role: 'assistant', content: response.explanation, timestamp: Date.now() });
+
       if (response.type === 'style_update' && response.data) {
         if (elementId && sectionId) {
           this.store.dispatch(updateElement({ 
@@ -69,6 +75,10 @@ export class AICopilotComponent implements OnInit {
             changes: { styles: response.data } 
           }));
         }
+        
+        // Update design profile with successful style
+        this.aiMemory.updateProfileFromStyle(response.data);
+        
         this.lastExplanation = response.explanation;
       }
       

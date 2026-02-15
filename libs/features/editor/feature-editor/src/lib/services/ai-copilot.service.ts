@@ -21,21 +21,31 @@ export interface AICopilotResponse {
   explanation: string;
 }
 
+import { AIMemoryService } from './ai-memory.service';
+
 @Injectable({
   providedIn: 'root'
 })
 export class AICopilotService {
 
-  constructor(private aiService: AIService) {}
+  constructor(
+    private aiService: AIService,
+    private aiMemory: AIMemoryService
+  ) {}
 
   /**
    * Generates a style update based on user instructions and current context
    */
   getDesignAdvice(instruction: string, context: { section?: Section, element?: Element }): Observable<AICopilotResponse> {
+    const memoryContext = this.aiMemory.getBrainContext();
+    
     const systemPrompt = `
       Eres el AI Design Co-pilot de "Anto Studios", un editor de sitios web premium.
       Tu objetivo es traducir instrucciones de diseño en configuraciones técnicas de estilo (JSON).
       
+      ${memoryContext}
+
+      REGLAS DE RESPUESTA:
       Debes responder ÚNICAMENTE con un objeto JSON válido que siga esta estructura:
       {
         "type": "style_update",
@@ -43,10 +53,10 @@ export class AICopilotService {
            // para secciones: backgroundColor, backgroundAttachment, patternType, patternOpacity, padding, borderRadius
            // para elementos: color, fontSize, fontWeight, backgroundColor, borderRadius, boxShadow, transform
         },
-        "explanation": "Una breve explicación de por qué aplicaste estos cambios en español."
+        "explanation": "Una breve explicación de por qué aplicaste estos cambios basándote en la instrucción y la memoria del usuario."
       }
 
-      CONTEXTO ACTUAL:
+      CONTEXTO DEL COMPONENTE ACTUAL:
       ${JSON.stringify(context)}
 
       INSTRUCCIÓN DEL USUARIO:

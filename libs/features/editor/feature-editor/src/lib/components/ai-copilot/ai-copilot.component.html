@@ -12,7 +12,10 @@
         <span class="sparkle">✨</span>
         <h3>Design Co-pilot</h3>
       </div>
-      <button class="btn-close" (click)="toggleChat()">×</button>
+      <div class="header-actions">
+        <button class="btn-reset" (click)="aiMemory.clearMemory()" title="Reiniciar Cerebro">🧠 🔄</button>
+        <button class="btn-close" (click)="toggleChat()">×</button>
+      </div>
     </div>
 
     <div class="panel-body">
