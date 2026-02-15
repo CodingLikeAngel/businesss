@@ -25,7 +25,7 @@ import * as PageActions from '../../../../store/actions/page.actions';
       [class.preview-mode]="isPreviewMode && !showEditorControls"
       [style.minHeight.px]="sectionHeight"
       [style.position]="'relative'"
-      [style.backgroundColor]="section.styles?.['backgroundColor']">
+      [style.backgroundColor]="section.styles['backgroundColor']">
       
       <!-- Section Header -->
       <div *ngIf="!isPreviewMode || showEditorControls" class="section-header">
