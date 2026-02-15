@@ -2065,37 +2065,33 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     const sectionEl = document.getElementById(this.section.id);
     if (!sectionEl) return;
 
-    // Determine which row this slot belongs to
-    const colCount = getColumnCount(this.config.layoutType);
-    const rowIndex = Math.floor(index / colCount);
-    const rowStartIdx = rowIndex * colCount;
-    const rowEndIdx = Math.min(rowStartIdx + colCount, this.config.slots.length);
-
-    // Find the grid container for this row
+    const sizes = new Map<number, { width: number; height: number; left?: number; top?: number }>();
     const gridContainers = sectionEl.querySelectorAll('.grid-container');
-    const gridEl = gridContainers[rowIndex];
-    const gridRect = gridEl?.getBoundingClientRect();
 
-    // Keep existing sizes from other rows, only recapture this row
-    const sizes = new Map(this.resizeService.customSizes());
-
-    if (gridEl) {
+    // Capture dimensions for ALL slots in ALL rows
+    // This is critical because syncFromConfig zeroes them out (isStrict=true),
+    // and we need valid pixel values for neighbor rows to preserve their fr overrides.
+    gridContainers.forEach(gridEl => {
+      const gridRect = gridEl.getBoundingClientRect();
       const slotElements = gridEl.querySelectorAll('.slot');
-      slotElements.forEach((el, localIdx) => {
-        const globalIdx = rowStartIdx + localIdx;
-        if (globalIdx >= rowEndIdx) return;
+
+      slotElements.forEach((el) => {
+        const slotIndexAttr = el.getAttribute('data-slot-index');
+        if (slotIndexAttr === null) return;
+        
+        const slotIdx = parseInt(slotIndexAttr, 10);
         const rect = el.getBoundingClientRect();
         const left = gridRect ? rect.left - gridRect.left : 0;
         const top = gridRect ? rect.top - gridRect.top : 0;
 
-        sizes.set(globalIdx, {
+        sizes.set(slotIdx, {
           width: Math.round(rect.width),
           height: Math.round(rect.height),
           left: Math.round(left),
           top: Math.round(top)
         });
       });
-    }
+    });
 
     this.resizeService.customSizes.set(sizes);
     this.cdr.detectChanges();
