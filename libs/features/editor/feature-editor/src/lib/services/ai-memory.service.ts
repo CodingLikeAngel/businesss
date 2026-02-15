@@ -1,3 +1,5 @@
+import { Injectable } from '@angular/core';
+
 export interface StyleWeight {
   value: string;
   weight: number; // 0 to 1
