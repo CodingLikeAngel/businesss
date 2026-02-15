@@ -97,7 +97,7 @@
     </aside>
 
     <!-- THE CANVAS -->
-    <main class="canvas-area" (click)="onWorkspaceClick($event)">
+    <main class="canvas-area" (click)="onWorkspaceClick($event)" [style.backgroundColor]="backgroundColor$ | async">
       <div class="canvas-wrapper">
         <div
           class="preview-frame"

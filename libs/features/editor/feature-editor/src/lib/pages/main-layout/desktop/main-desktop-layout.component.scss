@@ -209,9 +209,9 @@
 // 🎨 PREMIUM CANVAS AREA
 .canvas-area {
   flex: 1;
-  background-color: #0f172a;
+  background-color: transparent; /* Use transparent to show workspace background if needed, or rely on .frame-content */
   background-image: radial-gradient(
-    rgba(255, 255, 255, 0.03) 1px,
+    rgba(255, 255, 255, 0.05) 1px,
     transparent 0
   );
   background-size: 40px 40px;
@@ -258,7 +258,7 @@
 }
 
 .preview-frame {
-  background: white;
+  background: transparent; /* allow page background to show through if content is transparent */
   box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.8),
     0 30px 60px -30px rgba(0, 0, 0, 0.9);
   transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
