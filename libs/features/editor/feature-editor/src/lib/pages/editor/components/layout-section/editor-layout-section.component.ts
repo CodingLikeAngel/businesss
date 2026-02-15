@@ -165,7 +165,7 @@ interface ComponentDefaultSize {
       </div>
 
       <!-- Grid Container - ONE per row for independent resize -->
-      <div *ngFor="let row of getRowGroups(); let ri = index; trackBy: trackBySlotIndex"
+      <div *ngFor="let row of getRowGroups(); let ri = index"
            class="grid-container"
            [style.grid-template-columns]="getGridTemplateForRow(ri)"
            [style.gap.px]="config.gap"
@@ -818,21 +818,6 @@ interface ComponentDefaultSize {
     .empty-content:hover { 
       color: #818cf8; 
       transform: scale(1.02);
-    }
-    
-    /* Ensure empty slot is clickable */
-    .slot.empty {
-      background: rgba(2, 6, 23, 0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 10 !important;
-    }
-
-    .empty-content {
-      pointer-events: auto !important;
-      position: relative;
-      z-index: 20;
     }
 
     .plus-icon { 
