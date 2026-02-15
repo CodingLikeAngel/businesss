@@ -26,7 +26,9 @@ export class AICopilotComponent implements OnInit {
     private aiCopilot: AICopilotService
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    console.log('AICopilotComponent initialized successfully');
+  }
 
   toggleChat() {
     this.isOpen = !this.isOpen;

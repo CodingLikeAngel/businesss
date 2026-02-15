@@ -1,8 +1,12 @@
+:host {
+  display: block;
+}
+
 .ai-copilot-container {
   position: fixed;
   bottom: 2rem;
   right: 2rem;
-  z-index: 999999;
+  z-index: 2147483647; /* Max possible z-index */
   display: flex;
   flex-direction: column;
   align-items: flex-end;
