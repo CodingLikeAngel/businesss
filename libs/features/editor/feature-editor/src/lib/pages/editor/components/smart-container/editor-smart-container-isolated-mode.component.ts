@@ -1,447 +1,356 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, ViewChild, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { SmartContainerComponent, SmartContainerConfig } from '@negocio/ui-components';
+import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 import { AppState } from '../../../../store/state/app.state';
 import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.selectors';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
-import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 @Component({
   selector: 'lib-editor-smart-container-isolated-mode',
   standalone: true,
-  imports: [CommonModule, FormsModule, SmartContainerComponent],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
         
+        <!-- ===== HEADER ===== -->
         <div class="isolated-mode-header">
           <div class="header-breadcrumb">
-            <span class="mode-badge">📦 CONTAINER EDITOR</span>
+            <span class="mode-badge">📦 SMART CONTAINER</span>
             <span class="separator">/</span>
-            <span class="component-name">SMART CONTAINER</span>
+            <span class="component-name">ORCHESTRATION GOLD</span>
           </div>
           
           <div class="header-actions">
+            <div class="action-group">
+              <button class="icon-btn" (click)="undo()" [disabled]="!canUndo" title="Deshacer (Ctrl+Z)">
+                <span class="icon">↶</span>
+              </button>
+              <button class="icon-btn" (click)="redo()" [disabled]="!canRedo" title="Rehacer (Ctrl+Y)">
+                <span class="icon">↷</span>
+              </button>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="action-group">
+              <button class="icon-btn" (click)="toggleGrid()" [class.active]="showGrid" title="Cuadrícula (G)">
+                <span class="icon">#</span>
+              </button>
+              <button class="icon-btn" (click)="toggleSnap()" [class.active]="snapToGrid" title="Snap (S)">
+                <span class="icon">⊞</span>
+              </button>
+            </div>
+
+            <div class="divider"></div>
+
             <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
           </div>
         </div>
 
+        <!-- ===== BODY ===== -->
         <div class="isolated-mode-body">
+          
+          <!-- Sidebar Controls -->
           <div class="controls-sidebar">
+            <div class="sidebar-tabs">
+              <button [class.active]="activeTab === 'layout'" (click)="activeTab = 'layout'">ESTRUCTURA</button>
+              <button [class.active]="activeTab === 'style'" (click)="activeTab = 'style'">ESTILO</button>
+            </div>
+
             <div class="sidebar-scroll-content">
               
-              <!-- STRUCTURE SECTION (Drag & Drop) -->
-              <div class="sidebar-section">
+              <!-- LAYOUT SECTION -->
+              <div class="sidebar-section animate-fade-in" *ngIf="activeTab === 'layout'">
                 <div class="section-header">
-                  <span class="section-icon">🏗️</span>
-                  <h4>STRUCTURE & ORDER</h4>
+                  <span class="section-icon">📐</span>
+                  <h4>ORDEN DE ELEMENTOS</h4>
                 </div>
-
-                <div class="layer-list">
-                  <div *ngIf="editableElements.length === 0" class="empty-state">
-                    No elements yet
-                  </div>
-                  
-                  <div *ngFor="let el of editableElements; let i = index" 
-                       class="layer-item" 
+                
+                <div class="reorder-tips">Organiza tus componentes internos arrastrando para cambiar su prioridad visual.</div>
+                
+                <div class="draggable-item-list">
+                  <div *ngFor="let child of editableChildren; let i = index" 
+                       class="child-item-card" 
                        draggable="true"
                        (dragstart)="onDragStart($event, i)"
                        (dragover)="onDragOver($event)"
                        (drop)="onDrop($event, i)"
                        (dragend)="onDragEnd()">
-                    <div class="layer-handle">
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 8h16M4 16h16" stroke-linecap="round"/>
-                      </svg>
+                    <span class="drag-handle">⠿</span>
+                    <span class="child-index">#{{ i + 1 }}</span>
+                    <span class="child-type">{{ child.type }}</span>
+                  </div>
+                </div>
+
+                <div class="control-group mt-8">
+                  <label>Gap entre Elementos ({{ editableContent.gap }}px)</label>
+                  <input type="range" min="0" max="100" step="5" [(ngModel)]="editableContent.gap" (ngModelChange)="onContentChange()" class="premium-range">
+                </div>
+              </div>
+
+              <!-- STYLE SECTION -->
+              <div class="sidebar-section animate-fade-in" *ngIf="activeTab === 'style'">
+                <div class="section-header">
+                  <span class="section-icon">🎨</span>
+                  <h4>APARIENCIA DEL CONTENEDOR</h4>
+                </div>
+                
+                <div class="control-group">
+                  <label>Color de Fondo</label>
+                  <div class="color-row">
+                    <div class="color-preview" [style.background-color]="editableStyles.backgroundColor">
+                      <input type="color" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onContentChange()">
                     </div>
-                    <span class="layer-name">{{ el.name || el.type || 'Element ' + (i+1) }}</span>
-                    <span class="layer-type">{{ el.type }}</span>
+                    <input type="text" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onContentChange()" class="premium-input-mini">
+                  </div>
+                  <div class="theme-palette mt-2" *ngIf="globalColors$ | async as colors">
+                     <div *ngFor="let c of colors" class="swatch" [style.background-color]="c" (click)="editableStyles.backgroundColor = c; onContentChange()"></div>
                   </div>
                 </div>
-                
-                <p class="text-[10px] text-slate-500 mt-2 italic">Drag items to reorder logic flow.</p>
-              </div>
 
-              <!-- LAYOUT SECTION -->
-              <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">📐</span>
-                  <h4>LAYOUT & DISPLAY</h4>
-                
                 <div class="control-group">
-                  <label>Display Type</label>
-                  <select [(ngModel)]="editableConfig.display" class="premium-input">
-                    <option value="block">Block (Standard)</option>
-                    <option value="flex">Flexbox</option>
-                    <option value="grid">Grid (Future)</option>
+                  <label>Padding Interno ({{ editableStyles.paddingProp }}px)</label>
+                  <input type="range" min="0" max="100" step="5" [(ngModel)]="editableStyles.paddingProp" (ngModelChange)="onContentChange()" class="premium-range">
+                </div>
+
+                <div class="control-group">
+                  <label>Radio de Borde ({{ editableStyles.borderRadiusProp }}px)</label>
+                  <input type="range" min="0" max="60" step="4" [(ngModel)]="editableStyles.borderRadiusProp" (ngModelChange)="onContentChange()" class="premium-range">
+                </div>
+
+                <div class="control-group">
+                  <label>Sombra Gold</label>
+                  <select [(ngModel)]="editableStyles.boxShadow" (ngModelChange)="onContentChange()" class="premium-select">
+                    <option value="none">Ninguna</option>
+                    <option value="0 10px 30px rgba(0,0,0,0.1)">Suave</option>
+                    <option value="0 20px 60px rgba(0,0,0,0.3)">Atrevida</option>
+                    <option value="0 30px 100px rgba(0,0,0,0.5)">Dramática</option>
                   </select>
-                </div>
-
-                <div class="control-group" *ngIf="editableConfig.display === 'flex'">
-                  <label>Direction</label>
-                  <select [(ngModel)]="editableConfig.flexDirection" class="premium-input">
-                    <option value="row">Horizontal (Row)</option>
-                    <option value="column">Vertical (Column)</option>
-                  </select>
-                </div>
-
-                <div class="control-row grid grid-cols-2 gap-2" *ngIf="editableConfig.display === 'flex'">
-                  <div class="control-group">
-                    <label>Justify</label>
-                    <select [(ngModel)]="editableConfig.justifyContent" class="premium-input">
-                      <option value="flex-start">Start</option>
-                      <option value="center">Center</option>
-                      <option value="flex-end">End</option>
-                      <option value="space-between">Between</option>
-                    </select>
-                  </div>
-                  <div class="control-group">
-                    <label>Align</label>
-                    <select [(ngModel)]="editableConfig.alignItems" class="premium-input">
-                      <option value="stretch">Stretch</option>
-                      <option value="center">Center</option>
-                      <option value="flex-start">Start</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="control-group">
-                  <label>Gap (Spacing)</label>
-                  <input type="text" [(ngModel)]="editableConfig.gap" placeholder="e.g. 20px" class="premium-input">
-                </div>
-              </div>
-
-              <!-- APPEARANCE SECTION -->
-              <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">✨</span>
-                  <h4>STYLING & COLORS</h4>
-                </div>
-                
-                <div class="control-group">
-                  <label>Background Color</label>
-                  <div class="color-control-wrapper">
-                    <div class="color-input-wrapper">
-                      <div class="color-preview" [style.background-color]="editableConfig.backgroundColor">
-                        <input type="color" [(ngModel)]="editableConfig.backgroundColor">
-                      </div>
-                      <input type="text" [(ngModel)]="editableConfig.backgroundColor" class="premium-input hex-input">
-                    </div>
-                  </div>
-                </div>
-
-                <div class="control-group">
-                  <label>Border Radius</label>
-                  <input type="text" [(ngModel)]="editableConfig.borderRadius" placeholder="e.g. 12px" class="premium-input">
-                </div>
-
-                <div class="control-group">
-                  <label>Border</label>
-                  <input type="text" [(ngModel)]="editableConfig.border" placeholder="e.g. 1px solid #ccc" class="premium-input">
-                </div>
-              </div>
-
-              <!-- SPACING SECTION -->
-              <div class="sidebar-section no-border">
-                <div class="section-header">
-                  <span class="section-icon">↔️</span>
-                  <h4>PADDING & MARGIN</h4>
-                </div>
-                <div class="control-row grid grid-cols-2 gap-2">
-                  <div class="control-group">
-                    <label>Padding</label>
-                    <input type="text" [(ngModel)]="editableConfig.padding" class="premium-input">
-                  </div>
-                  <div class="control-group">
-                    <label>Margin</label>
-                    <input type="text" [(ngModel)]="editableConfig.margin" class="premium-input">
-                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="isolated-canvas">
-            <div class="canvas-inner">
-              <div class="draggable-wrapper"
-                   [style.width.px]="currentSize.width"
-                   [style.height.px]="currentSize.height">
+          <!-- Canvas Area -->
+          <div class="isolated-canvas" #canvas (mousedown)="onCanvasMouseDown($event)">
+              <div class="canvas-inner" #canvasInner
+                   [style.transform]="'scale(' + viewportScale + ')'"
+                   [style.transformOrigin]="'center top'"
+                   [class.show-grid]="showGrid"
+                   [class.grid-snapping]="snapToGrid">
                 
-                <lib-smart-container
-                  [config]="editableConfig"
-                  [variant]="'default'"
-                  style="display: block; width: 100%; height: 100%;">
+                <div class="draggable-wrapper"
+                     #draggableWrapper
+                     [style.left.px]="currentPosition.x"
+                     [style.top.px]="currentPosition.y"
+                     [style.width.px]="currentSize.width"
+                     [style.minHeight.px]="currentSize.height"
+                     [style.backgroundColor]="editableStyles.backgroundColor"
+                     [style.padding.px]="editableStyles.paddingProp"
+                     [style.borderRadius.px]="editableStyles.borderRadiusProp"
+                     [style.boxShadow]="editableStyles.boxShadow"
+                     [class.is-dragging]="isDragging"
+                     [class.is-resizing]="isResizing"
+                     (mousedown)="onMouseDown($event)">
                   
-                  <!-- Preview content inside the container -->
-                  <div *ngIf="editableElements.length === 0" class="w-full h-full flex items-center justify-center text-slate-500 border-2 border-dashed border-slate-700 rounded-lg">
-                    <div class="text-center">
-                      <p class="text-xs font-bold uppercase tracking-widest">Container Preview</p>
-                      <p class="text-[10px] opacity-60 mt-1">Width: {{currentSize.width}}px | Height: {{currentSize.height}}px</p>
-                    </div>
+                  <div class="smart-content-flow" [style.gap.px]="editableContent.gap">
+                      <div *ngFor="let child of editableChildren" class="placeholder-child">
+                         <span class="label">COMPONENT: {{ child.type }}</span>
+                      </div>
+                      <div class="empty-hint" *ngIf="editableChildren.length === 0">El contenedor está vacío</div>
                   </div>
 
-                  <!-- Blocks Preview -->
-                  <div *ngIf="editableElements.length > 0" class="w-full h-full relative" [style.display]="editableConfig.display" [style.flex-direction]="editableConfig.flexDirection" [style.justify-content]="editableConfig.justifyContent" [style.align-items]="editableConfig.alignItems" [style.gap]="editableConfig.gap">
-                     <div *ngFor="let el of editableElements" class="preview-block" [title]="el.type">
-                        <span class="text-[10px] font-bold">{{ el.type }}</span>
-                     </div>
-                  </div>
-                  
-                </lib-smart-container>
-
-                <div class="resize-handle se" (mousedown)="startResize($event)"></div>
+                  <!-- 8-Point Resizing -->
+                  <div class="resize-handle n"  (mousedown)="startResize($event, 'n')"></div>
+                  <div class="resize-handle s"  (mousedown)="startResize($event, 's')"></div>
+                  <div class="resize-handle e"  (mousedown)="startResize($event, 'e')"></div>
+                  <div class="resize-handle w"  (mousedown)="startResize($event, 'w')"></div>
+                  <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>
+                  <div class="resize-handle ne" (mousedown)="startResize($event, 'ne')"></div>
+                  <div class="resize-handle sw" (mousedown)="startResize($event, 'sw')"></div>
+                  <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
+                </div>
               </div>
-            </div>
-            
+
             <div class="modern-position-dock">
-              <div class="dock-item"><span class="label">DISPLAY</span><span class="value uppercase text-indigo-400">{{ editableConfig.display }}</span></div>
+              <div class="dock-item"><span class="label">CHILDREN</span><span class="value">{{ editableChildren.length }}</span></div>
+              <div class="dock-divider"></div>
+              <div class="dock-item"><span class="label">GAP</span><span class="value">{{ editableContent.gap }}px</span></div>
               <div class="dock-divider"></div>
               <div class="dock-item"><span class="label">SIZE</span><span class="value">{{ currentSize.width }}x{{ currentSize.height }}</span></div>
-              <div class="dock-divider"></div>
-               <div class="dock-item"><span class="label">ITEMS</span><span class="value">{{ editableElements.length }}</span></div>
             </div>
           </div>
         </div>
 
         <div class="isolated-mode-footer">
-          <div class="footer-hint">Los Smart Containers permiten agrupar componentes y gestionar el layout interno dinámicamente.</div>
+          <div class="footer-hint">Smart Container Gold: Flexibilidad total para orquestar tus diseños más complejos.</div>
           <div class="footer-actions-btns">
             <button class="btn-clean secondary" (click)="cancel()">Descartar cambios</button>
-            <button class="btn-clean primary" (click)="apply()">Guardar Estructura</button>
+            <button class="btn-clean primary" (click)="apply()">Guardar Contenedor</button>
           </div>
         </div>
       </div>
     </div>
   `,
   styles: [`
-    .isolated-mode-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(2, 6, 23, 0.98);
-      backdrop-filter: blur(15px);
-      z-index: 9999999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .isolated-mode-container {
-      background: #0f172a;
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 32px;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.8);
-    }
-    .isolated-mode-header {
-      height: 72px;
-      padding: 0 2rem;
-      background: #1e293b;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .mode-badge { font-size: 10px; font-weight: 800; color: #6366f1; background: rgba(99, 102, 241, 0.1); padding: 5px 12px; border-radius: 10px; border: 1px solid rgba(99, 102, 241, 0.2); }
-    .component-name { color: white; font-size: 14px; font-weight: 700; margin-left: 10px; letter-spacing: 0.5px; }
-    .close-main-btn { background: rgba(239, 68, 68, 0.1); color: #f87171; border: none; width: 36px; height: 36px; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
-    .close-main-btn:hover { background: #ef4444; color: white; transform: rotate(90deg); }
+    @import '../_isolated-mode-shared';
+    @include isolated-mode-foundation;
+    @include resize-handles;
+    @include modern-dock;
 
-    .isolated-mode-body {
-      flex: 1;
-      display: flex;
-      flex-direction: row; /* Explicit row */
-      overflow: hidden;
+    .sidebar-tabs { display: flex; background: rgba(15, 23, 42, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      button { flex: 1; padding: 1.2rem 0.5rem; background: transparent; border: none; color: #64748b; font-size: 10px; font-weight: 900; letter-spacing: 1.5px; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        &.active { color: #f472b6; border-bottom-color: #f472b6; background: rgba(244, 114, 182, 0.05); }
+      }
     }
 
-    .controls-sidebar {
-      width: 380px;
-      min-width: 380px; /* Safety */
-      flex-shrink: 0; /* Prevent shrinking */
-      background: #020617;
-      border-right: 1px solid rgba(255,255,255,0.05);
-      overflow-y: auto;
+    .canvas-inner { width: 4000px; height: 3000px; position: relative; padding-top: 150px;
+      &.show-grid { background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px); background-size: 30px 30px; }
     }
-    .sidebar-scroll-content { padding: 2rem; }
-    .sidebar-section { margin-bottom: 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2rem; }
-    .sidebar-section.no-border { border-bottom: none; }
-    .section-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; color: #64748b; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; }
-    
-    .control-group { margin-bottom: 1.5rem; }
-    .control-group label { display: block; font-size: 10px; color: #475569; margin-bottom: 0.6rem; text-transform: uppercase; font-weight: 800; }
-    
-    .premium-input {
-      width: 100%;
-      background: rgba(15, 23, 42, 0.8);
-      border: 1px solid rgba(255,255,255,0.08);
-      color: white;
-      padding: 0.75rem 1rem;
-      border-radius: 14px;
-      font-size: 12px;
-      transition: all 0.2s;
+
+    .draggable-wrapper { position: absolute !important; cursor: move; z-index: 100; border: 2px dashed transparent; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      &:hover { border-color: rgba(244, 114, 182, 0.3); }
+      &.is-dragging, &.is-resizing { border-color: #f472b6; background: rgba(244, 114, 182, 0.02); }
     }
-    .premium-input:focus { border-color: #6366f1; outline: none; background: #0f172a; }
 
-    .color-control-wrapper { display: flex; flex-direction: column; gap: 0.5rem; }
-    .color-input-wrapper { display: flex; gap: 1rem; }
-    .color-preview { width: 42px; height: 42px; border-radius: 12px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); }
-    .color-preview input { position: absolute; inset: -10px; width: 200%; height: 200%; cursor: pointer; }
-
-    .isolated-canvas { flex: 1; background: #010409; position: relative; overflow: hidden; background-image: 
-      linear-gradient(rgba(99, 102, 241, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(99, 102, 241, 0.05) 1px, transparent 1px);
-      background-size: 30px 30px; }
-    .canvas-inner { width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; padding: 60px; }
-    
-    .draggable-wrapper { position: relative; border: 2px dashed rgba(99, 102, 241, 0.3); padding: 8px; border-radius: 4px; }
-    .resize-handle { position: absolute; width: 14px; height: 14px; background: #6366f1; border: 2px solid white; border-radius: 5px; bottom: -7px; right: -7px; cursor: se-resize; transition: transform 0.2s; }
-    .resize-handle:hover { transform: scale(1.2); }
-
-    .modern-position-dock { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(12px); padding: 0.8rem 1.8rem; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.05); display: flex; gap: 2rem; color: white; font-size: 11px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-    .dock-divider { width: 1px; background: rgba(255, 255, 255, 0.1); }
-    .dock-item { display: flex; align-items: center; gap: 0.6rem; }
-    .dock-item .label { color: #475569; font-weight: 900; }
-
-    .isolated-mode-footer { height: 80px; padding: 0 3rem; background: #1e293b; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255, 255, 255, 0.05); }
-    .footer-hint { font-size: 12px; color: #64748b; font-style: italic; }
-    .btn-clean { padding: 0.8rem 2rem; border-radius: 16px; font-weight: 800; cursor: pointer; border: none; font-size: 13px; transition: all 0.3s; }
-    .btn-clean.primary { background: #6366f1; color: white; box-shadow: 0 5px 20px rgba(99, 102, 241, 0.4); }
-    .btn-clean.secondary { background: transparent; color: #64748b; }
-    .btn-clean:hover { transform: translateY(-2px); filter: brightness(1.1); }
-    .btn-clean.active { transform: translateY(0); opacity: 0.8; }
-
-    /* Layer List Styles */
-    .layer-list { display: flex; flex-direction: column; gap: 8px; }
-    .empty-state { padding: 1rem; text-align: center; color: #475569; border: 1px dashed rgba(255,255,255,0.1); border-radius: 8px; font-size: 11px; }
-    .layer-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; display: flex; align-items: center; gap: 10px; cursor: grab; transition: all 0.2s; }
-    .layer-item:hover { background: rgba(255,255,255,0.06); border-color: rgba(99, 102, 241, 0.3); }
-    .layer-item:active { cursor: grabbing; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-    .layer-handle { color: #64748b; display: flex; align-items: center; }
-    .layer-name { color: #e2e8f0; font-size: 12px; font-weight: 600; flex: 1; }
-    .layer-type { color: #6366f1; font-size: 9px; font-weight: 800; text-transform: uppercase; background: rgba(99, 102, 241, 0.1); padding: 2px 6px; border-radius: 4px; }
-    .cdk-drag-preview { box-sizing: border-box; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); background: #1e293b; color: white; padding: 10px; display: flex; align-items: center; gap: 10px; }
-    .cdk-drag-placeholder { opacity: 0; }
-    .cdk-drag-animating { transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); }
-    .layer-list.cdk-drop-list-dragging .layer-item:not(.cdk-drag-placeholder) { transition: transform 250ms cubic-bezier(0, 0, 0.2, 1); }
-
-    .preview-block {
-      background: rgba(99, 102, 241, 0.2);
-      border: 1px solid rgba(99, 102, 241, 0.4);
-      color: white;
-      padding: 0.5rem;
-      border-radius: 6px;
-      min-width: 50px;
-      min-height: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .smart-content-flow { display: flex; flex-direction: column; width: 100%; height: 100%; 
+      .placeholder-child { background: rgba(255,255,255,0.05); border: 1px dashed rgba(255,255,255,0.1); padding: 20px; border-radius: 12px; display: flex; align-items: center; justify-content: center; .label { font-size: 10px; font-weight: 900; color: #64748b; text-transform: uppercase; letter-spacing: 1px; } }
+      .empty-hint { color: #475569; font-size: 12px; font-style: italic; text-align: center; margin-top: 40px; }
     }
+
+    .reorder-tips { font-size: 11px; color: #64748b; margin-bottom: 20px; line-height: 1.5; padding: 10px; background: rgba(255,255,255,0.03); border-radius: 10px; }
+    .draggable-item-list { display: flex; flex-direction: column; gap: 10px; }
+    .child-item-card { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; cursor: grab; display: flex; align-items: center; gap: 12px; transition: all 0.2s;
+      &:active { cursor: grabbing; transform: scale(0.98); opacity: 0.8; }
+      &:hover { border-color: rgba(255, 255, 255, 0.15); }
+      .drag-handle { color: #334155; font-size: 18px; }
+      .child-index { font-weight: 900; color: #f472b6; font-size: 10px; }
+      .child-type { font-weight: 700; color: white; font-size: 12px; text-transform: uppercase; }
+    }
+
+    .color-row { display: flex; gap: 10px; align-items: center; .color-preview { width: 34px; height: 34px; border-radius: 8px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); input { position: absolute; inset: -5px; width: 150%; height: 150%; cursor: pointer; opacity: 0; } } }
+    .theme-palette { display: flex; flex-wrap: wrap; gap: 5px; .swatch { width: 20px; height: 20px; border-radius: 4px; cursor: pointer; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.2s; &:hover { transform: scale(1.2); } } }
+
+    .premium-input, .premium-select { width: 100%; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 0.8rem 1rem; border-radius: 12px; font-size: 13px; &:focus { border-color: #f472b6; outline: none; } }
+    .premium-input-mini { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-family: monospace; }
+    .premium-range { width: 100%; accent-color: #f472b6; }
+
+    .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
   `]
 })
-export class EditorSmartContainerIsolatedModeComponent implements OnInit, OnDestroy {
-  @Input() public config!: IsolatedModeConfig;
-  @Output() public closed = new EventEmitter<void>();
-  @Output() public applied = new EventEmitter<IsolatedModeConfig>();
+export class EditorSmartContainerIsolatedModeComponent extends BaseIsolatedModeComponent {
+  @ViewChild('canvas') canvasRef!: ElementRef;
 
-  public editableConfig: SmartContainerConfig = {};
-  public editableElements: any[] = [];
-  public currentSize = { width: 0, height: 0 };
-  
-  private isResizing = false;
-  private dragStartX = 0;
-  private dragStartY = 0;
-  private startW = 0;
-  private startH = 0;
+  private store = inject(Store<AppState>);
+  globalColors$: Observable<string[]> = this.store.select(selectCurrentPageGlobalStyles).pipe(
+    map(styles => styles ? [styles.primaryColor, styles.secondaryColor, styles.accentColor, styles.backgroundColor, styles.textColor].filter(Boolean) : [])
+  );
 
-  ngOnInit() {
-    this.editableConfig = { ...this.config.content };
-    // Extract elements if passed in content, otherwise init empty
-    if (this.config.content['elements']) {
-        this.editableElements = [...this.config.content['elements']];
-        delete (this.editableConfig as any)['elements'];
-    }
+  activeTab: 'layout' | 'style' = 'layout';
+  editableChildren: any[] = [];
+  dragToIndex = -1;
+
+  protected override getCanvasElement(): HTMLElement | null {
+    return this.canvasRef?.nativeElement;
+  }
+
+  protected override initializeState() {
+    this.editableContent = { 
+        ...this.config.content,
+        gap: this.config.content.gap || 20
+    };
+    this.editableChildren = JSON.parse(JSON.stringify(this.config.content.children || []));
+    this.editableStyles = { 
+        ...this.config.styles,
+        paddingProp: parseInt(this.config.styles.padding) || 40,
+        borderRadiusProp: parseInt(this.config.styles.borderRadius) || 24,
+        backgroundColor: this.config.styles.backgroundColor || 'transparent',
+        boxShadow: this.config.styles.boxShadow || 'none'
+    };
     
-    this.currentSize = { ...this.config.size };
+    this.currentPosition = { ...(this.config.position || { x: 300, y: 150 }) };
+    this.currentSize = { 
+        width: this.config.size?.width || 800, 
+        height: this.config.size?.height || 600 
+    };
+    
+    this.initialPosition = { ...this.currentPosition };
+    this.initialSize = { ...this.currentSize };
+    this.viewportScale = 0.5;
 
-    window.addEventListener('mousemove', this.onMouseMove);
-    window.addEventListener('mouseup', this.onMouseUp);
+    this.saveState();
   }
 
-  ngOnDestroy() {
-    window.removeEventListener('mousemove', this.onMouseMove);
-    window.removeEventListener('mouseup', this.onMouseUp);
+  override saveState() {
+    const newState = {
+      position: { ...this.currentPosition },
+      size: { ...this.currentSize },
+      styles: JSON.parse(JSON.stringify(this.editableStyles)),
+      content: {
+        ...JSON.parse(JSON.stringify(this.editableContent)),
+        children: JSON.parse(JSON.stringify(this.editableChildren))
+      }
+    };
+
+    const lastState = this.undoStack[this.undoStack.length - 1];
+    if (lastState && JSON.stringify(lastState) === JSON.stringify(newState)) return;
+
+    this.undoStack.push(newState as any);
+    if (this.undoStack.length > 50) this.undoStack.shift();
+    this.redoStack = [];
   }
 
-  private draggedIndex: number | null = null;
-
-  public onDragStart(event: DragEvent, index: number) {
-    this.draggedIndex = index;
-    if (event.dataTransfer) {
-      event.dataTransfer.effectAllowed = 'move';
-      event.dataTransfer.setData('text/html', index.toString());
-    }
+  onDragStart(event: DragEvent, index: number) {
+    event.dataTransfer?.setData('text/plain', index.toString());
   }
 
-  public onDragOver(event: DragEvent) {
+  onDragOver(event: DragEvent) {
     event.preventDefault();
-    if (event.dataTransfer) {
-      event.dataTransfer.dropEffect = 'move';
-    }
   }
 
-  public onDrop(event: DragEvent, dropIndex: number) {
+  onDrop(event: DragEvent, dropIndex: number) {
     event.preventDefault();
-    if (this.draggedIndex !== null && this.draggedIndex !== dropIndex) {
-      const item = this.editableElements[this.draggedIndex];
-      this.editableElements.splice(this.draggedIndex, 1);
-      this.editableElements.splice(dropIndex, 0, item);
+    const dragIndex = parseInt(event.dataTransfer?.getData('text/plain') || '-1');
+    if (dragIndex !== -1 && dragIndex !== dropIndex) {
+      const movedItem = this.editableChildren.splice(dragIndex, 1)[0];
+      this.editableChildren.splice(dropIndex, 0, movedItem);
+      this.onContentChange();
     }
   }
 
-  public onDragEnd() {
-    this.draggedIndex = null;
-  }
+  onDragEnd() { }
 
-  public startResize(e: MouseEvent) {
-    e.stopPropagation();
-    this.isResizing = true;
-    this.dragStartX = e.clientX;
-    this.dragStartY = e.clientY;
-    this.startW = this.currentSize.width;
-    this.startH = this.currentSize.height;
-  }
-
-  private onMouseMove = (e: MouseEvent) => {
-    if (this.isResizing) {
-      this.currentSize.width = Math.max(100, this.startW + (e.clientX - this.dragStartX));
-      this.currentSize.height = Math.max(100, this.startH + (e.clientY - this.dragStartY));
-    }
-  }
-
-  private onMouseUp = () => {
-    this.isResizing = false;
-  }
-
-  public close() { this.closed.emit(); }
-  public cancel() { this.closed.emit(); }
-  public onOverlayClick(e: Event) { this.closed.emit(); }
-
-  public apply() {
+  override apply() {
     this.applied.emit({
       ...this.config,
-      content: { ...this.editableConfig, elements: this.editableElements },
-      styles: {
-        ...this.config.styles,
-        width: this.currentSize.width + 'px',
-        height: this.currentSize.height + 'px'
+      content: { 
+        ...this.editableContent, 
+        children: this.editableChildren
       },
+      styles: {
+        ...this.editableStyles,
+        padding: this.editableStyles.paddingProp + 'px',
+        borderRadius: this.editableStyles.borderRadiusProp + 'px',
+        left: this.currentPosition.x + 'px',
+        top: this.currentPosition.y + 'px',
+        width: this.currentSize.width + 'px',
+        minHeight: this.currentSize.height + 'px',
+        position: 'absolute'
+      },
+      position: { ...this.currentPosition },
       size: { ...this.currentSize }
     });
   }
+
+  override onContentChange() {
+    this.scheduleSaveState();
+  }
+
+  onCanvasMouseDown(event: MouseEvent) { }
+  onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

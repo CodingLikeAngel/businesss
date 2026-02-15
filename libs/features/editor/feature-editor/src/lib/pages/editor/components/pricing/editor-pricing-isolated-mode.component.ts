@@ -1,20 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject, HostListener } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../../store/state/app.state';
-import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.selectors';
-import { map } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
-
-import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
-export { IsolatedModeConfig };
-
-export interface UndoRedoState {
-  plans: any[];
-  content: any;
-  styles: any;
-}
+import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 
 @Component({
   selector: 'lib-editor-pricing-isolated-mode',
@@ -27,12 +14,12 @@ export interface UndoRedoState {
     <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
         
-        <!-- Header -->
+        <!-- ===== HEADER ===== -->
         <div class="isolated-mode-header">
           <div class="header-breadcrumb">
-            <span class="mode-badge">💎 PREMIUM PRICING</span>
+            <span class="mode-badge">💎 PRICING EDITOR</span>
             <span class="separator">/</span>
-            <span class="component-name">PLANES Y TARIFAS</span>
+            <span class="component-name">PLANES & TARIFAS GOLD</span>
           </div>
           
           <div class="header-actions">
@@ -47,143 +34,157 @@ export interface UndoRedoState {
             
             <div class="divider"></div>
             
+            <div class="action-group">
+              <button class="icon-btn" (click)="toggleGrid()" [class.active]="showGrid" title="Cuadrícula (G)">
+                <span class="icon">#</span>
+              </button>
+              <button class="icon-btn" (click)="toggleSnap()" [class.active]="snapToGrid" title="Snap (S)">
+                <span class="icon">⊞</span>
+              </button>
+              <button class="icon-btn" (click)="resetPosition()" title="Reset (R)">
+                <span class="icon">↺</span>
+              </button>
+            </div>
+
+            <div class="divider"></div>
+
             <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
           </div>
         </div>
 
+        <!-- ===== BODY ===== -->
         <div class="isolated-mode-body">
+          
           <!-- Sidebar Controls -->
           <div class="controls-sidebar">
+            <div class="sidebar-tabs">
+                <button [class.active]="activeTab === 'config'" (click)="activeTab = 'config'">ESTILO</button>
+                <button [class.active]="activeTab === 'plans'" (click)="activeTab = 'plans'">PLANES</button>
+            </div>
+
             <div class="sidebar-scroll-content">
               
-              <!-- SECCIÓN: CABECERA -->
-              <div class="sidebar-section">
+              <!-- CONFIG TAB -->
+              <div class="sidebar-section" *ngIf="activeTab === 'config'">
                 <div class="section-header">
-                  <span class="section-icon">📜</span>
-                  <h4>CONCEPTO DE SECCIÓN</h4>
+                  <span class="section-icon">🎨</span>
+                  <h4>CONCEPTO & ESTILO</h4>
                 </div>
                 
                 <div class="control-group">
-                  <label>Título Principal</label>
-                  <input type="text" [(ngModel)]="editableContent.title" (ngModelChange)="onPartialChange()" class="premium-input">
+                  <label>Título de la Sección</label>
+                  <input type="text" [(ngModel)]="editableContent.title" (ngModelChange)="onContentChange()" class="premium-input">
                 </div>
 
                 <div class="control-group">
-                  <label>Subtítulo Explicativo</label>
-                  <textarea [(ngModel)]="editableContent.subtitle" (ngModelChange)="onPartialChange()" class="premium-input h-20"></textarea>
-                </div>
-              </div>
-
-              <!-- SECCIÓN: CONFIGURACIÓN GLOBAL -->
-              <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">⚙️</span>
-                  <h4>AJUSTES GLOBALES</h4>
-                </div>
-                
-                <div class="control-group">
-                  <label>Variante Visual</label>
-                  <select [(ngModel)]="editableContent.variant" (ngModelChange)="onPartialChange()" class="premium-input">
-                    <option value="default">Estándar</option>
-                    <option value="glass">Glassmorphism</option>
-                    <option value="modern">Modern Suite</option>
-                    <option value="minimal">Minimal Dark</option>
-                  </select>
+                  <label>Subtítulo / Promo</label>
+                  <textarea [(ngModel)]="editableContent.subtitle" (ngModelChange)="onContentChange()" class="premium-textarea"></textarea>
                 </div>
 
-                <div class="control-group">
-                  <label>Moneda / Símbolo</label>
-                  <input type="text" [(ngModel)]="editableContent.currency" (ngModelChange)="onPartialChange()" class="premium-input" placeholder="€">
-                </div>
-
-                <div class="control-group">
-                  <label>Color de Acento (Highlight)</label>
-                  <div class="flex gap-2">
-                    <input type="color" [(ngModel)]="editableContent.accentColor" (ngModelChange)="onPartialChange()" class="color-picker-premium">
-                    <input type="text" [(ngModel)]="editableContent.accentColor" (ngModelChange)="onPartialChange()" class="premium-input-small">
+                <div class="control-row grid grid-cols-2 gap-4 mt-4">
+                  <div class="control-group">
+                    <label>Moneda</label>
+                    <input type="text" [(ngModel)]="editableContent.currency" (ngModelChange)="onContentChange()" class="premium-input text-center">
+                  </div>
+                  <div class="control-group">
+                    <label>Color Acento</label>
+                    <div class="color-input-wrapper">
+                        <div class="color-preview" [style.background-color]="editableContent.accentColor">
+                            <input type="color" [(ngModel)]="editableContent.accentColor" (ngModelChange)="onContentChange()">
+                        </div>
+                        <input type="text" [(ngModel)]="editableContent.accentColor" (ngModelChange)="onContentChange()" class="premium-input hex-input">
+                    </div>
                   </div>
                 </div>
+
+                <div class="control-group mt-6">
+                  <label>Ajuste de Canvas (Height)</label>
+                  <input type="number" [(ngModel)]="currentSize.height" (ngModelChange)="onSizeChange()" class="premium-input">
+                </div>
               </div>
 
-              <!-- SECCIÓN: LISTADO DE PLANES -->
-              <div class="sidebar-section">
+              <!-- PLANS TAB -->
+              <div class="sidebar-section" *ngIf="activeTab === 'plans'">
                 <div class="section-header">
                   <span class="section-icon">💰</span>
-                  <h4>PLANES ACTIVOS ({{ editablePlans.length }})</h4>
-                  <button class="premium-add-btn" (click)="addPlan()">+ Nuevo</button>
+                  <h4>PLANES ACTIVOS</h4>
+                  <button class="add-btn-mini" (click)="addPlan()">+</button>
                 </div>
                 
                 <div class="items-list-premium">
                   <div *ngFor="let plan of editablePlans; let i = index" 
                        class="item-card" 
                        [class.active]="selectedPlanIndex === i" 
-                       (click)="selectPlan(i)">
-                    <div class="item-visual plan" [style.border-color]="plan.highlighted ? editableContent.accentColor : 'transparent'">
-                      <span class="text-xs font-bold">{{ plan.price }}</span>
+                       (click)="selectedPlanIndex = i">
+                    <div class="item-visual" [style.background-color]="plan.highlighted ? editableContent.accentColor : 'rgba(255,255,255,0.05)'">
+                        <span class="text-[10px] font-bold">{{ plan.price }}</span>
                     </div>
                     <div class="item-info">
                       <span class="item-title">{{ plan.name || 'Sin Nombre' }}</span>
-                      <span class="item-meta">{{ plan.highlighted ? '🔥 DESTACADO' : 'Plan Estándar' }}</span>
+                      <span class="item-meta">{{ plan.highlighted ? 'RECOMENDADO' : 'Estándar' }}</span>
                     </div>
-                    <div class="item-actions">
-                      <button class="delete-icon-btn" (click)="removePlan(i, $event)">✕</button>
-                    </div>
+                    <button class="delete-btn" (click)="removePlan(i, $event)">✕</button>
                   </div>
                 </div>
-              </div>
 
-              <!-- SECCIÓN: EDITOR DE PLAN SELECCIONADO -->
-              <div class="sidebar-section no-border" *ngIf="selectedPlanIndex !== -1">
-                <div class="premium-editor-box">
+                <!-- PLAN EDITOR -->
+                <div class="detail-editor-card mt-6 animate-fade-in" *ngIf="selectedPlanIndex !== -1">
                   <div class="section-header">
                     <span class="section-icon">✏️</span>
-                    <h4>EDITAR PLAN: {{ editablePlans[selectedPlanIndex].name }}</h4>
+                    <h4>EDITAR PLAN #{{ selectedPlanIndex + 1 }}</h4>
                   </div>
 
                   <div class="control-group">
                     <label>Nombre del Plan</label>
-                    <input type="text" [(ngModel)]="editablePlans[selectedPlanIndex].name" (ngModelChange)="onPartialChange()" class="premium-input">
+                    <input type="text" [(ngModel)]="editablePlans[selectedPlanIndex].name" (ngModelChange)="onContentChange()" class="premium-input">
+                  </div>
+
+                  <div class="control-row grid grid-cols-2 gap-2">
+                    <div class="control-group">
+                        <label>Precio</label>
+                        <input type="text" [(ngModel)]="editablePlans[selectedPlanIndex].price" (ngModelChange)="onContentChange()" class="premium-input">
+                    </div>
+                    <div class="control-group">
+                        <label>Periodo</label>
+                        <input type="text" [(ngModel)]="editablePlans[selectedPlanIndex].period" (ngModelChange)="onContentChange()" class="premium-input" placeholder="/mes">
+                    </div>
                   </div>
 
                   <div class="control-group">
-                    <label>Precio / Valor</label>
-                    <input type="text" [(ngModel)]="editablePlans[selectedPlanIndex].price" (ngModelChange)="onPartialChange()" class="premium-input">
+                    <label>Características (Líneas)</label>
+                    <textarea [(ngModel)]="editablePlans[selectedPlanIndex].featuresText" (ngModelChange)="onContentChange()" class="premium-textarea h-32" placeholder="Acceso Premium&#10;Soporte 24/7..."></textarea>
                   </div>
 
-                  <div class="control-group">
-                    <label>Período (ej: /mes, /año)</label>
-                    <input type="text" [(ngModel)]="editablePlans[selectedPlanIndex].period" (ngModelChange)="onPartialChange()" class="premium-input">
-                  </div>
-
-                  <div class="control-group">
-                    <label>Características (Una por línea)</label>
-                    <textarea [(ngModel)]="editablePlans[selectedPlanIndex].featuresText" (ngModelChange)="onPartialChange()" class="premium-input h-32" placeholder="Característica 1&#10;Característica 2..."></textarea>
-                  </div>
-
-                  <div class="control-group">
-                    <label class="premium-checkbox-label">
-                      <input type="checkbox" [(ngModel)]="editablePlans[selectedPlanIndex].highlighted" (ngModelChange)="onPartialChange()">
-                      <span>Destacar este plan</span>
-                    </label>
-                  </div>
-
-                  <div class="control-group">
-                    <label>Texto del Botón</label>
-                    <input type="text" [(ngModel)]="editablePlans[selectedPlanIndex].buttonText" (ngModelChange)="onPartialChange()" class="premium-input">
+                  <div class="checkbox-control mt-4" (click)="editablePlans[selectedPlanIndex].highlighted = !editablePlans[selectedPlanIndex].highlighted; onContentChange()">
+                    <div class="custom-checkbox" [class.checked]="editablePlans[selectedPlanIndex].highlighted"></div>
+                    <span>Destacar este Plan</span>
                   </div>
                 </div>
               </div>
-
             </div>
           </div>
 
           <!-- Canvas Area -->
-          <div class="isolated-canvas pricing-ambient">
-            <div class="canvas-inner">
-               <div class="pricing-preview-container">
+          <div class="isolated-canvas" #canvas (mousedown)="onCanvasMouseDown($event)">
+              <div class="canvas-inner" #canvasInner
+                   [style.transform]="'scale(' + viewportScale + ')'"
+                   [style.transformOrigin]="'center top'"
+                   [class.show-grid]="showGrid"
+                   [class.grid-snapping]="snapToGrid">
+                
+                <div class="draggable-wrapper"
+                     #draggableWrapper
+                     [style.left.px]="currentPosition.x"
+                     [style.top.px]="currentPosition.y"
+                     [style.width.px]="currentSize.width"
+                     [style.min-height.px]="currentSize.height"
+                     [class.is-dragging]="isDragging"
+                     [class.is-resizing]="isResizing"
+                     (mousedown)="onMouseDown($event)">
+                  
                   <div class="preview-header-branded" *ngIf="editableContent.title">
-                     <h2 class="premium-title">{{ editableContent.title }}</h2>
-                     <p class="premium-subtitle">{{ editableContent.subtitle }}</p>
+                      <h2 class="premium-title">{{ editableContent.title }}</h2>
+                      <p class="premium-subtitle">{{ editableContent.subtitle }}</p>
                   </div>
 
                   <div class="pricing-render-grid">
@@ -191,9 +192,9 @@ export interface UndoRedoState {
                          class="plan-render-wrapper"
                          [class.is-highlighted]="plan.highlighted"
                          [class.is-editing]="selectedPlanIndex === i"
-                         (click)="selectPlan(i)">
+                         (click)="selectedPlanIndex = i; $event.stopPropagation()">
                       
-                      <div class="plan-card-renderer" [style.border-top-color]="plan.highlighted ? editableContent.accentColor : 'transparent'">
+                      <div class="plan-card-renderer" [style.border-top-color]="plan.highlighted ? editableContent.accentColor : 'rgba(255,255,255,0.05)'">
                          <div class="plan-badge" *ngIf="plan.highlighted" [style.background]="editableContent.accentColor">RECOMENDADO</div>
                          <h3 class="plan-name">{{ plan.name }}</h3>
                          <div class="plan-price">
@@ -209,7 +210,7 @@ export interface UndoRedoState {
                             </li>
                          </ul>
 
-                         <button class="plan-cta" [style.background]="plan.highlighted ? editableContent.accentColor : 'rgba(255,255,255,0.05)'">
+                         <button class="plan-cta" [style.background]="plan.highlighted ? editableContent.accentColor : 'rgba(255,255,255,0.08)'">
                             {{ plan.buttonText || 'Elegir Plan' }}
                          </button>
                       </div>
@@ -217,324 +218,195 @@ export interface UndoRedoState {
                       <div class="item-id-badge">#{{ i + 1 }}</div>
                     </div>
                   </div>
-               </div>
-            </div>
+
+                  <!-- 8-point Resize Handles -->
+                  <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>
+                  <div class="resize-handle n"  (mousedown)="startResize($event, 'n')"></div>
+                  <div class="resize-handle ne" (mousedown)="startResize($event, 'ne')"></div>
+                  <div class="resize-handle e"  (mousedown)="startResize($event, 'e')"></div>
+                  <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
+                  <div class="resize-handle s"  (mousedown)="startResize($event, 's')"></div>
+                  <div class="resize-handle sw" (mousedown)="startResize($event, 'sw')"></div>
+                  <div class="resize-handle w"  (mousedown)="startResize($event, 'w')"></div>
+                </div>
+              </div>
 
             <div class="modern-position-dock">
               <div class="dock-item"><span class="label">ACCENT</span><div class="color-dot" [style.background]="editableContent.accentColor"></div><span class="value uppercase">{{ editableContent.accentColor }}</span></div>
               <div class="dock-divider"></div>
               <div class="dock-item"><span class="label">CURRENCY</span><span class="value">{{ editableContent.currency }}</span></div>
               <div class="dock-divider"></div>
-              <div class="dock-item"><span class="label">TRANSFORM</span><span class="value">SCALE(1.0)</span></div>
+              <div class="dock-item"><span class="label">TOTAL</span><span class="value">{{ editablePlans.length }} Planes</span></div>
             </div>
           </div>
         </div>
 
-        <!-- Footer -->
         <div class="isolated-mode-footer">
-          <div class="footer-hint">Consejo: Destaca el plan que ofrezca la mejor relación calidad-precio para aumentar conversiones.</div>
+          <div class="footer-hint">Pricing Pro: El 80% de los usuarios eligen el plan destacado. Úsalo con estrategia.</div>
           <div class="footer-actions-btns">
             <button class="btn-clean secondary" (click)="cancel()">Descartar cambios</button>
-            <button class="btn-clean primary" (click)="apply()">Guardar Tabla de Precios</button>
+            <button class="btn-clean primary" (click)="apply()">Guardar Tarifas</button>
           </div>
         </div>
       </div>
     </div>
   `,
   styles: [`
-    .isolated-mode-overlay {
-      position: fixed; inset: 0 !important; background: rgba(2, 6, 23, 0.97); backdrop-filter: blur(16px);
-      z-index: 9999999 !important; display: flex; align-items: center; justify-content: center; padding: 1.5vh 1.5vw;
+    @import '../_isolated-mode-shared';
+    @include isolated-mode-foundation;
+    @include resize-handles;
+    @include modern-dock;
+
+    .canvas-inner { width: 6000px; height: 6000px; position: relative; padding: 200px;
+      &.show-grid { background-image: radial-gradient(rgba(255, 255, 255, 0.04) 1.5px, transparent 1.5px); background-size: 60px 60px; }
+      &.grid-snapping { background-image: radial-gradient(rgba(251, 191, 36, 0.2) 2px, transparent 2px); background-size: 60px 60px; }
     }
 
-    .isolated-mode-container {
-      background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 28px;
-      width: 100%; height: 100%; display: flex; flex-direction: column; overflow: hidden;
-      box-shadow: 0 50px 150px -30px rgba(0, 0, 0, 1);
-      animation: premium-zoom-in 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    .sidebar-tabs { display: flex; border-bottom: 1px solid rgba(255,255,255,0.05); }
+    .sidebar-tabs button { flex: 1; padding: 1rem; background: transparent; border: none; color: #64748b; font-size: 10px; font-weight: 900; letter-spacing: 1px; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.3s; }
+    .sidebar-tabs button.active { color: #fbbf24; border-bottom-color: #fbbf24; background: rgba(251, 191, 36, 0.05); }
+
+    .draggable-wrapper { position: absolute !important; cursor: move; z-index: 100; outline: 4px solid transparent; outline-offset: 8px; background: rgba(15, 23, 42, 0.4); padding: 50px; box-shadow: 0 40px 100px -20px rgba(0,0,0,0.6); border-radius: 4px;
+      &:hover { outline-color: rgba(251, 191, 36, 0.3); }
+      &.is-dragging, &.is-resizing { outline-color: #fbbf24; outline-width: 5px; }
     }
 
-    @keyframes premium-zoom-in {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
+    .preview-header-branded { text-align: center; margin-bottom: 60px; }
+    .premium-title { font-size: 56px; font-weight: 900; color: white; margin-bottom: 10px; letter-spacing: -2px; }
+    .premium-subtitle { font-size: 20px; color: #94a3b8; max-width: 800px; margin: 0 auto; line-height: 1.5; }
+
+    .pricing-render-grid { display: flex; gap: 30px; width: 100%; justify-content: center; align-items: flex-end; }
+    .plan-render-wrapper { position: relative; flex: 1; max-width: 350px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      &.is-editing { transform: scale(1.05) translateY(-5px); z-index: 10; .plan-card-renderer { border-color: #fbbf24; box-shadow: 0 30px 60px rgba(0,0,0,0.4); } }
     }
 
-    .isolated-mode-header {
-      height: 72px; padding: 0 1.8rem; background: #1e293b; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex; align-items: center; justify-content: space-between;
+    .plan-card-renderer { background: #1e293b; border-radius: 32px; padding: 3rem 2rem; border-top: 5px solid transparent; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; height: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+    .plan-badge { position: absolute; top: -15px; color: #020617; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 900; }
+    .plan-name { font-size: 20px; font-weight: 900; color: #f8fafc; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em; }
+    .plan-price { display: flex; align-items: baseline; gap: 4px; color: white; margin-bottom: 2rem; }
+    .plan-price .amount { font-size: 54px; font-weight: 900; }
+    .plan-price .currency { font-size: 20px; font-weight: 700; }
+    .plan-price .period { font-size: 14px; color: #64748b; }
+    .plan-features { list-style: none; padding: 0; margin: 0 0 2rem 0; width: 100%; display: flex; flex-direction: column; gap: 0.8rem; }
+    .plan-features li { display: flex; align-items: center; gap: 10px; color: #94a3b8; font-size: 14px; text-align: left; }
+    .plan-cta { width: 100%; padding: 1rem; border-radius: 16px; border: none; color: white; font-weight: 900; font-size: 14px; margin-top: auto; cursor: pointer; }
+
+    .item-id-badge { position: absolute; top: -12px; left: -12px; background: #fbbf24; color: #020617; font-size: 11px; font-weight: 900; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 20; }
+
+    .items-list-premium { display: flex; flex-direction: column; gap: 8px; }
+    .item-card { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; cursor: pointer;
+       &.active { border-color: #fbbf24; background: rgba(251, 191, 36, 0.08); }
+    }
+    .item-visual { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; }
+    .item-info { flex: 1; .item-title { display: block; color: white; font-size: 12px; font-weight: 700; } .item-meta { font-size: 9px; color: #64748b; } }
+    .delete-btn { background: transparent; border: none; color: #ef444455; cursor: pointer; padding: 4px; &:hover { color: #ef4444; } }
+
+    .checkbox-control { display: flex; align-items: center; gap: 10px; cursor: pointer;
+      span { font-size: 11px; color: #94a3b8; font-weight: 800; text-transform: uppercase; }
+    }
+    .custom-checkbox { width: 20px; height: 20px; border: 2px solid rgba(255, 255, 255, 0.15); border-radius: 6px; position: relative; transition: all 0.2s;
+      &.checked { background: #fbbf24; border-color: #fbbf24; }
+      &.checked::after { content: '✓'; position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; color: #020617; font-size: 12px; font-weight: 900; }
     }
 
-    .mode-badge { font-size: 10px; font-weight: 900; color: #fbbf24; background: rgba(251, 191, 36, 0.1); padding: 6px 12px; border-radius: 9px; border: 1px solid rgba(251, 191, 36, 0.2); }
-    .component-name { color: #f8fafc; font-size: 15px; font-weight: 800; margin-left: 12px; }
-    .header-actions { display: flex; align-items: center; gap: 1.2rem; }
+    .detail-editor-card { background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(251, 191, 36, 0.2); border-radius: 20px; padding: 1.5rem; }
+    .add-btn-mini { background: #fbbf24; color: #020617; border: none; padding: 2px 10px; border-radius: 6px; font-weight: 900; cursor: pointer; margin-left: auto; }
 
-    .icon-btn {
-      width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;
-      background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #94a3b8; border-radius: 12px; cursor: pointer; transition: all 0.25s;
-    }
-    .icon-btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.1); color: white; border-color: #fbbf24; }
-    .icon-btn:disabled { opacity: 0.15; cursor: not-allowed; }
+    .premium-input, .premium-select { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); color: white; padding: 0.7rem 0.9rem; border-radius: 12px; font-size: 13px; }
+    .premium-textarea { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); color: white; padding: 0.7rem 0.9rem; border-radius: 12px; font-size: 12px; height: 80px; resize: none; }
+    .color-input-wrapper { display: flex; gap: 10px; align-items: center; .color-preview { width: 40px; height: 40px; border-radius: 10px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); input { position: absolute; inset: -5px; width: 150%; height: 150%; cursor: pointer; opacity: 0; } } .hex-input { font-family: monospace; } }
 
-    .close-main-btn {
-      width: 40px; height: 40px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2);
-      color: #ef4444; border-radius: 12px; cursor: pointer; transition: all 0.2s;
-    }
-    .close-main-btn:hover { background: #ef4444; color: white; }
-
-    .isolated-mode-body {
-      flex: 1;
-      display: flex;
-      flex-direction: row; /* Standardized layout */
-      overflow: hidden;
-    }
-
-    .controls-sidebar {
-      width: 380px;
-      min-width: 380px;
-      flex-shrink: 0;
-      background: #020617;
-      border-right: 1px solid rgba(255, 255, 255, 0.08);
-      overflow-y: auto;
-    }
-
-    .sidebar-scroll-content { padding: 2rem; }
-    .sidebar-section { margin-bottom: 2.5rem; padding-bottom: 1.8rem; border-bottom: 1px solid rgba(255, 255, 255, 0.06); }
-    .sidebar-section.no-border { border-bottom: none; }
-    .section-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; }
-    .section-header h4 { margin: 0; font-size: 12px; color: #64748b; font-weight: 900; text-transform: uppercase; letter-spacing: 0.15em; }
-
-    .control-group { margin-bottom: 1.5rem; }
-    .control-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 0.8rem; font-weight: 800; }
-
-    .premium-input {
-      width: 100%; background: rgba(15, 23, 42, 0.7); border: 1px solid rgba(255, 255, 255, 0.1);
-      color: white; padding: 0.85rem 1.1rem; border-radius: 16px; font-size: 14px; transition: all 0.3s;
-    }
-    .premium-input:focus { border-color: #fbbf24; background: rgba(15, 23, 42, 1); outline: none; box-shadow: 0 0 20px rgba(251, 191, 36, 0.1); }
-
-    .premium-input-small { width: 80px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 0.5rem; border-radius: 10px; font-size: 11px; }
-    .color-picker-premium { width: 44px; height: 36px; border: none; border-radius: 10px; cursor: pointer; background: transparent; }
-
-    .premium-add-btn {
-      background: #fbbf24; color: #0f172a; border: none; padding: 6px 14px; border-radius: 10px;
-      font-size: 12px; font-weight: 900; cursor: pointer; box-shadow: 0 4px 10px rgba(251, 191, 36, 0.3);
-    }
-
-    .items-list-premium { display: flex; flex-direction: column; gap: 14px; }
-    .item-card {
-      display: flex; align-items: center; gap: 16px; padding: 14px;
-      background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 18px;
-      cursor: pointer; transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1);
-    }
-    .item-card:hover { background: rgba(30, 41, 59, 0.8); border-color: rgba(251, 191, 36, 0.3); transform: translateX(8px); }
-    .item-card.active { background: rgba(251, 191, 36, 0.08); border-color: #fbbf24; }
-
-    .item-visual.plan {
-      width: 48px; height: 48px; background: #0f172a; border-radius: 14px; border: 2px solid transparent;
-      display: flex; align-items: center; justify-content: center; color: white; overflow: hidden;
-    }
-
-    .item-info { flex: 1; overflow: hidden; }
-    .item-title { display: block; color: white; font-size: 14px; font-weight: 800; }
-    .item-meta { font-size: 11px; color: #64748b; font-weight: 700; }
-
-    .premium-editor-box {
-      background: linear-gradient(135deg, rgba(251, 191, 36, 0.03) 0%, rgba(245, 158, 11, 0.03) 100%);
-      border: 1px solid rgba(251, 191, 36, 0.15); border-radius: 22px; padding: 1.6rem;
-    }
-    
-    .premium-checkbox-label { display: flex; align-items: center; gap: 10px; cursor: pointer; color: white !important; }
-
-    .isolated-canvas {
-      flex: 1; background: #020617; position: relative; overflow: hidden;
-      background-image: radial-gradient(rgba(251, 191, 36, 0.03) 1px, transparent 1px); background-size: 60px 60px;
-    }
-
-    .canvas-inner { width: 100%; height: 100%; overflow-y: auto; padding: 80px 40px; display: flex; flex-direction: column; align-items: center; }
-    
-    .preview-header-branded { text-align: center; margin-bottom: 70px; max-width: 800px; }
-    .premium-title { color: white; font-size: 52px; font-weight: 900; margin-bottom: 1.4rem; letter-spacing: -0.01em; }
-    .premium-subtitle { color: #94a3b8; font-size: 22px; line-height: 1.6; font-weight: 500; }
-
-    .pricing-render-grid { display: flex; gap: 30px; width: 100%; max-width: 1100px; justify-content: center; align-items: flex-end; }
-    .plan-render-wrapper { position: relative; flex: 1; max-width: 350px; border-radius: 28px; border: 2px solid transparent; transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1); cursor: pointer; }
-    .plan-render-wrapper.is-editing { border-color: #fbbf24; transform: scale(1.06) translateY(-10px); z-index: 10; filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.6)); }
-    .plan-render-wrapper.is-highlighted:not(.is-editing) { border-color: rgba(251, 191, 36, 0.1); }
-    
-    .plan-card-renderer {
-      background: #1e293b; border-radius: 28px; padding: 3rem 2rem; border-top: 4px solid transparent; 
-      position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; height: 100%;
-    }
-    
-    .plan-badge { position: absolute; top: -15px; background: #fbbf24; color: #0f172a; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 900; box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3); }
-    .plan-name { font-size: 20px; font-weight: 900; color: #f8fafc; margin-bottom: 1.5rem; text-transform: uppercase; letter-spacing: 0.1em; }
-    .plan-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 2rem; color: white; }
-    .plan-price .currency { font-size: 24px; font-weight: 600; }
-    .plan-price .amount { font-size: 56px; font-weight: 900; }
-    .plan-price .period { font-size: 16px; color: #64748b; font-weight: 600; }
-    
-    .plan-features { list-style: none; padding: 0; margin: 0 0 2.5rem 0; width: 100%; display: flex; flex-direction: column; gap: 1rem; }
-    .plan-features li { display: flex; align-items: center; gap: 10px; color: #cbd5e1; font-size: 14px; font-weight: 600; text-align: left; }
-    .check-icon { font-weight: 900; }
-    
-    .plan-cta { width: 100%; padding: 1rem; border-radius: 16px; border: none; color: white; font-weight: 900; font-size: 15px; margin-top: auto; cursor: pointer; }
-    
-    .item-id-badge { position: absolute; top: -15px; left: -15px; background: #fbbf24; color: #0f172a; font-size: 12px; font-weight: 900; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 20; }
-
-    .modern-position-dock { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.96); backdrop-filter: blur(12px); padding: 0.85rem 2rem; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.1); display: flex; gap: 2rem; color: white; font-size: 13px; box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.5); }
-    .dock-divider { width: 1px; background: rgba(255, 255, 255, 0.1); }
-    .dock-item { display: flex; align-items: center; gap: 0.8rem; }
-    .dock-item .label { color: #64748b; font-weight: 900; text-transform: uppercase; font-size: 11px; }
-    .color-dot { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); }
-
-    .isolated-mode-footer { height: 80px; padding: 0 3rem; background: #1e293b; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255, 255, 255, 0.1); }
-    .footer-hint { font-size: 13px; color: #94a3b8; font-weight: 600; }
-    .btn-clean { padding: 0.8rem 2.2rem; border-radius: 16px; font-weight: 900; cursor: pointer; border: none; font-size: 14px; transition: all 0.25s; }
-    .btn-clean.primary { background: #fbbf24; color: #0f172a; box-shadow: 0 5px 20px rgba(251, 191, 36, 0.3); }
-    .btn-clean.secondary { background: transparent; color: #94a3b8; }
-    .btn-clean.secondary:hover { color: white; background: rgba(255, 255, 255, 0.05); }
+    .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
   `]
 })
-export class EditorPricingIsolatedModeComponent implements OnInit, OnDestroy {
-  @Input() config!: IsolatedModeConfig;
-  @Output() closed = new EventEmitter<void>();
-  @Output() applied = new EventEmitter<IsolatedModeConfig>();
-
-  private store = inject(Store<AppState>);
-
-  // State
-  editablePlans: any[] = [];
-  editableContent: any = {};
+export class EditorPricingIsolatedModeComponent extends BaseIsolatedModeComponent {
+  @ViewChild('canvas') canvasRef!: ElementRef;
+  activeTab: 'config' | 'plans' = 'config';
   selectedPlanIndex = -1;
-  
-  // Undo/Redo
-  undoStack: UndoRedoState[] = [];
-  redoStack: UndoRedoState[] = [];
+  editablePlans: any[] = [];
 
-  private saveTimeout: any;
-
-  get canUndo() { return this.undoStack.length > 1; }
-  get canRedo() { return this.redoStack.length > 0; }
-
-  ngOnInit() {
-    this.initializeState();
+  protected override getCanvasElement(): HTMLElement | null {
+    return this.canvasRef?.nativeElement;
   }
 
-  private initializeState() {
-    this.editablePlans = JSON.parse(JSON.stringify(this.config.content.plans || this.config.content.items || []));
-    this.editableContent = {
-      title: this.config.content.title || 'Planes de Inversión',
-      subtitle: this.config.content.subtitle || 'Elige la opción que mejor se adapte a tus necesidades.',
-      variant: this.config.content.variant || 'default',
-      accentColor: this.config.content.accentColor || '#fbbf24',
-      currency: this.config.content.currency || '€'
+  protected override initializeState() {
+    this.editableContent = { 
+        ...this.config.content,
+        title: this.config.content.title || 'Planes Detallados',
+        subtitle: this.config.content.subtitle || 'Transparencia total para que elijas con confianza.',
+        currency: this.config.content.currency || '€',
+        accentColor: this.config.content.accentColor || '#fbbf24',
+        variant: this.config.content.variant || 'default'
     };
+    this.editablePlans = JSON.parse(JSON.stringify(this.config.content.plans || this.config.content.items || []));
+    this.editableStyles = { ...this.config.styles };
+    
+    this.currentPosition = { ...(this.config.position || { x: 50, y: 50 }) };
+    this.currentSize = { 
+        width: parseInt(this.config.styles?.width) || 1100, 
+        height: parseInt(this.config.styles?.height) || 800 
+    };
+    
+    this.initialPosition = { ...this.currentPosition };
+    this.initialSize = { ...this.currentSize };
+    this.viewportScale = 0.4;
 
-    if (this.editablePlans.length > 0) {
-      this.selectedPlanIndex = 0;
-    }
+    if (this.editablePlans.length > 0) this.selectedPlanIndex = 0;
 
     this.saveState();
   }
 
-  ngOnDestroy() {
-    if (this.saveTimeout) clearTimeout(this.saveTimeout);
+  override onContentChange() {
+    this.scheduleSaveState();
   }
-
-  // --- ACTIONS ---
-  saveState() {
-    const state: UndoRedoState = {
-      plans: JSON.parse(JSON.stringify(this.editablePlans)),
-      content: { ...this.editableContent },
-      styles: { ...this.config.styles }
-    };
-    this.undoStack.push(state);
-    this.redoStack = [];
-    if (this.undoStack.length > 50) this.undoStack.shift();
-  }
-
-  undo() {
-    if (this.undoStack.length > 1) {
-      this.redoStack.push(this.undoStack.pop()!);
-      this.restoreState(this.undoStack[this.undoStack.length - 1]);
-    }
-  }
-
-  redo() {
-    if (this.redoStack.length > 0) {
-      const state = this.redoStack.pop()!;
-      this.undoStack.push(state);
-      this.restoreState(state);
-    }
-  }
-
-  private restoreState(state: UndoRedoState) {
-    this.editablePlans = JSON.parse(JSON.stringify(state.plans));
-    this.editableContent = { ...state.content };
-  }
-
-  onPartialChange() {
-    if (this.saveTimeout) clearTimeout(this.saveTimeout);
-    this.saveTimeout = setTimeout(() => this.saveState(), 800);
-  }
-
-  selectPlan(index: number) { this.selectedPlanIndex = index; }
 
   addPlan() {
     this.editablePlans.push({
-      name: 'Nuevo Plan',
+      name: 'Plan Nuevo',
       price: '99',
       period: '/mes',
-      featuresText: 'Característica A\nCaracterística B\nSoporte Premium',
+      featuresText: 'Característica 1\nCaracterística 2\nSoporte VIP',
       highlighted: false,
-      buttonText: 'Empezar ahora'
+      buttonText: 'Empezar ya'
     });
     this.selectedPlanIndex = this.editablePlans.length - 1;
-    this.saveState();
+    this.onContentChange();
   }
 
   removePlan(index: number, e: MouseEvent) {
     e.stopPropagation();
     this.editablePlans.splice(index, 1);
     if (this.selectedPlanIndex >= this.editablePlans.length) {
-      this.selectedPlanIndex = this.editablePlans.length - 1;
+      this.selectedPlanIndex = Math.max(-1, this.editablePlans.length - 1);
     }
-    this.saveState();
+    this.onContentChange();
   }
 
   getPlanFeatures(plan: any): string[] {
     if (!plan.featuresText) return [];
-    return plan.featuresText.split('\n').filter((f: string) => f.trim() !== '');
+    return plan.featuresText.split('\n').filter((f: any) => f.trim() !== '');
   }
 
-  onOverlayClick(event: MouseEvent) { this.closed.emit(); }
-  close() { this.closed.emit(); }
-  cancel() { this.closed.emit(); }
-
-  apply() {
-    const config: IsolatedModeConfig = {
+  override apply() {
+    this.applied.emit({
       ...this.config,
       content: { 
-        ...this.config.content,
         ...this.editableContent,
         plans: this.editablePlans,
-        items: this.editablePlans // Sync legacy
-      }
-    };
-    this.applied.emit(config);
+        items: this.editablePlans // Backward compat
+      },
+      styles: {
+        ...this.editableStyles,
+        width: this.currentSize.width + 'px',
+        minHeight: this.currentSize.height + 'px',
+        position: 'relative'
+      },
+      position: { ...this.currentPosition },
+      size: { ...this.currentSize }
+    });
   }
 
-  @HostListener('window:keydown', ['$event'])
-  handleKeydown(event: KeyboardEvent) {
-    if (event.key === 'Escape') this.close();
-    if ((event.ctrlKey || event.metaKey) && event.key === 'z') {
-      event.preventDefault();
-      this.undo();
-    }
-    if ((event.ctrlKey || event.metaKey) && event.key === 'y') {
-      event.preventDefault();
-      this.redo();
-    }
-  }
+  onCanvasMouseDown(event: MouseEvent) { }
+  onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, ViewChild, ElementRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -6,17 +6,8 @@ import { UIButtonComponent, variants } from '@negocio/ui-components';
 import { AppState } from '../../../../store/state/app.state';
 import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.selectors';
 import { map } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
-
-import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
-export { IsolatedModeConfig };
-
-export interface UndoRedoState {
-  position: { x: number; y: number };
-  size: { width: number; height: number };
-  styles: any;
-  content: any;
-}
+import { Observable } from 'rxjs';
+import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 
 @Component({
   selector: 'lib-editor-button-isolated-mode',
@@ -40,13 +31,6 @@ export interface UndoRedoState {
           
           <div class="header-actions">
             <div class="action-group">
-              <button class="icon-btn" (click)="showGrid = !showGrid" [class.active]="showGrid" title="Cuadrícula (G)">
-                <span class="icon">#</span>
-              </button>
-              <button class="icon-btn" (click)="snapToGrid = !snapToGrid" [class.active]="snapToGrid" title="Ajustar a Cuadrícula (S)">
-                <span class="icon">⇶</span>
-              </button>
-              <div class="divider"></div>
               <button class="icon-btn" (click)="undo()" [disabled]="!canUndo" title="Deshacer (Ctrl+Z)">
                 <span class="icon">↶</span>
               </button>
@@ -57,6 +41,24 @@ export interface UndoRedoState {
             
             <div class="divider"></div>
             
+            <div class="action-group">
+              <button class="icon-btn" (click)="toggleGrid()" 
+                      [class.active]="showGrid" 
+                      title="Cuadrícula (G)">
+                <span class="icon">#</span>
+              </button>
+              <button class="icon-btn" (click)="toggleSnap()" 
+                      [class.active]="snapToGrid" 
+                      title="Snap (S)">
+                <span class="icon">⊞</span>
+              </button>
+              <button class="icon-btn" (click)="resetPosition()" title="Reset (R)">
+                <span class="icon">↺</span>
+              </button>
+            </div>
+
+            <div class="divider"></div>
+
             <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
           </div>
         </div>
@@ -152,10 +154,13 @@ export interface UndoRedoState {
                   </div>
                 </div>
                 
-                <div class="flex items-center justify-between p-2 bg-slate-900/40 rounded-xl border border-white/5">
-                  <span class="text-[11px] text-slate-300 font-bold uppercase">Modo Oscuro</span>
-                  <div class="toggle-switch" [class.active]="editableContent.dark" (click)="editableContent.dark = !editableContent.dark; onContentChange()">
-                    <div class="toggle-thumb"></div>
+                <div class="control-group">
+                  <label>Modo de Iluminación Ambient</label>
+                  <div class="toggle-wrapper" (click)="toggleDarkMode()" [class.active]="editableContent.dark">
+                    <div class="toggle-track">
+                      <div class="toggle-thumb"></div>
+                    </div>
+                    <span>{{ editableContent.dark ? 'OSCURO' : 'CLARO' }}</span>
                   </div>
                 </div>
               </div>
@@ -175,7 +180,7 @@ export interface UndoRedoState {
                   </div>
 
                   <div *ngIf="bgType === 'solid'" class="color-input-wrapper">
-                    <div class="color-preview">
+                    <div class="color-preview" [style.background]="editableStyles.backgroundColor">
                       <input type="color" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()">
                     </div>
                     <input type="text" [(ngModel)]="editableStyles.backgroundColor" (ngModelChange)="onStyleChange()" class="premium-input font-mono" placeholder="#hex">
@@ -225,7 +230,7 @@ export interface UndoRedoState {
                 <div class="control-row grid grid-cols-2 gap-2">
                   <div class="control-group">
                     <label>Tamaño Fuente</label>
-                    <input type="number" [(ngModel)]="editableStyles.fontSize" [style.fontSize.px]="13" (ngModelChange)="onStyleChange()" class="premium-input" placeholder="14">
+                    <input type="number" [(ngModel)]="editableStyles.fontSize" (ngModelChange)="onStyleChange()" class="premium-input" placeholder="14">
                   </div>
                   <div class="control-group">
                     <label>Peso</label>
@@ -259,24 +264,6 @@ export interface UndoRedoState {
                 <div class="control-group">
                   <label>Escala (Hover): {{ hoverScale }}</label>
                   <input type="range" min="0.8" max="1.2" step="0.01" [(ngModel)]="hoverScale" (ngModelChange)="onStyleChange()" class="w-full">
-                </div>
-              </div>
-
-              <!-- SECCIÓN: FEEDBACK -->
-              <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">🔊</span>
-                  <h4>FEEDBACK</h4>
-                </div>
-                <div class="flex items-center justify-between p-2 bg-slate-900/40 rounded-xl border border-white/5 mb-3">
-                  <span class="text-[11px] text-slate-300 font-bold uppercase">Sensación Háptica</span>
-                  <div class="toggle-switch" [class.active]="editableContent.haptic" (click)="editableContent.haptic = !editableContent.haptic; onContentChange()">
-                    <div class="toggle-thumb"></div>
-                  </div>
-                </div>
-                <div class="control-group">
-                  <label>Sonido URL (Clic)</label>
-                  <input type="text" [(ngModel)]="editableContent.soundUrl" (ngModelChange)="onContentChange()" class="premium-input" placeholder="https://...">
                 </div>
               </div>
 
@@ -314,6 +301,8 @@ export interface UndoRedoState {
           <!-- Canvas Area -->
           <div class="isolated-canvas" #canvas (mousedown)="onCanvasMouseDown($event)">
             <div class="canvas-inner" #canvasInner
+                 [style.transform]="'scale(' + viewportScale + ')'"
+                 [style.transformOrigin]="'center'"
                  [class.show-grid]="showGrid"
                  [class.grid-snapping]="snapToGrid">
               <div class="draggable-wrapper"
@@ -383,150 +372,20 @@ export interface UndoRedoState {
       </div>
     </div>
   `,
+  styleUrls: ['../_isolated-mode-shared.scss'],
   styles: [`
-    .isolated-mode-overlay {
-      position: fixed;
-      inset: 0 !important;
-      background: rgba(2, 6, 23, 0.95);
-      backdrop-filter: blur(16px);
-      z-index: 9999999 !important;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5vh 1.5vw;
-    }
-
-    .isolated-mode-container {
-      background: #0f172a;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 24px;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      animation: container-entry 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    @keyframes container-entry {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
-    }
-
-    .isolated-mode-header {
-      height: 70px;
-      padding: 0 1.5rem;
-      background: #1e293b;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .mode-badge { font-size: 10px; font-weight: 800; color: #6366f1; background: rgba(99, 102, 241, 0.15); padding: 4px 8px; border-radius: 6px; }
-    .component-name { color: #f8fafc; font-size: 14px; font-weight: 700; }
-    .header-actions { display: flex; align-items: center; gap: 1rem; }
-
-    .icon-btn {
-      width: 38px;
-      height: 38px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #94a3b8;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-    .icon-btn:disabled { opacity: 0.3; cursor: not-allowed; }
-
-    .close-main-btn {
-      width: 38px;
-      height: 38px;
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.2);
-      color: #ef4444;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    .isolated-mode-body {
-      flex: 1;
-      display: flex;
-      flex-direction: row; /* Explicit row */
-      overflow: hidden;
-    }
-
-    .controls-sidebar {
-      width: 320px;
-      min-width: 320px; /* Safety */
-      flex-shrink: 0; /* Prevent shrinking */
-      background: #020617;
-      border-right: 1px solid rgba(255, 255, 255, 0.08); 
-      overflow-y: auto;
-    }
-
-    .sidebar-scroll-content { padding: 1.5rem; }
-    .sidebar-section { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-    .sidebar-section.no-border { border-bottom: none; }
-    .section-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
-    .section-header h4 { margin: 0; font-size: 12px; color: #94a3b8; letter-spacing: 0.1em; }
-
-    .control-group { margin-bottom: 1rem; }
-    .control-group label { display: block; font-size: 11px; color: #94a3b8; margin-bottom: 0.5rem; }
-
-    .premium-input {
-      width: 100%;
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      color: white;
-      padding: 0.6rem 0.8rem;
-      border-radius: 10px;
-      font-size: 12px;
-    }
-
-    .sub-tab-btn { flex: 1; padding: 6px; font-size: 10px; font-weight: 800; color: #64748b; border-radius: 6px; transition: all 0.2s; background: transparent; border: none; cursor: pointer; }
-    .sub-tab-btn.active { background: #6366f1; color: white; }
-
-    .toggle-switch { width: 34px; height: 18px; background: #1e293b; border-radius: 20px; position: relative; cursor: pointer; transition: background 0.3s; }
-    .toggle-switch.active { background: #6366f1; }
-    .toggle-switch .toggle-thumb { width: 14px; height: 14px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: transform 0.3s; }
-    .toggle-switch.active .toggle-thumb { transform: translateX(16px); }
-
-    .color-control-wrapper { display: flex; flex-direction: column; gap: 0.5rem; }
-    .color-input-wrapper { display: flex; gap: 0.8rem; }
-    .color-preview { width: 38px; height: 38px; border-radius: 10px; position: relative; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.2); }
-    .color-preview input { position: absolute; inset: -5px; width: 150%; height: 150%; cursor: pointer; }
-
-    .theme-palette { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
-    .palette-swatch { width: 20px; height: 20px; border-radius: 4px; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.08); transition: transform 0.2s; }
-    .palette-swatch:hover { transform: scale(1.2); z-index: 10; border-color: white; }
-
-    .isolated-canvas {
-      flex: 1;
-      background: #020617;
-      position: relative;
-      overflow: auto;
-      display: block;
-      transition: background-color 0.4s ease, background-image 0.4s ease;
-      z-index: 1;
-    }
+    @import '../_isolated-mode-shared';
+    @include isolated-mode-foundation;
+    @include resize-handles;
+    @include modern-dock;
 
     .canvas-inner {
       width: 4000px;
       height: 4000px;
       position: relative;
-      flex-shrink: 0;
-    }
-
-    .canvas-inner.show-grid {
-      background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
       background-size: 20px 20px;
-    }
-
-    .canvas-inner.grid-snapping {
-      background-image: radial-gradient(rgba(99, 102, 241, 0.3) 1.5px, transparent 1.5px);
+      &.show-grid { background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px); }
+      &.grid-snapping { background-image: radial-gradient(rgba(99, 102, 241, 0.3) 1.5px, transparent 1.5px); }
     }
     
     .draggable-wrapper {
@@ -537,171 +396,57 @@ export interface UndoRedoState {
       outline-offset: 4px;
       transition: outline-color 0.15s ease, box-shadow 0.3s ease;
       background: rgba(255, 255, 255, 0.01);
+      &:hover { outline-color: rgba(99, 102, 241, 0.5); }
+      &.is-dragging, &.is-resizing { outline-color: #6366f1; outline-width: 3px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
     }
 
-    .draggable-wrapper:hover {
-      outline-color: rgba(99, 102, 241, 0.5);
+    .sub-tab-btn { flex: 1; padding: 6px; font-size: 10px; font-weight: 800; color: #64748b; border-radius: 6px; background: transparent; border: none; cursor: pointer; }
+    .sub-tab-btn.active { background: #6366f1; color: white; }
+
+    .color-input-wrapper { display: flex; gap: 0.8rem; }
+    .color-preview { width: 38px; height: 38px; border-radius: 10px; position: relative; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.2); }
+    .color-preview input { position: absolute; inset: -5px; width: 150%; height: 150%; cursor: pointer; }
+
+    .theme-palette { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 4px; }
+    .palette-swatch { width: 20px; height: 20px; border-radius: 4px; cursor: pointer; border: 1px solid rgba(255, 255, 255, 0.08); }
+
+    .premium-input {
+      width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
+      color: white; padding: 0.6rem 0.8rem; border-radius: 10px; font-size: 12px;
     }
 
-    .draggable-wrapper.is-dragging,
-    .draggable-wrapper.is-resizing {
-      outline-color: #6366f1;
-      outline-width: 3px;
-      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+    /* Style for Toggle in Button */
+    .toggle-wrapper {
+      display: flex; align-items: center; justify-content: space-between; background: rgba(15, 23, 42, 0.6); 
+      border: 1px solid rgba(255, 255, 255, 0.08); padding: 0.6rem 1rem; border-radius: 12px; cursor: pointer;
+      &.active { border-color: #6366f1; }
+      span { font-size: 11px; font-weight: 700; color: #94a3b8; }
     }
-
-    .preview-btn {
-      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-
-    /* RESIZE HANDLES */
-    .resize-handle {
-      position: absolute;
-      width: 12px;
-      height: 12px;
-      background: #fff;
-      border: 2px solid #6366f1;
-      border-radius: 4px;
-      z-index: 10;
-      transition: all 0.2s;
-    }
-
-    .resize-handle:hover {
-      background: #6366f1;
-      transform: scale(1.3);
-      box-shadow: 0 0 10px rgba(99, 102, 241, 0.4);
-    }
-    
-    .resize-handle.active {
-      background: #6366f1;
-      border-color: #fff;
-      transform: scale(1.5);
-    }
-
-    .resize-handle.nw { top: -8px; left: -8px; cursor: nw-resize; }
-    .resize-handle.n { top: -8px; left: 50%; transform: translateX(-50%); cursor: n-resize; }
-    .resize-handle.ne { top: -8px; right: -8px; cursor: ne-resize; }
-    .resize-handle.e { top: 50%; right: -8px; transform: translateY(-50%); cursor: e-resize; }
-    .resize-handle.se { bottom: -8px; right: -8px; cursor: se-resize; }
-    .resize-handle.s { bottom: -8px; left: 50%; transform: translateX(-50%); cursor: s-resize; }
-    .resize-handle.sw { bottom: -8px; left: -8px; cursor: sw-resize; }
-    .resize-handle.w { top: 50%; left: -8px; transform: translateY(-50%); cursor: w-resize; }
-
-    .modern-position-dock {
-      position: absolute;
-      bottom: 30px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(15, 23, 42, 0.9);
-      backdrop-filter: blur(8px);
-      padding: 0.6rem 2rem;
-      border-radius: 50px;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex;
-      gap: 1.5rem;
-      color: white;
-      font-size: 11px;
-      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-      pointer-events: none;
-    }
-
-    .dock-divider { width: 1px; height: 16px; background: rgba(255, 255, 255, 0.1); }
-    .dock-item { display: flex; align-items: center; gap: 0.6rem; }
-    .dock-item .label { color: #6366f1; font-weight: 900; background: rgba(99, 102, 241, 0.15); padding: 2px 8px; border-radius: 6px; font-size: 9px; }
-    .dock-item .value { font-weight: 700; font-family: 'JetBrains Mono', monospace; }
-
-    .isolated-mode-footer { height: 72px; padding: 0 2rem; background: #1e293b; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255, 255, 255, 0.08); flex-shrink: 0; }
-    .footer-hint { font-size: 12px; color: #94a3b8; font-style: italic; }
-    .btn-clean { padding: 0.6rem 1.5rem; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; font-size: 13px; transition: all 0.2s; }
-    .btn-clean.primary { background: #6366f1; color: white; box-shadow: 0 8px 20px -5px rgba(99, 102, 241, 0.4); }
-    .btn-clean.secondary { background: transparent; color: #94a3b8; }
-    .btn-clean:hover { transform: translateY(-2px); }
+    .toggle-track { width: 34px; height: 18px; background: #1e293b; border-radius: 20px; position: relative; }
+    .toggle-thumb { width: 14px; height: 14px; background: white; border-radius: 50%; position: absolute; top: 2px; left: 2px; transition: transform 0.3s; }
+    .active .toggle-thumb { transform: translateX(16px); }
+    .active .toggle-track { background: #6366f1; }
   `]
 })
-export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
-  @Input() config!: IsolatedModeConfig;
-  @Output() closed = new EventEmitter<void>();
-  @Output() applied = new EventEmitter<IsolatedModeConfig>();
-
-  @ViewChild('canvas') canvas!: ElementRef;
+export class EditorButtonIsolatedModeComponent extends BaseIsolatedModeComponent {
+  @ViewChild('canvas') canvasRef!: ElementRef;
 
   private store = inject(Store<AppState>);
   globalColors$: Observable<string[]> = this.store.select(selectCurrentPageGlobalStyles).pipe(
-    map(styles => {
-      if (!styles) return [];
-      return [
-        styles.primaryColor,
-        styles.secondaryColor,
-        styles.accentColor,
-        styles.backgroundColor,
-        styles.textColor
-      ].filter(Boolean);
-    })
+    map(styles => styles ? [styles.primaryColor, styles.secondaryColor, styles.accentColor, styles.backgroundColor, styles.textColor].filter(Boolean) : [])
   );
 
-  // State
-  editableContent: any = {};
-  editableStyles: any = {};
-  currentPosition = { x: 0, y: 0 };
-  currentSize = { width: 0, height: 0 };
-  initialPosition = { x: 0, y: 0 };
-  initialSize = { width: 0, height: 0 };
-
-  // Advanced Styles
   bgType: 'solid' | 'gradient' = 'solid';
   gradColor1 = '#6366f1';
   gradColor2 = '#a855f7';
   hoverScale = 1;
   availableVariants = variants;
 
-  // Undo/Redo
-  undoStack: UndoRedoState[] = [];
-  redoStack: UndoRedoState[] = [];
-
-  // Interaction
-  isDragging = false;
-  isResizing = false;
-  resizeHandle = '';
-  dragStartX = 0;
-  dragStartY = 0;
-  startPositionX = 0;
-  startPositionY = 0;
-  startSizeWidth = 0;
-  startSizeHeight = 0;
-
-  private destroy$ = new Subject<void>();
-  private saveTimeout: any;
-
-  // Grid Settings
-  showGrid = true;
-  snapToGrid = true;
-  gridSize = 20;
-
-  get canUndo() { return this.undoStack.length > 1; }
-  get canRedo() { return this.redoStack.length > 0; }
-
-  ngOnInit() {
-    this.initializeState();
-    this.setupMouseListeners();
+  protected override getCanvasElement(): HTMLElement | null {
+    return this.canvasRef?.nativeElement;
   }
 
-  formatVariantName(variant: string): string {
-    if (!variant) return '';
-    return variant
-      .split('-')
-      .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(' ');
-  }
-
-  onVariantChange() {
-    // Optional: Clear custom colors if a variant is selected to avoid confusion
-    // but we allow overrides if user explicitly changes color afterwards
-    this.onContentChange();
-  }
-
-  private initializeState() {
-    // Safeguard against undefined content/styles
+  protected override initializeState() {
     const content = this.config?.content || {};
     const styles = this.config?.styles || {};
     
@@ -726,8 +471,6 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
       '--btn-hover-shadow': styles['--btn-hover-shadow'] || ''
     };
 
-
-    // Detect gradient
     if (this.editableStyles.backgroundColor?.startsWith('linear-gradient')) {
       this.bgType = 'gradient';
       const colors = this.editableStyles.backgroundColor.match(/#[a-fA-F0-9]{3,6}/g);
@@ -738,237 +481,50 @@ export class EditorButtonIsolatedModeComponent implements OnInit, OnDestroy {
     }
 
     this.hoverScale = parseFloat(styles['--btn-hover-scale']) || 1;
-
-    this.currentPosition = { ...(this.config?.position || { x: 0, y: 0 }) };
+    this.currentPosition = { ...(this.config?.position || { x: 2000 - 90, y: 2000 - 25 }) };
     this.currentSize = { ...(this.config?.size || { width: 180, height: 50 }) };
-
     
-    // Centrar inicialmente si no tiene posición o es 0,0
-    const pos = this.config?.position;
-    if (!pos || (pos.x === 0 && pos.y === 0)) {
-
-       // Medidas por defecto razonables para un botón si no viene el tamaño
-       if (!this.currentSize.width) this.currentSize.width = 180;
-       if (!this.currentSize.height) this.currentSize.height = 50;
-
-       this.currentPosition = {
-         x: 2000 - (this.currentSize.width / 2),
-         y: 2000 - (this.currentSize.height / 2)
-       };
-    }
-
     this.initialPosition = { ...this.currentPosition };
     this.initialSize = { ...this.currentSize };
-
-    // Sincronizar el scroll después de que el DOM esté listo
-    setTimeout(() => this.scrollToComponent(), 100);
+    this.viewportScale = 0.7;
 
     this.saveState();
   }
 
-  private scrollToComponent() {
-    if (!this.canvas?.nativeElement) return;
-    
-    // Center the component in the viewport
-    const container = this.canvas.nativeElement;
-    const scrollLeft = Math.max(0, this.currentPosition.x - (container.clientWidth / 2) + (this.currentSize.width / 2));
-    const scrollTop = Math.max(0, this.currentPosition.y - (container.clientHeight / 2) + (this.currentSize.height / 2));
-    
-    container.scrollTo({
-      left: scrollLeft,
-      top: scrollTop,
-      behavior: 'smooth'
-    });
-  }
-
-  // --- MOUSE HANDLERS ---
-  private setupMouseListeners() {
-    window.addEventListener('mousemove', this.onMouseMove);
-    window.addEventListener('mouseup', this.onMouseUp);
-  }
-
-  ngOnDestroy() {
-    window.removeEventListener('mousemove', this.onMouseMove);
-    window.removeEventListener('mouseup', this.onMouseUp);
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  onCanvasMouseDown(event: MouseEvent) {
-    // Deselect if needed
-  }
-
-  onMouseDown(event: MouseEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.isDragging = true;
-    this.dragStartX = event.clientX;
-    this.dragStartY = event.clientY;
-    this.startPositionX = this.currentPosition.x;
-    this.startPositionY = this.currentPosition.y;
-  }
-
-  startResize(event: MouseEvent, handle: string) {
-    event.preventDefault();
-    event.stopPropagation();
-    this.isResizing = true;
-    this.resizeHandle = handle;
-    this.dragStartX = event.clientX;
-    this.dragStartY = event.clientY;
-    this.startPositionX = this.currentPosition.x;
-    this.startPositionY = this.currentPosition.y;
-    this.startSizeWidth = this.currentSize.width;
-    this.startSizeHeight = this.currentSize.height;
-  }
-
-  private onMouseMove = (event: MouseEvent) => {
-    if (this.isDragging) {
-      const dx = event.clientX - this.dragStartX;
-      const dy = event.clientY - this.dragStartY;
-      
-      let nx = this.startPositionX + dx;
-      let ny = this.startPositionY + dy;
-
-      if (this.snapToGrid) {
-        nx = Math.round(nx / this.gridSize) * this.gridSize;
-        ny = Math.round(ny / this.gridSize) * this.gridSize;
-      }
-
-      this.currentPosition.x = nx;
-      this.currentPosition.y = ny;
-      this.onPositionChange();
-    } else if (this.isResizing) {
-      const dx = event.clientX - this.dragStartX;
-      const dy = event.clientY - this.dragStartY;
-      let nw = this.startSizeWidth;
-      let nh = this.startSizeHeight;
-      let nx = this.currentPosition.x;
-      let ny = this.currentPosition.y;
-
-      if (this.resizeHandle.includes('e')) nw = this.startSizeWidth + dx;
-      if (this.resizeHandle.includes('s')) nh = this.startSizeHeight + dy;
-      if (this.resizeHandle.includes('w')) {
-        nw = this.startSizeWidth - dx;
-        nx = this.startPositionX + dx;
-      }
-      if (this.resizeHandle.includes('n')) {
-        nh = this.startSizeHeight - dy;
-        ny = this.startPositionY + dy;
-      }
-
-      if (this.snapToGrid) {
-        nw = Math.round(nw / this.gridSize) * this.gridSize;
-        nh = Math.round(nh / this.gridSize) * this.gridSize;
-        nx = Math.round(nx / this.gridSize) * this.gridSize;
-        ny = Math.round(ny / this.gridSize) * this.gridSize;
-      }
-
-      this.currentSize.width = Math.max(40, nw);
-      this.currentSize.height = Math.max(20, nh);
-      this.currentPosition.x = nx;
-      this.currentPosition.y = ny;
-      
-      this.onPositionChange();
-      this.onSizeChange();
-    }
-  }
-
-  private onMouseUp = () => {
-    if (this.isDragging || this.isResizing) {
-      this.isDragging = false;
-      this.isResizing = false;
-      this.saveState();
-    }
-  }
-
-  // --- ACTIONS ---
-
-
-  saveState() {
-    const state = {
-      position: { ...this.currentPosition },
-      size: { ...this.currentSize },
-      styles: { ...this.editableStyles },
-      content: { ...this.editableContent }
-    };
-    this.undoStack.push(state);
-    this.redoStack = [];
-  }
-
-  undo() {
-    if (this.undoStack.length > 1) {
-      this.redoStack.push(this.undoStack.pop()!);
-      this.restoreState(this.undoStack[this.undoStack.length - 1]);
-    }
-  }
-
-  redo() {
-    if (this.redoStack.length > 0) {
-      const state = this.redoStack.pop()!;
-      this.undoStack.push(state);
-      this.restoreState(state);
-    }
-  }
-
-  private restoreState(state: UndoRedoState) {
-    this.currentPosition = { ...state.position };
-    this.currentSize = { ...state.size };
-    this.editableStyles = { ...state.styles };
-    this.editableContent = { ...state.content };
-  }
-
-  onPositionChange() { this.scheduleSave(); }
-  onSizeChange() { this.scheduleSave(); }
-  onStyleChange() { this.scheduleSave(); }
-  onContentChange() { this.scheduleSave(); }
-
-  private scheduleSave() {
-    if (this.saveTimeout) clearTimeout(this.saveTimeout);
-    this.saveTimeout = setTimeout(() => this.saveState(), 1000);
-  }
-
-
-  
   getCustomStyles() {
     const s: any = { ...this.editableStyles };
-    
     if (this.bgType === 'gradient') {
       s.backgroundColor = `linear-gradient(45deg, ${this.gradColor1}, ${this.gradColor2})`;
     }
-    
     s['--btn-hover-scale'] = this.hoverScale;
-    
     return s;
   }
 
-  onOverlayClick(event: MouseEvent) { this.closed.emit(); }
-  close() { this.closed.emit(); }
-  cancel() { this.closed.emit(); }
+  toggleDarkMode() {
+    this.editableContent.dark = !this.editableContent.dark;
+    this.onContentChange();
+  }
 
-  apply() {
-    const config: IsolatedModeConfig = {
+  override apply() {
+    const styles = {
+      ...this.getCustomStyles(),
+      left: `${this.currentPosition.x}px`,
+      top: `${this.currentPosition.y}px`,
+      width: `${this.currentSize.width}px`,
+      height: `${this.currentSize.height}px`,
+      position: 'absolute'
+    };
+    
+    const finalConfig = {
       ...this.config,
-      // FIX: Explicitly set top-level variant to ensure it persists in the layout
       variant: this.editableContent.variant,
       content: { ...this.editableContent },
-      styles: {
-        ...this.getCustomStyles(),
-        left: `${this.currentPosition.x}px`,
-        top: `${this.currentPosition.y}px`,
-        width: `${this.currentSize.width}px`,
-        height: `${this.currentSize.height}px`,
-        position: 'absolute'
-      },
+      styles: styles,
       position: this.currentPosition,
       size: this.currentSize
     };
-    this.applied.emit(config);
+    this.applied.emit(finalConfig);
   }
 
-  @HostListener('window:keydown', ['$event'])
-  handleKeydown(event: KeyboardEvent) {
-    if (event.key === 'Escape') this.close();
-    if ((event.ctrlKey || event.metaKey) && event.key === 'z') this.undo();
-    if ((event.ctrlKey || event.metaKey) && event.key === 'y') this.redo();
-  }
+  onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

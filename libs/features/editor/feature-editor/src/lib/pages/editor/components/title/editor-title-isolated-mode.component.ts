@@ -2,8 +2,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UITitleComponent, variants } from '@negocio/ui-components';
-import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
-import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-isolated-mode.component';
+import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 
 @Component({
   selector: 'lib-editor-title-isolated-mode',
@@ -24,30 +23,30 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
           <div class="header-actions">
             <div class="action-group">
               <button class="icon-btn" (click)="undo()" [disabled]="!canUndo" title="Deshacer (Ctrl+Z)">
-                <span>↶</span>
+                <span class="icon">↶</span>
               </button>
               <button class="icon-btn" (click)="redo()" [disabled]="!canRedo" title="Rehacer (Ctrl+Y)">
-                <span>↷</span>
+                <span class="icon">↷</span>
               </button>
             </div>
             
-            <div class="header-divider"></div>
+            <div class="divider"></div>
             
             <div class="action-group">
               <button class="icon-btn" (click)="toggleGrid()" 
                       [class.active]="showGrid" title="Cuadrícula (G)">
-                <span>#</span>
+                <span class="icon">#</span>
               </button>
               <button class="icon-btn" (click)="toggleSnap()" 
                       [class.active]="snapToGrid" title="Snap (S)">
-                <span>⊞</span>
+                <span class="icon">⊞</span>
               </button>
               <button class="icon-btn" (click)="resetPosition()" title="Reset (R)">
-                <span>↺</span>
+                <span class="icon">↺</span>
               </button>
             </div>
 
-            <div class="header-divider"></div>
+            <div class="divider"></div>
 
             <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
           </div>
@@ -97,7 +96,7 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
                 <div class="control-group">
                   <label>Variante Visual</label>
                   <div class="select-wrapper">
-                    <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()" class="premium-select">
+                    <select [(ngModel)]="editableContent.variant" (ngModelChange)="onVariantChange()" class="premium-select">
                       <option value="default">Estándar</option>
                       <option value="gradient">Gradiente (Premium)</option>
                       <option value="outline">Contorno (Outline)</option>
@@ -144,7 +143,7 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
               <div class="sidebar-section">
                 <div class="section-header">
                   <span class="section-icon">🌈</span>
-                  <h4>COLORES</h4>
+                  <h4>COLORES & TAMAÑO</h4>
                 </div>
                 
                 <div class="control-group">
@@ -153,12 +152,12 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
                     <div class="color-preview" [style.background-color]="editableStyles['color']">
                       <input type="color" [(ngModel)]="editableStyles['color']" (ngModelChange)="onStyleChange()">
                     </div>
-                    <input type="text" [(ngModel)]="editableStyles['color']" (ngModelChange)="onStyleChange()" class="premium-input" placeholder="#000000">
+                    <input type="text" [(ngModel)]="editableStyles['color']" (ngModelChange)="onStyleChange()" class="premium-input font-mono" placeholder="#000000">
                   </div>
                 </div>
 
                 <div class="control-group">
-                  <label>Tamaño de Fuente</label>
+                  <label>Tamaño de Fuente (PX)</label>
                   <input type="text" [(ngModel)]="editableStyles['fontSize']" (ngModelChange)="onStyleChange()" class="premium-input" placeholder="24px o 2rem">
                 </div>
 
@@ -185,22 +184,22 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
                   <span class="section-icon">📏</span>
                   <h4>POSICIÓN & TAMAÑO</h4>
                 </div>
-                <div class="control-row">
-                  <div class="control-group half">
+                <div class="control-row grid grid-cols-2 gap-2">
+                  <div class="control-group">
                     <label>Posición X</label>
                     <input type="number" [(ngModel)]="currentPosition.x" (ngModelChange)="onPositionChange()" class="premium-input text-center">
                   </div>
-                  <div class="control-group half">
+                  <div class="control-group">
                     <label>Posición Y</label>
                     <input type="number" [(ngModel)]="currentPosition.y" (ngModelChange)="onPositionChange()" class="premium-input text-center">
                   </div>
                 </div>
-                <div class="control-row">
-                  <div class="control-group half">
+                <div class="control-row grid grid-cols-2 gap-2">
+                  <div class="control-group">
                     <label>Ancho (W)</label>
                     <input type="number" [(ngModel)]="currentSize.width" (ngModelChange)="onSizeChange()" class="premium-input text-center">
                   </div>
-                  <div class="control-group half">
+                  <div class="control-group">
                     <label>Alto (H)</label>
                     <input type="number" [(ngModel)]="currentSize.height" (ngModelChange)="onSizeChange()" class="premium-input text-center">
                   </div>
@@ -212,17 +211,14 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
 
           <!-- Canvas Area -->
           <div class="isolated-canvas" #canvas (mousedown)="onCanvasMouseDown($event)">
-            <div class="canvas-viewport"
-                 [style.width.px]="(config.canvasSize?.width || 1200) * viewportScale"
-                 [style.height.px]="(config.canvasSize?.height || 800) * viewportScale">
               <div class="canvas-inner" #canvasInner
-                   [style.width.px]="config.canvasSize?.width || 1200"
-                   [style.height.px]="config.canvasSize?.height || 800"
                    [style.transform]="'scale(' + viewportScale + ')'"
+                   [style.transformOrigin]="'center'"
                    [class.show-grid]="showGrid"
                    [class.grid-snapping]="snapToGrid">
                 
                 <div class="draggable-wrapper"
+                     #draggableWrapper
                      [style.left.px]="currentPosition.x"
                      [style.top.px]="currentPosition.y"
                      [style.width.px]="currentSize.width"
@@ -250,38 +246,17 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
                   <div class="resize-handle s"  [class.active]="resizeHandle === 's'"  (mousedown)="startResize($event, 's')"></div>
                   <div class="resize-handle sw" [class.active]="resizeHandle === 'sw'" (mousedown)="startResize($event, 'sw')"></div>
                   <div class="resize-handle w"  [class.active]="resizeHandle === 'w'"  (mousedown)="startResize($event, 'w')"></div>
-
-                  <!-- Dimension labels during resize -->
-                  <div class="dimension-label width-label" *ngIf="isResizing">{{ currentSize.width }}px</div>
-                  <div class="dimension-label height-label" *ngIf="isResizing">{{ currentSize.height }}px</div>
                 </div>
               </div>
-            </div>
 
             <!-- Position Dock -->
             <div class="modern-position-dock">
-              <div class="dock-item">
-                <span class="label">X</span>
-                <span class="value">{{ currentPosition.x }}px</span>
-              </div>
-              <div class="dock-item">
-                <span class="label">Y</span>
-                <span class="value">{{ currentPosition.y }}px</span>
-              </div>
+              <div class="dock-item"><span class="label">X</span><span class="value">{{ currentPosition.x }}</span></div>
+              <div class="dock-item"><span class="label">Y</span><span class="value">{{ currentPosition.y }}</span></div>
               <div class="dock-divider"></div>
-              <div class="dock-item">
-                <span class="label">SIZE</span>
-                <span class="value">{{ currentSize.width }}×{{ currentSize.height }}</span>
-              </div>
+              <div class="dock-item"><span class="label">LEVEL</span><span class="value title-level">{{ editableContent.level }}</span></div>
               <div class="dock-divider"></div>
-              <div class="dock-item">
-                <span class="label">LEVEL</span>
-                <span class="value title-level">{{ editableContent.level }}</span>
-              </div>
-              <div class="dock-item">
-                <span class="label">ALIGN</span>
-                <span class="value">{{ editableContent.align }}</span>
-              </div>
+              <div class="dock-item"><span class="label">SIZE</span><span class="value">{{ currentSize.width }}x{{ currentSize.height }}</span></div>
             </div>
           </div>
         </div>
@@ -289,7 +264,7 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
         <!-- ===== FOOTER ===== -->
         <div class="isolated-mode-footer">
           <div class="footer-hint">
-            <b>G</b> rejilla · <b>S</b> snap · <b>R</b> reset · <b>Flechas</b> ajuste fino · <b>Ctrl+Z/Y</b> deshacer/rehacer
+            Tipografía optimizada para conversión.
           </div>
           <div class="footer-actions-btns">
             <button class="btn-clean secondary" (click)="cancel()">Descartar</button>
@@ -299,59 +274,58 @@ import { BaseIsolatedModeComponent, ISOLATED_MODE_SHARED_STYLES } from '../base-
       </div>
     </div>
   `,
-  styles: [ISOLATED_MODE_SHARED_STYLES, `
-    /* Component-specific */
-    .alignment-btns {
-      display: flex;
-      gap: 4px;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 10px;
-      padding: 3px;
+  styleUrls: ['../_isolated-mode-shared.scss'],
+  styles: [`
+    @import '../_isolated-mode-shared';
+    @include isolated-mode-foundation;
+    @include resize-handles;
+    @include modern-dock;
+
+    .canvas-inner {
+      width: 4000px;
+      height: 4000px;
+      position: relative;
+      background-size: 20px 20px;
+      &.show-grid { background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px); }
+      &.grid-snapping { background-image: radial-gradient(rgba(99, 102, 241, 0.25) 1.5px, transparent 1.5px); }
     }
-    .align-btn {
-      flex: 1;
-      padding: 6px;
-      text-align: center;
-      background: transparent;
-      border: none;
-      border-radius: 8px;
-      color: #94a3b8;
-      cursor: pointer;
-      font-size: 11px;
-      transition: all 0.2s;
+
+    .draggable-wrapper {
+      position: absolute !important;
+      cursor: move;
+      z-index: 100;
+      outline: 2px solid transparent;
+      outline-offset: 4px;
+      background: rgba(255, 255, 255, 0.01);
+      &:hover { outline-color: rgba(99, 102, 241, 0.4); }
+      &.is-dragging, &.is-resizing { outline-color: #6366f1; outline-width: 3px; }
     }
-    .align-btn.active {
-      background: var(--iso-primary);
-      color: white;
-      box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
-    }
-    .align-btn:hover:not(.active) {
-      background: rgba(255, 255, 255, 0.06);
-    }
-    .title-level {
-      color: #f472b6 !important;
-      text-transform: uppercase;
-    }
-    .text-center { text-align: center; }
-    .premium-textarea {
-      resize: vertical;
-      min-height: 60px;
-      font-family: inherit;
-    }
+
+    .alignment-btns { display: flex; gap: 4px; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 10px; padding: 3px; }
+    .align-btn { flex: 1; padding: 6px; text-align: center; background: transparent; border: none; border-radius: 8px; color: #94a3b8; cursor: pointer; transition: all 0.2s; }
+    .align-btn.active { background: #6366f1; color: white; }
+
+    .color-input-wrapper { display: flex; gap: 0.8rem; }
+    .color-preview { width: 38px; height: 38px; border-radius: 10px; position: relative; overflow: hidden; border: 1px solid rgba(255, 255, 255, 0.2); }
+    .color-preview input { position: absolute; inset: -5px; width: 150%; height: 150%; cursor: pointer; }
+
+    .title-level { color: #f472b6 !important; text-transform: uppercase; font-weight: 800; font-size: 10px; }
+    .premium-textarea { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); color: white; padding: 0.8rem; border-radius: 12px; font-size: 13px; line-height: 1.5; }
+    .premium-input, .premium-select { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08); color: white; padding: 0.6rem 0.8rem; border-radius: 10px; font-size: 12px; }
   `]
 })
 export class EditorTitleIsolatedModeComponent extends BaseIsolatedModeComponent {
+  @ViewChild('canvas') canvasRef!: ElementRef;
   availableVariants = variants;
 
-  // ===== BaseIsolatedModeComponent overrides =====
-
-  getDefaultSize() {
-    return { width: 500, height: 80 };
+  protected override getCanvasElement(): HTMLElement | null {
+    return this.canvasRef?.nativeElement;
   }
 
-  initializeContent(): void {
+  protected override initializeState() {
     const c = this.config?.content || {};
+    const s = this.config?.styles || {};
+    
     this.editableContent = {
       text: c.text || 'Título de ejemplo',
       level: c.level || 'h2',
@@ -359,21 +333,26 @@ export class EditorTitleIsolatedModeComponent extends BaseIsolatedModeComponent 
       align: c.align || 'center',
       animation: c.animation || 'none'
     };
-  }
 
-  initializeStyles(): void {
-    const s = this.config?.styles || {};
     this.editableStyles = {
       color: s.color || '',
       fontSize: s.fontSize || '',
       fontWeight: s.fontWeight || ''
     };
+
+    this.currentPosition = { ...(this.config?.position || { x: 2000 - 250, y: 2000 - 40 }) };
+    this.currentSize = { ...(this.config?.size || { width: 500, height: 80 }) };
+    
+    this.initialPosition = { ...this.currentPosition };
+    this.initialSize = { ...this.currentSize };
+    this.viewportScale = 0.7;
+
+    this.saveState();
   }
 
-  buildApplyPayload(): IsolatedModeConfig {
-    return {
+  override apply() {
+    const finalConfig = {
       ...this.config,
-      // FIX: Explicitly set top-level variant
       variant: this.editableContent.variant,
       content: { ...this.editableContent },
       styles: {
@@ -384,5 +363,9 @@ export class EditorTitleIsolatedModeComponent extends BaseIsolatedModeComponent 
       position: { ...this.currentPosition },
       size: { ...this.currentSize }
     };
+    this.applied.emit(finalConfig);
   }
+
+  onCanvasMouseDown(event: MouseEvent) { /* Silenciamos */ }
+  onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

@@ -1,8 +1,8 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { UICardComponent } from '@negocio/ui-components';
-import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 
 @Component({
   selector: 'lib-editor-card-testimonial-isolated-mode',
@@ -12,328 +12,271 @@ import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
     <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
         
+        <!-- ===== HEADER ===== -->
         <div class="isolated-mode-header">
           <div class="header-breadcrumb">
-            <span class="mode-badge">💬 MODO AISLADO</span>
+            <span class="mode-badge">💬 TESTIMONIAL CARD</span>
             <span class="separator">/</span>
-            <span class="component-name">CARD TESTIMONIAL</span>
+            <span class="component-name">SOCIAL PROOF GOLD</span>
           </div>
           
           <div class="header-actions">
+            <div class="action-group">
+              <button class="icon-btn" (click)="undo()" [disabled]="!canUndo" title="Deshacer (Ctrl+Z)">
+                <span class="icon">↶</span>
+              </button>
+              <button class="icon-btn" (click)="redo()" [disabled]="!canRedo" title="Rehacer (Ctrl+Y)">
+                <span class="icon">↷</span>
+              </button>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="action-group">
+              <button class="icon-btn" (click)="toggleGrid()" [class.active]="showGrid" title="Cuadrícula (G)">
+                <span class="icon">#</span>
+              </button>
+              <button class="icon-btn" (click)="toggleSnap()" [class.active]="snapToGrid" title="Snap (S)">
+                <span class="icon">⊞</span>
+              </button>
+            </div>
+
+            <div class="divider"></div>
+
             <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
           </div>
         </div>
 
+        <!-- ===== BODY ===== -->
         <div class="isolated-mode-body">
+          
+          <!-- Sidebar Controls -->
           <div class="controls-sidebar">
             <div class="sidebar-scroll-content">
               
-              <!-- AUTHOR INFO -->
               <div class="sidebar-section">
                 <div class="section-header">
-                  <span class="section-icon">👤</span>
-                  <h4>INFORMACIÓN DEL AUTOR</h4>
+                  <span class="section-icon">✍️</span>
+                  <h4>TESTIMONIO</h4>
                 </div>
                 
                 <div class="control-group">
-                  <label>Nombre del Autor</label>
-                  <input type="text" [(ngModel)]="editableContent.authorName" class="premium-input">
+                  <label>Autor / Cliente</label>
+                  <input type="text" [(ngModel)]="editableContent.author" (ngModelChange)="onContentChange()" class="premium-input">
                 </div>
 
                 <div class="control-group">
-                  <label>Cargo / Posición</label>
-                  <input type="text" [(ngModel)]="editableContent.authorRole" class="premium-input">
+                  <label>Cargo / Rol</label>
+                  <input type="text" [(ngModel)]="editableContent.role" (ngModelChange)="onContentChange()" class="premium-input">
                 </div>
 
                 <div class="control-group">
-                  <label>Empresa / Organización</label>
-                  <input type="text" [(ngModel)]="editableContent.company" class="premium-input">
+                  <label>Comentario</label>
+                  <textarea [(ngModel)]="editableContent.text" (ngModelChange)="onContentChange()" class="premium-textarea h-24"></textarea>
                 </div>
 
                 <div class="control-group">
-                  <label>URL de Avatar</label>
-                  <input type="text" [(ngModel)]="editableContent.avatar" class="premium-input">
+                  <label>Foto de Perfil (URL)</label>
+                  <input type="text" [(ngModel)]="editableContent.avatar" (ngModelChange)="onContentChange()" class="premium-input">
                 </div>
               </div>
 
-              <!-- TESTIMONIAL CONTENT -->
               <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">💬</span>
-                  <h4>CONTENIDO DEL TESTIMONIO</h4>
-                </div>
-                
-                <div class="control-group">
-                  <label>Testimonio</label>
-                  <textarea [(ngModel)]="editableContent.testimonial" class="premium-input h-32" placeholder="Escribe el testimonio aquí..."></textarea>
-                </div>
-
-                <div class="control-group">
-                  <label>Fecha</label>
-                  <input type="text" [(ngModel)]="editableContent.date" class="premium-input" placeholder="Ej: Enero 2026">
-                </div>
-              </div>
-
-              <!-- RATING -->
-              <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">⭐</span>
-                  <h4>VALORACIÓN</h4>
-                </div>
-                
-                <div class="control-group">
-                  <label class="flex items-center gap-2">
-                    <input type="checkbox" [(ngModel)]="editableContent.showRating" class="w-4 h-4">
-                    <span>Mostrar Rating</span>
-                  </label>
-                </div>
-
-                <div class="control-group" *ngIf="editableContent.showRating">
-                  <label>Rating (0-5)</label>
-                  <div class="flex items-center gap-3">
-                    <input type="range" min="0" max="5" step="0.5" [(ngModel)]="editableContent.rating" class="flex-1">
-                    <span class="text-white font-bold text-sm">{{ editableContent.rating || 0 }}</span>
-                  </div>
-                </div>
-              </div>
-
-              <!-- APPEARANCE -->
-              <div class="sidebar-section no-border">
                 <div class="section-header">
                   <span class="section-icon">🎨</span>
-                  <h4>APARIENCIA</h4>
+                  <h4>ESTILO VISUAL</h4>
                 </div>
                 
                 <div class="control-group">
-                  <label>Variante Visual</label>
-                  <select [(ngModel)]="editableContent.variant" class="premium-input">
-                    <option value="">Heredar Global</option>
-                    <option value="default">Estándar</option>
-                    <option value="primary">Primario</option>
-                    <option value="secondary">Secundario</option>
-                    <option value="glass">Vidrio (Glass)</option>
-                    <option value="neon">Neón</option>
-                    <option value="cyberpunk">Cyberpunk</option>
-                  </select>
-                  <p class="variant-hint" *ngIf="!editableContent.variant">
-                    Heredando: {{ config.content['globalVariant'] || 'glass' }}
-                  </p>
-                </div>
-
-                <div class="control-group">
-                  <label>Estilo de Card</label>
-                  <select [(ngModel)]="editableContent.cardStyle" class="premium-input">
-                    <option value="minimal">Minimalista</option>
-                    <option value="bordered">Con Borde</option>
-                    <option value="elevated">Elevado (Shadow)</option>
-                    <option value="quote">Estilo Cita</option>
+                  <label>Variante de Card</label>
+                  <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()" class="premium-select">
+                    <option value="modern">Moderno (Minimal)</option>
+                    <option value="boxed">Enmarcado (Shadow)</option>
+                    <option value="glass">Cristal (Blur)</option>
+                    <option value="gradient">Gradiente Suave</option>
                   </select>
                 </div>
 
                 <div class="control-group">
-                  <label class="flex items-center gap-2">
-                    <input type="checkbox" [(ngModel)]="editableContent.showQuotes" class="w-4 h-4">
-                    <span>Mostrar Comillas</span>
-                  </label>
+                  <label>Puntuación ({{ editableContent.rating }} estrellas)</label>
+                  <input type="range" min="1" max="5" [(ngModel)]="editableContent.rating" (ngModelChange)="onContentChange()" class="premium-range">
+                </div>
+
+                <div class="control-group">
+                  <label>Color de Enfoque</label>
+                  <div class="color-row">
+                    <div class="color-preview" [style.background-color]="editableStyles.accentColor">
+                      <input type="color" [(ngModel)]="editableStyles.accentColor" (ngModelChange)="onContentChange()">
+                    </div>
+                    <input type="text" [(ngModel)]="editableStyles.accentColor" (ngModelChange)="onContentChange()" class="premium-input-mini">
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div class="isolated-canvas">
-            <div class="canvas-inner">
-              <div class="draggable-wrapper"
-                   [style.width.px]="currentSize.width"
-                   [style.height.px]="currentSize.height">
+          <!-- Canvas Area -->
+          <div class="isolated-canvas" #canvas (mousedown)="onCanvasMouseDown($event)">
+              <div class="canvas-inner" #canvasInner
+                   [style.transform]="'scale(' + viewportScale + ')'"
+                   [style.transformOrigin]="'center top'"
+                   [class.show-grid]="showGrid"
+                   [class.grid-snapping]="snapToGrid">
                 
-                
-                <lib-ui-components-card
-                  [title]="editableContent.authorName || 'Juan Pérez'"
-                  [description]="editableContent.testimonial || 'Excelente servicio y atención al cliente. Muy recomendado.'"
-                  [variant]="editableContent.variant || config.content['globalVariant'] || 'glass'"
-                  [customStyles]="editableStyles">
+                <div class="draggable-wrapper"
+                     #draggableWrapper
+                     [style.left.px]="currentPosition.x"
+                     [style.top.px]="currentPosition.y"
+                     [style.width.px]="currentSize.width"
+                     [class.is-dragging]="isDragging"
+                     [class.is-resizing]="isResizing"
+                     (mousedown)="onMouseDown($event)">
                   
-                  <!-- Author info footer -->
-                  <div class="mt-4 flex items-center gap-3 border-t border-white/10 pt-4">
-                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm">
-                      {{ (editableContent.authorName || 'JP')[0] }}
-                    </div>
-                    <div class="flex-1">
-                      <div class="text-xs font-bold text-white">{{ editableContent.authorRole || 'CEO' }}</div>
-                      <div class="text-[10px] text-slate-400">{{ editableContent.company || 'Tech Company' }}</div>
-                    </div>
-                    <div *ngIf="editableContent.showRating !== false" class="text-yellow-400 text-sm">
-                      {{ '⭐'.repeat(Math.floor(editableContent.rating || 5)) }}
-                    </div>
+                  <div class="testimonial-render-card" [class]="'variant--' + editableContent.variant" [style.borderColor]="editableStyles.accentColor">
+                      <div class="card-header-flex">
+                         <img [src]="editableContent.avatar" class="avatar-circle">
+                         <div class="info">
+                            <span class="author">{{ editableContent.author }}</span>
+                            <span class="role">{{ editableContent.role }}</span>
+                         </div>
+                         <div class="rating" [style.color]="editableStyles.accentColor">
+                            {{ '⭐'.repeat(editableContent.rating) }}
+                         </div>
+                      </div>
+                      <p class="quote">"{{ editableContent.text }}"</p>
                   </div>
-                </lib-ui-components-card>
 
-                <div class="resize-handle se" (mousedown)="startResize($event)"></div>
+                  <!-- Lateral handles -->
+                  <div class="resize-handle e"  (mousedown)="startResize($event, 'e')"></div>
+                  <div class="resize-handle w"  (mousedown)="startResize($event, 'w')"></div>
+                </div>
               </div>
-            </div>
-            
+
             <div class="modern-position-dock">
-              <div class="dock-item"><span class="label">AUTHOR</span><span class="value text-purple-400">{{ editableContent.authorName || 'Juan Pérez' }}</span></div>
+              <div class="dock-item"><span class="label">VARIANTE</span><span class="value uppercase text-pink-400">{{ editableContent.variant }}</span></div>
               <div class="dock-divider"></div>
-              <div class="dock-item"><span class="label">RATING</span><span class="value text-yellow-400">{{ editableContent.showRating !== false ? (editableContent.rating || 5) + '⭐' : 'Hidden' }}</span></div>
+              <div class="dock-item"><span class="label">RATING</span><span class="value">{{ editableContent.rating }}/5</span></div>
               <div class="dock-divider"></div>
-              <div class="dock-item"><span class="label">SIZE</span><span class="value">{{ currentSize.width }}x{{ currentSize.height }}</span></div>
+              <div class="dock-item"><span class="label">WIDTH</span><span class="value">{{ currentSize.width }}px</span></div>
             </div>
           </div>
         </div>
 
         <div class="isolated-mode-footer">
-          <div class="footer-hint">Personaliza el testimonio de tus clientes.</div>
+          <div class="footer-hint">Testimonial Gold: Las reseñas con foto aumentan la conversión hasta en un 40%.</div>
           <div class="footer-actions-btns">
-            <button class="btn-clean secondary" (click)="cancel()">Cancelar</button>
-            <button class="btn-clean primary" (click)="apply()">Aplicar Cambios</button>
+            <button class="btn-clean secondary" (click)="cancel()">Descartar cambios</button>
+            <button class="btn-clean primary" (click)="apply()">Actualizar Testimonio</button>
           </div>
         </div>
       </div>
     </div>
   `,
   styles: [`
-    .isolated-mode-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(2, 6, 23, 0.98);
-      backdrop-filter: blur(15px);
-      z-index: 9999999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1rem;
-    }
-    .isolated-mode-container {
-      background: #0f172a;
-      border: 1px solid rgba(255,255,255,0.05);
-      border-radius: 32px;
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.8);
-    }
-    .isolated-mode-header {
-      height: 72px;
-      padding: 0 2rem;
-      background: #1e293b;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .mode-badge { font-size: 10px; font-weight: 800; color: #6366f1; background: rgba(99, 102, 241, 0.1); padding: 5px 12px; border-radius: 10px; border: 1px solid rgba(99, 102, 241, 0.2); }
-    .component-name { color: white; font-size: 14px; font-weight: 700; margin-left: 10px; letter-spacing: 0.5px; }
-    .close-main-btn { background: rgba(239, 68, 68, 0.1); color: #f87171; border: none; width: 36px; height: 36px; border-radius: 12px; cursor: pointer; transition: all 0.2s; }
-    .close-main-btn:hover { background: #ef4444; color: white; transform: rotate(90deg); }
+    @import '../_isolated-mode-shared';
+    @include isolated-mode-foundation;
+    @include resize-handles;
+    @include modern-dock;
 
-    .isolated-mode-body { flex: 1; display: flex; overflow: hidden; }
-    .controls-sidebar { width: 340px; background: #020617; border-right: 1px solid rgba(255,255,255,0.05); overflow-y: auto; }
-    .sidebar-scroll-content { padding: 2rem; }
-    .sidebar-section { margin-bottom: 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 2rem; }
-    .sidebar-section.no-border { border-bottom: none; }
-    .section-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.5rem; color: #64748b; font-size: 11px; font-weight: 900; text-transform: uppercase; letter-spacing: 1.5px; }
-    
-    .control-group { margin-bottom: 1.5rem; }
-    .control-group label { display: block; font-size: 10px; color: #475569; margin-bottom: 0.6rem; text-transform: uppercase; font-weight: 800; }
-    
-    .premium-input {
-      width: 100%;
-      background: rgba(15, 23, 42, 0.6);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: white;
-      padding: 0.6rem 0.8rem;
-      border-radius: 10px;
-      font-size: 12px;
+    .canvas-inner { width: 4000px; height: 3000px; position: relative; padding-top: 250px;
+      &.show-grid { background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px); background-size: 40px 40px; }
     }
 
-    .variant-hint { font-size: 10px; color: #64748b; margin-top: 0.5rem; font-style: italic; }
+    .draggable-wrapper { position: absolute !important; cursor: move; z-index: 100; border: 2px dashed transparent; padding: 20px; transition: border-color 0.2s;
+      &:hover { border-color: rgba(236, 72, 153, 0.3); }
+      &.is-dragging, &.is-resizing { border-color: #ec4899; background: rgba(236, 72, 153, 0.02); }
+    }
 
-    .isolated-canvas { flex: 1; background: #020617; position: relative; overflow: hidden; background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 20px 20px; }
-    .canvas-inner { width: 100%; height: 100%; position: relative; display: flex; align-items: center; justify-content: center; padding: 50px; }
-    
-    .draggable-wrapper { position: relative; border: 1px dashed rgba(16, 185, 129, 0.5); padding: 5px; }
-    .resize-handle { position: absolute; width: 10px; height: 10px; background: #10b981; border: 1.5px solid white; border-radius: 3px; bottom: -5px; right: -5px; cursor: se-resize; }
+    .testimonial-render-card { background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; padding: 30px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      &.variant--glass { backdrop-filter: blur(20px); background: rgba(255,255,255,0.03); }
+      &.variant--gradient { background: linear-gradient(135deg, rgba(88, 28, 135, 0.1), rgba(15, 23, 42, 0.9)); }
+      .card-header-flex { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; }
+      .avatar-circle { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; }
+      .info { flex: 1; display: flex; flex-direction: column; }
+      .author { font-size: 16px; font-weight: 800; color: white; }
+      .role { font-size: 12px; color: #64748b; }
+      .quote { font-size: 15px; line-height: 1.6; color: #94a3b8; font-style: italic; }
+    }
 
-    .modern-position-dock { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(8px); padding: 0.6rem 1.2rem; border-radius: 16px; border: 1px solid rgba(255, 255, 255, 0.08); display: flex; gap: 1.5rem; color: white; font-size: 11px; }
-    .dock-divider { width: 1px; background: rgba(255, 255, 255, 0.1); }
-    .dock-item { display: flex; align-items: center; gap: 0.5rem; }
-    .dock-item .label { color: #64748b; font-weight: 800; }
+    .color-row { display: flex; gap: 10px; align-items: center; .color-preview { width: 34px; height: 34px; border-radius: 8px; position: relative; overflow: hidden; border: 1px solid rgba(255,255,255,0.1); input { position: absolute; inset: -5px; width: 150%; height: 150%; cursor: pointer; opacity: 0; } } }
 
-    .isolated-mode-footer { height: 72px; padding: 0 2rem; background: #1e293b; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255, 255, 255, 0.08); }
-    .footer-hint { font-size: 12px; color: #94a3b8; font-style: italic; }
-    .btn-clean { padding: 0.6rem 1.5rem; border-radius: 12px; font-weight: 700; cursor: pointer; border: none; font-size: 13px; transition: all 0.2s; }
-    .btn-clean.primary { background: #6366f1; color: white; }
-    .btn-clean.secondary { background: transparent; color: #94a3b8; }
-    .btn-clean:hover { transform: translateY(-1px); opacity: 0.9; }
+    .premium-input, .premium-select, .premium-textarea { width: 100%; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 0.8rem 1rem; border-radius: 12px; font-size: 13px; &:focus { border-color: #ec4899; outline: none; } }
+    .premium-input-mini { width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255,255,255,0.1); color: white; padding: 6px 12px; border-radius: 8px; font-size: 11px; font-family: monospace; }
+    .premium-range { width: 100%; accent-color: #ec4899; }
   `]
 })
-export class EditorCardTestimonialIsolatedModeComponent implements OnInit, OnDestroy {
-  @Input() public config!: IsolatedModeConfig;
-  @Output() public closed = new EventEmitter<void>();
-  @Output() public applied = new EventEmitter<IsolatedModeConfig>();
+export class EditorCardTestimonialIsolatedModeComponent extends BaseIsolatedModeComponent {
+  @ViewChild('canvas') canvasRef!: ElementRef;
 
-  public editableContent: any = {};
-  public editableStyles: any = {};
-  public currentSize = { width: 0, height: 0 };
-  public Math = Math; // Expose Math to template
-  
-  private isResizing = false;
-  private dragStartX = 0;
-  private dragStartY = 0;
-  private startW = 0;
-  private startH = 0;
-
-  ngOnInit() {
-    this.editableContent = { ...this.config.content };
-    this.editableStyles = { ...this.config.styles };
-    this.currentSize = { ...this.config.size };
-
-    window.addEventListener('mousemove', this.onMouseMove);
-    window.addEventListener('mouseup', this.onMouseUp);
+  protected override getCanvasElement(): HTMLElement | null {
+    return this.canvasRef?.nativeElement;
   }
 
-  ngOnDestroy() {
-    window.removeEventListener('mousemove', this.onMouseMove);
-    window.removeEventListener('mouseup', this.onMouseUp);
+  protected override initializeState() {
+    this.editableContent = { 
+        ...this.config.content,
+        author: this.config.content.author || 'Cliente Satisfecho',
+        role: this.config.content.role || 'CEO de Empresa',
+        text: this.config.content.text || 'Una experiencia increíble que superó nuestras expectativas.',
+        avatar: this.config.content.avatar || 'https://i.pravatar.cc/150',
+        variant: this.config.content.variant || 'modern',
+        rating: this.config.content.rating || 5
+    };
+    
+    this.editableStyles = { 
+        ...this.config.styles,
+        accentColor: this.config.styles.accentColor || '#ec4899'
+    };
+    
+    this.currentPosition = { ...(this.config.position || { x: 500, y: 300 }) };
+    this.currentSize = { 
+        width: this.config.size?.width || 450, 
+        height: this.config.size?.height || 280 
+    };
+    
+    this.initialPosition = { ...this.currentPosition };
+    this.initialSize = { ...this.currentSize };
+    this.viewportScale = 0.8;
+
+    this.saveState();
   }
 
-  public startResize(e: MouseEvent) {
-    e.stopPropagation();
-    this.isResizing = true;
-    this.dragStartX = e.clientX;
-    this.dragStartY = e.clientY;
-    this.startW = this.currentSize.width;
-    this.startH = this.currentSize.height;
+  override saveState() {
+    const newState = {
+      position: { ...this.currentPosition },
+      size: { ...this.currentSize },
+      styles: JSON.parse(JSON.stringify(this.editableStyles)),
+      content: JSON.parse(JSON.stringify(this.editableContent))
+    };
+
+    const lastState = this.undoStack[this.undoStack.length - 1];
+    if (lastState && JSON.stringify(lastState) === JSON.stringify(newState)) return;
+
+    this.undoStack.push(newState as any);
+    if (this.undoStack.length > 50) this.undoStack.shift();
+    this.redoStack = [];
   }
 
-  private onMouseMove = (e: MouseEvent) => {
-    if (this.isResizing) {
-      this.currentSize.width = Math.max(300, this.startW + (e.clientX - this.dragStartX));
-      this.currentSize.height = Math.max(250, this.startH + (e.clientY - this.dragStartY));
-    }
-  }
-
-  private onMouseUp = () => {
-    this.isResizing = false;
-  }
-
-  public close() { this.closed.emit(); }
-  public cancel() { this.closed.emit(); }
-  public onOverlayClick(e: Event) { this.closed.emit(); }
-
-  public apply() {
+  override apply() {
     this.applied.emit({
       ...this.config,
       content: { ...this.editableContent },
       styles: {
         ...this.editableStyles,
+        left: this.currentPosition.x + 'px',
+        top: this.currentPosition.y + 'px',
         width: this.currentSize.width + 'px',
-        height: this.currentSize.height + 'px'
+        position: 'absolute'
       },
+      position: { ...this.currentPosition },
       size: { ...this.currentSize }
     });
   }
+
+  override onContentChange() {
+    this.scheduleSaveState();
+  }
+
+  onCanvasMouseDown(event: MouseEvent) { }
+  onOverlayClick(event: MouseEvent) { this.cancel(); }
 }

@@ -1,38 +1,22 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, inject, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Store } from '@ngrx/store';
-import { AppState } from '../../../../store/state/app.state';
-import { selectCurrentPageGlobalStyles } from '../../../../store/selectors/page.selectors';
-import { map } from 'rxjs/operators';
-import { Observable, Subject } from 'rxjs';
-
-import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
-export { IsolatedModeConfig };
-
-export interface UndoRedoState {
-  items: any[];
-  content: any;
-  styles: any;
-}
+import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 
 @Component({
   selector: 'lib-editor-testimonials-isolated-mode',
   standalone: true,
-  imports: [
-    CommonModule, 
-    FormsModule
-  ],
+  imports: [CommonModule, FormsModule],
   template: `
     <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
         
-        <!-- Header -->
+        <!-- ===== HEADER ===== -->
         <div class="isolated-mode-header">
           <div class="header-breadcrumb">
-            <span class="mode-badge">🎯 MODO AISLADO</span>
+            <span class="mode-badge">💬 TESTIMONIALS EDITOR</span>
             <span class="separator">/</span>
-            <span class="component-name">TESTIMONIALS - PREMIUM FEEDBACK EDITOR</span>
+            <span class="component-name">SOCIAL PROOF GOLD</span>
           </div>
           
           <div class="header-actions">
@@ -47,515 +31,365 @@ export interface UndoRedoState {
             
             <div class="divider"></div>
             
+            <div class="action-group">
+              <button class="icon-btn" (click)="toggleGrid()" [class.active]="showGrid" title="Cuadrícula (G)">
+                <span class="icon">#</span>
+              </button>
+              <button class="icon-btn" (click)="toggleSnap()" [class.active]="snapToGrid" title="Snap (S)">
+                <span class="icon">⊞</span>
+              </button>
+            </div>
+
+            <div class="divider"></div>
+
             <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
           </div>
         </div>
 
+        <!-- ===== BODY ===== -->
         <div class="isolated-mode-body">
+          
           <!-- Sidebar Controls -->
           <div class="controls-sidebar">
+            <div class="sidebar-tabs">
+              <button [class.active]="activeTab === 'items'" (click)="activeTab = 'items'">FEEDBACK</button>
+              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">LAYOUT</button>
+            </div>
+
             <div class="sidebar-scroll-content">
               
-              <!-- SECCIÓN: CABECERA DE SECCIÓN -->
-              <div class="sidebar-section">
+              <!-- ITEMS SECTION -->
+              <div class="sidebar-section animate-fade-in" *ngIf="activeTab === 'items'">
                 <div class="section-header">
-                  <span class="section-icon">📝</span>
-                  <h4>CONCEPTO</h4>
+                  <span class="section-icon">⭐️</span>
+                  <h4>COMENTARIOS DE CLIENTES</h4>
                 </div>
                 
-                <div class="control-group">
-                  <label>Título de la Sección</label>
-                  <input type="text" [(ngModel)]="editableContent.title" (ngModelChange)="onPartialChange()" class="premium-input" placeholder="Testimonios">
+                <div class="item-list">
+                  <div *ngFor="let item of editableItems; let i = index" 
+                       class="testimonial-item-card" 
+                       [class.active]="selectedIndex === i"
+                       (click)="selectedIndex = i">
+                    <div class="item-main">
+                      <div class="avatar-mini">
+                        <img [src]="item.avatar" *ngIf="item.avatar" class="w-full h-full object-cover">
+                        <span *ngIf="!item.avatar">👤</span>
+                      </div>
+                      <div class="flex-1 overflow-hidden">
+                        <input type="text" [(ngModel)]="item.author" (ngModelChange)="onContentChange()" class="premium-input-mini" placeholder="Nombre...">
+                      </div>
+                      <button (click)="removeItem(i, $event)" class="delete-btn-mini">✕</button>
+                    </div>
+                    
+                    <div *ngIf="selectedIndex === i" class="item-details animate-fade-in">
+                        <label>Cargo / Empresa</label>
+                        <input type="text" [(ngModel)]="item.role" (ngModelChange)="onContentChange()" class="premium-input-mini" placeholder="CEO en...">
+                        
+                        <label class="mt-3">Reseña del Cliente</label>
+                        <textarea [(ngModel)]="item.quote" (ngModelChange)="onContentChange()" class="premium-textarea h-24" placeholder="Escribe el testimonio..."></textarea>
+                        
+                        <div class="rating-editor mt-3">
+                           <label>Puntuación ({{ item.rating }}★)</label>
+                           <div class="flex gap-1 mt-1">
+                              <button *ngFor="let s of [1,2,3,4,5]" 
+                                      (click)="item.rating = s; onContentChange()"
+                                      class="star-btn"
+                                      [class.active]="s <= item.rating">★</button>
+                           </div>
+                        </div>
+
+                        <label class="mt-3">Avatar URL</label>
+                        <input type="text" [(ngModel)]="item.avatar" (ngModelChange)="onContentChange()" class="premium-input-mini" placeholder="https://...">
+                    </div>
+                  </div>
                 </div>
 
-                <div class="control-group">
-                  <label>Subtítulo / Promo</label>
-                  <input type="text" [(ngModel)]="editableContent.subtitle" (ngModelChange)="onPartialChange()" class="premium-input" placeholder="Nuestros clientes confían">
-                </div>
+                <button (click)="addItem()" class="add-btn-premium mt-4">+ Nuevo Testimonio</button>
               </div>
 
-              <!-- SECCIÓN: CONFIGURACIÓN LAYOUT -->
-              <div class="sidebar-section">
+              <!-- DESIGN SECTION -->
+              <div class="sidebar-section animate-fade-in" *ngIf="activeTab === 'design'">
                 <div class="section-header">
-                  <span class="section-icon">📐</span>
-                  <h4>LAYOUT & ESTILO</h4>
+                  <span class="section-icon">🧩</span>
+                  <h4>GRID & APARIENCIA</h4>
                 </div>
                 
                 <div class="control-group">
-                  <label>Variante de Layout</label>
-                  <select [(ngModel)]="editableContent.variant" (ngModelChange)="onPartialChange()" class="premium-input">
-                    <option value="default">Default (Grid)</option>
-                    <option value="carousel">Carrusel Deslizante</option>
-                    <option value="columns">Columnas de Altura Variable</option>
-                    <option value="centered">Centrado Foco</option>
+                  <label>Título de Sección</label>
+                  <input type="text" [(ngModel)]="editableContent.title" (ngModelChange)="onContentChange()" class="premium-input">
+                </div>
+
+                <div class="control-group">
+                  <label>Variante de Tarjetas</label>
+                  <select [(ngModel)]="editableContent.variant" (ngModelChange)="onContentChange()" class="premium-select">
+                    <option value="default">Diseño Grid Clásico</option>
+                    <option value="carousel">Carrusel Fluido</option>
+                    <option value="columns">Mampostería (Masonry)</option>
+                    <option value="centered">Foco Central</option>
                   </select>
                 </div>
 
                 <div class="control-group">
-                  <label>Diseño de Tarjetas</label>
-                  <select [(ngModel)]="editableContent.cardVariant" (ngModelChange)="onPartialChange()" class="premium-input">
-                    <option value="default">Clásico</option>
-                    <option value="glass">Glassmorphism</option>
-                    <option value="neon">Neon</option>
-                    <option value="minimal">Minimalista</option>
-                  </select>
-                </div>
-
-                <div class="control-group">
-                  <label>Columnas (Mobile/Desktop)</label>
-                  <div class="grid-cols-selector">
-                    <button *ngFor="let n of [1,2,3,4]" 
+                  <label>Columnas Visuales ({{ editableContent.gridCols }})</label>
+                  <div class="grid-selector">
+                    <button *ngFor="let n of [1,2,3]" 
                             [class.active]="editableContent.gridCols === n" 
-                            (click)="editableContent.gridCols = n; onPartialChange()">
+                            (click)="editableContent.gridCols = n; onContentChange()">
                       {{ n }}
                     </button>
                   </div>
                 </div>
-              </div>
 
-              <!-- SECCIÓN: LISTADO DE TESTIMONIOS -->
-              <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">💬</span>
-                  <h4>TESTIMONIOS ({{ editableItems.length }})</h4>
-                  <button class="premium-add-btn" (click)="addItem()">+ Añadir</button>
-                </div>
-                
-                <div class="items-list-premium">
-                  <div *ngFor="let item of editableItems; let i = index" 
-                       class="item-card" 
-                       [class.active]="selectedItemIndex === i" 
-                       (click)="selectItem(i)">
-                    <div class="item-visual avatar">
-                      <img [src]="item.avatar || 'https://i.pravatar.cc/100?u=' + i" *ngIf="item.avatar" class="w-full h-full rounded-lg object-cover">
-                      <span *ngIf="!item.avatar">👤</span>
-                    </div>
-                    <div class="item-info">
-                      <span class="item-title">{{ item.author || 'Anónimo' }}</span>
-                      <span class="item-meta">{{ item.role || 'Cliente' }}</span>
-                    </div>
-                    <div class="item-actions">
-                      <button class="delete-icon-btn" (click)="removeItem(i, $event)">✕</button>
-                    </div>
-                  </div>
+                <div class="control-group mt-6">
+                  <label>Estética de Tarjetas</label>
+                  <select [(ngModel)]="editableContent.cardVariant" (ngModelChange)="onContentChange()" class="premium-select">
+                    <option value="default">Sólido Moderno</option>
+                    <option value="glass">Glassmorphism Transparente</option>
+                    <option value="minimal">Minimalista (Sin Borde)</option>
+                    <option value="neon">Brillo Neón (Accent)</option>
+                  </select>
                 </div>
               </div>
-
-              <!-- SECCIÓN: EDITOR DE TESTIMONIO SELECCIONADO -->
-              <div class="sidebar-section no-border" *ngIf="selectedItemIndex !== -1">
-                <div class="detail-editor-card feedback">
-                  <div class="section-header">
-                    <span class="section-icon">✏️</span>
-                    <h4>EDITAR TESTIMONIO #{{ selectedItemIndex + 1 }}</h4>
-                  </div>
-
-                  <div class="control-group">
-                    <label>Nombre del Autor</label>
-                    <input type="text" [(ngModel)]="editableItems[selectedItemIndex].author" (ngModelChange)="onPartialChange()" class="premium-input">
-                  </div>
-
-                  <div class="control-group">
-                    <label>Cargo / Empresa</label>
-                    <input type="text" [(ngModel)]="editableItems[selectedItemIndex].role" (ngModelChange)="onPartialChange()" class="premium-input">
-                  </div>
-
-                  <div class="control-group">
-                    <label>Testimonio (La Cita)</label>
-                    <textarea [(ngModel)]="editableItems[selectedItemIndex].quote" (ngModelChange)="onPartialChange()" class="premium-input h-32" placeholder="Escribe el testimonio aquí..."></textarea>
-                  </div>
-
-                  <div class="control-group">
-                    <label>Calificación ({{ editableItems[selectedItemIndex].rating || 5 }} estrellas)</label>
-                    <div class="flex gap-1 justify-center py-2 bg-slate-900/50 rounded-xl">
-                      <button *ngFor="let s of [1,2,3,4,5]" 
-                              class="text-xl transition-transform hover:scale-125 focus:outline-none"
-                              [style.color]="s <= (editableItems[selectedItemIndex].rating || 5) ? '#fbbf24' : '#475569'"
-                              (click)="editableItems[selectedItemIndex].rating = s; onPartialChange()">
-                        ★
-                      </button>
-                    </div>
-                  </div>
-
-                  <div class="control-group">
-                    <label>URL de Imagen Avatar</label>
-                    <input type="text" [(ngModel)]="editableItems[selectedItemIndex].avatar" (ngModelChange)="onPartialChange()" class="premium-input">
-                  </div>
-                </div>
-              </div>
-
             </div>
           </div>
 
           <!-- Canvas Area -->
-          <div class="isolated-canvas ambient-testimonials">
-            <div class="canvas-inner" [style.background-image]="canvasBg">
-               <div class="testimonials-preview-container">
-                  <div class="preview-header-branded" *ngIf="editableContent.title">
-                     <h2 class="premium-title">{{ editableContent.title }}</h2>
-                     <p class="premium-subtitle">{{ editableContent.subtitle }}</p>
-                  </div>
-
-                  <div class="testimonials-render-grid" 
-                       [style.grid-template-columns]="getGridColumns()"
-                       [style.gap.px]="30">
-                    
-                    <div *ngFor="let item of editableItems; let i = index" 
-                         class="testimonial-render-wrapper"
-                         [class.is-editing]="selectedItemIndex === i"
-                         (click)="selectItem(i)">
-                      
-                      <div class="testimonial-card-renderer" [style.color]="'white'">
-                         <div class="quote-symbol">"</div>
-                         <p class="quote-text">{{ item.quote || 'Cita del cliente...' }}</p>
-                         <div class="author-block">
-                            <img [src]="item.avatar || 'https://i.pravatar.cc/100?u=' + i" class="author-avatar shadow-lg">
-                            <div class="author-details">
-                               <div class="name">{{ item.author || 'Nombre' }}</div>
-                               <div class="role">{{ item.role || 'Cargo' }}</div>
-                            </div>
-                         </div>
-                         <div class="rating-stars">
-                            <span *ngFor="let s of [1,2,3,4,5]" [style.color]="s <= (item.rating || 5) ? '#fbbf24' : '#ffffff22'">★</span>
-                         </div>
+          <div class="isolated-canvas" #canvas (mousedown)="onCanvasMouseDown($event)">
+              <div class="canvas-inner" #canvasInner
+                   [style.transform]="'scale(' + viewportScale + ')'"
+                   [style.transformOrigin]="center top"
+                   [class.show-grid]="showGrid"
+                   [class.grid-snapping]="snapToGrid">
+                
+                <div class="draggable-wrapper"
+                     #draggableWrapper
+                     [style.left.px]="currentPosition.x"
+                     [style.top.px]="currentPosition.y"
+                     [style.width.px]="currentSize.width"
+                     [class.is-dragging]="isDragging"
+                     [class.is-resizing]="isResizing"
+                     (mousedown)="onMouseDown($event)">
+                  
+                  <div class="preview-render-testimonials" [style.columns]="editableContent.gridCols">
+                      <div class="header-preview-text" *ngIf="editableContent.title">
+                         <h2>{{ editableContent.title }}</h2>
                       </div>
 
-                      <div class="item-id-badge">#{{ i + 1 }}</div>
-                    </div>
+                      <div class="testimonial-cards-grid" 
+                           [style.grid-template-columns]="'repeat(' + editableContent.gridCols + ', 1fr)'">
+                        <div *ngFor="let item of editableItems; let i = index" 
+                             class="testimonial-card-gold"
+                             [class.is-editing]="selectedIndex === i"
+                             (click)="selectedIndex = i">
+                           <div class="quote-sign">"</div>
+                           <p class="quote-body">{{ item.quote || 'Excelente servicio...' }}</p>
+                           <div class="author-info">
+                              <img [src]="item.avatar || 'https://i.pravatar.cc/100?u=' + i" class="avatar-img">
+                              <div class="details">
+                                 <div class="name">{{ item.author || 'Anónimo' }}</div>
+                                 <div class="role">{{ item.role || 'Cliente' }}</div>
+                              </div>
+                           </div>
+                           <div class="stars-row">
+                              <span *ngFor="let s of [1,2,3,4,5]" [style.color]="s <= item.rating ? '#fbbf24' : '#475569'">★</span>
+                           </div>
+                        </div>
+                      </div>
                   </div>
-               </div>
-            </div>
+
+                  <!-- Horizontal resize -->
+                  <div class="resize-handle e"  (mousedown)="startResize($event, 'e')"></div>
+                  <div class="resize-handle w"  (mousedown)="startResize($event, 'w')"></div>
+                </div>
+              </div>
 
             <div class="modern-position-dock">
-              <div class="dock-item"><span class="label">LAYOUT</span><span class="value text-purple-400">{{ (editableContent.variant || 'grid') | uppercase }}</span></div>
+              <div class="dock-item"><span class="label">RESEÑAS</span><span class="value">{{ editableItems.length }}</span></div>
               <div class="dock-divider"></div>
-              <div class="dock-item"><span class="label">TRANSFORM</span><span class="value">SCALE(1.0)</span></div>
+              <div class="dock-item"><span class="label">LAYOUT</span><span class="value uppercase text-indigo-400">{{ editableContent.variant }}</span></div>
               <div class="dock-divider"></div>
-              <div class="dock-item"><span class="label">FEEDBACKS</span><span class="value">{{ editableItems.length }}</span></div>
+              <div class="dock-item"><span class="label">COLS</span><span class="value">{{ editableContent.gridCols }}</span></div>
             </div>
           </div>
         </div>
 
-        <!-- Footer -->
         <div class="isolated-mode-footer">
-          <div class="footer-hint">Consejo: Mantén los testimonios breves e impactantes para una mejor lectura en móvil.</div>
+          <div class="footer-hint">Testimonials Gold: La prueba social es el factor #1 en la decisión de compra.</div>
           <div class="footer-actions-btns">
             <button class="btn-clean secondary" (click)="cancel()">Descartar cambios</button>
-            <button class="btn-clean primary" (click)="apply()">Guardar Testimonios</button>
+            <button class="btn-clean primary" (click)="apply()">Publicar Feedback</button>
           </div>
         </div>
       </div>
     </div>
   `,
   styles: [`
-    .isolated-mode-overlay {
-      position: fixed;
-      inset: 0 !important;
-      background: rgba(2, 6, 23, 0.96);
-      backdrop-filter: blur(14px);
-      z-index: 9999999 !important;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 1.5vh 1.5vw;
+    @import '../_isolated-mode-shared';
+    @include isolated-mode-foundation;
+    @include resize-handles;
+    @include modern-dock;
+
+    .sidebar-tabs { display: flex; background: rgba(15, 23, 42, 0.4); border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      button { flex: 1; padding: 1.2rem 0.5rem; background: transparent; border: none; color: #64748b; font-size: 10px; font-weight: 900; letter-spacing: 1.5px; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        &.active { color: #8b5cf6; border-bottom-color: #8b5cf6; background: rgba(139, 92, 246, 0.05); }
+      }
     }
 
-    .isolated-mode-container {
-      background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 24px;
-      width: 100%; height: 100%; display: flex; flex-direction: column; overflow: hidden;
-      box-shadow: 0 40px 80px -15px rgba(0, 0, 0, 0.9);
-      animation: premium-entry 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    .canvas-inner { width: 4000px; height: 3000px; position: relative; padding-top: 60px;
+      &.show-grid { background-image: radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px); background-size: 30px 30px; }
     }
 
-    @keyframes premium-entry {
-      from { opacity: 0; transform: scale(0.97); }
-      to { opacity: 1; transform: scale(1); }
+    .draggable-wrapper { position: absolute !important; cursor: move; z-index: 100; border: 2px dashed transparent; padding: 20px; transition: border-color 0.2s;
+      &:hover { border-color: rgba(139, 92, 246, 0.3); }
+      &.is-dragging, &.is-resizing { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.02); }
     }
 
-    .isolated-mode-header {
-      height: 70px; padding: 0 1.5rem; background: #1e293b; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      display: flex; align-items: center; justify-content: space-between;
-    }
-
-    .mode-badge { font-size: 10px; font-weight: 800; color: #a855f7; background: rgba(168, 85, 247, 0.1); padding: 5px 10px; border-radius: 8px; border: 1px solid rgba(168, 85, 247, 0.2); }
-    .component-name { color: #f8fafc; font-size: 14px; font-weight: 700; margin-left: 10px; }
-    .header-actions { display: flex; align-items: center; gap: 1rem; }
-
-    .icon-btn {
-      width: 38px; height: 38px; display: flex; align-items: center; justify-content: center;
-      background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08);
-      color: #94a3b8; border-radius: 10px; cursor: pointer; transition: all 0.2s;
-    }
-    .icon-btn:hover:not(:disabled) { background: rgba(255, 255, 255, 0.08); color: white; border-color: #6366f1; }
-    .icon-btn:disabled { opacity: 0.1; cursor: not-allowed; }
-
-    .close-main-btn {
-      width: 38px; height: 38px; background: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.2);
-      color: #ef4444; border-radius: 10px; cursor: pointer; transition: all 0.2s;
-    }
-    .close-main-btn:hover { background: #ef4444; color: white; }
-
-    .isolated-mode-body {
-      flex: 1;
-      display: flex;
-      flex-direction: row; /* Explicit row */
-      overflow: hidden;
-    }
-
-    .controls-sidebar {
-      width: 380px;
-      min-width: 380px; /* Safety */
-      flex-shrink: 0; /* Prevent shrinking */
-      background: #020617;
-      border-right: 1px solid rgba(255, 255, 255, 0.08);
-      overflow-y: auto;
-    }
-
-    .sidebar-scroll-content { padding: 1.8rem; }
-    .sidebar-section { margin-bottom: 2.2rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
-    .sidebar-section.no-border { border-bottom: none; }
-    .section-header { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1.2rem; }
-    .section-header h4 { margin: 0; font-size: 11px; color: #64748b; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; }
-
-    .control-group { margin-bottom: 1.4rem; }
-    .control-group label { display: block; font-size: 10px; color: #94a3b8; margin-bottom: 0.7rem; font-weight: 700; }
-
-    .premium-input {
-      width: 100%; background: rgba(15, 23, 42, 0.6); border: 1px solid rgba(255, 255, 255, 0.08);
-      color: white; padding: 0.75rem 1rem; border-radius: 14px; font-size: 13px; transition: all 0.2s;
-    }
-    .premium-input:focus { border-color: #6366f1; background: rgba(15, 23, 42, 0.9); outline: none; }
-
-    .grid-cols-selector { display: flex; gap: 8px; }
-    .grid-cols-selector button {
-      flex: 1; height: 36px; background: #1e293b; border: 1px solid rgba(255, 255, 255, 0.05);
-      color: #94a3b8; border-radius: 10px; font-size: 11px; font-weight: 800; cursor: pointer; transition: all 0.2s;
-    }
-    .grid-cols-selector button.active { background: #6366f1; color: white; border-color: #818cf8; box-shadow: 0 0 20px rgba(99, 102, 241, 0.3); }
-
-    .premium-add-btn {
-      background: #8b5cf6; color: white; border: none; padding: 5px 12px; border-radius: 8px;
-      font-size: 11px; font-weight: 800; cursor: pointer;
-    }
-
-    .items-list-premium { display: flex; flex-direction: column; gap: 12px; }
-    .item-card {
-      display: flex; align-items: center; gap: 14px; padding: 12px;
-      background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px;
-      cursor: pointer; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    .item-card:hover { background: rgba(30, 41, 59, 0.8); border-color: rgba(99, 102, 241, 0.3); transform: translateY(-2px); }
-    .item-card.active { background: rgba(99, 102, 241, 0.15); border-color: #6366f1; }
-
-    .item-visual.avatar {
-      width: 44px; height: 44px; background: #0f172a; border-radius: 12px;
-      display: flex; align-items: center; justify-content: center; font-size: 20px; overflow: hidden;
-    }
-
-    .item-info { flex: 1; overflow: hidden; }
-    .item-title { display: block; color: white; font-size: 13px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .item-meta { font-size: 11px; color: #64748b; font-weight: 600; }
-
-    .delete-icon-btn { background: transparent; border: none; color: #ef444433; font-size: 16px; cursor: pointer; transition: color 0.2s; }
-    .item-card:hover .delete-icon-btn { color: #ef4444; }
-
-    .detail-editor-card.feedback {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
-      border: 1px solid rgba(99, 102, 241, 0.2); border-radius: 20px; padding: 1.4rem;
-    }
-
-    .isolated-canvas {
-      flex: 1; background: #020617; position: relative; overflow: hidden;
-      background-image: radial-gradient(rgba(139, 92, 246, 0.05) 1px, transparent 1px); background-size: 50px 50px;
-    }
-
-    .canvas-inner { width: 100%; height: 100%; overflow-y: auto; padding: 80px 40px; display: flex; flex-direction: column; align-items: center; }
-    
-    .preview-header-branded { text-align: center; margin-bottom: 70px; max-width: 800px; }
-    .premium-title { color: white; font-size: 48px; font-weight: 900; margin-bottom: 1.2rem; letter-spacing: -0.02em; }
-    .premium-subtitle { color: #94a3b8; font-size: 20px; line-height: 1.6; font-weight: 500; }
-
-    .testimonials-render-grid { display: grid; width: 100%; max-width: 1200px; }
-    .testimonial-render-wrapper { position: relative; border-radius: 24px; border: 2px solid transparent; transition: all 0.4s cubic-bezier(0.19, 1, 0.22, 1); cursor: pointer; }
-    .testimonial-render-wrapper.is-editing { border-color: #6366f1; transform: scale(1.05); z-index: 10; filter: drop-shadow(0 25px 50px rgba(0, 0, 0, 0.5)); }
-    
-    .testimonial-card-renderer {
-      background: #1e293b; border-radius: 24px; padding: 2.5rem; height: 100%;
-      border: 1px solid rgba(255, 255, 255, 0.05); display: flex; flex-direction: column; gap: 1.5rem;
+    .item-list { display: flex; flex-direction: column; gap: 12px; }
+    .testimonial-item-card { background: #0f172a; border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 12px; padding: 12px; cursor: pointer; transition: all 0.2s;
+      &:hover { border-color: rgba(255, 255, 255, 0.15); }
+      &.active { border-color: #8b5cf6; background: rgba(139, 92, 246, 0.05); box-shadow: 0 0 20px rgba(139, 92, 246, 0.1); }
     }
     
-    .quote-symbol { font-size: 80px; font-family: serif; line-height: 1; height: 40px; color: #6366f1; opacity: 0.3; margin-top: -20px; }
-    .quote-text { font-size: 18px; line-height: 1.7; font-weight: 500; font-style: italic; color: #e2e8f0; }
-    
-    .author-block { display: flex; align-items: center; gap: 1rem; margin-top: auto; border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 1.5rem; }
-    .author-avatar { width: 50px; height: 50px; border-radius: 12px; border: 2px solid #6366f1; }
-    .author-details .name { color: white; font-weight: 800; font-size: 16px; }
-    .author-details .role { color: #94a3b8; font-size: 12px; font-weight: 600; }
-    
-    .rating-stars { display: flex; gap: 2px; font-size: 14px; }
-    
-    .item-id-badge { position: absolute; top: -12px; left: -12px; background: #6366f1; color: white; font-size: 11px; font-weight: 900; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.5); }
+    .item-main { display: flex; align-items: center; gap: 10px; }
+    .avatar-mini { width: 32px; height: 32px; border-radius: 8px; background: rgba(255,255,255,0.05); overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .item-details { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.05);
+      label { display: block; font-size: 9px; color: #64748b; text-transform: uppercase; font-weight: 800; margin-bottom: 6px; }
+    }
 
-    .modern-position-dock { position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%); background: rgba(15, 23, 42, 0.95); backdrop-filter: blur(10px); padding: 0.75rem 1.8rem; border-radius: 20px; border: 1px solid rgba(255, 255, 255, 0.08); display: flex; gap: 1.8rem; color: white; font-size: 12px; box-shadow: 0 15px 25px -5px rgba(0, 0, 0, 0.4); }
-    .dock-divider { width: 1px; background: rgba(255, 255, 255, 0.1); }
-    .dock-item { display: flex; align-items: center; gap: 0.6rem; }
-    .dock-item .label { color: #64748b; font-weight: 900; text-transform: uppercase; }
+    .delete-btn-mini { background: rgba(239, 68, 68, 0.1); color: #f87171; border: none; width: 24px; height: 24px; border-radius: 6px; cursor: pointer; transition: all 0.2s; &:hover { background: #ef4444; color: white; } }
 
-    .isolated-mode-footer { height: 75px; padding: 0 2.5rem; background: #1e293b; display: flex; align-items: center; justify-content: space-between; border-top: 1px solid rgba(255, 255, 255, 0.08); }
-    .footer-hint { font-size: 12px; color: #94a3b8; font-weight: 500; }
-    .btn-clean { padding: 0.75rem 2rem; border-radius: 14px; font-weight: 800; cursor: pointer; border: none; font-size: 14px; transition: all 0.2s; }
-    .btn-clean.primary { background: #6366f1; color: white; box-shadow: 0 4px 15px -1px rgba(99, 102, 241, 0.4); }
-    .btn-clean.secondary { background: transparent; color: #94a3b8; }
-    .btn-clean.secondary:hover { color: white; background: rgba(255, 255, 255, 0.05); }
+    .star-btn { background: transparent; border: none; color: #475569; font-size: 16px; cursor: pointer; transition: all 0.2s; &.active { color: #fbbf24; transform: scale(1.2); } }
+
+    .grid-selector { display: flex; gap: 5px; background: rgba(15, 23, 42, 0.6); padding: 5px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.05);
+      button { flex: 1; height: 30px; border: none; background: transparent; color: #64748b; border-radius: 6px; font-weight: 800; font-size: 11px; cursor: pointer; transition: all 0.2s;
+        &.active { background: #8b5cf6; color: white; }
+      }
+    }
+
+    .add-btn-premium { width: 100%; background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.1)); border: 1px dashed rgba(139, 92, 246, 0.4); color: #a78bfa; padding: 12px; border-radius: 14px; font-size: 12px; font-weight: 800; cursor: pointer; transition: all 0.3s;
+      &:hover { background: rgba(139, 92, 246, 0.2); border-color: #8b5cf6; transform: translateY(-1px); }
+    }
+
+    .premium-input, .premium-select, .premium-textarea { width: 100%; background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(255, 255, 255, 0.1); color: white; padding: 0.8rem 1rem; border-radius: 12px; font-size: 13px; transition: all 0.2s; &:focus { border-color: #8b5cf6; outline: none; background: #0f172a; } }
+    .premium-input-mini { width: 100%; background: transparent; border: 1px solid transparent; color: white; padding: 4px 8px; border-radius: 6px; font-size: 12px; &:focus { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.1); } }
+
+    .preview-render-testimonials { color: white; text-align: center; }
+    .header-preview-text h2 { font-size: 32px; font-weight: 900; margin-bottom: 40px; color: white; }
+
+    .testimonial-cards-grid { display: grid; gap: 24px; padding: 10px; }
+    .testimonial-card-gold { background: #1e293b; border-radius: 20px; padding: 24px; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; text-align: left; transition: all 0.3s;
+      &.is-editing { border-color: #8b5cf6; transform: scale(1.02); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+      .quote-sign { font-size: 48px; font-family: serif; color: #8b5cf6; opacity: 0.2; height: 30px; margin-top: -10px; }
+      .quote-body { font-size: 15px; color: #cbd5e1; line-height: 1.6; margin-bottom: 20px; font-style: italic; }
+      .author-info { display: flex; align-items: center; gap: 12px; .avatar-img { width: 44px; height: 44px; border-radius: 12px; border: 2px solid #8b5cf6; } .details .name { font-weight: 800; font-size: 15px; } .details .role { font-size: 11px; color: #64748b; } }
+      .stars-row { margin-top: 15px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 12px; display: flex; gap: 2px; }
+    }
+
+    .animate-fade-in { animation: fadeIn 0.4s cubic-bezier(0.165, 0.84, 0.44, 1); }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
   `]
 })
-export class EditorTestimonialsIsolatedModeComponent implements OnInit, OnDestroy {
-  @Input() config!: IsolatedModeConfig;
-  @Output() closed = new EventEmitter<void>();
-  @Output() applied = new EventEmitter<IsolatedModeConfig>();
+export class EditorTestimonialsIsolatedModeComponent extends BaseIsolatedModeComponent {
+  @ViewChild('canvas') canvasRef!: ElementRef;
 
-  private store = inject(Store<AppState>);
-  globalColors$: Observable<string[]> = this.store.select(selectCurrentPageGlobalStyles).pipe(
-    map(styles => styles ? [styles.primaryColor, styles.secondaryColor, styles.accentColor] : [])
-  );
-
-  // State
+  activeTab: 'items' | 'design' = 'items';
+  selectedIndex = 0;
   editableItems: any[] = [];
-  editableContent: any = {};
-  selectedItemIndex = -1;
-  
-  // Undo/Redo
-  undoStack: UndoRedoState[] = [];
-  redoStack: UndoRedoState[] = [];
 
-  private destroy$ = new Subject<void>();
-  private saveTimeout: any;
-
-  get canUndo() { return this.undoStack.length > 1; }
-  get canRedo() { return this.redoStack.length > 0; }
-  
-  get canvasBg() {
-    return 'none';
+  protected override getCanvasElement(): HTMLElement | null {
+    return this.canvasRef?.nativeElement;
   }
 
-  ngOnInit() {
-    this.initializeState();
-  }
-
-  private initializeState() {
-    this.editableItems = JSON.parse(JSON.stringify(this.config.content.items || this.config.content.testimonials || []));
-    this.editableContent = {
-      title: this.config.content.title || 'Lo que dicen de nosotros',
-      subtitle: this.config.content.subtitle || 'Damos lo mejor para nuestros clientes.',
-      variant: this.config.content.variant || 'default',
-      cardVariant: this.config.content.cardVariant || 'default',
-      gridCols: this.config.content.gridCols || 3
+  protected override initializeState() {
+    this.editableContent = { 
+        ...this.config.content,
+        title: this.config.content.title || 'Lo que dicen de nosotros',
+        variant: this.config.content.variant || 'default',
+        gridCols: this.config.content.gridCols || 3,
+        cardVariant: this.config.content.cardVariant || 'default'
     };
+    this.editableItems = JSON.parse(JSON.stringify(this.config.content.items || this.config.content.testimonials || []));
+    this.editableStyles = { ...this.config.styles };
+    
+    this.currentPosition = { ...(this.config.position || { x: 200, y: 80 }) };
+    this.currentSize = { 
+        width: this.config.size?.width || 1000, 
+        height: this.config.size?.height || 700 
+    };
+    
+    this.initialPosition = { ...this.currentPosition };
+    this.initialSize = { ...this.currentSize };
+    this.viewportScale = 0.5;
 
-    if (this.editableItems.length > 0) {
-      this.selectedItemIndex = 0;
-    }
+    if (this.editableItems.length > 0) this.selectedIndex = 0;
 
     this.saveState();
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  // --- ACTIONS ---
-  saveState() {
-    const state: UndoRedoState = {
-      items: JSON.parse(JSON.stringify(this.editableItems)),
-      content: { ...this.editableContent },
-      styles: { ...this.config.styles }
+  override saveState() {
+    const newState = {
+      position: { ...this.currentPosition },
+      size: { ...this.currentSize },
+      styles: JSON.parse(JSON.stringify(this.editableStyles)),
+      content: {
+        ...JSON.parse(JSON.stringify(this.editableContent)),
+        items: JSON.parse(JSON.stringify(this.editableItems))
+      }
     };
-    this.undoStack.push(state);
-    this.redoStack = [];
+
+    const lastState = this.undoStack[this.undoStack.length - 1];
+    if (lastState && JSON.stringify(lastState) === JSON.stringify(newState)) return;
+
+    this.undoStack.push(newState as any);
     if (this.undoStack.length > 50) this.undoStack.shift();
-  }
-
-  undo() {
-    if (this.undoStack.length > 1) {
-      this.redoStack.push(this.undoStack.pop()!);
-      this.restoreState(this.undoStack[this.undoStack.length - 1]);
-    }
-  }
-
-  redo() {
-    if (this.redoStack.length > 0) {
-      const state = this.redoStack.pop()!;
-      this.undoStack.push(state);
-      this.restoreState(state);
-    }
-  }
-
-  private restoreState(state: UndoRedoState) {
-    this.editableItems = JSON.parse(JSON.stringify(state.items));
-    this.editableContent = { ...state.content };
-  }
-
-  onPartialChange() {
-    if (this.saveTimeout) clearTimeout(this.saveTimeout);
-    this.saveTimeout = setTimeout(() => this.saveState(), 800);
-  }
-
-  selectItem(index: number) {
-    this.selectedItemIndex = index;
+    this.redoStack = [];
   }
 
   addItem() {
     this.editableItems.push({
-      author: 'Nuevo Cliente',
-      role: 'CEO en Creative Co.',
-      quote: 'Trabajar con este equipo ha sido una de las mejores decisiones para nuestra marca. El resultado final superó todas las expectativas.',
+      author: 'Nuevo Cliente Satisfecho',
+      role: 'CEO en Creative Studios',
+      quote: 'El equipo superó todas nuestras expectativas. La calidad y el trato han sido excepcionales desde el primer día.',
       avatar: 'https://i.pravatar.cc/150?u=' + Math.random(),
       rating: 5
     });
-    this.selectedItemIndex = this.editableItems.length - 1;
-    this.saveState();
+    this.selectedIndex = this.editableItems.length - 1;
+    this.onContentChange();
   }
 
-  removeItem(index: number, e: MouseEvent) {
-    e.stopPropagation();
+  removeItem(index: number, event: MouseEvent) {
+    event.stopPropagation();
     this.editableItems.splice(index, 1);
-    if (this.selectedItemIndex >= this.editableItems.length) {
-      this.selectedItemIndex = this.editableItems.length - 1;
+    if (this.selectedIndex >= this.editableItems.length) {
+      this.selectedIndex = Math.max(0, this.editableItems.length - 1);
     }
-    this.saveState();
+    this.onContentChange();
   }
 
-  getGridColumns() {
-    return `repeat(${this.editableContent.gridCols}, 1fr)`;
+  override onContentChange() {
+    this.scheduleSaveState();
   }
 
-  onOverlayClick(event: MouseEvent) { this.closed.emit(); }
-  close() { this.closed.emit(); }
-  cancel() { this.closed.emit(); }
-
-  apply() {
-    const config: IsolatedModeConfig = {
+  override apply() {
+    this.applied.emit({
       ...this.config,
       content: { 
-        ...this.config.content,
-        ...this.editableContent,
+        ...this.editableContent, 
         items: this.editableItems,
-        testimonials: this.editableItems // Sync with legacy props if needed
-      }
-    };
-    this.applied.emit(config);
+        testimonials: this.editableItems
+      },
+      styles: {
+        ...this.editableStyles,
+        left: this.currentPosition.x + 'px',
+        top: this.currentPosition.y + 'px',
+        width: this.currentSize.width + 'px',
+        position: 'absolute'
+      },
+      position: { ...this.currentPosition },
+      size: { ...this.currentSize }
+    });
   }
 
-  @HostListener('window:keydown', ['$event'])
-  handleKeydown(event: KeyboardEvent) {
-    if (event.key === 'Escape') this.close();
-    if ((event.ctrlKey || event.metaKey) && event.key === 'z') {
-      event.preventDefault();
-      this.undo();
-    }
-    if ((event.ctrlKey || event.metaKey) && event.key === 'y') {
-      event.preventDefault();
-      this.redo();
-    }
-  }
+  onCanvasMouseDown(event: MouseEvent) { }
+  onOverlayClick(event: MouseEvent) { this.cancel(); }
 }
