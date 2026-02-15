@@ -553,7 +553,7 @@ interface ComponentDefaultSize {
 
     .layout-section {
       position: relative;
-      background: linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+      background: transparent; /* Allow global bg to show through */
       border: 1px solid rgba(99, 102, 241, 0.25);
       border-radius: 16px;
       overflow: hidden;
@@ -570,7 +570,7 @@ interface ComponentDefaultSize {
 
     .layout-section:not(.preview-mode) {
       border: 1px solid rgba(99, 102, 241, 0.25);
-      background: linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85));
+      background: linear-gradient(165deg, rgba(15, 23, 42, 0.95), rgba(30, 41, 59, 0.85)); /* Keep gradient ONLY in editor mode for context */
       box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
     }
 

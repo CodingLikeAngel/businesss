@@ -168,7 +168,7 @@ import * as PageActions from '../../../../store/actions/page.actions';
       height: 100%;
       position: relative;
       overflow: hidden;
-      background: #f8fafc;
+      background: transparent; /* Changed from #f8fafc to allow global bg */
       z-index: 1;
     }
 
@@ -178,9 +178,10 @@ import * as PageActions from '../../../../store/actions/page.actions';
       background: transparent !important;
     }
 
-      .editor-section.preview-mode {
-        padding-top: 0 !important;
-      }
+    .editor-section.preview-mode {
+      padding-top: 0 !important;
+      background: transparent !important;
+    }
       
       .box-container.preview-mode {
         padding: 0 !important;

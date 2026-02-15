@@ -25,8 +25,8 @@
   @include shared.texture-noise;
   @include shared.apply-all-variants('hero-section--');
   
-  /* Background parity with UI component */
-  background-color: var(--theme-bg, #0f172a);
+  /* Background parity with UI component - Allow inheritance for global bg */
+  background-color: var(--theme-bg, transparent);
   color: var(--theme-color, #fff);
   font-family: var(--theme-font, shared.$unified-font-family);
 
