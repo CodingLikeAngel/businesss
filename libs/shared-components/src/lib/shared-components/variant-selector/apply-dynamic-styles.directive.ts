@@ -87,8 +87,7 @@ export class ApplyDynamicStylesDirective implements OnChanges {
         const isSection = el.classList.contains('editor-section') || el.classList.contains('hero-section') || el.classList.contains('testimonials-container') || el.classList.contains('pricing-container') || el.classList.contains('stats-container');
         
         // Final safety check for any element that already has layout-critical positioning
-        const computedStyle = window.getComputedStyle(el);
-        const isStickyFixed = computedStyle.position === 'sticky' || computedStyle.position === 'fixed';
+        const isStickyFixed = typeof window !== 'undefined' && window.getComputedStyle(el).position === 'sticky' || typeof window !== 'undefined' && window.getComputedStyle(el).position === 'fixed';
         
         const isProtectedContainer = isHeaderFooter || isSection || isStickyFixed;
 

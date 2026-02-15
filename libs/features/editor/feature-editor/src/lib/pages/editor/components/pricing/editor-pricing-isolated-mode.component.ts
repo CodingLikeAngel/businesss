@@ -1,8 +1,10 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
+import { UIPricingTableSectionComponent } from '@negocio/featured-components';
+import { TableColumn, TableRow } from '@negocio/ui-components';
 
 // Re-export IsolatedModeConfig for convenience
 export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
@@ -12,7 +14,8 @@ export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
   standalone: true,
   imports: [
     CommonModule, 
-    FormsModule
+    FormsModule,
+    UIPricingTableSectionComponent
   ],
   template: `
     <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
@@ -186,42 +189,15 @@ export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                      [class.is-resizing]="isResizing"
                      (mousedown)="onMouseDown($event)">
                   
-                  <div class="preview-header-branded" *ngIf="editableContent.title">
-                      <h2 class="premium-title">{{ editableContent.title }}</h2>
-                      <p class="premium-subtitle">{{ editableContent.subtitle }}</p>
-                  </div>
-
-                  <div class="pricing-render-grid">
-                    <div *ngFor="let plan of editablePlans; let i = index" 
-                         class="plan-render-wrapper"
-                         [class.is-highlighted]="plan.highlighted"
-                         [class.is-editing]="selectedPlanIndex === i"
-                         (click)="selectedPlanIndex = i; $event.stopPropagation()">
-                      
-                      <div class="plan-card-renderer" [style.border-top-color]="plan.highlighted ? editableContent.accentColor : 'rgba(255,255,255,0.05)'">
-                         <div class="plan-badge" *ngIf="plan.highlighted" [style.background]="editableContent.accentColor">RECOMENDADO</div>
-                         <h3 class="plan-name">{{ plan.name }}</h3>
-                         <div class="plan-price">
-                            <span class="currency">{{ editableContent.currency }}</span>
-                            <span class="amount">{{ plan.price }}</span>
-                            <span class="period">{{ plan.period }}</span>
-                         </div>
-                         
-                         <ul class="plan-features">
-                            <li *ngFor="let feat of getPlanFeatures(plan)">
-                                <span class="check-icon" [style.color]="editableContent.accentColor">✓</span>
-                                {{ feat }}
-                            </li>
-                         </ul>
-
-                         <button class="plan-cta" [style.background]="plan.highlighted ? editableContent.accentColor : 'rgba(255,255,255,0.08)'">
-                            {{ plan.buttonText || 'Elegir Plan' }}
-                         </button>
-                      </div>
-
-                      <div class="item-id-badge">#{{ i + 1 }}</div>
-                    </div>
-                  </div>
+                  <!-- ===== REAL UI COMPONENT ===== -->
+                  <lib-ui-pricing-table-section
+                    [title]="editableContent.title"
+                    [subtitle]="editableContent.subtitle"
+                    [variant]="editableContent.variant"
+                    [columns]="tableColumns()"
+                    [rows]="tableRows()"
+                    [customStyles]="pricingCustomStyles()">
+                  </lib-ui-pricing-table-section>
 
                   <!-- 8-point Resize Handles -->
                   <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>
@@ -270,32 +246,10 @@ export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
     .sidebar-tabs button { flex: 1; padding: 1rem; background: transparent; border: none; color: #64748b; font-size: 10px; font-weight: 900; letter-spacing: 1px; cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.3s; }
     .sidebar-tabs button.active { color: #fbbf24; border-bottom-color: #fbbf24; background: rgba(251, 191, 36, 0.05); }
 
-    .draggable-wrapper { position: absolute !important; cursor: move; z-index: 100; outline: 4px solid transparent; outline-offset: 8px; background: rgba(15, 23, 42, 0.4); padding: 50px; box-shadow: 0 40px 100px -20px rgba(0,0,0,0.6); border-radius: 4px;
+    .draggable-wrapper { position: absolute !important; cursor: move; z-index: 100; outline: 4px solid transparent; outline-offset: 8px; background: transparent; padding: 20px; border-radius: 4px;
       &:hover { outline-color: rgba(251, 191, 36, 0.3); }
       &.is-dragging, &.is-resizing { outline-color: #fbbf24; outline-width: 5px; }
     }
-
-    .preview-header-branded { text-align: center; margin-bottom: 60px; }
-    .premium-title { font-size: 56px; font-weight: 900; color: white; margin-bottom: 10px; letter-spacing: -2px; }
-    .premium-subtitle { font-size: 20px; color: #94a3b8; max-width: 800px; margin: 0 auto; line-height: 1.5; }
-
-    .pricing-render-grid { display: flex; gap: 30px; width: 100%; justify-content: center; align-items: flex-end; }
-    .plan-render-wrapper { position: relative; flex: 1; max-width: 350px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      &.is-editing { transform: scale(1.05) translateY(-5px); z-index: 10; .plan-card-renderer { border-color: #fbbf24; box-shadow: 0 30px 60px rgba(0,0,0,0.4); } }
-    }
-
-    .plan-card-renderer { background: #1e293b; border-radius: 32px; padding: 3rem 2rem; border-top: 5px solid transparent; position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; height: 100%; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-    .plan-badge { position: absolute; top: -15px; color: #020617; padding: 4px 14px; border-radius: 20px; font-size: 11px; font-weight: 900; }
-    .plan-name { font-size: 20px; font-weight: 900; color: #f8fafc; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 0.1em; }
-    .plan-price { display: flex; align-items: baseline; gap: 4px; color: white; margin-bottom: 2rem; }
-    .plan-price .amount { font-size: 54px; font-weight: 900; }
-    .plan-price .currency { font-size: 20px; font-weight: 700; }
-    .plan-price .period { font-size: 14px; color: #64748b; }
-    .plan-features { list-style: none; padding: 0; margin: 0 0 2rem 0; width: 100%; display: flex; flex-direction: column; gap: 0.8rem; }
-    .plan-features li { display: flex; align-items: center; gap: 10px; color: #94a3b8; font-size: 14px; text-align: left; }
-    .plan-cta { width: 100%; padding: 1rem; border-radius: 16px; border: none; color: white; font-weight: 900; font-size: 14px; margin-top: auto; cursor: pointer; }
-
-    .item-id-badge { position: absolute; top: -12px; left: -12px; background: #fbbf24; color: #020617; font-size: 11px; font-weight: 900; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; z-index: 20; }
 
     .items-list-premium { display: flex; flex-direction: column; gap: 8px; }
     .item-card { display: flex; align-items: center; gap: 12px; padding: 12px; background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; cursor: pointer;
@@ -343,7 +297,11 @@ export class EditorPricingIsolatedModeComponent extends BaseIsolatedModeComponen
         accentColor: this.config.content.accentColor || '#fbbf24',
         variant: this.config.content.variant || 'default'
     };
-    this.editablePlans = JSON.parse(JSON.stringify(this.config.content.plans || this.config.content.items || []));
+    this.editablePlans = JSON.parse(JSON.stringify(this.config.content.plans || this.config.content.items || [
+      { name: 'Básico', price: '29', period: '/mes', featuresText: 'Acceso básico\nSoporte email\n1 usuario', highlighted: false },
+      { name: 'Pro', price: '79', period: '/mes', featuresText: 'Acceso completo\nSoporte 24/7\n5 usuarios', highlighted: true },
+      { name: 'Enterprise', price: '199', period: '/mes', featuresText: 'Todo incluido\nSoporte dedicado\nUsuarios ilimitados', highlighted: false }
+    ]));
     this.editableStyles = { ...this.config.styles };
     
     this.currentPosition = { ...(this.config.position || { x: 50, y: 50 }) };
@@ -360,6 +318,33 @@ export class EditorPricingIsolatedModeComponent extends BaseIsolatedModeComponen
 
     this.saveState();
   }
+
+  // Transform editablePlans to table columns
+  tableColumns = computed((): TableColumn[] => {
+    return [
+      { key: 'plan', label: 'Plan' },
+      { key: 'features', label: 'Características' },
+      { key: 'price', label: 'Precio' },
+    ];
+  });
+
+  // Transform editablePlans to table rows
+  tableRows = computed((): TableRow[] => {
+    return this.editablePlans.map(plan => ({
+      plan: plan.name || 'Plan',
+      features: this.getPlanFeatures(plan).join(', ') || 'Sin características',
+      price: `${this.editableContent.currency}${plan.price}${plan.period || ''}`
+    }));
+  });
+
+  // Custom styles for the pricing component
+  pricingCustomStyles = computed(() => {
+    return {
+      backgroundColor: '#0f172a',
+      color: '#ffffff',
+      '--accent-color': this.editableContent.accentColor || '#fbbf24'
+    };
+  });
 
   override onContentChange() {
     this.scheduleSaveState();

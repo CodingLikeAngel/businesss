@@ -112,13 +112,15 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
     
     // Failsafe: Ensure isolated-mode-active is removed when switching to preview
     this.variantService.builderStep$.subscribe(step => {
-      if (step === 'preview') {
+      if (step === 'preview' && typeof document !== 'undefined') {
         document.body.classList.remove('isolated-mode-active');
       }
     });
 
     // Fix NG0100: Set background properties via CSS variables
     this.exportGlobalStyles$.subscribe((styles: any) => {
+      if (typeof document === 'undefined') return;
+      
       const root = document.documentElement;
       
       // Base Background
