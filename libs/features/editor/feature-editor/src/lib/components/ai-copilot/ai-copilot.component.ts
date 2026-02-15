@@ -25,7 +25,7 @@ export class AICopilotComponent implements OnInit {
   constructor(
     private store: Store,
     private aiCopilot: AICopilotService,
-    private aiMemory: AIMemoryService
+    public aiMemory: AIMemoryService
   ) {}
 
   ngOnInit(): void {
