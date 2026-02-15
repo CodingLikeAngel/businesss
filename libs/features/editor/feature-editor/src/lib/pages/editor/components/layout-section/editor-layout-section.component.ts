@@ -165,7 +165,7 @@ interface ComponentDefaultSize {
       </div>
 
       <!-- Grid Container - ONE per row for independent resize -->
-      <div *ngFor="let row of getRowGroups(); let ri = index"
+      <div *ngFor="let row of getRowGroups(); let ri = index; trackBy: trackBySlotIndex"
            class="grid-container"
            [style.grid-template-columns]="getGridTemplateForRow(ri)"
            [style.gap.px]="config.gap"
@@ -336,6 +336,10 @@ interface ComponentDefaultSize {
         </div>
       </div>
 
+
+
+    </section>
+
       <!-- Component Picker Modal -->
       <div *ngIf="showComponentPicker" class="component-picker-overlay" (click)="closeComponentPicker()">
         <div class="component-picker-modal" (click)="$event.stopPropagation()">
@@ -454,8 +458,6 @@ interface ComponentDefaultSize {
           </div>
         </div>
       </div>
-
-    </section>
 
     <!-- Isolated Mode Overlay - Outside section to prevent clipping -->
     <div 
@@ -817,6 +819,21 @@ interface ComponentDefaultSize {
       color: #818cf8; 
       transform: scale(1.02);
     }
+    
+    /* Ensure empty slot is clickable */
+    .slot.empty {
+      background: rgba(2, 6, 23, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10 !important;
+    }
+
+    .empty-content {
+      pointer-events: auto !important;
+      position: relative;
+      z-index: 20;
+    }
 
     .plus-icon { 
       font-size: 1.75rem; 
@@ -939,7 +956,7 @@ interface ComponentDefaultSize {
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
+      z-index: 100000 !important;
       backdrop-filter: blur(4px);
     }
 
@@ -1484,9 +1501,11 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
 
   openComponentPicker(index: number, event: Event) {
     event.stopPropagation();
+    console.log('[Editor] Opening component picker for slot', index);
     this.editingSlotIndex = index;
     this.showComponentPicker = true;
     this.selectedCategory = 'all';
+    this.cdr.detectChanges();
   }
 
   closeComponentPicker() {
