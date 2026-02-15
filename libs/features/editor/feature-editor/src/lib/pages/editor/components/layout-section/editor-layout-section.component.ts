@@ -1302,9 +1302,18 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       const layoutType = rawConfig.layoutType || 'single';
       const isStrict = this.resizeService.isStrictGrid(layoutType);
 
+      // PRESERVATION LOGIC:
+      // If we have a local pending override and the incoming config has NONE, keep the local one.
+      // This handles the race condition where store updates 'section' before our persistConfig() round-trip completes.
+      let preservedOverrides = rawConfig.gridTemplateOverridePerRow;
+      if (!preservedOverrides && this.config?.gridTemplateOverridePerRow && this.config.layoutType === layoutType) {
+         preservedOverrides = this.config.gridTemplateOverridePerRow;
+      }
+
       this.config = {
         ...createDefaultLayoutConfig(),
         ...rawConfig,
+        gridTemplateOverridePerRow: preservedOverrides, // Apply preserved overrides
         slots: (rawConfig.slots || []).map((s: any) => {
           const cleanLayoutStyles = { ...(s.layoutStyles || {}) };
           

@@ -563,9 +563,29 @@ export class SlotResizeService {
     }
 
     // Build and persist per-row grid template overrides for strict grids
-    const gridTemplateOverridePerRow = isStrictGridMode
-      ? this.buildAllRowOverrides(config.layoutType, config.slots.length)
-      : undefined;
+    let gridTemplateOverridePerRow = config.gridTemplateOverridePerRow;
+
+    if (isStrictGridMode) {
+      // Initialize if missing
+      if (!gridTemplateOverridePerRow) {
+        gridTemplateOverridePerRow = {};
+        // logical migration: if legacy override exists, apply it to all rows initially? 
+        // No, we let the getter handle fallback. We just start fresh for this row.
+      } else {
+        // Clone to avoid mutation
+        gridTemplateOverridePerRow = { ...gridTemplateOverridePerRow };
+      }
+
+      const colCount = getColumnCount(config.layoutType);
+      const rowIndex = Math.floor(index / colCount);
+      
+      // Build override JUST for this row
+      const rowOverride = this.buildGridTemplateOverrideForRow(config.layoutType, rowIndex);
+      
+      if (rowOverride) {
+        gridTemplateOverridePerRow[rowIndex] = rowOverride;
+      }
+    }
 
     // Clear legacy single override when using per-row
     return { ...config, slots, gridTemplateOverride: undefined, gridTemplateOverridePerRow };
