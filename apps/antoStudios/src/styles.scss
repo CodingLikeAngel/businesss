@@ -136,6 +136,11 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
 body {
   font-family: var(--font-family-sans);
   background: linear-gradient(135deg, var(--color-surface-secondary) 0%, var(--color-surface-tertiary) 100%);
@@ -146,6 +151,7 @@ body {
   padding: 0;
   min-height: 100vh;
   transition: background-color 0.3s ease, color 0.3s ease;
+  overflow-x: hidden;
 }
 
 /* Typography hierarchy */
@@ -271,10 +277,6 @@ body.light {
   color: var(--color-light-text-primary);
 }
 
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
-}
 
 /* Focus styles for accessibility */
 *:focus {

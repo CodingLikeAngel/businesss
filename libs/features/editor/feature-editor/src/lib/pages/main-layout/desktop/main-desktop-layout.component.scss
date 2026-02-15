@@ -379,13 +379,15 @@
   &.builder-shell {
     height: auto !important;
     min-height: 100vh;
-    overflow: visible !important;
+    overflow-y: visible !important;
+    overflow-x: hidden !important; // Prevent horizontal leak from fixed/translated elements
   }
 
   .workspace {
     height: auto !important;
     min-height: calc(100vh - 72px);
-    overflow: visible !important;
+    overflow-y: visible !important;
+    overflow-x: hidden !important;
   }
 
   .canvas-area {
