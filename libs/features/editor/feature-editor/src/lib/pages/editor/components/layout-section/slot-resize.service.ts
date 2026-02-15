@@ -2,7 +2,7 @@
 // Servicio para manejar el redimensionado de slots en el layout
 
 import { Injectable, signal, computed } from '@angular/core';
-import { SlotConfig, LayoutSectionConfig, LayoutType, LAYOUT_DEFINITIONS } from './layout-section.interfaces';
+import { SlotConfig, LayoutSectionConfig, LayoutType, LAYOUT_DEFINITIONS, getColumnCount } from './layout-section.interfaces';
 import { ResizeAnchor } from './resize-handle.directive';
 
 export type ResizeDirection = 'horizontal' | 'vertical' | 'both' | 'n' | 's' | 'e' | 'w' | 'nw' | 'ne' | 'sw' | 'se' | 'move';
@@ -289,31 +289,40 @@ export class SlotResizeService {
   }
 
   /**
-   * Obtener el grid template personalizado basado en customSizes o en la config persistida
+   * Get the grid template for a specific row.
+   * For single-row layouts (two-columns, three-columns, etc.) rowIndex is always 0.
+   * For multi-row grids (grid-2x2, grid-3x2, grid-3x3) each row is independent.
    */
-  getCustomGridTemplate(config: LayoutSectionConfig): string {
+  getCustomGridTemplateForRow(config: LayoutSectionConfig, rowIndex: number = 0): string {
     const layoutType = config.layoutType;
     const def = LAYOUT_DEFINITIONS.find(l => l.type === layoutType);
     if (!def) return '1fr';
 
+    const colCount = getColumnCount(layoutType);
+    const rowStartIdx = rowIndex * colCount;
     const customSizesMap = this.customSizes();
     const isActivelyResizing = this.isResizing();
-    
-    // Helper: get width from customSizes or persisted layoutStyles
-    const getW = (idx: number): number | undefined => {
-      const custom = customSizesMap.get(idx)?.width;
+
+    // Helper: get width from customSizes for a global slot index
+    const getW = (globalIdx: number): number | undefined => {
+      const custom = customSizesMap.get(globalIdx)?.width;
       if (typeof custom === 'number' && custom > 0 && custom < 2500) {
         return custom;
       }
       return undefined;
     };
 
-    // During active resize, build template dynamically from customSizes
+    // During active resize, build template dynamically from this row's customSizes
     if (isActivelyResizing) {
-      return this.buildDynamicGridTemplate(layoutType, def, getW);
+      return this.buildDynamicGridTemplateForRow(def, colCount, rowStartIdx, getW);
     }
 
-    // When NOT resizing, use persisted gridTemplateOverride if available
+    // When NOT resizing, use persisted per-row override if available
+    if (config.gridTemplateOverridePerRow && config.gridTemplateOverridePerRow[rowIndex]) {
+      return config.gridTemplateOverridePerRow[rowIndex];
+    }
+
+    // Legacy fallback: single gridTemplateOverride (applies to all rows)
     if (config.gridTemplateOverride) {
       return config.gridTemplateOverride;
     }
@@ -323,121 +332,123 @@ export class SlotResizeService {
   }
 
   /**
-   * Build dynamic grid template during active resize
+   * Legacy wrapper — kept for backward compat with single-row layouts.
    */
-  private buildDynamicGridTemplate(
-    layoutType: LayoutType, 
-    def: any, 
-    getW: (idx: number) => number | undefined
-  ): string {
-    if (layoutType === 'three-columns') {
-      const w0 = getW(0); const w1 = getW(1); const w2 = getW(2);
-      if (w0 || w1 || w2) {
-        return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
-      }
-    }
-
-    if (layoutType.includes('two-columns') || layoutType.includes('sidebar-left') || layoutType.includes('sidebar-right')) {
-      const w0 = getW(0); const w1 = getW(1);
-      if (w0 || w1) {
-        return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
-      }
-    }
-
-    if (layoutType.includes('grid-')) {
-      if (layoutType === 'grid-2x2') {
-        const w0 = getW(0) || getW(2);
-        const w1 = getW(1) || getW(3);
-        if (w0 || w1) {
-          return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'}`;
-        }
-      }
-      if (layoutType.includes('grid-3x')) {
-        const w0 = getW(0) || getW(3) || getW(6);
-        const w1 = getW(1) || getW(4) || getW(7);
-        const w2 = getW(2) || getW(5) || getW(8);
-        if (w0 || w1 || w2) {
-          return `${w0 ? w0 + 'px' : '1fr'} ${w1 ? w1 + 'px' : '1fr'} ${w2 ? w2 + 'px' : '1fr'}`;
-        }
-      }
-    }
-
-    return def.gridTemplate || '1fr';
+  getCustomGridTemplate(config: LayoutSectionConfig): string {
+    return this.getCustomGridTemplateForRow(config, 0);
   }
 
   /**
-   * Build grid template override string from current customSizes for persistence.
+   * Build dynamic grid template during active resize for a specific row.
+   * Uses global slot indices starting at rowStartIdx.
+   */
+  private buildDynamicGridTemplateForRow(
+    def: any,
+    colCount: number,
+    rowStartIdx: number,
+    getW: (globalIdx: number) => number | undefined
+  ): string {
+    const parts: string[] = [];
+    let anyCustom = false;
+
+    for (let c = 0; c < colCount; c++) {
+      const w = getW(rowStartIdx + c);
+      if (w) {
+        parts.push(`${w}px`);
+        anyCustom = true;
+      } else {
+        parts.push('1fr');
+      }
+    }
+
+    return anyCustom ? parts.join(' ') : (def.gridTemplate || '1fr');
+  }
+
+  /**
+   * Build grid template override for a specific row.
    * Uses proportional fr units (not raw pixels) so columns adapt to container width.
    */
-  buildGridTemplateOverride(layoutType: LayoutType): string | undefined {
-    const def = LAYOUT_DEFINITIONS.find(l => l.type === layoutType);
-    if (!def) return undefined;
+  buildGridTemplateOverrideForRow(layoutType: LayoutType, rowIndex: number): string | undefined {
+    const colCount = getColumnCount(layoutType);
+    const rowStartIdx = rowIndex * colCount;
 
     const sizes = this.customSizes();
-    const getW = (idx: number): number | undefined => {
-      const s = sizes.get(idx);
-      return (s && s.width > 0 && s.width < 2500) ? s.width : undefined;
-    };
+    const widths: (number | undefined)[] = [];
 
-    // Convert pixel widths to proportional fr values
-    const toFr = (widths: (number | undefined)[]): string | undefined => {
-      const resolvedWidths = widths.map(w => w || 0);
-      const minW = Math.max(1, Math.min(...resolvedWidths.filter(w => w > 0)));
-      const anyValid = resolvedWidths.some(w => w > 0);
-      if (!anyValid) return undefined;
-      
-      return resolvedWidths.map(w => {
-        if (w <= 0) return '1fr';
-        // Round to 2 decimal places for cleaner values
-        const fr = Math.round((w / minW) * 100) / 100;
-        return `${fr}fr`;
-      }).join(' ');
-    };
-
-    if (layoutType === 'three-columns') {
-      return toFr([getW(0), getW(1), getW(2)]);
+    for (let c = 0; c < colCount; c++) {
+      const s = sizes.get(rowStartIdx + c);
+      widths.push((s && s.width > 0 && s.width < 2500) ? s.width : undefined);
     }
 
-    if (layoutType.includes('two-columns') || layoutType.includes('sidebar-left') || layoutType.includes('sidebar-right')) {
-      return toFr([getW(0), getW(1)]);
-    }
-
-    if (layoutType === 'grid-2x2') {
-      return toFr([getW(0) || getW(2), getW(1) || getW(3)]);
-    }
-
-    if (layoutType.includes('grid-3x')) {
-      return toFr([getW(0) || getW(3) || getW(6), getW(1) || getW(4) || getW(7), getW(2) || getW(5) || getW(8)]);
-    }
-
-    return undefined;
+    return this.toFr(widths);
   }
 
   /**
-   * Helper para encontrar el vecino horizontal en la misma fila
+   * Build ALL per-row overrides at once, returning a Record<number, string>.
+   */
+  buildAllRowOverrides(layoutType: LayoutType, totalSlots: number): Record<number, string> | undefined {
+    const colCount = getColumnCount(layoutType);
+    const rowCount = Math.ceil(totalSlots / colCount);
+    const result: Record<number, string> = {};
+    let anyDefined = false;
+
+    for (let r = 0; r < rowCount; r++) {
+      const override = this.buildGridTemplateOverrideForRow(layoutType, r);
+      if (override) {
+        result[r] = override;
+        anyDefined = true;
+      }
+    }
+
+    return anyDefined ? result : undefined;
+  }
+
+  /**
+   * Legacy wrapper — kept for backward compat with single-row layouts.
+   */
+  buildGridTemplateOverride(layoutType: LayoutType): string | undefined {
+    return this.buildGridTemplateOverrideForRow(layoutType, 0);
+  }
+
+  /**
+   * Convert pixel widths to proportional fr values.
+   */
+  private toFr(widths: (number | undefined)[]): string | undefined {
+    const resolvedWidths = widths.map(w => w || 0);
+    const minW = Math.max(1, Math.min(...resolvedWidths.filter(w => w > 0)));
+    const anyValid = resolvedWidths.some(w => w > 0);
+    if (!anyValid) return undefined;
+
+    return resolvedWidths.map(w => {
+      if (w <= 0) return '1fr';
+      const fr = Math.round((w / minW) * 100) / 100;
+      return `${fr}fr`;
+    }).join(' ');
+  }
+
+  /**
+   * Helper: find the horizontal neighbor in the SAME row.
+   * Uses generic column-count logic so it works for any grid layout.
    */
   private getHorizontalNeighborIndex(layoutType: LayoutType, currentIndex: number): number {
-    switch (layoutType) {
-      case 'two-columns':
-      case 'two-columns-left':
-      case 'two-columns-right':
-      case 'sidebar-left':
-      case 'sidebar-right':
-      case 'hero-banner':
-        return currentIndex === 0 ? 1 : (currentIndex === 1 ? 0 : -1);
-      case 'three-columns':
-        if (currentIndex === 0) return 1;
-        if (currentIndex === 1) return (this.resizeDirection() === 'w' ? 0 : 2);
-        if (currentIndex === 2) return 1;
-        break;
-      case 'grid-2x2':
-        if (currentIndex === 0) return 1;
-        if (currentIndex === 1) return 0;
-        if (currentIndex === 2) return 3;
-        if (currentIndex === 3) return 2;
-        break;
+    const colCount = getColumnCount(layoutType);
+
+    // Single-column layouts have no horizontal neighbor
+    if (colCount <= 1) return -1;
+
+    const colInRow = currentIndex % colCount;
+    const rowStart = currentIndex - colInRow;
+
+    // For 2-column layouts: neighbor is the other column
+    if (colCount === 2) {
+      return colInRow === 0 ? rowStart + 1 : rowStart;
     }
-    return -1;
+
+    // For 3+ column layouts: pick neighbor based on resize direction
+    if (colInRow === 0) return currentIndex + 1;                 // leftmost → right neighbor
+    if (colInRow === colCount - 1) return currentIndex - 1;      // rightmost → left neighbor
+    // Middle: use resize direction hint
+    return this.resizeDirection() === 'w' ? currentIndex - 1 : currentIndex + 1;
   }
 
   /**
@@ -526,25 +537,16 @@ export class SlotResizeService {
 
     updateSlot(index, newWidth, newHeight, left, top);
 
-    // CRITICAL FIX: Update customSizes signal so buildGridTemplateOverride sees the new size
+    // Update customSizes signal so per-row template builders see the new size
     const currentSizes = new Map(this.customSizes());
     const sizeData = { width: newWidth, height: newHeight || 0, left, top };
-    
     currentSizes.set(index, sizeData);
 
-    // Also sync width to column siblings in multi-row grids (e.g. grid-2x2)
-    // This ensures resizing row 2 updates the column even if row 1 had a value
-    if (isStrictGridMode) {
-      const siblings = this.getColumnSiblings(config.layoutType, index);
-      siblings.forEach(sibIdx => {
-         const existing = currentSizes.get(sibIdx) || { width: 0, height: 0, left: 0, top: 0 };
-         currentSizes.set(sibIdx, { ...existing, width: newWidth });
-      });
-    }
+    // NOTE: We do NOT sync column siblings anymore — each row is autonomous
 
     this.customSizes.set(currentSizes);
 
-    // For strict grids, clean up neighbor slots (no inline width/position) 
+    // For strict grids, clean up neighbor slots in the same row (no inline width/position)
     if (isStrictGridMode) {
       const neighborIdx = this.getHorizontalNeighborIndex(config.layoutType, index);
       if (neighborIdx !== -1) {
@@ -560,12 +562,13 @@ export class SlotResizeService {
       }
     }
 
-    // Build and persist gridTemplateOverride for strict grids
-    const gridTemplateOverride = isStrictGridMode 
-      ? this.buildGridTemplateOverride(config.layoutType) 
+    // Build and persist per-row grid template overrides for strict grids
+    const gridTemplateOverridePerRow = isStrictGridMode
+      ? this.buildAllRowOverrides(config.layoutType, config.slots.length)
       : undefined;
 
-    return { ...config, slots, gridTemplateOverride };
+    // Clear legacy single override when using per-row
+    return { ...config, slots, gridTemplateOverride: undefined, gridTemplateOverridePerRow };
   }
 
   /**

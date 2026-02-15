@@ -54,7 +54,32 @@ export interface LayoutSectionConfig {
   backgroundColor?: string;
   borderRadius?: number;
   minHeight?: number;
-  gridTemplateOverride?: string; // Persisted custom grid-template-columns after resize
+  gridTemplateOverride?: string; // Legacy: single override for backward compat
+  gridTemplateOverridePerRow?: Record<number, string>; // Per-row column overrides (row index → grid-template-columns)
+}
+
+// Get the number of columns for a layout type
+export function getColumnCount(layoutType: LayoutType): number {
+  switch (layoutType) {
+    case 'single':
+    case 'hero-banner':
+      return 1;
+    case 'two-columns':
+    case 'two-columns-left':
+    case 'two-columns-right':
+    case 'sidebar-left':
+    case 'sidebar-right':
+    case 'grid-2x2':
+      return 2;
+    case 'three-columns':
+    case 'grid-3x2':
+    case 'grid-3x3':
+      return 3;
+    case 'masonry':
+      return 1;
+    default:
+      return 1;
+  }
 }
 
 // Layout definition with slot metadata

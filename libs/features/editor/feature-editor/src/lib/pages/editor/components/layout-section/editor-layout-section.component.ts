@@ -41,6 +41,7 @@ import {
   LAYOUT_DEFINITIONS,
   COMPONENT_CATALOG,
   getLayoutDefinition,
+  getColumnCount,
   createInitialSlots,
   createDefaultLayoutConfig,
   ComponentCatalogItem
@@ -163,83 +164,87 @@ interface ComponentDefaultSize {
         </div>
       </div>
 
-      <!-- Grid Container -->
-      <div class="grid-container" [style.grid-template-columns]="getGridTemplate()" [style.gap.px]="config.gap">
+      <!-- Grid Container - ONE per row for independent resize -->
+      <div *ngFor="let row of getRowGroups(); let ri = index"
+           class="grid-container"
+           [style.grid-template-columns]="getGridTemplateForRow(ri)"
+           [style.gap.px]="config.gap"
+           [attr.data-row]="ri">
         
         <!-- Slots -->
         <div 
-          *ngFor="let slot of config.slots; let i = index; trackBy: trackBySlotIndex" 
+          *ngFor="let slotEntry of row; trackBy: trackBySlotEntry" 
           class="slot"
-          [class.empty]="slot.componentType === 'empty'"
-          [class.selected]="selectedSlotIndex === i"
-          [class.resizing]="resizeService.isResizing() && resizeService.activeSlotIndex() === i"
-          [class.flow-component]="isFlowComponent(slot)"
+          [class.empty]="slotEntry.slot.componentType === 'empty'"
+          [class.selected]="selectedSlotIndex === slotEntry.globalIndex"
+          [class.resizing]="resizeService.isResizing() && resizeService.activeSlotIndex() === slotEntry.globalIndex"
+          [class.flow-component]="isFlowComponent(slotEntry.slot)"
           [class.preview-mode]="isPreviewMode && !showEditorControls"
           [class.strict-grid]="isStrictGridLayout()"
-          [style.height]="getSlotStyleHeight(i, slot)"
-          [style.minHeight]="getSlotStyleMinHeight(i, slot)"
-          [style.left]="getSlotStyleLeft(i)"
-          [style.top]="getSlotStyleTop(i)"
-          [style.position]="getSlotStylePosition(i, slot)"
-          [attr.data-slot-index]="i"
-          (click)="selectSlot(i, $event)">
+          [style.height]="getSlotStyleHeight(slotEntry.globalIndex, slotEntry.slot)"
+          [style.minHeight]="getSlotStyleMinHeight(slotEntry.globalIndex, slotEntry.slot)"
+          [style.left]="getSlotStyleLeft(slotEntry.globalIndex)"
+          [style.top]="getSlotStyleTop(slotEntry.globalIndex)"
+          [style.position]="getSlotStylePosition(slotEntry.globalIndex, slotEntry.slot)"
+          [attr.data-slot-index]="slotEntry.globalIndex"
+          (click)="selectSlot(slotEntry.globalIndex, $event)">
           
           <!-- Empty Slot -->
-          <div *ngIf="slot.componentType === 'empty' && (!isPreviewMode || showEditorControls)" class="empty-slot">
-            <div class="empty-content" (click)="openComponentPicker(i, $event)">
+          <div *ngIf="slotEntry.slot.componentType === 'empty' && (!isPreviewMode || showEditorControls)" class="empty-slot">
+            <div class="empty-content" (click)="openComponentPicker(slotEntry.globalIndex, $event)">
               <span class="plus-icon">+</span>
               <span class="slot-label">Añadir Componente</span>
             </div>
           </div>
 
           <!-- Filled Slot - Component Renderer -->
-          <ng-container *ngIf="slot.componentType !== 'empty'">
+          <ng-container *ngIf="slotEntry.slot.componentType !== 'empty'">
             <div class="slot-component" style="height: auto; min-height: 100%;">
               <!-- Editing Overlay -->
               <div *ngIf="(!isPreviewMode && isEditing) || showEditorControls" class="slot-controls">
-                <button *ngIf="isPositioned(i, slot)"
+                <button *ngIf="isPositioned(slotEntry.globalIndex, slotEntry.slot)"
                         class="slot-btn" 
-                        (click)="resetSlotPosition(i)" 
+                        (click)="resetSlotPosition(slotEntry.globalIndex)" 
                         title="Resetear Posición (Centrar en Grid)">🎯</button>
                 <button class="slot-btn drag-handle" 
-                        appResizeHandle [slotIndex]="i" anchor="move"
+                        appResizeHandle [slotIndex]="slotEntry.globalIndex" anchor="move"
                         title="Mover Componente">⠿</button>
                 <button class="slot-btn edit-btn" 
-                        (click)="editSlotComponent(i, $event)" 
-                        [title]="hasIsolatedMode(slot.componentType) ? 'Editar en Modo Aislado' : 'Configurar'">
-                  {{ hasIsolatedMode(slot.componentType) ? '🎯' : '⚙️' }}
+                        (click)="editSlotComponent(slotEntry.globalIndex, $event)" 
+                        [title]="hasIsolatedMode(slotEntry.slot.componentType) ? 'Editar en Modo Aislado' : 'Configurar'">
+                  {{ hasIsolatedMode(slotEntry.slot.componentType) ? '🎯' : '⚙️' }}
                 </button>
-                <button class="slot-btn" (click)="openComponentPicker(i, $event)" title="Cambiar Componente">🔄</button>
-                <button class="slot-btn danger" (click)="clearSlot(i, $event)" title="Eliminar">🗑️</button>
+                <button class="slot-btn" (click)="openComponentPicker(slotEntry.globalIndex, $event)" title="Cambiar Componente">🔄</button>
+                <button class="slot-btn danger" (click)="clearSlot(slotEntry.globalIndex, $event)" title="Eliminar">🗑️</button>
               </div>
 
               <!-- Component Content -->
-              <ng-container [ngSwitch]="slot.componentType">
+              <ng-container [ngSwitch]="slotEntry.slot.componentType">
 
                 <!-- UI BUTTON -->
                 <lib-ui-components-button
                   *ngSwitchCase="'ui-button'"
-                  [variant]="$any(slot.componentVariant || globalVariant || 'primary')"
-                  [customStyles]="getComponentStyles(slot, i)">
-                  {{ slot.content?.['text'] || 'Botón' }}
+                  [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'primary')"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)">
+                  {{ slotEntry.slot.content?.['text'] || 'Botón' }}
                 </lib-ui-components-button>
 
                 <!-- UI TITLE -->
                 <lib-ui-components-title
                   *ngSwitchCase="'ui-title'"
-                  [text]="slot.content?.['text'] || 'Título'"
-                  [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [customStyles]="getComponentStyles(slot, i)">
+                  [text]="slotEntry.slot.content?.['text'] || 'Título'"
+                  [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'default')"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)">
                 </lib-ui-components-title>
 
                 <!-- UI IMAGE -->
                 <lib-ui-image
                   *ngSwitchCase="'ui-image'"
-                  [src]="slot.content?.['src'] || 'assets/placeholder.jpg'"
-                  [alt]="slot.content?.['alt'] || 'Imagen'"
-                  [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [filter]="slot.styles?.['filter']"
-                  [customStyles]="getComponentStyles(slot, i)"
+                  [src]="slotEntry.slot.content?.['src'] || 'assets/placeholder.jpg'"
+                  [alt]="slotEntry.slot.content?.['alt'] || 'Imagen'"
+                  [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'default')"
+                  [filter]="slotEntry.slot.styles?.['filter']"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)"
                   class="slot-image">
                 </lib-ui-image>
 
@@ -247,69 +252,69 @@ interface ComponentDefaultSize {
                 <!-- UI CARD -->
                 <lib-ui-components-card
                   *ngSwitchCase="'ui-card'"
-                  [variant]="$any(slot.componentVariant || globalVariant || 'glass')"
-                  [title]="slot.content?.['title'] || 'Título'"
-                  [description]="slot.content?.['description'] || 'Descripción...'"
-                  [customStyles]="getComponentStyles(slot, i)"
+                  [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'glass')"
+                  [title]="slotEntry.slot.content?.['title'] || 'Título'"
+                  [description]="slotEntry.slot.content?.['description'] || 'Descripción...'"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)"
                   class="slot-card">
                 </lib-ui-components-card>
 
                 <!-- UI CARD ANIMATED -->
                 <lib-ui-components-card-animated
                   *ngSwitchCase="'ui-card-animated'"
-                  [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [customStyles]="getComponentStyles(slot, i)"
+                  [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'default')"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)"
                   class="slot-card">
                 </lib-ui-components-card-animated>
 
                 <!-- UI ACCORDION -->
                 <div 
                   *ngSwitchCase="'ui-accordion'" 
-                  [ngStyle]="getComponentStyles(slot, i)">
+                  [ngStyle]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)">
                   <lib-ui-components-accordion
                     style="width: 100%; height: auto; display: block;"
-                    [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                    [items]="slot.content?.['items'] || [{title:'Item 1', content:'Contenido 1'}]">
+                    [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'default')"
+                    [items]="slotEntry.slot.content?.['items'] || [{title:'Item 1', content:'Contenido 1'}]">
                   </lib-ui-components-accordion>
                 </div>
 
                 <!-- UI LIST -->
                 <lib-ui-list
                   *ngSwitchCase="'ui-list'"
-                  [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [items]="slot.content?.['items'] || ['Item 1', 'Item 2', 'Item 3']"
-                  [customStyles]="getComponentStyles(slot, i)">
+                  [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'default')"
+                  [items]="slotEntry.slot.content?.['items'] || ['Item 1', 'Item 2', 'Item 3']"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)">
                 </lib-ui-list>
 
                 <!-- UI CARD PRODUCT -->
                 <lib-card-products
                   *ngSwitchCase="'ui-card-product'"
-                  [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [product]="slot.content?.['product'] || { image: '', name: 'Producto', description: 'Descripción...', price: '0.00' }"
-                  [customStyles]="getComponentStyles(slot, i)">
+                  [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'default')"
+                  [product]="slotEntry.slot.content?.['product'] || { image: '', name: 'Producto', description: 'Descripción...', price: '0.00' }"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)">
                 </lib-card-products>
 
                 <!-- UI CHIP -->
                 <lib-ui-components-chip
                   *ngSwitchCase="'ui-chip'"
-                  [variant]="$any(slot.componentVariant || globalVariant || 'default')"
-                  [customStyles]="getComponentStyles(slot, i)">
-                  {{ slot.content?.['text'] || 'Chip' }}
+                  [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'default')"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)">
+                  {{ slotEntry.slot.content?.['text'] || 'Chip' }}
                 </lib-ui-components-chip>
 
                 <!-- DRAGGABLE BOX -->
                 <lib-ui-components-draggable-box-1
                   *ngSwitchCase="'draggable-box'"
-                  [variant]="$any(slot.content?.['variant'] || slot.componentVariant || globalVariant || 'secondary')"
-                  [content]="slot.content?.['text'] || 'Caja'"
-                  [customStyles]="getComponentStyles(slot, i)"
+                  [variant]="$any(slotEntry.slot.content?.['variant'] || slotEntry.slot.componentVariant || globalVariant || 'secondary')"
+                  [content]="slotEntry.slot.content?.['text'] || 'Caja'"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)"
                   class="slot-box">
                 </lib-ui-components-draggable-box-1>
 
                 <!-- Default/Unknown -->
                 <div *ngSwitchDefault class="unknown-component">
                   <span class="unknown-icon">❓</span>
-                  <span>{{ slot.componentType }}</span>
+                  <span>{{ slotEntry.slot.componentType }}</span>
                 </div>
 
               </ng-container>
@@ -317,15 +322,15 @@ interface ComponentDefaultSize {
             </div>
 
             <!-- Resize Anchors - OUTSIDE slot-component so they aren't clipped -->
-            <div *ngIf="((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slot)" class="resize-anchors">
-                <div class="resize-anchor nw" appResizeHandle [slotIndex]="i" anchor="nw" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor n"  appResizeHandle [slotIndex]="i" anchor="n"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="vertical" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor ne" appResizeHandle [slotIndex]="i" anchor="ne" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor e"  appResizeHandle [slotIndex]="i" anchor="e"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="horizontal" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor se" appResizeHandle [slotIndex]="i" anchor="se" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor s"  appResizeHandle [slotIndex]="i" anchor="s"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="vertical" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor sw" appResizeHandle [slotIndex]="i" anchor="sw" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
-                <div class="resize-anchor w"  appResizeHandle [slotIndex]="i" anchor="w"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="horizontal" (resizeStart)="onSlotResizeStart(i)" (resized)="onSlotResized(i, $event)" (resizeMove)="onResizeMoving()"></div>
+            <div *ngIf="((!isPreviewMode && isEditing) || showEditorControls) && isSlotFilled(slotEntry.slot)" class="resize-anchors">
+                <div class="resize-anchor nw" appResizeHandle [slotIndex]="slotEntry.globalIndex" anchor="nw" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(slotEntry.globalIndex)" (resized)="onSlotResized(slotEntry.globalIndex, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor n"  appResizeHandle [slotIndex]="slotEntry.globalIndex" anchor="n"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="vertical" (resizeStart)="onSlotResizeStart(slotEntry.globalIndex)" (resized)="onSlotResized(slotEntry.globalIndex, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor ne" appResizeHandle [slotIndex]="slotEntry.globalIndex" anchor="ne" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(slotEntry.globalIndex)" (resized)="onSlotResized(slotEntry.globalIndex, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor e"  appResizeHandle [slotIndex]="slotEntry.globalIndex" anchor="e"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="horizontal" (resizeStart)="onSlotResizeStart(slotEntry.globalIndex)" (resized)="onSlotResized(slotEntry.globalIndex, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor se" appResizeHandle [slotIndex]="slotEntry.globalIndex" anchor="se" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(slotEntry.globalIndex)" (resized)="onSlotResized(slotEntry.globalIndex, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor s"  appResizeHandle [slotIndex]="slotEntry.globalIndex" anchor="s"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="vertical" (resizeStart)="onSlotResizeStart(slotEntry.globalIndex)" (resized)="onSlotResized(slotEntry.globalIndex, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor sw" appResizeHandle [slotIndex]="slotEntry.globalIndex" anchor="sw" [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" (resizeStart)="onSlotResizeStart(slotEntry.globalIndex)" (resized)="onSlotResized(slotEntry.globalIndex, $event)" (resizeMove)="onResizeMoving()"></div>
+                <div class="resize-anchor w"  appResizeHandle [slotIndex]="slotEntry.globalIndex" anchor="w"  [isStrictGrid]="isStrictGridLayout()" [layoutType]="config.layoutType" direction="horizontal" (resizeStart)="onSlotResizeStart(slotEntry.globalIndex)" (resized)="onSlotResized(slotEntry.globalIndex, $event)" (resizeMove)="onResizeMoving()"></div>
             </div>
           </ng-container>
         </div>
@@ -1375,7 +1380,34 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   }
 
   getGridTemplate(): string {
-    return this.resizeService.getCustomGridTemplate(this.config);
+    return this.resizeService.getCustomGridTemplateForRow(this.config, 0);
+  }
+
+  /**
+   * Partition slots into rows based on column count.
+   * Returns Array of { slot, globalIndex }[] — one sub-array per row.
+   */
+  getRowGroups(): { slot: SlotConfig; globalIndex: number }[][] {
+    const colCount = getColumnCount(this.config.layoutType);
+    const slots = this.config.slots;
+    const rows: { slot: SlotConfig; globalIndex: number }[][] = [];
+
+    for (let i = 0; i < slots.length; i += colCount) {
+      const row = slots.slice(i, i + colCount).map((slot, colIdx) => ({
+        slot,
+        globalIndex: i + colIdx
+      }));
+      rows.push(row);
+    }
+
+    return rows;
+  }
+
+  /**
+   * Get independent grid template for a specific row.
+   */
+  getGridTemplateForRow(rowIndex: number): string {
+    return this.resizeService.getCustomGridTemplateForRow(this.config, rowIndex);
   }
 
   toggleEditing() {
@@ -1426,7 +1458,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
       ...this.config,
       layoutType: type,
       slots: newSlots,
-      gridTemplateOverride: undefined
+      gridTemplateOverride: undefined,
+      gridTemplateOverridePerRow: undefined
     };
     
     // Clear ephemeral service state so getCustomGridTemplate uses the default
@@ -1998,6 +2031,13 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     return index;
   }
 
+  /**
+   * TrackBy for per-row slot entries — uses the global index for identity.
+   */
+  trackBySlotEntry(index: number, entry: { slot: SlotConfig; globalIndex: number }): number {
+    return entry.globalIndex;
+  }
+
 
   applySlotConfig() {
     if (!this.editingSlot || this.editingSlotIndex < 0) return;
@@ -2025,26 +2065,38 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     const sectionEl = document.getElementById(this.section.id);
     if (!sectionEl) return;
 
-    const slotElements = sectionEl.querySelectorAll('.slot');
-    const sizes = new Map<number, { width: number; height: number; left?: number; top?: number }>();
-    const gridEl = sectionEl.querySelector('.grid-container');
+    // Determine which row this slot belongs to
+    const colCount = getColumnCount(this.config.layoutType);
+    const rowIndex = Math.floor(index / colCount);
+    const rowStartIdx = rowIndex * colCount;
+    const rowEndIdx = Math.min(rowStartIdx + colCount, this.config.slots.length);
+
+    // Find the grid container for this row
+    const gridContainers = sectionEl.querySelectorAll('.grid-container');
+    const gridEl = gridContainers[rowIndex];
     const gridRect = gridEl?.getBoundingClientRect();
 
-    slotElements.forEach((el, i) => {
-      const rect = el.getBoundingClientRect();
-      const left = gridRect ? rect.left - gridRect.left : 0;
-      const top = gridRect ? rect.top - gridRect.top : 0;
-      
-      sizes.set(i, {
-        width: Math.round(rect.width),
-        height: Math.round(rect.height),
-        left: Math.round(left),
-        top: Math.round(top)
-      });
-    });
+    // Keep existing sizes from other rows, only recapture this row
+    const sizes = new Map(this.resizeService.customSizes());
 
-    // We MUST update the service's customSizes BEFORE the directive's startResize logic runs
-    // so it has accurate neighbor dimensions even for '1fr' slots
+    if (gridEl) {
+      const slotElements = gridEl.querySelectorAll('.slot');
+      slotElements.forEach((el, localIdx) => {
+        const globalIdx = rowStartIdx + localIdx;
+        if (globalIdx >= rowEndIdx) return;
+        const rect = el.getBoundingClientRect();
+        const left = gridRect ? rect.left - gridRect.left : 0;
+        const top = gridRect ? rect.top - gridRect.top : 0;
+
+        sizes.set(globalIdx, {
+          width: Math.round(rect.width),
+          height: Math.round(rect.height),
+          left: Math.round(left),
+          top: Math.round(top)
+        });
+      });
+    }
+
     this.resizeService.customSizes.set(sizes);
     this.cdr.detectChanges();
   }
