@@ -1,0 +1,54 @@
+<div class="ai-copilot-container" [class.is-open]="isOpen">
+  <!-- Status Indicator -->
+  <div class="ai-status" *ngIf="isProcessing">
+    <div class="pulse"></div>
+    <span>Gemini está diseñando...</span>
+  </div>
+
+  <!-- Chat Modal -->
+  <div class="ai-panel glass-morphism" *ngIf="isOpen">
+    <div class="panel-header">
+      <div class="header-title">
+        <span class="sparkle">✨</span>
+        <h3>Design Co-pilot</h3>
+      </div>
+      <button class="btn-close" (click)="toggleChat()">×</button>
+    </div>
+
+    <div class="panel-body">
+      <div class="ai-intro" *ngIf="!lastExplanation">
+        <p>¡Hola! Soy tu asistente de diseño. Dime qué quieres cambiar y yo ajustaré los estilos por ti.</p>
+        <div class="suggestions">
+          <button (click)="prompt = 'Haz que parezca un videojuego retro'">🎮 Retro Gaming</button>
+          <button (click)="prompt = 'Aplica un estilo Cyberpunk con neones'">🌃 Cyberpunk</button>
+          <button (click)="prompt = 'Dale un toque minimalista y limpio'">✨ Minimalista</button>
+        </div>
+      </div>
+
+      <div class="ai-feedback" *ngIf="lastExplanation">
+        <p class="explanation">{{ lastExplanation }}</p>
+      </div>
+    </div>
+
+    <div class="panel-footer">
+      <div class="input-wrapper">
+        <textarea 
+          [(ngModel)]="prompt" 
+          placeholder="Ej: Haz esta sección más oscura con bordes redondeados..."
+          (keydown.enter)="$event.preventDefault(); submitPrompt()"
+          [disabled]="isProcessing"
+        ></textarea>
+        <button class="btn-send" (click)="submitPrompt()" [disabled]="isProcessing || !prompt.trim()">
+          <span *ngIf="!isProcessing">🚀</span>
+          <div class="loader" *ngIf="isProcessing"></div>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating Trigger Button -->
+  <button class="ai-trigger" (click)="toggleChat()" [class.is-processing]="isProcessing">
+    <span class="icon">✨</span>
+    <span class="label">Ask AI</span>
+  </button>
+</div>

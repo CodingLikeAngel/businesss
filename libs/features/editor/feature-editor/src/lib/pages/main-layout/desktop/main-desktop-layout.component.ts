@@ -10,6 +10,7 @@ import { MainLayoutBaseComponent } from '../main-layout-base.component';
 
 import { EditorHeaderSectionComponent } from '../../editor/components/header/editor-header-section.component';
 import { EditorFooterSectionComponent } from '../../editor/components/footer/editor-footer-section.component';
+import { AICopilotComponent } from '../../../components/ai-copilot/ai-copilot.component';
 import { Store } from '@ngrx/store';
 import * as PageSelectors from '../../../store/selectors/page.selectors';
 import { map } from 'rxjs';
@@ -23,7 +24,8 @@ import { map } from 'rxjs';
     EditorHeaderSectionComponent,
     VariantSelectorComponent,
     TemplateSelectorComponent,
-    EditorFooterSectionComponent
+    EditorFooterSectionComponent,
+    AICopilotComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './main-desktop-layout.component.html',
