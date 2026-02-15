@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 /**
@@ -13,21 +14,13 @@ export interface StatsItem {
 }
 
 /**
- * Stats Isolated Mode Content
- */
-export interface StatsIsolatedModeContent {
-  title?: string;
-  subtitle?: string;
-  stats?: StatsItem[];
-  variant?: string;
-  backgroundColor?: string;
-  textColor?: string;
-  accentColor?: string;
-  iconColor?: string;
-}
-
-/**
  * Stats Section Isolated Mode Component
+ * 
+ * Extends BaseIsolatedModeComponent to provide:
+ * - Undo/Redo functionality
+ * - Drag & Resize capabilities
+ * - Grid snapping
+ * - Keyboard shortcuts
  */
 @Component({
   selector: 'lib-editor-stats-isolated-mode',
@@ -44,7 +37,14 @@ export interface StatsIsolatedModeContent {
             <span class="separator">/</span>
             <span class="component-name">STATS SECTION</span>
           </div>
-          <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
+          <div class="header-actions">
+            <button class="action-btn" (click)="undo()" [disabled]="!canUndo" title="Deshacer (Ctrl+Z)">↶</button>
+            <button class="action-btn" (click)="redo()" [disabled]="!canRedo" title="Rehacer (Ctrl+Y)">↷</button>
+            <button class="action-btn" (click)="toggleGrid()" [class.active]="showGrid" title="Toggle Grid (G)">⊞</button>
+            <button class="action-btn" (click)="toggleSnap()" [class.active]="snapToGrid" title="Snap to Grid (S)">⬡</button>
+            <button class="action-btn" (click)="resetPosition()" title="Reset Position (R)">⟲</button>
+            <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
+          </div>
         </div>
 
         <!-- Body -->
@@ -64,7 +64,8 @@ export interface StatsIsolatedModeContent {
                   <label>Título de la Sección</label>
                   <input 
                     type="text" 
-                    [(ngModel)]="content.title" 
+                    [(ngModel)]="editableContent.title" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input" 
                     placeholder="Nuestros Números"
                   />
@@ -73,7 +74,8 @@ export interface StatsIsolatedModeContent {
                 <div class="control-group">
                   <label>Subtítulo</label>
                   <textarea 
-                    [(ngModel)]="content.subtitle" 
+                    [(ngModel)]="editableContent.subtitle" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input" 
                     rows="2"
                     placeholder="Lo que hemos logrado juntos"
@@ -82,7 +84,11 @@ export interface StatsIsolatedModeContent {
 
                 <div class="control-group">
                   <label>Variante de Estilo</label>
-                  <select [(ngModel)]="content.variant" class="premium-input">
+                  <select 
+                    [(ngModel)]="editableContent.variant" 
+                    (ngModelChange)="onVariantChange()"
+                    class="premium-input"
+                  >
                     <option value="cards">Tarjetas</option>
                     <option value="inline">En línea</option>
                     <option value="grid">Grid</option>
@@ -95,12 +101,12 @@ export interface StatsIsolatedModeContent {
               <div class="sidebar-section">
                 <div class="section-header">
                   <span class="section-icon">📊</span>
-                  <h4>ESTADÍSTICAS ({{ content.stats?.length || 0 }})</h4>
+                  <h4>ESTADÍSTICAS ({{ editableContent.stats?.length || 0 }})</h4>
                   <button class="add-btn" (click)="addStatItem()">+</button>
                 </div>
 
                 <div class="stats-items-list">
-                  <div class="stat-item-edit" *ngFor="let stat of content.stats; let i = index">
+                  <div class="stat-item-edit" *ngFor="let stat of editableContent.stats; let i = index">
                     <div class="stat-header">
                       <span class="stat-number">{{ i + 1 }}</span>
                       <button class="remove-btn" (click)="removeStatItem(i)">×</button>
@@ -112,6 +118,7 @@ export interface StatsIsolatedModeContent {
                         <input 
                           type="text" 
                           [(ngModel)]="stat.value" 
+                          (ngModelChange)="onContentChange()"
                           class="premium-input value-input" 
                           placeholder="500+"
                         />
@@ -121,6 +128,7 @@ export interface StatsIsolatedModeContent {
                         <input 
                           type="text" 
                           [(ngModel)]="stat.label" 
+                          (ngModelChange)="onContentChange()"
                           class="premium-input" 
                           placeholder="Clientes"
                         />
@@ -132,6 +140,7 @@ export interface StatsIsolatedModeContent {
                       <input 
                         type="text" 
                         [(ngModel)]="stat.icon" 
+                        (ngModelChange)="onContentChange()"
                         class="premium-input icon-input" 
                         placeholder="👥"
                       />
@@ -151,7 +160,8 @@ export interface StatsIsolatedModeContent {
                   <label>Color de Fondo</label>
                   <input 
                     type="color" 
-                    [(ngModel)]="content.backgroundColor" 
+                    [(ngModel)]="editableContent.backgroundColor" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input color-input"
                   />
                 </div>
@@ -161,7 +171,8 @@ export interface StatsIsolatedModeContent {
                     <label>Color de Texto</label>
                     <input 
                       type="color" 
-                      [(ngModel)]="content.textColor" 
+                      [(ngModel)]="editableContent.textColor" 
+                      (ngModelChange)="onContentChange()"
                       class="premium-input color-input"
                     />
                   </div>
@@ -169,7 +180,8 @@ export interface StatsIsolatedModeContent {
                     <label>Color de Acento</label>
                     <input 
                       type="color" 
-                      [(ngModel)]="content.accentColor" 
+                      [(ngModel)]="editableContent.accentColor" 
+                      (ngModelChange)="onContentChange()"
                       class="premium-input color-input"
                     />
                   </div>
@@ -179,7 +191,8 @@ export interface StatsIsolatedModeContent {
                   <label>Color de Iconos</label>
                   <input 
                     type="color" 
-                    [(ngModel)]="content.iconColor" 
+                    [(ngModel)]="editableContent.iconColor" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input color-input"
                   />
                 </div>
@@ -188,42 +201,82 @@ export interface StatsIsolatedModeContent {
           </div>
 
           <!-- Canvas Preview -->
-          <div class="isolated-canvas">
+          <div class="isolated-canvas" #canvasElement [class.show-grid]="showGrid">
             <div class="canvas-inner">
+              <!-- Draggable Wrapper -->
               <div 
-                class="preview-stats"
-                [style.background]="content.backgroundColor || '#0f172a'"
-                [style.color]="content.textColor || '#ffffff'"
+                class="draggable-wrapper"
+                [style.left.px]="currentPosition.x"
+                [style.top.px]="currentPosition.y"
+                [style.width.px]="currentSize.width"
+                [style.height.px]="currentSize.height"
+                (mousedown)="onMouseDown($event)"
               >
-                <div class="preview-header">
-                  <h2 class="preview-title">{{ content.title || 'Nuestros Números' }}</h2>
-                  <p class="preview-subtitle">{{ content.subtitle || 'Lo que hemos logrado juntos' }}</p>
-                </div>
-                
-                <div class="preview-stats-grid" [class]="'variant-' + (content.variant || 'cards')">
-                  <div class="preview-stat-item" *ngFor="let stat of getPreviewStats()">
-                    <span class="preview-stat-icon" [style.color]="content.iconColor || '#6366f1'">
-                      {{ stat.icon || '📊' }}
-                    </span>
-                    <span class="preview-stat-value" [style.color]="content.accentColor || '#6366f1'">
-                      {{ stat.value || '100+' }}
-                    </span>
-                    <span class="preview-stat-label">{{ stat.label || 'Estadística' }}</span>
+                <div 
+                  class="preview-stats"
+                  [style.background]="editableContent.backgroundColor || '#0f172a'"
+                  [style.color]="editableContent.textColor || '#ffffff'"
+                >
+                  <div class="preview-header">
+                    <h2 class="preview-title">{{ editableContent.title || 'Nuestros Números' }}</h2>
+                    <p class="preview-subtitle">{{ editableContent.subtitle || 'Lo que hemos logrado juntos' }}</p>
+                  </div>
+                  
+                  <div class="preview-stats-grid" [class]="'variant-' + (editableContent.variant || 'cards')">
+                    <div class="preview-stat-item" *ngFor="let stat of getPreviewStats()">
+                      <span class="preview-stat-icon" [style.color]="editableContent.iconColor || '#6366f1'">
+                        {{ stat.icon || '📊' }}
+                      </span>
+                      <span class="preview-stat-value" [style.color]="editableContent.accentColor || '#6366f1'">
+                        {{ stat.value || '100+' }}
+                      </span>
+                      <span class="preview-stat-label">{{ stat.label || 'Estadística' }}</span>
+                    </div>
                   </div>
                 </div>
+
+                <!-- Resize Handles -->
+                <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>
+                <div class="resize-handle n" (mousedown)="startResize($event, 'n')"></div>
+                <div class="resize-handle ne" (mousedown)="startResize($event, 'ne')"></div>
+                <div class="resize-handle e" (mousedown)="startResize($event, 'e')"></div>
+                <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
+                <div class="resize-handle s" (mousedown)="startResize($event, 's')"></div>
+                <div class="resize-handle sw" (mousedown)="startResize($event, 'sw')"></div>
+                <div class="resize-handle w" (mousedown)="startResize($event, 'w')"></div>
               </div>
             </div>
 
             <!-- Info Dock -->
             <div class="modern-position-dock">
               <div class="dock-item">
+                <span class="label">X</span>
+                <span class="value">{{ currentPosition.x }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">Y</span>
+                <span class="value">{{ currentPosition.y }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">W</span>
+                <span class="value">{{ currentSize.width }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">H</span>
+                <span class="value">{{ currentSize.height }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
                 <span class="label">VARIANT</span>
-                <span class="value text-purple-400">{{ content.variant || 'cards' }}</span>
+                <span class="value text-purple-400">{{ editableContent.variant || 'cards' }}</span>
               </div>
               <div class="dock-divider"></div>
               <div class="dock-item">
                 <span class="label">STATS</span>
-                <span class="value">{{ content.stats?.length || 0 }}</span>
+                <span class="value">{{ editableContent.stats?.length || 0 }}</span>
               </div>
             </div>
           </div>
@@ -231,10 +284,16 @@ export interface StatsIsolatedModeContent {
 
         <!-- Footer -->
         <div class="isolated-mode-footer">
-          <div class="footer-hint">Edita las estadísticas de tu sección.</div>
+          <div class="footer-hint">
+            <span class="hint-item">G: Grid</span>
+            <span class="hint-item">S: Snap</span>
+            <span class="hint-item">R: Reset</span>
+            <span class="hint-item">Ctrl+Z: Undo</span>
+            <span class="hint-item">Ctrl+S: Save</span>
+          </div>
           <div class="footer-actions-btns">
             <button class="btn-clean secondary" (click)="cancel()">Cancelar</button>
-            <button class="btn-clean primary" (click)="apply()">Aplicar Cambios</button>
+            <button class="btn-clean primary" (click)="apply()">Guardar Cambios</button>
           </div>
         </div>
       </div>
@@ -242,13 +301,9 @@ export interface StatsIsolatedModeContent {
   `,
   styleUrl: './editor-stats-isolated-mode.component.scss',
 })
-export class EditorStatsIsolatedModeComponent implements OnInit, OnDestroy {
-  @Input() public config!: IsolatedModeConfig;
-  @Output() public closed = new EventEmitter<void>();
-  @Output() public applied = new EventEmitter<IsolatedModeConfig>();
+export class EditorStatsIsolatedModeComponent extends BaseIsolatedModeComponent {
+  @ViewChild('canvasElement') canvasRef!: ElementRef;
 
-  public content: StatsIsolatedModeContent = {};
-  
   private defaultStats: StatsItem[] = [
     { value: '500+', label: 'Clientes Satisfechos', icon: '👥' },
     { value: '10K+', label: 'Proyectos Entregados', icon: '🚀' },
@@ -256,10 +311,11 @@ export class EditorStatsIsolatedModeComponent implements OnInit, OnDestroy {
     { value: '24/7', label: 'Soporte Disponible', icon: '💬' },
   ];
 
-  ngOnInit() {
+  protected initializeState(): void {
     const configStats = this.config?.content?.['stats'] as StatsItem[] | undefined;
     
-    this.content = {
+    // Initialize content
+    this.editableContent = {
       title: this.config?.content?.['title'] || 'Nuestros Números',
       subtitle: this.config?.content?.['subtitle'] || 'Lo que hemos logrado juntos',
       variant: this.config?.content?.['variant'] || 'cards',
@@ -267,64 +323,69 @@ export class EditorStatsIsolatedModeComponent implements OnInit, OnDestroy {
       textColor: this.config?.content?.['textColor'] || '#ffffff',
       accentColor: this.config?.content?.['accentColor'] || '#6366f1',
       iconColor: this.config?.content?.['iconColor'] || '#6366f1',
-      stats: configStats || this.defaultStats,
+      stats: configStats || [...this.defaultStats],
     };
 
-    document.addEventListener('keydown', this.handleKeydown);
+    // Initialize styles
+    this.editableStyles = this.config?.styles ? { ...this.config.styles } : {};
+
+    // Initialize position and size
+    this.currentPosition = this.config?.position || { x: 50, y: 50 };
+    this.currentSize = this.config?.size || { width: 650, height: 350 };
+    this.initialPosition = { ...this.currentPosition };
+    this.initialSize = { ...this.currentSize };
+
+    // Save initial state
+    this.saveState();
   }
 
-  ngOnDestroy() {
-    document.removeEventListener('keydown', this.handleKeydown);
+  protected getCanvasElement(): HTMLElement | null {
+    return this.canvasRef?.nativeElement || null;
   }
 
-  private handleKeydown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      this.close();
+  addStatItem(): void {
+    if (!this.editableContent.stats) {
+      this.editableContent.stats = [];
     }
-  };
-
-  public close() {
-    this.closed.emit();
-  }
-
-  public cancel() {
-    this.closed.emit();
-  }
-
-  public onOverlayClick(e: Event) {
-    this.closed.emit();
-  }
-
-  public addStatItem() {
-    if (!this.content.stats) {
-      this.content.stats = [];
-    }
-    this.content.stats.push({
+    this.editableContent.stats.push({
       value: '100+',
       label: 'Nueva Estadística',
       icon: '⭐',
     });
+    this.saveState();
   }
 
-  public removeStatItem(index: number) {
-    if (this.content.stats && index >= 0 && index < this.content.stats.length) {
-      this.content.stats.splice(index, 1);
+  removeStatItem(index: number): void {
+    if (this.editableContent.stats && index >= 0 && index < this.editableContent.stats.length) {
+      this.editableContent.stats.splice(index, 1);
+      this.saveState();
     }
   }
 
-  public getPreviewStats(): StatsItem[] {
-    return this.content.stats || this.defaultStats;
+  getPreviewStats(): StatsItem[] {
+    return this.editableContent.stats || this.defaultStats;
   }
 
-  public apply() {
-    this.applied.emit({
+  override apply(): void {
+    const finalConfig: IsolatedModeConfig = {
       ...this.config,
-      content: { ...this.content },
+      content: { ...this.editableContent },
+      styles: {
+        ...this.editableStyles,
+        width: this.currentSize.width + 'px',
+        height: this.currentSize.height + 'px',
+        position: 'absolute',
+        left: this.currentPosition.x + 'px',
+        top: this.currentPosition.y + 'px'
+      },
+      position: { ...this.currentPosition },
+      size: { ...this.currentSize },
       metadata: {
         createdAt: this.config?.metadata?.createdAt || Date.now(),
         modifiedAt: Date.now(),
         modifiedBy: this.config?.metadata?.modifiedBy,
       },
-    });
+    };
+    this.applied.emit(finalConfig);
   }
 }

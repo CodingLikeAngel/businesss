@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 /**
@@ -12,20 +13,13 @@ export interface FAQItem {
 }
 
 /**
- * FAQ Isolated Mode Content
- */
-export interface FAQIsolatedModeContent {
-  title?: string;
-  subtitle?: string;
-  items?: FAQItem[];
-  variant?: string;
-  backgroundColor?: string;
-  textColor?: string;
-  accentColor?: string;
-}
-
-/**
  * FAQ Section Isolated Mode Component
+ * 
+ * Extends BaseIsolatedModeComponent to provide:
+ * - Undo/Redo functionality
+ * - Drag & Resize capabilities
+ * - Grid snapping
+ * - Keyboard shortcuts
  */
 @Component({
   selector: 'lib-editor-faq-isolated-mode',
@@ -42,7 +36,14 @@ export interface FAQIsolatedModeContent {
             <span class="separator">/</span>
             <span class="component-name">FAQ SECTION</span>
           </div>
-          <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
+          <div class="header-actions">
+            <button class="action-btn" (click)="undo()" [disabled]="!canUndo" title="Deshacer (Ctrl+Z)">↶</button>
+            <button class="action-btn" (click)="redo()" [disabled]="!canRedo" title="Rehacer (Ctrl+Y)">↷</button>
+            <button class="action-btn" (click)="toggleGrid()" [class.active]="showGrid" title="Toggle Grid (G)">⊞</button>
+            <button class="action-btn" (click)="toggleSnap()" [class.active]="snapToGrid" title="Snap to Grid (S)">⬡</button>
+            <button class="action-btn" (click)="resetPosition()" title="Reset Position (R)">⟲</button>
+            <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
+          </div>
         </div>
 
         <!-- Body -->
@@ -62,7 +63,8 @@ export interface FAQIsolatedModeContent {
                   <label>Título</label>
                   <input 
                     type="text" 
-                    [(ngModel)]="content.title" 
+                    [(ngModel)]="editableContent.title" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input" 
                     placeholder="Preguntas Frecuentes"
                   />
@@ -71,7 +73,8 @@ export interface FAQIsolatedModeContent {
                 <div class="control-group">
                   <label>Subtítulo</label>
                   <textarea 
-                    [(ngModel)]="content.subtitle" 
+                    [(ngModel)]="editableContent.subtitle" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input" 
                     rows="2"
                     placeholder="Encuentra respuestas a las preguntas más comunes"
@@ -80,7 +83,11 @@ export interface FAQIsolatedModeContent {
 
                 <div class="control-group">
                   <label>Variante de Estilo</label>
-                  <select [(ngModel)]="content.variant" class="premium-input">
+                  <select 
+                    [(ngModel)]="editableContent.variant" 
+                    (ngModelChange)="onVariantChange()"
+                    class="premium-input"
+                  >
                     <option value="accordion">Acordeón</option>
                     <option value="list">Lista Simple</option>
                     <option value="cards">Tarjetas</option>
@@ -92,12 +99,12 @@ export interface FAQIsolatedModeContent {
               <div class="sidebar-section">
                 <div class="section-header">
                   <span class="section-icon">❓</span>
-                  <h4>PREGUNTAS ({{ content.items?.length || 0 }})</h4>
+                  <h4>PREGUNTAS ({{ editableContent.items?.length || 0 }})</h4>
                   <button class="add-btn" (click)="addFAQItem()">+</button>
                 </div>
 
                 <div class="faq-items-list">
-                  <div class="faq-item-edit" *ngFor="let item of content.items; let i = index">
+                  <div class="faq-item-edit" *ngFor="let item of editableContent.items; let i = index">
                     <div class="faq-header">
                       <span class="faq-number">{{ i + 1 }}</span>
                       <button class="remove-btn" (click)="removeFAQItem(i)">×</button>
@@ -108,6 +115,7 @@ export interface FAQIsolatedModeContent {
                       <input 
                         type="text" 
                         [(ngModel)]="item.question" 
+                        (ngModelChange)="onContentChange()"
                         class="premium-input" 
                         placeholder="¿Cuál es tu pregunta?"
                       />
@@ -117,6 +125,7 @@ export interface FAQIsolatedModeContent {
                       <label>Respuesta</label>
                       <textarea 
                         [(ngModel)]="item.answer" 
+                        (ngModelChange)="onContentChange()"
                         class="premium-input" 
                         rows="3"
                         placeholder="Tu respuesta aquí..."
@@ -137,7 +146,8 @@ export interface FAQIsolatedModeContent {
                   <label>Color de Fondo</label>
                   <input 
                     type="color" 
-                    [(ngModel)]="content.backgroundColor" 
+                    [(ngModel)]="editableContent.backgroundColor" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input color-input"
                   />
                 </div>
@@ -147,7 +157,8 @@ export interface FAQIsolatedModeContent {
                     <label>Color de Texto</label>
                     <input 
                       type="color" 
-                      [(ngModel)]="content.textColor" 
+                      [(ngModel)]="editableContent.textColor" 
+                      (ngModelChange)="onContentChange()"
                       class="premium-input color-input"
                     />
                   </div>
@@ -155,7 +166,8 @@ export interface FAQIsolatedModeContent {
                     <label>Color de Acento</label>
                     <input 
                       type="color" 
-                      [(ngModel)]="content.accentColor" 
+                      [(ngModel)]="editableContent.accentColor" 
+                      (ngModelChange)="onContentChange()"
                       class="premium-input color-input"
                     />
                   </div>
@@ -165,42 +177,82 @@ export interface FAQIsolatedModeContent {
           </div>
 
           <!-- Canvas Preview -->
-          <div class="isolated-canvas">
+          <div class="isolated-canvas" #canvasElement [class.show-grid]="showGrid">
             <div class="canvas-inner">
+              <!-- Draggable Wrapper -->
               <div 
-                class="preview-faq"
-                [style.background]="content.backgroundColor || '#f8fafc'"
-                [style.color]="content.textColor || '#1e293b'"
+                class="draggable-wrapper"
+                [style.left.px]="currentPosition.x"
+                [style.top.px]="currentPosition.y"
+                [style.width.px]="currentSize.width"
+                [style.height.px]="currentSize.height"
+                (mousedown)="onMouseDown($event)"
               >
-                <div class="preview-header">
-                  <h2 class="preview-title">{{ content.title || 'Preguntas Frecuentes' }}</h2>
-                  <p class="preview-subtitle">{{ content.subtitle || 'Encuentra respuestas a las preguntas más comunes' }}</p>
-                </div>
-                
-                <div class="preview-faq-list" [class]="'variant-' + (content.variant || 'accordion')">
-                  <div class="preview-faq-item" *ngFor="let item of getPreviewFAQItems()">
-                    <div class="preview-faq-question">
-                      <span class="preview-icon">{{ content.variant === 'accordion' ? '▼' : 'Q:' }}</span>
-                      {{ item.question || '¿Cuál es tu pregunta?' }}
-                    </div>
-                    <div class="preview-faq-answer" *ngIf="content.variant !== 'accordion' || true">
-                      {{ item.answer || 'Tu respuesta aquí...' }}
+                <div 
+                  class="preview-faq"
+                  [style.background]="editableContent.backgroundColor || '#f8fafc'"
+                  [style.color]="editableContent.textColor || '#1e293b'"
+                >
+                  <div class="preview-header">
+                    <h2 class="preview-title">{{ editableContent.title || 'Preguntas Frecuentes' }}</h2>
+                    <p class="preview-subtitle">{{ editableContent.subtitle || 'Encuentra respuestas a las preguntas más comunes' }}</p>
+                  </div>
+                  
+                  <div class="preview-faq-list" [class]="'variant-' + (editableContent.variant || 'accordion')">
+                    <div class="preview-faq-item" *ngFor="let item of getPreviewFAQItems()">
+                      <div class="preview-faq-question">
+                        <span class="preview-icon">{{ editableContent.variant === 'accordion' ? '▼' : 'Q:' }}</span>
+                        {{ item.question || '¿Cuál es tu pregunta?' }}
+                      </div>
+                      <div class="preview-faq-answer" *ngIf="editableContent.variant !== 'accordion' || true">
+                        {{ item.answer || 'Tu respuesta aquí...' }}
+                      </div>
                     </div>
                   </div>
                 </div>
+
+                <!-- Resize Handles -->
+                <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>
+                <div class="resize-handle n" (mousedown)="startResize($event, 'n')"></div>
+                <div class="resize-handle ne" (mousedown)="startResize($event, 'ne')"></div>
+                <div class="resize-handle e" (mousedown)="startResize($event, 'e')"></div>
+                <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
+                <div class="resize-handle s" (mousedown)="startResize($event, 's')"></div>
+                <div class="resize-handle sw" (mousedown)="startResize($event, 'sw')"></div>
+                <div class="resize-handle w" (mousedown)="startResize($event, 'w')"></div>
               </div>
             </div>
 
             <!-- Info Dock -->
             <div class="modern-position-dock">
               <div class="dock-item">
+                <span class="label">X</span>
+                <span class="value">{{ currentPosition.x }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">Y</span>
+                <span class="value">{{ currentPosition.y }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">W</span>
+                <span class="value">{{ currentSize.width }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">H</span>
+                <span class="value">{{ currentSize.height }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
                 <span class="label">VARIANT</span>
-                <span class="value text-purple-400">{{ content.variant || 'accordion' }}</span>
+                <span class="value text-purple-400">{{ editableContent.variant || 'accordion' }}</span>
               </div>
               <div class="dock-divider"></div>
               <div class="dock-item">
                 <span class="label">ITEMS</span>
-                <span class="value">{{ content.items?.length || 0 }}</span>
+                <span class="value">{{ editableContent.items?.length || 0 }}</span>
               </div>
             </div>
           </div>
@@ -208,10 +260,16 @@ export interface FAQIsolatedModeContent {
 
         <!-- Footer -->
         <div class="isolated-mode-footer">
-          <div class="footer-hint">Edita tu sección de FAQ.</div>
+          <div class="footer-hint">
+            <span class="hint-item">G: Grid</span>
+            <span class="hint-item">S: Snap</span>
+            <span class="hint-item">R: Reset</span>
+            <span class="hint-item">Ctrl+Z: Undo</span>
+            <span class="hint-item">Ctrl+S: Save</span>
+          </div>
           <div class="footer-actions-btns">
             <button class="btn-clean secondary" (click)="cancel()">Cancelar</button>
-            <button class="btn-clean primary" (click)="apply()">Aplicar Cambios</button>
+            <button class="btn-clean primary" (click)="apply()">Guardar Cambios</button>
           </div>
         </div>
       </div>
@@ -219,13 +277,9 @@ export interface FAQIsolatedModeContent {
   `,
   styleUrl: './editor-faq-isolated-mode.component.scss',
 })
-export class EditorFAQIsolatedModeComponent implements OnInit, OnDestroy {
-  @Input() public config!: IsolatedModeConfig;
-  @Output() public closed = new EventEmitter<void>();
-  @Output() public applied = new EventEmitter<IsolatedModeConfig>();
+export class EditorFAQIsolatedModeComponent extends BaseIsolatedModeComponent {
+  @ViewChild('canvasElement') canvasRef!: ElementRef;
 
-  public content: FAQIsolatedModeContent = {};
-  
   private defaultItems: FAQItem[] = [
     { question: '¿Cómo puedo empezar?', answer: 'Puedes registrarte gratis y comenzar a usar nuestras herramientas inmediatamente.' },
     { question: '¿Cuáles son los métodos de pago?', answer: 'Aceptamos tarjetas de crédito, PayPal y transferencias bancarias.' },
@@ -233,73 +287,79 @@ export class EditorFAQIsolatedModeComponent implements OnInit, OnDestroy {
     { question: '¿Ofrecen soporte técnico?', answer: 'Sí, nuestro equipo de soporte está disponible 24/7 para ayudarte.' },
   ];
 
-  ngOnInit() {
+  protected initializeState(): void {
     const configItems = this.config?.content?.['items'] as FAQItem[] | undefined;
     
-    this.content = {
+    // Initialize content
+    this.editableContent = {
       title: this.config?.content?.['title'] || 'Preguntas Frecuentes',
       subtitle: this.config?.content?.['subtitle'] || 'Encuentra respuestas a las preguntas más comunes',
       variant: this.config?.content?.['variant'] || 'accordion',
       backgroundColor: this.config?.content?.['backgroundColor'] || '#f8fafc',
       textColor: this.config?.content?.['textColor'] || '#1e293b',
       accentColor: this.config?.content?.['accentColor'] || '#6366f1',
-      items: configItems || this.defaultItems,
+      items: configItems || [...this.defaultItems],
     };
 
-    document.addEventListener('keydown', this.handleKeydown);
+    // Initialize styles
+    this.editableStyles = this.config?.styles ? { ...this.config.styles } : {};
+
+    // Initialize position and size
+    this.currentPosition = this.config?.position || { x: 50, y: 50 };
+    this.currentSize = this.config?.size || { width: 600, height: 450 };
+    this.initialPosition = { ...this.currentPosition };
+    this.initialSize = { ...this.currentSize };
+
+    // Save initial state
+    this.saveState();
   }
 
-  ngOnDestroy() {
-    document.removeEventListener('keydown', this.handleKeydown);
+  protected getCanvasElement(): HTMLElement | null {
+    return this.canvasRef?.nativeElement || null;
   }
 
-  private handleKeydown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      this.close();
+  addFAQItem(): void {
+    if (!this.editableContent.items) {
+      this.editableContent.items = [];
     }
-  };
-
-  public close() {
-    this.closed.emit();
-  }
-
-  public cancel() {
-    this.closed.emit();
-  }
-
-  public onOverlayClick(e: Event) {
-    this.closed.emit();
-  }
-
-  public addFAQItem() {
-    if (!this.content.items) {
-      this.content.items = [];
-    }
-    this.content.items.push({
+    this.editableContent.items.push({
       question: 'Nueva pregunta',
       answer: 'Respuesta a la nueva pregunta',
     });
+    this.saveState();
   }
 
-  public removeFAQItem(index: number) {
-    if (this.content.items && index >= 0 && index < this.content.items.length) {
-      this.content.items.splice(index, 1);
+  removeFAQItem(index: number): void {
+    if (this.editableContent.items && index >= 0 && index < this.editableContent.items.length) {
+      this.editableContent.items.splice(index, 1);
+      this.saveState();
     }
   }
 
-  public getPreviewFAQItems(): FAQItem[] {
-    return this.content.items || this.defaultItems;
+  getPreviewFAQItems(): FAQItem[] {
+    return this.editableContent.items || this.defaultItems;
   }
 
-  public apply() {
-    this.applied.emit({
+  override apply(): void {
+    const finalConfig: IsolatedModeConfig = {
       ...this.config,
-      content: { ...this.content },
+      content: { ...this.editableContent },
+      styles: {
+        ...this.editableStyles,
+        width: this.currentSize.width + 'px',
+        height: this.currentSize.height + 'px',
+        position: 'absolute',
+        left: this.currentPosition.x + 'px',
+        top: this.currentPosition.y + 'px'
+      },
+      position: { ...this.currentPosition },
+      size: { ...this.currentSize },
       metadata: {
         createdAt: this.config?.metadata?.createdAt || Date.now(),
         modifiedAt: Date.now(),
         modifiedBy: this.config?.metadata?.modifiedBy,
       },
-    });
+    };
+    this.applied.emit(finalConfig);
   }
 }

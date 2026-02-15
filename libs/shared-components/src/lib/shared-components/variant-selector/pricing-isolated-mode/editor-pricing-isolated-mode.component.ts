@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 /**
@@ -15,20 +16,13 @@ export interface PricingPlanEditItem {
 }
 
 /**
- * Pricing Table Isolated Mode Content
- */
-export interface PricingIsolatedModeContent {
-  title?: string;
-  subtitle?: string;
-  variant?: string;
-  plans?: PricingPlanEditItem[];
-  backgroundColor?: string;
-  textColor?: string;
-  accentColor?: string;
-}
-
-/**
  * Pricing Table Isolated Mode Component
+ * 
+ * Extends BaseIsolatedModeComponent to provide:
+ * - Undo/Redo functionality
+ * - Drag & Resize capabilities
+ * - Grid snapping
+ * - Keyboard shortcuts
  */
 @Component({
   selector: 'lib-editor-pricing-isolated-mode',
@@ -45,7 +39,14 @@ export interface PricingIsolatedModeContent {
             <span class="separator">/</span>
             <span class="component-name">PRICING TABLE</span>
           </div>
-          <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
+          <div class="header-actions">
+            <button class="action-btn" (click)="undo()" [disabled]="!canUndo" title="Deshacer (Ctrl+Z)">↶</button>
+            <button class="action-btn" (click)="redo()" [disabled]="!canRedo" title="Rehacer (Ctrl+Y)">↷</button>
+            <button class="action-btn" (click)="toggleGrid()" [class.active]="showGrid" title="Toggle Grid (G)">⊞</button>
+            <button class="action-btn" (click)="toggleSnap()" [class.active]="snapToGrid" title="Snap to Grid (S)">⬡</button>
+            <button class="action-btn" (click)="resetPosition()" title="Reset Position (R)">⟲</button>
+            <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
+          </div>
         </div>
 
         <!-- Body -->
@@ -65,7 +66,8 @@ export interface PricingIsolatedModeContent {
                   <label>Título de la Sección</label>
                   <input 
                     type="text" 
-                    [(ngModel)]="content.title" 
+                    [(ngModel)]="editableContent.title" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input" 
                     placeholder="Planes y Precios"
                   />
@@ -75,7 +77,8 @@ export interface PricingIsolatedModeContent {
                   <label>Subtítulo</label>
                   <input 
                     type="text" 
-                    [(ngModel)]="content.subtitle" 
+                    [(ngModel)]="editableContent.subtitle" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input" 
                     placeholder="Elige el plan perfecto"
                   />
@@ -83,7 +86,11 @@ export interface PricingIsolatedModeContent {
 
                 <div class="control-group">
                   <label>Variante</label>
-                  <select [(ngModel)]="content.variant" class="premium-input">
+                  <select 
+                    [(ngModel)]="editableContent.variant" 
+                    (ngModelChange)="onVariantChange()"
+                    class="premium-input"
+                  >
                     <option value="default">Default</option>
                     <option value="cards">Tarjetas</option>
                     <option value="toggle">Con Toggle</option>
@@ -103,7 +110,8 @@ export interface PricingIsolatedModeContent {
                   <label>Color de Fondo</label>
                   <input 
                     type="color" 
-                    [(ngModel)]="content.backgroundColor" 
+                    [(ngModel)]="editableContent.backgroundColor" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input color-input"
                   />
                 </div>
@@ -112,7 +120,8 @@ export interface PricingIsolatedModeContent {
                   <label>Color de Texto</label>
                   <input 
                     type="color" 
-                    [(ngModel)]="content.textColor" 
+                    [(ngModel)]="editableContent.textColor" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input color-input"
                   />
                 </div>
@@ -121,7 +130,8 @@ export interface PricingIsolatedModeContent {
                   <label>Color de Acento</label>
                   <input 
                     type="color" 
-                    [(ngModel)]="content.accentColor" 
+                    [(ngModel)]="editableContent.accentColor" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input color-input"
                   />
                 </div>
@@ -131,12 +141,12 @@ export interface PricingIsolatedModeContent {
               <div class="sidebar-section no-border">
                 <div class="section-header">
                   <span class="section-icon">💰</span>
-                  <h4>PLANES ({{ content.plans?.length || 0 }})</h4>
+                  <h4>PLANES ({{ editableContent.plans?.length || 0 }})</h4>
                   <button class="add-btn" (click)="addPlan()">+</button>
                 </div>
 
                 <div class="plans-list">
-                  <div class="plan-item-edit" *ngFor="let plan of content.plans; let i = index">
+                  <div class="plan-item-edit" *ngFor="let plan of editableContent.plans; let i = index">
                     <div class="plan-header">
                       <span class="plan-number">{{ i + 1 }}</span>
                       <button class="remove-btn" (click)="removePlan(i)">×</button>
@@ -148,6 +158,7 @@ export interface PricingIsolatedModeContent {
                         <input 
                           type="text" 
                           [(ngModel)]="plan.name" 
+                          (ngModelChange)="onContentChange()"
                           class="premium-input" 
                           placeholder="Plan Name"
                         />
@@ -157,6 +168,7 @@ export interface PricingIsolatedModeContent {
                         <input 
                           type="text" 
                           [(ngModel)]="plan.price" 
+                          (ngModelChange)="onContentChange()"
                           class="premium-input" 
                           placeholder="99€"
                         />
@@ -167,6 +179,7 @@ export interface PricingIsolatedModeContent {
                       <label>Características (una por línea)</label>
                       <textarea 
                         [(ngModel)]="plan.featuresText" 
+                        (ngModelChange)="onContentChange()"
                         class="premium-input h-20" 
                         placeholder="Característica 1&#10;Característica 2&#10;Característica 3"
                       ></textarea>
@@ -175,7 +188,7 @@ export interface PricingIsolatedModeContent {
                     <div class="plan-row">
                       <div class="control-group flex-1">
                         <label class="flex items-center gap-2">
-                          <input type="checkbox" [(ngModel)]="plan.highlighted" class="w-4 h-4" />
+                          <input type="checkbox" [(ngModel)]="plan.highlighted" (ngModelChange)="onContentChange()" class="w-4 h-4" />
                           <span>Destacado</span>
                         </label>
                       </div>
@@ -184,6 +197,7 @@ export interface PricingIsolatedModeContent {
                         <input 
                           type="text" 
                           [(ngModel)]="plan.buttonText" 
+                          (ngModelChange)="onContentChange()"
                           class="premium-input" 
                           placeholder="Elegir Plan"
                         />
@@ -196,51 +210,91 @@ export interface PricingIsolatedModeContent {
           </div>
 
           <!-- Canvas Preview -->
-          <div class="isolated-canvas">
+          <div class="isolated-canvas" #canvasElement [class.show-grid]="showGrid">
             <div class="canvas-inner">
+              <!-- Draggable Wrapper -->
               <div 
-                class="preview-pricing" 
-                [style.background]="getPreviewBackground()"
-                [style.color]="content.textColor || '#ffffff'"
+                class="draggable-wrapper"
+                [style.left.px]="currentPosition.x"
+                [style.top.px]="currentPosition.y"
+                [style.width.px]="currentSize.width"
+                [style.height.px]="currentSize.height"
+                (mousedown)="onMouseDown($event)"
               >
-                <div class="preview-header" *ngIf="content.title || content.subtitle">
-                  <h2 class="preview-title">{{ content.title || 'Planes y Precios' }}</h2>
-                  <p class="preview-subtitle">{{ content.subtitle || 'Elige el plan perfecto para ti' }}</p>
-                </div>
-                
-                <div class="preview-grid">
-                  <div 
-                    class="preview-plan" 
-                    *ngFor="let plan of getPreviewPlans(); let idx = index"
-                    [class.highlighted]="plan.highlighted"
-                    [style.borderColor]="plan.highlighted ? content.accentColor : 'rgba(255,255,255,0.2)'"
-                  >
-                    <div class="preview-plan-name">{{ plan.name || 'Plan ' + (idx + 1) }}</div>
-                    <div class="preview-plan-price">{{ plan.price || 'XX€' }}</div>
-                    <ul class="preview-plan-features">
-                      <li *ngFor="let f of getFeaturesList(plan)">{{ f }}</li>
-                    </ul>
-                    <button 
-                      class="preview-plan-button"
-                      [style.background]="plan.highlighted ? content.accentColor : 'rgba(255,255,255,0.2)'"
+                <div 
+                  class="preview-pricing" 
+                  [style.background]="getPreviewBackground()"
+                  [style.color]="editableContent.textColor || '#ffffff'"
+                >
+                  <div class="preview-header" *ngIf="editableContent.title || editableContent.subtitle">
+                    <h2 class="preview-title">{{ editableContent.title || 'Planes y Precios' }}</h2>
+                    <p class="preview-subtitle">{{ editableContent.subtitle || 'Elige el plan perfecto para ti' }}</p>
+                  </div>
+                  
+                  <div class="preview-grid">
+                    <div 
+                      class="preview-plan" 
+                      *ngFor="let plan of getPreviewPlans(); let idx = index"
+                      [class.highlighted]="plan.highlighted"
+                      [style.borderColor]="plan.highlighted ? editableContent.accentColor : 'rgba(255,255,255,0.2)'"
                     >
-                      {{ plan.buttonText || 'Elegir Plan' }}
-                    </button>
+                      <div class="preview-plan-name">{{ plan.name || 'Plan ' + (idx + 1) }}</div>
+                      <div class="preview-plan-price">{{ plan.price || 'XX€' }}</div>
+                      <ul class="preview-plan-features">
+                        <li *ngFor="let f of getFeaturesList(plan)">{{ f }}</li>
+                      </ul>
+                      <button 
+                        class="preview-plan-button"
+                        [style.background]="plan.highlighted ? editableContent.accentColor : 'rgba(255,255,255,0.2)'"
+                      >
+                        {{ plan.buttonText || 'Elegir Plan' }}
+                      </button>
+                    </div>
                   </div>
                 </div>
+
+                <!-- Resize Handles -->
+                <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>
+                <div class="resize-handle n" (mousedown)="startResize($event, 'n')"></div>
+                <div class="resize-handle ne" (mousedown)="startResize($event, 'ne')"></div>
+                <div class="resize-handle e" (mousedown)="startResize($event, 'e')"></div>
+                <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
+                <div class="resize-handle s" (mousedown)="startResize($event, 's')"></div>
+                <div class="resize-handle sw" (mousedown)="startResize($event, 'sw')"></div>
+                <div class="resize-handle w" (mousedown)="startResize($event, 'w')"></div>
               </div>
             </div>
 
             <!-- Info Dock -->
             <div class="modern-position-dock">
               <div class="dock-item">
+                <span class="label">X</span>
+                <span class="value">{{ currentPosition.x }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">Y</span>
+                <span class="value">{{ currentPosition.y }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">W</span>
+                <span class="value">{{ currentSize.width }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">H</span>
+                <span class="value">{{ currentSize.height }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
                 <span class="label">VARIANT</span>
-                <span class="value text-purple-400">{{ content.variant || 'default' }}</span>
+                <span class="value text-purple-400">{{ editableContent.variant || 'default' }}</span>
               </div>
               <div class="dock-divider"></div>
               <div class="dock-item">
                 <span class="label">PLANES</span>
-                <span class="value">{{ content.plans?.length || 0 }}</span>
+                <span class="value">{{ editableContent.plans?.length || 0 }}</span>
               </div>
             </div>
           </div>
@@ -248,10 +302,16 @@ export interface PricingIsolatedModeContent {
 
         <!-- Footer -->
         <div class="isolated-mode-footer">
-          <div class="footer-hint">Gestiona los planes y precios de tu servicio.</div>
+          <div class="footer-hint">
+            <span class="hint-item">G: Grid</span>
+            <span class="hint-item">S: Snap</span>
+            <span class="hint-item">R: Reset</span>
+            <span class="hint-item">Ctrl+Z: Undo</span>
+            <span class="hint-item">Ctrl+S: Save</span>
+          </div>
           <div class="footer-actions-btns">
             <button class="btn-clean secondary" (click)="cancel()">Cancelar</button>
-            <button class="btn-clean primary" (click)="apply()">Aplicar Cambios</button>
+            <button class="btn-clean primary" (click)="apply()">Guardar Cambios</button>
           </div>
         </div>
       </div>
@@ -259,107 +319,107 @@ export interface PricingIsolatedModeContent {
   `,
   styleUrl: './editor-pricing-isolated-mode.component.scss',
 })
-export class EditorPricingIsolatedModeComponent implements OnInit, OnDestroy {
-  @Input() public config!: IsolatedModeConfig;
-  @Output() public closed = new EventEmitter<void>();
-  @Output() public applied = new EventEmitter<IsolatedModeConfig>();
+export class EditorPricingIsolatedModeComponent extends BaseIsolatedModeComponent {
+  @ViewChild('canvasElement') canvasRef!: ElementRef;
 
-  public content: PricingIsolatedModeContent = {};
-  
   private defaultPlans: PricingPlanEditItem[] = [
     { name: 'Básico', price: '500€', featuresText: 'Web simple\nSEO básico\nDominio incluido', highlighted: false, buttonText: 'Elegir Plan' },
     { name: 'Pro', price: '1200€', featuresText: 'Tienda online\nSEO avanzado\nSoporte 24/7', highlighted: true, buttonText: 'Elegir Plan' },
     { name: 'Enterprise', price: 'Consultar', featuresText: 'A medida\nSoporte 24/7\nIntegraciones', highlighted: false, buttonText: 'Contactar' },
   ];
 
-  ngOnInit() {
+  protected initializeState(): void {
     const configPlans = this.config?.content?.['plans'] as PricingPlanEditItem[] | undefined;
     
-    this.content = {
+    // Initialize content
+    this.editableContent = {
       title: this.config?.content?.['title'] || 'Planes y Precios',
       subtitle: this.config?.content?.['subtitle'] || 'Elige el plan perfecto para ti.',
       variant: this.config?.content?.['variant'] || 'default',
       backgroundColor: this.config?.content?.['backgroundColor'] || '#0f172a',
       textColor: this.config?.content?.['textColor'] || '#ffffff',
       accentColor: this.config?.content?.['accentColor'] || '#6366f1',
-      plans: configPlans || this.defaultPlans,
+      plans: configPlans || [...this.defaultPlans],
     };
 
-    document.addEventListener('keydown', this.handleKeydown);
+    // Initialize styles
+    this.editableStyles = this.config?.styles ? { ...this.config.styles } : {};
+
+    // Initialize position and size
+    this.currentPosition = this.config?.position || { x: 50, y: 50 };
+    this.currentSize = this.config?.size || { width: 700, height: 450 };
+    this.initialPosition = { ...this.currentPosition };
+    this.initialSize = { ...this.currentSize };
+
+    // Save initial state
+    this.saveState();
   }
 
-  ngOnDestroy() {
-    document.removeEventListener('keydown', this.handleKeydown);
+  protected getCanvasElement(): HTMLElement | null {
+    return this.canvasRef?.nativeElement || null;
   }
 
-  private handleKeydown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      this.close();
+  addPlan(): void {
+    if (!this.editableContent.plans) {
+      this.editableContent.plans = [];
     }
-  };
-
-  public close() {
-    this.closed.emit();
-  }
-
-  public cancel() {
-    this.closed.emit();
-  }
-
-  public onOverlayClick(e: Event) {
-    this.closed.emit();
-  }
-
-  public addPlan() {
-    if (!this.content.plans) {
-      this.content.plans = [];
-    }
-    this.content.plans.push({
+    this.editableContent.plans.push({
       name: 'Nuevo Plan',
       price: 'XX€',
       featuresText: 'Característica 1\nCaracterística 2\nCaracterística 3',
       highlighted: false,
       buttonText: 'Elegir Plan',
     });
+    this.saveState();
   }
 
-  public removePlan(index: number) {
-    if (this.content.plans && index >= 0 && index < this.content.plans.length) {
-      this.content.plans.splice(index, 1);
+  removePlan(index: number): void {
+    if (this.editableContent.plans && index >= 0 && index < this.editableContent.plans.length) {
+      this.editableContent.plans.splice(index, 1);
+      this.saveState();
     }
   }
 
-  public getPreviewPlans(): PricingPlanEditItem[] {
-    return this.content.plans || this.defaultPlans;
+  getPreviewPlans(): PricingPlanEditItem[] {
+    return this.editableContent.plans || this.defaultPlans;
   }
 
-  public getFeaturesList(plan: PricingPlanEditItem): string[] {
+  getFeaturesList(plan: PricingPlanEditItem): string[] {
     return plan.featuresText ? plan.featuresText.split('\n').filter(f => f.trim()) : ['Característica 1', 'Característica 2', 'Característica 3'];
   }
 
-  public apply() {
-    const contentObj: Record<string, any> = {
-      title: this.content.title,
-      subtitle: this.content.subtitle,
-      variant: this.content.variant,
-      backgroundColor: this.content.backgroundColor,
-      textColor: this.content.textColor,
-      accentColor: this.content.accentColor,
-      plans: this.content.plans || this.defaultPlans,
-    };
+  getPreviewBackground(): string {
+    return this.editableContent.backgroundColor || '#0f172a';
+  }
 
-    this.applied.emit({
+  override apply(): void {
+    const finalConfig: IsolatedModeConfig = {
       ...this.config,
-      content: contentObj,
+      content: {
+        title: this.editableContent.title,
+        subtitle: this.editableContent.subtitle,
+        variant: this.editableContent.variant,
+        backgroundColor: this.editableContent.backgroundColor,
+        textColor: this.editableContent.textColor,
+        accentColor: this.editableContent.accentColor,
+        plans: this.editableContent.plans || this.defaultPlans,
+      },
+      styles: {
+        ...this.editableStyles,
+        width: this.currentSize.width + 'px',
+        height: this.currentSize.height + 'px',
+        position: 'absolute',
+        left: this.currentPosition.x + 'px',
+        top: this.currentPosition.y + 'px'
+      },
+      position: { ...this.currentPosition },
+      size: { ...this.currentSize },
       metadata: {
         createdAt: this.config?.metadata?.createdAt || Date.now(),
         modifiedAt: Date.now(),
         modifiedBy: this.config?.metadata?.modifiedBy,
       },
-    });
-  }
-
-  public getPreviewBackground(): string {
-    return this.content.backgroundColor || '#0f172a';
+    };
+    this.applied.emit(finalConfig);
   }
 }

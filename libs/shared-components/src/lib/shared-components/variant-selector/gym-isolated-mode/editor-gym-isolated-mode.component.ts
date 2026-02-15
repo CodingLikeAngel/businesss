@@ -1,6 +1,7 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 
 /**
@@ -27,24 +28,13 @@ export interface GymMembershipPlan {
 }
 
 /**
- * Gym Isolated Mode Content
- */
-export interface GymIsolatedModeContent {
-  gymName?: string;
-  tagline?: string;
-  description?: string;
-  classes?: GymClass[];
-  plans?: GymMembershipPlan[];
-  stats?: { icon: string; value: string; label: string }[];
-  variant?: string;
-  backgroundColor?: string;
-  textColor?: string;
-  accentColor?: string;
-  buttonColor?: string;
-}
-
-/**
  * Gym Section Isolated Mode Component
+ * 
+ * Extends BaseIsolatedModeComponent to provide:
+ * - Undo/Redo functionality
+ * - Drag & Resize capabilities
+ * - Grid snapping
+ * - Keyboard shortcuts
  */
 @Component({
   selector: 'lib-editor-gym-isolated-mode',
@@ -61,7 +51,14 @@ export interface GymIsolatedModeContent {
             <span class="separator">/</span>
             <span class="component-name">GYM SECTION</span>
           </div>
-          <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
+          <div class="header-actions">
+            <button class="action-btn" (click)="undo()" [disabled]="!canUndo" title="Deshacer (Ctrl+Z)">↶</button>
+            <button class="action-btn" (click)="redo()" [disabled]="!canRedo" title="Rehacer (Ctrl+Y)">↷</button>
+            <button class="action-btn" (click)="toggleGrid()" [class.active]="showGrid" title="Toggle Grid (G)">⊞</button>
+            <button class="action-btn" (click)="toggleSnap()" [class.active]="snapToGrid" title="Snap to Grid (S)">⬡</button>
+            <button class="action-btn" (click)="resetPosition()" title="Reset Position (R)">⟲</button>
+            <button class="close-main-btn" (click)="close()" title="Cerrar (Esc)">✕</button>
+          </div>
         </div>
 
         <!-- Body -->
@@ -81,7 +78,8 @@ export interface GymIsolatedModeContent {
                   <label>Nombre del Gimnasio</label>
                   <input 
                     type="text" 
-                    [(ngModel)]="content.gymName" 
+                    [(ngModel)]="editableContent.gymName" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input" 
                     placeholder="FitPower Gym"
                   />
@@ -91,7 +89,8 @@ export interface GymIsolatedModeContent {
                   <label>Tagline</label>
                   <input 
                     type="text" 
-                    [(ngModel)]="content.tagline" 
+                    [(ngModel)]="editableContent.tagline" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input" 
                     placeholder="Transforma tu cuerpo, transforma tu vida"
                   />
@@ -100,7 +99,8 @@ export interface GymIsolatedModeContent {
                 <div class="control-group">
                   <label>Descripción</label>
                   <textarea 
-                    [(ngModel)]="content.description" 
+                    [(ngModel)]="editableContent.description" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input" 
                     rows="2"
                     placeholder="Breve descripción del gimnasio"
@@ -109,7 +109,11 @@ export interface GymIsolatedModeContent {
 
                 <div class="control-group">
                   <label>Variante de Estilo</label>
-                  <select [(ngModel)]="content.variant" class="premium-input">
+                  <select 
+                    [(ngModel)]="editableContent.variant" 
+                    (ngModelChange)="onVariantChange()"
+                    class="premium-input"
+                  >
                     <option value="energetic">Energético</option>
                     <option value="modern">Moderno</option>
                     <option value="classic">Clásico</option>
@@ -122,12 +126,12 @@ export interface GymIsolatedModeContent {
               <div class="sidebar-section">
                 <div class="section-header">
                   <span class="section-icon">💪</span>
-                  <h4>CLASES ({{ content.classes?.length || 0 }})</h4>
+                  <h4>CLASES ({{ editableContent.classes?.length || 0 }})</h4>
                   <button class="add-btn" (click)="addClass()">+</button>
                 </div>
 
                 <div class="classes-list">
-                  <div class="class-edit" *ngFor="let cls of content.classes; let i = index">
+                  <div class="class-edit" *ngFor="let cls of editableContent.classes; let i = index">
                     <div class="class-header">
                       <span class="class-number">{{ i + 1 }}</span>
                       <button class="remove-btn" (click)="removeClass(i)">×</button>
@@ -138,6 +142,7 @@ export interface GymIsolatedModeContent {
                       <input 
                         type="text" 
                         [(ngModel)]="cls.name" 
+                        (ngModelChange)="onContentChange()"
                         class="premium-input" 
                         placeholder="CrossFit"
                       />
@@ -147,6 +152,7 @@ export interface GymIsolatedModeContent {
                       <label>Descripción</label>
                       <textarea 
                         [(ngModel)]="cls.description" 
+                        (ngModelChange)="onContentChange()"
                         class="premium-input" 
                         rows="2"
                         placeholder="Descripción de la clase"
@@ -159,13 +165,14 @@ export interface GymIsolatedModeContent {
                         <input 
                           type="text" 
                           [(ngModel)]="cls.duration" 
+                          (ngModelChange)="onContentChange()"
                           class="premium-input" 
                           placeholder="60 min"
                         />
                       </div>
                       <div class="control-group flex-1">
                         <label>Intensidad</label>
-                        <select [(ngModel)]="cls.intensity" class="premium-input">
+                        <select [(ngModel)]="cls.intensity" (ngModelChange)="onContentChange()" class="premium-input">
                           <option value="baja">Baja</option>
                           <option value="media">Media</option>
                           <option value="alta">Alta</option>
@@ -179,6 +186,7 @@ export interface GymIsolatedModeContent {
                         <input 
                           type="text" 
                           [(ngModel)]="cls.schedule" 
+                          (ngModelChange)="onContentChange()"
                           class="premium-input" 
                           placeholder="L-V: 8:00, 18:00"
                         />
@@ -188,6 +196,7 @@ export interface GymIsolatedModeContent {
                         <input 
                           type="text" 
                           [(ngModel)]="cls.instructor" 
+                          (ngModelChange)="onContentChange()"
                           class="premium-input" 
                           placeholder="Juan Pérez"
                         />
@@ -201,12 +210,12 @@ export interface GymIsolatedModeContent {
               <div class="sidebar-section">
                 <div class="section-header">
                   <span class="section-icon">💳</span>
-                  <h4>PLANES ({{ content.plans?.length || 0 }})</h4>
+                  <h4>PLANES ({{ editableContent.plans?.length || 0 }})</h4>
                   <button class="add-btn" (click)="addPlan()">+</button>
                 </div>
 
                 <div class="plans-list">
-                  <div class="plan-edit" *ngFor="let plan of content.plans; let i = index">
+                  <div class="plan-edit" *ngFor="let plan of editableContent.plans; let i = index">
                     <div class="plan-header">
                       <span class="plan-number">{{ i + 1 }}</span>
                       <button class="remove-btn" (click)="removePlan(i)">×</button>
@@ -217,6 +226,7 @@ export interface GymIsolatedModeContent {
                       <input 
                         type="text" 
                         [(ngModel)]="plan.name" 
+                        (ngModelChange)="onContentChange()"
                         class="premium-input" 
                         placeholder="Plan Básico"
                       />
@@ -228,13 +238,14 @@ export interface GymIsolatedModeContent {
                         <input 
                           type="text" 
                           [(ngModel)]="plan.price" 
+                          (ngModelChange)="onContentChange()"
                           class="premium-input" 
                           placeholder="29.99€"
                         />
                       </div>
                       <div class="control-group flex-1">
                         <label>
-                          <input type="checkbox" [(ngModel)]="plan.isPopular" />
+                          <input type="checkbox" [(ngModel)]="plan.isPopular" (ngModelChange)="onContentChange()" />
                           Popular
                         </label>
                       </div>
@@ -243,11 +254,11 @@ export interface GymIsolatedModeContent {
                     <div class="control-group">
                       <label>Características (una por línea)</label>
                       <textarea 
-                        [(ngModel)]="planFeaturesText" 
+                        [ngModel]="getPlanFeaturesText(i)"
+                        (ngModelChange)="updatePlanFeatures(i, $event)"
                         class="premium-input" 
                         rows="3"
                         placeholder="Acceso a sala&#10;Clases grupales&#10;Parking gratuito"
-                        (change)="updatePlanFeatures(i)"
                       ></textarea>
                     </div>
                   </div>
@@ -265,7 +276,8 @@ export interface GymIsolatedModeContent {
                   <label>Color de Fondo</label>
                   <input 
                     type="color" 
-                    [(ngModel)]="content.backgroundColor" 
+                    [(ngModel)]="editableContent.backgroundColor" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input color-input"
                   />
                 </div>
@@ -275,7 +287,8 @@ export interface GymIsolatedModeContent {
                     <label>Color de Texto</label>
                     <input 
                       type="color" 
-                      [(ngModel)]="content.textColor" 
+                      [(ngModel)]="editableContent.textColor" 
+                      (ngModelChange)="onContentChange()"
                       class="premium-input color-input"
                     />
                   </div>
@@ -283,7 +296,8 @@ export interface GymIsolatedModeContent {
                     <label>Color de Acento</label>
                     <input 
                       type="color" 
-                      [(ngModel)]="content.accentColor" 
+                      [(ngModel)]="editableContent.accentColor" 
+                      (ngModelChange)="onContentChange()"
                       class="premium-input color-input"
                     />
                   </div>
@@ -293,7 +307,8 @@ export interface GymIsolatedModeContent {
                   <label>Color del Botón</label>
                   <input 
                     type="color" 
-                    [(ngModel)]="content.buttonColor" 
+                    [(ngModel)]="editableContent.buttonColor" 
+                    (ngModelChange)="onContentChange()"
                     class="premium-input color-input"
                   />
                 </div>
@@ -302,65 +317,105 @@ export interface GymIsolatedModeContent {
           </div>
 
           <!-- Canvas Preview -->
-          <div class="isolated-canvas">
+          <div class="isolated-canvas" #canvasElement [class.show-grid]="showGrid">
             <div class="canvas-inner">
+              <!-- Draggable Wrapper -->
               <div 
-                class="preview-gym"
-                [style.background]="content.backgroundColor || '#0f172a'"
-                [style.color]="content.textColor || '#ffffff'"
+                class="draggable-wrapper"
+                [style.left.px]="currentPosition.x"
+                [style.top.px]="currentPosition.y"
+                [style.width.px]="currentSize.width"
+                [style.height.px]="currentSize.height"
+                (mousedown)="onMouseDown($event)"
               >
-                <div class="preview-header">
-                  <h1 class="preview-title">{{ content.gymName || 'FitPower Gym' }}</h1>
-                  <p class="preview-tagline">{{ content.tagline || 'Transforma tu cuerpo, transforma tu vida' }}</p>
-                  <p class="preview-description">{{ content.description || 'El mejor gimnasio de la ciudad' }}</p>
-                </div>
-                
-                <div class="preview-classes-section" *ngIf="content.classes && content.classes.length > 0">
-                  <h3 class="preview-section-title">Clases Destacadas</h3>
-                  <div class="preview-classes-grid">
-                    <div class="preview-class-card" *ngFor="let cls of getPreviewClasses()">
-                      <div class="preview-class-icon">🏋️</div>
-                      <h4>{{ cls.name || 'Clase' }}</h4>
-                      <p class="preview-class-desc">{{ cls.description || 'Descripción' }}</p>
-                      <div class="preview-class-meta">
-                        <span>{{ cls.duration || '60 min' }}</span>
-                        <span [class]="'intensity-' + (cls.intensity || 'media')">{{ cls.intensity || 'Media' }}</span>
+                <div 
+                  class="preview-gym"
+                  [style.background]="editableContent.backgroundColor || '#0f172a'"
+                  [style.color]="editableContent.textColor || '#ffffff'"
+                >
+                  <div class="preview-header">
+                    <h1 class="preview-title">{{ editableContent.gymName || 'FitPower Gym' }}</h1>
+                    <p class="preview-tagline">{{ editableContent.tagline || 'Transforma tu cuerpo, transforma tu vida' }}</p>
+                    <p class="preview-description">{{ editableContent.description || 'El mejor gimnasio de la ciudad' }}</p>
+                  </div>
+                  
+                  <div class="preview-classes-section" *ngIf="editableContent.classes && editableContent.classes.length > 0">
+                    <h3 class="preview-section-title">Clases Destacadas</h3>
+                    <div class="preview-classes-grid">
+                      <div class="preview-class-card" *ngFor="let cls of getPreviewClasses()">
+                        <div class="preview-class-icon">🏋️</div>
+                        <h4>{{ cls.name || 'Clase' }}</h4>
+                        <p class="preview-class-desc">{{ cls.description || 'Descripción' }}</p>
+                        <div class="preview-class-meta">
+                          <span>{{ cls.duration || '60 min' }}</span>
+                          <span [class]="'intensity-' + (cls.intensity || 'media')">{{ cls.intensity || 'Media' }}</span>
+                        </div>
+                        <p class="preview-class-schedule">{{ cls.schedule || 'Horario' }}</p>
                       </div>
-                      <p class="preview-class-schedule">{{ cls.schedule || 'Horario' }}</p>
+                    </div>
+                  </div>
+
+                  <div class="preview-plans-section" *ngIf="editableContent.plans && editableContent.plans.length > 0">
+                    <h3 class="preview-section-title">Planes de Membresía</h3>
+                    <div class="preview-plans-grid">
+                      <div 
+                        class="preview-plan-card" 
+                        *ngFor="let plan of editableContent.plans"
+                        [class.popular]="plan.isPopular"
+                      >
+                        <span class="popular-badge" *ngIf="plan.isPopular">Más Popular</span>
+                        <h4>{{ plan.name || 'Plan' }}</h4>
+                        <div class="preview-plan-price">{{ plan.price || '29.99€' }}</div>
+                        <ul class="preview-plan-features">
+                          <li *ngFor="let feature of plan.features">{{ feature }}</li>
+                        </ul>
+                      </div>
                     </div>
                   </div>
                 </div>
 
-                <div class="preview-plans-section" *ngIf="content.plans && content.plans.length > 0">
-                  <h3 class="preview-section-title">Planes de Membresía</h3>
-                  <div class="preview-plans-grid">
-                    <div 
-                      class="preview-plan-card" 
-                      *ngFor="let plan of content.plans"
-                      [class.popular]="plan.isPopular"
-                    >
-                      <span class="popular-badge" *ngIf="plan.isPopular">Más Popular</span>
-                      <h4>{{ plan.name || 'Plan' }}</h4>
-                      <div class="preview-plan-price">{{ plan.price || '29.99€' }}</div>
-                      <ul class="preview-plan-features">
-                        <li *ngFor="let feature of plan.features">{{ feature }}</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
+                <!-- Resize Handles -->
+                <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>
+                <div class="resize-handle n" (mousedown)="startResize($event, 'n')"></div>
+                <div class="resize-handle ne" (mousedown)="startResize($event, 'ne')"></div>
+                <div class="resize-handle e" (mousedown)="startResize($event, 'e')"></div>
+                <div class="resize-handle se" (mousedown)="startResize($event, 'se')"></div>
+                <div class="resize-handle s" (mousedown)="startResize($event, 's')"></div>
+                <div class="resize-handle sw" (mousedown)="startResize($event, 'sw')"></div>
+                <div class="resize-handle w" (mousedown)="startResize($event, 'w')"></div>
               </div>
             </div>
 
             <!-- Info Dock -->
             <div class="modern-position-dock">
               <div class="dock-item">
+                <span class="label">X</span>
+                <span class="value">{{ currentPosition.x }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">Y</span>
+                <span class="value">{{ currentPosition.y }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">W</span>
+                <span class="value">{{ currentSize.width }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
+                <span class="label">H</span>
+                <span class="value">{{ currentSize.height }}</span>
+              </div>
+              <div class="dock-divider"></div>
+              <div class="dock-item">
                 <span class="label">VARIANT</span>
-                <span class="value text-purple-400">{{ content.variant || 'energetic' }}</span>
+                <span class="value text-purple-400">{{ editableContent.variant || 'energetic' }}</span>
               </div>
               <div class="dock-divider"></div>
               <div class="dock-item">
                 <span class="label">CLASSES</span>
-                <span class="value">{{ content.classes?.length || 0 }}</span>
+                <span class="value">{{ editableContent.classes?.length || 0 }}</span>
               </div>
             </div>
           </div>
@@ -368,10 +423,16 @@ export interface GymIsolatedModeContent {
 
         <!-- Footer -->
         <div class="isolated-mode-footer">
-          <div class="footer-hint">Edita tu sección de gimnasio.</div>
+          <div class="footer-hint">
+            <span class="hint-item">G: Grid</span>
+            <span class="hint-item">S: Snap</span>
+            <span class="hint-item">R: Reset</span>
+            <span class="hint-item">Ctrl+Z: Undo</span>
+            <span class="hint-item">Ctrl+S: Save</span>
+          </div>
           <div class="footer-actions-btns">
             <button class="btn-clean secondary" (click)="cancel()">Cancelar</button>
-            <button class="btn-clean primary" (click)="apply()">Aplicar Cambios</button>
+            <button class="btn-clean primary" (click)="apply()">Guardar Cambios</button>
           </div>
         </div>
       </div>
@@ -379,14 +440,9 @@ export interface GymIsolatedModeContent {
   `,
   styleUrl: './editor-gym-isolated-mode.component.scss',
 })
-export class EditorGymIsolatedModeComponent implements OnInit, OnDestroy {
-  @Input() public config!: IsolatedModeConfig;
-  @Output() public closed = new EventEmitter<void>();
-  @Output() public applied = new EventEmitter<IsolatedModeConfig>();
+export class EditorGymIsolatedModeComponent extends BaseIsolatedModeComponent {
+  @ViewChild('canvasElement') canvasRef!: ElementRef;
 
-  public content: GymIsolatedModeContent = {};
-  public planFeaturesText: string = '';
-  
   private defaultClasses: GymClass[] = [
     { name: 'CrossFit', description: 'Entrenamiento funcional de alta intensidad', duration: '60 min', intensity: 'alta', schedule: 'L-V: 8:00, 18:00', instructor: 'Carlos Ruiz' },
     { name: 'Yoga', description: 'Clase de yoga para flexibilidad y relajación', duration: '75 min', intensity: 'baja', schedule: 'L-V: 7:00, 19:00', instructor: 'María García' },
@@ -399,11 +455,12 @@ export class EditorGymIsolatedModeComponent implements OnInit, OnDestroy {
     { name: 'VIP', price: '79.99€', features: ['Todo Premium', 'Entrenador personal', 'Nutrición'], isPopular: false },
   ];
 
-  ngOnInit() {
+  protected initializeState(): void {
     const configClasses = this.config?.content?.['classes'] as GymClass[] | undefined;
     const configPlans = this.config?.content?.['plans'] as GymMembershipPlan[] | undefined;
     
-    this.content = {
+    // Initialize content
+    this.editableContent = {
       gymName: this.config?.content?.['gymName'] || 'FitPower Gym',
       tagline: this.config?.content?.['tagline'] || 'Transforma tu cuerpo, transforma tu vida',
       description: this.config?.content?.['description'] || 'El mejor gimnasio de la ciudad',
@@ -412,40 +469,32 @@ export class EditorGymIsolatedModeComponent implements OnInit, OnDestroy {
       textColor: this.config?.content?.['textColor'] || '#ffffff',
       accentColor: this.config?.content?.['accentColor'] || '#ef4444',
       buttonColor: this.config?.content?.['buttonColor'] || '#ef4444',
-      classes: configClasses || this.defaultClasses,
-      plans: configPlans || this.defaultPlans,
+      classes: configClasses || [...this.defaultClasses],
+      plans: configPlans || [...this.defaultPlans],
     };
 
-    document.addEventListener('keydown', this.handleKeydown);
+    // Initialize styles
+    this.editableStyles = this.config?.styles ? { ...this.config.styles } : {};
+
+    // Initialize position and size
+    this.currentPosition = this.config?.position || { x: 50, y: 50 };
+    this.currentSize = this.config?.size || { width: 700, height: 600 };
+    this.initialPosition = { ...this.currentPosition };
+    this.initialSize = { ...this.currentSize };
+
+    // Save initial state
+    this.saveState();
   }
 
-  ngOnDestroy() {
-    document.removeEventListener('keydown', this.handleKeydown);
+  protected getCanvasElement(): HTMLElement | null {
+    return this.canvasRef?.nativeElement || null;
   }
 
-  private handleKeydown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      this.close();
+  addClass(): void {
+    if (!this.editableContent.classes) {
+      this.editableContent.classes = [];
     }
-  };
-
-  public close() {
-    this.closed.emit();
-  }
-
-  public cancel() {
-    this.closed.emit();
-  }
-
-  public onOverlayClick(e: Event) {
-    this.closed.emit();
-  }
-
-  public addClass() {
-    if (!this.content.classes) {
-      this.content.classes = [];
-    }
-    this.content.classes.push({
+    this.editableContent.classes.push({
       name: 'Nueva Clase',
       description: 'Descripción de la nueva clase',
       duration: '60 min',
@@ -453,51 +502,74 @@ export class EditorGymIsolatedModeComponent implements OnInit, OnDestroy {
       schedule: 'L-V: 9:00',
       instructor: 'Instructor',
     });
+    this.saveState();
   }
 
-  public removeClass(index: number) {
-    if (this.content.classes && index >= 0 && index < this.content.classes.length) {
-      this.content.classes.splice(index, 1);
+  removeClass(index: number): void {
+    if (this.editableContent.classes && index >= 0 && index < this.editableContent.classes.length) {
+      this.editableContent.classes.splice(index, 1);
+      this.saveState();
     }
   }
 
-  public addPlan() {
-    if (!this.content.plans) {
-      this.content.plans = [];
+  addPlan(): void {
+    if (!this.editableContent.plans) {
+      this.editableContent.plans = [];
     }
-    this.content.plans.push({
+    this.editableContent.plans.push({
       name: 'Nuevo Plan',
       price: '39.99€',
       features: ['Característica 1', 'Característica 2'],
       isPopular: false,
     });
+    this.saveState();
   }
 
-  public removePlan(index: number) {
-    if (this.content.plans && index >= 0 && index < this.content.plans.length) {
-      this.content.plans.splice(index, 1);
+  removePlan(index: number): void {
+    if (this.editableContent.plans && index >= 0 && index < this.editableContent.plans.length) {
+      this.editableContent.plans.splice(index, 1);
+      this.saveState();
     }
   }
 
-  public updatePlanFeatures(planIndex: number) {
-    if (this.content.plans && this.content.plans[planIndex]) {
-      this.content.plans[planIndex].features = this.planFeaturesText.split('\n').filter(f => f.trim());
+  getPlanFeaturesText(planIndex: number): string {
+    if (this.editableContent.plans && this.editableContent.plans[planIndex]) {
+      return this.editableContent.plans[planIndex].features.join('\n');
+    }
+    return '';
+  }
+
+  updatePlanFeatures(planIndex: number, featuresText: string): void {
+    if (this.editableContent.plans && this.editableContent.plans[planIndex]) {
+      this.editableContent.plans[planIndex].features = featuresText.split('\n').filter(f => f.trim());
+      this.saveState();
     }
   }
 
-  public getPreviewClasses(): GymClass[] {
-    return this.content.classes || this.defaultClasses;
+  getPreviewClasses(): GymClass[] {
+    return this.editableContent.classes || this.defaultClasses;
   }
 
-  public apply() {
-    this.applied.emit({
+  override apply(): void {
+    const finalConfig: IsolatedModeConfig = {
       ...this.config,
-      content: { ...this.content },
+      content: { ...this.editableContent },
+      styles: {
+        ...this.editableStyles,
+        width: this.currentSize.width + 'px',
+        height: this.currentSize.height + 'px',
+        position: 'absolute',
+        left: this.currentPosition.x + 'px',
+        top: this.currentPosition.y + 'px'
+      },
+      position: { ...this.currentPosition },
+      size: { ...this.currentSize },
       metadata: {
         createdAt: this.config?.metadata?.createdAt || Date.now(),
         modifiedAt: Date.now(),
         modifiedBy: this.config?.metadata?.modifiedBy,
       },
-    });
+    };
+    this.applied.emit(finalConfig);
   }
 }

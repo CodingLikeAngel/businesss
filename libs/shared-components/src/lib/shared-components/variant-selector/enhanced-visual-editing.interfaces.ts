@@ -430,6 +430,15 @@ export interface IsolatedModeConfig {
   /** Available variants */
   variants?: string[];
   
+  /** Position on canvas */
+  position?: { x: number; y: number };
+  
+  /** Size of component */
+  size?: { width: number; height: number };
+  
+  /** Canvas size for positioning context */
+  canvasSize?: { width: number; height: number };
+  
   /** Original config for comparison */
   originalConfig?: IsolatedModeConfig;
   
