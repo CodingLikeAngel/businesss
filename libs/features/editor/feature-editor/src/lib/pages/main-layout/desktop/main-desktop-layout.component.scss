@@ -250,7 +250,8 @@
   :host-context(body.isolated-mode-active) & {
     z-index: 9999999 !important;
     isolation: auto !important;
-    overflow: visible !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important; // Block horizontal scroll in isolated mode
     padding: 0 !important; /* Remove padding to allow full coverage */
   }
 }
@@ -390,7 +391,8 @@
   .canvas-area {
     padding: 0;
     background: #020617;
-    overflow: visible !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important; // Block horizontal scroll in preview mode
     display: block !important;
     height: auto !important;
     min-height: calc(100vh - 72px);
@@ -403,12 +405,13 @@
   }
 
   .preview-frame.frame-desktop {
-    width: 100vw;
+    width: 100%; // Change from 100vw to 100% to avoid sidebar overflow
     height: auto !important;
     min-height: calc(100vh - 72px);
     border-radius: 0;
     border: none;
-    overflow: visible !important;
+    overflow-y: visible !important;
+    overflow-x: hidden !important;
 
     .frame-content {
       display: block !important;
@@ -419,7 +422,8 @@
       background-size: var(--page-bg-size, cover);
       background-attachment: var(--page-bg-attachment, scroll);
       background-position: center;
-      overflow: visible !important;
+      overflow-y: visible !important;
+      overflow-x: hidden !important;
       min-height: calc(100vh - 72px);
       position: relative;
 
