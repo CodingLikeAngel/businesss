@@ -42,8 +42,8 @@ export class AICopilotService {
     return this.orchestrator.executeDesignAction(instruction, context).pipe(
       map(response => {
         try {
-          // Extract JSON from response
-          const text = response.candidates[0].content.parts[0].text;
+          // Extract JSON from standardized text response
+          const text = response.text;
           const jsonMatch = text.match(/\{[\s\S]*\}/);
           if (jsonMatch) {
             return JSON.parse(jsonMatch[0]) as AICopilotResponse;
@@ -54,7 +54,7 @@ export class AICopilotService {
           return {
             type: 'style_update',
             data: {},
-            explanation: 'Lo siento, no pude procesar esa instrucción de diseño. Inténtalo de nuevo.'
+            explanation: 'Lo siento, no pude procesar esa instrucción de diseño con el modelo actual. Inténtalo de nuevo.'
           } as AICopilotResponse;
         }
       })

@@ -36,20 +36,14 @@ export class AIOrchestratorService {
     `;
 
     return this.aiService.sendMessage([refinementPrompt]).pipe(
-      map(response => {
-        try {
-          return response.candidates[0].content.parts[0].text.trim();
-        } catch (e) {
-          return instruction; // Fallback to original
-        }
-      })
+      map(response => response.text.trim())
     );
   }
 
   /**
    * Orchestrates the call to the Master Model
    */
-  executeDesignAction(instruction: string, componentContext: any): Observable<any> {
+  executeDesignAction(instruction: string, componentContext: any): Observable<{ text: string }> {
     return this.refinePrompt(instruction).pipe(
       switchMap(refinedInstruction => {
         console.log('AI Orchestrator - Refined Prompt:', refinedInstruction);

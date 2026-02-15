@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { environment } from './environments/environment';
-
-
 
 @Injectable({
   providedIn: 'root'
@@ -14,12 +12,26 @@ export class AIService {
   private geminiUrl = environment.geminiUrl;
   private openAiKey = environment.openAiKey;
   private geminiKey = environment.geminiKey;
-  useGemini = true; // Cambia a `false` para usar OpenAI
+  private mistralUrl = (environment as any).mistralUrl;
+  private mistralKey = (environment as any).mistralKey;
+  
+  currentProvider: 'gemini' | 'openai' | 'mistral' = 'mistral'; 
 
   constructor(private http: HttpClient) {}
 
-  sendMessage(messages: string[]): Observable<any> {
-    return this.useGemini ? this.sendGeminiMessage(messages) : this.sendOpenAIMessage(messages);
+  /**
+   * Sends a message to the currently active AI provider and returns a standardized response.
+   * @returns Observable<{ text: string }>
+   */
+  sendMessage(messages: string[]): Observable<{ text: string }> {
+    switch (this.currentProvider) {
+      case 'openai': 
+        return this.sendOpenAIMessage(messages).pipe(map(res => ({ text: res.choices[0].message.content })));
+      case 'mistral': 
+        return this.sendMistralMessage(messages).pipe(map(res => ({ text: res.choices[0].message.content })));
+      default: 
+        return this.sendGeminiMessage(messages).pipe(map(res => ({ text: res.candidates[0].content.parts[0].text })));
+    }
   }
   
   private sendOpenAIMessage(messages: string[]): Observable<any> {
@@ -49,5 +61,18 @@ export class AIService {
   
     return this.http.post<any>(`${this.geminiUrl}?key=${this.geminiKey}`, body, { headers });
   }
-  
+
+  private sendMistralMessage(messages: string[]): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.mistralKey}`
+    });
+
+    const body = {
+      model: 'mistral-tiny', 
+      messages: messages.map(content => ({ role: 'user', content }))
+    };
+
+    return this.http.post<any>(this.mistralUrl, body, { headers });
+  }
 }
