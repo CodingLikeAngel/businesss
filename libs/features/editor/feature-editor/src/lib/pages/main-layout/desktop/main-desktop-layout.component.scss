@@ -344,18 +344,34 @@
     width: 0 !important;
     margin: 0;
     opacity: 0;
+    pointer-events: none;
+  }
+
+  &.builder-shell {
+    height: auto !important;
+    min-height: 100vh;
+    overflow: visible !important;
+  }
+
+  .workspace {
+    height: auto !important;
+    min-height: calc(100vh - 72px);
+    overflow: visible !important;
   }
 
   .canvas-area {
     padding: 0;
     background: #020617;
-    overflow-y: auto !important;
-    align-items: flex-start !important;
+    overflow: visible !important;
+    display: block !important;
+    height: auto !important;
+    min-height: calc(100vh - 72px);
   }
 
   .canvas-wrapper {
     align-items: flex-start !important;
     min-height: 100%;
+    perspective: none !important; /* Disable perspective in preview to avoid clipping bugs */
   }
 
   .preview-frame.frame-desktop {
@@ -367,10 +383,19 @@
     overflow: visible !important;
 
     .frame-content {
+      display: block !important;
       height: auto !important;
       overflow: visible !important;
       min-height: calc(100vh - 72px);
     }
+  }
+
+  /* Robustness: Force no clipping in scroller path */
+  .canvas-wrapper {
+    align-items: flex-start !important;
+    min-height: 100%;
+    perspective: none !important;
+    overflow: visible !important;
   }
 }
 

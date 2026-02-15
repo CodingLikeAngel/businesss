@@ -105,6 +105,17 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
     }
   }
 
+  override ngOnInit() {
+    super.ngOnInit();
+    
+    // Failsafe: Ensure isolated-mode-active is removed when switching to preview
+    this.variantService.builderStep$.subscribe(step => {
+      if (step === 'preview') {
+        document.body.classList.remove('isolated-mode-active');
+      }
+    });
+  }
+
   override returnToEditor() {
     this.variantService.setBuilderStep('editor');
   }
