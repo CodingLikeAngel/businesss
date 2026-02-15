@@ -24,7 +24,8 @@ import * as PageActions from '../../../../store/actions/page.actions';
       class="editor-section"
       [class.preview-mode]="isPreviewMode && !showEditorControls"
       [style.minHeight.px]="sectionHeight"
-      [style.position]="'relative'">
+      [style.position]="'relative'"
+      [style.backgroundColor]="section.styles?.['backgroundColor']">
       
       <!-- Section Header -->
       <div *ngIf="!isPreviewMode || showEditorControls" class="section-header">
@@ -172,6 +173,23 @@ import * as PageActions from '../../../../store/actions/page.actions';
       z-index: 1;
     }
 
+    /* Standard Diagonal Pattern for consistency across all sections */
+    .editor-section::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.02) 10px,
+        rgba(255, 255, 255, 0.02) 20px
+      );
+      opacity: 0.8;
+    }
+
     .isolated-mode-active .editor-section {
       overflow: visible !important;
       z-index: 1 !important;
@@ -276,13 +294,7 @@ import * as PageActions from '../../../../store/actions/page.actions';
 
     .box-container {
       position: relative;
-      background: repeating-linear-gradient(
-        45deg,
-        transparent,
-        transparent 10px,
-        rgba(255, 255, 255, 0.02) 10px,
-        rgba(255, 255, 255, 0.02) 20px
-      );
+      z-index: 1;
     }
 
     .draggable-box {

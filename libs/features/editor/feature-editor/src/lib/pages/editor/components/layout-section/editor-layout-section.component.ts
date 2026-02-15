@@ -562,6 +562,23 @@ interface ComponentDefaultSize {
       box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
     }
 
+    /* Standard Diagonal Pattern for consistency across all sections */
+    .layout-section::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(255, 255, 255, 0.02) 10px,
+        rgba(255, 255, 255, 0.02) 20px
+      );
+      opacity: 0.8;
+    }
+
     .layout-section.preview-mode {
       border: none !important;
       background: transparent !important;

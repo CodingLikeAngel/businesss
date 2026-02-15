@@ -23,6 +23,7 @@
 .hero-section {
   // Common properties - Standardized
   @include shared.texture-noise;
+  @include shared.premium-pattern;
   @include shared.apply-all-variants('hero-section--');
   
   /* Background parity with UI component - Allow inheritance for global bg */
