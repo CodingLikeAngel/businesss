@@ -1,0 +1,212 @@
+import {
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  ViewContainerRef,
+  inject,
+  OnChanges,
+  SimpleChanges,
+  OnInit,
+  OnDestroy,
+  CUSTOM_ELEMENTS_SCHEMA,
+} from '@angular/core';
+import { getSectionComponent } from './section-type-registry';
+import { PageSection } from '@negocio/shared-components';
+import { BaseEditorSectionComponent } from '../base-editor-section.component';
+import type {
+  HeroConfig,
+  FeaturesConfig,
+  StatsConfig,
+  GalleryConfig,
+  TitleConfig,
+  ChartConfig,
+  NavBarConfig,
+  FooterConfig,
+  BubbleConfig,
+  CardConfig,
+  ServiceCardsConfig,
+  FaqConfig,
+  PricingConfig,
+  PromotionsConfig,
+  ProductsConfig,
+  TestimonialsConfig,
+} from '@negocio/shared-components';
+
+/** Context passed to dynamically created section components. All configs optional so any section can ignore unused ones. */
+export interface EditorSectionRendererContext {
+  section: PageSection;
+  componentVariants: { [key: string]: string };
+  globalVariant: string;
+  heroConfig?: HeroConfig;
+  featuresConfig?: FeaturesConfig;
+  statsConfig?: StatsConfig;
+  galleryConfig?: GalleryConfig;
+  titleConfig?: TitleConfig;
+  chartConfig?: ChartConfig;
+  navBarConfig?: NavBarConfig;
+  footerConfig?: FooterConfig;
+  bubbleConfig?: BubbleConfig;
+  cardConfig?: CardConfig;
+  serviceCardsConfig?: ServiceCardsConfig;
+  faqConfig?: FaqConfig;
+  pricingConfig?: PricingConfig;
+  promotionsConfig?: PromotionsConfig;
+  productsConfig?: ProductsConfig;
+  testimonialsConfig?: TestimonialsConfig;
+}
+
+@Component({
+  selector: 'lib-editor-section-renderer',
+  standalone: true,
+  template: '',
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+})
+export class EditorSectionRendererComponent implements OnInit, OnChanges, OnDestroy {
+  private viewContainerRef = inject(ViewContainerRef);
+
+  @Input() section!: PageSection;
+  @Input() componentVariants: { [key: string]: string } = {};
+  @Input() globalVariant = 'default';
+  @Input() heroConfig?: HeroConfig;
+  @Input() featuresConfig?: FeaturesConfig;
+  @Input() statsConfig?: StatsConfig;
+  @Input() galleryConfig?: GalleryConfig;
+  @Input() titleConfig?: TitleConfig;
+  @Input() chartConfig?: ChartConfig;
+  @Input() navBarConfig?: NavBarConfig;
+  @Input() footerConfig?: FooterConfig;
+  @Input() bubbleConfig?: BubbleConfig;
+  @Input() cardConfig?: CardConfig;
+  @Input() serviceCardsConfig?: ServiceCardsConfig;
+  @Input() faqConfig?: FaqConfig;
+  @Input() pricingConfig?: PricingConfig;
+  @Input() promotionsConfig?: PromotionsConfig;
+  @Input() productsConfig?: ProductsConfig;
+  @Input() testimonialsConfig?: TestimonialsConfig;
+
+  @Output() elementMoved = new EventEmitter<{ bounds: unknown; elementId: string }>();
+  @Output() elementResized = new EventEmitter<{ bounds: unknown; elementId: string }>();
+  @Output() sectionResized = new EventEmitter<{ section: PageSection; bounds: unknown }>();
+
+  private componentRef: import('@angular/core').ComponentRef<unknown> | null = null;
+  private outputSubscriptions: (() => void)[] = [];
+
+  ngOnInit(): void {
+    this.renderSection();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    const typeChanged =
+      changes['section'] &&
+      changes['section'].currentValue?.type !== changes['section'].previousValue?.type;
+    if (typeChanged && this.componentRef) {
+      this.destroyCurrent();
+      this.renderSection();
+    } else if (this.componentRef) {
+      this.updateInputs();
+    } else if (this.section?.type) {
+      this.renderSection();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.destroyCurrent();
+  }
+
+  private getContext(): EditorSectionRendererContext {
+    return {
+      section: this.section,
+      componentVariants: this.componentVariants,
+      globalVariant: this.globalVariant,
+      heroConfig: this.heroConfig,
+      featuresConfig: this.featuresConfig,
+      statsConfig: this.statsConfig,
+      galleryConfig: this.galleryConfig,
+      titleConfig: this.titleConfig,
+      chartConfig: this.chartConfig,
+      navBarConfig: this.navBarConfig,
+      footerConfig: this.footerConfig,
+      bubbleConfig: this.bubbleConfig,
+      cardConfig: this.cardConfig,
+      serviceCardsConfig: this.serviceCardsConfig,
+      faqConfig: this.faqConfig,
+      pricingConfig: this.pricingConfig,
+      promotionsConfig: this.promotionsConfig,
+      productsConfig: this.productsConfig,
+      testimonialsConfig: this.testimonialsConfig,
+    };
+  }
+
+  private renderSection(): void {
+    if (!this.section?.type) return;
+    const ComponentClass = getSectionComponent(this.section.type);
+    this.componentRef = this.viewContainerRef.createComponent(ComponentClass);
+    this.setAllInputs(this.componentRef);
+    this.subscribeOutputs(this.componentRef.instance);
+  }
+
+  private setAllInputs(ref: import('@angular/core').ComponentRef<unknown>): void {
+    const ctx = this.getContext();
+    const set = (key: string, value: unknown) => {
+      try {
+        ref.setInput(key, value);
+      } catch {
+        // component may not have this input
+      }
+    };
+    set('section', ctx.section);
+    set('componentVariants', ctx.componentVariants);
+    set('globalVariant', ctx.globalVariant);
+    set('heroConfig', ctx.heroConfig);
+    set('featuresConfig', ctx.featuresConfig);
+    set('statsConfig', ctx.statsConfig);
+    set('galleryConfig', ctx.galleryConfig);
+    set('titleConfig', ctx.titleConfig);
+    set('chartConfig', ctx.chartConfig);
+    set('navBarConfig', ctx.navBarConfig);
+    set('footerConfig', ctx.footerConfig);
+    set('bubbleConfig', ctx.bubbleConfig);
+    set('cardConfig', ctx.cardConfig);
+    set('serviceCardsConfig', ctx.serviceCardsConfig);
+    set('faqConfig', ctx.faqConfig);
+    set('pricingConfig', ctx.pricingConfig);
+    set('promotionsConfig', ctx.promotionsConfig);
+    set('productsConfig', ctx.productsConfig);
+    set('testimonialsConfig', ctx.testimonialsConfig);
+  }
+
+  private updateInputs(): void {
+    if (this.componentRef) this.setAllInputs(this.componentRef);
+  }
+
+  private subscribeOutputs(instance: unknown): void {
+    this.clearOutputSubscriptions();
+    const base = instance as Partial<BaseEditorSectionComponent>;
+    if (base.elementMoved?.subscribe) {
+      const sub = base.elementMoved.subscribe((e) => this.elementMoved.emit(e));
+      this.outputSubscriptions.push(() => sub.unsubscribe());
+    }
+    if (base.elementResized?.subscribe) {
+      const sub = base.elementResized.subscribe((e) => this.elementResized.emit(e));
+      this.outputSubscriptions.push(() => sub.unsubscribe());
+    }
+    if (base.sectionResized?.subscribe) {
+      const sub = base.sectionResized.subscribe((e) => this.sectionResized.emit(e));
+      this.outputSubscriptions.push(() => sub.unsubscribe());
+    }
+  }
+
+  private clearOutputSubscriptions(): void {
+    this.outputSubscriptions.forEach((unsub) => unsub());
+    this.outputSubscriptions = [];
+  }
+
+  private destroyCurrent(): void {
+    this.clearOutputSubscriptions();
+    if (this.componentRef) {
+      this.componentRef.destroy();
+      this.componentRef = null;
+    }
+  }
+}

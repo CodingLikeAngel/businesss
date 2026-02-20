@@ -113,7 +113,7 @@ El editor es una aplicación compleja: **layout principal (desktop/mobile)**, **
 
 | # | Acción | Prioridad | Estado |
 |---|--------|-----------|--------|
-| 5.1 | Extraer el renderizado de secciones a un componente o directiva que use un registro (map) tipo → componente, para reducir el tamaño del template principal. | Media | Pendiente |
+| 5.1 | Extraer el renderizado de secciones a un componente o directiva que use un registro (map) tipo → componente, para reducir el tamaño del template principal. | Media | ✅ Hecho: `EditorSectionRendererComponent` + `section-type-registry.ts` (map tipo → componente); carga dinámica con `ViewContainerRef.createComponent()`; desktop y mobile usan el renderer; templates ~98 y ~50 líneas. |
 | 5.2 | Añadir tests de integración: cargar página, seleccionar sección, abrir modo aislado, aplicar, preview, undo. | Media | Pendiente |
 | 5.3 | Unificar donde sea posible el template mobile/desktop de secciones (un solo template con clases responsive en vez de dos bloques). | Baja | Pendiente |
 
