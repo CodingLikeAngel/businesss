@@ -125,28 +125,31 @@ export class EditorStatsSectionComponent extends EnhancedBaseEditorSectionCompon
   }
 
   openIsolatedMode(event: MouseEvent): void {
-    event.stopPropagation();
+    event?.stopPropagation?.();
+    event?.preventDefault?.();
     this.isolatedConfig = {
       sectionId: this.section.id,
       elementId: this.section.id + '_stats_wrapper',
       type: 'stats',
       content: { ...this.section.content },
-      styles: { ...this.section.styles },
+      styles: { ...(this.section.styles || {}) },
       position: { x: 0, y: 0 },
       size: { width: 900, height: 500 }
     };
+    document.body.classList.add('isolated-mode-active');
     this.showIsolatedMode = true;
   }
 
   onIsolatedModeClosed(): void {
+    document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 
   onIsolatedModeApplied(config: IsolatedModeConfig): void {
     this.variantService.updateSectionInCurrentPage(this.section.id, {
       content: { ...this.section.content, ...config.content },
-      styles: { ...this.section.styles, ...config.styles }
+      styles: { ...(this.section.styles || {}), ...(config.styles || {}) }
     });
-    this.showIsolatedMode = false;
+    this.onIsolatedModeClosed();
   }
 }
