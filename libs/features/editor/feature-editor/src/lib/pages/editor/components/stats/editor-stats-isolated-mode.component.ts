@@ -65,6 +65,14 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                   <span class="section-icon">📈</span>
                   <h4>DATOS DESTACADOS</h4>
                 </div>
+                <div class="control-group">
+                  <label>Título de sección</label>
+                  <input type="text" [(ngModel)]="editableContent.title" (ngModelChange)="onContentChange()" class="premium-input-mini" placeholder="Nuestras Métricas">
+                </div>
+                <div class="control-group">
+                  <label>Subtítulo</label>
+                  <input type="text" [(ngModel)]="editableContent.subtitle" (ngModelChange)="onContentChange()" class="premium-input-mini" placeholder="Indicadores clave">
+                </div>
                 
                 <div class="item-list">
                   <div *ngFor="let item of editableItems; let i = index" 
@@ -159,8 +167,10 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                      (mousedown)="onMouseDown($event)">
                   
                   <lib-ui-components-stats-section
-                    [variant]="editableContent.variant"
-                    [stats]="editableItems"
+                    [title]="editableContent.title || 'Nuestras Métricas'"
+                    [subtitle]="editableContent.subtitle || 'Indicadores clave'"
+                    [variant]="editableContent.variant || 'default'"
+                    [stats]="statsForPreview"
                     [customStyles]="editableStyles"
                     style="width: 100%; display: block;">
                   </lib-ui-components-stats-section>
@@ -249,14 +259,41 @@ export class EditorStatsIsolatedModeComponent extends BaseIsolatedModeComponent 
     return this.canvasRef?.nativeElement;
   }
 
+  /** Map editable form (label, value, suffix, icon) to StatItem for the UI component */
+  get statsForPreview(): any[] {
+    return (this.editableItems || []).map((item: any) => ({
+      icon: item.icon ?? '📊',
+      label: item.label ?? 'Métrica',
+      value: item.value ?? '0',
+      description: item.description ?? item.suffix ?? '',
+      progress: item.progress,
+      trend: item.trend,
+      trendValue: item.trendValue,
+      unit: item.unit
+    }));
+  }
+
   protected override initializeState() {
     this.editableContent = { 
         ...this.config.content,
-        variant: this.config.content.variant || 'modern',
-        columns: this.config.content.columns || 4,
+        title: this.config.content.title ?? 'Nuestras Métricas',
+        subtitle: this.config.content.subtitle ?? 'Indicadores clave',
+        variant: this.config.content.variant || 'default',
+        columns: this.config.content.columns ?? 4,
         animate: this.config.content.animate !== false
     };
-    this.editableItems = JSON.parse(JSON.stringify(this.config.content.items || []));
+    const rawItems = this.config.content.items || [];
+    this.editableItems = rawItems.map((it: any) => ({
+      label: it.label ?? 'Métrica',
+      value: typeof it.value === 'number' ? String(it.value) : (it.value ?? '0'),
+      suffix: it.unit ?? it.suffix ?? '',
+      icon: it.icon ?? '📊',
+      description: it.description,
+      progress: it.progress,
+      trend: it.trend,
+      trendValue: it.trendValue,
+      unit: it.unit
+    }));
     this.editableStyles = { 
         ...this.config.styles,
         accentColor: this.config.styles.accentColor || '#3b82f6'
@@ -317,11 +354,23 @@ export class EditorStatsIsolatedModeComponent extends BaseIsolatedModeComponent 
   }
 
   override apply() {
+    const itemsAsStatItem = this.editableItems.map((item: any) => ({
+      icon: item.icon ?? '📊',
+      label: item.label ?? 'Métrica',
+      value: item.value ?? '0',
+      description: item.description ?? item.suffix ?? '',
+      progress: item.progress,
+      trend: item.trend,
+      trendValue: item.trendValue,
+      unit: item.unit ?? item.suffix
+    }));
     this.applied.emit({
       ...this.config,
       content: { 
         ...this.editableContent, 
-        items: this.editableItems
+        title: this.editableContent.title,
+        subtitle: this.editableContent.subtitle,
+        items: itemsAsStatItem
       },
       styles: {
         ...this.editableStyles,
