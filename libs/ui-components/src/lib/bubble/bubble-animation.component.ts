@@ -41,7 +41,7 @@ export interface BubbleCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './bubble-animation.component.html',
-  styleUrls: ['./bubble-animation.component.scss'],
+  styleUrl: './bubble-animation.component.scss',
   encapsulation: ViewEncapsulation.None
 })
 export class BubbleAnimationComponent implements AfterViewInit, OnDestroy {

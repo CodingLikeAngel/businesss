@@ -25,7 +25,7 @@ export interface Image1CustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './image-1.component.html',
-  styleUrls: ['./image-1.component.scss'],
+  styleUrl: './image-1.component.scss',
 })
 export class UIImage1Component {
   src = input<string>('https://via.placeholder.com/300');

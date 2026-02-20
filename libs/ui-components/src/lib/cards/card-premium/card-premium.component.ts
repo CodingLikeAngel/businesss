@@ -125,7 +125,7 @@ export interface CardPremiumCustomStyles {
       </div>
     </div>
   `,
-  styleUrls: ['./card-premium.component.scss'],
+  styleUrl: './card-premium.component.scss',
 })
 export class UICardPremiumComponent {
   config = input<CardPremiumConfig>({

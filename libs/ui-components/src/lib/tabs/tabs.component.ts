@@ -27,7 +27,7 @@ export interface TabsCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './tabs.component.html',
-  styleUrls: ['./tabs.component.scss'],
+  styleUrl: './tabs.component.scss',
 })
 export class UITabsComponent implements OnInit {
   variant = input<TabsVariantType>('secondary');

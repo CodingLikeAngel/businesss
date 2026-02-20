@@ -30,7 +30,7 @@ export interface TableCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './table.component.html',
-  styleUrls: ['./table.component.scss'],
+  styleUrl: './table.component.scss',
 })
 export class UITableComponent {
   variant = input<TableVariantType>('secondary');

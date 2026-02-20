@@ -23,7 +23,7 @@ export interface HeaderCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './header.component.html',
-  styleUrls: ['./header.component.scss'],
+  styleUrl: './header.component.scss',
 })
 export class UIHeaderComponent {
   title = input('Header Title');

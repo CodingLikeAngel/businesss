@@ -54,7 +54,7 @@ export interface FooterCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './footer.component.html',
-  styleUrls: ['./footer.component.scss'],
+  styleUrl: './footer.component.scss',
 })
 export class UIFooterComponent implements OnInit {
   dark = input(false);

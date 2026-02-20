@@ -17,7 +17,7 @@ export interface SpacerCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './spacer.component.html',
-  styleUrls: ['./spacer.component.scss'],
+  styleUrl: './spacer.component.scss',
 })
 export class UISpacerComponent {
   variant = input<SpacerVariantType>('empty');

@@ -31,7 +31,7 @@ export interface Input2Option {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './input-2.component.html',
-  styleUrls: ['./input-2.component.scss'],
+  styleUrl: './input-2.component.scss',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

@@ -33,7 +33,7 @@ export interface SpinnerContext {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './spinner.component.html',
-  styleUrls: ['./spinner.component.scss'],
+  styleUrl: './spinner.component.scss',
 })
 export class UISpinnerComponent {
   variant = input<SpinnerVariantType>('secondary');

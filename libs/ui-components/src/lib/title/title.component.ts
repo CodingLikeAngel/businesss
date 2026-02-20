@@ -29,7 +29,7 @@ export interface TitleCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './title.component.html',
-  styleUrls: ['./title.component.scss'],
+  styleUrl: './title.component.scss',
 })
 export class UITitleComponent {
   level = input<TitleLevel>('h1');

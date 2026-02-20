@@ -23,7 +23,7 @@ export interface Chip3CustomStyles {
   imports: [CommonModule, NgIconComponent],
   providers: [provideIcons({ heroXMark, heroCheck })],
   templateUrl: './chip-3.component.html',
-  styleUrls: ['./chip-3.component.scss'],
+  styleUrl: './chip-3.component.scss',
 })
 export class UIChip3Component {
   variant = input<Chip3VariantType>('secondary');

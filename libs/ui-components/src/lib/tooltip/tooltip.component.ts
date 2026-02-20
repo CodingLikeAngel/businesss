@@ -26,7 +26,7 @@ export interface TooltipCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './tooltip.component.html',
-  styleUrls: ['./tooltip.component.scss'],
+  styleUrl: './tooltip.component.scss',
 })
 export class UITooltipComponent {
   variant = input<TooltipVariantType>('secondary');

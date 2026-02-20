@@ -17,7 +17,7 @@ export interface List1CustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './list-1.component.html',
-  styleUrls: ['./list-1.component.scss'],
+  styleUrl: './list-1.component.scss',
 })
 export class UIList1Component {
   variant = input<List1VariantType>('secondary');

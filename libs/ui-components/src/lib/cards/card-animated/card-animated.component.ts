@@ -26,7 +26,7 @@ export interface AnimatedCardCustomStyles {
   standalone: true,
   imports: [CommonModule, UIButtonComponent],
   templateUrl: './card-animated.component.html',
-  styleUrls: ['./card-animated.component.scss'],
+  styleUrl: './card-animated.component.scss',
 })
 export class UICardAnimatedComponent {
   icon = input('🌟');

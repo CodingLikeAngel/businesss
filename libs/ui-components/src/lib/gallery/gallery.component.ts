@@ -25,7 +25,7 @@ export interface GalleryImage {
   standalone: true,
   imports: [CommonModule], // Agrega UIImageComponent aquí
   templateUrl: './gallery.component.html',
-  styleUrls: ['./gallery.component.scss'],
+  styleUrl: './gallery.component.scss',
   encapsulation: ViewEncapsulation.None
 })
 export class UIGalleryComponent implements OnInit, AfterViewInit, OnDestroy {

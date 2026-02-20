@@ -7,7 +7,7 @@ import { isPlatformBrowser } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './forest-animation.component.html',
-  styleUrls: ['./forest-animation.component.scss'],
+  styleUrl: './forest-animation.component.scss',
 })
 export class ForestAnimationComponent implements AfterViewInit, OnDestroy {
   variant = input<'enchanted' | 'mystic' | 'ancient' | 'twilight' | 'frosty' | 'jungle' | 'desert' | 'candy' | 'oceanic' | 'fiery'>('enchanted');

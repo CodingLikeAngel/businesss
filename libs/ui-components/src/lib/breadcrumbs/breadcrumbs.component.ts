@@ -18,7 +18,7 @@ export interface BreadcrumbsCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './breadcrumbs.component.html',
-  styleUrls: ['./breadcrumbs.component.scss']
+  styleUrl: './breadcrumbs.component.scss'
 })
 export class UIBreadcrumbsComponent {
   items = input<BreadcrumbItem[]>([]);

@@ -38,7 +38,7 @@ export interface InputOption {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './input.component.html',
-  styleUrls: ['./input.component.scss'],
+  styleUrl: './input.component.scss',
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

@@ -204,10 +204,24 @@ Componentes **sin variantes numeradas**: spacer, shape, video, map, date-time-pi
 
 ---
 
-## 7. Referencias rápidas
+## 8. Estado de implementación
+
+- **Fase 1 (hecho):**
+  - Selectores unificados a `lib-ui-components-<nombre>` en todos los componentes y usos actualizados en shared-components, feature-editor, featured-components y apps.
+  - Duplicado footer corregido: `videogames-footer` usa `lib-ui-components-videogames-footer`.
+  - Gallery corregido: `lib-ui-components-gallery` (antes `lib-ui-components-ui-gallery`).
+  - Unificado `styleUrl` en todos los componentes que tenían un solo archivo SCSS.
+  - Alias `@negocio/ui-components/models` añadido en `tsconfig.base.json` (uso desde apps; dentro de la lib se mantienen imports relativos para no crear entry points extra en Nx).
+  - Utilidad `mergeCustomStyles()` en `lib/models/merge-custom-styles.util.ts`; componente piloto **button** migrado (usa `mergeCustomStyles(customStyles, 'btn')` y `ChangeDetectionStrategy.OnPush`).
+- **Fases 2–4:** Pendientes (aplicar mergeCustomStyles/OnPush al resto de familias, unificar acordeon/accordion, tokens y accesibilidad).
+
+---
+
+## 9. Referencias rápidas
 
 - **Ruta base:** `libs/ui-components/src/lib`
 - **Modelo de variantes:** `libs/ui-components/src/lib/models/ui-components-data.model.ts`
 - **CustomStyles compartido:** `libs/ui-components/src/lib/models/custom-styles.interface.ts`
+- **Utilidad mergeCustomStyles:** `libs/ui-components/src/lib/models/merge-custom-styles.util.ts`
 - **Estilos globales de la lib:** `libs/ui-components/src/lib/styles/` (`_mixins.scss`, `_variables.scss`, `_applicators.scss`, etc.)
 - **Exportaciones:** `libs/ui-components/src/index.ts`

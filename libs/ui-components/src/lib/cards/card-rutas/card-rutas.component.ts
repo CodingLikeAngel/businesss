@@ -40,7 +40,7 @@ interface CardCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './card-rutas.component.html',
-  styleUrls: ['./card-rutas.component.scss'],
+  styleUrl: './card-rutas.component.scss',
 })
 export class UICardRutasComponent implements AfterViewInit, OnDestroy {
   items = input<CardItem[]>([

@@ -17,7 +17,7 @@ export interface List3CustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './list-3.component.html',
-  styleUrls: ['./list-3.component.scss'],
+  styleUrl: './list-3.component.scss',
 })
 export class UIList3Component {
   variant = input<List3VariantType>('secondary');

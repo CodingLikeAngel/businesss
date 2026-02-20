@@ -23,7 +23,7 @@ export interface Chip1CustomStyles {
   imports: [CommonModule, NgIconComponent],
   providers: [provideIcons({ heroXMark, heroCheck })],
   templateUrl: './chip-1.component.html',
-  styleUrls: ['./chip-1.component.scss'],
+  styleUrl: './chip-1.component.scss',
 })
 export class UIChip1Component {
   variant = input<Chip1VariantType>('secondary');

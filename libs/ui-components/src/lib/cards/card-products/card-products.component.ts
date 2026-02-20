@@ -14,7 +14,7 @@ export interface CardProductsCustomStyles {
   standalone: true,
   imports: [CommonModule, UIButtonComponent],
   templateUrl: './card-products.component.html',
-  styleUrls: ['./card-products.component.scss']
+  styleUrl: './card-products.component.scss'
 })
 export class UiCardProductsComponent {
   product = input<{ 

@@ -29,7 +29,7 @@ export interface ImageCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './image.component.html',
-  styleUrls: ['./image.component.scss'],
+  styleUrl: './image.component.scss',
 })
 export class UIImageComponent {
   src = input<string>('https://via.placeholder.com/300'); // URL por defecto

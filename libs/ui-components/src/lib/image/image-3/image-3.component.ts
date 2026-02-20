@@ -25,7 +25,7 @@ export interface Image3CustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './image-3.component.html',
-  styleUrls: ['./image-3.component.scss'],
+  styleUrl: './image-3.component.scss',
 })
 export class UIImage3Component {
   src = input<string>('https://via.placeholder.com/300');

@@ -73,7 +73,7 @@ export interface ChartCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './chart.component.html',
-  styleUrls: ['./chart.component.scss'],
+  styleUrl: './chart.component.scss',
 })
 export class UIChartComponent implements AfterViewInit {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef<HTMLCanvasElement>;

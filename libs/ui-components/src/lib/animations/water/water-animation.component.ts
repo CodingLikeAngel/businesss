@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './water-animation.component.html',
-  styleUrls: ['./water-animation.component.scss'],
+  styleUrl: './water-animation.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class WaterAnimationComponent implements OnInit, AfterViewInit, OnDestroy {

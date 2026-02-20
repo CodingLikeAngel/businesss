@@ -36,7 +36,7 @@ export interface UICardAction {
   standalone: true,
   imports: [CommonModule, GlitchEffectPipe, HighlightEffectPipe],
   templateUrl: './card.component.html',
-  styleUrls: ['./card.component.scss'],
+  styleUrl: './card.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
     trigger('cardHover', [

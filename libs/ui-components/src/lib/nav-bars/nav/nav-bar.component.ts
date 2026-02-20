@@ -31,7 +31,7 @@ export interface NavLink {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './nav-bar.component.html',
-  styleUrls: ['./nav-bar.component.scss'],
+  styleUrl: './nav-bar.component.scss',
 
 })
 export class UINavBarComponent implements OnInit {

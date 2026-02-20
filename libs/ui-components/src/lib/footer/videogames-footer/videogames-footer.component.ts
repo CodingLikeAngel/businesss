@@ -39,7 +39,7 @@ export interface videoGamesFooterCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './videogames-footer.component.html',
-  styleUrls: ['./videogames-footer.component.scss'],
+  styleUrl: './videogames-footer.component.scss',
 })
 export class UIVideogamesFooterComponent {
   variant = input<string>('arcade');

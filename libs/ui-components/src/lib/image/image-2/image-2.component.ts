@@ -25,7 +25,7 @@ export interface Image2CustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './image-2.component.html',
-  styleUrls: ['./image-2.component.scss'],
+  styleUrl: './image-2.component.scss',
 })
 export class UIImage2Component {
   src = input<string>('https://via.placeholder.com/300');
