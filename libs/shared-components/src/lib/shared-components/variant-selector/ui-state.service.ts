@@ -43,6 +43,45 @@ export class UiStateService {
     }
   }
 
+  /** Map section type -> content keys to show in sidebar (so all wrappers are editable without isolated mode). */
+  private static readonly SECTION_TYPE_CONTENT_KEYS: Record<string, string[]> = {
+    title: ['title', 'text', 'level', 'variant', 'animation', 'align'],
+    showcase: ['icon', 'title', 'text', 'layout', 'variant'],
+    image: ['title', 'subtitle', 'image', 'imageUrl', 'label', 'alt', 'caption'],
+    video: ['title', 'subtitle', 'videoUrl', 'videoPoster'],
+    map: ['title', 'address', 'zoom', 'showOverlay'],
+    shape: ['shapeType', 'customPath'],
+    chart: ['title', 'subtitle', 'chartType'],
+    list: ['title', 'subtitle', 'items'],
+    table: ['title', 'subtitle', 'items'],
+    tabs: ['title', 'items'],
+    steps: ['title', 'subtitle', 'items'],
+    faq: ['title', 'subtitle', 'items'],
+    gallery: ['title', 'subtitle', 'items'],
+    services: ['title', 'subtitle', 'items'],
+    products: ['title', 'subtitle', 'items'],
+    promotions: ['title', 'subtitle', 'items'],
+    stats: ['title', 'subtitle', 'items'],
+    testimonials: ['title', 'subtitle', 'items'],
+    contact: ['title', 'subtitle', 'description', 'address', 'email', 'phone'],
+    newsletter: ['title', 'subtitle', 'description', 'placeholder', 'label'],
+    cta: ['title', 'subtitle', 'label', 'link'],
+    hero: ['title', 'subtitle', 'description', 'label', 'link', 'image'],
+    breadcrumbs: ['title', 'items'],
+    chip: ['text', 'label', 'icon'],
+    bubble: ['title', 'text', 'icon'],
+    accordion: ['title', 'subtitle', 'items'],
+    pricing: ['title', 'subtitle', 'items'],
+    features: ['title', 'subtitle', 'items'],
+    'card-testimonial': ['title', 'subtitle', 'items', 'globalVariant'],
+    'card-product': ['title', 'subtitle', 'items', 'globalVariant'],
+    'card-animated': ['title', 'subtitle', 'items', 'globalVariant'],
+    'card-rutas': ['title', 'subtitle', 'items', 'globalVariant'],
+    'card-premium': ['title', 'subtitle', 'items', 'globalVariant'],
+    input: ['title', 'placeholder', 'label'],
+    container: ['title', 'subtitle'],
+  };
+
   private normalizeSection(section: any) {
     if (!section) return null;
     const copy = { ...section, content: { ...(section.content || {}) }, styles: { ...(section.styles || {}) } };
@@ -52,6 +91,15 @@ export class UiStateService {
     // Campos comunes
     const commonKeys = ['title', 'subtitle', 'description', 'text', 'link', 'image'];
     commonKeys.forEach(k => { if (copy.content[k] === undefined) copy.content[k] = ''; });
+    // Por tipo: asegurar todas las propiedades editables desde el sidebar
+    const typeKeys = UiStateService.SECTION_TYPE_CONTENT_KEYS[section.type];
+    if (typeKeys?.length) {
+      typeKeys.forEach(k => {
+        if (copy.content[k] === undefined) {
+          copy.content[k] = k === 'items' ? [] : (k === 'showOverlay' ? false : '');
+        }
+      });
+    }
     return copy;
   }
 

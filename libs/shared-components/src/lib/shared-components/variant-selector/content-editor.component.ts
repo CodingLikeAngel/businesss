@@ -118,6 +118,11 @@ import { FormsModule } from '@angular/forms';
                     </div>
                 </div>
             </div>
+
+            <div class="input-v2 mt-3" *ngIf="hasProperty('icon')">
+                <label>Icono (emoji o clase)</label>
+                <input type="text" class="text-v2" [ngModel]="targetContent.icon" (ngModelChange)="updateProperty('icon', $event)" placeholder="Ej: ✨ o icon-star">
+            </div>
         </section>
 
         <!-- SECTION 4: ITERABLES / LIST ITEMS -->
@@ -183,6 +188,27 @@ import { FormsModule } from '@angular/forms';
                     <option value="radar">Gráfico de Radar</option>
                     <option value="area">Gráfico de Área</option>
                 </select>
+            </div>
+        </section>
+
+        <!-- SECTION 6: EXTRA CONTENT PROPERTIES (layout, variant, address, etc.) -->
+        <section class="edit-group" *ngIf="extraContentKeys.length > 0">
+            <div class="group-title">
+                <span class="dot"></span>
+                <h4>Propiedades adicionales</h4>
+            </div>
+            <div class="form-v2">
+                <div class="input-v2" *ngFor="let entry of extraContentKeys">
+                    <label>{{ entry.label }}</label>
+                    <input *ngIf="!entry.isBoolean" type="text" class="text-v2"
+                           [ngModel]="entry.value"
+                           (ngModelChange)="updateProperty(entry.key, $event)"
+                           [placeholder]="'Valor para ' + entry.key + '...'">
+                    <label *ngIf="entry.isBoolean" class="checkbox-label-v2">
+                        <input type="checkbox" [ngModel]="entry.value" (ngModelChange)="updateProperty(entry.key, $event)">
+                        {{ entry.label }}
+                    </label>
+                </div>
             </div>
         </section>
 
@@ -273,6 +299,8 @@ import { FormsModule } from '@angular/forms';
             &:focus { border-color: #3b82f6; background: rgba(59, 130, 246, 0.05); }
         }
         .textarea-v2 { resize: vertical; min-height: 80px; }
+        .checkbox-label-v2 { display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #94a3b8; cursor: pointer; }
+        .checkbox-label-v2 input[type="checkbox"] { accent-color: #3b82f6; }
     }
 
     .media-input-wrapper {
@@ -454,7 +482,52 @@ export class ContentEditorComponent {
   get hasNoContentFields(): boolean {
     if (!this.selectedSection && !this.selectedElement) return false;
     const hasChart = this.selectedSection?.type === 'chart';
-    return !this.shouldShowTextFields && !this.shouldShowActions && !this.shouldShowMedia && !this.shouldShowItems && !hasChart;
+    return !this.shouldShowTextFields && !this.shouldShowActions && !this.shouldShowMedia && !this.shouldShowItems && !hasChart && this.extraContentKeys.length === 0;
+  }
+
+  /** Keys already shown in dedicated sections (text, actions, media, items, chart). */
+  private static readonly STANDARD_CONTENT_KEYS = new Set([
+    'title', 'subtitle', 'description', 'text', 'label', 'link', 'cta',
+    'image', 'imageUrl', 'videoUrl', 'videoPoster', 'icon',
+    'items', 'chartType'
+  ]);
+
+  /** Human-readable labels for extra content keys. */
+  private static readonly CONTENT_KEY_LABELS: Record<string, string> = {
+    layout: 'Disposición',
+    variant: 'Variante',
+    level: 'Nivel (h1-h6)',
+    animation: 'Animación',
+    align: 'Alineación',
+    address: 'Dirección',
+    zoom: 'Zoom',
+    showOverlay: 'Mostrar superposición',
+    shapeType: 'Tipo de forma',
+    customPath: 'Ruta personalizada (SVG)',
+    placeholder: 'Placeholder',
+    email: 'Email',
+    phone: 'Teléfono',
+    alt: 'Texto alternativo',
+    caption: 'Pie de imagen',
+    globalVariant: 'Variante global',
+  };
+
+  /** Content keys that are primitives and not in standard sections; show in "Propiedades adicionales". */
+  get extraContentKeys(): { key: string; value: string | number | boolean; label: string; isBoolean: boolean }[] {
+    const content = this.targetContent;
+    if (!content || typeof content !== 'object') return [];
+    const out: { key: string; value: string | number | boolean; label: string; isBoolean: boolean }[] = [];
+    for (const key of Object.keys(content)) {
+      if (ContentEditorComponent.STANDARD_CONTENT_KEYS.has(key)) continue;
+      const val = content[key];
+      if (val === null || val === undefined) continue;
+      if (Array.isArray(val) || (typeof val === 'object' && val !== null)) continue;
+      const isBoolean = typeof val === 'boolean';
+      if (typeof val !== 'string' && typeof val !== 'number' && !isBoolean) continue;
+      const label = ContentEditorComponent.CONTENT_KEY_LABELS[key] || key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+      out.push({ key, value: val, label, isBoolean });
+    }
+    return out;
   }
 
   // HELPER TO UPDATE ANY PROPERTY SAFELY
