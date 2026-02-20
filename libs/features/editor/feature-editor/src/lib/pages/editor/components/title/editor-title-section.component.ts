@@ -10,6 +10,7 @@ import {
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorTitleIsolatedModeComponent } from './editor-title-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 @Component({
   selector: 'lib-editor-title-section',
@@ -19,7 +20,8 @@ import { EditorTitleIsolatedModeComponent } from './editor-title-isolated-mode.c
     UITitleComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorTitleIsolatedModeComponent
+    EditorTitleIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-title-section.component.html'
 })

@@ -1,25 +1,23 @@
 <!-- Standardized Image Editor Section -->
-<div #sectionElement
-  class="editor-section cursor-pointer transition-all duration-500 group relative min-h-[400px]"
+<section #sectionElement
+  [id]="section.id"
+  class="editor-section cursor-pointer transition-all duration-500 relative min-h-[400px]"
+  [class.preview-mode]="isPreviewMode && !showEditorControls"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="getSectionConfig()"
   sectionId="{{section.id}}"
   (visualEvents)="handleEventStandalone($event, section.id)">
-
-  <!-- Section Quick Actions -->
-  <div class="absolute top-0 left-0 right-0 h-10 bg-white/50 backdrop-blur-sm border-b border-slate-200 flex items-center justify-between px-4 z-20 opacity-0 group-hover:opacity-100 transition-opacity">
-    <div class="flex items-center gap-4">
-      <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Multimedia / Imagen v2</span>
-      <button 
-        (click)="openIsolatedMode($event)"
-        class="bg-emerald-500 hover:bg-emerald-600 text-white text-[9px] font-black px-3 py-1 rounded-full shadow-lg shadow-emerald-200 transition-all flex items-center gap-2">
-        <span>FILTROS Y MÁSCARAS</span>
-        <span class="bg-black/20 px-1.5 py-0.5 rounded text-[8px]">PRO</span>
-      </button>
-    </div>
-  </div>
+  <lib-editor-section-chrome
+    sectionLabel="Imagen"
+    sectionIcon="🖼️"
+    [isPreviewMode]="isPreviewMode"
+    [showEditorControls]="showEditorControls"
+    editButtonTitle="Modo Aislado (I)"
+    (editClick)="openIsolatedMode($event)"
+    (togglePreview)="toggleEditorControlsInPreview()">
+  </lib-editor-section-chrome>
 
   <div class="container mx-auto px-6 max-w-7xl relative py-20 h-full min-h-[400px]">
     <lib-ui-image #imageElement
@@ -58,4 +56,4 @@
     (closed)="onIsolatedModeClosed()"
     (applied)="onIsolatedModeApplied($event)">
   </lib-editor-image-isolated-mode>
-</div>
+</section>

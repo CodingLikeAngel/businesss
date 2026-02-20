@@ -11,6 +11,7 @@ import { UIFaqSectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorFaqIsolatedModeComponent } from './editor-faq-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 /**
  * Enhanced Editor FAQ Section Component
@@ -24,7 +25,8 @@ import { EditorFaqIsolatedModeComponent } from './editor-faq-isolated-mode.compo
     UIFaqSectionComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorFaqIsolatedModeComponent
+    EditorFaqIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-faq-section.component.html'
 })

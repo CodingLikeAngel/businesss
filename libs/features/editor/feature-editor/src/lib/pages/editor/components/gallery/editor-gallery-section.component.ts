@@ -12,6 +12,7 @@ import { UIGallerySectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorGalleryIsolatedModeComponent } from './editor-gallery-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 /**
  * Enhanced Editor Gallery Section Component
@@ -25,7 +26,8 @@ import { EditorGalleryIsolatedModeComponent } from './editor-gallery-isolated-mo
     UIGallerySectionComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorGalleryIsolatedModeComponent
+    EditorGalleryIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-gallery-section.component.html'
 })

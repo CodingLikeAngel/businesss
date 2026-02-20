@@ -10,6 +10,7 @@ import {
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorVideoIsolatedModeComponent } from './editor-video-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 @Component({
   selector: 'lib-editor-video-section',
@@ -19,7 +20,8 @@ import { EditorVideoIsolatedModeComponent } from './editor-video-isolated-mode.c
     UIVideoComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorVideoIsolatedModeComponent
+    EditorVideoIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-video-section.component.html'
 })

@@ -9,6 +9,7 @@ import {
 } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { EditorButtonIsolatedModeComponent, IsolatedModeConfig } from './editor-button-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 import { HostListener } from '@angular/core';
 
 /**
@@ -23,7 +24,8 @@ import { HostListener } from '@angular/core';
     UIButtonComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorButtonIsolatedModeComponent
+    EditorButtonIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-button-section.component.html'
 })

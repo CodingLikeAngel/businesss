@@ -10,6 +10,7 @@ import {
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorImageIsolatedModeComponent } from './editor-image-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 /**
  * Enhanced Editor Image Section Component
@@ -23,7 +24,8 @@ import { EditorImageIsolatedModeComponent } from './editor-image-isolated-mode.c
     UIImageComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorImageIsolatedModeComponent
+    EditorImageIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-image-section.component.html'
 })

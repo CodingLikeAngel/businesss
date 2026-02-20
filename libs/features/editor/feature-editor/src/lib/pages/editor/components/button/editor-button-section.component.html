@@ -1,30 +1,24 @@
 <!-- Standardized Button Editor Section -->
-<div
+<section
   #sectionElement
-  class="editor-section cursor-pointer transition-all duration-500 group relative min-h-[200px]"
+  [id]="section.id"
+  class="editor-section cursor-pointer transition-all duration-500 relative min-h-[200px]"
+  [class.preview-mode]="isPreviewMode && !showEditorControls"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="createElementConfig('section')"
   sectionId="{{ section.id }}"
-  (visualEvents)="handleVisualEvent($event, section.id)"
->
-  <!-- Section Quick Actions -->
-  <div
-    class="absolute top-0 left-0 right-0 h-12 bg-white/80 backdrop-blur-sm border-b border-slate-200 flex items-center justify-between px-4 z-10 opacity-0 group-hover:opacity-100 transition-opacity"
-  >
-    <div class="flex items-center gap-2">
-      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Botón Universal</span>
-    </div>
-    <button
-      class="flex items-center gap-2 px-3 py-1 bg-indigo-500 hover:bg-indigo-600 text-white rounded-md text-xs font-bold transition-all shadow-sm"
-      (click)="openIsolatedMode($event)"
-      title="Modo Aislado (I)"
-    >
-      <span>🎯</span>
-      <span>Editar</span>
-    </button>
-  </div>
+  (visualEvents)="handleVisualEvent($event, section.id)">
+  <lib-editor-section-chrome
+    sectionLabel="Botón"
+    sectionIcon="🔘"
+    [isPreviewMode]="isPreviewMode"
+    [showEditorControls]="showEditorControls"
+    editButtonTitle="Modo Aislado (I)"
+    (editClick)="openIsolatedMode($event)"
+    (togglePreview)="toggleEditorControlsInPreview()">
+  </lib-editor-section-chrome>
 
   <!-- Button Container -->
   <div class="container mx-auto px-6 max-w-7xl flex flex-wrap justify-center items-center gap-6 py-12 h-full">
@@ -78,7 +72,7 @@
       </button>
     </div>
   </div>
-</div>
+</section>
 
 <!-- Isolated Mode Modal -->
 <lib-editor-button-isolated-mode

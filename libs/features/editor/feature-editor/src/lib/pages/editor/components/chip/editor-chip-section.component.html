@@ -1,23 +1,23 @@
 <!-- DESKTOP CHIP -->
-<div *ngIf="!isMobile" #sectionElement
-  class="editor-section cursor-pointer transition-all duration-500 group relative py-8"
+<section *ngIf="!isMobile" #sectionElement
+  [id]="section.id"
+  class="editor-section cursor-pointer transition-all duration-500 relative py-8"
+  [class.preview-mode]="isPreviewMode && !showEditorControls"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="getSectionConfig()"
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
-
-  <!-- Section Quick Actions -->
-  <div class="absolute top-0 left-0 right-0 h-10 bg-white/50 backdrop-blur-sm border-b border-slate-200 flex items-center justify-between px-4 z-50 opacity-0 group-hover:opacity-100 transition-opacity">
-    <div class="flex items-center gap-2">
-      <span class="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Átomo / Chip</span>
-      <div class="h-4 w-[1px] bg-slate-200 mx-2"></div>
-      <button (click)="openIsolatedMode($event)" class="bg-indigo-600 text-white text-[9px] font-bold px-3 py-1 rounded-full hover:bg-indigo-700 transition-colors uppercase tracking-widest shadow-lg shadow-indigo-200">
-        EDITAR DISEÑO 🎯
-      </button>
-    </div>
-  </div>
+  <lib-editor-section-chrome
+    sectionLabel="Chip"
+    sectionIcon="🏷️"
+    [isPreviewMode]="isPreviewMode"
+    [showEditorControls]="showEditorControls"
+    editButtonTitle="Modo Aislado (I)"
+    (editClick)="openIsolatedMode($event)"
+    (togglePreview)="toggleEditorControlsInPreview()">
+  </lib-editor-section-chrome>
 
   <div class="container mx-auto px-6 flex justify-center gap-4">
     <lib-ui-components-chip #chipElement
@@ -35,7 +35,7 @@
       {{ section.content['label'] || 'Chip Label' }}
     </lib-ui-components-chip>
   </div>
-</div>
+</section>
 
 <!-- MOBILE CHIP -->
 <div *ngIf="isMobile" #sectionElement

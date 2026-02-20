@@ -11,6 +11,7 @@ import { UIStatsLibSectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorStatsIsolatedModeComponent } from './editor-stats-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 /**
  * Enhanced Editor Stats Section Component
@@ -24,7 +25,8 @@ import { EditorStatsIsolatedModeComponent } from './editor-stats-isolated-mode.c
     UIStatsLibSectionComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorStatsIsolatedModeComponent
+    EditorStatsIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-stats-section.component.html'
 })

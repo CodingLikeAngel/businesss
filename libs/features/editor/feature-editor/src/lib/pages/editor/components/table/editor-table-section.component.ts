@@ -10,6 +10,7 @@ import { UITableComponent, UITitleComponent } from '@negocio/ui-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorTableIsolatedModeComponent } from './editor-table-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 /**
  * Enhanced Editor Table Section Component
@@ -25,7 +26,8 @@ import { EditorTableIsolatedModeComponent } from './editor-table-isolated-mode.c
     UITitleComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorTableIsolatedModeComponent
+    EditorTableIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-table-section.component.html'
 })

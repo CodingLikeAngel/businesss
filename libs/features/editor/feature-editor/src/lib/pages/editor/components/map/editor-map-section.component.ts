@@ -9,6 +9,7 @@ import {
 } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { EditorMapIsolatedModeComponent, IsolatedModeConfig } from './editor-map-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 @Component({
   selector: 'lib-editor-map-section',
@@ -18,7 +19,8 @@ import { EditorMapIsolatedModeComponent, IsolatedModeConfig } from './editor-map
     UIMapComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorMapIsolatedModeComponent
+    EditorMapIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-map-section.component.html'
 })

@@ -10,6 +10,7 @@ import { UIStepsSectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorStepsIsolatedModeComponent } from './editor-steps-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 /**
  * Enhanced Editor Steps Section Component
@@ -24,7 +25,8 @@ import { EditorStepsIsolatedModeComponent } from './editor-steps-isolated-mode.c
     UIStepsSectionComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorStepsIsolatedModeComponent
+    EditorStepsIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-steps-section.component.html'
 })

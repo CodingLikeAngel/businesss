@@ -12,6 +12,7 @@ import { UIContactSectionComponent } from '@negocio/featured-components';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorContactIsolatedModeComponent } from './editor-contact-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 /**
  * Enhanced Editor Contact Section Component
@@ -25,7 +26,8 @@ import { EditorContactIsolatedModeComponent } from './editor-contact-isolated-mo
     ReactiveFormsModule,
     UIContactSectionComponent,
     EnhancedVisualEditableDirective,
-    EditorContactIsolatedModeComponent
+    EditorContactIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-contact-section.component.html',
   styleUrls: ['./editor-contact-section.component.scss'],

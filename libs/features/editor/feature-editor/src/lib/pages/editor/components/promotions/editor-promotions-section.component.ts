@@ -13,6 +13,7 @@ import {
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorPromotionsIsolatedModeComponent } from './editor-promotions-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 /**
  * Enhanced Editor Promotions Section Component
@@ -26,7 +27,8 @@ import { EditorPromotionsIsolatedModeComponent } from './editor-promotions-isola
     PromotionsSectionComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorPromotionsIsolatedModeComponent
+    EditorPromotionsIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-promotions-section.component.html'
 })

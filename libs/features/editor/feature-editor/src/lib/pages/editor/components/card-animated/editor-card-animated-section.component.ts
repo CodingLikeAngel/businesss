@@ -9,6 +9,7 @@ import {
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorCardAnimatedIsolatedModeComponent } from './editor-card-animated-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 @Component({
   selector: 'lib-editor-card-animated-section',
@@ -18,7 +19,8 @@ import { EditorCardAnimatedIsolatedModeComponent } from './editor-card-animated-
     UICardAnimatedComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorCardAnimatedIsolatedModeComponent
+    EditorCardAnimatedIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-card-animated-section.component.html'
 })

@@ -10,6 +10,7 @@ import {
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorListIsolatedModeComponent } from './editor-list-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 @Component({
   selector: 'lib-editor-list-section',
@@ -19,7 +20,8 @@ import { EditorListIsolatedModeComponent } from './editor-list-isolated-mode.com
     UIListComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorListIsolatedModeComponent
+    EditorListIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-list-section.component.html'
 })

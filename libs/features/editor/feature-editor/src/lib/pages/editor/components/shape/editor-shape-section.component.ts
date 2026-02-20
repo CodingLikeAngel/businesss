@@ -9,6 +9,7 @@ import {
 } from '@negocio/shared-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { EditorShapeIsolatedModeComponent, IsolatedModeConfig } from './editor-shape-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 @Component({
   selector: 'lib-editor-shape-section',
@@ -18,7 +19,8 @@ import { EditorShapeIsolatedModeComponent, IsolatedModeConfig } from './editor-s
     UIShapeComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorShapeIsolatedModeComponent
+    EditorShapeIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-shape-section.component.html'
 })

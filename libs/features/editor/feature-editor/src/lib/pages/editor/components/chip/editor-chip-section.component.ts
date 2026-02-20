@@ -11,6 +11,7 @@ import {
 } from '@negocio/ui-components';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorChipIsolatedModeComponent } from './editor-chip-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 
 /**
@@ -26,7 +27,8 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
     UIChipComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorChipIsolatedModeComponent
+    EditorChipIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-chip-section.component.html'
 })

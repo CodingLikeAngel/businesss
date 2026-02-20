@@ -1,23 +1,23 @@
 <!-- Advanced Services Editor Section -->
-<div #sectionElement
-  class="editor-section cursor-pointer py-12 transition-all duration-700 group relative"
+<section #sectionElement
+  [id]="section.id"
+  class="editor-section cursor-pointer py-12 transition-all duration-700 relative"
+  [class.preview-mode]="isPreviewMode && !showEditorControls"
   [class.is-selected]="selectedSectionId === section.id"
   (click)="selectSection($event, section)"
   [applyDynamicStyles]="section.styles"
   [enhancedVisualEditable]="getSectionConfig()"
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
-
-  <!-- Section Quick Actions -->
-  <div class="absolute top-0 left-0 right-0 h-12 bg-white/80 backdrop-blur-sm border-b border-slate-200 flex items-center justify-between px-4 z-50 opacity-0 group-hover:opacity-100 transition-opacity">
-    <div class="flex items-center gap-2">
-      <span class="text-xs font-bold text-slate-500 uppercase tracking-wider">Business / Services Portfolio</span>
-      <div class="h-4 w-[1px] bg-slate-200 mx-2"></div>
-      <button (click)="openIsolatedMode($event)" class="bg-indigo-600 text-white text-[10px] font-bold px-3 py-1.5 rounded-full hover:bg-indigo-700 transition-colors uppercase tracking-widest shadow-lg shadow-indigo-200 flex items-center gap-2">
-        <span>🎯</span> EDITOR AVANZADO PRO
-      </button>
-    </div>
-  </div>
+  <lib-editor-section-chrome
+    sectionLabel="Servicios"
+    sectionIcon="🛠️"
+    [isPreviewMode]="isPreviewMode"
+    [showEditorControls]="showEditorControls"
+    editButtonTitle="Modo Aislado (I)"
+    (editClick)="openIsolatedMode($event)"
+    (togglePreview)="toggleEditorControlsInPreview()">
+  </lib-editor-section-chrome>
 
   <div class="container mx-auto px-6 max-w-7xl">
     <div #servicesElement class="editor-element mb-16"
@@ -43,4 +43,4 @@
     (closed)="onIsolatedModeClosed()"
     (applied)="onIsolatedModeApplied($event)">
   </lib-editor-services-isolated-mode>
-</div>
+</section>

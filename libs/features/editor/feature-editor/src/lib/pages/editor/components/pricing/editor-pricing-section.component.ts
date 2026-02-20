@@ -13,6 +13,7 @@ import {
 } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { EditorPricingIsolatedModeComponent, IsolatedModeConfig } from './editor-pricing-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 /**
  * Enhanced Editor Pricing Section Component
@@ -25,7 +26,8 @@ import { EditorPricingIsolatedModeComponent, IsolatedModeConfig } from './editor
     UIPricingTableSectionComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorPricingIsolatedModeComponent
+    EditorPricingIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-pricing-section.component.html'
 })

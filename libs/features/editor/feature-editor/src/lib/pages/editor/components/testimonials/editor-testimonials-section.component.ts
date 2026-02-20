@@ -10,6 +10,7 @@ import {
 import { UITestimonialsSectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { EditorTestimonialsIsolatedModeComponent, IsolatedModeConfig } from './editor-testimonials-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 import { HostListener } from '@angular/core';
 
 /**
@@ -23,7 +24,8 @@ import { HostListener } from '@angular/core';
     UITestimonialsSectionComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorTestimonialsIsolatedModeComponent
+    EditorTestimonialsIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-testimonials-section.component.html'
 })

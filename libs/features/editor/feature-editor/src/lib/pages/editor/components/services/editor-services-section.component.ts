@@ -12,6 +12,7 @@ import { ServiceSectionComponent } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EditorServicesIsolatedModeComponent } from './editor-services-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 /**
  * Enhanced Editor Services Section Component
@@ -25,7 +26,8 @@ import { EditorServicesIsolatedModeComponent } from './editor-services-isolated-
     ServiceSectionComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorServicesIsolatedModeComponent
+    EditorServicesIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-services-section.component.html'
 })
