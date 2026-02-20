@@ -86,6 +86,8 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
   editorState: EditorState;
   modalState: ModalState;
   showShortcuts = false;
+  /** 5.3 Unified template: true for mobile editor, false for desktop (toolbar/modal/shortcuts visibility). */
+  isMobile = false;
   loading$ = this.editorService.loading$;
   sections$: Observable<PageSection[]>;
 
@@ -361,6 +363,15 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
 
   get isGuidesEnabled() {
     return this.visualEditorService.showGuides;
+  }
+
+  /** 5.3 Shared template: mode for toolbar (desktop). Mobile hides toolbar. */
+  get currentMode(): 'all' | 'move' | 'resize' {
+    return (this.visualEditorService?.interactionMode as 'all' | 'move' | 'resize') ?? 'all';
+  }
+
+  setMode(mode: 'all' | 'move' | 'resize') {
+    this.visualEditorService?.setInteractionMode?.(mode);
   }
 
   trackBySectionId(index: number, section: any): string {

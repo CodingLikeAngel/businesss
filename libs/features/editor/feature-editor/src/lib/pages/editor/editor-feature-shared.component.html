@@ -1,0 +1,80 @@
+<div class="sections-container min-h-screen relative pb-32">
+  <!-- Floating Undo/Redo + Mode Toolbar (desktop only; mobile uses compact UI) -->
+  <div *ngIf="!isMobile" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] flex items-center gap-4" style="pointer-events: auto;">
+    <lib-undo-redo-toolbar></lib-undo-redo-toolbar>
+    <div class="bg-gray-900/90 backdrop-blur-md rounded-full px-2 py-1 flex items-center gap-1 border border-white/10 shadow-xl" role="toolbar" aria-label="Modos de edición">
+      <button type="button" (click)="setMode('all')" [attr.aria-pressed]="currentMode === 'all'" [ngClass]="{'bg-indigo-500/30 text-indigo-400': currentMode === 'all'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Modo Completo (activo: mover y redimensionar)">
+        <span aria-hidden="true">✨</span><span class="sr-only">{{ currentMode === 'all' ? 'Modo Completo activo' : 'Modo Completo' }}</span>
+      </button>
+      <div class="w-px h-4 bg-white/20 mx-1" aria-hidden="true"></div>
+      <button type="button" (click)="setMode('move')" [attr.aria-pressed]="currentMode === 'move'" [ngClass]="{'bg-indigo-500/30 text-indigo-400': currentMode === 'move'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Solo Mover">
+        <span aria-hidden="true">📍</span><span class="sr-only">{{ currentMode === 'move' ? 'Mover activo' : 'Mover' }}</span>
+      </button>
+      <button type="button" (click)="setMode('resize')" [attr.aria-pressed]="currentMode === 'resize'" [ngClass]="{'bg-indigo-500/30 text-indigo-400': currentMode === 'resize'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Solo Redimensionar">
+        <span aria-hidden="true">📐</span><span class="sr-only">{{ currentMode === 'resize' ? 'Redimensionar activo' : 'Redimensionar' }}</span>
+      </button>
+      <div class="w-px h-4 bg-white/20 mx-1"></div>
+      <button (click)="toggleSnap()" [ngClass]="{'text-indigo-400': isSnapEnabled}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Ajustar a Cuadrícula (Snap)">🧲</button>
+      <button (click)="toggleGuides()" [ngClass]="{'text-indigo-400': isGuidesEnabled}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Mostrar Guías">📏</button>
+      <div class="w-px h-4 bg-white/20 mx-1"></div>
+      <button (click)="toggleShortcuts()" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Ayuda y Atajos">⌨️</button>
+    </div>
+  </div>
+
+  <div *ngIf="loading$ | async" class="flex items-center justify-center p-10 md:p-20">
+    <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-white"></div>
+  </div>
+
+  <div
+    *ngIf="(sections$ | async)?.length === 0 && !(loading$ | async)"
+    class="flex flex-col items-center justify-center p-10 md:p-20 text-white/50"
+  >
+    <div class="text-4xl md:text-6xl mb-4">🏗️</div>
+    <h2 class="text-xl md:text-2xl font-bold">Página vacía</h2>
+    <p class="text-xs md:text-base text-center max-w-sm">
+      {{ isMobile ? 'Añade secciones desde el panel de Estructura.' : 'Añade secciones desde la pestaña "Estructura Página" en el panel izquierdo.' }}
+    </p>
+  </div>
+
+  <ng-container *ngFor="let section of sections$ | async; trackBy: trackBySectionId">
+    <lib-editor-section-renderer
+      *ngIf="section.visible"
+      [section]="section"
+      [componentVariants]="componentVariants"
+      [globalVariant]="globalVariant"
+      [heroConfig]="heroConfig"
+      [featuresConfig]="featuresConfig"
+      [statsConfig]="statsConfig"
+      [galleryConfig]="galleryConfig"
+      [titleConfig]="titleConfig"
+      [chartConfig]="chartConfig"
+      [navBarConfig]="navBarConfig"
+      [footerConfig]="footerConfig"
+      [bubbleConfig]="bubbleConfig"
+      [cardConfig]="cardConfig"
+      [serviceCardsConfig]="serviceCardsConfig"
+      [faqConfig]="faqConfig"
+      [pricingConfig]="pricingConfig"
+      [promotionsConfig]="promotionsConfig"
+      [productsConfig]="productsConfig"
+      [testimonialsConfig]="testimonialsConfig"
+      (elementMoved)="onElementMoved($event.bounds, $event.elementId, section)"
+      (elementResized)="onElementResized($event.bounds, $event.elementId, section)"
+      (sectionResized)="onSectionResized($event.section, $event.bounds)"
+    >
+    </lib-editor-section-renderer>
+  </ng-container>
+</div>
+
+<lib-ui-components-modal
+  *ngIf="!isMobile"
+  [isOpen]="modalState.isOpen"
+  [variant]="'glass'"
+  [rounded]="'md'"
+  [size]="'lg'"
+  [title]="getModalTitle()"
+  [content]="modalState.selectedItem?.description || 'Selecciona un item para ver más detalles.'"
+  (modalOnClose)="closeModal()"
+></lib-ui-components-modal>
+
+<lib-shortcuts-guide *ngIf="!isMobile && showShortcuts" (close)="toggleShortcuts()"></lib-shortcuts-guide>

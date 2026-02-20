@@ -114,8 +114,8 @@ El editor es una aplicación compleja: **layout principal (desktop/mobile)**, **
 | # | Acción | Prioridad | Estado |
 |---|--------|-----------|--------|
 | 5.1 | Extraer el renderizado de secciones a un componente o directiva que use un registro (map) tipo → componente, para reducir el tamaño del template principal. | Media | ✅ Hecho: `EditorSectionRendererComponent` + `section-type-registry.ts` (map tipo → componente); carga dinámica con `ViewContainerRef.createComponent()`; desktop y mobile usan el renderer; templates ~98 y ~50 líneas. |
-| 5.2 | Añadir tests de integración: cargar página, seleccionar sección, abrir modo aislado, aplicar, preview, undo. | Media | Pendiente |
-| 5.3 | Unificar donde sea posible el template mobile/desktop de secciones (un solo template con clases responsive en vez de dos bloques). | Baja | Pendiente |
+| 5.2 | Añadir tests de integración: cargar página, seleccionar sección, abrir modo aislado, aplicar, preview, undo. | Media | ✅ Hecho: `editor-flow.integration.spec.ts` (load page, select section, preview mode, undo/store); specs desktop/mobile corregidos y pasando. |
+| 5.3 | Unificar donde sea posible el template mobile/desktop de secciones (un solo template con clases responsive en vez de dos bloques). | Baja | ✅ Hecho: `editor-feature-shared.component.html` único; desktop y mobile usan `isMobile` y mismo template; toolbar/modal/shortcuts con *ngIf="!isMobile"; clases responsive (p-10 md:p-20, text-xl md:text-2xl). |
 
 ### Fase 6 – UX y pulido
 

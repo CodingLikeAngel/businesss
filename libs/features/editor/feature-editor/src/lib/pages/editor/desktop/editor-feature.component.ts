@@ -14,7 +14,7 @@ import { ShortcutsGuideComponent } from '../components/shortcuts-guide/shortcuts
 @Component({
   selector: 'lib-editor-desktop-feature',
   standalone: true,
-  templateUrl: './editor-feature.component.html',
+  templateUrl: '../editor-feature-shared.component.html',
   styleUrls: ['./editor-feature.component.scss'],
   imports: [
     CommonModule,
@@ -28,17 +28,20 @@ import { ShortcutsGuideComponent } from '../components/shortcuts-guide/shortcuts
 })
 
 export class EditorDesktopFeatureComponent extends BaseEditorFeatureComponent implements OnInit {
+  /** 5.3 Unified template: desktop shows toolbar, modal, shortcuts. */
+  override isMobile = false;
 
   override ngOnInit() {
     super.ngOnInit();
     this.editorService.updateEditorState({ isMobile: false });
   }
 
-  get currentMode() {
-    return this.visualEditorService.interactionMode;
+  override get currentMode(): 'all' | 'move' | 'resize' {
+    const mode = this.visualEditorService.interactionMode;
+    return mode === 'move' || mode === 'resize' ? mode : 'all';
   }
 
-  setMode(mode: 'all' | 'move' | 'resize') {
+  override setMode(mode: 'all' | 'move' | 'resize') {
     this.visualEditorService.setInteractionMode(mode);
   }
 }
