@@ -181,6 +181,7 @@ Componentes **sin variantes numeradas**: spacer, shape, video, map, date-time-pi
 - **Modifier:** bloque o elemento + `--` + modificador (ej. `btn--primary`, `card--size-wide`, `accordion-rounded-md`). Para variantes de diseño se usa a menudo `variant-<nombre>` o `<block>-<modificador>`.
 - **Estados:** `is-expanded`, `is-open`, `is-active`, `dark` cuando aplican.
 - Los componentes que admiten variantes usan clases tipo `<block>-<variant>` (ej. `btn-primary`, `chip-secondary`) generadas por el mixin `apply-all-variants('<prefix>-')` desde `lib/styles`.
+- **Estado de aplicación BEM:** Aplicada de forma consistente en Button (`btn`, `btn-content`, `btn-{variant}`, `btn-{size}`), Chip (`chip`, `chip-avatar`, `chip-icon-*`, `chip-{variant}`), Accordion (`accordion-container`, `accordion-item`, `accordion-header`, `accordion-content-wrapper`, `accordion-content-inner`, `is-expanded`, `is-open`), Input (`input`, `input-wrapper`, `input-control-outer`, `input-*`), Modal (`modal-wrapper`, `modal-overlay`, `modal-container`, `modal-header`, `modal-body`, `close-btn`).
 
 ### Fase 4 – Diseño y UX
 
@@ -221,8 +222,8 @@ Componentes **sin variantes numeradas**: spacer, shape, video, map, date-time-pi
   - Alias `@negocio/ui-components/models` añadido en `tsconfig.base.json` (uso desde apps; dentro de la lib se mantienen imports relativos para no crear entry points extra en Nx).
   - Utilidad `mergeCustomStyles()` en `lib/models/merge-custom-styles.util.ts`; componente piloto **button** migrado (usa `mergeCustomStyles(customStyles, 'btn')` y `ChangeDetectionStrategy.OnPush`).
 - **Fase 2 (hecho):** Aplicado estándar (mergeCustomStyles + OnPush) a: Button (piloto), Chip, Spinner, Card, Input, Modal, Tabs, Table, Tooltip, Title, Accordion, Breadcrumbs, List, Nav-bar.
-- **Fase 3 (hecho):** Base accordion movida de `acordeon/` a `accordion/`; carpeta `acordeon` eliminada; export unificado desde `accordion/accordion.component`. Convención BEM documentada en este plan y en README de la lib.
-- **Fase 4 (hecho):** Tokens referenciados en README; checklist de accesibilidad en README; README de la librería creado con uso, props, tokens y a11y.
+- **Fase 3 (hecho):** Base accordion movida de `acordeon/` a `accordion/`; carpeta `acordeon` eliminada; export unificado desde `accordion/accordion.component`. Convención BEM documentada en este plan y en README de la lib. **Aplicación BEM:** clases alineadas con la convención en Button, Chip, Accordion, Input y Modal (véase "Estado de aplicación BEM" en Fase 3).
+- **Fase 4 (hecho):** (9) Tokens: `_variables.scss` referenciado; Button, Chip, Accordion, Input y Modal usan `var(--theme-*)`, `var(--sp-*)`, `var(--fs-*)` donde aplica. (10) Estados y accesibilidad: `:focus-visible` aplicado en Button, Chip, Input (focus en control), Modal (botón cerrar) y Accordion (header); ARIA ya presente en Modal (aria-modal, aria-labelledby), Accordion (aria-expanded, aria-controls, aria-labelledby), Button y Chip. (11) Documentación: README con tokens, checklist a11y y sección **Props y eventos (resumen por componente)** con tabla de inputs/outputs y notas a11y.
 
 ---
 

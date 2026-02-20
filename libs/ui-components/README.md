@@ -118,6 +118,21 @@ Los estilos personalizados (`customStyles`) se fusionan con `mergeCustomStyles()
 - **Acordeón:** `aria-expanded`, `aria-controls` en el botón; `role="region"` y `aria-labelledby` en el panel; `:focus-visible` en el header.
 - **Contraste:** cumplir WCAG 2.1 AA donde aplique (texto y controles).
 
+## 📋 Props y eventos (resumen por componente)
+
+| Componente | Inputs principales | Outputs | Notas a11y |
+|------------|--------------------|---------|------------|
+| **Button** | `variant`, `size`, `rounded`, `disabled`, `ariaLabel`, `expanded`, `pressed`, `customStyles` | `buttonClick` | `aria-label`, `aria-disabled`, `aria-expanded`, `aria-pressed`; `:focus-visible` |
+| **Chip** | `variant`, `selected`, `removable`, `disabled`, `iconName`, `avatarSrc`, `customStyles` | `chipClick`, `chipRemove` | `aria-label`, `aria-pressed`; `:focus-visible` en chip y en botón de quitar |
+| **Input** | `type`, `placeholder`, `label`, `variant`, `disabled`, `customStyles` | `valueChange`, `blur`, `focus` | Label asociado o `aria-label`; `:focus-visible`; mensajes de error con `aria-describedby` |
+| **Accordion** | `items` (title/content), `variant`, `customStyles` | — | `aria-expanded`, `aria-controls`, `aria-labelledby` en paneles; `:focus-visible` en header |
+| **Modal** | `isOpen`, `title`, `content`, `size`, `rounded`, `customStyles` | `close` | `aria-modal`, `aria-labelledby`, botón cerrar `aria-label`; trampa de foco; `:focus-visible` en close |
+| **Tooltip** | `content`, `position`, `variant` | — | Activar por teclado/focus; `aria-describedby` en disparador |
+| **Tabs** | `tabs`, `activeIndex`, `variant` | `activeIndexChange` | `role="tablist"`, `aria-selected` en tab, `aria-controls` |
+| **Card** | `title`, `description`, `variant`, `customStyles` | — | Contenido semántico (heading + texto) |
+
+Los tokens de tema (`--theme-bg`, `--theme-color`, `--theme-radius`, `--sp-*`, `--fs-*`) se aplican en Button, Chip, Accordion, Input y Modal para que un solo cambio de tema afecte a todos.
+
 ## 🔗 Enlaces Útiles
 
 - [Nx Documentation](https://nx.dev)

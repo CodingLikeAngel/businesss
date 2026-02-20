@@ -35,10 +35,11 @@
 
 /* Estilos base para el contenedor del modal */
 .modal-container {
-  font-family: "Orbitron", sans-serif;
+  font-family: var(--theme-font, "Orbitron", sans-serif);
   position: relative;
-  background-color: #ffffff;
-  border: 1px solid #d1d5db; /* Gris claro */
+  background-color: var(--theme-bg, #ffffff);
+  border: var(--theme-border-width, 1px) var(--theme-border-style, solid) var(--theme-border, rgba(0,0,0,0.1));
+  border-radius: var(--theme-radius, 0.75rem);
   transition: all 0.3s ease-in-out;
   transform: scale(0.95);
   opacity: 0;
@@ -104,7 +105,7 @@
 
 /* Estilos para el encabezado */
 .modal-header {
-  padding: 0.5rem 0.75rem;
+  padding: var(--sp-2, 0.5rem) var(--sp-3, 0.75rem);
   background-color: rgba(0, 0, 0, 0.05);
   display: flex;
   justify-content: space-between;
@@ -132,7 +133,7 @@
 
 /* Estilos para el cuerpo */
 .modal-body {
-  padding: 0.5rem 0.75rem;
+  padding: var(--sp-2, 0.5rem) var(--sp-3, 0.75rem);
   overflow-y: auto;
 
   &.body-sm {
@@ -155,10 +156,16 @@
 .close-btn {
   background: none;
   border: none;
-  font-size: 1.25rem;
+  font-size: var(--fs-md, 1.25rem);
   cursor: pointer;
   padding: 0;
   line-height: 1;
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-accent, #3b82f6);
+    outline-offset: 2px;
+    border-radius: var(--theme-radius, 0.25rem);
+  }
 }
 
 /* Custom modal styles if needed */

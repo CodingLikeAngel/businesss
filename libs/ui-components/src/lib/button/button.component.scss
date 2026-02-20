@@ -74,8 +74,8 @@
     }
   }
 
-  &:focus {
-    outline: 2px solid #007bff;
+  &:focus-visible {
+    outline: 2px solid var(--theme-accent, #3b82f6);
     outline-offset: 2px;
   }
 

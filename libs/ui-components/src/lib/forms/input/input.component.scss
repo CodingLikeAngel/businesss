@@ -4,9 +4,9 @@
   display: block;
   width: 100%;
   --input-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --input-radius: 0.75rem;
-  --input-padding-x: 1.25rem;
-  --input-padding-y: 0.85rem;
+  --input-radius: var(--theme-radius, 0.75rem);
+  --input-padding-x: var(--sp-6, 1.25rem);
+  --input-padding-y: var(--sp-3, 0.75rem);
   
   @include shared.apply-all-variants('variant-');
 }
@@ -68,8 +68,9 @@
     transition: opacity 0.3s ease;
   }
 
-  &:focus {
-    border-color: var(--accent-color, #6366f1);
+  &:focus,
+  &:focus-visible {
+    border-color: var(--accent-color, var(--theme-accent, #6366f1));
     box-shadow: 0 0 0 4px var(--accent-glow, rgba(99, 102, 241, 0.2));
     background: var(--theme-bg-focused, rgba(15, 23, 42, 0.8));
     
