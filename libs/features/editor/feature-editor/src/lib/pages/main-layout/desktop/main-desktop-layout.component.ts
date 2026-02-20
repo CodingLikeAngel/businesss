@@ -37,6 +37,10 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
   isResizing = false;
 
   private store = inject(Store);
+
+  saving$ = this.store.select(PageSelectors.selectPageSaving);
+  hasUnsavedChanges$ = this.store.select(PageSelectors.selectHasUnsavedChanges);
+  lastSaved$ = this.store.select(PageSelectors.selectLastSaved);
   
   exportGlobalStyles$ = this.store.select(PageSelectors.selectCurrentPage).pipe(
     map((page: any) => page?.globalStyles || {})

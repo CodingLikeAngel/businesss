@@ -69,7 +69,10 @@
         align-items: center;
         gap: 6px;
         opacity: 0.8;
+        &.saving { color: #f59e0b; .dot { animation: pulse 1s ease-in-out infinite; } }
+        &.unsaved { color: #94a3b8; }
       }
+      @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     }
   }
 

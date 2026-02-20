@@ -9,13 +9,13 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
   standalone: true,
   imports: [CommonModule, FormsModule, UIGallerySectionComponent],
   template: `
-    <div class="isolated-mode-overlay" (click)="onOverlayClick($event)">
+    <div class="isolated-mode-overlay" (click)="onOverlayClick($event)" role="dialog" aria-modal="true" aria-labelledby="gallery-isolated-title">
       <div class="isolated-mode-container" (click)="$event.stopPropagation()">
         
         <!-- ===== HEADER ===== -->
         <div class="isolated-mode-header">
           <div class="header-breadcrumb">
-            <span class="mode-badge">🖼️ GALLERY EDITOR</span>
+            <span id="gallery-isolated-title" class="mode-badge">🖼️ GALLERY EDITOR</span>
             <span class="separator">/</span>
             <span class="component-name">MULTIMEDIA GALLERY GOLD</span>
           </div>

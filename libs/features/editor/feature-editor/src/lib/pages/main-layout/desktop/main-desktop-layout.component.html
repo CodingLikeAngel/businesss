@@ -11,7 +11,12 @@
       <div class="logo-mark">AS</div>
       <div class="project-info">
         <span class="project-name">Anto Studios Editor</span>
-        <span class="save-status"> <span class="dot"></span> Automático </span>
+        <span class="save-status" [class.saving]="saving$ | async" [class.unsaved]="(hasUnsavedChanges$ | async) && !(saving$ | async)">
+          <span class="dot"></span>
+          <ng-container *ngIf="saving$ | async">Guardando...</ng-container>
+          <ng-container *ngIf="!(saving$ | async) && (hasUnsavedChanges$ | async)">Sin guardar</ng-container>
+          <ng-container *ngIf="!(saving$ | async) && !(hasUnsavedChanges$ | async)">Guardado</ng-container>
+        </span>
       </div>
     </div>
 

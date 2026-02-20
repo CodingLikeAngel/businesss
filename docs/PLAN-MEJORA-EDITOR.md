@@ -95,35 +95,35 @@ El editor es una aplicación compleja: **layout principal (desktop/mobile)**, **
 
 ### Fase 3 – Panel lateral y flujo de edición
 
-| # | Acción | Prioridad |
-|---|--------|-----------|
-| 3.1 | Revisar ContentEditor y DesignEditor: para cada tipo de sección seleccionada, mostrar al menos campos básicos (y específicos si existen) enlazados al store. | Alta |
-| 3.2 | Asegurar que "Estructura" (orden, añadir/quitar secciones) y el store están siempre sincronizados; probar con layout y slots. | Alta |
-| 3.3 | Alinear "Bloques" disponibles con los tipos que tienen vista específica (no solo placeholder); ocultar o marcar como "próximamente" los que caen en default. | Media |
+| # | Acción | Prioridad | Estado |
+|---|--------|-----------|--------|
+| 3.1 | Revisar ContentEditor y DesignEditor: para cada tipo de sección seleccionada, mostrar al menos campos básicos (y específicos si existen) enlazados al store. | Alta | ✅ Hecho: mensaje de ayuda cuando no hay campos (usar Modo Aislado). |
+| 3.2 | Asegurar que "Estructura" (orden, añadir/quitar secciones) y el store están siempre sincronizados; probar con layout y slots. | Alta | Pendiente |
+| 3.3 | Alinear "Bloques" disponibles con los tipos que tienen vista específica (no solo placeholder); ocultar o marcar como "próximamente" los que caen en default. | Media | Pendiente |
 
 ### Fase 4 – Estado y persistencia
 
-| # | Acción | Prioridad |
-|---|--------|-----------|
-| 4.1 | Definir claramente: store como fuente de verdad de la página; VariantService como derivado o para configs globales. Evitar duplicar "contenido actual" en ambos. | Alta |
-| 4.2 | Revisar que todas las acciones editables (contenido, estilos, move, resize) disparen comandos para undo/redo y que el estado tras undo/redo sea correcto. | Alta |
-| 4.3 | Mejorar indicador de guardado (Automático / Guardando / Guardado / Error) si no es suficientemente claro. | Media |
+| # | Acción | Prioridad | Estado |
+|---|--------|-----------|--------|
+| 4.1 | Definir claramente: store como fuente de verdad de la página; VariantService como derivado o para configs globales. Evitar duplicar "contenido actual" en ambos. | Alta | ✅ Hecho: [ARQUITECTURA-ESTADO-EDITOR.md](./ARQUITECTURA-ESTADO-EDITOR.md). |
+| 4.2 | Revisar que todas las acciones editables (contenido, estilos, move, resize) disparen comandos para undo/redo y que el estado tras undo/redo sea correcto. | Alta | Pendiente |
+| 4.3 | Mejorar indicador de guardado (Automático / Guardando / Guardado / Error) si no es suficientemente claro. | Media | ✅ Hecho: Guardando… / Sin guardar / Guardado en el hub. |
 
 ### Fase 5 – Refactor y mantenibilidad
 
-| # | Acción | Prioridad |
-|---|--------|-----------|
-| 5.1 | Extraer el renderizado de secciones a un componente o directiva que use un registro (map) tipo → componente, para reducir el tamaño del template principal. | Media |
-| 5.2 | Añadir tests de integración: cargar página, seleccionar sección, abrir modo aislado, aplicar, preview, undo. | Media |
-| 5.3 | Unificar donde sea posible el template mobile/desktop de secciones (un solo template con clases responsive en vez de dos bloques). | Baja |
+| # | Acción | Prioridad | Estado |
+|---|--------|-----------|--------|
+| 5.1 | Extraer el renderizado de secciones a un componente o directiva que use un registro (map) tipo → componente, para reducir el tamaño del template principal. | Media | Pendiente |
+| 5.2 | Añadir tests de integración: cargar página, seleccionar sección, abrir modo aislado, aplicar, preview, undo. | Media | Pendiente |
+| 5.3 | Unificar donde sea posible el template mobile/desktop de secciones (un solo template con clases responsive en vez de dos bloques). | Baja | Pendiente |
 
 ### Fase 6 – UX y pulido
 
-| # | Acción | Prioridad |
-|---|--------|-----------|
-| 6.1 | Dejar claro en la barra de modos qué modo está activo (Completo / Mover / Redimensionar) y que el cursor/handles lo reflejen. | Media |
-| 6.2 | Revisar accesibilidad de modales (modo aislado, atajos, plantillas): foco, cierre con Escape, y navegación por teclado. | Media |
-| 6.3 | Revisar mensajes de error y estados vacíos (página sin secciones, sección sin vista) para que sean claros y accionables. | Baja |
+| # | Acción | Prioridad | Estado |
+|---|--------|-----------|--------|
+| 6.1 | Dejar claro en la barra de modos qué modo está activo (Completo / Mover / Redimensionar) y que el cursor/handles lo reflejen. | Media | ✅ Hecho: aria-pressed, role="toolbar", títulos y texto sr-only. |
+| 6.2 | Revisar accesibilidad de modales (modo aislado, atajos, plantillas): foco, cierre con Escape, y navegación por teclado. | Media | ✅ Hecho: Escape en BaseIsolatedModeComponent; role="dialog", aria-modal en galería. |
+| 6.3 | Revisar mensajes de error y estados vacíos (página sin secciones, sección sin vista) para que sean claros y accionables. | Baja | ✅ Hecho: mensaje en ngSwitchDefault más accionable (Estructura, reordenar, eliminar). |
 
 ---
 
@@ -140,10 +140,11 @@ El editor es una aplicación compleja: **layout principal (desktop/mobile)**, **
 ## 6. Próximos pasos recomendados
 
 1. **Documentación de secciones**: Ver [EDITOR-SECCIONES-Y-MODO-AISLADO.md](./EDITOR-SECCIONES-Y-MODO-AISLADO.md) para la lista de tipos de sección y modo aislado.
-2. Priorizar **Fase 1** (auditoría preview y defensas en `section.content`/configs) y **Fase 2** (modo aislado y documentación).
-2. Asignar o repartir por bloques (hero, gallery, stats, layout, etc.) la revisión de preview y modo aislado.
-3. Crear issues o tareas por ítem del plan y cerrarlos según se implementen.
-4. Revisar este plan cada cierto tiempo (p. ej. trimestral) y ajustar prioridades según feedback de uso real.
+2. **Estado del editor**: Ver [ARQUITECTURA-ESTADO-EDITOR.md](./ARQUITECTURA-ESTADO-EDITOR.md) para store como fuente de verdad y VariantService.
+3. Priorizar **Fase 1** (auditoría preview y defensas en `section.content`/configs) y **Fase 2** (modo aislado y documentación).
+4. Asignar o repartir por bloques (hero, gallery, stats, layout, etc.) la revisión de preview y modo aislado.
+5. Crear issues o tareas por ítem del plan y cerrarlos según se implementen.
+6. Revisar este plan cada cierto tiempo (p. ej. trimestral) y ajustar prioridades según feedback de uso real.
 
 ---
 

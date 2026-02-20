@@ -158,6 +158,15 @@ import { FormsModule } from '@angular/forms';
             </div>
         </section>
 
+        <!-- HINT: No content fields for this type -->
+        <section class="edit-group hint-box" *ngIf="hasNoContentFields">
+            <div class="group-title">
+                <span class="dot"></span>
+                <h4>Edición de este bloque</h4>
+            </div>
+            <p class="hint-text">No hay campos de redacción aquí para este tipo. Usa el botón <strong>Editar</strong> (Modo Aislado) en la sección del lienzo para más opciones.</p>
+        </section>
+
         <!-- SECTION 5: SPECIAL (CHART) -->
         <section class="edit-group" *ngIf="selectedSection?.type === 'chart'">
             <div class="group-title">
@@ -225,6 +234,13 @@ import { FormsModule } from '@angular/forms';
 
     .edit-group {
         margin-bottom: 1.5rem;
+        &.hint-box {
+            background: rgba(99, 102, 241, 0.06);
+            border: 1px solid rgba(99, 102, 241, 0.15);
+            border-radius: 12px;
+            padding: 1rem;
+            .hint-text { margin: 0.5rem 0 0; font-size: 0.85rem; color: #94a3b8; line-height: 1.5; }
+        }
         .group-title {
             display: flex;
             align-items: center;
@@ -432,6 +448,13 @@ export class ContentEditorComponent {
     if (this.isAccordion) return true;
     // Otherwise check if items array exists
     return this.targetContent && Array.isArray(this.targetContent.items);
+  }
+
+  /** True when selection has no content fields shown in this panel; show hint to use isolated mode. */
+  get hasNoContentFields(): boolean {
+    if (!this.selectedSection && !this.selectedElement) return false;
+    const hasChart = this.selectedSection?.type === 'chart';
+    return !this.shouldShowTextFields && !this.shouldShowActions && !this.shouldShowMedia && !this.shouldShowItems && !hasChart;
   }
 
   // HELPER TO UPDATE ANY PROPERTY SAFELY

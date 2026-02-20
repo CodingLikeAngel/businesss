@@ -5,16 +5,16 @@
     <lib-undo-redo-toolbar></lib-undo-redo-toolbar>
 
     <!-- Mode Switcher -->
-     <div class="bg-gray-900/90 backdrop-blur-md rounded-full px-2 py-1 flex items-center gap-1 border border-white/10 shadow-xl">
-        <button (click)="setMode('all')" [ngClass]="{'bg-indigo-500/30 text-indigo-400': currentMode === 'all'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Modo Completo">
-          ✨
+     <div class="bg-gray-900/90 backdrop-blur-md rounded-full px-2 py-1 flex items-center gap-1 border border-white/10 shadow-xl" role="toolbar" aria-label="Modos de edición">
+        <button type="button" (click)="setMode('all')" [attr.aria-pressed]="currentMode === 'all'" [ngClass]="{'bg-indigo-500/30 text-indigo-400': currentMode === 'all'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Modo Completo (activo: mover y redimensionar)">
+          <span aria-hidden="true">✨</span><span class="sr-only">{{ currentMode === 'all' ? 'Modo Completo activo' : 'Modo Completo' }}</span>
         </button>
-        <div class="w-px h-4 bg-white/20 mx-1"></div>
-        <button (click)="setMode('move')" [ngClass]="{'bg-indigo-500/30 text-indigo-400': currentMode === 'move'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Mover">
-          📍
+        <div class="w-px h-4 bg-white/20 mx-1" aria-hidden="true"></div>
+        <button type="button" (click)="setMode('move')" [attr.aria-pressed]="currentMode === 'move'" [ngClass]="{'bg-indigo-500/30 text-indigo-400': currentMode === 'move'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Solo Mover">
+          <span aria-hidden="true">📍</span><span class="sr-only">{{ currentMode === 'move' ? 'Mover activo' : 'Mover' }}</span>
         </button>
-        <button (click)="setMode('resize')" [ngClass]="{'bg-indigo-500/30 text-indigo-400': currentMode === 'resize'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Redimensionar">
-          📐
+        <button type="button" (click)="setMode('resize')" [attr.aria-pressed]="currentMode === 'resize'" [ngClass]="{'bg-indigo-500/30 text-indigo-400': currentMode === 'resize'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Solo Redimensionar">
+          <span aria-hidden="true">📐</span><span class="sr-only">{{ currentMode === 'resize' ? 'Redimensionar activo' : 'Redimensionar' }}</span>
         </button>
         <div class="w-px h-4 bg-white/20 mx-1"></div>
         <button (click)="toggleSnap()" [ngClass]="{'text-indigo-400': isSnapEnabled}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Ajustar a Cuadrícula (Snap)">
@@ -1367,8 +1367,8 @@
           <h3 class="text-xl font-bold mb-2">{{ section.label }}</h3>
           <p class="text-sm opacity-70">Tipo: {{ section.type }}</p>
           <p class="mt-4 text-xs">
-            Este componente aún no tiene una vista previa específica en el
-            editor, pero se ha añadido a la estructura.
+            Este bloque aún no tiene vista de edición aquí. Está en la estructura de la página.
+            Usa la pestaña <strong>Estructura</strong> del panel para reordenar o eliminar, o cambia el tipo de bloque.
           </p>
         </div>
       </div>
