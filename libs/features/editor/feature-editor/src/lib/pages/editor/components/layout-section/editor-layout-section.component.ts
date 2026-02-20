@@ -2434,7 +2434,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
    * Toggle editor controls in preview mode
    * When in preview mode, this toggles the editor controls visibility
    */
-  toggleEditorControlsInPreview(): void {
+  override toggleEditorControlsInPreview(): void {
     this.showEditorControls = !this.showEditorControls;
     
     if (this.showEditorControls) {
