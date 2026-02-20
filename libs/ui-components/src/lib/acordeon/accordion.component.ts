@@ -1,6 +1,7 @@
-import { Component, input, signal, computed } from '@angular/core';
+import { Component, input, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { variants as globalVariants } from '../models/ui-components-data.model';
+import { mergeCustomStyles } from '../models/merge-custom-styles.util';
 
 // Variantes específicas del acordeón
 export const accordionSpecificVariants = ['mi-variant-custom', 'otra-especial'] as const;
@@ -39,6 +40,7 @@ export interface AcordeonCustomStyles {
   imports: [CommonModule],
   templateUrl: './accordion.component.html',
   styleUrl: './accordion.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UIAccordionComponent {
   // Convertimos los @Input en señales
@@ -54,34 +56,8 @@ export class UIAccordionComponent {
   expandedIndex = signal(-1);
 
   accordionStyles = computed(() => {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-    
-    // Set default values to prevent inheritance
-    styles['--accordion-bg'] = 'white';
-    styles['--accordion-color'] = '#333';
-    
-    if (customStyles['backgroundColor']) {
-      styles['--accordion-bg'] = customStyles['backgroundColor'];
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-    
-    if (customStyles['color']) {
-      styles['--accordion-color'] = customStyles['color'];
-      styles['--theme-color'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
-    // Copy any other custom styles
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
-    
-    return styles;
+    const base = mergeCustomStyles(this.customStyles(), 'accordion');
+    return { '--accordion-bg': 'white', '--accordion-color': '#333', ...base };
   });
 
   // Estado interno para manejar múltiples items abiertos

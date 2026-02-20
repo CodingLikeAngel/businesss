@@ -1,9 +1,10 @@
 // chip.component.ts (Hijo - UIChipComponent)
-import { Component, input, computed, output, EventEmitter } from '@angular/core';
+import { Component, input, computed, output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroXMark, heroCheck } from '@ng-icons/heroicons/outline';
 import { variants as baseVariants } from '../models/ui-components-data.model';
+import { mergeCustomStyles } from '../models/merge-custom-styles.util';
 
 // Variantes específicas del componente hijo
 const specificChipVariants = ['magic-spark'] as const;
@@ -25,6 +26,7 @@ export interface ChipCustomStyles {
   providers: [provideIcons({ heroXMark, heroCheck })],
   templateUrl: './chip.component.html',
   styleUrl: './chip.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UIChipComponent {
   variant = input<ChipVariantType>('secondary');
@@ -44,31 +46,7 @@ export class UIChipComponent {
   removeClick = output<Event>();
   customStyles = input<ChipCustomStyles>({});
 
-  chipStyles = computed(() => {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-    
-    if (customStyles['backgroundColor']) {
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-    
-    if (customStyles['color']) {
-      styles['--theme-color'] = customStyles['color'];
-      styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
-    
-    return styles;
-  });
+  chipStyles = computed(() => mergeCustomStyles(this.customStyles(), 'chip'));
 
   chipClasses = computed(() => {
     const classes = ['chip'];

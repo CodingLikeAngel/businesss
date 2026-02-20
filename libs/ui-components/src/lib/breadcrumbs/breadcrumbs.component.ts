@@ -1,6 +1,6 @@
-
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { mergeCustomStyles } from '../models/merge-custom-styles.util';
 
 export interface BreadcrumbItem {
   label: string;
@@ -18,7 +18,8 @@ export interface BreadcrumbsCustomStyles {
   standalone: true,
   imports: [CommonModule],
   templateUrl: './breadcrumbs.component.html',
-  styleUrl: './breadcrumbs.component.scss'
+  styleUrl: './breadcrumbs.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UIBreadcrumbsComponent {
   items = input<BreadcrumbItem[]>([]);
@@ -26,30 +27,6 @@ export class UIBreadcrumbsComponent {
   variant = input('simple');
   customStyles = input<BreadcrumbsCustomStyles>({});
 
-  breadcrumbStyles = computed(() => {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-    
-    if (customStyles['backgroundColor']) {
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-    
-    if (customStyles['color']) {
-      styles['--theme-color'] = customStyles['color'];
-      styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
-    
-    return styles;
-  });
+  breadcrumbStyles = computed(() => mergeCustomStyles(this.customStyles(), 'breadcrumb'));
 }
 

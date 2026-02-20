@@ -1,6 +1,7 @@
-import { Component, input, computed, output, EventEmitter, AfterViewInit } from '@angular/core';
+import { Component, input, computed, output, EventEmitter, AfterViewInit, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { variants } from '../models/ui-components-data.model';
+import { mergeCustomStyles } from '../models/merge-custom-styles.util';
 
 export const modalVariants = variants;
 
@@ -19,6 +20,7 @@ export interface ModalCustomStyles {
   imports: [CommonModule],
   templateUrl: './modal.component.html',
   styleUrl: './modal.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UIModalComponent implements AfterViewInit {
   variant = input<ModalVariantType>('secondary');
@@ -34,31 +36,7 @@ export class UIModalComponent implements AfterViewInit {
   customStyles = input<ModalCustomStyles>({});
   modalOnClose = output<void>();
 
-  modalStyles = computed(() => {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-    
-    if (customStyles['backgroundColor']) {
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-    
-    if (customStyles['color']) {
-      styles['--theme-color'] = customStyles['color'];
-      styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
-
-    return styles;
-  });
+  modalStyles = computed(() => mergeCustomStyles(this.customStyles(), 'modal'));
 
   modalClasses = computed(() => {
     const classes = ['modal-container', `modal-${this.variant()}`];

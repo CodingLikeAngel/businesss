@@ -1,7 +1,8 @@
 // spinner.component.ts (Hijo - UISpinnerComponent)
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { variants as baseVariants } from '../models/ui-components-data.model';
+import { mergeCustomStyles } from '../models/merge-custom-styles.util';
 
 // Variante específica del componente hijo
 const specificSpinnerVariants = ['cosmic-dust'] as const;
@@ -34,6 +35,7 @@ export interface SpinnerContext {
   imports: [CommonModule],
   templateUrl: './spinner.component.html',
   styleUrl: './spinner.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UISpinnerComponent {
   variant = input<SpinnerVariantType>('secondary');
@@ -67,32 +69,12 @@ export class UISpinnerComponent {
   });
 
   spinnerStyles = computed(() => {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-    
-    if (customStyles['backgroundColor']) {
-      styles['--spinner-bg'] = customStyles['backgroundColor']; // Specific var
-      styles['--theme-bg'] = customStyles['backgroundColor'];   // Generic var
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
+    const custom = this.customStyles();
+    const styles = { ...mergeCustomStyles(custom, 'spinner') };
+    if (custom['color']) {
+      styles['--spinner-border'] = `4px solid ${custom['color']}`;
+      styles['--spinner-border-top'] = `4px solid ${custom['color']}`;
     }
-    
-    if (customStyles['color']) {
-      styles['--spinner-border'] = `4px solid ${customStyles['color']}`; // Spinner color implies border
-      styles['--spinner-border-top'] = `4px solid ${customStyles['color']}`;
-      styles['--theme-color'] = customStyles['color'];
-      styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
-    // Copy any other custom styles
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
-    
     return styles;
   });
 

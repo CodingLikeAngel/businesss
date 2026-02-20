@@ -213,7 +213,8 @@ Componentes **sin variantes numeradas**: spacer, shape, video, map, date-time-pi
   - Unificado `styleUrl` en todos los componentes que tenían un solo archivo SCSS.
   - Alias `@negocio/ui-components/models` añadido en `tsconfig.base.json` (uso desde apps; dentro de la lib se mantienen imports relativos para no crear entry points extra en Nx).
   - Utilidad `mergeCustomStyles()` en `lib/models/merge-custom-styles.util.ts`; componente piloto **button** migrado (usa `mergeCustomStyles(customStyles, 'btn')` y `ChangeDetectionStrategy.OnPush`).
-- **Fases 2–4:** Pendientes (aplicar mergeCustomStyles/OnPush al resto de familias, unificar acordeon/accordion, tokens y accesibilidad).
+- **Fase 2 (hecho):** Aplicado estándar (mergeCustomStyles + OnPush) a: Button (piloto), Chip, Spinner, Card, Input, Modal, Tabs, Table, Tooltip, Title, Accordion (acordeon), Breadcrumbs, List, Nav-bar.
+- **Fases 3–4:** Pendientes (unificar acordeon/accordion, tokens y accesibilidad).
 
 ---
 

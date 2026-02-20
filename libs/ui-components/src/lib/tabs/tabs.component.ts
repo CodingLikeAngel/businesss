@@ -1,6 +1,7 @@
-import { Component, Output, EventEmitter, OnInit, input, computed } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { variants as baseVariants } from '../models/ui-components-data.model';
+import { mergeCustomStyles } from '../models/merge-custom-styles.util';
 
 // Variante específica del componente hijo
 const specificTabsVariants = ['pixel-adventure'] as const;
@@ -28,6 +29,7 @@ export interface TabsCustomStyles {
   imports: [CommonModule],
   templateUrl: './tabs.component.html',
   styleUrl: './tabs.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UITabsComponent implements OnInit {
   variant = input<TabsVariantType>('secondary');
@@ -66,31 +68,7 @@ export class UITabsComponent implements OnInit {
     }
   }
 
-  tabsStyles = computed(() => {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-    
-    if (customStyles['backgroundColor']) {
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-    
-    if (customStyles['color']) {
-      styles['--theme-color'] = customStyles['color'];
-      styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
-    
-    return styles;
-  });
+  tabsStyles = computed(() => mergeCustomStyles(this.customStyles(), 'tabs'));
 
   tabsClasses = computed(() => {
     return [

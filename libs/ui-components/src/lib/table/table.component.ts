@@ -1,7 +1,8 @@
 // table.component.ts (Hijo - UITableComponent)
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { variants as baseVariants } from '../models/ui-components-data.model';
+import { mergeCustomStyles } from '../models/merge-custom-styles.util';
 
 // Variante específica del componente hijo
 const specificTableVariants = ['data-grid'] as const;
@@ -41,31 +42,7 @@ export class UITableComponent {
   rows = input<TableRow[]>([]);
   customStyles = input<TableCustomStyles>({});
 
-  tableStyles = computed(() => {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-    
-    if (customStyles['backgroundColor']) {
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-    
-    if (customStyles['color']) {
-      styles['--theme-color'] = customStyles['color'];
-      styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
-    
-    return styles;
-  });
+  tableStyles = computed(() => mergeCustomStyles(this.customStyles(), 'table'));
 
   tableClasses = computed(() => {
     const classes = ['table-container', `table-${this.variant()}`];

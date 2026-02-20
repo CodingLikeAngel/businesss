@@ -1,7 +1,8 @@
 // title.component.ts (Hijo - UITitleComponent)
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { variants as baseVariants } from '../models/ui-components-data.model';
+import { mergeCustomStyles } from '../models/merge-custom-styles.util';
 
 // Variante específica del componente hijo
 const specificTitleVariants = ['arcade'] as const;
@@ -30,6 +31,7 @@ export interface TitleCustomStyles {
   imports: [CommonModule],
   templateUrl: './title.component.html',
   styleUrl: './title.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UITitleComponent {
   level = input<TitleLevel>('h1');
@@ -49,31 +51,5 @@ export class UITitleComponent {
     `title--align-${this.align()}`,
   ].filter(Boolean));
 
-  titleStyles = computed(() => {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-    
-    if (customStyles['backgroundColor']) {
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--title-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-    
-    if (customStyles['color']) {
-      styles['--theme-color'] = customStyles['color'];
-      styles['--title-color'] = customStyles['color'];
-      styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
-
-    return styles;
-  });
+  titleStyles = computed(() => mergeCustomStyles(this.customStyles(), 'title'));
 }

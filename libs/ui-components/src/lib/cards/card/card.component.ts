@@ -4,6 +4,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { GlitchEffectPipe } from "./pipes/glitch-effect.pipe";
 import { HighlightEffectPipe } from "./pipes/highlight-effect.pipe";
 import { variants } from '../../models/ui-components-data.model';
+import { mergeCustomStyles } from '../../models/merge-custom-styles.util';
 
 // Tipos y constantes
 export const cardVariants = variants;
@@ -85,31 +86,7 @@ export class UICardComponent {
     return { ...this.componentStyles(), '--card-overlay-opacity': this.isHovered ? '0.3' : '0' };
   }
 
-  componentStyles = computed(() => {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-    
-    if (customStyles['backgroundColor']) {
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-    
-    if (customStyles['color']) {
-      styles['--theme-color'] = customStyles['color'];
-      styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
-    
-    return styles;
-  });
+  componentStyles = computed(() => mergeCustomStyles(this.customStyles(), 'card'));
 
   cardClasses = computed(() => ['card', `card--${this.variant()}`, `card--size-${this.size()}`]);
 

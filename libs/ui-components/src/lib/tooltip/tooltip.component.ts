@@ -1,7 +1,8 @@
 // tooltip.component.ts (Hijo - UITooltipComponent)
-import { Component, input, computed } from '@angular/core';
+import { Component, input, computed, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { variants as baseVariants } from '../models/ui-components-data.model';
+import { mergeCustomStyles } from '../models/merge-custom-styles.util';
 
 // Variante específica del componente hijo
 const specificTooltipVariants = ['pixel-info'] as const;
@@ -27,6 +28,7 @@ export interface TooltipCustomStyles {
   imports: [CommonModule],
   templateUrl: './tooltip.component.html',
   styleUrl: './tooltip.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UITooltipComponent {
   variant = input<TooltipVariantType>('secondary');
@@ -51,31 +53,5 @@ export class UITooltipComponent {
     return classes.join(' ');
   });
 
-  tooltipStyles = computed(() => {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-    
-    if (customStyles['backgroundColor']) {
-      styles['--tooltip-bg'] = customStyles['backgroundColor'];
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-    
-    if (customStyles['color']) {
-      styles['--tooltip-color'] = customStyles['color'];
-      styles['--theme-color'] = customStyles['color'];
-      styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
-
-    return styles;
-  });
+  tooltipStyles = computed(() => mergeCustomStyles(this.customStyles(), 'tooltip'));
 }
