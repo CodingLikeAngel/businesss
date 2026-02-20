@@ -15,6 +15,7 @@ import {
 import { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { EditorFeaturesIsolatedModeComponent } from './editor-features-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 @Component({
   selector: 'lib-editor-features-section',
@@ -25,7 +26,8 @@ import { EditorFeaturesIsolatedModeComponent } from './editor-features-isolated-
     UICardAnimatedComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorFeaturesIsolatedModeComponent
+    EditorFeaturesIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-features-section.component.html'
 })

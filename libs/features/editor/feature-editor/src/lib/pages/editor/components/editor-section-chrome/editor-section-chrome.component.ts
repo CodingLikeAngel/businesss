@@ -18,8 +18,9 @@ import { CommonModule } from '@angular/common';
       </div>
       <div class="section-actions">
         <button
+          type="button"
           class="action-btn"
-          (click)="editClick.emit($event)"
+          (click)="editClick.emit($event as MouseEvent)"
           [title]="editButtonTitle">
           <span>🎯</span>
           <span class="btn-text">Editar</span>
@@ -116,6 +117,6 @@ export class EditorSectionChromeComponent {
   @Input() showEditorControls = false;
   @Input() editButtonTitle = 'Modo Aislado (I)';
 
-  @Output() editClick = new EventEmitter<Event>();
+  @Output() editClick = new EventEmitter<MouseEvent>();
   @Output() togglePreview = new EventEmitter<void>();
 }
