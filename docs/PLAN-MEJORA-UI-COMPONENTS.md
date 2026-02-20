@@ -175,6 +175,13 @@ Componentes **sin variantes numeradas**: spacer, shape, video, map, date-time-pi
 8. **Convención de clases**
    - Documentar en README o en este plan la convención BEM-like y aplicarla de forma gradual en SCSS (sin romper variantes existentes si no es necesario).
 
+**Convención BEM adoptada (documentada en README de la lib):**
+- **Block:** nombre del componente en minúsculas (ej. `btn`, `card`, `accordion-container`).
+- **Element:** bloque + `--` + elemento (ej. `card--title`, `accordion-header`). Se acepta también bloque + `-` + nombre cuando es parte clara del bloque (ej. `accordion-header`, `accordion-content-wrapper`).
+- **Modifier:** bloque o elemento + `--` + modificador (ej. `btn--primary`, `card--size-wide`, `accordion-rounded-md`). Para variantes de diseño se usa a menudo `variant-<nombre>` o `<block>-<modificador>`.
+- **Estados:** `is-expanded`, `is-open`, `is-active`, `dark` cuando aplican.
+- Los componentes que admiten variantes usan clases tipo `<block>-<variant>` (ej. `btn-primary`, `chip-secondary`) generadas por el mixin `apply-all-variants('<prefix>-')` desde `lib/styles`.
+
 ### Fase 4 – Diseño y UX
 
 9. **Tokens y variables**
@@ -213,8 +220,9 @@ Componentes **sin variantes numeradas**: spacer, shape, video, map, date-time-pi
   - Unificado `styleUrl` en todos los componentes que tenían un solo archivo SCSS.
   - Alias `@negocio/ui-components/models` añadido en `tsconfig.base.json` (uso desde apps; dentro de la lib se mantienen imports relativos para no crear entry points extra en Nx).
   - Utilidad `mergeCustomStyles()` en `lib/models/merge-custom-styles.util.ts`; componente piloto **button** migrado (usa `mergeCustomStyles(customStyles, 'btn')` y `ChangeDetectionStrategy.OnPush`).
-- **Fase 2 (hecho):** Aplicado estándar (mergeCustomStyles + OnPush) a: Button (piloto), Chip, Spinner, Card, Input, Modal, Tabs, Table, Tooltip, Title, Accordion (acordeon), Breadcrumbs, List, Nav-bar.
-- **Fases 3–4:** Pendientes (unificar acordeon/accordion, tokens y accesibilidad).
+- **Fase 2 (hecho):** Aplicado estándar (mergeCustomStyles + OnPush) a: Button (piloto), Chip, Spinner, Card, Input, Modal, Tabs, Table, Tooltip, Title, Accordion, Breadcrumbs, List, Nav-bar.
+- **Fase 3 (hecho):** Base accordion movida de `acordeon/` a `accordion/`; carpeta `acordeon` eliminada; export unificado desde `accordion/accordion.component`. Convención BEM documentada en este plan y en README de la lib.
+- **Fase 4 (hecho):** Tokens referenciados en README; checklist de accesibilidad en README; README de la librería creado con uso, props, tokens y a11y.
 
 ---
 

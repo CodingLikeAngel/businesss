@@ -80,6 +80,44 @@ nx test ui-components
 nx build ui-components
 ```
 
+## 🎯 Tokens del tema
+
+Los componentes consumen variables CSS definidas en `lib/styles/_variables.scss` y en el tema global. Usar estos tokens en lugar de valores fijos:
+
+| Token | Uso |
+|-------|-----|
+| `--theme-bg` | Fondo del componente |
+| `--theme-color` | Texto / color principal |
+| `--theme-accent` | Acentos y hover |
+| `--theme-radius` | Border radius general |
+| `--theme-border` | Borde |
+| `--theme-shadow` | Sombra |
+| `--theme-font` | Fuente |
+| `--theme-padding` | Padding estándar |
+| `--theme-items-gap` | Separación entre ítems |
+| `--fs-xs` … `--fs-2xl` | Escala tipográfica |
+| `--sp-1` … `--sp-16` | Escala de espaciado |
+| `--shadow-sm` … `--shadow-xl` | Sombras |
+
+Los estilos personalizados (`customStyles`) se fusionan con `mergeCustomStyles()` y mapean `backgroundColor`/`color` a estos tokens y a variables con prefijo del componente (ej. `--btn-bg`, `--card-color`).
+
+## 📐 Convención de clases (BEM-like)
+
+- **Block:** nombre del componente (`btn`, `card`, `accordion-container`).
+- **Element:** bloque + `--` o `-` + nombre (`card--title`, `accordion-header`, `accordion-content-wrapper`).
+- **Modifier:** bloque/elemento + modificador (`btn--primary`, `card--size-wide`, `accordion-rounded-md`). Variantes de diseño: `variant-<nombre>` o `<block>-<variant>`.
+- **Estados:** `is-expanded`, `is-open`, `is-active`, `dark` cuando apliquen.
+- Variantes generadas con el mixin `apply-all-variants('<prefix>-')` desde `lib/styles`.
+
+## ♿ Accesibilidad (checklist)
+
+- **Botones / enlaces:** `aria-label` o texto visible, `aria-disabled` cuando corresponda, `:focus-visible` visible (outline/box-shadow).
+- **Modales:** `role="dialog"`, `aria-modal="true"`, trampa de foco, cierre con Escape.
+- **Tooltips:** no depender solo de hover; activación por teclado/focus; `aria-describedby` si se asocia al elemento disparador.
+- **Formularios:** `<label>` asociado o `aria-label`; mensajes de error con `aria-describedby` o `aria-errormessage`.
+- **Acordeón:** `aria-expanded`, `aria-controls` en el botón; `role="region"` y `aria-labelledby` en el panel; `:focus-visible` en el header.
+- **Contraste:** cumplir WCAG 2.1 AA donde aplique (texto y controles).
+
 ## 🔗 Enlaces Útiles
 
 - [Nx Documentation](https://nx.dev)

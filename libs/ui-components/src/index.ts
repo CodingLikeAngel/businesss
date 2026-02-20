@@ -80,7 +80,7 @@ export * from './lib/chart/chart-2/chart-2.component';
 export * from './lib/chart/chart-3/chart-3.component';
 
 // Misc UI
-export * from './lib/acordeon/accordion.component';
+export * from './lib/accordion/accordion.component';
 export * from './lib/accordion/accordion-1/accordion-1.component';
 export * from './lib/accordion/accordion-2/accordion-2.component';
 export * from './lib/accordion/accordion-3/accordion-3.component';

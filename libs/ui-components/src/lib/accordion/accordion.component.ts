@@ -3,10 +3,9 @@ import { CommonModule } from '@angular/common';
 import { variants as globalVariants } from '../models/ui-components-data.model';
 import { mergeCustomStyles } from '../models/merge-custom-styles.util';
 
-// Variantes específicas del acordeón
+// Variantes específicas del accordion
 export const accordionSpecificVariants = ['mi-variant-custom', 'otra-especial'] as const;
 
-// Todas las variantes base (globales + específicas)
 export const baseAccordionVariants = [...globalVariants, ...accordionSpecificVariants] as const;
 type BaseAccordionVariant = typeof baseAccordionVariants[number];
 
@@ -16,8 +15,7 @@ export interface AccordionItem {
   expanded?: boolean;
 }
 
-// Interfaz para las propiedades CSS personalizadas
-export interface AcordeonCustomStyles {
+export interface AccordionCustomStyles {
   backgroundColor?: string;
   color?: string;
   '--accordion-bg'?: string;
@@ -43,16 +41,14 @@ export interface AcordeonCustomStyles {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UIAccordionComponent {
-  // Convertimos los @Input en señales
   variant = input<BaseAccordionVariant | string>('secondary');
   rounded = input<'none' | 'md' | 'full'>('md');
   size = input<'sm' | 'md' | 'lg'>('md');
   dark = input<boolean>(false);
   items = input<AccordionItem[]>([]);
   singleExpand = input<boolean>(false);
-  customStyles = input<AcordeonCustomStyles>({}); // Estilos personalizados
+  customStyles = input<AccordionCustomStyles>({});
 
-  // Estado interno como señal
   expandedIndex = signal(-1);
 
   accordionStyles = computed(() => {
@@ -60,24 +56,19 @@ export class UIAccordionComponent {
     return { '--accordion-bg': 'white', '--accordion-color': '#333', ...base };
   });
 
-  // Estado interno para manejar múltiples items abiertos
   private openItems = signal(new Set<number>());
 
-  // Computed para saber si un item está expandido
-  isItemExpanded(index: number, expandedFromInput?: boolean): boolean {
+  isItemExpanded(index: number, _expandedFromInput?: boolean): boolean {
     if (this.singleExpand()) {
       return this.expandedIndex() === index;
     }
-    // Si viene expandido por defecto en el input y no hemos interactuado aún, lo respetamos
-    // Pero para simplificar, usaremos nuestro set interno como fuente de verdad
     return this.openItems().has(index);
   }
 
-  // Clases calculadas con computed basadas en señales
   accordionClasses = computed(() => {
     const classes = [
       'accordion-container',
-      `variant-${this.variant()}`, 
+      `variant-${this.variant()}`,
       `accordion-rounded-${this.rounded()}`,
       `accordion-${this.size()}`,
       this.dark() ? 'dark' : '',
@@ -96,7 +87,7 @@ export class UIAccordionComponent {
 
   contentClasses = computed(() => {
     const classes = [
-      'accordion-content-wrapper', // Wrapper para animación
+      'accordion-content-wrapper',
       `content-${this.size()}`,
       this.dark() ? 'dark' : '',
     ];
@@ -105,9 +96,9 @@ export class UIAccordionComponent {
 
   toggleItem(index: number) {
     if (this.singleExpand()) {
-      this.expandedIndex.update(current => current === index ? -1 : index);
+      this.expandedIndex.update((current) => (current === index ? -1 : index));
     } else {
-      this.openItems.update(set => {
+      this.openItems.update((set) => {
         const newSet = new Set(set);
         if (newSet.has(index)) {
           newSet.delete(index);
