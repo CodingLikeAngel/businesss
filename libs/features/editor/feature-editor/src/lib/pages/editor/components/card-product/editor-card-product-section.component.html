@@ -39,7 +39,7 @@
   <lib-editor-card-product-isolated-mode
     *ngIf="showIsolatedMode"
     [config]="isolatedConfig!"
-    (closed)="showIsolatedMode = false"
+    (closed)="onIsolatedModeClosed()"
     (applied)="onIsolatedModeApplied($event)">
   </lib-editor-card-product-isolated-mode>
 </section>

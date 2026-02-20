@@ -135,10 +135,12 @@ export class EditorFaqSectionComponent extends EnhancedBaseEditorSectionComponen
       position: { x: 0, y: 0 },
       size: { width: 800, height: 600 }
     };
+    if (typeof document !== 'undefined') document.body.classList.add('isolated-mode-active');
     this.showIsolatedMode = true;
   }
 
   onIsolatedModeClosed(): void {
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 
@@ -147,6 +149,7 @@ export class EditorFaqSectionComponent extends EnhancedBaseEditorSectionComponen
       content: { ...this.section.content, ...config.content },
       styles: { ...this.section.styles, ...config.styles }
     });
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 }

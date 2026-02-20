@@ -139,10 +139,12 @@ export class EditorProductsSectionComponent extends EnhancedBaseEditorSectionCom
       position: { x: 0, y: 0 },
       size: { width: 1100, height: 700 }
     };
+    if (typeof document !== 'undefined') document.body.classList.add('isolated-mode-active');
     this.showIsolatedMode = true;
   }
 
   onIsolatedModeClosed(): void {
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 
@@ -151,6 +153,7 @@ export class EditorProductsSectionComponent extends EnhancedBaseEditorSectionCom
       content: { ...this.section.content, ...config.content },
       styles: { ...this.section.styles, ...config.styles }
     });
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 }

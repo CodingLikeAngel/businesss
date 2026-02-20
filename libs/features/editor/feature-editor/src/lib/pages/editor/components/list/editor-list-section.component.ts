@@ -40,10 +40,12 @@ export class EditorListSectionComponent extends EnhancedBaseEditorSectionCompone
       position: { x: 0, y: 0 },
       size: { width: 400, height: 300 }
     };
+    if (typeof document !== 'undefined') document.body.classList.add('isolated-mode-active');
     this.showIsolatedMode = true;
   }
 
   onIsolatedModeClosed(): void {
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 
@@ -52,6 +54,7 @@ export class EditorListSectionComponent extends EnhancedBaseEditorSectionCompone
       content: { ...this.section.content, ...config.content },
       styles: { ...this.section.styles, ...config.styles }
     });
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 }

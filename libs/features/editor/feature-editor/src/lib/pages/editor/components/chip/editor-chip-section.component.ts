@@ -144,7 +144,13 @@ export class EditorChipSectionComponent extends EnhancedBaseEditorSectionCompone
       position: { x: 0, y: 0 },
       size: { width: 0, height: 0 }
     };
+    if (typeof document !== 'undefined') document.body.classList.add('isolated-mode-active');
     this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
+    this.showIsolatedMode = false;
   }
 
   onIsolatedModeApplied(config: IsolatedModeConfig) {
@@ -154,6 +160,7 @@ export class EditorChipSectionComponent extends EnhancedBaseEditorSectionCompone
              ...config.content
           }
       });
+      if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
       this.showIsolatedMode = false;
   }
 }

@@ -59,7 +59,13 @@ export class EditorCardTestimonialSectionComponent extends EnhancedBaseEditorSec
       position: { x: 0, y: 0 },
       size: { width: 450, height: 400 }
     };
+    if (typeof document !== 'undefined') document.body.classList.add('isolated-mode-active');
     this.showIsolatedMode = true;
+  }
+
+  onIsolatedModeClosed(): void {
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
+    this.showIsolatedMode = false;
   }
 
   onIsolatedModeApplied(config: IsolatedModeConfig): void {
@@ -75,6 +81,7 @@ export class EditorCardTestimonialSectionComponent extends EnhancedBaseEditorSec
       this.variantService.setComponentVariant(this.section.id, config.content['variant']);
     }
 
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 }

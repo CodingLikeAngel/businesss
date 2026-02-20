@@ -140,10 +140,12 @@ export class EditorShowcaseSectionComponent extends EnhancedBaseEditorSectionCom
         height: parseInt(showcaseStyles.minHeight || showcaseStyles.height) || 150
       }
     };
+    if (typeof document !== 'undefined') document.body.classList.add('isolated-mode-active');
     this.showIsolatedMode = true;
   }
 
   onIsolatedModeClosed(): void {
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 
@@ -160,6 +162,7 @@ export class EditorShowcaseSectionComponent extends EnhancedBaseEditorSectionCom
         customStyles: config.styles
       }
     });
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 }

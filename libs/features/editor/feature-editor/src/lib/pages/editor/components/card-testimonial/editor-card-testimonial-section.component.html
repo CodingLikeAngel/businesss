@@ -52,7 +52,7 @@
   <lib-editor-card-testimonial-isolated-mode
     *ngIf="showIsolatedMode"
     [config]="isolatedConfig!"
-    (closed)="showIsolatedMode = false"
+    (closed)="onIsolatedModeClosed()"
     (applied)="onIsolatedModeApplied($event)">
   </lib-editor-card-testimonial-isolated-mode>
 </section>

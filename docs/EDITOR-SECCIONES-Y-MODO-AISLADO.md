@@ -23,29 +23,29 @@ Todas estas secciones muestran el chrome de editor (etiqueta + botón Editar) y 
 | video | EditorVideoSectionComponent | Sí |
 | testimonials | EditorTestimonialsSectionComponent | Sí |
 | title, ui-title | EditorTitleSectionComponent | Sí |
-| tabs, ui-tabs | EditorTabsSectionComponent | Sí (pendiente revisar) |
-| table, ui-table | EditorTableSectionComponent | Sí (pendiente revisar) |
+| tabs, ui-tabs | EditorTabsSectionComponent | Sí |
+| table, ui-table | EditorTableSectionComponent | Sí |
 | steps | EditorStepsSectionComponent | Sí |
-| faq | EditorFaqSectionComponent | Revisar |
+| faq | EditorFaqSectionComponent | Sí |
 | accordion, ui-accordion | EditorAccordionSectionComponent | Sí |
 | button, ui-button | EditorButtonSectionComponent | Sí |
 | image, ui-image | EditorImageSectionComponent | Sí |
-| list, ui-list | EditorListSectionComponent | Revisar |
-| map, ui-map | EditorMapSectionComponent | Revisar |
-| products | EditorProductsSectionComponent | Revisar |
-| promotions | EditorPromotionsSectionComponent | Revisar |
-| services | EditorServicesSectionComponent | Revisar |
-| shape, ui-shape | EditorShapeSectionComponent | Revisar |
-| showcase, ui-showcase | EditorShowcaseSectionComponent | Revisar |
-| card-animated, ui-card-animated | EditorCardAnimatedSectionComponent | Revisar |
-| card-product, ui-card-product | EditorCardProductSectionComponent | Revisar |
-| card-testimonial, ui-card-testimonial | EditorCardTestimonialSectionComponent | Revisar |
+| list, ui-list | EditorListSectionComponent | Sí |
+| map, ui-map | EditorMapSectionComponent | Sí |
+| products | EditorProductsSectionComponent | Sí |
+| promotions | EditorPromotionsSectionComponent | Sí |
+| services | EditorServicesSectionComponent | Sí |
+| shape, ui-shape | EditorShapeSectionComponent | Sí |
+| showcase, ui-showcase | EditorShowcaseSectionComponent | Sí |
+| card-animated, ui-card-animated | EditorCardAnimatedSectionComponent | Sí |
+| card-product, ui-card-product | EditorCardProductSectionComponent | Sí |
+| card-testimonial, ui-card-testimonial | EditorCardTestimonialSectionComponent | Sí |
 | card-premium, ui-card-premium | EditorCardPremiumSectionComponent | Revisar |
 | card-rutas | EditorCardRutasSectionComponent | Revisar |
-| chip, ui-chip | EditorChipSectionComponent | Revisar |
+| chip, ui-chip | EditorChipSectionComponent | Sí |
 | draggable-box, layout-section | EditorDraggableBoxSectionComponent / EditorLayoutSectionComponent | Sí (propio overlay) |
 
-**Nota**: Las filas marcadas como "Revisar" pueden no tener aún `isolated-mode-active` en body; se puede añadir el mismo patrón (add al abrir, remove en closed y applied) para consistencia.
+**Nota**: card-premium y card-rutas pueden revisarse después para añadir el mismo patrón de body class si abren modo aislado.
 
 ---
 

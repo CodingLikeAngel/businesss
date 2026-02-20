@@ -124,10 +124,12 @@ export class EditorMapSectionComponent extends EnhancedBaseEditorSectionComponen
         height: parseInt(mapStyles.height) || 300
       }
     };
+    if (typeof document !== 'undefined') document.body.classList.add('isolated-mode-active');
     this.showIsolatedMode = true;
   }
 
   onIsolatedModeClosed(): void {
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 
@@ -142,6 +144,7 @@ export class EditorMapSectionComponent extends EnhancedBaseEditorSectionComponen
         customStyles: config.styles
       }
     });
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 }

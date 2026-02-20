@@ -41,7 +41,7 @@
   <lib-editor-card-animated-isolated-mode
     *ngIf="showIsolatedMode"
     [config]="isolatedConfig!"
-    (closed)="showIsolatedMode = false"
+    (closed)="onIsolatedModeClosed()"
     (applied)="onIsolatedModeApplied($event)">
   </lib-editor-card-animated-isolated-mode>
 </section>

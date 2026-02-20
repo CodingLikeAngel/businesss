@@ -66,6 +66,6 @@
 <lib-editor-chip-isolated-mode 
   *ngIf="showIsolatedMode && isolatedConfig"
   [config]="isolatedConfig"
-  (closed)="showIsolatedMode = false"
+  (closed)="onIsolatedModeClosed()"
   (applied)="onIsolatedModeApplied($event)">
 </lib-editor-chip-isolated-mode>
