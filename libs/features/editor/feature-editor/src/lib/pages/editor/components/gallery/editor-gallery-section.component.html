@@ -30,7 +30,7 @@
     <lib-ui-components-gallery-section
       [title]="section.content['title'] || 'Galería de Proyectos'"
       [subtitle]="section.content['subtitle'] || 'Nuestro trabajo reciente'"
-      [images]="section.content['items'] || galleryConfig.images"
+      [images]="getGalleryImages()"
       [variant]="$any(section.content['variant'] || getVariant(section.id))"
       [customStyles]="section.styles || {}"
       [applyDynamicStyles]="section.styles || {}"
@@ -67,7 +67,7 @@
     <lib-ui-components-gallery-section
       [title]="section.content['title'] || 'Galería de Proyectos'"
       [subtitle]="section.content['subtitle'] || 'Nuestro trabajo reciente'"
-      [images]="section.content['items'] || galleryConfig.images"
+      [images]="getGalleryImages()"
       [variant]="$any(section.content['variant'] || getVariant(section.id))"
       [customStyles]="section.styles || {}"
       [applyDynamicStyles]="section.styles || {}"

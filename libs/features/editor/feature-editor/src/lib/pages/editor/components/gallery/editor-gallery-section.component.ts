@@ -32,14 +32,30 @@ import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-se
   templateUrl: './editor-gallery-section.component.html'
 })
 export class EditorGallerySectionComponent extends EnhancedBaseEditorSectionComponent implements AfterViewInit, DoCheck {
-  @Input() galleryConfig!: GalleryConfig;
-  @Input() titleConfig!: TitleConfig;
+  @Input() galleryConfig?: GalleryConfig;
+  @Input() titleConfig?: TitleConfig;
 
   @ViewChild('sectionElement', { static: true }) sectionElement!: ElementRef;
   @ViewChild('galleryElement', { static: true }) galleryElement!: ElementRef;
 
   showIsolatedMode = false;
   isolatedConfig?: IsolatedModeConfig;
+
+  /** Default images so preview always shows something when no items/config. */
+  private static readonly DEFAULT_IMAGES = [
+    { src: 'https://images.unsplash.com/photo-1542744173-8e7e53415bb0', alt: 'Proyecto 1' },
+    { src: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4', alt: 'Proyecto 2' },
+    { src: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c', alt: 'Proyecto 3' },
+    { src: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f', alt: 'Proyecto 4' }
+  ];
+
+  getGalleryImages(): { src: string; alt: string; category?: string }[] {
+    const items = this.section?.content?.['items'];
+    if (items && Array.isArray(items) && items.length > 0) return items;
+    const configImages = this.galleryConfig?.images;
+    if (configImages && Array.isArray(configImages) && configImages.length > 0) return configImages;
+    return EditorGallerySectionComponent.DEFAULT_IMAGES;
+  }
 
   ngDoCheck() {
     // Sincronización de imágenes individuales si se editan desde el panel lateral
