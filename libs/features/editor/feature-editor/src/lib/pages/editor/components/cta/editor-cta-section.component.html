@@ -28,9 +28,9 @@
        (visualEvents)="handleCtaEvent($event)">
     
     <lib-ui-cta-section
-      [title]="section.content['title'] || '¿Listo para impulsar tu negocio?'"
-      [description]="section.content['description'] || 'Únete a nosotros y descubre el futuro del éxito profesional.'"
-      [ctaLabel]="section.content['ctaLabel'] || 'Ver Ofertas'"
+      [title]="getSectionContent('title', '¿Listo para impulsar tu negocio?')"
+      [description]="getSectionContent('description', 'Únete a nosotros y descubre el futuro del éxito profesional.')"
+      [ctaLabel]="getSectionContent('ctaLabel', 'Ver Ofertas')"
       [variant]="$any(getVariant(section.id))"
     ></lib-ui-cta-section>
 

@@ -125,10 +125,12 @@ export class EditorTitleSectionComponent extends EnhancedBaseEditorSectionCompon
         height: parseInt(titleStyles.minHeight || titleStyles.height) || 50
       }
     };
+    if (typeof document !== 'undefined') document.body.classList.add('isolated-mode-active');
     this.showIsolatedMode = true;
   }
 
   onIsolatedModeClosed(): void {
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 
@@ -145,6 +147,7 @@ export class EditorTitleSectionComponent extends EnhancedBaseEditorSectionCompon
         customStyles: config.styles
       }
     });
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 }

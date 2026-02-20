@@ -124,10 +124,12 @@ export class EditorImageSectionComponent extends EnhancedBaseEditorSectionCompon
         height: parseInt(imageStyles.height) || 300
       }
     };
+    if (typeof document !== 'undefined') document.body.classList.add('isolated-mode-active');
     this.showIsolatedMode = true;
   }
 
   onIsolatedModeClosed(): void {
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 
@@ -141,6 +143,7 @@ export class EditorImageSectionComponent extends EnhancedBaseEditorSectionCompon
         customStyles: config.styles
       }
     });
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 }

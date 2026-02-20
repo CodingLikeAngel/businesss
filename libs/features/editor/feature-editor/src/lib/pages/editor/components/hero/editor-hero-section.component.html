@@ -14,13 +14,13 @@
 
   <ng-container [ngSwitch]="section.type">
   <lib-ui-hero-minimal *ngSwitchCase="'hero-minimal'"
-      [title]="section.content['title'] || 'Less is More'"
-      [subtitle]="section.content['subtitle'] || 'Minimalist design focuses on the essential.'"
-      [badge]="section.content['badge'] || 'Introducing'"
-      [variant]="$any(section.content['variant'] || getVariant(section.id))"
-      [ctaLabel]="section.content['ctaLabel'] || 'Read More'"
-      [secondaryCtaLabel]="section.content['secondaryCtaLabel']"
-      [showCta]="section.content['showCta'] !== false"
+      [title]="getSectionContent('title', 'Less is More')"
+      [subtitle]="getSectionContent('subtitle', 'Minimalist design focuses on the essential.')"
+      [badge]="getSectionContent('badge', 'Introducing')"
+      [variant]="$any(getSectionContent('variant', getVariant(section.id)))"
+      [ctaLabel]="getSectionContent('ctaLabel', 'Read More')"
+      [secondaryCtaLabel]="section?.content?.['secondaryCtaLabel']"
+      [showCta]="section?.content?.['showCta'] !== false"
       [customStyles]="section.styles || {}"
       (click)="selectSection($event, section)"
       class="editor-section cursor-pointer block"
@@ -29,14 +29,14 @@
 
   <!-- HERO SPLIT -->
   <lib-ui-hero-split *ngSwitchCase="'hero-split'"
-      [title]="section.content['title'] || 'Hero Split'"
-      [subtitle]="section.content['subtitle'] || 'Perfect balance between visuals and content.'"
-      [variant]="$any(section.content['variant'] || getVariant(section.id))"
-      [ctaLabel]="section.content['ctaLabel'] || 'Get Started'"
-      [secondaryCtaLabel]="section.content['secondaryCtaLabel']"
-      [showCta]="section.content['showCta'] !== false"
-      [image]="section.content['image']"
-      [icon]="section.content['icon'] || '🚀'"
+      [title]="getSectionContent('title', 'Hero Split')"
+      [subtitle]="getSectionContent('subtitle', 'Perfect balance between visuals and content.')"
+      [variant]="$any(getSectionContent('variant', getVariant(section.id)))"
+      [ctaLabel]="getSectionContent('ctaLabel', 'Get Started')"
+      [secondaryCtaLabel]="section?.content?.['secondaryCtaLabel']"
+      [showCta]="section?.content?.['showCta'] !== false"
+      [image]="section?.content?.['image']"
+      [icon]="getSectionContent('icon', '🚀')"
       [customStyles]="section.styles || {}"
       (click)="selectSection($event, section)"
       class="editor-section cursor-pointer block"
@@ -66,7 +66,7 @@
            (visualEvents)="handleTitleEvent($event)">
         <lib-ui-components-title
           [level]="'h1'"
-          [text]="section.content['title'] || 'Título Impresionante'"
+          [text]="getSectionContent('title', 'Título Impresionante')"
           [variant]="$any(getVariant(section.id))"
           align="center"
         ></lib-ui-components-title>
@@ -79,10 +79,10 @@
            elementId="{{section.id + '_subtitle'}}"
            sectionId="{{section.id}}"
            (visualEvents)="handleSubtitleEvent($event)">
-        <p class="text-2xl md:text-3xl leading-relaxed">{{ section.content['subtitle'] || 'Tu éxito comienza con una presencia digital world-class.' }}</p>
+        <p class="text-2xl md:text-3xl leading-relaxed">{{ getSectionContent('subtitle', 'Tu éxito comienza con una presencia digital world-class.') }}</p>
       </div>
 
-      <div *ngIf="section.content['showCta'] !== false"
+      <div *ngIf="section?.content?.['showCta'] !== false"
            class="editor-element animate-bounce-subtle"
            [class.is-selected]="selectedElementId === section.id + '_cta'"
            (click)="selectElement($event, { id: section.id + '_cta', sectionId: section.id, content: section.content, type: 'cta' })"
@@ -91,15 +91,15 @@
            sectionId="{{section.id}}"
            (visualEvents)="handleCtaEvent($event)">
         <button class="cta-button font-bold text-lg px-10 py-4 rounded-full transition-all">
-          {{ section.content['ctaLabel'] || 'Empezar ahora' }}
+          {{ getSectionContent('ctaLabel', 'Empezar ahora') }}
         </button>
       </div>
     </div>
 
     <!-- Items Grid (Directly editable) -->
-    <div class="relative z-20 mt-20 w-full max-w-7xl px-4" *ngIf="section.content['items']?.length">
+    <div class="relative z-20 mt-20 w-full max-w-7xl px-4" *ngIf="section?.content?.['items']?.length">
       <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
-         <div *ngFor="let card of section.content['items']; let i = index"
+         <div *ngFor="let card of section?.content?.['items'] || []; let i = index"
               class="editor-element"
               [class.is-selected]="selectedElementId === section.id + '_card_' + i"
               (click)="selectElement($event, { id: section.id + '_card_' + i, sectionId: section.id, type: 'card', content: card, index: i, isItem: true })"

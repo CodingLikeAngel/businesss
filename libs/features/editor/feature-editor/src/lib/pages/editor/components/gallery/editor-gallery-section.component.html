@@ -28,10 +28,10 @@
        sectionId="{{section.id}}"
        (visualEvents)="handleGalleryWrapperEvent($event)">
     <lib-ui-components-gallery-section
-      [title]="section.content['title'] || 'Galería de Proyectos'"
-      [subtitle]="section.content['subtitle'] || 'Nuestro trabajo reciente'"
+      [title]="getSectionContent('title', 'Galería de Proyectos')"
+      [subtitle]="getSectionContent('subtitle', 'Nuestro trabajo reciente')"
       [images]="getGalleryImages()"
-      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [variant]="$any(getSectionContent('variant', getVariant(section.id)))"
       [customStyles]="section.styles || {}"
       [applyDynamicStyles]="section.styles || {}"
     ></lib-ui-components-gallery-section>
@@ -65,10 +65,10 @@
        sectionId="{{section.id}}"
        (visualEvents)="handleGalleryWrapperEvent($event)">
     <lib-ui-components-gallery-section
-      [title]="section.content['title'] || 'Galería de Proyectos'"
-      [subtitle]="section.content['subtitle'] || 'Nuestro trabajo reciente'"
+      [title]="getSectionContent('title', 'Galería de Proyectos')"
+      [subtitle]="getSectionContent('subtitle', 'Nuestro trabajo reciente')"
       [images]="getGalleryImages()"
-      [variant]="$any(section.content['variant'] || getVariant(section.id))"
+      [variant]="$any(getSectionContent('variant', getVariant(section.id)))"
       [customStyles]="section.styles || {}"
       [applyDynamicStyles]="section.styles || {}"
     ></lib-ui-components-gallery-section>

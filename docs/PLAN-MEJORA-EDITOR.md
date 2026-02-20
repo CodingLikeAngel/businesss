@@ -139,7 +139,8 @@ El editor es una aplicación compleja: **layout principal (desktop/mobile)**, **
 
 ## 6. Próximos pasos recomendados
 
-1. Priorizar **Fase 1** (auditoría preview y defensas en `section.content`/configs) y **Fase 2** (modo aislado y documentación).
+1. **Documentación de secciones**: Ver [EDITOR-SECCIONES-Y-MODO-AISLADO.md](./EDITOR-SECCIONES-Y-MODO-AISLADO.md) para la lista de tipos de sección y modo aislado.
+2. Priorizar **Fase 1** (auditoría preview y defensas en `section.content`/configs) y **Fase 2** (modo aislado y documentación).
 2. Asignar o repartir por bloques (hero, gallery, stats, layout, etc.) la revisión de preview y modo aislado.
 3. Crear issues o tareas por ítem del plan y cerrarlos según se implementen.
 4. Revisar este plan cada cierto tiempo (p. ej. trimestral) y ajustar prioridades según feedback de uso real.

@@ -153,10 +153,12 @@ export class EditorGallerySectionComponent extends EnhancedBaseEditorSectionComp
       position: { x: 0, y: 0 },
       size: { width: 800, height: 600 }
     };
+    if (typeof document !== 'undefined') document.body.classList.add('isolated-mode-active');
     this.showIsolatedMode = true;
   }
 
   onIsolatedModeClosed(): void {
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 
@@ -165,6 +167,7 @@ export class EditorGallerySectionComponent extends EnhancedBaseEditorSectionComp
       content: { ...this.section.content, ...config.content },
       styles: { ...this.section.styles, ...config.styles }
     });
+    if (typeof document !== 'undefined') document.body.classList.remove('isolated-mode-active');
     this.showIsolatedMode = false;
   }
 }

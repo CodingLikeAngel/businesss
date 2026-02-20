@@ -74,6 +74,16 @@ export abstract class BaseEditorSectionComponent implements OnInit, OnDestroy {
     return this.uiStateService.selectedElement?.id;
   }
 
+  /**
+   * Safe access to section content. Use in templates and logic to avoid undefined errors in preview/initial load.
+   * @param key Content key (e.g. 'title', 'items', 'variant')
+   * @param defaultValue Value when missing or section/content is undefined
+   */
+  getSectionContent<T = unknown>(key: string, defaultValue: T): T {
+    const value = this.section?.content?.[key];
+    return (value !== undefined && value !== null ? value : defaultValue) as T;
+  }
+
   getVariant(sectionId: string): any {
     const contentVariant = this.section?.content?.['variant'];
     if (contentVariant && contentVariant !== 'default') {
