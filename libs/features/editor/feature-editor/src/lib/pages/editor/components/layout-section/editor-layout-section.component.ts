@@ -1240,7 +1240,7 @@ interface ComponentDefaultSize {
 export class EditorLayoutSectionComponent extends BaseEditorSectionComponent implements OnInit, OnDestroy, OnChanges {
   // Dependency Injection
   readonly store = inject(Store);
-  readonly cdr = inject(ChangeDetectorRef);
+  override readonly cdr = inject(ChangeDetectorRef);
   readonly resizeService = inject(SlotResizeService);
   override readonly variantService = inject(VariantService);
   
