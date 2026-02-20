@@ -10,6 +10,7 @@ import { MainLayoutBaseComponent } from '../main-layout-base.component';
 
 import { EditorHeaderSectionComponent } from '../../editor/components/header/editor-header-section.component';
 import { EditorFooterSectionComponent } from '../../editor/components/footer/editor-footer-section.component';
+import { SUPPORTED_SECTION_TYPES } from '../../editor/components/section-renderer/section-type-registry';
 import { AICopilotComponent } from '../../../components/ai-copilot/ai-copilot.component';
 import { Store } from '@ngrx/store';
 import * as PageSelectors from '../../../store/selectors/page.selectors';
@@ -35,6 +36,9 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
   isSidebarCollapsed = false;
   sidebarWidth = 400;
   isResizing = false;
+
+  /** For 3.3: types with dedicated editor view, passed to Bloques so non-supported show "Vista genérica". */
+  supportedSectionTypes = Array.from(SUPPORTED_SECTION_TYPES);
 
   private store = inject(Store);
 

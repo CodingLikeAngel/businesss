@@ -1264,6 +1264,32 @@ export class VariantService {
     }
   }
 
+  /**
+   * Sync from NgRx store (source of truth). Called by the editor when store's current page changes
+   * (e.g. load, undo/redo) so Estructura panel and VariantService stay in sync with the store.
+   */
+  syncFromStore(page: Page | null): void {
+    if (!page) {
+      this.currentPageSubject.next(null);
+      this.sectionsSubject.next([]);
+      return;
+    }
+    const existing = this.currentPageSubject.getValue();
+    if (existing?.id === page.id && JSON.stringify(existing.sections) === JSON.stringify(page.sections)) {
+      return;
+    }
+    this.currentPageSubject.next({ ...page });
+    this.sectionsSubject.next(page.sections || []);
+    // Keep pages list in sync if this page is in it
+    const pages = this.pagesSubject.value;
+    const idx = pages.findIndex(p => p.id === page.id);
+    if (idx !== -1) {
+      const updated = [...pages];
+      updated[idx] = { ...page };
+      this.pagesSubject.next(updated);
+    }
+  }
+
   updatePage(pageId: string, changes: Partial<Page>): void {
     const updatedPages = this.pagesSubject.value.map(page =>
       page.id === pageId ? { ...page, ...changes, updatedAt: new Date() } : page

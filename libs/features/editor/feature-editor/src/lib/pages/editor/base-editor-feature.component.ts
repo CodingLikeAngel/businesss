@@ -172,6 +172,11 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
         hasFloatingChildren: this.checkFloatingChildren(s)
       })))
     );
+
+    // 3.2 Store → VariantService: keep Estructura panel in sync when store changes (undo/redo, load)
+    this.store.select(PageSelectors.selectCurrentPage).pipe(takeUntil(this.destroy$)).subscribe((page: any) => {
+      if (page) this.variantService.syncFromStore(page);
+    });
     
     // INITIAL LOAD: Sync VariantService data into NgRx Store
     this.syncVariantServiceToStore();

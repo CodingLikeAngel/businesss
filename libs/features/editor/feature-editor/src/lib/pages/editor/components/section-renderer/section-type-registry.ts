@@ -129,3 +129,10 @@ export const SECTION_TYPE_REGISTRY = registry;
 export function getSectionComponent(type: string): Type<unknown> {
   return SECTION_TYPE_REGISTRY.get(type) ?? EditorFallbackSectionComponent;
 }
+
+/** Set of section types that have a dedicated editor view (not fallback). Use for 3.3 Bloques alignment. */
+export const SUPPORTED_SECTION_TYPES = new Set(SECTION_TYPE_REGISTRY.keys());
+
+export function hasDedicatedEditorView(type: string): boolean {
+  return SUPPORTED_SECTION_TYPES.has(type);
+}

@@ -120,6 +120,8 @@ export class VariantSelectorComponent implements OnInit {
   activeIsolatedMode: string | null = null;
 
   @Input() isCollapsed = false;
+  /** Types that have a dedicated editor view (for 3.3 Bloques badge). Pass from app that uses section-type-registry. */
+  @Input() supportedSectionTypes: string[] | Set<string> | null = null;
   @Output() toggleCollapse = new EventEmitter<void>();
 
   // UI State getters/setters

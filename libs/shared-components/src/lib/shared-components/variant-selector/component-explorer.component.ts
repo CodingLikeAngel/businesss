@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { VariantService, PageSection } from '../../../services/variant.service';
@@ -292,6 +292,7 @@ interface SectionVariant {
             <div class="comp-meta">
               <h4>{{ comp.label }}</h4>
               <span class="comp-cat">{{ comp.category }}</span>
+              <span *ngIf="supportedSectionTypes && !hasDedicatedView(comp)" class="comp-badge-generic" title="Se edita con vista genérica">Vista genérica</span>
             </div>
             <div class="comp-select-indicator" aria-hidden="true"></div>
           </div>
@@ -884,6 +885,15 @@ interface SectionVariant {
           letter-spacing: 0.05em;
           margin-top: 0.5rem;
         }
+        .comp-badge-generic {
+          display: inline-block;
+          margin-top: 0.25rem;
+          font-size: 0.6rem;
+          color: #94a3b8;
+          background: rgba(148, 163, 184, 0.15);
+          padding: 2px 6px;
+          border-radius: 4px;
+        }
       }
 
       .comp-select-indicator {
@@ -1195,10 +1205,22 @@ interface SectionVariant {
   `]
 })
 export class ComponentExplorerComponent implements OnInit {
+  /** When set, types not in this list show a "Vista genérica" badge (3.3 Bloques alignment). */
+  @Input() supportedSectionTypes: string[] | Set<string> | null = null;
+
   selectedComponent: SectionVariant | null = null;
   selectedVariant = 'glass';
   selectedSubtype: string | null = null;
   selectedCategory = 'all';
+
+  /** True if this component type has a dedicated editor view (not fallback). */
+  hasDedicatedView(comp: SectionVariant): boolean {
+    if (!this.supportedSectionTypes) return true;
+    const set = this.supportedSectionTypes instanceof Set
+      ? this.supportedSectionTypes
+      : new Set(this.supportedSectionTypes);
+    return set.has(comp.type);
+  }
 
   categories = [
     { id: 'all', name: 'Todos', icon: '🎯' },

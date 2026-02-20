@@ -98,8 +98,8 @@ El editor es una aplicación compleja: **layout principal (desktop/mobile)**, **
 | # | Acción | Prioridad | Estado |
 |---|--------|-----------|--------|
 | 3.1 | Revisar ContentEditor y DesignEditor: para cada tipo de sección seleccionada, mostrar al menos campos básicos (y específicos si existen) enlazados al store. | Alta | ✅ Hecho: mensaje de ayuda cuando no hay campos (usar Modo Aislado). |
-| 3.2 | Asegurar que "Estructura" (orden, añadir/quitar secciones) y el store están siempre sincronizados; probar con layout y slots. | Alta | Pendiente |
-| 3.3 | Alinear "Bloques" disponibles con los tipos que tienen vista específica (no solo placeholder); ocultar o marcar como "próximamente" los que caen en default. | Media | Pendiente |
+| 3.2 | Asegurar que "Estructura" (orden, añadir/quitar secciones) y el store están siempre sincronizados; probar con layout y slots. | Alta | ✅ Hecho: Store → VariantService con `syncFromStore(page)`; suscripción en base-editor a `selectCurrentPage`; VariantService → Store ya existía vía currentPage$ en base. |
+| 3.3 | Alinear "Bloques" disponibles con los tipos que tienen vista específica (no solo placeholder); ocultar o marcar como "próximamente" los que caen en default. | Media | ✅ Hecho: `SUPPORTED_SECTION_TYPES` en section-type-registry; input `supportedSectionTypes` en variant-selector y component-explorer; badge "Vista genérica" para tipos no soportados; main-desktop-layout pasa la lista. |
 
 ### Fase 4 – Estado y persistencia
 

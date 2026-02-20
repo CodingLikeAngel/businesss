@@ -109,6 +109,7 @@
         <!-- EXPLORER PANEL -->
         <section class="panel-v2" *ngIf="activeTab === 'explorer'">
           <lib-component-explorer
+            [supportedSectionTypes]="supportedSectionTypes"
             (componentSelected)="onComponentSelected($event)"
           ></lib-component-explorer>
         </section>
