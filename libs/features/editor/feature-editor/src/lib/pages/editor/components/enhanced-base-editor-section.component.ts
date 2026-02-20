@@ -49,12 +49,13 @@ export abstract class EnhancedBaseEditorSectionComponent extends BaseEditorSecti
     return this.platformInfo.isTouch;
   }
 
-  ngOnInit() {
-    // Platform detection already done in constructor
+  override ngOnInit(): void {
+    super.ngOnInit();
   }
 
-  ngOnDestroy() {
+  override ngOnDestroy(): void {
     this.cleanupAllVisualEditing();
+    super.ngOnDestroy();
   }
 
   /**

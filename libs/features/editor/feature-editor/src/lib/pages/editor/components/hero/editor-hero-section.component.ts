@@ -17,6 +17,7 @@ import {
 } from '@negocio/featured-components';
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { EditorHeroIsolatedModeComponent, IsolatedModeConfig } from './editor-hero-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 import { HostListener } from '@angular/core';
 
 /**
@@ -34,7 +35,8 @@ import { HostListener } from '@angular/core';
     UIHeroMinimalComponent,
     UIHeroSplitComponent,
     EnhancedVisualEditableDirective,
-    EditorHeroIsolatedModeComponent
+    EditorHeroIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-hero-section.component.html',
   styleUrls: ['./editor-hero-section.component.scss']

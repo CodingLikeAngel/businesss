@@ -491,8 +491,7 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   @ViewChild('editableBox') editableBox!: ElementRef;
   
   private store = inject(Store);
-  private destroy$ = new Subject<void>();
-  private cdr = inject(ChangeDetectorRef);
+  override protected cdr = inject(ChangeDetectorRef);
   private persistSubject$ = new Subject<void>();
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
@@ -525,10 +524,7 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   isDragging = false;
   isResizing = false;
   resizeHandle = '';
-  
-  // Preview mode state
-  isPreviewMode = false;
-  showEditorControls = false;
+
   dragStartX = 0;
   dragStartY = 0;
   startLeft = 0;
@@ -536,23 +532,10 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   startWidth = 0;
   startHeight = 0;
 
-  ngOnInit() {
+  override ngOnInit() {
+    super.ngOnInit();
     this.loadPositionFromStore();
     this.mergeContentAndStyles();
-
-    // Subscribe to builder step changes to detect preview mode
-    this.variantService.builderStep$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(step => {
-        const wasPreviewMode = this.isPreviewMode;
-        this.isPreviewMode = step === 'preview';
-        
-        // Reset editor controls toggle when exiting preview mode
-        if (!this.isPreviewMode) {
-          this.showEditorControls = false;
-        }
-        this.cdr.detectChanges();
-      });
   }
 
   ngAfterViewInit() {
@@ -567,9 +550,8 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
       });
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  override ngOnDestroy() {
+    super.ngOnDestroy();
   }
 
   @HostListener('window:keydown', ['$event'])
@@ -723,10 +705,6 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   /**
    * Toggle editor controls in preview mode
    */
-  toggleEditorControlsInPreview(): void {
-    this.showEditorControls = !this.showEditorControls;
-    this.cdr.detectChanges();
-  }
 
   onMouseDown(event: MouseEvent) {
     if (this.isPreviewMode && !this.showEditorControls) return;

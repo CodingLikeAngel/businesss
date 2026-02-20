@@ -10,6 +10,7 @@ import { UITitleComponent } from '@negocio/ui-components';
 import { CTASectionComponent as UICTASectionComponent } from '@negocio/featured-components'; // Renamed to avoid conflict with CTASectionComponent in imports array
 import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-section.component';
 import { EditorCTAIsolatedModeComponent, IsolatedModeConfig } from './editor-cta-isolated-mode.component';
+import { EditorSectionChromeComponent } from '../editor-section-chrome/editor-section-chrome.component';
 
 /**
  * Enhanced Editor CTA Section Component
@@ -20,10 +21,11 @@ import { EditorCTAIsolatedModeComponent, IsolatedModeConfig } from './editor-cta
   standalone: true,
   imports: [
     CommonModule,
-    UICTASectionComponent, // Changed from CTASectionComponent
+    UICTASectionComponent,
     ApplyDynamicStylesDirective,
     EnhancedVisualEditableDirective,
-    EditorCTAIsolatedModeComponent
+    EditorCTAIsolatedModeComponent,
+    EditorSectionChromeComponent
   ],
   templateUrl: './editor-cta-section.component.html'
 })

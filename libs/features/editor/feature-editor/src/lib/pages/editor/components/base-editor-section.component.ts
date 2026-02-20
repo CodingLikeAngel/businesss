@@ -1,5 +1,7 @@
-import { Component, Input, Output, EventEmitter, inject, Inject, PLATFORM_ID, Optional } from '@angular/core';
+import { Component, Input, Output, EventEmitter, inject, Inject, PLATFORM_ID, Optional, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import {
   PageSection,
   UiStateService,
@@ -9,7 +11,7 @@ import {
 @Component({
   template: ''
 })
-export abstract class BaseEditorSectionComponent {
+export abstract class BaseEditorSectionComponent implements OnInit, OnDestroy {
   @Input() section!: PageSection;
   @Input()
   set isMobile(value: boolean) {
@@ -29,9 +31,39 @@ export abstract class BaseEditorSectionComponent {
   public uiStateService = inject(UiStateService);
   protected variantService = inject(VariantService);
   protected isBrowser: boolean;
+  protected cdr = inject(ChangeDetectorRef, { optional: true });
+  protected destroy$ = new Subject<void>();
+
+  /** Preview mode: true when builder step is 'preview'. Sections hide editor chrome unless showEditorControls is true. */
+  isPreviewMode = false;
+  /** When in preview mode, toggles visibility of section header and edit controls. */
+  showEditorControls = false;
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
+  }
+
+  ngOnInit(): void {
+    this.variantService.builderStep$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(step => {
+        this.isPreviewMode = step === 'preview';
+        if (!this.isPreviewMode) {
+          this.showEditorControls = false;
+        }
+        this.cdr?.detectChanges();
+      });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  /** Toggle editor controls visibility in preview mode. */
+  toggleEditorControlsInPreview(): void {
+    this.showEditorControls = !this.showEditorControls;
+    this.cdr?.detectChanges();
   }
 
   get selectedSectionId() {

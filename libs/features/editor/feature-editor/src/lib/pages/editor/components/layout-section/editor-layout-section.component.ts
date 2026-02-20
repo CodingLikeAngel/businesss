@@ -1245,13 +1245,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   override readonly variantService = inject(VariantService);
   
   // Lifecycle Management
-  private destroy$ = new Subject<void>();
   private persistSubject$ = new Subject<void>();
-  
-  // Preview mode state
-  isPreviewMode = false;
-  showEditorControls = false; // Toggle to show/hide editor controls in preview mode
-  
+
   config: LayoutSectionConfig = createDefaultLayoutConfig();
   isEditing = false;
   showLayoutPicker = false;
@@ -1279,27 +1274,15 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     super(platformId);
   }
 
-  ngOnInit() {
+  override ngOnInit() {
+    super.ngOnInit();
     this.loadConfigFromSection();
     this.resizeService.syncFromConfig(this.config);
     this.setupPersistence();
-    
-    // Subscribe to builder step changes to detect preview mode
     this.variantService.builderStep$
       .pipe(takeUntil(this.destroy$))
       .subscribe(step => {
-        const wasPreviewMode = this.isPreviewMode;
-        this.isPreviewMode = step === 'preview';
-        
-        // When entering preview mode, disable editing mode
-        if (!wasPreviewMode && this.isPreviewMode) {
-          this.isEditing = false;
-        }
-        
-        // Reset editor controls toggle when exiting preview mode
-        if (!this.isPreviewMode) {
-          this.showEditorControls = false;
-        }
+        if (step === 'preview') this.isEditing = false;
         this.cdr.detectChanges();
       });
   }
@@ -1310,9 +1293,8 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     }
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  override ngOnDestroy() {
+    super.ngOnDestroy();
   }
 
   private loadConfigFromSection() {
