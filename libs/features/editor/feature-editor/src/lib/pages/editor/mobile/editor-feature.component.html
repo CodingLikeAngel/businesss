@@ -502,6 +502,14 @@
 
       <!-- DATE TIME PICKER -->
       <lib-editor-input-section
+        *ngSwitchCase="'date-time-picker'"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+      >
+      </lib-editor-input-section>
+
+      <lib-editor-input-section
         *ngSwitchCase="'ui-date-time-picker'"
         [section]="section"
         [componentVariants]="componentVariants"
@@ -943,6 +951,24 @@
         (elementResized)="onElementResized($event.bounds, $event.elementId)"
         (sectionResized)="onSectionResized($event.section, $event.bounds)"
       ></lib-editor-generic-section>
+
+      <!-- Tipos *-new del explorador: mapeo al mismo editor que el tipo base -->
+      <lib-editor-button-section *ngSwitchCase="'button-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-button-section>
+      <lib-editor-chip-section *ngSwitchCase="'chip-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-chip-section>
+      <lib-editor-input-section *ngSwitchCase="'input-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-input-section>
+      <lib-editor-image-section *ngSwitchCase="'image-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-image-section>
+      <lib-editor-list-section *ngSwitchCase="'list-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-list-section>
+      <lib-editor-modal-1-section *ngSwitchCase="'modal-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-modal-1-section>
+      <lib-editor-spinner-section *ngSwitchCase="'spinner-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-spinner-section>
+      <lib-editor-table-section *ngSwitchCase="'table-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-table-section>
+      <lib-editor-tooltip-1-section *ngSwitchCase="'tooltip-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-tooltip-1-section>
+      <lib-editor-title-section *ngSwitchCase="'title-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-title-section>
+      <lib-editor-tabs-section *ngSwitchCase="'tabs-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-tabs-section>
+      <lib-editor-nav-bar-1-section *ngSwitchCase="'nav-bar-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-nav-bar-1-section>
+      <lib-editor-gallery-section *ngSwitchCase="'gallery-new'" [section]="section" [galleryConfig]="galleryConfig" [titleConfig]="titleConfig" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-gallery-section>
+      <lib-editor-chart-section *ngSwitchCase="'chart-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-chart-section>
+      <lib-editor-accordion-section *ngSwitchCase="'accordion-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-accordion-section>
+      <lib-editor-breadcrumbs-section *ngSwitchCase="'breadcrumbs-new'" [section]="section" [componentVariants]="componentVariants" [globalVariant]="globalVariant" (elementMoved)="onElementMoved($event.bounds, $event.elementId)" (elementResized)="onElementResized($event.bounds, $event.elementId)" (sectionResized)="onSectionResized($event.section, $event.bounds)"></lib-editor-breadcrumbs-section>
 
       <lib-editor-fallback-section
         *ngSwitchDefault
