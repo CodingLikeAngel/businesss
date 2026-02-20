@@ -491,7 +491,7 @@ export class EditorDraggableBoxSectionComponent extends BaseEditorSectionCompone
   @ViewChild('editableBox') editableBox!: ElementRef;
   
   private store = inject(Store);
-  override protected cdr = inject(ChangeDetectorRef);
+  protected override cdr = inject(ChangeDetectorRef);
   private persistSubject$ = new Subject<void>();
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
