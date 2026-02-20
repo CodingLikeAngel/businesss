@@ -33,9 +33,9 @@
       [subtitle]="getSectionContent('subtitle', 'Perfect balance between visuals and content.')"
       [variant]="$any(getSectionContent('variant', getVariant(section.id)))"
       [ctaLabel]="getSectionContent('ctaLabel', 'Get Started')"
-      [secondaryCtaLabel]="section?.content?.['secondaryCtaLabel']"
-      [showCta]="section?.content?.['showCta'] !== false"
-      [image]="section?.content?.['image']"
+      [secondaryCtaLabel]="section.content?.['secondaryCtaLabel']"
+      [showCta]="section.content?.['showCta'] !== false"
+      [image]="section.content?.['image']"
       [icon]="getSectionContent('icon', '🚀')"
       [customStyles]="section.styles || {}"
       (click)="selectSection($event, section)"
@@ -97,7 +97,7 @@
     </div>
 
     <!-- Items Grid (Directly editable) -->
-    <div class="relative z-20 mt-20 w-full max-w-7xl px-4" *ngIf="section?.content?.['items']?.length">
+    <div class="relative z-20 mt-20 w-full max-w-7xl px-4" *ngIf="section.content?.['items']?.length">
       <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
          <div *ngFor="let card of section?.content?.['items'] || []; let i = index"
               class="editor-element"

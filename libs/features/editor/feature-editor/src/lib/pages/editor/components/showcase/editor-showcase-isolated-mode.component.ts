@@ -170,7 +170,7 @@ import { Observable } from 'rxjs';
                      [class.is-resizing]="isResizing"
                      (mousedown)="onMouseDown($event)">
                   
-                  <lib-ui-showcase-atom
+                  <lib-ui-components-showcase-atom
                     [icon]="editableContent.icon"
                     [title]="editableContent.title"
                     [text]="editableContent.text"
@@ -178,7 +178,7 @@ import { Observable } from 'rxjs';
                     [variant]="editableContent.variant"
                     [customStyles]="getFinalStyles()"
                     style="display: block; width: 100%;">
-                  </lib-ui-showcase-atom>
+                  </lib-ui-components-showcase-atom>
 
                   <!-- 8-Point Resizing -->
                   <div class="resize-handle n"  (mousedown)="startResize($event, 'n')"></div>
