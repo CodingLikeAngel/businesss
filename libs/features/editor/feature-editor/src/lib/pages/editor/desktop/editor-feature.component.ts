@@ -56,6 +56,7 @@ import { EditorShapeSectionComponent } from '../components/shape/editor-shape-se
 import { EditorVideoSectionComponent } from '../components/video/editor-video-section.component';
 import { EditorMapSectionComponent } from '../components/map/editor-map-section.component';
 import { EditorSpacerSectionComponent } from '../components/spacer/editor-spacer-section.component';
+import { EditorFallbackSectionComponent } from '../components/fallback/editor-fallback-section.component';
 import { EditorNavBar1SectionComponent } from '../components/nav-bar/editor-nav-bar-1-section.component';
 import { EditorNavBar2SectionComponent } from '../components/nav-bar/editor-nav-bar-2-section.component';
 import { EditorNavBar3SectionComponent } from '../components/nav-bar/editor-nav-bar-3-section.component';
@@ -128,6 +129,7 @@ import { EditorLayoutSectionComponent } from '../components/layout-section/edito
     EditorVideoSectionComponent,
     EditorMapSectionComponent,
     EditorSpacerSectionComponent,
+    EditorFallbackSectionComponent,
     EditorNavBar1SectionComponent,
     EditorNavBar2SectionComponent,
     EditorNavBar3SectionComponent,

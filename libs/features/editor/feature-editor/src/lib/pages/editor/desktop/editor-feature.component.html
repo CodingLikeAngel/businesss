@@ -1356,22 +1356,15 @@
       >
       </lib-editor-spacer-section>
 
-      <div
+      <!-- Cualquier tipo no mapeado: vista de edición genérica con contenido real -->
+      <lib-editor-fallback-section
         *ngSwitchDefault
-        class="editor-section cursor-pointer p-10 border border-dashed border-white/20 rounded-xl m-4 bg-white/5"
-        [class.is-selected]="uiStateService.selectedSection?.id === section.id"
-        (click)="selectSection($event, section)"
+        [section]="section"
+        [componentVariants]="componentVariants"
+        [globalVariant]="globalVariant"
+        (sectionResized)="onSectionResized($event.section, $event.bounds)"
       >
-        <div class="text-center text-white/50">
-          <div class="text-4xl mb-4">🧩</div>
-          <h3 class="text-xl font-bold mb-2">{{ section.label }}</h3>
-          <p class="text-sm opacity-70">Tipo: {{ section.type }}</p>
-          <p class="mt-4 text-xs">
-            Este bloque aún no tiene vista de edición aquí. Está en la estructura de la página.
-            Usa la pestaña <strong>Estructura</strong> del panel para reordenar o eliminar, o cambia el tipo de bloque.
-          </p>
-        </div>
-      </div>
+      </lib-editor-fallback-section>
     </ng-container>
   </ng-container>
 </div>

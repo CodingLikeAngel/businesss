@@ -43,6 +43,7 @@ import { EditorDraggableBox1SectionComponent } from '../components/draggable-box
 import { EditorDraggableBox2SectionComponent } from '../components/draggable-box/editor-draggable-box-2-section.component';
 import { EditorDraggableBox3SectionComponent } from '../components/draggable-box/editor-draggable-box-3-section.component';
 import { EditorGenericSectionComponent } from '../components/generic/editor-generic-section.component';
+import { EditorFallbackSectionComponent } from '../components/fallback/editor-fallback-section.component';
 import { EditorShapeSectionComponent } from '../components/shape/editor-shape-section.component';
 import { EditorVideoSectionComponent } from '../components/video/editor-video-section.component';
 import { EditorMapSectionComponent } from '../components/map/editor-map-section.component';
@@ -106,6 +107,7 @@ import { EditorLayoutSectionComponent } from '../components/layout-section/edito
     EditorDraggableBox2SectionComponent,
     EditorDraggableBox3SectionComponent,
     EditorGenericSectionComponent,
+    EditorFallbackSectionComponent,
     EditorShapeSectionComponent,
     EditorVideoSectionComponent,
     EditorMapSectionComponent,

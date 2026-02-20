@@ -123,7 +123,7 @@ El editor es una aplicación compleja: **layout principal (desktop/mobile)**, **
 |---|--------|-----------|--------|
 | 6.1 | Dejar claro en la barra de modos qué modo está activo (Completo / Mover / Redimensionar) y que el cursor/handles lo reflejen. | Media | ✅ Hecho: aria-pressed, role="toolbar", títulos y texto sr-only. |
 | 6.2 | Revisar accesibilidad de modales (modo aislado, atajos, plantillas): foco, cierre con Escape, y navegación por teclado. | Media | ✅ Hecho: Escape en BaseIsolatedModeComponent; role="dialog", aria-modal en galería. |
-| 6.3 | Revisar mensajes de error y estados vacíos (página sin secciones, sección sin vista) para que sean claros y accionables. | Baja | ✅ Hecho: mensaje en ngSwitchDefault más accionable (Estructura, reordenar, eliminar). |
+| 6.3 | Revisar mensajes de error y estados vacíos (página sin secciones, sección sin vista) para que sean claros y accionables. | Baja | ✅ Hecho: tipos no mapeados usan vista de edición genérica (EditorFallbackSectionComponent) en lugar de mensaje; solo hint mínimo si no hay contenido. |
 
 ---
 
