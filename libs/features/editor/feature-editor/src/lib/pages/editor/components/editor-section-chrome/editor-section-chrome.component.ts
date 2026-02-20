@@ -20,7 +20,7 @@ import { CommonModule } from '@angular/common';
         <button
           type="button"
           class="action-btn"
-          (click)="editClick.emit($event as MouseEvent)"
+          (click)="onEditClick($event)"
           [title]="editButtonTitle">
           <span>🎯</span>
           <span class="btn-text">Editar</span>
@@ -119,4 +119,8 @@ export class EditorSectionChromeComponent {
 
   @Output() editClick = new EventEmitter<MouseEvent>();
   @Output() togglePreview = new EventEmitter<void>();
+
+  onEditClick(event: Event): void {
+    this.editClick.emit(event as MouseEvent);
+  }
 }
