@@ -8,7 +8,7 @@ export interface DeepFooterCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-deep-footer',
+  selector: 'lib-ui-components-deep-footer',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './deep-footer.component.html',

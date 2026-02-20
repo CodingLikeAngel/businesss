@@ -14,7 +14,7 @@ export interface BreadcrumbsCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-breadcrumbs',
+  selector: 'lib-ui-components-breadcrumbs',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './breadcrumbs.component.html',

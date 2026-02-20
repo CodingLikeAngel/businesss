@@ -2,7 +2,7 @@ import { Component, input, output, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'lib-ui-footer-mega',
+  selector: 'lib-ui-components-footer-mega',
   standalone: true,
   imports: [CommonModule],
   template: `

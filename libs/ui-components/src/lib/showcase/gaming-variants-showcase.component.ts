@@ -4,7 +4,7 @@ import { UIButtonComponent } from '../button/button.component';
 import { UIInputComponent } from '../forms/input/input.component';
 
 @Component({
-  selector: 'lib-ui-gaming-variants-showcase',
+  selector: 'lib-ui-components-gaming-variants-showcase',
   standalone: true,
   imports: [CommonModule, UIButtonComponent, UIInputComponent],
   templateUrl: './gaming-variants-showcase.component.html',

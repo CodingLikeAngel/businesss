@@ -238,7 +238,7 @@ interface ComponentDefaultSize {
                 </lib-ui-components-title>
 
                 <!-- UI IMAGE -->
-                <lib-ui-image
+                <lib-ui-components-image
                   *ngSwitchCase="'ui-image'"
                   [src]="slotEntry.slot.content?.['src'] || 'assets/placeholder.jpg'"
                   [alt]="slotEntry.slot.content?.['alt'] || 'Imagen'"
@@ -246,7 +246,7 @@ interface ComponentDefaultSize {
                   [filter]="slotEntry.slot.styles?.['filter']"
                   [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)"
                   class="slot-image">
-                </lib-ui-image>
+                </lib-ui-components-image>
 
 
                 <!-- UI CARD -->
@@ -279,12 +279,12 @@ interface ComponentDefaultSize {
                 </div>
 
                 <!-- UI LIST -->
-                <lib-ui-list
+                <lib-ui-components-list
                   *ngSwitchCase="'ui-list'"
                   [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'default')"
                   [items]="slotEntry.slot.content?.['items'] || ['Item 1', 'Item 2', 'Item 3']"
                   [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)">
-                </lib-ui-list>
+                </lib-ui-components-list>
 
                 <!-- UI CARD PRODUCT -->
                 <lib-card-products

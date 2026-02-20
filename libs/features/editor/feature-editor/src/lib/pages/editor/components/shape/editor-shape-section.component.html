@@ -20,7 +20,7 @@
   </lib-editor-section-chrome>
 
   <div class="container mx-auto px-6 max-w-7xl relative py-20 h-full min-h-[400px]">
-    <lib-ui-shape #shapeElement
+    <lib-ui-components-shape #shapeElement
       [type]="section.content['shapeType'] || 'blob'"
       [customPath]="section.content['customPath']"
       [customStyles]="section.content['shapeStyles'] || {}"
@@ -36,7 +36,7 @@
       [style.height]="section.content['shapeStyles']?.['height'] || '100px'"
       [style.left]="section.content['shapeStyles']?.['left']"
       [style.top]="section.content['shapeStyles']?.['top']"
-    ></lib-ui-shape>
+    ></lib-ui-components-shape>
   </div>
 
   <!-- Isolated Mode Modal -->

@@ -13,7 +13,7 @@ export interface List1CustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-list-1',
+  selector: 'lib-ui-components-list-1',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './list-1.component.html',

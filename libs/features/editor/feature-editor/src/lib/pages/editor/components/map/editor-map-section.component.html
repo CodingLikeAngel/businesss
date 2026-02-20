@@ -20,7 +20,7 @@
   </lib-editor-section-chrome>
 
   <div class="container mx-auto px-6 max-w-7xl relative py-20 h-full min-h-[500px]">
-    <lib-ui-map #mapElement
+    <lib-ui-components-map #mapElement
       [address]="section.content['address'] || 'Madrid, Spain'"
       [zoom]="section.content['zoom'] || 14"
       [customStyles]="section.content['mapStyles'] || {}"
@@ -37,7 +37,7 @@
       [style.height]="section.content['mapStyles']?.['height'] || '400px'"
       [style.left]="section.content['mapStyles']?.['left']"
       [style.top]="section.content['mapStyles']?.['top']"
-    ></lib-ui-map>
+    ></lib-ui-components-map>
   </div>
 
   <!-- Isolated Mode Component -->

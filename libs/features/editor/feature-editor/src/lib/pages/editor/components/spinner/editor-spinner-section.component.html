@@ -13,10 +13,10 @@
        elementId="{{section.id + '_spinner'}}"
        sectionId="{{section.id}}"
        (visualEvents)="handleSpinnerEvent($event)">
-       <lib-ui-spinner
+       <lib-ui-components-spinner
          [variant]="section.content['variant'] || getVariant(section.id)"
          [size]="'lg'"
          [customStyles]="section.styles || {}"
-       ></lib-ui-spinner>
+       ></lib-ui-components-spinner>
     </div>
 </div>

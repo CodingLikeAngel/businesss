@@ -13,7 +13,7 @@ export interface SpacerCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-spacer',
+  selector: 'lib-ui-components-spacer',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './spacer.component.html',

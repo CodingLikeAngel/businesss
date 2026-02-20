@@ -20,7 +20,7 @@
   </lib-editor-section-chrome>
 
   <div class="container mx-auto px-6 max-w-7xl relative py-20 h-full min-h-[400px]">
-    <lib-ui-image #imageElement
+    <lib-ui-components-image #imageElement
       [src]="section.content['src'] || 'https://via.placeholder.com/600x400'"
       [alt]="section.content['alt']"
       [size]="section.content['size'] || 'custom'"
@@ -46,7 +46,7 @@
       [style.height]="section.content['imageStyles']?.['height']"
       [style.left]="section.content['imageStyles']?.['left']"
       [style.top]="section.content['imageStyles']?.['top']"
-    ></lib-ui-image>
+    ></lib-ui-components-image>
   </div>
 
   <!-- Isolated Mode Component -->

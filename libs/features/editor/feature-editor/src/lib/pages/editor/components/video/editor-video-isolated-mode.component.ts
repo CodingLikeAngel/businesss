@@ -149,14 +149,14 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                      [class.is-resizing]="isResizing"
                      (mousedown)="onMouseDown($event)">
                   
-                  <lib-ui-video
+                  <lib-ui-components-video
                     [src]="editableContent.videoUrl"
                     [autoplay]="editableContent.autoplay"
                     [loop]="editableContent.loop"
                     [muted]="true"
                     [customStyles]="editableStyles"
                     style="width: 100%; height: 100%; display: block;">
-                  </lib-ui-video>
+                  </lib-ui-components-video>
 
                   <!-- 8-point Resize Handles -->
                   <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>

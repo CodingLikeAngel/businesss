@@ -10,7 +10,7 @@ export interface VideoCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-video',
+  selector: 'lib-ui-components-video',
   standalone: true,
   imports: [CommonModule],
   template: `

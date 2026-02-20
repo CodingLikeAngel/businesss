@@ -62,12 +62,12 @@ import {
               {{ element.content.text || 'Button' }}
             </lib-ui-components-button>
 
-            <lib-ui-image
+            <lib-ui-components-image
               *ngSwitchCase="'image'"
               [src]="element.content.image || 'assets/placeholder.jpg'"
               [alt]="element.content.text || 'Image'"
               class="w-full h-full object-cover">
-            </lib-ui-image>
+            </lib-ui-components-image>
 
             <lib-ui-components-title
               *ngSwitchCase="'heading'"

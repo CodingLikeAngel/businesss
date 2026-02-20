@@ -211,7 +211,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                    (mousedown)="onMouseDown($event)">
                 
                 <div class="image-mask-container" [style.clip-path]="currentMaskValue">
-                  <lib-ui-image 
+                  <lib-ui-components-image 
                        [src]="editableContent.src" 
                        [alt]="editableContent.alt"
                        [variant]="editableContent.variant || 'default'"
@@ -223,7 +223,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                          'border-radius': borderRadius + 'px'
                        }"
                        style="width: 100%; height: 100%; display: block;">
-                  </lib-ui-image>
+                  </lib-ui-components-image>
                 </div>
 
                 <!-- 8-point Resize Handles -->

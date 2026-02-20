@@ -6,7 +6,7 @@ const headerVariants = baseVariants;
 type HeaderVariantType = typeof headerVariants[number] | (string & {});
 
 @Component({
-  selector: 'lib-ui-header-modern',
+  selector: 'lib-ui-components-header-modern',
   standalone: true,
   imports: [CommonModule],
   template: `

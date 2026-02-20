@@ -35,7 +35,7 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
            elementId="{{section.id + '_image-2'}}"
            sectionId="{{section.id}}"
            (visualEvents)="handleComponentEvent($event)">
-        <lib-ui-image-2
+        <lib-ui-components-image-2
           [src]="section.content['src'] || 'https://via.placeholder.com/300'"
           [alt]="section.content['alt'] || 'Image'"
           [size]="$any(section.content['size'] || 'medium')"
@@ -46,7 +46,7 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
           [variant]="$any(section.content['variant'] || 'primary')"
           [animation]="$any(section.content['animation'] || 'none')"
           [customStyles]="section.styles || {}"
-        ></lib-ui-image-2>
+        ></lib-ui-components-image-2>
       </div>
     </div>
   `

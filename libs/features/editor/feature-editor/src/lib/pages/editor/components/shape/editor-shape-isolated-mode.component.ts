@@ -159,12 +159,12 @@ export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                      [class.is-resizing]="isResizing"
                      (mousedown)="onMouseDown($event)">
                   
-                  <lib-ui-shape
+                  <lib-ui-components-shape
                     [type]="editableContent.shapeType || 'blob'"
                     [customPath]="editableContent.customPath"
                     [customStyles]="getMergedStyles()"
                     style="width: 100%; height: 100%; display: block;">
-                  </lib-ui-shape>
+                  </lib-ui-components-shape>
 
                   <!-- 8-point Resize Handles -->
                   <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>

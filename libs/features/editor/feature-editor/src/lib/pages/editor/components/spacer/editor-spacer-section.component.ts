@@ -36,13 +36,13 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
         </div>
       </div>
 
-      <lib-ui-spacer
+      <lib-ui-components-spacer
         [variant]="section.content['variant'] || 'empty'"
         [height]="section.styles['height'] || '50px'"
         [customStyles]="section.content['customStyles'] || {}"
         class="w-full block"
       >
-      </lib-ui-spacer>
+      </lib-ui-components-spacer>
 
       <!-- Drag handle hint if selected -->
       <div *ngIf="selectedSectionId === section.id" class="absolute bottom-0 left-0 right-0 h-1 bg-indigo-500/50 animate-pulse"></div>

@@ -43,7 +43,7 @@
           <div class="cursor-pointer editor-element"
                [class.is-selected]="uiStateService.selectedElement?._original === headerConfig"
                (click)="selectElement($event, { id: 'navbar', content: headerConfig, type: 'header', _original: headerConfig })">
-            <lib-ui-header
+            <lib-ui-components-header
               [variant]="headerConfig.variant"
               [align]="headerConfig.align"
               [dark]="headerConfig.dark"
@@ -51,7 +51,7 @@
               [subtitle]="headerConfig.subtitle"
               [navItems]="headerConfig.navItems"
               [customStyles]="headerConfig.customStyles"
-            ></lib-ui-header>
+            ></lib-ui-components-header>
           </div>
 
           <section class="flex-1">

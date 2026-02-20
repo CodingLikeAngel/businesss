@@ -53,7 +53,8 @@
         "libs/features/editor/feature-editor-shell/src/index.ts"
       ],
       "@negocio/shared-components": ["libs/shared-components/src/index.ts"],
-      "@negocio/ui-components": ["libs/ui-components/src/index.ts"]
+      "@negocio/ui-components": ["libs/ui-components/src/index.ts"],
+      "@negocio/ui-components/models": ["libs/ui-components/src/lib/models"]
     }
   },
   "exclude": ["node_modules", "tmp"]

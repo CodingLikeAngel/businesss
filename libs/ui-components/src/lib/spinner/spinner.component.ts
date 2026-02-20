@@ -29,7 +29,7 @@ export interface SpinnerContext {
 }
 
 @Component({
-  selector: 'lib-ui-spinner',
+  selector: 'lib-ui-components-spinner',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './spinner.component.html',

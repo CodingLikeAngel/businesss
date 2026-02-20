@@ -35,14 +35,14 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
            elementId="{{section.id + '_list-2'}}"
            sectionId="{{section.id}}"
            (visualEvents)="handleComponentEvent($event)">
-        <lib-ui-list-2
+        <lib-ui-components-list-2
           [variant]="$any(section.content['variant'] || 'primary')"
           [rounded]="$any(section.content['rounded'] || 'md')"
           [size]="$any(section.content['size'] || 'md')"
           [dark]="section.content['dark'] || false"
           [items]="section.content['items'] || ['Item 1', 'Item 2', 'Item 3']"
           [customStyles]="section.styles || {}"
-        ></lib-ui-list-2>
+        ></lib-ui-components-list-2>
       </div>
     </div>
   `

@@ -136,13 +136,13 @@ export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                      [class.is-resizing]="isResizing"
                      (mousedown)="onMouseDown($event)">
                   
-                  <lib-ui-map
+                  <lib-ui-components-map
                     [address]="editableContent.address"
                     [zoom]="editableContent.zoom"
                     [showOverlay]="editableContent.showOverlay"
                     [customStyles]="getMergedStyles()"
                     style="width: 100%; height: 100%; display: block; border-radius: inherit;">
-                  </lib-ui-map>
+                  </lib-ui-components-map>
 
                   <!-- 8-point Resize Handles -->
                   <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>

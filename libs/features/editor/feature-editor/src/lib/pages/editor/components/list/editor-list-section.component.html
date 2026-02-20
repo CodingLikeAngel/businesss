@@ -26,13 +26,13 @@
        elementId="{{section.id + '_list'}}"
        sectionId="{{section.id}}"
        (visualEvents)="handleVisualEvent($event, section.id + '_list')">
-       <lib-ui-list
+       <lib-ui-components-list
          [items]="section.content['items'] || ['Item 1', 'Item 2', 'Item 3']"
          [variant]="section.content['variant'] || getVariant(section.id)"
          [rounded]="section.content['rounded'] || 'md'"
          [size]="section.content['size'] || 'md'"
          [customStyles]="section.styles || {}"
-       ></lib-ui-list>
+       ></lib-ui-components-list>
     </div>
 
   <!-- Isolated Mode Component -->

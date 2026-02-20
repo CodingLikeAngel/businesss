@@ -31,13 +31,13 @@
          elementId="{{section.id + '_chart'}}"
          sectionId="{{section.id}}"
          (visualEvents)="handleChartEvent($event)">
-      <lib-ui-chart
+      <lib-ui-components-chart
         [variant]="section.content['variant'] || getVariant(section.id)"
         [type]="section.content['chartType'] || 'bar'"
         [data]="section.content['chartData'] || chartConfig.data"
         [customStyles]="section.styles || {}"
         [applyDynamicStyles]="section.styles || {}">
-      </lib-ui-chart>
+      </lib-ui-components-chart>
     </div>
   </div>
 </div>
@@ -74,12 +74,12 @@
        elementId="{{section.id + '_chart'}}"
        sectionId="{{section.id}}"
        (visualEvents)="handleChartEvent($event)">
-    <lib-ui-chart
+    <lib-ui-components-chart
       [variant]="section.content['variant'] || getVariant(section.id)"
       [type]="section.content['chartType'] || 'bar'"
       [data]="section.content['chartData'] || chartConfig.data"
       [customStyles]="section.styles || {}"
       [applyDynamicStyles]="section.styles || {}">
-    </lib-ui-chart>
+    </lib-ui-components-chart>
   </div>
 </div>

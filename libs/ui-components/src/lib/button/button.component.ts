@@ -1,8 +1,9 @@
-import { Component, input, computed, output, EventEmitter } from '@angular/core';
+import { Component, input, computed, output, EventEmitter, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NgIconComponent, provideIcons } from '@ng-icons/core';
 import { heroStar, heroRocketLaunch, heroArrowRight } from '@ng-icons/heroicons/outline';
 import { variants as globalVariants } from '../models/ui-components-data.model';
+import { mergeCustomStyles } from '../models/merge-custom-styles.util';
 
 // Variantes específicas del botón
 export const buttonSpecificVariants = ['icon-only', 'text-only', 'glass'] as const;
@@ -52,32 +53,10 @@ export class UIButtonComponent {
   rippleActive = false;
 
   buttonStyles = computed(() => {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-    
-    if (customStyles['backgroundColor']) {
-      styles['--btn-bg'] = customStyles['backgroundColor'];
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-    
-    if (customStyles['color']) {
-      styles['--btn-color'] = customStyles['color'];
-      styles['--theme-color'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
-
+    const styles = { ...mergeCustomStyles(this.customStyles(), 'btn') };
     if (this.expanded()) {
       styles['width'] = '100%';
     }
-
     return styles;
   });
 

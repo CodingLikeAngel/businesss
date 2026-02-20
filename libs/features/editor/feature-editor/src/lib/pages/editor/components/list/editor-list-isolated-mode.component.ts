@@ -182,14 +182,14 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                      [class.is-resizing]="isResizing"
                      (mousedown)="onMouseDown($event)">
                   
-                  <lib-ui-list
+                  <lib-ui-components-list
                     [items]="editableItems"
                     [variant]="editableContent.variant"
                     [size]="editableContent.size"
                     [rounded]="editableContent.rounded"
                     [customStyles]="editableStyles"
                     style="display: block; width: 100%; height: 100%;">
-                  </lib-ui-list>
+                  </lib-ui-components-list>
 
                   <!-- 8-point Resize Handles -->
                   <div class="resize-handle nw" (mousedown)="startResize($event, 'nw')"></div>

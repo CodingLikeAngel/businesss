@@ -19,7 +19,7 @@ export interface HeaderCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-header',
+  selector: 'lib-ui-components-header',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './header.component.html',

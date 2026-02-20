@@ -13,7 +13,7 @@ export interface ShapeCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-shape',
+  selector: 'lib-ui-components-shape',
   standalone: true,
   imports: [CommonModule],
   template: `

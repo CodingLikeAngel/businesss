@@ -18,7 +18,7 @@
     
     <ng-container [ngSwitch]="section.config['subtype']">
       <!-- MEGA FOOTER -->
-      <lib-ui-footer-mega *ngSwitchCase="'mega'"
+      <lib-ui-components-footer-mega *ngSwitchCase="'mega'"
         [variant]="$any(section.content['variant'] || getVariant(section.id))"
         [title]="section.content['title'] || 'Mega Corp'"
         [description]="section.content['description'] || 'Innovative solutions for the modern world.'"
@@ -27,17 +27,17 @@
         [linkGroups]="section.content['linkGroups'] || []"
         [showNewsletter]="section.content['showNewsletter'] !== false"
         [customStyles]="section.styles || {}"
-      ></lib-ui-footer-mega>
+      ></lib-ui-components-footer-mega>
 
       <!-- SIMPLE FOOTER -->
-      <lib-ui-footer-simple *ngSwitchCase="'simple'"
+      <lib-ui-components-footer-simple *ngSwitchCase="'simple'"
         [variant]="$any(section.content['variant'] || getVariant(section.id))"
         [title]="section.content['title'] || 'Company Name'"
         [copyright]="section.content['copyright'] || '© 2024 All rights reserved.'"
         [links]="section.content['links'] || []"
         [socialIcons]="section.content['socialIcons'] || []"
         [customStyles]="section.styles || {}"
-      ></lib-ui-footer-simple>
+      ></lib-ui-components-footer-simple>
 
       <!-- DEFAULT (Standard Footer) -->
       <lib-ui-components-footer *ngSwitchDefault

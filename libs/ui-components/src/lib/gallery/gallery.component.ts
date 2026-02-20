@@ -21,7 +21,7 @@ export interface GalleryImage {
 }
 
 @Component({
-  selector: 'lib-ui-components-ui-gallery',
+  selector: 'lib-ui-components-gallery',
   standalone: true,
   imports: [CommonModule], // Agrega UIImageComponent aquí
   templateUrl: './gallery.component.html',

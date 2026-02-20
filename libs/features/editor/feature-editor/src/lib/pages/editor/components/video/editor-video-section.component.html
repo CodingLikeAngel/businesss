@@ -20,7 +20,7 @@
   </lib-editor-section-chrome>
 
   <div class="container mx-auto px-6 max-w-7xl relative py-20 h-full min-h-[400px]">
-    <lib-ui-video #videoElement
+    <lib-ui-components-video #videoElement
       [src]="section.content['videoUrl'] || section.content['src'] || 'https://www.w3schools.com/html/mov_bbb.mp4'"
       [autoplay]="section.content['autoplay'] !== false"
       [loop]="section.content['loop'] !== false"
@@ -38,7 +38,7 @@
       [style.height]="section.content['videoStyles']?.['height'] || 'auto'"
       [style.left]="section.content['videoStyles']?.['left']"
       [style.top]="section.content['videoStyles']?.['top']"
-    ></lib-ui-video>
+    ></lib-ui-components-video>
   </div>
 
   <!-- Isolated Mode Component -->

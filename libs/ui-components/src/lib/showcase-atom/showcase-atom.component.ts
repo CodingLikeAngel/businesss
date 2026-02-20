@@ -15,7 +15,7 @@ export interface ShowcaseCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-showcase-atom',
+  selector: 'lib-ui-components-showcase-atom',
   standalone: true,
   imports: [CommonModule],
   template: `

@@ -17,7 +17,7 @@ export interface ListCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-list',
+  selector: 'lib-ui-components-list',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './list.component.html',

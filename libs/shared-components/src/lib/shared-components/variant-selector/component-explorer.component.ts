@@ -355,21 +355,21 @@ interface SectionVariant {
                   <lib-ui-cta-section *ngSwitchCase="'cta'" [variant]="$any(selectedVariant)"></lib-ui-cta-section>
                   <lib-reservation-form *ngSwitchCase="'reservation-form'" [variant]="$any(selectedVariant)"></lib-reservation-form>
                   <div *ngSwitchCase="'header'" class="h-full w-full">
-                     <lib-ui-header *ngIf="!selectedSubtype || selectedSubtype === 'standard'" [variant]="$any(selectedVariant)" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header>
-                     <lib-ui-header-classic *ngIf="selectedSubtype === 'classic'" [variant]="$any(selectedVariant)" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header-classic>
-                     <lib-ui-header-modern *ngIf="selectedSubtype === 'modern'" [variant]="$any(selectedVariant)" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-header-modern>
+                     <lib-ui-components-header *ngIf="!selectedSubtype || selectedSubtype === 'standard'" [variant]="$any(selectedVariant)" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-components-header>
+                     <lib-ui-components-header-classic *ngIf="selectedSubtype === 'classic'" [variant]="$any(selectedVariant)" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-components-header-classic>
+                     <lib-ui-components-header-modern *ngIf="selectedSubtype === 'modern'" [variant]="$any(selectedVariant)" title="Logo" [navItems]="[{label:'Inicio', href:'#'}, {label:'Servicios', href:'#'}, {label:'Contacto', href:'#'}]"></lib-ui-components-header-modern>
                   </div>
                   <div *ngSwitchCase="'footer'">
                     <lib-ui-components-footer *ngIf="!selectedSubtype || selectedSubtype === 'standard'" [variant]="$any(selectedVariant)" title="Logo"></lib-ui-components-footer>
-                    <lib-ui-footer-mega *ngIf="selectedSubtype === 'mega'" [variant]="$any(selectedVariant)" title="Mega Corp" description="Innovative solutions for the modern world." copyright="© 2024 Mega Corp. All rights reserved."></lib-ui-footer-mega>
-                    <lib-ui-footer-simple *ngIf="selectedSubtype === 'simple'" [variant]="$any(selectedVariant)" title="Company Name" copyright="© 2024 All rights reserved."></lib-ui-footer-simple>
+                    <lib-ui-components-footer-mega *ngIf="selectedSubtype === 'mega'" [variant]="$any(selectedVariant)" title="Mega Corp" description="Innovative solutions for the modern world." copyright="© 2024 Mega Corp. All rights reserved."></lib-ui-components-footer-mega>
+                    <lib-ui-components-footer-simple *ngIf="selectedSubtype === 'simple'" [variant]="$any(selectedVariant)" title="Company Name" copyright="© 2024 All rights reserved."></lib-ui-components-footer-simple>
                   </div>
                   <div *ngSwitchCase="'faq'" class="p-4"><lib-ui-faq-section [variant]="$any(selectedVariant)"></lib-ui-faq-section></div>
                   <div *ngSwitchCase="'features'" class="p-4"><lib-ui-features-section [variant]="$any(selectedVariant)"></lib-ui-features-section></div>
                   <div *ngSwitchCase="'gallery'" class="p-4"><lib-ui-components-gallery-section [variant]="$any(selectedVariant)"></lib-ui-components-gallery-section></div>
                   <div *ngSwitchCase="'stats'" class="p-4"><lib-ui-components-stats-section [variant]="$any(selectedVariant)"></lib-ui-components-stats-section></div>
                   <div *ngSwitchCase="'steps'" class="p-4"><lib-ui-steps-section [variant]="$any(selectedVariant)"></lib-ui-steps-section></div>
-                  <div *ngSwitchCase="'showcase'" class="p-4"><lib-ui-gaming-variants-showcase></lib-ui-gaming-variants-showcase></div>
+                  <div *ngSwitchCase="'showcase'" class="p-4"><lib-ui-components-gaming-variants-showcase></lib-ui-components-gaming-variants-showcase></div>
                   <div *ngSwitchCase="'testimonials'" class="p-4"><lib-ui-testimonials-section [variant]="$any(selectedVariant)"></lib-ui-testimonials-section></div>
                   <!-- COMMERCE -->
                   <div *ngSwitchCase="'services'" class="p-4"><lib-service-section [variant]="$any(selectedVariant)" [title]="'Nuestros Servicios'"></lib-service-section></div>
@@ -414,16 +414,16 @@ interface SectionVariant {
                      <lib-ui-components-chip [variant]="$any(selectedVariant)" label="Chip"></lib-ui-components-chip>
                   </div>
                   <div *ngSwitchCase="'spinner'" class="flex justify-center items-center h-full min-h-[200px]">
-                     <lib-ui-spinner [variant]="$any(selectedVariant)"></lib-ui-spinner>
+                     <lib-ui-components-spinner [variant]="$any(selectedVariant)"></lib-ui-components-spinner>
                   </div>
                   <div *ngSwitchCase="'date-time-picker'" class="p-8 flex justify-center">
                      <lib-ui-components-date-time-picker [variant]="$any(selectedVariant)"></lib-ui-components-date-time-picker>
                   </div>
                   <div *ngSwitchCase="'ui-chart'" class="p-8 h-80">
-                     <lib-ui-chart [variant]="$any(selectedVariant)" [data]="{labels: ['Ene', 'Feb', 'Mar'], datasets: [{label: 'Ventas', data: [10, 20, 15]}]}"></lib-ui-chart>
+                     <lib-ui-components-chart [variant]="$any(selectedVariant)" [data]="{labels: ['Ene', 'Feb', 'Mar'], datasets: [{label: 'Ventas', data: [10, 20, 15]}]}"></lib-ui-components-chart>
                   </div>
                   <div *ngSwitchCase="'breadcrumbs'" class="p-8">
-                     <lib-ui-breadcrumbs [variant]="$any(selectedVariant)" [items]="[{label:'Home', url:'/'}, {label:'Sección', url:'#'}]"></lib-ui-breadcrumbs>
+                     <lib-ui-components-breadcrumbs [variant]="$any(selectedVariant)" [items]="[{label:'Home', url:'/'}, {label:'Sección', url:'#'}]"></lib-ui-components-breadcrumbs>
                   </div>
                   <div *ngSwitchCase="'card-animated'" class="max-w-xs mx-auto p-4">
                      <lib-ui-components-card-animated [variant]="$any(selectedVariant)" title="Tarjeta" description="Descripción de la tarjeta animada"></lib-ui-components-card-animated>
@@ -438,13 +438,13 @@ interface SectionVariant {
                      </div>
                   </div>
                   <div *ngSwitchCase="'image'" class="p-4 flex justify-center">
-                    <lib-ui-image [variant]="$any(selectedVariant)" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-image>
+                    <lib-ui-components-image [variant]="$any(selectedVariant)" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-components-image>
                   </div>
                   <div *ngSwitchCase="'table'" class="p-4">
                     <lib-ui-components-table [variant]="$any(selectedVariant)" [rows]="[{id:1, name:'Item A'}, {id:2, name:'Item B'}]" [columns]="[{key:'id', label:'ID'}, {key:'name', label:'Nombre'}]"></lib-ui-components-table>
                   </div>
                   <div *ngSwitchCase="'list'" class="max-w-md mx-auto p-4">
-                    <lib-ui-list [variant]="$any(selectedVariant)" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-list>
+                    <lib-ui-components-list [variant]="$any(selectedVariant)" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-components-list>
                   </div>
                   <div *ngSwitchCase="'title'" class="p-4">
                     <lib-ui-components-title [variant]="$any(selectedVariant)" [level]="'h1'" text="Título de ejemplo"></lib-ui-components-title>
@@ -473,10 +473,10 @@ interface SectionVariant {
                    </div>
                    <!-- SPACER PREVIEWS -->
                    <div *ngSwitchCase="'spacer'" class="p-4 flex items-center justify-center min-h-[150px]">
-                      <lib-ui-spacer [variant]="$any(selectedVariant)" height="60px"></lib-ui-spacer>
+                      <lib-ui-components-spacer [variant]="$any(selectedVariant)" height="60px"></lib-ui-components-spacer>
                    </div>
                    <div *ngSwitchCase="'ui-spacer'" class="p-4 flex items-center justify-center min-h-[150px]">
-                      <lib-ui-spacer [variant]="$any(selectedVariant)" height="40px"></lib-ui-spacer>
+                      <lib-ui-components-spacer [variant]="$any(selectedVariant)" height="40px"></lib-ui-components-spacer>
                    </div>
                    <!-- NEW COMPONENT TYPES PREVIEWS -->
                    <div *ngSwitchCase="'button-new'" class="flex gap-4 justify-center items-center h-full min-h-[200px]">
@@ -495,14 +495,14 @@ interface SectionVariant {
                       <lib-ui-components-input-3 *ngIf="selectedSubtype === 'input-3'" [variant]="$any(selectedVariant === 'default' ? 'glass' : selectedVariant)" placeholder="Input 3..."></lib-ui-components-input-3>
                    </div>
                    <div *ngSwitchCase="'image-new'" class="p-4 flex justify-center">
-                      <lib-ui-image-1 *ngIf="!selectedSubtype || selectedSubtype === 'image-1'" [variant]="$any(selectedVariant === 'default' ? 'default' : selectedVariant)" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-image-1>
-                      <lib-ui-image-2 *ngIf="selectedSubtype === 'image-2'" [variant]="$any(selectedVariant === 'default' ? 'rounded' : selectedVariant)" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-image-2>
-                      <lib-ui-image-3 *ngIf="selectedSubtype === 'image-3'" [variant]="$any(selectedVariant === 'default' ? 'circle' : selectedVariant)" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-image-3>
+                      <lib-ui-components-image-1 *ngIf="!selectedSubtype || selectedSubtype === 'image-1'" [variant]="$any(selectedVariant === 'default' ? 'default' : selectedVariant)" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-components-image-1>
+                      <lib-ui-components-image-2 *ngIf="selectedSubtype === 'image-2'" [variant]="$any(selectedVariant === 'default' ? 'rounded' : selectedVariant)" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-components-image-2>
+                      <lib-ui-components-image-3 *ngIf="selectedSubtype === 'image-3'" [variant]="$any(selectedVariant === 'default' ? 'circle' : selectedVariant)" src="https://via.placeholder.com/600x400" alt="Placeholder"></lib-ui-components-image-3>
                    </div>
                    <div *ngSwitchCase="'list-new'" class="max-w-md mx-auto p-4">
-                      <lib-ui-list-1 *ngIf="!selectedSubtype || selectedSubtype === 'list-1'" [variant]="$any(selectedVariant === 'default' ? 'default' : selectedVariant)" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-list-1>
-                      <lib-ui-list-2 *ngIf="selectedSubtype === 'list-2'" [variant]="$any(selectedVariant === 'default' ? 'glass' : selectedVariant)" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-list-2>
-                      <lib-ui-list-3 *ngIf="selectedSubtype === 'list-3'" [variant]="$any(selectedVariant === 'default' ? 'neon' : selectedVariant)" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-list-3>
+                      <lib-ui-components-list-1 *ngIf="!selectedSubtype || selectedSubtype === 'list-1'" [variant]="$any(selectedVariant === 'default' ? 'default' : selectedVariant)" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-components-list-1>
+                      <lib-ui-components-list-2 *ngIf="selectedSubtype === 'list-2'" [variant]="$any(selectedVariant === 'default' ? 'glass' : selectedVariant)" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-components-list-2>
+                      <lib-ui-components-list-3 *ngIf="selectedSubtype === 'list-3'" [variant]="$any(selectedVariant === 'default' ? 'neon' : selectedVariant)" [items]="['Elemento 1', 'Elemento 2', 'Elemento 3']"></lib-ui-components-list-3>
                    </div>
                    <div *ngSwitchCase="'modal-new'" class="p-4 flex justify-center items-center h-full min-h-[200px]">
                       <lib-ui-components-modal-1 *ngIf="!selectedSubtype || selectedSubtype === 'modal-1'" [variant]="$any(selectedVariant === 'default' ? 'default' : selectedVariant)" [isOpen]="true" title="Modal 1" content="Contenido del modal 1"></lib-ui-components-modal-1>

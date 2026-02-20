@@ -9,7 +9,7 @@
   (visualEvents)="handleSectionEvent($event)">
 
   <div class="container mx-auto px-6 max-w-4xl">
-    <lib-ui-breadcrumbs #breadcrumbsElement
+    <lib-ui-components-breadcrumbs #breadcrumbsElement
       [variant]="section.content['variant'] || getVariant(section.id)"
       [items]="section.content['items'] || [{ label: 'Home', url: '/' }, { label: 'Section', url: '/section' }, { label: 'Current', url: '' }]"
       [customStyles]="section.styles || {}"
@@ -21,7 +21,7 @@
       elementId="{{section.id + '_breadcrumbs'}}"
       sectionId="{{section.id}}"
       (visualEvents)="handleBreadcrumbsEvent($event)">
-    </lib-ui-breadcrumbs>
+    </lib-ui-components-breadcrumbs>
   </div>
 </div>
 
@@ -35,7 +35,7 @@
   sectionId="{{section.id}}"
   (visualEvents)="handleSectionEvent($event)">
 
-  <lib-ui-breadcrumbs #breadcrumbsElement
+  <lib-ui-components-breadcrumbs #breadcrumbsElement
     [variant]="section.content['variant'] || getVariant(section.id)"
     [items]="section.content['items'] || [{ label: 'Home', url: '/' }, { label: 'Section', url: '/section' }, { label: 'Current', url: '' }]"
     [customStyles]="section.styles || {}"
@@ -47,5 +47,5 @@
     elementId="{{section.id + '_breadcrumbs'}}"
     sectionId="{{section.id}}"
     (visualEvents)="handleBreadcrumbsEvent($event)">
-  </lib-ui-breadcrumbs>
+  </lib-ui-components-breadcrumbs>
 </div>

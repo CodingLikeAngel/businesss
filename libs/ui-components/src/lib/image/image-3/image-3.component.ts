@@ -21,7 +21,7 @@ export interface Image3CustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-image-3',
+  selector: 'lib-ui-components-image-3',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './image-3.component.html',

@@ -10,7 +10,7 @@ export interface MapCustomStyles {
 }
 
 @Component({
-  selector: 'lib-ui-map',
+  selector: 'lib-ui-components-map',
   standalone: true,
   imports: [CommonModule],
   template: `
