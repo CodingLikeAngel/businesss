@@ -43,7 +43,7 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
           [height]="section.content['height']"
           [shape]="$any(section.content['shape'] || 'square')"
           [caption]="section.content['caption']"
-          [variant]="$any(section.content['variant'] || 'default')"
+          [variant]="$any(section.content['variant'] || getVariant(section.id))"
           [animation]="$any(section.content['animation'] || 'none')"
           [customStyles]="section.styles || {}"
         ></lib-ui-components-image-1>

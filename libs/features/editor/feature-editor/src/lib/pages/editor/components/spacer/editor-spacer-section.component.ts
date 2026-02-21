@@ -37,7 +37,7 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
       </div>
 
       <lib-ui-components-spacer
-        [variant]="section.content['variant'] || 'empty'"
+        [variant]="section.content['variant'] || getVariant(section.id)"
         [height]="section.styles['height'] || '50px'"
         [customStyles]="section.content['customStyles'] || {}"
         class="w-full block"

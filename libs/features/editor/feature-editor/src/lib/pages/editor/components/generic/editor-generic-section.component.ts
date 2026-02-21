@@ -94,7 +94,7 @@ import {
 
             <lib-ui-components-accordion
               *ngSwitchCase="'accordion'"
-              [variant]="element.content.variant || 'default'"
+              [variant]="element.content.variant || getVariant(section.id)"
               [items]="element.content.items || [{title:'Item 1', content:'Contenido 1'}, {title:'Item 2', content:'Contenido 2'}]">
             </lib-ui-components-accordion>
 

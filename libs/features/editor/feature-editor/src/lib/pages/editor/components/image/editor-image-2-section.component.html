@@ -61,7 +61,7 @@
         [height]="section.data.height"
         [shape]="section.data.shape || 'square'"
         [caption]="section.data.caption"
-        [variant]="section.data.variant || 'primary'"
+        [variant]="section.data?.variant || section.content?.['variant'] || getVariant(section.id)"
         [animation]="section.data.animation || 'none'"
         [customStyles]="section.data.customStyles || {}">
       </lib-ui-components-image-2>

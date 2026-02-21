@@ -36,7 +36,7 @@ import { EnhancedBaseEditorSectionComponent } from '../enhanced-base-editor-sect
            sectionId="{{section.id}}"
            (visualEvents)="handleComponentEvent($event)">
         <lib-ui-components-list-2
-          [variant]="$any(section.content['variant'] || 'primary')"
+          [variant]="$any(section.content['variant'] || getVariant(section.id))"
           [rounded]="$any(section.content['rounded'] || 'md')"
           [size]="$any(section.content['size'] || 'md')"
           [dark]="section.content['dark'] || false"

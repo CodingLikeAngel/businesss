@@ -37,7 +37,7 @@
         [title]="section.content['title'] || 'Nueva Característica'"
         [text]="section.content['text'] || 'Explora cómo este beneficio puede mejorar tu flujo de trabajo diario.'"
         [layout]="section.content['layout'] || 'vertical'"
-        [variant]="section.content['variant'] || 'default'"
+        [variant]="section.content['variant'] || getVariant(section.id)"
         [customStyles]="section.content['showcaseStyles'] || {}"
       ></lib-ui-components-showcase-atom>
     </div>
