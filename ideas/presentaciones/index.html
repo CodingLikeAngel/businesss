@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presentación · Visión, Negocio e Integración</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0f14;
+      --bg-card: #18181f;
+      --border: rgba(255,255,255,0.08);
+      --text: #e4e4e7;
+      --text-muted: #a1a1aa;
+      --accent: #6366f1;
+      --accent-soft: rgba(99, 102, 241, 0.15);
+      --success: #22c55e;
+      --warning: #eab308;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: 100vh;
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .nav { position: relative; padding: 1rem; border-bottom: 1px solid var(--border); }
+      .nav ul { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 2rem 1rem;
+      border-right: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .nav h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      margin: 0 0 1.25rem 1rem;
+    }
+    .nav ul { list-style: none; padding: 0; margin: 0; }
+    .nav li { margin-bottom: 0.25rem; }
+    .nav a {
+      display: block;
+      padding: 0.6rem 1rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: color .2s, background .2s;
+    }
+    .nav a:hover { color: var(--text); background: var(--accent-soft); }
+    .nav a.active { color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+    .nav .badge {
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--accent);
+      margin-left: 0.5rem;
+    }
+    .main {
+      padding: 3rem 3rem 4rem;
+      max-width: 900px;
+    }
+    section {
+      margin-bottom: 4rem;
+      padding-bottom: 3rem;
+      border-bottom: 1px solid var(--border);
+    }
+    section:last-of-type { border-bottom: 0; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .subtitle { color: var(--text-muted); font-size: 1.1rem; margin: 0 0 2rem; }
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin: 2rem 0 1rem;
+      color: var(--text);
+    }
+    h3 { font-size: 1.05rem; font-weight: 600; margin: 1.25rem 0 0.5rem; color: var(--text); }
+    p { margin: 0 0 0.75rem; color: var(--text); }
+    ul, ol { margin: 0 0 1rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.35rem; }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1rem 0;
+    }
+    .card strong { color: var(--text); }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+    }
+    th, td { padding: 0.6rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { color: var(--text-muted); font-weight: 600; }
+    .quote {
+      border-left: 4px solid var(--accent);
+      padding-left: 1.25rem;
+      margin: 1.25rem 0;
+      color: var(--text);
+      font-style: italic;
+    }
+    .audience {
+      display: inline-block;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 0.35rem 0.65rem;
+      border-radius: 6px;
+      margin-bottom: 0.75rem;
+    }
+    .audience.cto { background: rgba(34, 197, 94, 0.15); color: var(--success); }
+    .audience.dev { background: rgba(234, 179, 8, 0.15); color: var(--warning); }
+    pre {
+      background: #0c0c10;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      overflow-x: auto;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    code { font-family: ui-monospace, monospace; font-size: 0.85em; }
+    .doc-ref {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 1.5rem;
+    }
+    .doc-ref a { color: var(--accent); text-decoration: none; }
+    .doc-ref a:hover { text-decoration: underline; }
+    @media print {
+      .nav { position: relative; height: auto; border: 0; }
+      .layout { grid-template-columns: 1fr; }
+      section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="nav" role="navigation" aria-label="Índice de la presentación">
+      <h2>Índice</h2>
+      <ul>
+        <li><a href="#portada">Portada</a></li>
+        <li><a href="#vision">Visión · IA y producción</a><span class="badge">CEO/CTO</span></li>
+        <li><a href="#negocio-integrado">Negocio integrado</a><span class="badge">CEO/CTO</span></li>
+        <li><a href="#ats">ATS como herramienta</a><span class="badge">CEO/CTO</span></li>
+        <li><a href="#negocio-anto">Oportunidades Anto Studios</a><span class="badge">CEO/CTO</span></li>
+        <li><a href="#logs">Logs y flujos para IA</a><span class="badge">Jefes desarrollo</span></li>
+      </ul>
+    </nav>
+
+    <main class="main">
+      <!-- PORTADA -->
+      <section id="portada">
+        <h1>Visión, negocio e integración</h1>
+        <p class="subtitle">Anto Studios · ATS · Sistema integrado</p>
+        <p>Presentación para clientes, CTOs, CEOs y jefes de desarrollo.</p>
+        <p class="doc-ref">Documentos de referencia: Vision (modularización + IA), Oportunidades de negocio, Plan integrado, Logs y flujos.</p>
+      </section>
+
+      <!-- VISIÓN MODULARIZACIÓN + IA + PRODUCCIÓN -->
+      <section id="vision">
+        <span class="audience cto">Para CEO / CTO</span>
+        <h1>Visión: modularización, IA y producción</h1>
+        <p class="subtitle">Sistema modular, framework propio e integración con IA para generar y publicar aplicaciones de forma controlada.</p>
+
+        <h2>Objetivo a futuro</h2>
+        <ul>
+          <li><strong>Sistema modular:</strong> Núcleo del builder desacoplado, reutilizable por UI humana o por agentes IA.</li>
+          <li><strong>IA como diseñador/desarrollador:</strong> Dado un brief, la IA elige componentes, los configura y genera o actualiza la estructura (schema de página + datos).</li>
+          <li><strong>Framework propio:</strong> Componentes + design tokens + reglas de composición como base común para humanos e IA.</li>
+          <li><strong>Producción controlada:</strong> Preview → staging → publicación con rollback y auditoría.</li>
+        </ul>
+
+        <h2>Capas del sistema</h2>
+        <div class="card">
+          <strong>Presentación</strong> → Editor visual, Chat/API para IA, Dashboard<br>
+          <strong>API del builder (headless)</strong> → CRUD páginas/secciones, validar schema, preview<br>
+          <strong>Núcleo</strong> → Schema de página, registro de componentes, export<br>
+          <strong>Framework</strong> → ui-components, featured-components, variantes
+        </div>
+
+        <h2>Integración con IA</h2>
+        <p>La IA no pinta píxeles: genera o modifica <strong>datos</strong> (schema de página). Recibe un brief o instrucción y devuelve acciones sobre el schema (crear sección, editar contenido, cambiar variante). El sistema puede exponer API + catálogo de componentes documentado para que cualquier IA (propia o existente) consuma el contexto.</p>
+        <p class="doc-ref">Documento completo: <a href="../DOC_VISION_MODULARIZACION_IA_PRODUCCION.md">DOC_VISION_MODULARIZACION_IA_PRODUCCION.md</a></p>
+      </section>
+
+      <!-- NEGOCIO INTEGRADO -->
+      <section id="negocio-integrado">
+        <span class="audience cto">Para CEO / CTO</span>
+        <h1>Oportunidades del sistema integrado</h1>
+        <p class="subtitle">ATS + Anto Studios como un solo producto: hub de control y producción.</p>
+
+        <div class="quote">
+          «Un solo hub donde ves todo tu código, tus métricas, tu IA y tus sitios en vivo, y publicas a producción con un clic y con control.»
+        </div>
+
+        <h2>Qué aporta la integración</h2>
+        <ul>
+          <li><strong>ATS:</strong> Visión 360 (repos, calidad, seguridad, CI, dependencias, sprints, informes IA).</li>
+          <li><strong>Anto Studios:</strong> Creación de sitios/landings y export a código o publicación.</li>
+          <li><strong>Integración:</strong> Un único lugar para controlar (métricas + activos vivos) y actuar (analizar, publicar, rollback, auditar), con quality gates y trazabilidad.</li>
+        </ul>
+
+        <h2>Segmentos objetivo</h2>
+        <table>
+          <tr><th>Segmento</th><th>Propuesta</th><th>Precio orientativo</th></tr>
+          <tr><td>Agencias / dev shops</td><td>Hub único: análisis + métricas + diseño + publicación con quality gate</td><td>€199–499/mes</td></tr>
+          <tr><td>Product companies</td><td>Marketing diseña en Anto; ingeniería controla publicación desde el hub</td><td>€2.000–8.000/mes</td></tr>
+          <tr><td>Empresas multi-marca</td><td>Todos los sitios y repos en un hub; publicación y rollback centralizados</td><td>Enterprise €10k–50k/año</td></tr>
+          <tr><td>Freelancers</td><td>Dashboard profesional para mostrar al cliente; publicar con un clic</td><td>€49–99/mes</td></tr>
+        </table>
+
+        <h2>Modelo SaaS por niveles</h2>
+        <ul>
+          <li><strong>Starter</strong> (€49–79/mes): 1–2 repos, 1–2 sitios, publicación básica, logs exportables.</li>
+          <li><strong>Agency</strong> (€199–299/mes): Repos y sitios ampliados, quality gate, flujos guardados, export logs para IA.</li>
+          <li><strong>Company</strong> (€799–1.999/mes): Múltiples workspaces, SSO, roles, integraciones, API.</li>
+          <li><strong>Enterprise</strong> (€10k–50k/año): Instancia dedicada, SLA, soporte prioritario, formación.</li>
+        </ul>
+        <p class="doc-ref">Documento completo: <a href="../PLAN_OPORTUNIDADES_NEGOCIO_INTEGRADO.md">PLAN_OPORTUNIDADES_NEGOCIO_INTEGRADO.md</a></p>
+      </section>
+
+      <!-- ATS COMO HERRAMIENTA -->
+      <section id="ats">
+        <span class="audience cto">Para CEO / CTO</span>
+        <h1>ATS · Automated Technical Scoring</h1>
+        <p class="subtitle">Hub gamificado para mejorar todos los flujos de trabajo en equipo: análisis técnico, gestión de sprints, avatares, logros, IA e integración con reuniones y tareas.</p>
+
+        <h2>Más que análisis: un hub para el equipo</h2>
+        <p>ATS no es solo un analizador de código. Es una <strong>plataforma gamificada</strong> que une en un solo lugar el estado técnico de los proyectos, la gestión de sprints, el reconocimiento del equipo y la IA para mejorar día a día los flujos de trabajo. Pensada para que equipos y líderes tengan visión 360 y disfruten usándola.</p>
+
+        <h2>Gamificación y avatares</h2>
+        <ul>
+          <li><strong>Hero Hub (base del repo):</strong> Avatar del proyecto con equipo visual (head, body, weapon, shield). Rank del repositorio (ej. S+), “Biological Vitals” e “Integrity” para que el estado del código se sienta vivo.</li>
+          <li><strong>Niveles y XP:</strong> Sistema de nivel (Rank L1, L2…), XP y barra de progreso (“Limit Break”). Los hitos técnicos (Dockerfile, CI, tests, cero vulnerabilidades, estructura Nx) suman XP al repo.</li>
+          <li><strong>Logros y trofeos:</strong> “Trophy Vault” con achievements (ej. Fort Knox Pure, CI Godspeed) y logros desbloqueables. Notificaciones de tipo achievement, kudos, level-up y cumpleaños.</li>
+          <li><strong>Equipo y pilotos:</strong> Avatares por desarrollador, equipo “equipado” con ítems que dan bonificaciones. Quests vinculadas a tareas del sprint con recompensas en XP.</li>
+        </ul>
+
+        <h2>Gestión de sprints (ciclo completo)</h2>
+        <p>Módulo de sprints con todo el ciclo ágil en un solo panel, con pestañas y subcomponentes dedicados:</p>
+        <ul>
+          <li><strong>Board:</strong> Tablero de tareas con drag & drop; tareas con prioridad, story points, asignación y estado (Backlog → Refined → To Do → In Progress → Done).</li>
+          <li><strong>Planning:</strong> Definición y planificación de sprints (objetivos, fechas, velocidad).</li>
+          <li><strong>Refinement:</strong> Refinamiento de backlog.</li>
+          <li><strong>Daily:</strong> Seguimiento de daily standups.</li>
+          <li><strong>Kudos:</strong> Reconocimiento entre compañeros.</li>
+          <li><strong>Achievements:</strong> Logros del equipo y por persona.</li>
+          <li><strong>Fun:</strong> Zona de juegos y dinámicas ligeras para el equipo.</li>
+          <li><strong>Vacations / Holidays:</strong> Vacaciones y festivos del equipo.</li>
+          <li><strong>Birthdays:</strong> Cumpleaños; notificaciones integradas.</li>
+          <li><strong>Share:</strong> Compartir estado o resúmenes del sprint.</li>
+        </ul>
+        <p>Backend con módulo <strong>sprint-management</strong> (MongoDB): sprints, tareas, estados y métricas (velocity, metas) listos para integrar con IA y automatización.</p>
+
+        <h2>IA y automatización</h2>
+        <ul>
+          <li><strong>Informes estratégicos (Gemini):</strong> La IA agrega datos de todos los proyectos del workspace (análisis, salud, métricas) y genera informes de negocio y técnicos en lenguaje natural.</li>
+          <li><strong>Evaluación de código con LLM:</strong> Scores y reportes en markdown sobre calidad, seguridad y recomendaciones.</li>
+          <li><strong>Automatización de tareas y reuniones (visión):</strong> Definición de sprints a partir de reuniones, sugerencias de tareas desde la IA, resúmenes de dailies o planning. El hub está preparado para consumir y mostrar estos flujos.</li>
+          <li><strong>Optimizador de prompts:</strong> Panel para generar y afinar prompts (code review, documentación, etc.) con IA.</li>
+        </ul>
+
+        <h2>Análisis técnico (base del scoring)</h2>
+        <table>
+          <tr><th>Área</th><th>Capacidad</th></tr>
+          <tr><td>Proyecto / Repo</td><td>AST, métricas estructurales, análisis local y desde URL (clone + análisis)</td></tr>
+          <tr><td>Calidad</td><td>SonarQube, quality gates, code smells, bugs, vulnerabilidades</td></tr>
+          <tr><td>Seguridad</td><td>Dependencias, secretos expuestos, vulnerabilidades</td></tr>
+          <tr><td>CI/CD</td><td>Métricas de pipelines, tests, cobertura</td></tr>
+          <tr><td>Dashboard 360</td><td>Repo (Hero Hub), ATS score, Sonar, CI, Security, Roadmap, Sprints, Bundle, DevEx, Licenses, Team culture, Web performance, informes LLM</td></tr>
+        </table>
+
+        <h2>Experiencia y personalización</h2>
+        <p>HUD con <strong>temas visuales</strong> (cyberpunk, Nintendo, Rayman, Matrix, retro, vaporwave, etc.) y paletas de color. Interfaz coherente en todos los paneles (headers, progress bars, cards, avatares) para que el hub se sienta un “juego” serio: mismo lenguaje visual en métricas, sprints y logros.</p>
+
+        <h2>Para quién es ATS (standalone)</h2>
+        <ul>
+          <li><strong>Equipos que quieren mejorar flujos:</strong> Un solo sitio para código, sprints, reconocimiento (kudos, achievements) y diversión (fun, birthdays). Menos herramientas sueltas, más cohesión.</li>
+          <li><strong>CTOs y jefes de desarrollo:</strong> Visión 360 técnica + estado del equipo y de los sprints. Informes IA para presentar a negocio.</li>
+          <li><strong>Agencias y product companies:</strong> Evaluar repos, gestionar sprints por cliente o producto, y dar a los equipos una experiencia gamificada que motive.</li>
+        </ul>
+
+        <h2>Stack técnico</h2>
+        <div class="card">
+          <strong>Backend:</strong> NestJS (TypeScript), MongoDB (sprints, tareas) · <strong>Frontend:</strong> Angular + Tailwind, CDK (drag & drop) · <strong>IA:</strong> Google Gemini 1.5 Flash · <strong>Calidad:</strong> SonarQube, ESLint, Prettier · <strong>Monorepo:</strong> Nx · <strong>Control de versiones:</strong> simple-git
+        </div>
+        <p class="doc-ref">Proyecto: <code>ats</code> (NestJS + Angular + Nx). Documentación en el README del repositorio ATS.</p>
+      </section>
+
+      <!-- OPORTUNIDADES ANTO STUDIOS -->
+      <section id="negocio-anto">
+        <span class="audience cto">Para CEO / CTO</span>
+        <h1>Oportunidades Anto Studios</h1>
+        <p class="subtitle">Editor visual que exporta código real: React, Angular, Vue, Web Components.</p>
+
+        <div class="quote">«Diseña una vez, usa en todas partes.»</div>
+
+        <h2>Ventaja competitiva</h2>
+        <p>Anto Studios no solo diseña webs: <strong>exporta componentes nativos</strong> para varios entornos. Estética premium por defecto; componentes de nicho (gimnasio, restaurante, spa, portfolio).</p>
+        <table>
+          <tr><th>Capacidad</th><th>Wix</th><th>Figma</th><th>Anto Studios</th></tr>
+          <tr><td>Editor visual</td><td>✅</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Design tokens</td><td>❌</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Export React/Angular/Vue</td><td>❌</td><td>❌</td><td>✅</td></tr>
+          <tr><td>No-code + código real</td><td>❌</td><td>❌</td><td>✅</td></tr>
+        </table>
+
+        <h2>Líneas de negocio (Anto por separado)</h2>
+        <ul>
+          <li><strong>SaaS Web Builder (B2C):</strong> €29–49/mes — Pequeños negocios, plantillas por industria.</li>
+          <li><strong>Component Builder Pro (B2B):</strong> €99–299/mes — Agencias, export sin marca de agua, API, Storybook.</li>
+          <li><strong>Template Marketplace:</strong> Revenue share 70/30 — Plantillas premium.</li>
+          <li><strong>SaaS vertical:</strong> «Anto Gyms», «Anto Resto» — €29–49/mes por vertical.</li>
+          <li><strong>Enterprise:</strong> €5.000–50.000/año — Design system centralizado, SSO, soporte.</li>
+        </ul>
+        <p class="doc-ref">Documento completo: <a href="../DOC_OPORTUNIDADES_NEGOCIO.md">DOC_OPORTUNIDADES_NEGOCIO.md</a></p>
+      </section>
+
+      <!-- LOGS Y FLUJOS (JEFES DE DESARROLLO) -->
+      <section id="logs">
+        <span class="audience dev">Para jefes de desarrollo / tech leads</span>
+        <h1>Logs y flujos exportables para IA</h1>
+        <p class="subtitle">Buenas prácticas para trazabilidad, depuración y contexto que la IA puede consumir en cualquier flujo.</p>
+
+        <h2>Por qué logs en cada paso</h2>
+        <ul>
+          <li><strong>Depuración:</strong> Saber en qué paso falló un análisis, export o publicación.</li>
+          <li><strong>Auditoría:</strong> Quién hizo qué y cuándo (crítico al trabajar directo en producción).</li>
+          <li><strong>Contexto para IA:</strong> La IA lee un stream o dump de logs de un flujo y puede resumir, diagnosticar o recomendar el siguiente paso.</li>
+          <li><strong>Observabilidad:</strong> Duración por paso, tasa de error, volumen de operaciones.</li>
+          <li><strong>Reproducibilidad:</strong> Reconstruir un flujo para reproducir un bug o re-ejecutar un escenario.</li>
+        </ul>
+
+        <h2>Buenas prácticas: logs estructurados (JSON)</h2>
+        <p>Una línea por evento (JSON Lines). Campos comunes: <code>ts</code>, <code>level</code>, <code>app</code>, <code>flow</code>, <code>step</code>, <code>entity</code>, <code>result</code>, <code>duration_ms</code>, <code>message</code>, <code>payload</code> (sin datos sensibles). Cada flujo largo tiene un <code>flowId</code> (UUID) para agrupar todos los pasos.</p>
+        <pre>{"ts":"2026-02-20T10:00:01.000Z","level":"info","app":"ats","flow":"repo-analysis","step":"sonar.analyze","entity":"repo:github.com/org/repo","result":"ok","duration_ms":12000,"message":"SonarQube analysis completed"}</pre>
+
+        <h2>Exportables en tiempo real</h2>
+        <ul>
+          <li><strong>Stream en vivo:</strong> El cliente (hub, CLI) se suscribe por WebSocket/SSE al <code>flowId</code> y recibe eventos mientras el flujo corre.</li>
+          <li><strong>Export al finalizar:</strong> Descargar todos los logs del flujo en JSON Lines o JSON para dar contexto a la IA o a soporte.</li>
+          <li><strong>Uso por IA:</strong> Input = export del flujo; prompt tipo «Con estos logs, resume qué pasó, si hubo errores y qué recomiendas.» La IA entiende el flujo sin necesidad de ver código.</li>
+        </ul>
+
+        <h2>Guardar flujos</h2>
+        <ul>
+          <li><strong>Como template:</strong> Secuencia de pasos + parámetros reutilizable (ej. «Análisis completo de repo», «Publicar sitio a producción»).</li>
+          <li><strong>Como historial:</strong> Cada ejecución guardada con flowId, parámetros, resultado y enlace a logs; permite re-ejecutar o exportar para IA.</li>
+          <li><strong>Integración IA:</strong> La IA puede sugerir flujos, resumir ejecuciones pasadas o proponer automatizaciones (ej. «cada viernes analizar repo X y publicar sitio Y a staging»).</li>
+        </ul>
+
+        <h2>Automatizar tests y escribirlos con un agente</h2>
+        <p>El sistema de logs es especialmente útil para <strong>testing</strong>: un flujo real (análisis, export, publicación, etc.) queda registrado paso a paso. Con ese registro se puede:</p>
+        <ul>
+          <li><strong>Automatizar tests:</strong> Re-ejecutar el mismo flujo en CI y comparar logs (o resultados) con el flujo de referencia; detectar regresiones sin escribir asserts a mano para cada paso.</li>
+          <li><strong>Escribir tests con un agente:</strong> Un agente (IA) recibe el export de un flujo real como contexto y genera tests (p. ej. E2E o de integración) que reproducen ese flujo. “Este flujo pasó en producción; genera un test que lo replique.”</li>
+        </ul>
+        <p>Logs estructurados + <code>flowId</code> = contrato claro para humanos, para IA y para la pipeline de tests.</p>
+
+        <h2>Resumen para equipos técnicos</h2>
+        <div class="card">
+          Logs por paso → Flujo identificado (<code>flowId</code>) → Stream en tiempo real → Export de logs → Contexto para IA → <strong>Tests automáticos y generación de tests por agente a partir de flujos reales</strong> → Flujos guardados (templates + historial) → Reproducibilidad y auditoría.
+        </div>
+        <p class="doc-ref">Documento completo: <a href="../profundizar/DOC_LOGS_FLUJOS_IA.md">profundizar/DOC_LOGS_FLUJOS_IA.md</a></p>
+      </section>
+
+      <!-- CIERRE -->
+      <section id="cierre">
+        <h1>Resumen y próximos pasos</h1>
+        <ul>
+          <li><strong>Visión:</strong> Sistema modular con API headless, IA que genera/modifica schema de página y producción controlada (preview → staging → prod con rollback).</li>
+          <li><strong>Negocio integrado:</strong> Un solo producto (hub ATS + Anto) para agencias, product companies y empresas; SaaS por niveles y add-ons (quality gate, logs para IA, flujos).</li>
+          <li><strong>ATS:</strong> Hub gamificado para mejorar flujos de trabajo: análisis técnico + gestión de sprints (planning, daily, kudos, achievements, fun, birthdays) + avatares, niveles, XP y logros + IA (informes estratégicos, evaluación de código, optimizador de prompts). Visión 360 para CTOs y equipos.</li>
+          <li><strong>Anto Studios:</strong> Múltiples líneas (SaaS builder, Component Builder Pro, marketplace, verticales, enterprise).</li>
+          <li><strong>Logs y flujos:</strong> Logs estructurados por paso, export en tiempo real y flujos guardados para trazabilidad, depuración y contexto para IA — clave para jefes de desarrollo y equipos técnicos.</li>
+        </ul>
+        <p style="margin-top:2rem; color: var(--text-muted); font-size: 0.9rem;">Presentación generada a partir de los documentos en <code>ideas/</code> y <code>ideas/profundizar/</code>. Febrero 2026.</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Marcar enlace activo según scroll (opcional)
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav a[href^="#"]');
+    function setActive() {
+      const scrollY = window.scrollY;
+      let current = '';
+      sections.forEach(s => {
+        const top = s.offsetTop - 100;
+        if (scrollY >= top) current = s.getAttribute('id');
+      });
+      navLinks.forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+      });
+    }
+    window.addEventListener('scroll', setActive);
+    setActive();
+  </script>
+</body>
+</html>

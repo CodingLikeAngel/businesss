@@ -125,6 +125,15 @@ Un “flujo” puede ser un **template** (solo definición de pasos y parámetro
 - **IA resume flujos guardados:** “Los últimos 5 análisis de este repo fallaron en el paso Sonar; revisa la configuración de quality gate.”
 - **IA genera un flujo nuevo:** El usuario describe “quiero que cada viernes se analice el repo X y se publique el sitio Y a staging”; la IA propone un flujo (o un job programado) que el usuario guarda y activa.
 
+### 4.5 Automatizar tests y escribirlos con un agente
+
+El sistema de logs es muy útil para **testing** porque un flujo real queda registrado paso a paso. Con ese registro se puede:
+
+- **Automatizar tests:** Re-ejecutar el mismo flujo en CI (o en un test de integración/E2E) y comparar los logs (o los resultados) con un flujo de referencia. Así se detectan regresiones sin escribir asserts manuales para cada paso; el "contrato" es la secuencia de pasos y resultados esperados derivada del flujo real.
+- **Escribir tests con un agente:** Un agente (IA) recibe el export de un flujo real como contexto y **genera tests** (p. ej. E2E o de integración) que reproducen ese flujo. Por ejemplo: "Este flujo pasó en producción; genera un test que lo replique." El agente conoce los pasos (step), la entidad (entity), el resultado (result) y opcionalmente el payload; puede generar código de test (Playwright, Cypress, Jest, etc.) que ejecute la misma secuencia y valide los mismos hitos.
+
+Logs estructurados + `flowId` = contrato claro para humanos, para IA y para la pipeline de tests.
+
 ---
 
 ## 5. Resumen de capacidades objetivo
@@ -136,6 +145,8 @@ Un “flujo” puede ser un **template** (solo definición de pasos y parámetro
 | **Stream en tiempo real** | Cliente (hub, CLI) puede suscribirse a los eventos de un flowId y ver logs en vivo (WebSocket/SSE o polling). |
 | **Export de logs** | Endpoint o acción “Descargar logs de este flujo” en formato JSON Lines o JSON, con o sin resumen en texto. |
 | **Contexto para IA** | Se puede pasar a la IA el export de un flujo (o varios) para que resuma, diagnostique o recomiende. |
+| **Automatizar tests** | Re-ejecutar el flujo en CI y comparar logs/resultados con el de referencia; detectar regresiones sin asserts manuales por paso. |
+| **Escribir tests con un agente** | Un agente (IA) recibe el export de un flujo real y genera tests (E2E, integración) que reproducen esa secuencia. |
 | **Guardar flujos como template** | Definir secuencias reutilizables (pasos + parámetros) y ejecutarlas por nombre. |
 | **Historial de ejecuciones** | Guardar cada ejecución (flowId, parámetros, resultado, enlace a logs) y permitir re-ejecutar o exportar. |
 
@@ -149,6 +160,7 @@ Un “flujo” puede ser un **template** (solo definición de pasos y parámetro
 4. **Fase 4:** Definir “tipos de flujo” (análisis, export, publicación) y guardar ejecuciones en historial con enlace a logs.
 5. **Fase 5:** Flujos guardados como templates (definición + parámetros) y re-ejecución desde el hub.
 6. **Fase 6:** Integración con IA: enviar export de logs como contexto a Gemini (u otro) y respuestas en el hub (resumen, diagnóstico, sugerencia de siguiente paso o de flujo).
+7. **Fase 7 (opcional):** Usar flujos guardados como **oráculo para tests**: re-ejecutar en CI y comparar logs; y/o alimentar un agente que **genere tests** (E2E/integración) a partir del export de un flujo real.
 
 ---
 
