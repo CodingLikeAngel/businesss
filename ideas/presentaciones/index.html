@@ -261,6 +261,49 @@
       font-size: 1.08rem;
       padding: 1.25rem 0 1.25rem 1.5rem;
     }
+    .img-diagram {
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+      border-radius: 14px;
+      border: 1px solid var(--bg-card-border);
+      box-shadow: var(--glow-amber);
+      margin: 1.5rem 0;
+      display: block;
+    }
+    .venn-wrap {
+      margin: 1.5rem 0;
+      padding: 1rem;
+      background: rgba(18, 18, 28, 0.6);
+      border-radius: 14px;
+      border: 1px solid var(--bg-card-border);
+      box-shadow: var(--glow-amber);
+    }
+    .venn-svg {
+      width: 100%;
+      max-width: 520px;
+      height: auto;
+      margin: 0 auto;
+      display: block;
+    }
+    .venn-wrap figcaption { margin-top: 0.75rem; }
+    .overlap-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.5rem;
+      margin: 0.75rem 0;
+      list-style: none;
+      padding-left: 0;
+    }
+    .overlap-list li {
+      margin: 0;
+      padding: 0.4rem 0.6rem;
+      background: rgba(245, 158, 11, 0.06);
+      border-radius: 8px;
+      border-left: 3px solid var(--accent);
+      font-size: 0.9rem;
+    }
+    .overlap-list.triple li { border-left-color: var(--accent-cyan); background: rgba(34, 211, 238, 0.06); }
     @media print {
       .nav { position: relative; height: auto; border: 0; background: #0a0a0e; }
       .layout { grid-template-columns: 1fr; }
@@ -276,6 +319,7 @@
       <h2>Índice</h2>
       <ul>
         <li><a href="#portada">Portada</a></li>
+        <li><a href="#sobre-mi">Sobre mí</a></li>
         <li><a href="#vision">Visión · IA y producción</a><span class="badge">CEO/CTO</span></li>
         <li><a href="#negocio-integrado">Negocio integrado</a><span class="badge">CEO/CTO</span></li>
         <li><a href="#integracion">Integración ATS + Anto</a><span class="badge">CEO/CTO</span></li>
@@ -298,6 +342,69 @@
         </div>
         <p>Presentación para clientes, CTOs, CEOs y jefes de desarrollo.</p>
         <p class="doc-ref">Esta presentación incluye el contenido de todos los documentos: Visión (modularización + IA + producción), Oportunidades de negocio (Anto e integrado), Integración ATS + Anto, Mejoras (Anto Studios), Logs y flujos para IA. <a href="presupuesto-desarrollo.html">Presupuesto de desarrollo</a> (fases, equipo, sprints, tiempos).</p>
+      </section>
+
+      <!-- SOBRE MÍ -->
+      <section id="sobre-mi">
+        <h1>Sobre mí</h1>
+        <p class="subtitle">Para que me conozcáis mejor</p>
+
+        <div class="quote">
+          Soy una persona con un perfil poco habitual. En dinámicas de equipo convencionales no siempre encajo, pero destaco en otros ámbitos: <strong>I+D</strong>, visión de producto y resolución de problemas complejos. Tengo <strong>Asperger (TEA)</strong>, <strong>TDAH</strong> y <strong>altas capacidades</strong>. Llegar hasta aquí ha sido un camino difícil: la relación con profesores, compañeros de clase o de trabajo ha sido a menudo complicada, y en muchas ocasiones he terminado asumiendo yo solo tareas que en teoría eran de todo el grupo — por ejemplo, trabajos en equipo de ocho personas que he sacado adelante en solitario. Cuando el contexto me permite centrarme en lo que se me da bien, mi aportación en grupo suele estar por encima de la media. Esta sección sirve para que entendáis cómo funciono y qué comparten las tres condiciones, sobre todo en su cruce — la triple excepcionalidad.
+        </div>
+
+        <div class="quote">
+          <strong>Compararme con el resto “para bien o para mal” no es justo:</strong> no partimos del mismo sitio. Hay conductas mías que pueden chocar, pero no se puede pretender corregir todo; ser <strong>neurodivergente</strong> es parte de quién soy, igual que no se le pide a una persona LGTBI que deje de serlo. Tratarme igual que a los demás y exigirme exactamente lo mismo tiene un efecto desigual: en algunas cosas quedo en desventaja clara y en otras mi rendimiento es muy superior. Si en lugar de eso se aprovechan mis fortalezas, hay resultados que <strong>solo yo puedo aportar</strong> — no por ser “mejor” en general, sino por una capacidad analítica y creativa que en mi caso va ligada a este perfil.
+        </div>
+
+        <h2>Diagrama: coincidencias en doble y triple excepcionalidad</h2>
+        <p>Adaptado por Blanca Santiago a partir de Katy Higgins Lee, MTF. Las tres circunferencias representan <strong>Autismo (TEA)</strong>, <strong>TDAH</strong> y <strong>Altas Capacidades (AA. CC.)</strong>. Lo que queda en el centro es lo que comparten las tres — triple excepcionalidad.</p>
+        <figure class="venn-wrap">
+          <img src="image.png" alt="Diagrama de Venn: Coincidencias en doble excepcionalidad (Autismo, TDAH, Altas Capacidades)" class="img-diagram" />
+          <figcaption class="doc-ref">Coincidencias en doble y triple excepcionalidad. Original: Katy Higgins Lee, MTF. Adaptación: Blanca Santiago.</figcaption>
+        </figure>
+
+        <h2>Resumen por condición</h2>
+        <p><strong>Autismo (TEA / Asperger):</strong> Dificultad con la inflexibilidad y los cambios, mantener amistades, intereses restringidos, comunicación no verbal, necesidad de rutinas, sensibilidad sensorial, regulación emocional, patrones repetitivos, dificultad para entender perspectivas e ironía, perfeccionismo, ansiedad.</p>
+        <p><strong>TDAH:</strong> Dificultad para mantener la atención, impulsividad, hiperactividad motora, organizar tareas, regular el humor, seguir instrucciones, olvidos frecuentes, desorganización, búsqueda de estímulos, impaciencia, gestión del tiempo, cambios de humor, procrastinación.</p>
+        <p><strong>Altas capacidades (AA. CC.):</strong> Pensamiento abstracto, curiosidad insaciable, rapidez de aprendizaje, creatividad e imaginación, vocabulario amplio, memoria excepcional, intereses variados y profundos, perfeccionismo, sensibilidad emocional, necesidad de autonomía, resolución de problemas, pensamiento crítico, persistencia en lo que interesa, idealismo y sentido de la justicia, autodemandas, intuición desarrollada.</p>
+
+        <h2>Solapamiento de dos condiciones</h2>
+        <h3>Autismo + TDAH</h3>
+        <ul>
+          <li>Dificultad para establecer y mantener relaciones, regular la atención, planificar y organizar; problemas de comunicación; sensibilidad a estímulos; problemas de sueño; gestión del tiempo; procesamiento de la información; autorregulación; contacto ocular; entender ironía y sarcasmo; hiperactividad; anticipar consecuencias; tomar decisiones; conducta impulsiva.</li>
+        </ul>
+        <h3>TDAH + Altas capacidades</h3>
+        <ul>
+          <li>Aburrimiento con tareas repetitivas; frustración ante el fracaso; pensamiento rápido; necesidad de novedad; dificultad para terminar proyectos y trabajar en equipo; desorganización; intensidad emocional; hiperfoco en intereses; sensibilidad a la crítica; impaciencia; dificultad para seguir normas/rutinas; tendencia a la distracción; perfeccionismo; ansiedad; baja autoestima.</li>
+        </ul>
+        <h3>Autismo + Altas capacidades</h3>
+        <ul>
+          <li>Perfeccionismo; intereses intensos y específicos; sensibilidad a estímulos; necesidad de lógica y orden; dificultad en la socialización; alta autodemandas; comunicación directa y sincera; pensamiento no convencional; aislamiento social voluntario; dificultad para entender normas sociales implícitas; ansiedad social; hipersensibilidad; intolerancia a la frustración; rigidez cognitiva; necesidad de precisión.</li>
+        </ul>
+
+        <h2>Triple excepcionalidad: lo que comparten las tres condiciones</h2>
+        <p>Estos rasgos aparecen cuando confluyen <strong>Autismo, TDAH y Altas capacidades</strong>. Explican gran parte de cómo me muevo en el día a día y por qué a veces el trabajo en equipo “tradicional” me cuesta, mientras que en I+D o en contextos que permiten hiperfoco y autonomía rindo por encima.</p>
+        <ul class="overlap-list triple">
+          <li>Intensidad emocional</li>
+          <li>Perfeccionismo</li>
+          <li>Sensibilidad a la frustración</li>
+          <li>Problemas de sueño</li>
+          <li>Ansiedad</li>
+          <li>Dificultad para iniciar tareas</li>
+          <li>Hiperfoco</li>
+          <li>Sentido de la justicia</li>
+          <li>Pensamiento divergente</li>
+          <li>Fatiga mental por sobreestimulación</li>
+          <li>Dificultad en la autorregulación emocional</li>
+          <li>Hipersensibilidad</li>
+          <li>Necesidad de control</li>
+          <li>Tendencia a la reflexión profunda</li>
+          <li>Dificultad en la interacción social</li>
+          <li>Baja autoestima (en contextos inadecuados)</li>
+        </ul>
+        <p>Conocer esto ayuda a entender que no es “capricho” ni “falta de esfuerzo”: es cómo está cableado el cerebro cuando se dan las tres condiciones. En entornos que respetan el ritmo, la autonomía y el enfoque en fortalezas (I+D, visión, resolución de problemas), el rendimiento puede ser muy alto.</p>
+        <p class="doc-ref">Diagrama original: Katy Higgins Lee, MTF. Adaptación: Blanca Santiago.</p>
       </section>
 
       <!-- VISIÓN MODULARIZACIÓN + IA + PRODUCCIÓN -->
