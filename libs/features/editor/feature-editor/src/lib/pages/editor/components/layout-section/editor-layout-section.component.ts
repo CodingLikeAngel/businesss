@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject, Inject, PLATFORM_ID, ViewContainerRef, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject, Inject, PLATFORM_ID, ViewContainerRef, TemplateRef, ViewChild, ElementRef, DOCUMENT } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
@@ -341,8 +341,8 @@ interface ComponentDefaultSize {
 
     </section>
 
-      <!-- Component Picker Modal -->
-      <div *ngIf="showComponentPicker" class="component-picker-overlay" (click)="closeComponentPicker()">
+      <!-- Component Picker Modal: rendered in template but moved to body when open so it escapes canvas perspective/transform -->
+      <div *ngIf="showComponentPicker" #pickerOverlay class="component-picker-overlay" (click)="closeComponentPicker()">
         <div class="component-picker-modal" (click)="$event.stopPropagation()">
           <div class="modal-header">
             <h3>Añadir Componente al Slot {{ editingSlotIndex + 1 }}</h3>
@@ -1502,14 +1502,23 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.selectedSlotIndex = index;
   }
 
+  @ViewChild('pickerOverlay') pickerOverlayRef: ElementRef<HTMLElement> | null = null;
+  private doc = inject(DOCUMENT);
+
   openComponentPicker(index: number, event: Event) {
     event.preventDefault();
     event.stopPropagation();
     this.editingSlotIndex = index;
     this.showComponentPicker = true;
     this.selectedCategory = 'all';
-    // Run CD in next tick so modal is painted (helps when parent uses OnPush or dynamic host)
-    setTimeout(() => this.cdr.detectChanges(), 0);
+    // Run CD then move overlay to body so it escapes .canvas-wrapper's perspective (which traps position:fixed)
+    setTimeout(() => {
+      this.cdr.detectChanges();
+      const el = this.pickerOverlayRef?.nativeElement;
+      if (el && this.doc.body && el.parentNode !== this.doc.body) {
+        this.doc.body.appendChild(el);
+      }
+    }, 0);
   }
 
   closeComponentPicker() {
