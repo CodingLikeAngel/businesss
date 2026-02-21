@@ -187,14 +187,15 @@ interface ComponentDefaultSize {
           [style.top]="getSlotStyleTop(slotEntry.globalIndex)"
           [style.position]="getSlotStylePosition(slotEntry.globalIndex, slotEntry.slot)"
           [attr.data-slot-index]="slotEntry.globalIndex"
-          (click)="selectSlot(slotEntry.globalIndex, $event)">
+          (click)="onSlotClick(slotEntry.globalIndex, $event)">
           
-          <!-- Empty Slot -->
+          <!-- Empty Slot: click opens component picker (stopPropagation so slot select doesn't swallow it) -->
           <div *ngIf="slotEntry.slot.componentType === 'empty' && (!isPreviewMode || showEditorControls)" class="empty-slot">
-            <div class="empty-content" (click)="openComponentPicker(slotEntry.globalIndex, $event)">
+            <button type="button" class="empty-content empty-content-btn"
+                    (click)="openComponentPicker(slotEntry.globalIndex, $event)">
               <span class="plus-icon">+</span>
               <span class="slot-label">Añadir Componente</span>
-            </div>
+            </button>
           </div>
 
           <!-- Filled Slot - Component Renderer -->
@@ -830,6 +831,14 @@ interface ComponentDefaultSize {
       cursor: pointer;
       color: #64748b;
       transition: all 0.3s;
+    }
+
+    .empty-content-btn {
+      width: 100%;
+      min-height: 120px;
+      border: none;
+      background: transparent;
+      font: inherit;
     }
 
     .empty-content:hover { 
@@ -1478,18 +1487,29 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.closeLayoutPicker();
   }
 
+  /** Handle slot area click: open picker if click was on "Añadir Componente", otherwise just select slot. */
+  onSlotClick(index: number, event: Event) {
+    const target = event.target as HTMLElement;
+    if (target.closest?.('.empty-content') || target.closest?.('.empty-content-btn')) {
+      return; // Let the button's openComponentPicker handle it
+    }
+    event.stopPropagation();
+    this.selectedSlotIndex = index;
+  }
+
   selectSlot(index: number, event: Event) {
     event.stopPropagation();
     this.selectedSlotIndex = index;
   }
 
   openComponentPicker(index: number, event: Event) {
+    event.preventDefault();
     event.stopPropagation();
-    console.log('[Editor] Opening component picker for slot', index);
     this.editingSlotIndex = index;
     this.showComponentPicker = true;
     this.selectedCategory = 'all';
-    this.cdr.detectChanges();
+    // Run CD in next tick so modal is painted (helps when parent uses OnPush or dynamic host)
+    setTimeout(() => this.cdr.detectChanges(), 0);
   }
 
   closeComponentPicker() {
