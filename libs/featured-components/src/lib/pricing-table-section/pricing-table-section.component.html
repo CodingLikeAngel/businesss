@@ -1,4 +1,4 @@
-<section [ngClass]="containerClasses()" [ngStyle]="pricingStyles()" aria-labelledby="pricing-section-title">
+<section [ngClass]="containerClasses()" [ngStyle]="pricingStyles()" role="region" aria-labelledby="pricing-section-title">
   <div class="pricing-inner">
     <header class="header-content">
       <lib-ui-components-title
@@ -11,7 +11,7 @@
       <p class="pricing-section__subtitle" *ngIf="subtitle()">{{ subtitle() }}</p>
     </header>
 
-    <div class="table-wrapper">
+    <div class="table-wrapper" *ngIf="rows().length > 0">
       <lib-ui-components-table
         [variant]="tableVariant()"
         [columns]="columns()"
@@ -20,6 +20,11 @@
         [size]="'lg'"
         [rounded]="'md'"
       ></lib-ui-components-table>
+    </div>
+
+    <div class="pricing-empty" *ngIf="rows().length === 0" role="status" aria-labelledby="pricing-empty-title">
+      <p id="pricing-empty-title" class="pricing-empty__title">No hay planes configurados</p>
+      <p class="pricing-empty__description">Añade filas a la tabla de precios para mostrarlos aquí.</p>
     </div>
   </div>
 </section>

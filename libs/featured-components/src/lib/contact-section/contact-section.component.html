@@ -1,12 +1,10 @@
-<section class="contact-section-v3" [ngClass]="['variant-' + variant()]" [ngStyle]="contactStyles()">
+<section class="contact-section-v3" [ngClass]="['variant-' + variant()]" [ngStyle]="contactStyles()" role="region" [attr.aria-labelledby]="'contact-title'">
   <div class="container-v3">
-    
     <div class="contact-grid">
-      
-      <!-- Lado Izquierdo: Formulario -->
       <div class="form-wrapper-v3">
         <header class="form-header">
           <lib-ui-components-title
+            id="contact-title"
             [text]="title()"
             [level]="'h2'"
             [variant]="variant()"
@@ -15,17 +13,17 @@
           <p class="subtitle-v3">{{ subtitle() }}</p>
         </header>
 
-        <form (ngSubmit)="onSubmit()" class="contact-form-v3">
+        <form id="contact-form-v3" (ngSubmit)="onSubmit()" class="contact-form-v3" [attr.aria-label]="'Formulario de contacto'">
           <div class="input-row">
             <lib-ui-components-input
               [label]="'Tu Nombre'"
               [variant]="variant()"
               [(ngModel)]="formData.name"
               name="name"
-              required>
+              required
+              aria-required="true">
             </lib-ui-components-input>
           </div>
-
           <div class="input-row">
             <lib-ui-components-input
               [label]="'Tu Email'"
@@ -33,10 +31,11 @@
               [variant]="variant()"
               [(ngModel)]="formData.email"
               name="email"
-              required>
+              required
+              aria-required="true"
+              autocomplete="email">
             </lib-ui-components-input>
           </div>
-
           <div class="input-row">
             <lib-ui-components-input
               [label]="'Mensaje'"
@@ -45,9 +44,12 @@
               [variant]="variant()"
               [(ngModel)]="formData.message"
               name="message"
-              required>
+              required
+              aria-required="true">
             </lib-ui-components-input>
           </div>
+
+          <p *ngIf="formError()" class="form-error" role="alert">{{ formError() }}</p>
 
           <div class="form-footer">
             <lib-ui-components-button
@@ -56,46 +58,41 @@
               [disabled]="isSubmitting"
               [rounded]="'md'"
               class="w-full"
-              (buttonClick)="onSubmit()">
+              type="submit"
+              [attr.aria-busy]="isSubmitting">
               <span class="btn-content">
-                {{ isSubmitting ? 'Enviando Mensaje...' : buttonText() }}
-                <span *ngIf="!isSubmitting" class="icon">🚀</span>
+                {{ isSubmitting ? 'Enviando...' : buttonText() }}
+                <span *ngIf="!isSubmitting" class="icon" aria-hidden="true">🚀</span>
               </span>
             </lib-ui-components-button>
           </div>
-          
-          <div *ngIf="successMessage" class="success-banner">
-              <span class="icon">✅</span>
-              {{ successMessage }}
+
+          <div *ngIf="successMessage" class="success-banner" role="status">
+            <span class="icon" aria-hidden="true">✅</span>
+            {{ successMessage }}
           </div>
         </form>
       </div>
 
-      <!-- Lado Derecho: Info -->
-      <div class="info-wrapper-v3">
-         <div class="glass-info-card">
-            <h3 class="info-title-v3">{{ infoTitle() }}</h3>
-            
-            <div class="contact-items-v3">
-               <div *ngFor="let item of contactItems()" class="contact-item-v3">
-                  <div class="item-icon-box">{{ item.icon }}</div>
-                  <div class="item-details">
-                     <span class="item-label">{{ item.title }}</span>
-                     <a *ngIf="item.link" [href]="item.link" class="item-value link">{{ item.value }}</a>
-                     <span *ngIf="!item.link" class="item-value">{{ item.value }}</span>
-                  </div>
-               </div>
+      <div class="info-wrapper-v3" aria-labelledby="contact-info-title">
+        <div class="glass-info-card">
+          <h3 id="contact-info-title" class="info-title-v3">{{ infoTitle() }}</h3>
+          <div class="contact-items-v3">
+            <div *ngFor="let item of contactItems(); let i = index" class="contact-item-v3">
+              <div class="item-icon-box" aria-hidden="true">{{ item.icon }}</div>
+              <div class="item-details">
+                <span class="item-label">{{ item.title }}</span>
+                <a *ngIf="item.link" [href]="item.link" class="item-value link" [attr.aria-label]="item.linkText || item.value">{{ item.value }}</a>
+                <span *ngIf="!item.link" class="item-value">{{ item.value }}</span>
+              </div>
             </div>
-
-            <!-- Redes Sociales / Decoración -->
-            <div class="social-decoration">
-               <div class="glow-blob"></div>
-            </div>
-         </div>
+          </div>
+          <div class="social-decoration">
+            <div class="glow-blob"></div>
+          </div>
+        </div>
       </div>
-
     </div>
-
   </div>
 </section>
 

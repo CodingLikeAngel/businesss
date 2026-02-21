@@ -1,4 +1,4 @@
-<section class="products-section" [ngStyle]="componentStyles">
+<section class="products-section" [ngStyle]="componentStyles()" role="region" aria-labelledby="products-section-title">
   <header class="products-header">
     <div class="products-header__inner">
       <lib-ui-components-title
@@ -12,8 +12,8 @@
     </div>
   </header>
 
-  <!-- Filters and Sorting Section -->
-  <div class="products-controls">
+  <!-- Filters and Sorting Section (hidden when no products) -->
+  <div class="products-controls" *ngIf="products().length > 0">
     <div class="container mx-auto px-4">
       <div class="filters-wrapper">
         <div class="filter-group">

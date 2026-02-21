@@ -1,14 +1,9 @@
-
-import { Component, input, output, computed } from '@angular/core';
+import { Component, input, output, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { UIButtonComponent, UIInputComponent, UITitleComponent } from '@negocio/ui-components';
-import { variants } from '../models/ui-components-data.model';export interface ContactCustomStyles {
-  backgroundColor?: string;
-  color?: string;
-  [key: string]: string | undefined;
-}
+import { applySectionStyles } from '../utils/section-styles.util';
+import type { CustomStyles } from '../models/custom-styles.interface';
 
 export interface ContactItem {
   icon: string;
@@ -17,6 +12,8 @@ export interface ContactItem {
   link?: string;
   linkText?: string;
 }
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 @Component({
   selector: 'lib-ui-contact-section',
@@ -35,37 +32,13 @@ export class UIContactSectionComponent {
     { icon: '📞', title: 'Teléfono', value: '+34 900 123 456', link: 'tel:+34900123456', linkText: 'Llamar ahora' },
     { icon: '📍', title: 'Dirección', value: 'Calle Principal 123, Ciudad', link: 'https://maps.google.com', linkText: 'Ver en mapa' }
   ]);
-  
+
   buttonText = input('Enviar Mensaje');
-  customStyles = input<ContactCustomStyles>({});
+  customStyles = input<CustomStyles>({});
 
-  contactStyles = computed(() => {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-    
-    if (customStyles['backgroundColor']) {
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-    
-    if (customStyles['color']) {
-      styles['--theme-color'] = customStyles['color'];
-      styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
+  contactStyles = computed(() => applySectionStyles(this.customStyles()));
 
-    return styles;
-  });
-  
-  formSubmit = output<any>();
+  formSubmit = output<{ name: string; email: string; message: string }>();
 
   formData = {
     name: '',
@@ -75,25 +48,48 @@ export class UIContactSectionComponent {
 
   isSubmitting = false;
   successMessage = '';
+  formError = signal<string | null>(null);
 
-  onSubmit() {
+  validateForm(): boolean {
+    const { name, email, message } = this.formData;
+    if (!name?.trim()) {
+      this.formError.set('Introduce tu nombre.');
+      return false;
+    }
+    if (!email?.trim()) {
+      this.formError.set('Introduce tu email.');
+      return false;
+    }
+    if (!EMAIL_REGEX.test(email)) {
+      this.formError.set('Introduce un email válido.');
+      return false;
+    }
+    if (!message?.trim()) {
+      this.formError.set('Escribe tu mensaje.');
+      return false;
+    }
+    this.formError.set(null);
+    return true;
+  }
+
+  onSubmit(): void {
     if (this.isSubmitting) return;
+    if (!this.validateForm()) return;
+
     this.isSubmitting = true;
+    this.formError.set(null);
     setTimeout(() => {
-        this.isSubmitting = false;
-        this.successMessage = '¡Mensaje enviado con éxito!';
-        this.formSubmit.emit(this.formData);
-        this.resetForm();
+      this.isSubmitting = false;
+      this.successMessage = '¡Mensaje enviado con éxito!';
+      this.formSubmit.emit({ ...this.formData });
+      this.resetForm();
     }, 1500);
   }
 
-  resetForm() {
-      this.formData = {
-          name: '',
-          email: '',
-          message: ''
-      };
-      setTimeout(() => this.successMessage = '', 3000);
+  resetForm(): void {
+    this.formData = { name: '', email: '', message: '' };
+    this.formError.set(null);
+    setTimeout(() => (this.successMessage = ''), 3000);
   }
 }
 

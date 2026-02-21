@@ -130,6 +130,7 @@
         tabindex="0"
         role="button"
         [attr.aria-label]="'Ver ' + item.title"
+        [attr.aria-current]="i === activeCarouselIndex ? 'true' : null"
         (click)="onCarouselItemClick(item)"
         (keydown)="onInteractiveKeydown($event, onCarouselItemClick, item)">
 

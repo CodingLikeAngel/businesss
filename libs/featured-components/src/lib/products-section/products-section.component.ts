@@ -2,6 +2,7 @@ import { Component, input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UICardComponent, UITitleComponent, UIButtonComponent } from '@negocio/ui-components';
 import { CustomStyles } from '../models/custom-styles.interface';
+import { applySectionStyles } from '../utils/section-styles.util';
 
 export interface Product {
   name: string;
@@ -49,31 +50,7 @@ export class ProductsSectionComponent {
     }
   ]);
 
-  get componentStyles() {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-
-    if (customStyles['backgroundColor']) {
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-
-    if (customStyles['color']) {
-      styles['--theme-color'] = customStyles['color'];
-      styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
-
-    return styles;
-  }
+  componentStyles = computed(() => applySectionStyles(this.customStyles()));
 
   onLoadMore(): void {
     // Hook for infinite scroll / load more; parent can override via output if needed.

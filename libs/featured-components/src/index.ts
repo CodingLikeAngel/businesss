@@ -20,9 +20,10 @@ export * from './lib/promotions-section/promotions-section.component';
 export * from './lib/cta-section/cta-section.component';
 export * from './lib/contact-section/contact-section.component';
 
-// Export models used by section components
+// Export models and utils
 export type { StatItem } from './lib/stats-section/stats-section.component';
 export type { Step } from './lib/steps-section/steps-section.component';
+export { applySectionStyles } from './lib/utils/section-styles.util';
 
 export * from './lib/shared/features/about/feature-about/src/lib/feature-about/pages/about/desktop/feature-about-page.component';
 export * from './lib/shared/features/about/feature-about/src/lib/feature-about/pages/about/mobile/feature-about-page.component';

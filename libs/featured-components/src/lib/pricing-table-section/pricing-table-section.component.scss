@@ -98,10 +98,31 @@
   overflow: hidden;
   box-shadow: var(--theme-shadow);
   transition: all 0.4s ease;
-  
+
   &:hover {
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3);
     border-color: var(--theme-accent, var(--pricing-accent, #3b82f6));
+  }
+}
+
+.pricing-empty {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px dashed rgba(255, 255, 255, 0.15);
+  border-radius: var(--theme-radius, 1rem);
+
+  .pricing-empty__title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem;
+    color: var(--theme-color);
+  }
+
+  .pricing-empty__description {
+    font-size: 0.95rem;
+    margin: 0;
+    opacity: 0.7;
   }
 }
 
