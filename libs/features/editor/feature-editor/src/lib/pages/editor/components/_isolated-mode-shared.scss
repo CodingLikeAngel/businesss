@@ -175,6 +175,38 @@ $sidebar-width: 320px;
     overflow-y: auto;
   }
 
+  .sidebar-tabs {
+    display: flex;
+    background: rgba(15, 23, 42, 0.4);
+    border-bottom: 1px solid $border-color;
+    padding: 0 0.5rem;
+    flex-shrink: 0;
+
+    button {
+      flex: 1;
+      padding: 0.65rem 0.5rem;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      color: $text-dim;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+
+      &:hover {
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      &.active {
+        color: $primary-accent;
+        border-bottom-color: $primary-accent;
+      }
+    }
+  }
+
   .sidebar-scroll-content {
     padding: 1rem;
     display: flex;

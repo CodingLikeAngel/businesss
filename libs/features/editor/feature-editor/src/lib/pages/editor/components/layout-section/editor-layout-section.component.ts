@@ -600,7 +600,8 @@ interface ComponentDefaultSize {
 
     .isolated-mode-overlay-content {
       width: 100% !important;
-      height: 100% !important;
+      min-height: 100% !important;
+      height: auto !important;
       max-width: none !important;
       max-height: none !important;
       overflow: visible !important;
@@ -836,12 +837,12 @@ interface ComponentDefaultSize {
       letter-spacing: 1px;
     }
 
-    /* Slot Component */
+    /* Slot Component - Smart-Adapt: height auto para no cortar contenido; min-height preservado */
     .slot-component {
       position: relative;
       width: 100%;
-      height: 100%;
-      min-height: inherit;
+      height: auto;
+      min-height: 80px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -849,10 +850,10 @@ interface ComponentDefaultSize {
       box-sizing: border-box;
     }
 
-    /* Flow components should expand to content */
+    /* Celdas de grid: permitir que el slot crezca con el contenido */
     .slot.flow-component .slot-component {
       height: auto;
-      min-height: 100%;
+      min-height: 100px;
     }
 
     .slot-controls {

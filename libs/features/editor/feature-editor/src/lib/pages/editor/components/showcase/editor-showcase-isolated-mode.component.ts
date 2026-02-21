@@ -58,8 +58,9 @@ import { Observable } from 'rxjs';
           <!-- Sidebar Controls -->
           <div class="controls-sidebar">
             <div class="sidebar-tabs">
-              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">CONTENIDO</button>
-              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">ESTILO</button>
+              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">Contenido</button>
+              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">Estilo</button>
+              <button [class.active]="activeTab === 'advanced'" (click)="activeTab = 'advanced'">Avanzado</button>
             </div>
 
             <div class="sidebar-scroll-content">
@@ -253,7 +254,7 @@ export class EditorShowcaseIsolatedModeComponent extends BaseIsolatedModeCompone
     map(styles => styles ? [styles.primaryColor, styles.secondaryColor, styles.accentColor, styles.backgroundColor, styles.textColor].filter(Boolean) : [])
   );
 
-  activeTab: 'content' | 'design' = 'content';
+  activeTab: 'content' | 'design' | 'advanced' = 'content';
 
   protected override getCanvasElement(): HTMLElement | null {
     return this.canvasRef?.nativeElement;

@@ -148,7 +148,10 @@
 | ✅ | **Export/ZIP:** `ExporterService` genera HTML por secciones (hero, features, pricing, contact, etc.), CSS con variables y tema dark/light, y ZIP con index.html, styles.css, main.ts, package.json y assets. |
 | ✅ | **Botón Publicar:** En el layout de escritorio del editor, "Publicar" descarga el ZIP (antostudios-YYYY-MM-DD.zip) usando `VariantService.getFullConfig()`, `ExporterService.exportProject()` y `DownloadService`. |
 | ✅ | **API pública:** `ExporterService` y `DownloadService` exportados desde `@negocio/shared-components` para uso en el editor. |
-| Pendiente | Smart-Adapt en todos los componentes de layout; modo aislado unificado (sidebar Contenido \| Estilo \| Avanzado); persistencia de dimensiones en JSON; tests y CI. |
+| ✅ | **Persistencia de dimensiones:** `ResizeSectionCommand` y reducer aplican `section.size`; se guarda y restaura en el modelo de página (JSON). |
+| ✅ | **Tests export:** Tests unitarios para `ExporterService` (ZIP, HTML, secciones) y `WebComponentExporter` (escape, props, observedAttributes); todos pasan. |
+| ✅ | **Modo aislado unificado (P1):** Sidebar con pestañas Contenido \| Estilo \| Avanzado en estilos compartidos (`.sidebar-tabs`); aplicado en Title y Showcase; pestaña Avanzado con posición/tamaño. |
+| Pendiente | Smart-Adapt en todos los componentes de layout (ui-card, ui-list, etc.); extender pestañas unificadas al resto de modos aislados; CI y documentación. |
 
 **Última actualización:** Febrero 2026  
 **Versión:** 1.0

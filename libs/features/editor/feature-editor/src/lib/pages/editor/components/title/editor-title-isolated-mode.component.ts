@@ -55,157 +55,147 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
         <!-- ===== BODY ===== -->
         <div class="isolated-mode-body">
           
-          <!-- Sidebar Controls -->
+          <!-- Sidebar: pestañas unificadas Contenido | Estilo | Avanzado -->
           <div class="controls-sidebar">
+            <div class="sidebar-tabs">
+              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">Contenido</button>
+              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">Estilo</button>
+              <button [class.active]="activeTab === 'advanced'" (click)="activeTab = 'advanced'">Avanzado</button>
+            </div>
             <div class="sidebar-scroll-content">
-              
-              <!-- CONTENT SECTION -->
-              <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">✏️</span>
-                  <h4>CONTENIDO</h4>
-                </div>
-                
-                <div class="control-group">
-                  <label>Texto del Título</label>
-                  <textarea [(ngModel)]="editableContent.text" (ngModelChange)="onContentChange()" class="premium-textarea" rows="3" placeholder="Escribe tu título aquí..."></textarea>
-                </div>
-
-                <div class="control-group">
-                  <label>Nivel de Encabezado</label>
-                  <div class="select-wrapper">
-                    <select [(ngModel)]="editableContent.level" (ngModelChange)="onContentChange()" class="premium-select">
-                      <option value="h1">H1 - Principal</option>
-                      <option value="h2">H2 - Sección</option>
-                      <option value="h3">H3 - Subsección</option>
-                      <option value="h4">H4 - Detalle</option>
-                      <option value="h5">H5 - Menor</option>
-                      <option value="h6">H6 - Mini</option>
-                    </select>
+              <ng-container *ngIf="activeTab === 'content'">
+                <div class="sidebar-section">
+                  <div class="section-header">
+                    <span class="section-icon">✏️</span>
+                    <h4>CONTENIDO</h4>
                   </div>
-                </div>
-              </div>
-
-              <!-- STYLE SECTION -->
-              <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">🎨</span>
-                  <h4>ESTILO & APARIENCIA</h4>
-                </div>
-                
-                <div class="control-group">
-                  <label>Variante Visual</label>
-                  <div class="select-wrapper">
-                    <select [(ngModel)]="editableContent.variant" (ngModelChange)="onVariantChange()" class="premium-select">
-                      <option value="default">Estándar</option>
-                      <option value="gradient">Gradiente (Premium)</option>
-                      <option value="outline">Contorno (Outline)</option>
-                      <option value="glitch">Glitch Effect</option>
-                      <option value="neon">Neon Glow</option>
-                      <option value="3d">3D Depth</option>
-                      
-                      <option disabled>──────────────</option>
-                      
-                      <ng-container *ngFor="let v of availableVariants">
-                        <option *ngIf="!['default', 'gradient', 'outline', 'glitch', 'neon', '3d'].includes(v)" [value]="v">
-                          {{ formatVariantName(v) }}
-                        </option>
-                      </ng-container>
-                    </select>
+                  <div class="control-group">
+                    <label>Texto del Título</label>
+                    <textarea [(ngModel)]="editableContent.text" (ngModelChange)="onContentChange()" class="premium-textarea" rows="3" placeholder="Escribe tu título aquí..."></textarea>
                   </div>
-                </div>
-
-                <div class="control-group">
-                  <label>Alineación</label>
-                  <div class="alignment-btns">
-                    <button class="align-btn" [class.active]="editableContent['align'] === 'left'" (click)="editableContent['align'] = 'left'; onContentChange()">⬅</button>
-                    <button class="align-btn" [class.active]="editableContent['align'] === 'center'" (click)="editableContent['align'] = 'center'; onContentChange()">↔</button>
-                    <button class="align-btn" [class.active]="editableContent['align'] === 'right'" (click)="editableContent['align'] = 'right'; onContentChange()">➡</button>
-                  </div>
-                </div>
-
-                 <div class="control-group">
-                  <label>Animación de Entrada</label>
-                  <div class="select-wrapper">
-                    <select [(ngModel)]="editableContent.animation" (ngModelChange)="onContentChange()" class="premium-select">
-                      <option value="none">Sin Animación</option>
-                      <option value="fade-up">Fade Up</option>
-                      <option value="fade-in">Fade In</option>
-                      <option value="zoom-in">Zoom In</option>
-                      <option value="typewriter">Máquina de Escribir</option>
-                      <option value="slide-in">Deslizar</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <!-- COLORS SECTION -->
-              <div class="sidebar-section">
-                <div class="section-header">
-                  <span class="section-icon">🌈</span>
-                  <h4>COLORES & TAMAÑO</h4>
-                </div>
-                
-                <div class="control-group">
-                  <label>Color Principal</label>
-                  <div class="color-input-wrapper">
-                    <div class="color-preview" [style.background-color]="editableStyles['color']">
-                      <input type="color" [(ngModel)]="editableStyles['color']" (ngModelChange)="onStyleChange()">
+                  <div class="control-group">
+                    <label>Nivel de Encabezado</label>
+                    <div class="select-wrapper">
+                      <select [(ngModel)]="editableContent.level" (ngModelChange)="onContentChange()" class="premium-select">
+                        <option value="h1">H1 - Principal</option>
+                        <option value="h2">H2 - Sección</option>
+                        <option value="h3">H3 - Subsección</option>
+                        <option value="h4">H4 - Detalle</option>
+                        <option value="h5">H5 - Menor</option>
+                        <option value="h6">H6 - Mini</option>
+                      </select>
                     </div>
-                    <input type="text" [(ngModel)]="editableStyles['color']" (ngModelChange)="onStyleChange()" class="premium-input font-mono" placeholder="#000000">
-                  </div>
-                </div>
-
-                <div class="control-group">
-                  <label>Tamaño de Fuente (PX)</label>
-                  <input type="text" [(ngModel)]="editableStyles['fontSize']" (ngModelChange)="onStyleChange()" class="premium-input" placeholder="24px o 2rem">
-                </div>
-
-                <div class="control-group">
-                  <label>Peso de Fuente</label>
-                  <div class="select-wrapper">
-                    <select [(ngModel)]="editableStyles['fontWeight']" (ngModelChange)="onStyleChange()" class="premium-select">
-                      <option value="">Normal</option>
-                      <option value="300">Light (300)</option>
-                      <option value="400">Regular (400)</option>
-                      <option value="500">Medium (500)</option>
-                      <option value="600">Semibold (600)</option>
-                      <option value="700">Bold (700)</option>
-                      <option value="800">Extra Bold (800)</option>
-                      <option value="900">Black (900)</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-
-              <!-- DIMENSIONS SECTION -->
-              <div class="sidebar-section no-border">
-                <div class="section-header">
-                  <span class="section-icon">📏</span>
-                  <h4>POSICIÓN & TAMAÑO</h4>
-                </div>
-                <div class="control-row grid grid-cols-2 gap-2">
-                  <div class="control-group">
-                    <label>Posición X</label>
-                    <input type="number" [(ngModel)]="currentPosition.x" (ngModelChange)="onPositionChange()" class="premium-input text-center">
                   </div>
                   <div class="control-group">
-                    <label>Posición Y</label>
-                    <input type="number" [(ngModel)]="currentPosition.y" (ngModelChange)="onPositionChange()" class="premium-input text-center">
-                  </div>
-                </div>
-                <div class="control-row grid grid-cols-2 gap-2">
-                  <div class="control-group">
-                    <label>Ancho (W)</label>
-                    <input type="number" [(ngModel)]="currentSize.width" (ngModelChange)="onSizeChange()" class="premium-input text-center">
+                    <label>Alineación</label>
+                    <div class="alignment-btns">
+                      <button class="align-btn" [class.active]="editableContent['align'] === 'left'" (click)="editableContent['align'] = 'left'; onContentChange()">⬅</button>
+                      <button class="align-btn" [class.active]="editableContent['align'] === 'center'" (click)="editableContent['align'] = 'center'; onContentChange()">↔</button>
+                      <button class="align-btn" [class.active]="editableContent['align'] === 'right'" (click)="editableContent['align'] = 'right'; onContentChange()">➡</button>
+                    </div>
                   </div>
                   <div class="control-group">
-                    <label>Alto (H)</label>
-                    <input type="number" [(ngModel)]="currentSize.height" (ngModelChange)="onSizeChange()" class="premium-input text-center">
+                    <label>Animación de Entrada</label>
+                    <div class="select-wrapper">
+                      <select [(ngModel)]="editableContent.animation" (ngModelChange)="onContentChange()" class="premium-select">
+                        <option value="none">Sin Animación</option>
+                        <option value="fade-up">Fade Up</option>
+                        <option value="fade-in">Fade In</option>
+                        <option value="zoom-in">Zoom In</option>
+                        <option value="typewriter">Máquina de Escribir</option>
+                        <option value="slide-in">Deslizar</option>
+                      </select>
+                    </div>
                   </div>
                 </div>
-              </div>
-
+              </ng-container>
+              <ng-container *ngIf="activeTab === 'design'">
+                <div class="sidebar-section">
+                  <div class="section-header">
+                    <span class="section-icon">🎨</span>
+                    <h4>ESTILO & APARIENCIA</h4>
+                  </div>
+                  <div class="control-group">
+                    <label>Variante Visual</label>
+                    <div class="select-wrapper">
+                      <select [(ngModel)]="editableContent.variant" (ngModelChange)="onVariantChange()" class="premium-select">
+                        <option value="default">Estándar</option>
+                        <option value="gradient">Gradiente (Premium)</option>
+                        <option value="outline">Contorno (Outline)</option>
+                        <option value="glitch">Glitch Effect</option>
+                        <option value="neon">Neon Glow</option>
+                        <option value="3d">3D Depth</option>
+                        <option disabled>──────────────</option>
+                        <ng-container *ngFor="let v of availableVariants">
+                          <option *ngIf="!['default', 'gradient', 'outline', 'glitch', 'neon', '3d'].includes(v)" [value]="v">{{ formatVariantName(v) }}</option>
+                        </ng-container>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="sidebar-section">
+                  <div class="section-header">
+                    <span class="section-icon">🌈</span>
+                    <h4>COLORES & TAMAÑO</h4>
+                  </div>
+                  <div class="control-group">
+                    <label>Color Principal</label>
+                    <div class="color-input-wrapper">
+                      <div class="color-preview" [style.background-color]="editableStyles['color']">
+                        <input type="color" [(ngModel)]="editableStyles['color']" (ngModelChange)="onStyleChange()">
+                      </div>
+                      <input type="text" [(ngModel)]="editableStyles['color']" (ngModelChange)="onStyleChange()" class="premium-input font-mono" placeholder="#000000">
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label>Tamaño de Fuente (PX)</label>
+                    <input type="text" [(ngModel)]="editableStyles['fontSize']" (ngModelChange)="onStyleChange()" class="premium-input" placeholder="24px o 2rem">
+                  </div>
+                  <div class="control-group">
+                    <label>Peso de Fuente</label>
+                    <div class="select-wrapper">
+                      <select [(ngModel)]="editableStyles['fontWeight']" (ngModelChange)="onStyleChange()" class="premium-select">
+                        <option value="">Normal</option>
+                        <option value="300">Light (300)</option>
+                        <option value="400">Regular (400)</option>
+                        <option value="500">Medium (500)</option>
+                        <option value="600">Semibold (600)</option>
+                        <option value="700">Bold (700)</option>
+                        <option value="800">Extra Bold (800)</option>
+                        <option value="900">Black (900)</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+              <ng-container *ngIf="activeTab === 'advanced'">
+                <div class="sidebar-section no-border">
+                  <div class="section-header">
+                    <span class="section-icon">📏</span>
+                    <h4>POSICIÓN & TAMAÑO</h4>
+                  </div>
+                  <div class="control-row grid grid-cols-2 gap-2">
+                    <div class="control-group">
+                      <label>Posición X</label>
+                      <input type="number" [(ngModel)]="currentPosition.x" (ngModelChange)="onPositionChange()" class="premium-input text-center">
+                    </div>
+                    <div class="control-group">
+                      <label>Posición Y</label>
+                      <input type="number" [(ngModel)]="currentPosition.y" (ngModelChange)="onPositionChange()" class="premium-input text-center">
+                    </div>
+                  </div>
+                  <div class="control-row grid grid-cols-2 gap-2">
+                    <div class="control-group">
+                      <label>Ancho (W)</label>
+                      <input type="number" [(ngModel)]="currentSize.width" (ngModelChange)="onSizeChange()" class="premium-input text-center">
+                    </div>
+                    <div class="control-group">
+                      <label>Alto (H)</label>
+                      <input type="number" [(ngModel)]="currentSize.height" (ngModelChange)="onSizeChange()" class="premium-input text-center">
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
             </div>
           </div>
 
@@ -316,6 +306,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 export class EditorTitleIsolatedModeComponent extends BaseIsolatedModeComponent {
   @ViewChild('canvas') canvasRef!: ElementRef;
   availableVariants = variants;
+  activeTab: 'content' | 'design' | 'advanced' = 'content';
 
   protected override getCanvasElement(): HTMLElement | null {
     return this.canvasRef?.nativeElement;
