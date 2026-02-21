@@ -157,5 +157,13 @@ La **ventaja diferencial** es la combinación de editor visual, design tokens y 
 
 ---
 
+## 10. Sistema integrado (ATS + Anto Studios)
+
+Para **oportunidades de negocio del sistema integrado** (hub ATS + Anto Studios como un solo producto), ver:
+
+- **ideas/PLAN_OPORTUNIDADES_NEGOCIO_INTEGRADO.md** – Segmentos, modelos de ingreso, go-to-market y métricas del producto integrado.
+
+---
+
 **Última actualización:** Febrero 2026  
 **Versión:** 1.0
