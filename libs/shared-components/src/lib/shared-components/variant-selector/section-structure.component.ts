@@ -316,22 +316,13 @@ export class SectionStructureComponent implements OnInit, OnDestroy {
     this.subscriptions.forEach(sub => sub.unsubscribe());
   }
 
+  private static readonly SECTION_ICONS: Record<string, string> = {
+    hero: '🚀', services: '🛠️', products: '🧩', testimonials: '⭐', pricing: '💰',
+    promotions: '🎁', faq: '❓', gallery: '🖼️', contact: '📞', bubble: '🫧',
+    features: '✨', stats: '📊'
+  };
   getSectionTypeIcon(type: string): string {
-    const icons: { [key: string]: string } = {
-      hero: '🚀',
-      services: '🛠️',
-      products: '🧩',
-      testimonials: '⭐',
-      pricing: '💰',
-      promotions: '🎁',
-      faq: '❓',
-      gallery: '🖼️',
-      contact: '📞',
-      bubble: '🫧',
-      features: '✨',
-      stats: '📊'
-    };
-    return icons[type] || '📄';
+    return SectionStructureComponent.SECTION_ICONS[type] ?? '📄';
   }
 
   toggleSectionVisibility(section: PageSection) {
