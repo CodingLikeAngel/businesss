@@ -1,4 +1,4 @@
-import { Component, HostListener, OnDestroy, OnInit, Inject, PLATFORM_ID, TrackByFunction, inject } from '@angular/core';
+import { Component, HostListener, OnDestroy, OnInit, Inject, PLATFORM_ID, TrackByFunction, inject, ChangeDetectorRef } from '@angular/core';
 import { EditorService } from '../../services/editor.service';
 import { CartService } from '../../services/cart.service';
 import { ModalService } from '../../services/modal.service';
@@ -57,6 +57,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
   protected keyboardService = inject(KeyboardService);
   protected visualEditorService = inject(VisualEditorService);
   protected actions$ = inject(Actions);
+  protected cdr = inject(ChangeDetectorRef);
 
   private variantSub?: Subscription;
   private configSubs: Subscription[] = [];
@@ -139,6 +140,7 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
     });
     this.variantService.globalVariant$.subscribe((variant) => {
       this.globalVariant = variant;
+      this.cdr.markForCheck();
     });
 
     this.configSubs.push(

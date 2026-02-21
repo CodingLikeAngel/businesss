@@ -84,16 +84,18 @@ export abstract class BaseEditorSectionComponent implements OnInit, OnDestroy {
     return (value !== undefined && value !== null ? value : defaultValue) as T;
   }
 
-  getVariant(sectionId: string): any {
+  /** Resolved variant for this section: content > component override > global theme. Always lowercase so UI component CSS classes match (e.g. variant-matrix). */
+  getVariant(sectionId: string): string {
     const contentVariant = this.section?.content?.['variant'];
     if (contentVariant && contentVariant !== 'default') {
-      return contentVariant;
+      return typeof contentVariant === 'string' ? contentVariant.toLowerCase() : String(contentVariant).toLowerCase();
     }
     const componentVariant = this.componentVariants[sectionId];
     if (componentVariant && componentVariant !== 'default') {
-      return componentVariant;
+      return typeof componentVariant === 'string' ? componentVariant.toLowerCase() : String(componentVariant).toLowerCase();
     }
-    return this.globalVariant || 'default';
+    const global = this.globalVariant || 'default';
+    return typeof global === 'string' ? global.toLowerCase() : String(global).toLowerCase();
   }
 
   selectSection(event: Event, section: PageSection) {

@@ -1127,12 +1127,13 @@ export class VariantService {
   }
 
   setGlobalVariant(variant: string) {
-    if (this.isValidVariant(variant)) {
-      this.globalVariantSubject.next(variant);
+    const normalized = typeof variant === 'string' ? variant.toLowerCase().trim() : '';
+    if (this.isValidVariant(normalized)) {
+      this.globalVariantSubject.next(normalized);
       
       // Aplicar forzosamente a todos los configs base para asegurar consistencia
       // IMPORTANT: We must create NEW objects for Angular Change Detection to pick it up immediately
-      const update = { variant };
+      const update = { variant: normalized };
       
       this.setHeaderConfig({ ...this.headerConfigSubject.value, ...update });
       this.setFooterConfig({ ...this.footerConfigSubject.value, ...update });

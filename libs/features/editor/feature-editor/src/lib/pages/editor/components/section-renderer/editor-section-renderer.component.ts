@@ -4,6 +4,7 @@ import {
   Output,
   EventEmitter,
   ViewContainerRef,
+  ChangeDetectorRef,
   inject,
   OnChanges,
   SimpleChanges,
@@ -64,6 +65,7 @@ export interface EditorSectionRendererContext {
 })
 export class EditorSectionRendererComponent implements OnInit, OnChanges, OnDestroy {
   private viewContainerRef = inject(ViewContainerRef);
+  private cdr = inject(ChangeDetectorRef);
 
   @Input() section!: PageSection;
   @Input() componentVariants: { [key: string]: string } = {};
@@ -105,6 +107,12 @@ export class EditorSectionRendererComponent implements OnInit, OnChanges, OnDest
       this.renderSection();
     } else if (this.componentRef) {
       this.updateInputs();
+      // When globalVariant or componentVariants change, force the dynamic component to update its view so theme applies immediately
+      if (changes['globalVariant'] || changes['componentVariants']) {
+        const ref = this.componentRef as import('@angular/core').ComponentRef<{ globalVariant?: string }>;
+        if (ref?.changeDetectorRef) ref.changeDetectorRef.markForCheck();
+        this.cdr.markForCheck();
+      }
     } else if (this.section?.type) {
       this.renderSection();
     }
