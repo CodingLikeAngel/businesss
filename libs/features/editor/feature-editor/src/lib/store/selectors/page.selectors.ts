@@ -58,6 +58,9 @@ function deduplicateByTypeKeepFirst<T extends { type?: string }>(sections: T[]):
   });
 }
 
+/** @deprecated Use deduplicateByTypeKeepFirst. Kept for compatibility. */
+const deduplicateSingleInstanceSections = deduplicateByTypeKeepFirst;
+
 /** Remove duplicate sections by id (first occurrence kept). Fixes "all sections duplicated" when array is repeated. */
 function deduplicateSectionsById<T extends { id?: string }>(sections: T[]): T[] {
   if (!sections?.length) return sections;
