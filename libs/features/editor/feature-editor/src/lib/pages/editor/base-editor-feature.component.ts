@@ -196,7 +196,8 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
         this.store.select(PageSelectors.selectCurrentPage).pipe(take(1)).subscribe(currentStorePage => {
           if (!currentStorePage || currentStorePage.id !== page.id) {
             console.log('🔄 Syncing VariantService -> Store (Page Switch/Load Detected)');
-            this.store.dispatch(PageActions.loadPageSuccess({ page: page as any }));
+            const normalizedSections = PageSelectors.normalizeSectionsForDisplay(page.sections || []);
+            this.store.dispatch(PageActions.loadPageSuccess({ page: { ...page, sections: normalizedSections } as any }));
           } else {
             // Same page, check if sections or content changed (e.g. added component from sidebar)
             // Use a simple but effective check to avoid loops
@@ -207,12 +208,13 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
             
             if (storeSectionsStr !== vsSectionsStr || storeGlobalStylesStr !== vsGlobalStylesStr) {
               console.log('🔄 Syncing VariantService -> Store (Update Detected)');
-              this.store.dispatch(PageActions.updatePage({ 
-                pageId: page.id, 
-                changes: { 
-                  sections: page.sections as any,
+              const normalizedSections = PageSelectors.normalizeSectionsForDisplay(page.sections || []);
+              this.store.dispatch(PageActions.updatePage({
+                pageId: page.id,
+                changes: {
+                  sections: normalizedSections as any,
                   globalStyles: page.globalStyles as any
-                } 
+                }
               }));
             }
           }
@@ -283,11 +285,12 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
       } else {
         // Fallback to segments if no pages found (legacy)
         const sections = (this.variantService as any).sectionsSubject.value;
+        const normalizedSections = PageSelectors.normalizeSectionsForDisplay(sections || []);
         const initialPage: Page = {
           id: 'default-page',
           name: 'Home',
           slug: 'home',
-          sections: sections as any,
+          sections: normalizedSections as any,
           globalStyles: {} as any,
           metadata: { title: 'Landing Page' } as any,
           versions: [],

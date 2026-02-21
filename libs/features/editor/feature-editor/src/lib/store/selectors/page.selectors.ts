@@ -46,6 +46,30 @@ export const selectLastSaved = createSelector(
   (state: PageState) => state?.lastSaved || null
 );
 
+/** Remove duplicate sections by id (first occurrence kept). */
+function deduplicateSectionsById<T extends { id?: string }>(sections: T[]): T[] {
+  if (!sections?.length) return sections;
+  const seen = new Set<string>();
+  return sections.filter((s) => {
+    const id = s.id ?? '';
+    if (seen.has(id)) return false;
+    seen.add(id);
+    return true;
+  });
+}
+
+/** If the array is exactly two copies of the same type sequence, keep only the first half. */
+function removeDuplicateSequence<T extends { type?: string }>(sections: T[]): T[] {
+  if (!sections?.length || sections.length < 2) return sections;
+  const half = Math.floor(sections.length / 2);
+  if (sections.length !== half * 2) return sections;
+  const types = (s: T) => (s.type || '').toLowerCase();
+  const firstTypes = sections.slice(0, half).map(types).join('\0');
+  const secondTypes = sections.slice(half).map(types).join('\0');
+  if (firstTypes !== secondTypes) return sections;
+  return sections.slice(0, half);
+}
+
 /** Keep only the first occurrence of each section type. Fixes "all sections duplicated" (Hero, Features, Contact each showing twice). */
 function deduplicateByTypeKeepFirst<T extends { type?: string }>(sections: T[]): T[] {
   if (!sections?.length) return sections;
@@ -58,31 +82,10 @@ function deduplicateByTypeKeepFirst<T extends { type?: string }>(sections: T[]):
   });
 }
 
-/** @deprecated Use deduplicateByTypeKeepFirst. Kept for compatibility. */
-const deduplicateSingleInstanceSections = deduplicateByTypeKeepFirst;
-
-/** Remove duplicate sections by id (first occurrence kept). Fixes "all sections duplicated" when array is repeated. */
-function deduplicateSectionsById<T extends { id?: string }>(sections: T[]): T[] {
-  if (!sections?.length) return sections;
-  const seen = new Set<string>();
-  return sections.filter((s) => {
-    const id = s.id ?? '';
-    if (seen.has(id)) return false;
-    seen.add(id);
-    return true;
-  });
-}
-
-/** If the array is exactly two copies of the same type sequence (e.g. [hero, features, hero, features]), keep only the first half. */
-function removeDuplicateSequence<T extends { type?: string }>(sections: T[]): T[] {
-  if (!sections?.length || sections.length < 2) return sections;
-  const half = Math.floor(sections.length / 2);
-  if (sections.length !== half * 2) return sections;
-  const types = (s: T) => (s.type || '').toLowerCase();
-  const firstTypes = sections.slice(0, half).map(types).join('\0');
-  const secondTypes = sections.slice(half).map(types).join('\0');
-  if (firstTypes !== secondTypes) return sections;
-  return sections.slice(0, half);
+/** Public helper: normalize sections (sequence + by id + one per type). Use when syncing to store or for display. */
+export function normalizeSectionsForDisplay<T extends { id?: string; type?: string }>(sections: T[]): T[] {
+  const list = sections ?? [];
+  return deduplicateByTypeKeepFirst(deduplicateSectionsById(removeDuplicateSequence(list)));
 }
 
 // Current page derived selectors
@@ -91,13 +94,10 @@ export const selectCurrentPageSections = createSelector(
   (page: Page | null) => page?.sections || []
 );
 
-/** Sections deduped: remove duplicate sequence, by id, then one per type (first only). Use for editor canvas. */
+/** Sections deduped: one per type (first only). Use for editor canvas. */
 export const selectCurrentPageSectionsDeduped = createSelector(
   selectCurrentPageSections,
-  (sections: Section[]) =>
-    deduplicateByTypeKeepFirst(
-      deduplicateSectionsById(removeDuplicateSequence(sections || []))
-    )
+  (sections: Section[]) => normalizeSectionsForDisplay(sections || [])
 );
 
 export const selectCurrentPageGlobalStyles = createSelector(
