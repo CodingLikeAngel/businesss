@@ -2,6 +2,8 @@
 import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UITitleComponent } from '@negocio/ui-components';
+import { applySectionStyles } from '../utils/section-styles.util';
+import type { CustomStyles } from '../models/custom-styles.interface';
 
 export interface Step {
   title: string;
@@ -12,12 +14,6 @@ export interface Step {
   tooltip?: string;
   expanded?: boolean;
   children?: Step[];
-}
-
-export interface StepsCustomStyles {
-  backgroundColor?: string;
-  color?: string;
-  [key: string]: string | undefined;
 }
 
 @Component({
@@ -32,33 +28,9 @@ export class UIStepsSectionComponent {
   subtitle = input('Sigue estos sencillos pasos');
   steps = input<Step[]>([]);
   variant = input('linear');
-  customStyles = input<StepsCustomStyles>({});
-  
-  stepsStyles = computed(() => {
-    const styles: Record<string, any> = {};
-    const customStyles = this.customStyles();
-    
-    if (customStyles['backgroundColor']) {
-      styles['--theme-bg'] = customStyles['backgroundColor'];
-      styles['--component-bg'] = customStyles['backgroundColor'];
-      styles['background'] = customStyles['backgroundColor'];
-      styles['background-color'] = customStyles['backgroundColor'];
-    }
-    
-    if (customStyles['color']) {
-      styles['--theme-color'] = customStyles['color'];
-      styles['--component-text'] = customStyles['color'];
-      styles['color'] = customStyles['color'];
-    }
-    
-    Object.keys(customStyles).forEach(key => {
-      if (key !== 'backgroundColor' && key !== 'color') {
-        styles[key] = customStyles[key];
-      }
-    });
-    
-    return styles;
-  });
+  customStyles = input<CustomStyles>({});
+
+  stepsStyles = computed(() => applySectionStyles(this.customStyles()));
 
   getAriaCurrent(index: number): string | null {
     const steps = this.steps();

@@ -34,6 +34,18 @@
     opacity: 0.9;
     color: var(--theme-color);
   }
+
+  .steps-empty {
+    text-align: center;
+    padding: 2rem;
+    opacity: 0.85;
+
+    .steps-empty__text {
+      margin: 0;
+      font-size: 1rem;
+      color: var(--theme-color);
+    }
+  }
   
   .steps-container {
     display: flex;

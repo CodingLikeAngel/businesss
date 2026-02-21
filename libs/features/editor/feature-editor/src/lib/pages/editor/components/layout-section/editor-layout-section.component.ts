@@ -14,11 +14,18 @@ import {
   UITitleComponent,
   UICardComponent,
   UICardAnimatedComponent,
+  UICardPremiumComponent,
   UIAccordionComponent,
   UIListComponent,
   UIChipComponent,
   UiCardProductsComponent,
-  UIDraggableBox1Component
+  UIDraggableBox1Component,
+  UIInputComponent,
+  UITableComponent,
+  UIShowcaseAtomComponent,
+  UIVideoComponent,
+  UISpacerComponent,
+  UIGalleryComponent
 } from '@negocio/ui-components';
 
 import { EditorButtonIsolatedModeComponent } from '../button/editor-button-isolated-mode.component';
@@ -87,11 +94,18 @@ interface ComponentDefaultSize {
     UITitleComponent,
     UICardComponent,
     UICardAnimatedComponent,
+    UICardPremiumComponent,
     UIAccordionComponent,
     UIListComponent,
     UIChipComponent,
     UiCardProductsComponent,
     UIDraggableBox1Component,
+    UIInputComponent,
+    UITableComponent,
+    UIShowcaseAtomComponent,
+    UIVideoComponent,
+    UISpacerComponent,
+    UIGalleryComponent,
     EditorButtonIsolatedModeComponent,
     EditorAccordionIsolatedModeComponent,
     EditorDraggableBoxIsolatedModeComponent,
@@ -315,6 +329,82 @@ interface ComponentDefaultSize {
                   class="slot-box">
                 </lib-ui-components-draggable-box-1>
 
+                <!-- UI INPUT -->
+                <lib-ui-components-input
+                  *ngSwitchCase="'ui-input'"
+                  [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'primary')"
+                  [placeholder]="slotEntry.slot.content?.['placeholder'] || 'Escribe aquí...'"
+                  [label]="slotEntry.slot.content?.['label'] || 'Campo'"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)"
+                  class="slot-input">
+                </lib-ui-components-input>
+
+                <!-- UI TABLE -->
+                <lib-ui-components-table
+                  *ngSwitchCase="'ui-table'"
+                  [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'secondary')"
+                  [columns]="slotEntry.slot.content?.['columns'] || [{ key: 'col1', label: 'Columna 1' }]"
+                  [rows]="slotEntry.slot.content?.['rows'] || [{ col1: 'Fila 1' }]"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)"
+                  class="slot-table">
+                </lib-ui-components-table>
+
+                <!-- UI SHOWCASE ATOM -->
+                <lib-ui-components-showcase-atom
+                  *ngSwitchCase="'ui-showcase-atom'"
+                  [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'default')"
+                  [icon]="slotEntry.slot.content?.['icon'] || '✨'"
+                  [title]="slotEntry.slot.content?.['title'] || 'Título'"
+                  [text]="slotEntry.slot.content?.['text'] || 'Descripción breve.'"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)"
+                  class="slot-showcase">
+                </lib-ui-components-showcase-atom>
+
+                <!-- UI VIDEO -->
+                <lib-ui-components-video
+                  *ngSwitchCase="'ui-video'"
+                  [src]="slotEntry.slot.content?.['src'] || ''"
+                  [autoplay]="slotEntry.slot.content?.['autoplay'] !== false"
+                  [loop]="slotEntry.slot.content?.['loop'] !== false"
+                  [muted]="slotEntry.slot.content?.['muted'] !== false"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)"
+                  class="slot-video">
+                </lib-ui-components-video>
+
+                <!-- UI SPACER -->
+                <lib-ui-components-spacer
+                  *ngSwitchCase="'ui-spacer'"
+                  [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'empty')"
+                  [height]="slotEntry.slot.content?.['height'] || '60px'"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)"
+                  class="slot-spacer">
+                </lib-ui-components-spacer>
+
+                <!-- UI GALLERY -->
+                <lib-ui-components-gallery
+                  *ngSwitchCase="'ui-gallery'"
+                  [variant]="$any(slotEntry.slot.componentVariant || globalVariant || 'default')"
+                  [images]="slotEntry.slot.content?.['images'] || [{ src: 'https://picsum.photos/300/200', alt: 'Imagen 1' }]"
+                  [customStyles]="getComponentStyles(slotEntry.slot, slotEntry.globalIndex)"
+                  class="slot-gallery">
+                </lib-ui-components-gallery>
+
+                <!-- UI CARD PREMIUM -->
+                <lib-ui-components-card-premium
+                  *ngSwitchCase="'ui-card-premium'"
+                  [config]="{
+                    icon: slotEntry.slot.content?.['icon'] || 'heroStar',
+                    title: slotEntry.slot.content?.['title'] || 'Título',
+                    description: slotEntry.slot.content?.['description'] || 'Descripción',
+                    image: slotEntry.slot.content?.['image'] || '',
+                    price: slotEntry.slot.content?.['price'] || '99',
+                    discount: slotEntry.slot.content?.['discount'] || '',
+                    tooltip: slotEntry.slot.content?.['tooltip'] || '',
+                    variant: slotEntry.slot.componentVariant || globalVariant || 'default'
+                  }"
+                  class="slot-card-premium">
+                </lib-ui-components-card-premium>
+
                 <!-- Default/Unknown -->
                 <div *ngSwitchDefault class="unknown-component">
                   <span class="unknown-icon">❓</span>
@@ -424,6 +514,81 @@ interface ComponentDefaultSize {
                 <input type="text" [(ngModel)]="editingSlot.content!['product']['image']" (ngModelChange)="onSlotConfigChange()" placeholder="URL...">
               </div>
             </ng-container>
+
+            <!-- Input Config -->
+            <ng-container *ngIf="editingSlot.componentType === 'ui-input'">
+              <div class="config-field">
+                <label>Placeholder</label>
+                <input type="text" [(ngModel)]="editingSlot.content!['placeholder']" (ngModelChange)="onSlotConfigChange()" placeholder="Texto placeholder...">
+              </div>
+              <div class="config-field">
+                <label>Etiqueta</label>
+                <input type="text" [(ngModel)]="editingSlot.content!['label']" (ngModelChange)="onSlotConfigChange()">
+              </div>
+            </ng-container>
+
+            <!-- Showcase Atom Config -->
+            <ng-container *ngIf="editingSlot.componentType === 'ui-showcase-atom'">
+              <div class="config-field">
+                <label>Icono (emoji o texto)</label>
+                <input type="text" [(ngModel)]="editingSlot.content!['icon']" (ngModelChange)="onSlotConfigChange()" placeholder="✨">
+              </div>
+              <div class="config-field">
+                <label>Título</label>
+                <input type="text" [(ngModel)]="editingSlot.content!['title']" (ngModelChange)="onSlotConfigChange()">
+              </div>
+              <div class="config-field">
+                <label>Texto</label>
+                <textarea [(ngModel)]="editingSlot.content!['text']" (ngModelChange)="onSlotConfigChange()"></textarea>
+              </div>
+            </ng-container>
+
+            <!-- Video Config -->
+            <ng-container *ngIf="editingSlot.componentType === 'ui-video'">
+              <div class="config-field">
+                <label>URL del vídeo</label>
+                <input type="text" [(ngModel)]="editingSlot.content!['src']" (ngModelChange)="onSlotConfigChange()" placeholder="https://...">
+              </div>
+              <div class="config-field">
+                <label><input type="checkbox" [(ngModel)]="editingSlot.content!['autoplay']" (ngModelChange)="onSlotConfigChange()"> Autoplay</label>
+              </div>
+              <div class="config-field">
+                <label><input type="checkbox" [(ngModel)]="editingSlot.content!['loop']" (ngModelChange)="onSlotConfigChange()"> Loop</label>
+              </div>
+              <div class="config-field">
+                <label><input type="checkbox" [(ngModel)]="editingSlot.content!['muted']" (ngModelChange)="onSlotConfigChange()"> Muted</label>
+              </div>
+            </ng-container>
+
+            <!-- Spacer Config -->
+            <div class="config-field" *ngIf="editingSlot.componentType === 'ui-spacer'">
+              <label>Altura</label>
+              <input type="text" [(ngModel)]="editingSlot.content!['height']" (ngModelChange)="onSlotConfigChange()" placeholder="60px">
+            </div>
+
+            <!-- Card Premium Config (quick fields when not in isolated) -->
+            <ng-container *ngIf="editingSlot.componentType === 'ui-card-premium'">
+              <div class="config-field">
+                <label>Título</label>
+                <input type="text" [(ngModel)]="editingSlot.content!['title']" (ngModelChange)="onSlotConfigChange()">
+              </div>
+              <div class="config-field">
+                <label>Descripción</label>
+                <textarea [(ngModel)]="editingSlot.content!['description']" (ngModelChange)="onSlotConfigChange()"></textarea>
+              </div>
+              <div class="config-field">
+                <label>Precio</label>
+                <input type="text" [(ngModel)]="editingSlot.content!['price']" (ngModelChange)="onSlotConfigChange()">
+              </div>
+              <div class="config-field">
+                <label>Descuento</label>
+                <input type="text" [(ngModel)]="editingSlot.content!['discount']" (ngModelChange)="onSlotConfigChange()" placeholder="Ej: -20%">
+              </div>
+              <div class="config-field">
+                <label>Imagen (URL)</label>
+                <input type="text" [(ngModel)]="editingSlot.content!['image']" (ngModelChange)="onSlotConfigChange()" placeholder="https://...">
+              </div>
+            </ng-container>
           </div>
 
           <div class="modal-footer">
@@ -475,7 +640,7 @@ interface ComponentDefaultSize {
         </lib-editor-image-isolated-mode>
 
         <lib-editor-card-premium-isolated-mode
-          *ngIf="activeIsolatedType === 'ui-card'"
+          *ngIf="activeIsolatedType === 'ui-card' || activeIsolatedType === 'ui-card-premium'"
           [config]="$any(isolatedConfig)"
           (closed)="onIsolatedModeClosed()"
           (applied)="onIsolatedModeApplied($any($event))">
@@ -1677,7 +1842,7 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     styles['height'] = '100%';
 
     // Component-specific structural overrides
-    const fullWidthComponents = ['ui-accordion', 'ui-list', 'ui-card', 'ui-card-animated', 'ui-card-product'];
+    const fullWidthComponents = ['ui-accordion', 'ui-list', 'ui-card', 'ui-card-animated', 'ui-card-product', 'ui-table', 'ui-gallery', 'ui-card-premium'];
     if (fullWidthComponents.some(type => componentType.includes(type))) {
       styles['justify-content'] = 'stretch';
       styles['align-items'] = 'stretch';
@@ -1865,6 +2030,53 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
         variant: slot.componentVariant || this.globalVariant || 'default'
       }),
 
+      'ui-card-premium': () => ({
+        icon: (slot.content?.['icon'] as any) || 'heroStar',
+        title: slot.content?.['title'] || 'Título',
+        description: slot.content?.['description'] || 'Descripción',
+        image: slot.content?.['image'] || '',
+        price: slot.content?.['price'] || '99',
+        discount: slot.content?.['discount'] || '',
+        tooltip: slot.content?.['tooltip'] || '',
+        variant: slot.componentVariant || this.globalVariant || 'default'
+      }),
+
+      'ui-input': () => ({
+        variant: slot.componentVariant || this.globalVariant || 'primary',
+        placeholder: slot.content?.['placeholder'] || 'Escribe aquí...',
+        label: slot.content?.['label'] || 'Campo'
+      }),
+
+      'ui-table': () => ({
+        variant: slot.componentVariant || this.globalVariant || 'secondary',
+        columns: slot.content?.['columns'] || [{ key: 'col1', label: 'Columna 1' }],
+        rows: slot.content?.['rows'] || [{ col1: 'Fila 1' }]
+      }),
+
+      'ui-showcase-atom': () => ({
+        variant: slot.componentVariant || this.globalVariant || 'default',
+        icon: slot.content?.['icon'] || '✨',
+        title: slot.content?.['title'] || 'Título',
+        text: slot.content?.['text'] || 'Descripción breve.'
+      }),
+
+      'ui-video': () => ({
+        src: slot.content?.['src'] || '',
+        autoplay: slot.content?.['autoplay'] !== false,
+        loop: slot.content?.['loop'] !== false,
+        muted: slot.content?.['muted'] !== false
+      }),
+
+      'ui-spacer': () => ({
+        variant: slot.componentVariant || this.globalVariant || 'empty',
+        height: slot.content?.['height'] || '60px'
+      }),
+
+      'ui-gallery': () => ({
+        variant: slot.componentVariant || this.globalVariant || 'default',
+        images: slot.content?.['images'] || [{ src: 'https://picsum.photos/300/200', alt: 'Imagen 1' }]
+      }),
+
       'empty': () => ({}),
     };
 
@@ -1884,16 +2096,23 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
   ): ComponentDefaultSize {
     // FIX: Remove arbitrary caps (Math.min) so components respect the layout's actual width
     const sizeMap: Record<SlotComponentType, ComponentDefaultSize> = {
-      'ui-button': { width: detectedWidth, height: 50 }, // Was min(220)
+      'ui-button': { width: detectedWidth, height: 50 },
       'ui-title': { width: detectedWidth, height: 100 },
       'ui-accordion': { width: detectedWidth, height: 250 },
       'draggable-box': { width: detectedWidth, height: 120 },
       'ui-list': { width: detectedWidth, height: 300 },
-      'ui-card-product': { width: detectedWidth, height: 480 }, // Was min(320)
-      'ui-chip': { width: 120, height: 40 }, // Chips are naturally small
+      'ui-card-product': { width: detectedWidth, height: 480 },
+      'ui-chip': { width: 120, height: 40 },
       'ui-image': { width: detectedWidth, height: Math.round(detectedWidth * 0.6) },
       'ui-card': { width: detectedWidth, height: 400 },
       'ui-card-animated': { width: detectedWidth, height: 400 },
+      'ui-card-premium': { width: detectedWidth, height: 400 },
+      'ui-input': { width: detectedWidth, height: 48 },
+      'ui-table': { width: detectedWidth, height: 280 },
+      'ui-showcase-atom': { width: detectedWidth, height: 120 },
+      'ui-video': { width: detectedWidth, height: Math.round(detectedWidth * 9 / 16) },
+      'ui-spacer': { width: detectedWidth, height: 60 },
+      'ui-gallery': { width: detectedWidth, height: 320 },
       'empty': { width: detectedWidth, height: 300 }
     };
 

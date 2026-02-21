@@ -20,7 +20,7 @@ export type LayoutType =
   | 'hero-banner'      // 2 slots: large top + small bottom
   | 'masonry';         // Dynamic masonry layout
 
-// Component types that can be placed in slots
+// Component types that can be placed in slots (todos los UI components wrappeados)
 export type SlotComponentType = 
   | 'empty'
   | 'ui-button'
@@ -28,11 +28,18 @@ export type SlotComponentType =
   | 'ui-title'
   | 'ui-card'
   | 'ui-card-animated'
+  | 'ui-card-premium'
   | 'ui-accordion'
   | 'ui-list'
   | 'ui-chip'
   | 'ui-card-product'
-  | 'draggable-box';
+  | 'draggable-box'
+  | 'ui-input'
+  | 'ui-table'
+  | 'ui-showcase-atom'
+  | 'ui-video'
+  | 'ui-spacer'
+  | 'ui-gallery';
 
 // Configuration for a single slot
 export interface SlotConfig {
@@ -207,16 +214,28 @@ export interface ComponentCatalogItem {
 }
 
 export const COMPONENT_CATALOG: ComponentCatalogItem[] = [
+  // Basic
   { type: 'ui-button', label: 'Botón', icon: '🔘', category: 'basic', defaultVariant: 'primary', defaultContent: { text: 'Botón' } },
   { type: 'ui-title', label: 'Título', icon: '📝', category: 'basic', defaultVariant: 'default', defaultContent: { text: 'Título' } },
-  { type: 'ui-image', label: 'Imagen', icon: '🖼️', category: 'media', defaultContent: { src: '' } },
-  { type: 'ui-card', label: 'Tarjeta', icon: '📇', category: 'content', defaultVariant: 'glass', defaultContent: { title: 'Título', description: 'Descripción...' } },
-  { type: 'ui-card-animated', label: 'Tarjeta Animada', icon: '✨', category: 'content' },
-  { type: 'ui-accordion', label: 'Acordeón', icon: '📂', category: 'interactive', defaultContent: { items: [{title:'Item 1', content:'Contenido 1'}] } },
-  { type: 'ui-list', label: 'Lista', icon: '📋', category: 'content', defaultContent: { items: ['Item 1', 'Item 2', 'Item 3'] } },
   { type: 'ui-chip', label: 'Chip', icon: '🏷️', category: 'basic', defaultContent: { text: 'Chip' } },
+  { type: 'ui-input', label: 'Campo de texto', icon: '✏️', category: 'basic', defaultVariant: 'primary', defaultContent: { placeholder: 'Escribe aquí...', label: 'Campo' } },
+  // Content
+  { type: 'ui-card', label: 'Tarjeta', icon: '📇', category: 'content', defaultVariant: 'glass', defaultContent: { title: 'Título', description: 'Descripción...' } },
+  { type: 'ui-card-animated', label: 'Tarjeta Animada', icon: '✨', category: 'content', defaultContent: { title: 'Título', description: 'Descripción', image: '' } },
+  { type: 'ui-card-premium', label: 'Tarjeta Premium', icon: '💎', category: 'content', defaultVariant: 'default', defaultContent: { icon: 'heroStar', title: 'Título', description: 'Descripción', price: '99', discount: '', image: '' } },
+  { type: 'ui-list', label: 'Lista', icon: '📋', category: 'content', defaultContent: { items: ['Item 1', 'Item 2', 'Item 3'] } },
   { type: 'ui-card-product', label: 'Producto', icon: '🛒', category: 'content', defaultContent: { product: { image: '', name: 'Producto', description: 'Descripción...', price: '0.00' } } },
-  { type: 'draggable-box', label: 'Caja Arrastrable', icon: '📦', category: 'interactive', defaultContent: { text: 'Caja' } }
+  { type: 'ui-showcase-atom', label: 'Bloque Icono + Texto', icon: '⚛️', category: 'content', defaultVariant: 'default', defaultContent: { icon: '✨', title: 'Título', text: 'Descripción breve.' } },
+  { type: 'ui-table', label: 'Tabla', icon: '📊', category: 'content', defaultVariant: 'secondary', defaultContent: { columns: [{ key: 'col1', label: 'Columna 1' }], rows: [{ col1: 'Fila 1' }] } },
+  // Interactive
+  { type: 'ui-accordion', label: 'Acordeón', icon: '📂', category: 'interactive', defaultContent: { items: [{ title: 'Item 1', content: 'Contenido 1' }] } },
+  { type: 'draggable-box', label: 'Caja Arrastrable', icon: '📦', category: 'interactive', defaultContent: { text: 'Caja' } },
+  // Media
+  { type: 'ui-image', label: 'Imagen', icon: '🖼️', category: 'media', defaultContent: { src: '', alt: 'Imagen' } },
+  { type: 'ui-video', label: 'Vídeo', icon: '🎬', category: 'media', defaultContent: { src: '', autoplay: true, loop: true, muted: true } },
+  { type: 'ui-gallery', label: 'Galería', icon: '🖼️', category: 'media', defaultContent: { images: [{ src: 'https://picsum.photos/300/200', alt: 'Imagen 1' }] } },
+  // Layout
+  { type: 'ui-spacer', label: 'Espaciador', icon: '↕️', category: 'basic', defaultVariant: 'empty', defaultContent: { height: '60px' } }
 ];
 
 // Helper to get layout definition

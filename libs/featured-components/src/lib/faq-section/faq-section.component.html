@@ -1,17 +1,21 @@
-<section [ngClass]="containerClasses()" [ngStyle]="faqStyles()">
+<section [ngClass]="containerClasses()" [ngStyle]="faqStyles()" role="region" [attr.aria-label]="title()">
   <div class="faq-inner">
     <div class="header-content">
-      <h2 class="title">{{ title() }}</h2>
+      <h2 class="title" id="faq-section-title">{{ title() }}</h2>
       <p class="subtitle">{{ subtitle() }}</p>
     </div>
 
-    <div class="faq-wrapper">
+    <div class="faq-wrapper" *ngIf="items().length > 0">
       <lib-ui-components-accordion
         [items]="items()"
         [variant]="variant() === 'glass' ? 'glass' : 'default'"
         [singleExpand]="true"
         class="faq-item-animate">
       </lib-ui-components-accordion>
+    </div>
+
+    <div class="faq-empty" *ngIf="items().length === 0" role="status">
+      <p class="faq-empty__text">No hay preguntas frecuentes configuradas.</p>
     </div>
   </div>
 </section>

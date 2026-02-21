@@ -156,6 +156,7 @@
 | ✅ | **Guardado y atajos (MVP):** Ctrl+S dispara guardado (persistencia en localStorage); indicador en cabecera (Guardando… / Sin guardar / Guardado); tooltip "Ctrl+S para guardar". |
 | ✅ | **Empty state slot:** Hint "Clic para elegir tipo" en slots vacíos; tooltip en botón Añadir Componente. |
 | ✅ | **README:** Quick start del editor (serve, build, test) y tabla de comandos en raíz del repo. |
+| ✅ | **featured-components:** Utilidad `applySectionStyles()` para tema consistente; usada en Contact, Products, Pricing, Stats, FAQ, Steps. Contact con validación de email y mensaje de error; empty states en Pricing, Products, FAQ, Stats, Steps; aria y role en secciones. |
 | Pendiente | Pulido UI (cards, forms, gallery), vista previa móvil en editor, documentación in-app / onboarding, tests E2E si se desea. |
 
 ---

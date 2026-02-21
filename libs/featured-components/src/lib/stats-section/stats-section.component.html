@@ -1,4 +1,4 @@
-<section [ngClass]="containerClasses()" [ngStyle]="statsStyles()">
+<section [ngClass]="containerClasses()" [ngStyle]="statsStyles()" role="region" [attr.aria-label]="title()">
   <div class="stats-inner">
     <header class="header-content">
       <lib-ui-components-title
@@ -9,7 +9,7 @@
       ></lib-ui-components-title>
       <p class="stats-section__subtitle" *ngIf="subtitle()">{{ subtitle() }}</p>
     </header>
-    <div class="stats-grid">
+    <div class="stats-grid" *ngIf="stats().length > 0">
       <div *ngFor="let stat of stats(); let i = index"
            class="stat-card"
            [attr.data-animation-delay]="(stat.animationDelay || i * 0.1) + 's'"
@@ -94,6 +94,9 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="stats-empty" *ngIf="stats().length === 0" role="status">
+      <p class="stats-empty__text">No hay métricas configuradas.</p>
     </div>
   </div>
 </section>

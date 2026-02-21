@@ -1,5 +1,5 @@
 
-<section class="steps-section" [ngClass]="['variant-' + variant(), variant()]" [ngStyle]="stepsStyles()">
+<section class="steps-section" [ngClass]="['variant-' + variant(), variant()]" [ngStyle]="stepsStyles()" role="region" [attr.aria-label]="title()">
   <header class="header">
     <lib-ui-components-title
       level="h2"
@@ -10,7 +10,7 @@
     <p class="steps-section__subtitle" *ngIf="subtitle()">{{ subtitle() }}</p>
   </header>
 
-  <div class="steps-container">
+  <div class="steps-container" *ngIf="steps().length > 0">
     <ol class="step-list">
       <li *ngFor="let step of steps(); let i = index" class="step-item" [attr.aria-current]="getAriaCurrent(i)">
         <details class="step-details" [open]="step.state === 'current' || step.state === 'completed' || step.expanded" [attr.aria-expanded]="step.state === 'current' || step.state === 'completed' || step.expanded" [attr.aria-controls]="'step-content-' + i">
@@ -51,6 +51,9 @@
         </details>
       </li>
     </ol>
+  </div>
+  <div class="steps-empty" *ngIf="steps().length === 0" role="status">
+    <p class="steps-empty__text">No hay pasos configurados.</p>
   </div>
 </section>
 
