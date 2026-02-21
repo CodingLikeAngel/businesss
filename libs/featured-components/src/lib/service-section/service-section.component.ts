@@ -2,7 +2,7 @@ import { Component, EventEmitter, Output, ViewEncapsulation, input, computed } f
 import { CommonModule } from '@angular/common';
 
 import { CustomStyles } from '../models/custom-styles.interface';
-import { UICardComponent } from '@negocio/ui-components';
+import { UICardComponent, UITitleComponent, UISpacerComponent } from '@negocio/ui-components';
 
 export interface ServiceItem {
   title: string;
@@ -16,7 +16,7 @@ export interface ServiceItem {
 @Component({
   selector: 'lib-service-section',
   standalone: true,
-  imports: [CommonModule, UICardComponent],
+  imports: [CommonModule, UICardComponent, UITitleComponent, UISpacerComponent],
   templateUrl: './service-section.component.html',
   styleUrls: ['./service-section.component.scss'],
   encapsulation: ViewEncapsulation.None

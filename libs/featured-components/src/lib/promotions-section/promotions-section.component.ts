@@ -4,6 +4,7 @@ import {
   UICardPremiumComponent,
   UIChipComponent,
   UITooltipComponent,
+  UITitleComponent,
 } from '@negocio/ui-components';
 import { CardPremiumConfig } from '@negocio/ui-components';
 import { CustomStyles } from '../models/custom-styles.interface';
@@ -15,7 +16,8 @@ import { CustomStyles } from '../models/custom-styles.interface';
     CommonModule,
     UICardPremiumComponent,
     UIChipComponent,
-    UITooltipComponent
+    UITooltipComponent,
+    UITitleComponent,
   ],
   templateUrl: './promotions-section.component.html',
   styleUrls: ['./promotions-section.component.scss'],

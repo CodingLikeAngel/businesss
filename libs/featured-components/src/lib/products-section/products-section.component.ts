@@ -1,6 +1,6 @@
 import { Component, input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UICardComponent } from '@negocio/ui-components';
+import { UICardComponent, UITitleComponent, UIButtonComponent } from '@negocio/ui-components';
 import { CustomStyles } from '../models/custom-styles.interface';
 
 export interface Product {
@@ -15,7 +15,7 @@ export interface Product {
 @Component({
   selector: 'lib-products-section',
   standalone: true,
-  imports: [CommonModule, UICardComponent],
+  imports: [CommonModule, UICardComponent, UITitleComponent, UIButtonComponent],
   templateUrl: './products-section.component.html',
   styleUrls: ['./products-section.component.scss'],
   encapsulation: ViewEncapsulation.None
@@ -73,5 +73,13 @@ export class ProductsSectionComponent {
     });
 
     return styles;
+  }
+
+  onLoadMore(): void {
+    // Hook for infinite scroll / load more; parent can override via output if needed.
+  }
+
+  onResetFilters(): void {
+    // Hook for resetting filters; parent can override via output if needed.
   }
 }

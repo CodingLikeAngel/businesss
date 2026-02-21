@@ -1,16 +1,19 @@
 
-    <section [ngClass]="containerClasses()" [ngStyle]="promotionsStyles()">
-      <div class="container mx-auto px-4">
-        <div class="text-center mb-16">
-          <h2 class="section-title">
-            {{ title() }}
-          </h2>
-          <p class="section-subtitle">
-            {{ description() }}
-          </p>
-        </div>
+    <section [ngClass]="containerClasses()" [ngStyle]="promotionsStyles()" aria-labelledby="promo-section-title">
+      <div class="promotions-section__inner">
+        <header class="promotions-section__header">
+          <lib-ui-components-title
+            id="promo-section-title"
+            level="h2"
+            [text]="title()"
+            [variant]="variant()"
+            align="center"
+            animation="fade"
+          ></lib-ui-components-title>
+          <p class="promotions-section__subtitle" *ngIf="description()">{{ description() }}</p>
+        </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div class="promotions-section__grid grid grid-cols-1 md:grid-cols-3 gap-10">
           <div *ngFor="let config of defaultItems(); let i = index" class="promo-item relative group">
             <div class="absolute -top-6 left-1/2 -translate-x-1/2 z-30 transition-transform group-hover:scale-110">
               <lib-ui-components-chip

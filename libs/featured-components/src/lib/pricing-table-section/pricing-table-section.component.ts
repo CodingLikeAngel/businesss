@@ -1,12 +1,12 @@
 import { Component, input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UITableComponent, TableColumn, TableRow } from '@negocio/ui-components';
+import { UITableComponent, UITitleComponent, TableColumn, TableRow } from '@negocio/ui-components';
 import { CustomStyles } from '../models/custom-styles.interface';
 
 @Component({
   selector: 'lib-ui-pricing-table-section',
   standalone: true,
-  imports: [CommonModule, UITableComponent],
+  imports: [CommonModule, UITableComponent, UITitleComponent],
   templateUrl: './pricing-table-section.component.html',
   styleUrls: ['./pricing-table-section.component.scss'],
   encapsulation: ViewEncapsulation.None

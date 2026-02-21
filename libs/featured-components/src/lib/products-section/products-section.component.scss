@@ -41,7 +41,15 @@
 .products-header {
   text-align: center;
   margin-bottom: 3rem;
+}
 
+.products-header__inner {
+  max-width: 48rem;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.products-header {
   .products-title {
     font-size: 2.5rem;
     font-weight: 700;
@@ -577,33 +585,44 @@
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
+}
 
-  .empty-icon {
-    margin-bottom: 2rem;
-    color: #d1d5db;
+.empty-state__icon,
+.empty-state .empty-icon {
+  margin-bottom: 2rem;
+  color: var(--theme-color, #d1d5db);
+  opacity: 0.6;
 
-    svg {
-      width: 64px;
-      height: 64px;
-      margin: 0 auto;
-    }
+  svg {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto;
   }
+}
 
-  .empty-title {
-    font-size: 1.5rem;
-    font-weight: 600;
-    color: #374151;
-    margin-bottom: 0.5rem;
-  }
+.empty-state__title,
+.empty-state .empty-title {
+  font-size: var(--fs-md, 1.5rem);
+  font-weight: 600;
+  color: var(--theme-color, #374151);
+  margin-bottom: 0.5rem;
+}
 
-  .empty-description {
-    color: #6b7280;
-    margin-bottom: 2rem;
-    max-width: 28rem;
-    margin-left: auto;
-    margin-right: auto;
-  }
+.empty-state__description,
+.empty-state .empty-description {
+  color: var(--theme-color);
+  opacity: 0.85;
+  margin-bottom: 2rem;
+  max-width: 28rem;
+  margin-left: auto;
+  margin-right: auto;
+}
 
+.empty-state__actions {
+  margin-top: 1.5rem;
+}
+
+.empty-state {
   .reset-filters-btn {
     padding: 0.75rem 2rem;
     background: #3b82f6;

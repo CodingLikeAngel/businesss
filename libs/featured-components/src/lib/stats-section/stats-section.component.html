@@ -1,9 +1,14 @@
 <section [ngClass]="containerClasses()" [ngStyle]="statsStyles()">
   <div class="stats-inner">
-    <div class="header-content">
-      <h2 class="title">{{ title() }}</h2>
-      <p class="subtitle">{{ subtitle() }}</p>
-    </div>
+    <header class="header-content">
+      <lib-ui-components-title
+        level="h2"
+        [text]="title()"
+        [variant]="variant()"
+        align="center"
+      ></lib-ui-components-title>
+      <p class="stats-section__subtitle" *ngIf="subtitle()">{{ subtitle() }}</p>
+    </header>
     <div class="stats-grid">
       <div *ngFor="let stat of stats(); let i = index"
            class="stat-card"

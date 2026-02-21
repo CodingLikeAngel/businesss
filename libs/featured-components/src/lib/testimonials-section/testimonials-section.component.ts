@@ -1,5 +1,6 @@
 import { Component, input, computed, ViewEncapsulation, signal, effect, inject, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UITitleComponent } from '@negocio/ui-components';
 import { CustomStyles } from '../models/custom-styles.interface';
 
 export interface TestimonialItem {
@@ -13,7 +14,7 @@ export interface TestimonialItem {
 @Component({
   selector: 'lib-ui-testimonials-section',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, UITitleComponent],
   templateUrl: './testimonials-section.component.html',
   styleUrls: ['./testimonials-section.component.scss'],
   encapsulation: ViewEncapsulation.None

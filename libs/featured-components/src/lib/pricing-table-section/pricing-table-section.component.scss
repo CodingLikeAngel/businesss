@@ -81,9 +81,11 @@
     color: var(--pricing-accent, #3b82f6);
   }
 
-  .subtitle {
-    font-size: 1.125rem;
-    opacity: 0.7;
+  .subtitle,
+  .pricing-section__subtitle {
+    font-size: var(--fs-base, 1.125rem);
+    opacity: 0.85;
+    color: var(--theme-color);
     max-width: 600px;
     margin: 0 auto;
   }

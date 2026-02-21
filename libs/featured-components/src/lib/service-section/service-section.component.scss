@@ -24,12 +24,37 @@
     }
   }
 
-  .container {
+  .service-section__header {
+    max-width: 720px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 0 var(--theme-padding, 2rem);
+  }
+
+  .service-section__subtitle {
+    margin-top: var(--sp-4, 1rem);
+    font-size: var(--fs-base, 1rem);
+    line-height: 1.6;
+    color: var(--theme-color);
+    opacity: 0.9;
+  }
+
+  .service-section__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(320px, 100%), 1fr));
+    gap: var(--theme-items-gap, 1.5rem);
     max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 var(--theme-padding, 2rem);
+  }
+
+  .service-section__card-wrap {
+    min-width: 0;
   }
 
   @media (max-width: 768px) {
-    .container {
+    .service-section__header,
+    .service-section__grid {
       padding: 0 1rem;
     }
   }

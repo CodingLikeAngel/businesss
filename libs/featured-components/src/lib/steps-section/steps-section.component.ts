@@ -1,6 +1,7 @@
 
 import { Component, input, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UITitleComponent } from '@negocio/ui-components';
 
 export interface Step {
   title: string;
@@ -22,7 +23,7 @@ export interface StepsCustomStyles {
 @Component({
   selector: 'lib-ui-steps-section',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, UITitleComponent],
   templateUrl: './steps-section.component.html',
   styleUrls: ['./steps-section.component.scss']
 })

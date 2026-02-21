@@ -1,5 +1,6 @@
 import { Component, input, computed, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { UITitleComponent } from '@negocio/ui-components';
 import { CustomStyles } from '../models/custom-styles.interface';
 
 export interface StatItem {
@@ -19,7 +20,7 @@ export interface StatItem {
 @Component({
   selector: 'lib-ui-components-stats-section',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, UITitleComponent],
   templateUrl: './stats-section.component.html',
   styleUrls: ['./stats-section.component.scss'],
   encapsulation: ViewEncapsulation.None

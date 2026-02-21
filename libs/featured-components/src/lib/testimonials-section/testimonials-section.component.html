@@ -8,9 +8,15 @@
 
   <div class="testimonials-inner">
     <div class="header-content">
-      <h2 class="title">{{ title() }}</h2>
-      <div class="title-underline"></div>
-      <p class="subtitle">{{ subtitle() }}</p>
+      <lib-ui-components-title
+        level="h2"
+        [text]="title()"
+        [variant]="variant()"
+        align="center"
+        animation="fade"
+      ></lib-ui-components-title>
+      <div class="title-underline" aria-hidden="true"></div>
+      <p class="subtitle" *ngIf="subtitle()">{{ subtitle() }}</p>
     </div>
 
     <!-- Carousel Container -->

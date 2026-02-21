@@ -1,22 +1,28 @@
-<section id="servicios" class="service-section" [ngStyle]="componentStyles()">
-  <div class="container mx-auto px-4">
-    <h2 class="text-4xl font-bold text-center mb-8">{{ title() }}</h2>
-    <p class="text-center text-lg text-gray-600 mb-12 max-w-3xl mx-auto">{{ subtitle() }}</p>
+<section id="servicios" class="service-section" [ngStyle]="componentStyles()" aria-labelledby="service-section-title">
+  <div class="service-section__header">
+    <lib-ui-components-title
+      id="service-section-title"
+      level="h2"
+      [text]="title()"
+      [variant]="variant()"
+      align="center"
+      animation="fade"
+    ></lib-ui-components-title>
+    <p class="service-section__subtitle" *ngIf="subtitle()">{{ subtitle() }}</p>
+    <lib-ui-components-spacer variant="empty" [height]="'var(--sp-8, 2rem)'"></lib-ui-components-spacer>
   </div>
-  <div class="container mx-auto px-4">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div *ngFor="let service of items()">
-        <lib-ui-components-card
-          [variant]="$any(variant())"
-          [image]="service.image"
-          size="wide"
-          animation="zoom"
-          [title]="service.title"
-          [description]="service.description"
-          [actions]="[{ label: 'Reservar Ahora', href: '#reservas' }]"
-          [customStyles]="service.styles || {}">
-        </lib-ui-components-card>
-      </div>
-    </div>
+  <div class="service-section__grid">
+    <article *ngFor="let service of items()" class="service-section__card-wrap">
+      <lib-ui-components-card
+        [variant]="$any(variant())"
+        [image]="service.image"
+        size="wide"
+        animation="zoom"
+        [title]="service.title"
+        [description]="service.description"
+        [actions]="[{ label: 'Reservar Ahora', href: '#reservas' }]"
+        [customStyles]="service.styles || {}"
+      ></lib-ui-components-card>
+    </article>
   </div>
 </section>

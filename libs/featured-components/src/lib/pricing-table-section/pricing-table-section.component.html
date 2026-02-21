@@ -1,9 +1,15 @@
-<section [ngClass]="containerClasses()" [ngStyle]="pricingStyles()">
+<section [ngClass]="containerClasses()" [ngStyle]="pricingStyles()" aria-labelledby="pricing-section-title">
   <div class="pricing-inner">
-    <div class="header-content">
-      <h2 class="title">{{ title() }}</h2>
-      <p class="subtitle">{{ subtitle() }}</p>
-    </div>
+    <header class="header-content">
+      <lib-ui-components-title
+        id="pricing-section-title"
+        level="h2"
+        [text]="title()"
+        [variant]="variant()"
+        align="center"
+      ></lib-ui-components-title>
+      <p class="pricing-section__subtitle" *ngIf="subtitle()">{{ subtitle() }}</p>
+    </header>
 
     <div class="table-wrapper">
       <lib-ui-components-table

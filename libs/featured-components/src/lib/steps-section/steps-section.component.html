@@ -1,9 +1,14 @@
 
 <section class="steps-section" [ngClass]="['variant-' + variant(), variant()]" [ngStyle]="stepsStyles()">
-  <div class="header">
-    <h2>{{ title() }}</h2>
-    <p *ngIf="subtitle()">{{ subtitle() }}</p>
-  </div>
+  <header class="header">
+    <lib-ui-components-title
+      level="h2"
+      [text]="title()"
+      [variant]="variant()"
+      align="center"
+    ></lib-ui-components-title>
+    <p class="steps-section__subtitle" *ngIf="subtitle()">{{ subtitle() }}</p>
+  </header>
 
   <div class="steps-container">
     <ol class="step-list">

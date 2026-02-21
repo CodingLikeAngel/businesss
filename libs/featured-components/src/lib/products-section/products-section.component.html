@@ -1,11 +1,16 @@
 <section class="products-section" [ngStyle]="componentStyles">
-  <!-- Header Section -->
-  <div class="products-header">
-    <div class="container mx-auto px-4">
-      <h2 class="products-title">{{ title() }}</h2>
-      <p class="products-subtitle">{{ subtitle() }}</p>
+  <header class="products-header">
+    <div class="products-header__inner">
+      <lib-ui-components-title
+        level="h2"
+        [text]="title()"
+        [variant]="variant()"
+        align="center"
+        animation="fade"
+      ></lib-ui-components-title>
+      <p class="products-subtitle" *ngIf="subtitle()">{{ subtitle() }}</p>
     </div>
-  </div>
+  </header>
 
   <!-- Filters and Sorting Section -->
   <div class="products-controls">
@@ -159,27 +164,39 @@
         </div>
       </div>
 
-      <!-- Load More Button (Infinite Scroll Alternative) -->
-      <div class="load-more-wrapper">
-        <button class="load-more-btn">
-          <span class="loading-spinner"></span>
-          Load More Products
-        </button>
+      <div class="load-more-wrapper" *ngIf="products().length > 0">
+        <lib-ui-components-button
+          variant="secondary"
+          size="lg"
+          rounded="md"
+          [loading]="false"
+          (buttonClick)="onLoadMore()"
+        >
+          Cargar más productos
+        </lib-ui-components-button>
       </div>
 
-      <!-- Empty State -->
-      <div class="empty-state" *ngIf="products().length === 0">
-        <div class="empty-icon">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+      <section class="empty-state" *ngIf="products().length === 0" aria-labelledby="empty-state-title">
+        <div class="empty-state__icon" aria-hidden="true">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
             <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
             <line x1="8" y1="21" x2="16" y2="21"></line>
             <line x1="12" y1="17" x2="12" y2="21"></line>
           </svg>
         </div>
-        <h3 class="empty-title">No products found</h3>
-        <p class="empty-description">Try adjusting your filters or search criteria.</p>
-        <button class="reset-filters-btn">Reset Filters</button>
-      </div>
+        <h3 id="empty-state-title" class="empty-state__title">No hay productos</h3>
+        <p class="empty-state__description">Prueba a cambiar filtros o criterios de búsqueda.</p>
+        <div class="empty-state__actions">
+          <lib-ui-components-button
+            variant="primary"
+            size="md"
+            rounded="md"
+            (buttonClick)="onResetFilters()"
+          >
+            Restablecer filtros
+          </lib-ui-components-button>
+        </div>
+      </section>
     </div>
   </div>
 
