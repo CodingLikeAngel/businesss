@@ -11,6 +11,7 @@ import {
   OnInit,
   OnDestroy,
   CUSTOM_ELEMENTS_SCHEMA,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { getSectionComponent } from './section-type-registry';
 import { PageSection } from '@negocio/shared-components';
@@ -83,6 +84,7 @@ export interface EditorSectionRendererContext {
   selector: 'lib-editor-section-renderer',
   standalone: true,
   template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class EditorSectionRendererComponent implements OnInit, OnChanges, OnDestroy {

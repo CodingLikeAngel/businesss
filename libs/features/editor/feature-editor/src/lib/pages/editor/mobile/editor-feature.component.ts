@@ -1,4 +1,4 @@
-import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, OnInit, CUSTOM_ELEMENTS_SCHEMA, ChangeDetectionStrategy } from '@angular/core';
 import { BaseEditorFeatureComponent } from '../base-editor-feature.component';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -11,6 +11,7 @@ import { ShortcutsGuideComponent } from '../components/shortcuts-guide/shortcuts
   standalone: true,
   templateUrl: '../editor-feature-shared.component.html',
   styleUrls: ['./editor-feature.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     CommonModule,
     RouterModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
 import { VariantService, PageSection } from '../../../services/variant.service';
@@ -283,7 +283,8 @@ import { VariantService, PageSection } from '../../../services/variant.service';
             &:hover { background: #059669; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4); }
         }
     }
-  `]
+  `],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SectionStructureComponent implements OnInit, OnDestroy {
   sections: PageSection[] = [];
@@ -297,12 +298,16 @@ export class SectionStructureComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  constructor(private variantService: VariantService) {}
+  constructor(
+    private variantService: VariantService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   ngOnInit() {
     this.subscriptions.push(
       this.variantService.sections$.subscribe(sections => {
         this.sections = sections;
+        this.cdr.markForCheck();
       })
     );
   }

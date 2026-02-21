@@ -1493,7 +1493,20 @@ export class VariantService {
     this.saveToLocalStorage();
   }
 
-  saveToLocalStorage() {
+  private saveToLocalStorageTimer: ReturnType<typeof setTimeout> | null = null;
+  private static readonly SAVE_DEBOUNCE_MS = 600;
+
+  saveToLocalStorage(): void {
+    if (typeof window === 'undefined' || !window.localStorage) return;
+    if (this.saveToLocalStorageTimer) clearTimeout(this.saveToLocalStorageTimer);
+    this.saveToLocalStorageTimer = setTimeout(() => {
+      this.saveToLocalStorageTimer = null;
+      this.flushToLocalStorage();
+    }, VariantService.SAVE_DEBOUNCE_MS);
+  }
+
+  /** Writes current state to localStorage immediately (e.g. before unload). */
+  flushToLocalStorage(): void {
     if (typeof window !== 'undefined' && window.localStorage) {
       const state = {
         header: this.headerConfigSubject.getValue(),

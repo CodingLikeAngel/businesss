@@ -183,8 +183,12 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
       shareReplay(1)
     );
 
-    // 3.2 Store → VariantService: keep Estructura panel in sync when store changes (undo/redo, load)
-    this.store.select(PageSelectors.selectCurrentPage).pipe(takeUntil(this.destroy$)).subscribe((page: any) => {
+    // 3.2 Store → VariantService: sync only when page content actually changes to avoid redundant work and re-renders
+    const pageFingerprint = (p: any) => !p ? '' : [p.id, (p.sections || []).length, (p.sections || []).map((s: any) => `${s.id}:${s.visible}`).join('|'), JSON.stringify(p.globalStyles || {})].join(';;');
+    this.store.select(PageSelectors.selectCurrentPage).pipe(
+      distinctUntilChanged((a, b) => pageFingerprint(a) === pageFingerprint(b)),
+      takeUntil(this.destroy$)
+    ).subscribe((page: any) => {
       if (page) this.variantService.syncFromStore(page);
     });
     
