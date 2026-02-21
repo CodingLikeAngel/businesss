@@ -22,6 +22,8 @@
 - **Framework propio:** el conjunto de componentes, reglas de composición y design tokens como “framework” que tanto humanos como IA usan para generar experiencias.
 - **Producción controlada:** preview, staging y despliegue directo a producción con rollback y auditoría.
 
+**Evolución natural del ecosistema:** El sistema integrado (builder + hub de análisis, sprints, IA y publicación) es la evolución natural de tener por separado herramientas tipo Wix (sitios), Trello (tareas/sprints), Figma (diseño) y CI/CD (análisis y despliegue). La meta es que **un agente pueda hacer lo que hoy hace un desarrollador** en ese flujo, y que **los devs centren sus esfuerzos en mejorar la IA propia de la empresa** para construir productos, no en orquestar manualmente muchas herramientas.
+
 ---
 
 ## 2. Modularización para una app completa

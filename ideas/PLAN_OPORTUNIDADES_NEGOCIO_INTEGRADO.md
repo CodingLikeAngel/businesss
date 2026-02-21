@@ -16,7 +16,16 @@
 - **Anto Studios** aporta: creación de sitios/landings y export a código o publicación.
 - **Integración** aporta: un único lugar para **controlar** (métricas + activos vivos) y **actuar** (analizar, publicar, hacer rollback, auditar), con opción de quality gates y trazabilidad completa.
 
-### 1.2 Diferenciación frente a productos por separado
+### 1.2 Evolución natural: Wix + Trello + Figma + CI/CD, todo en uno
+
+El sistema integrado es la **evolución natural** de herramientas que hoy están separadas:
+
+- **Wix** (crear sitios) + **Trello** (gestión de tareas y sprints) + **Figma** (diseño y componentes) + **CI/CD** (análisis, calidad, despliegue), unificados en un solo producto.
+- Objetivo: que **un agente pueda hacer lo que hoy hace un desarrollador** (diseñar, configurar, analizar, publicar), y que **los devs centren sus esfuerzos en mejorar la IA propia de la empresa** para construir productos, en lugar de repartir su tiempo entre muchas herramientas y tareas repetitivas.
+
+Así el cliente no compra "otra herramienta más", sino **el lugar donde el equipo y la IA trabajan juntos** con código, diseño, sprints y producción en un solo flujo.
+
+### 1.3 Diferenciación frente a productos por separado
 
 | Aspecto | Solo ATS | Solo Anto | **Sistema integrado** |
 |---------|----------|-----------|------------------------|
