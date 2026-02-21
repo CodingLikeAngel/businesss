@@ -3,8 +3,6 @@ import { PageState, initialNavigationState, initialPreviewState, initialMigratio
 import * as PageActions from '../actions/page.actions';
 import { Page, Section, Element, NavigationState, PreviewState, MigrationState, MigrationRecord } from '../../models/editor.model';
 
-const SINGLE_INSTANCE_SECTION_TYPES = new Set<string>(['hero', 'header', 'footer']);
-
 function deduplicateSectionsById<T extends { id?: string }>(sections: T[]): T[] {
   if (!sections?.length) return sections ?? [];
   const seen = new Set<string>();
@@ -16,12 +14,12 @@ function deduplicateSectionsById<T extends { id?: string }>(sections: T[]): T[] 
   });
 }
 
-function deduplicateSingleInstanceSections<T extends { type?: string }>(sections: T[]): T[] {
+/** Keep only the first occurrence of each section type so the store never persists duplicates. */
+function deduplicateByTypeKeepFirst<T extends { type?: string }>(sections: T[]): T[] {
   if (!sections?.length) return sections;
   const seen = new Set<string>();
   return sections.filter((s) => {
     const type = (s.type || '').toLowerCase();
-    if (!SINGLE_INSTANCE_SECTION_TYPES.has(type)) return true;
     if (seen.has(type)) return false;
     seen.add(type);
     return true;
@@ -40,11 +38,11 @@ function removeDuplicateSequence<T extends { type?: string }>(sections: T[]): T[
   return sections.slice(0, half);
 }
 
-/** Normalize sections so the store never persists duplicates (sequence, by id, or duplicate hero/header/footer). */
+/** Normalize sections so the store never persists duplicates (sequence, by id, one per type). */
 function normalizeSections(sections: Section[] | undefined): Section[] {
   const list = sections ?? [];
   const noSequenceDupes = removeDuplicateSequence(list) as Section[];
-  return deduplicateSingleInstanceSections(deduplicateSectionsById(noSequenceDupes)) as Section[];
+  return deduplicateByTypeKeepFirst(deduplicateSectionsById(noSequenceDupes)) as Section[];
 }
 
 export const initialPageState: PageState = {

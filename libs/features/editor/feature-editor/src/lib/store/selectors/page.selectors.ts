@@ -46,15 +46,12 @@ export const selectLastSaved = createSelector(
   (state: PageState) => state?.lastSaved || null
 );
 
-// Section types that should appear at most once per page (duplicates removed for display)
-const SINGLE_INSTANCE_SECTION_TYPES = new Set<string>(['hero', 'header', 'footer']);
-
-function deduplicateSingleInstanceSections<T extends { type?: string }>(sections: T[]): T[] {
+/** Keep only the first occurrence of each section type. Fixes "all sections duplicated" (Hero, Features, Contact each showing twice). */
+function deduplicateByTypeKeepFirst<T extends { type?: string }>(sections: T[]): T[] {
   if (!sections?.length) return sections;
   const seen = new Set<string>();
   return sections.filter((s) => {
     const type = (s.type || '').toLowerCase();
-    if (!SINGLE_INSTANCE_SECTION_TYPES.has(type)) return true;
     if (seen.has(type)) return false;
     seen.add(type);
     return true;
@@ -91,11 +88,11 @@ export const selectCurrentPageSections = createSelector(
   (page: Page | null) => page?.sections || []
 );
 
-/** Sections deduped: remove duplicate sequence, then by id, then hero/header/footer single-instance. Use for editor canvas. */
+/** Sections deduped: remove duplicate sequence, by id, then one per type (first only). Use for editor canvas. */
 export const selectCurrentPageSectionsDeduped = createSelector(
   selectCurrentPageSections,
   (sections: Section[]) =>
-    deduplicateSingleInstanceSections(
+    deduplicateByTypeKeepFirst(
       deduplicateSectionsById(removeDuplicateSequence(sections || []))
     )
 );

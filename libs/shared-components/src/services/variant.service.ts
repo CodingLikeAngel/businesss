@@ -857,16 +857,12 @@ export class VariantService {
     });
   }
 
-  /**
-   * Removes duplicate sections for single-instance types (hero, header, footer). Keeps the first occurrence of each type.
-   * Applied after deduplicateSectionsById so we first remove repeated ids, then single-instance type duplicates.
-   */
-  private deduplicateSingleInstanceSections(sections: PageSection[]): PageSection[] {
+  /** Keep only the first occurrence of each section type. Fixes all sections duplicated (Hero, Features, Contact twice). */
+  private deduplicateByTypeKeepFirst(sections: PageSection[]): PageSection[] {
     if (!sections?.length) return sections;
     const seen = new Set<string>();
     return sections.filter((s) => {
       const type = (s.type || '').toLowerCase();
-      if (!VariantService.SINGLE_INSTANCE_SECTION_TYPES.has(type)) return true;
       if (seen.has(type)) return false;
       seen.add(type);
       return true;
@@ -885,11 +881,11 @@ export class VariantService {
     return sections.slice(0, half);
   }
 
-  /** Full deduplication: remove duplicate sequence, then by id, then single-instance types. Use whenever setting or syncing sections. */
+  /** Full deduplication: remove duplicate sequence, by id, then one per type. Use whenever setting or syncing sections. */
   private deduplicateSections(sections: PageSection[]): PageSection[] {
     const list = sections || [];
     const noSequenceDupes = this.removeDuplicateSequence(list);
-    return this.deduplicateSingleInstanceSections(this.deduplicateSectionsById(noSequenceDupes));
+    return this.deduplicateByTypeKeepFirst(this.deduplicateSectionsById(noSequenceDupes));
   }
 
   /**
