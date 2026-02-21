@@ -117,9 +117,9 @@ export class EditorSectionRendererComponent implements OnInit, OnChanges, OnDest
 
   private componentRef: import('@angular/core').ComponentRef<unknown> | null = null;
   private outputSubscriptions: (() => void)[] = [];
+  private pendingType: string | null = null;
 
   ngOnInit(): void {
-    // Only create here if ngOnChanges did not already create (e.g. section was bound after first CD). Avoids double create when section is set before ngOnInit.
     if (!this.componentRef && this.section?.type) this.renderSection();
   }
 
@@ -127,19 +127,18 @@ export class EditorSectionRendererComponent implements OnInit, OnChanges, OnDest
     const typeChanged =
       changes['section'] &&
       changes['section'].currentValue?.type !== changes['section'].previousValue?.type;
-    if (typeChanged && this.componentRef) {
-      this.destroyCurrent();
-      this.renderSection();
+    if (typeChanged) {
+      this.pendingType = null;
+      if (this.componentRef) this.destroyCurrent();
+      if (this.section?.type) this.renderSection();
     } else if (this.componentRef) {
       this.updateInputs();
-      // When globalVariant or componentVariants change, force the dynamic component to update its view so theme applies immediately
       if (changes['globalVariant'] || changes['componentVariants']) {
         const ref = this.componentRef as import('@angular/core').ComponentRef<{ globalVariant?: string }>;
         if (ref?.changeDetectorRef) ref.changeDetectorRef.markForCheck();
         this.cdr.markForCheck();
       }
     } else if (this.section?.type) {
-      // First time section is available (or late binding): create once. ngOnInit will skip creating because we set componentRef here.
       this.renderSection();
     }
   }
@@ -174,10 +173,17 @@ export class EditorSectionRendererComponent implements OnInit, OnChanges, OnDest
 
   private renderSection(): void {
     if (!this.section?.type) return;
-    const ComponentClass = getSectionComponent(this.section.type);
-    this.componentRef = this.viewContainerRef.createComponent(ComponentClass);
-    this.setAllInputs(this.componentRef);
-    this.subscribeOutputs(this.componentRef.instance);
+    const typeRequested = this.section.type;
+    this.pendingType = typeRequested;
+    getSectionComponent(typeRequested).then((ComponentClass) => {
+      if (this.pendingType !== typeRequested) return;
+      this.pendingType = null;
+      this.destroyCurrent();
+      this.componentRef = this.viewContainerRef.createComponent(ComponentClass);
+      this.setAllInputs(this.componentRef);
+      this.subscribeOutputs(this.componentRef.instance);
+      this.cdr.markForCheck();
+    });
   }
 
   private setAllInputs(ref: import('@angular/core').ComponentRef<unknown>): void {

@@ -43,6 +43,9 @@
       "@negocio/features/feature-editor": [
         "libs/features/editor/feature-editor/src/index.ts"
       ],
+      "@negocio/features/feature-editor/store": [
+        "libs/features/editor/feature-editor/src/lib/store/index.ts"
+      ],
       "@negocio/features/feature-editor-api": [
         "libs/features/editor/feature-editor-api/src/index.ts"
       ],

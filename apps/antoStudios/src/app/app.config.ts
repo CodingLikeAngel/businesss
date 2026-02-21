@@ -7,7 +7,7 @@ import { getPlatformRoutes } from './platform.utils';
 import { appRoutes } from './app.routes';
 import { provideStore, provideState } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
-import { editorEffects, combinedEditorReducer } from '@negocio/features/feature-editor';
+import { combinedEditorReducer, editorEffects } from '@negocio/features/feature-editor/store';
 
 export const appConfig: ApplicationConfig = {
   providers: [
