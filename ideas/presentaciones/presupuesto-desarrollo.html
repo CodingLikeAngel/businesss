@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Presupuesto de desarrollo · Fases, equipo y tiempos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0f0f14;
+      --bg-card: #18181f;
+      --border: rgba(255,255,255,0.08);
+      --text: #e4e4e7;
+      --text-muted: #a1a1aa;
+      --accent: #6366f1;
+      --accent-soft: rgba(99, 102, 241, 0.15);
+      --success: #22c55e;
+      --warning: #eab308;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .nav { position: relative; padding: 1rem; border-bottom: 1px solid var(--border); }
+      .nav ul { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 1.5rem 1rem;
+      border-right: 1px solid var(--border);
+      background: var(--bg);
+    }
+    .nav h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-muted);
+      margin: 0 0 1rem 0.75rem;
+    }
+    .nav ul { list-style: none; padding: 0; margin: 0; }
+    .nav li { margin-bottom: 0.2rem; }
+    .nav a {
+      display: block;
+      padding: 0.5rem 0.75rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      transition: color .2s, background .2s;
+    }
+    .nav a:hover { color: var(--text); background: var(--accent-soft); }
+    .nav a.active { color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+    .main {
+      padding: 2.5rem 2.5rem 4rem;
+      max-width: 920px;
+    }
+    section {
+      margin-bottom: 3rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    section:last-of-type { border-bottom: 0; }
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.02em;
+    }
+    .subtitle { color: var(--text-muted); font-size: 1rem; margin: 0 0 1.5rem; }
+    h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 1.75rem 0 0.75rem;
+      color: var(--text);
+    }
+    h3 { font-size: 1rem; font-weight: 600; margin: 1.25rem 0 0.5rem; color: var(--text); }
+    p { margin: 0 0 0.6rem; color: var(--text); }
+    ul, ol { margin: 0 0 0.75rem; padding-left: 1.25rem; }
+    li { margin-bottom: 0.3rem; }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.25rem 1.5rem;
+      margin: 1rem 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+      margin: 0.75rem 0;
+    }
+    th, td { padding: 0.5rem 0.65rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th { color: var(--text-muted); font-weight: 600; }
+    .num { text-align: right; }
+    .phase-tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      margin-right: 0.5rem;
+    }
+    .phase-tag.base { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
+    .phase-tag.core { background: rgba(34, 197, 94, 0.2); color: #86efac; }
+    .phase-tag.api { background: rgba(234, 179, 8, 0.2); color: #fde047; }
+    .phase-tag.ia { background: rgba(236, 72, 153, 0.2); color: #f9a8d4; }
+    .phase-tag.adv { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; }
+    .doc-ref { font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; }
+    .doc-ref a { color: var(--accent); text-decoration: none; }
+    .doc-ref a:hover { text-decoration: underline; }
+    @media print {
+      .nav { position: relative; height: auto; border: 0; }
+      .layout { grid-template-columns: 1fr; }
+      section { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="nav" role="navigation" aria-label="Índice del presupuesto">
+      <h2>Índice</h2>
+      <ul>
+        <li><a href="#portada">Portada</a></li>
+        <li><a href="#resumen">Resumen ejecutivo</a></li>
+        <li><a href="#equipo">Equipo y roles</a></li>
+        <li><a href="#fases">Fases y sprints</a></li>
+        <li><a href="#desglose">Desglose por fase</a></li>
+        <li><a href="#presupuesto">Presupuesto económico</a></li>
+        <li><a href="#hipotesis">Hipótesis y riesgos</a></li>
+      </ul>
+    </nav>
+
+    <main class="main">
+      <!-- PORTADA -->
+      <section id="portada">
+        <h1>Presupuesto de desarrollo</h1>
+        <p class="subtitle">Sistema integrado ATS + Anto Studios · Fases, equipo, sprints y tiempos</p>
+        <p>Documento orientativo para planificación de recursos, número de desarrolladores, duración por fase y sprints. Basado en los roadmaps de Visión (Anto), Integración ATS+Anto, Logs y flujos, y Mejoras.</p>
+        <p class="doc-ref">Referencias: <a href="index.html">Presentación visión y negocio</a>, <a href="../DOC_VISION_MODULARIZACION_IA_PRODUCCION.md">DOC_VISION</a>, <a href="../mejoras/DOC_INTEGRACION_ATS_ANTO_STUDIOS.md">DOC_INTEGRACION</a>, <a href="../profundizar/DOC_LOGS_FLUJOS_IA.md">DOC_LOGS</a>, <a href="../mejoras/DOC_MEJORAS.md">DOC_MEJORAS</a>.</p>
+      </section>
+
+      <!-- RESUMEN EJECUTIVO -->
+      <section id="resumen">
+        <h1>Resumen ejecutivo</h1>
+        <div class="card">
+          <table>
+            <tr><th>Concepto</th><th class="num">Valor</th></tr>
+            <tr><td>Duración total estimada</td><td class="num">24–30 meses</td></tr>
+            <tr><td>Número de fases</td><td class="num">5 (F0 base → F4 producto avanzado)</td></tr>
+            <tr><td>Sprint estándar</td><td class="num">2 semanas</td></tr>
+            <tr><td>Sprints totales (aprox.)</td><td class="num">48–60</td></tr>
+            <tr><td>Equipo inicial (F0–F1)</td><td class="num">2–3 desarrolladores</td></tr>
+            <tr><td>Equipo máximo (F2–F4)</td><td class="num">3–4 desarrolladores</td></tr>
+          </table>
+        </div>
+        <p>Las fases se solapan en parte (Anto, ATS, integración y logs pueden avanzar en paralelo con un equipo de 3–4 devs). Los tiempos son orientativos y dependen de priorización y de si se externaliza parte del trabajo.</p>
+      </section>
+
+      <!-- EQUIPO Y ROLES -->
+      <section id="equipo">
+        <h1>Equipo y roles</h1>
+        <p class="subtitle">Perfiles sugeridos por fase (orientativo).</p>
+        <table>
+          <tr><th>Rol</th><th>Fase típica</th><th>Responsabilidad principal</th></tr>
+          <tr><td>Dev Anto / Frontend (Angular)</td><td>F0–F4</td><td>Editor, export, UI, schema, componentes (Anto Studios).</td></tr>
+          <tr><td>Dev ATS / Backend (NestJS)</td><td>F0–F4</td><td>Hub ATS, APIs, análisis, integración con Anto, logs.</td></tr>
+          <tr><td>Dev fullstack / integración</td><td>F1–F4</td><td>API builder headless, flujo Publicar, quality gate, BFF si aplica.</td></tr>
+          <tr><td>Dev IA / plataforma</td><td>F2–F4</td><td>Adapter IA→acciones, contexto Gemini, export enriquecido, bot del cliente (visión).</td></tr>
+        </table>
+        <p>En F0–F1 puede bastar con <strong>2 devs</strong> (1 más Anto/frontend, 1 más ATS/backend) si se prioriza bien. A partir de F2 se recomienda al menos <strong>3</strong> y en F3–F4 hasta <strong>4</strong> para no bloquear integración, IA y logs a la vez.</p>
+      </section>
+
+      <!-- FASES Y SPRINTS -->
+      <section id="fases">
+        <h1>Fases y sprints</h1>
+        <p class="subtitle">Sprint = 2 semanas. 1 mes ≈ 2 sprints.</p>
+        <table>
+          <tr>
+            <th>Fase</th>
+            <th>Nombre</th>
+            <th class="num">Duración</th>
+            <th class="num">Sprints</th>
+            <th class="num">Devs</th>
+          </tr>
+          <tr>
+            <td><span class="phase-tag base">F0</span></td>
+            <td>Base (Anto P0 + Logs piloto)</td>
+            <td class="num">3 meses</td>
+            <td class="num">6</td>
+            <td class="num">2</td>
+          </tr>
+          <tr>
+            <td><span class="phase-tag core">F1</span></td>
+            <td>Núcleo y visión en hub</td>
+            <td class="num">4 meses</td>
+            <td class="num">8</td>
+            <td class="num">2–3</td>
+          </tr>
+          <tr>
+            <td><span class="phase-tag api">F2</span></td>
+            <td>API, publicación e integración</td>
+            <td class="num">6 meses</td>
+            <td class="num">12</td>
+            <td class="num">3–4</td>
+          </tr>
+          <tr>
+            <td><span class="phase-tag ia">F3</span></td>
+            <td>IA y automatización</td>
+            <td class="num">6 meses</td>
+            <td class="num">12</td>
+            <td class="num">3–4</td>
+          </tr>
+          <tr>
+            <td><span class="phase-tag adv">F4</span></td>
+            <td>Producto avanzado (bot, export enriquecido)</td>
+            <td class="num">6+ meses</td>
+            <td class="num">12+</td>
+            <td class="num">4</td>
+          </tr>
+        </table>
+      </section>
+
+      <!-- DESGLOSE POR FASE -->
+      <section id="desglose">
+        <h1>Desglose por fase</h1>
+
+        <h2><span class="phase-tag base">F0 – Base (3 meses, 6 sprints, 2 devs)</span></h2>
+        <p><strong>Objetivo:</strong> Base estable de Anto (export/publicación + layout) y piloto de logs para que el resto de fases no se bloqueen.</p>
+        <ul>
+          <li><strong>Anto (Mejoras P0):</strong> Export/publicación estable + ZIP; Smart-Adapt en componentes de layout; resize persistente.</li>
+          <li><strong>Logs (Fases 1–2):</strong> Logs estructurados JSON con <code>flowId</code> y <code>step</code> en al menos un flujo piloto (ej. análisis ATS o export Anto); persistir por flowId y exponer <code>GET /flows/:flowId/logs</code>.</li>
+        </ul>
+        <p><strong>Entregables:</strong> Editor con export fiable y descarga ZIP; flujo de análisis o export con logs exportables por flowId.</p>
+
+        <h2><span class="phase-tag core">F1 – Núcleo y visión en hub (4 meses, 8 sprints, 2–3 devs)</span></h2>
+        <p><strong>Objetivo:</strong> Schema y catálogo consolidados (Visión F1); panel de Anto en el hub; mejoras P1 Anto.</p>
+        <ul>
+          <li><strong>Visión F1:</strong> Schema de página estable (JSON Schema), registro de componentes como catálogo maquinaable, export estable; opcional API interna.</li>
+          <li><strong>Integración F1:</strong> Panel “Sitios Anto” en ATS (lista + enlaces a preview/prod); API básica en Anto de lista de proyectos y estado de publicación (o mock).</li>
+          <li><strong>Anto P1:</strong> Modo aislado unificado + persistencia; responsive y vista previa móvil.</li>
+        </ul>
+        <p><strong>Entregables:</strong> Documentación de schema y catálogo; hub con panel Anto; editor con modo aislado y persistencia.</p>
+
+        <h2><span class="phase-tag api">F2 – API, publicación e integración (6 meses, 12 sprints, 3–4 devs)</span></h2>
+        <p><strong>Objetivo:</strong> API del builder (headless), flujo Publicar con staging/rollback, integración publicar desde hub y quality gate, logs con UI y templates.</p>
+        <ul>
+          <li><strong>Visión F2–F3:</strong> API REST (páginas, componentes, preview); flujo “Publicar” (versión, export, deploy), preview y staging, rollback, permisos.</li>
+          <li><strong>Integración F2–F3:</strong> Botón “Publicar a producción” desde hub (API Anto); quality gate (métricas ATS/Sonar antes de permitir publicar).</li>
+          <li><strong>Logs F3–F5:</strong> UI “Ver logs en vivo” y “Exportar logs del flujo”; tipos de flujo e historial; flujos guardados como templates y re-ejecución desde hub.</li>
+        </ul>
+        <p><strong>Entregables:</strong> API del builder operativa; publicación controlada (preview → staging → prod) con rollback; hub con publicar + quality gate; logs en vivo y flujos guardados.</p>
+
+        <h2><span class="phase-tag ia">F3 – IA y automatización (6 meses, 12 sprints, 3–4 devs)</span></h2>
+        <p><strong>Objetivo:</strong> IA que genera/modifica apps (desde brief o asistente); integración rollback/auditoría y IA en contexto; logs para IA y tests.</p>
+        <ul>
+          <li><strong>Visión F4:</strong> Flujo “Generar app desde brief” con IA; adapter IA → acciones; integración con aprobación y publicación.</li>
+          <li><strong>Integración F4–F5:</strong> Rollback y auditoría desde hub; estado de sitios Anto en contexto Gemini; API headless Anto para IA/automatización.</li>
+          <li><strong>Logs F6–F7:</strong> Export de logs como contexto a Gemini (u otro); respuestas en hub (resumen, diagnóstico, sugerencia); flujos como oráculo para tests (re-ejecutar en CI, agente que genera tests desde flujo real).</li>
+        </ul>
+        <p><strong>Entregables:</strong> Chat/API que genera o modifica schema desde brief; informes y recomendaciones IA en hub; tests generados o validados desde flujos.</p>
+
+        <h2><span class="phase-tag adv">F4 – Producto avanzado (6+ meses, 12+ sprints, 4 devs)</span></h2>
+        <p><strong>Objetivo:</strong> Export enriquecido (imágenes + MD), IAs especializadas por app, bot del cliente (voz/texto, clonable, tareas a agentes, análisis datos/métricas); mejoras P2–P3.</p>
+        <ul>
+          <li><strong>Logs F8 (visión):</strong> Export enriquecido (imágenes y Markdown en hitos del flujo); IAs especializadas por app; bot del cliente (comandos voz/texto, clonable, dar tareas a agentes, analizar datos y métricas de negocio).</li>
+          <li><strong>Anto P2–P3:</strong> Pulido UI (cards, forms, gallery), botón Publicar + flujo premium; tests, CI, documentación y onboarding.</li>
+        </ul>
+        <p><strong>Entregables:</strong> Exports de flujo con imágenes y MD; bot por cliente/workspace con voz y orquestación de agentes; producto estable y documentado.</p>
+      </section>
+
+      <!-- PRESUPUESTO ECONÓMICO -->
+      <section id="presupuesto">
+        <h1>Presupuesto económico (orientativo)</h1>
+        <p class="subtitle">Coste por desarrollador y totales según hipótesis de coste/mes. Ajustar a costes reales (internos, externos, país).</p>
+        <table>
+          <tr>
+            <th>Concepto</th>
+            <th class="num">Coste/mes (€)</th>
+            <th class="num">Notas</th>
+          </tr>
+          <tr><td>Desarrollador senior (referencia interna)</td><td class="num">5.000 – 7.000</td><td class="num">Bruto empresa, España</td></tr>
+          <tr><td>Desarrollador mid (referencia interna)</td><td class="num">3.500 – 5.000</td><td class="num">Bruto empresa, España</td></tr>
+          <tr><td>Externalizado (agencia / freelance)</td><td class="num">6.000 – 12.000</td><td class="num">Por dev/mes según perfil y mercado</td></tr>
+        </table>
+        <h3>Ejemplo de cálculo (equipo mixto 2–3 devs, 24 meses)</h3>
+        <div class="card">
+          <p>Hipótesis: 2 devs × 24 meses (promedio 2,5 devs equivalentes) = 60 dev·mes. A 5.000 €/dev·mes → <strong>300.000 €</strong> en personal de desarrollo (solo referencia; no incluye infra, herramientas, gestión de producto, diseño, etc.).</p>
+          <p>Si F0–F2 se hacen con 2 devs (13 meses) y F2–F4 con 3–4 devs (11 meses): (2×13 + 3,5×11) = 26 + 38,5 = 64,5 dev·mes → ~322.000 € a 5.000 €/dev·mes.</p>
+        </div>
+        <p>Incluir además: infraestructura (hosting, CI, APIs de IA), licencias (Sonar, etc.), posible diseño UX/UI y gestión de producto si no están cubiertos por el mismo equipo.</p>
+      </section>
+
+      <!-- HIPÓTESIS Y RIESGOS -->
+      <section id="hipotesis">
+        <h1>Hipótesis y riesgos</h1>
+        <ul>
+          <li><strong>Sprint de 2 semanas:</strong> Asumido como estándar; equipos que usen 1 o 3 semanas deben recalcular el número de sprints por fase.</li>
+          <li><strong>Paralelismo:</strong> Anto, ATS, integración y logs pueden repartirse entre devs; los plazos pueden acortarse si el equipo trabaja en paralelo sin bloqueos.</li>
+          <li><strong>Priorización:</strong> Si se recorta alcance (ej. solo integración básica sin IA avanzada), F3–F4 se reducen; si se prioriza bot y export enriquecido antes que “Generar app desde brief”, el orden de ítems dentro de F3–F4 puede cambiar.</li>
+          <li><strong>Dependencias:</strong> F2 depende de F0–F1 (export estable, panel en hub); F3 depende de API builder y logs F1–F5. Retrasos en F0–F1 impactan el resto.</li>
+          <li><strong>Riesgo de alcance:</strong> Añadir funcionalidades no previstas en los docs (nuevas apps, integraciones) aumenta duración y/o equipo.</li>
+        </ul>
+        <p class="doc-ref">Este presupuesto debe revisarse con responsables de producto y técnicos; los documentos en <code>ideas/</code> y <code>ideas/profundizar/</code> son la fuente de verdad del alcance.</p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const sections = document.querySelectorAll('section[id]');
+    const navLinks = document.querySelectorAll('.nav a[href^="#"]');
+    function setActive() {
+      const scrollY = window.scrollY;
+      let current = '';
+      sections.forEach(s => {
+        const top = s.offsetTop - 80;
+        if (scrollY >= top) current = s.getAttribute('id');
+      });
+      navLinks.forEach(a => {
+        a.classList.remove('active');
+        if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+      });
+    }
+    window.addEventListener('scroll', setActive);
+    setActive();
+  </script>
+</body>
+</html>
