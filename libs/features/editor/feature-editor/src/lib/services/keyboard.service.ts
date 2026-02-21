@@ -26,14 +26,14 @@ export class KeyboardService {
       key: 'z',
       ctrl: true,
       action: 'undo',
-      description: 'Undo last action',
+      description: 'Deshacer última acción',
       preventDefault: true
     },
     {
       key: 'y',
       ctrl: true,
       action: 'redo',
-      description: 'Redo last undone action',
+      description: 'Rehacer última acción deshecha',
       preventDefault: true
     },
     {
@@ -41,21 +41,21 @@ export class KeyboardService {
       ctrl: true,
       shift: true,
       action: 'redo',
-      description: 'Redo last undone action (alternative)',
+      description: 'Rehacer (alternativa)',
       preventDefault: true
     },
     {
       key: 'a',
       ctrl: true,
       action: 'select-all',
-      description: 'Select all elements',
+      description: 'Seleccionar todos los elementos',
       preventDefault: true
     },
     {
       key: 'g',
       ctrl: true,
       action: 'group-elements',
-      description: 'Group selected elements',
+      description: 'Agrupar elementos seleccionados',
       preventDefault: true
     },
     {
@@ -63,32 +63,38 @@ export class KeyboardService {
       ctrl: true,
       shift: true,
       action: 'ungroup-elements',
-      description: 'Ungroup selected elements',
+      description: 'Desagrupar elementos',
       preventDefault: true
     },
     {
       key: 'Escape',
       action: 'clear-selection',
-      description: 'Clear current selection',
+      description: 'Cancelar selección',
       preventDefault: false
     },
     {
       key: 'Delete',
       action: 'delete-selected',
-      description: 'Delete selected elements',
+      description: 'Eliminar elementos seleccionados',
       preventDefault: true
     },
     {
       key: 'Backspace',
       action: 'delete-selected',
-      description: 'Delete selected elements',
+      description: 'Eliminar elementos seleccionados (alternativa)',
       preventDefault: true
     },
     {
       key: '/',
       shift: true,
       action: 'toggle-shortcuts',
-      description: 'Show shortcuts guide',
+      description: 'Abrir esta guía de atajos',
+      preventDefault: true
+    },
+    {
+      key: '?',
+      action: 'toggle-shortcuts',
+      description: 'Abrir esta guía de atajos',
       preventDefault: true
     }
   ];
@@ -223,18 +229,19 @@ export class KeyboardService {
    * Get shortcuts by category
    */
   getShortcutsByCategory(): { [category: string]: KeyboardShortcut[] } {
-    const categories = {
-      'History': ['undo', 'redo'],
-      'Selection': ['select-all', 'clear-selection'],
-      'Grouping': ['group-elements', 'ungroup-elements'],
-      'Editing': ['delete-selected'],
-      'Help': ['toggle-shortcuts']
+    const categories: { [cat: string]: string[] } = {
+      'Historial': ['undo', 'redo'],
+      'Selección': ['select-all', 'clear-selection'],
+      'Agrupación': ['group-elements', 'ungroup-elements'],
+      'Edición': ['delete-selected'],
+      'Ayuda': ['toggle-shortcuts']
     };
 
     const result: { [category: string]: KeyboardShortcut[] } = {};
 
     Object.entries(categories).forEach(([category, actions]) => {
-      result[category] = this.shortcuts.filter(s => actions.includes(s.action));
+      const list = this.shortcuts.filter(s => actions.includes(s.action));
+      if (list.length) result[category] = list;
     });
 
     return result;

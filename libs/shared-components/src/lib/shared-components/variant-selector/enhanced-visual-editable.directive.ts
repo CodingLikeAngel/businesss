@@ -197,24 +197,30 @@ export class EnhancedVisualEditableDirective implements OnInit, OnDestroy, OnCha
       dragContainment = undefined;
     }
 
+    // Aplicar modo global de la barra de herramientas (a nivel de sección/elemento)
+    const mode = this.visualEditor.interactionMode;
+    const enableDrag = this.currentConfig.enableDrag && (mode === 'all' || mode === 'move');
+    const enableResize = this.currentConfig.enableResize && (mode === 'all' || mode === 'resize');
+    const gridSize = this.visualEditor.snapToGrid ? (this.currentConfig.interactions.snapToGrid || 8) : 0;
+
     return {
-      enableDrag: this.currentConfig.enableDrag,
-      enableResize: this.currentConfig.enableResize,
+      enableDrag,
+      enableResize,
       minWidth: 50,
       minHeight: 50,
       maxWidth: undefined,
       maxHeight: undefined,
       handles: {
-        top: this.currentConfig.enableResize,
-        right: this.currentConfig.enableResize,
-        bottom: this.currentConfig.enableResize,
-        left: this.currentConfig.enableResize,
-        topLeft: this.currentConfig.enableResize,
-        topRight: this.currentConfig.enableResize,
-        bottomLeft: this.currentConfig.enableResize,
-        bottomRight: this.currentConfig.enableResize
+        top: enableResize,
+        right: enableResize,
+        bottom: enableResize,
+        left: enableResize,
+        topLeft: enableResize,
+        topRight: enableResize,
+        bottomLeft: enableResize,
+        bottomRight: enableResize
       },
-      grid: this.currentConfig.interactions.snapToGrid,
+      grid: gridSize,
       containment: dragContainment
     };
   }

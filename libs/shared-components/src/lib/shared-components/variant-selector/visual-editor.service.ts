@@ -106,6 +106,8 @@ export class VisualEditorService {
 
   private _interactionMode: InteractionMode = 'all';
   private dragThreshold = 5; // Pixels to move before drag starts
+  /** Última config del elemento activo; al cambiar modo en la barra se aplica sobre esta (a nivel de sección). */
+  private lastActiveConfig: DragResizeConfig = { ...this.defaultConfig } as DragResizeConfig;
 
   constructor(
     private rendererFactory: RendererFactory2,
@@ -262,10 +264,26 @@ export class VisualEditorService {
   setInteractionMode(mode: InteractionMode) {
     this._interactionMode = mode;
     this.updateGlobalCursor();
-    // Re-create overlay if active to show/hide handles
     if (this.activeElement) {
       this.removeEditOverlay();
-      this.createEditOverlay(this.activeElement, this.defaultConfig); // Use stored config if possible? For now default
+      const enableDrag = mode === 'all' || mode === 'move';
+      const enableResize = mode === 'all' || mode === 'resize';
+      const config: DragResizeConfig = {
+        ...this.lastActiveConfig,
+        enableDrag,
+        enableResize,
+        handles: {
+          top: enableResize,
+          right: enableResize,
+          bottom: enableResize,
+          left: enableResize,
+          topLeft: enableResize,
+          topRight: enableResize,
+          bottomLeft: enableResize,
+          bottomRight: enableResize
+        }
+      };
+      this.createEditOverlay(this.activeElement, config);
     }
   }
 
@@ -766,6 +784,7 @@ export class VisualEditorService {
     }
 
     this.activeElement = element;
+    this.lastActiveConfig = { ...config };
     this.renderer.addClass(element, 'visual-selected');
 
     // Add to multi-selection if not already there

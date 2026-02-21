@@ -2,7 +2,7 @@
   <!-- Floating Undo/Redo + Mode Toolbar (desktop only; mobile uses compact UI) -->
   <div *ngIf="!isMobile" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] flex items-center gap-4" style="pointer-events: auto;">
     <lib-undo-redo-toolbar></lib-undo-redo-toolbar>
-    <div class="bg-gray-900/90 backdrop-blur-md rounded-full px-2 py-1 flex items-center gap-1 border border-white/10 shadow-xl" role="toolbar" aria-label="Modos de edición">
+    <div class="bg-gray-900/90 backdrop-blur-md rounded-full px-2 py-1 flex items-center gap-1 border border-white/10 shadow-xl" role="toolbar" aria-label="Modos de edición (aplican a la sección o elemento seleccionado)">
       <button type="button" (click)="setMode('all')" [attr.aria-pressed]="currentMode === 'all'" [ngClass]="{'bg-indigo-500/30 text-indigo-400': currentMode === 'all'}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Modo Completo (activo: mover y redimensionar)">
         <span aria-hidden="true">✨</span><span class="sr-only">{{ currentMode === 'all' ? 'Modo Completo activo' : 'Modo Completo' }}</span>
       </button>
@@ -17,7 +17,7 @@
       <button (click)="toggleSnap()" [ngClass]="{'text-indigo-400': isSnapEnabled}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Ajustar a Cuadrícula (Snap)">🧲</button>
       <button (click)="toggleGuides()" [ngClass]="{'text-indigo-400': isGuidesEnabled}" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Mostrar Guías">📏</button>
       <div class="w-px h-4 bg-white/20 mx-1"></div>
-      <button (click)="toggleShortcuts()" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Ayuda y Atajos">⌨️</button>
+      <button type="button" (click)="toggleShortcuts()" class="p-2 hover:bg-white/10 rounded-full transition-colors text-white" title="Ayuda y atajos (?)">⌨️</button>
     </div>
   </div>
 
