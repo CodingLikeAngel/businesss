@@ -1,11 +1,4 @@
 <div class="sections-container min-h-screen relative pb-32">
-  <!-- DEBUG BADGE -->
-  <div class="fixed bottom-4 right-4 z-[10001] bg-red-600 text-white px-3 py-2 rounded-lg shadow-2xl font-mono text-xs pointer-events-none opacity-80 flex flex-col gap-1">
-    <div class="font-bold border-b border-white/20 pb-1">DEDUPE MONITOR</div>
-    <div>Sections: {{ (sections$ | async)?.length || 0 }}</div>
-    <div>Last Type: {{ (sections$ | async)?.slice(-1)?.[0]?.type || 'none' }}</div>
-    <div>Family: {{ (sections$ | async)?.slice(-1)?.[0]?.type?.split('-')?.[0] || 'none' }}</div>
-  </div>
   <!-- Floating Undo/Redo + Mode Toolbar (desktop only; mobile uses compact UI) -->
   <div *ngIf="!isMobile" class="fixed top-4 left-1/2 transform -translate-x-1/2 z-[9999] flex items-center gap-4" style="pointer-events: auto;">
     <lib-undo-redo-toolbar></lib-undo-redo-toolbar>

@@ -7,7 +7,7 @@ import * as PageSelectors from '../../store/selectors/page.selectors';
 import { Page } from '../../models/editor.model';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Subscription, Observable, take, Subject, takeUntil, map, distinctUntilChanged } from 'rxjs';
+import { Subscription, Observable, take, Subject, takeUntil, map, distinctUntilChanged, shareReplay } from 'rxjs';
 import {
   VariantService,
   NavBarConfig,
@@ -169,17 +169,18 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
       this.modalState = state;
     });
 
-    // UNIFY WITH STORE: Use deduped sections; emit only when section list actually changes to avoid repeated re-renders
+    // UNIFY WITH STORE: Use deduped sections; emit when ids, length OR visibility change so canvas updates in real time
     this.sections$ = this.store.select(PageSelectors.selectCurrentPageSectionsDeduped).pipe(
       distinctUntilChanged((a, b) => {
-        const idsA = (a || []).map((s: any) => s.id).join(',');
-        const idsB = (b || []).map((s: any) => s.id).join(',');
-        return a?.length === b?.length && idsA === idsB;
+        if ((a?.length ?? 0) !== (b?.length ?? 0)) return false;
+        const fingerprint = (arr: any[]) => (arr || []).map((s: any) => `${s.id}:${s.visible}`).join('|');
+        return fingerprint(a) === fingerprint(b);
       }),
       map((sections: any[]) => (sections || []).map(s => ({
         ...s,
         hasFloatingChildren: this.checkFloatingChildren(s)
-      })))
+      }))),
+      shareReplay(1)
     );
 
     // 3.2 Store → VariantService: keep Estructura panel in sync when store changes (undo/redo, load)
@@ -192,42 +193,29 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
 
     // LISTEN FOR EXTERNAL PAGE SWITCHES AND UPDATES (from sidebar/VariantService)
     this.variantService.currentPage$.pipe(takeUntil(this.destroy$)).subscribe(page => {
-      // CRITICAL: Skip sync and potential re-renders if we are currently dragging/resizing
-      if (this.visualEditorService.isDragging || this.visualEditorService.isResizing) {
-        return;
-      }
+      if (this.visualEditorService.isDragging || this.visualEditorService.isResizing) return;
+      if (!page) return;
 
-      if (page) {
-        this.store.select(PageSelectors.selectCurrentPage).pipe(take(1)).subscribe(currentStorePage => {
-          // CRITICAL: Prevent re-dispatching if the data is already identical to what's in the store
-          // This stops the VariantService -> Store -> Effects -> VariantService infinite loop
-          
-          if (!currentStorePage || currentStorePage.id !== page.id) {
-            console.log('🔄 Syncing VariantService -> Store (Page Switch/Load Detected)');
-            const normalizedSections = PageSelectors.normalizeSectionsForDisplay(page.sections || []);
-            this.store.dispatch(PageActions.loadPageSuccess({ page: { ...page, sections: normalizedSections } as any }));
-          } else {
-            const normalizedVSSections = PageSelectors.normalizeSectionsForDisplay(page.sections || []);
-            const storeSections = currentStorePage.sections || [];
-            const storeIds = storeSections.map((s: any) => s.id).filter(Boolean).join(',');
-            const vsIds = normalizedVSSections.map((s: any) => s.id).filter(Boolean).join(',');
-            // Include visibility so sidebar eye toggle (VariantService) syncs to store and canvas hides section
-            const storeFingerprint = storeSections.map((s: any) => `${s.id}:${s.visible}`).join('|');
-            const vsFingerprint = normalizedVSSections.map((s: any) => `${s.id}:${s.visible}`).join('|');
-            const sectionsSame = storeIds === vsIds && storeFingerprint === vsFingerprint && (storeSections.length === normalizedVSSections.length);
-            const globalStylesSame = JSON.stringify(currentStorePage.globalStyles || {}) === JSON.stringify(page.globalStyles || {});
-            if (!sectionsSame || !globalStylesSame) {
-              this.store.dispatch(PageActions.updatePage({
-                pageId: page.id,
-                changes: {
-                  sections: normalizedVSSections as any,
-                  globalStyles: page.globalStyles as any
-                }
-              }));
-            }
-          }
-        });
-      }
+      this.store.select(PageSelectors.selectCurrentPage).pipe(take(1)).subscribe(currentStorePage => {
+        if (!currentStorePage || currentStorePage.id !== page.id) {
+          const normalizedSections = PageSelectors.normalizeSectionsForDisplay(page.sections || []);
+          this.store.dispatch(PageActions.loadPageSuccess({ page: { ...page, sections: normalizedSections } as any }));
+          return;
+        }
+        const normalizedVSSections = PageSelectors.normalizeSectionsForDisplay(page.sections || []);
+        const storeSections = currentStorePage.sections || [];
+        const storeIds = storeSections.map((s: any) => s.id).filter(Boolean).join(',');
+        const vsIds = normalizedVSSections.map((s: any) => s.id).filter(Boolean).join(',');
+        const storeFingerprint = storeSections.map((s: any) => `${s.id}:${s.visible}`).join('|');
+        const vsFingerprint = normalizedVSSections.map((s: any) => `${s.id}:${s.visible}`).join('|');
+        const sectionsSame = storeIds === vsIds && storeFingerprint === vsFingerprint && storeSections.length === normalizedVSSections.length;
+        const globalStylesSame = JSON.stringify(currentStorePage.globalStyles || {}) === JSON.stringify(page.globalStyles || {});
+        if (sectionsSame && globalStylesSame) return;
+
+        // Defer dispatch to next tick so sidebar click handler and UI stay responsive
+        const payload = { pageId: page.id, changes: { sections: normalizedVSSections as any, globalStyles: page.globalStyles as any } };
+        queueMicrotask(() => this.store.dispatch(PageActions.updatePage(payload)));
+      });
     });
 
     // Unified persistence logic handled via direct service subscriptions
