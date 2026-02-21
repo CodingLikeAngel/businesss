@@ -840,6 +840,24 @@ export class VariantService {
   // SECTION MANAGEMENT METHODS
   // ========================================
 
+  /** Section types that should appear at most once per page (e.g. hero, header, footer). Duplicates are removed when setting sections. */
+  private static readonly SINGLE_INSTANCE_SECTION_TYPES = new Set<string>(['hero', 'header', 'footer']);
+
+  /**
+   * Removes duplicate sections for single-instance types (hero, header, footer). Keeps the first occurrence of each type.
+   */
+  private deduplicateSingleInstanceSections(sections: PageSection[]): PageSection[] {
+    if (!sections?.length) return sections;
+    const seen = new Set<string>();
+    return sections.filter((s) => {
+      const type = (s.type || '').toLowerCase();
+      if (!VariantService.SINGLE_INSTANCE_SECTION_TYPES.has(type)) return true;
+      if (seen.has(type)) return false;
+      seen.add(type);
+      return true;
+    });
+  }
+
   /**
    * Get all sections from the current state
    */
@@ -1222,7 +1240,8 @@ export class VariantService {
   }
 
   setSections(sections: PageSection[]) {
-    this.sectionsSubject.next(sections);
+    const deduped = this.deduplicateSingleInstanceSections(sections || []);
+    this.sectionsSubject.next(deduped);
     this.saveToLocalStorage();
   }
 
@@ -1259,9 +1278,16 @@ export class VariantService {
   setCurrentPage(pageId: string): void {
     const page = this.pagesSubject.value.find(p => p.id === pageId);
     if (page) {
-      this.currentPageSubject.next(page);
-      // Update sections to match current page
-      this.sectionsSubject.next(page.sections);
+      const dedupedSections = this.deduplicateSingleInstanceSections(page.sections || []);
+      const hadDuplicates = dedupedSections.length < (page.sections || []).length;
+      const pageWithDeduped = { ...page, sections: dedupedSections };
+      this.currentPageSubject.next(pageWithDeduped);
+      this.sectionsSubject.next(dedupedSections);
+      if (hadDuplicates) {
+        const pages = this.pagesSubject.value.map(p => p.id === pageId ? pageWithDeduped : p);
+        this.pagesSubject.next(pages);
+        this.saveToLocalStorage();
+      }
     }
   }
 
@@ -1275,25 +1301,29 @@ export class VariantService {
       this.sectionsSubject.next([]);
       return;
     }
+    const dedupedSections = this.deduplicateSingleInstanceSections(page.sections || []);
+    const pageWithDeduped = { ...page, sections: dedupedSections };
     const existing = this.currentPageSubject.getValue();
-    if (existing?.id === page.id && JSON.stringify(existing.sections) === JSON.stringify(page.sections)) {
+    if (existing?.id === page.id && JSON.stringify(existing.sections) === JSON.stringify(dedupedSections)) {
       return;
     }
-    this.currentPageSubject.next({ ...page });
-    this.sectionsSubject.next(page.sections || []);
+    this.currentPageSubject.next(pageWithDeduped);
+    this.sectionsSubject.next(dedupedSections);
     // Keep pages list in sync if this page is in it
     const pages = this.pagesSubject.value;
     const idx = pages.findIndex(p => p.id === page.id);
     if (idx !== -1) {
       const updated = [...pages];
-      updated[idx] = { ...page };
+      updated[idx] = pageWithDeduped;
       this.pagesSubject.next(updated);
     }
   }
 
   updatePage(pageId: string, changes: Partial<Page>): void {
+    const sectionsToUse = changes.sections ? this.deduplicateSingleInstanceSections(changes.sections) : undefined;
+    const effectiveChanges = sectionsToUse !== undefined ? { ...changes, sections: sectionsToUse } : changes;
     const updatedPages = this.pagesSubject.value.map(page =>
-      page.id === pageId ? { ...page, ...changes, updatedAt: new Date() } : page
+      page.id === pageId ? { ...page, ...effectiveChanges, updatedAt: new Date() } : page
     );
     this.pagesSubject.next(updatedPages);
 
@@ -1303,7 +1333,7 @@ export class VariantService {
       const updatedPage = updatedPages.find(p => p.id === pageId);
       if (updatedPage) {
         this.currentPageSubject.next(updatedPage);
-        this.sectionsSubject.next(updatedPage.sections);
+        this.sectionsSubject.next(updatedPage.sections || []);
       }
     }
 
@@ -1330,7 +1360,13 @@ export class VariantService {
     const currentPage = this.currentPageSubject.getValue();
     if (!currentPage) return;
 
-    const updatedSections = [...currentPage.sections, section];
+    const type = (section.type || '').toLowerCase();
+    if (VariantService.SINGLE_INSTANCE_SECTION_TYPES.has(type)) {
+      const alreadyHas = (currentPage.sections || []).some((s) => (s.type || '').toLowerCase() === type);
+      if (alreadyHas) return;
+    }
+
+    const updatedSections = this.deduplicateSingleInstanceSections([...(currentPage.sections || []), section]);
     this.updatePage(currentPage.id, { sections: updatedSections });
   }
 
@@ -1544,20 +1580,23 @@ export class VariantService {
           if (state.products) this.productsConfigSubject.next(state.products);
           if (state.globalVariant) this.globalVariantSubject.next(state.globalVariant);
           if (state.componentVariants) this.componentVariantsSubject.next(state.componentVariants);
-          if (state.sections) this.sectionsSubject.next(state.sections);
+          if (state.sections) this.sectionsSubject.next(this.deduplicateSingleInstanceSections(state.sections));
           if (state.pages) {
-            this.pagesSubject.next(state.pages);
+            const pagesWithDeduped = (state.pages as Page[]).map((p: Page) => ({
+              ...p,
+              sections: this.deduplicateSingleInstanceSections(p.sections || [])
+            }));
+            this.pagesSubject.next(pagesWithDeduped);
             // Set current page
             if (state.currentPageId) {
-              const currentPage = state.pages.find((p: Page) => p.id === state.currentPageId);
+              const currentPage = pagesWithDeduped.find((p: Page) => p.id === state.currentPageId);
               if (currentPage) {
                 this.currentPageSubject.next(currentPage);
-                this.sectionsSubject.next(currentPage.sections);
+                this.sectionsSubject.next(currentPage.sections || []);
               }
-            } else if (state.pages.length > 0) {
-              // Default to first page if no current page set
-              this.currentPageSubject.next(state.pages[0]);
-              this.sectionsSubject.next(state.pages[0].sections);
+            } else if (pagesWithDeduped.length > 0) {
+              this.currentPageSubject.next(pagesWithDeduped[0]);
+              this.sectionsSubject.next(pagesWithDeduped[0].sections || []);
             }
           }
         } catch (e) {

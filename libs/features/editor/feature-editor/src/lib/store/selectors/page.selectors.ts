@@ -46,10 +46,31 @@ export const selectLastSaved = createSelector(
   (state: PageState) => state?.lastSaved || null
 );
 
+// Section types that should appear at most once per page (duplicates removed for display)
+const SINGLE_INSTANCE_SECTION_TYPES = new Set<string>(['hero', 'header', 'footer']);
+
+function deduplicateSingleInstanceSections<T extends { type?: string }>(sections: T[]): T[] {
+  if (!sections?.length) return sections;
+  const seen = new Set<string>();
+  return sections.filter((s) => {
+    const type = (s.type || '').toLowerCase();
+    if (!SINGLE_INSTANCE_SECTION_TYPES.has(type)) return true;
+    if (seen.has(type)) return false;
+    seen.add(type);
+    return true;
+  });
+}
+
 // Current page derived selectors
 export const selectCurrentPageSections = createSelector(
   selectCurrentPage,
   (page: Page | null) => page?.sections || []
+);
+
+/** Sections with duplicate hero/header/footer removed (first occurrence kept). Use for editor canvas. */
+export const selectCurrentPageSectionsDeduped = createSelector(
+  selectCurrentPageSections,
+  (sections: Section[]) => deduplicateSingleInstanceSections(sections)
 );
 
 export const selectCurrentPageGlobalStyles = createSelector(

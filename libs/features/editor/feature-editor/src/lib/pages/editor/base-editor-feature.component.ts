@@ -169,8 +169,8 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
       this.modalState = state;
     });
 
-    // UNIFY WITH STORE: Use selectors for sections
-    this.sections$ = this.store.select(PageSelectors.selectCurrentPageSections).pipe(
+    // UNIFY WITH STORE: Use deduped sections so hero/header/footer are not duplicated
+    this.sections$ = this.store.select(PageSelectors.selectCurrentPageSectionsDeduped).pipe(
       map((sections: any[]) => sections.map(s => ({
         ...s,
         hasFloatingChildren: this.checkFloatingChildren(s)
