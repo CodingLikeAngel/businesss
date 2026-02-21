@@ -87,7 +87,16 @@ Poder filtrar por `flow` + `entity` permite “todos los logs de este análisis�
 - **Frontend (hub):** En la pantalla de “Análisis en curso” o “Publicación en curso”, un panel que muestra el stream de logs en vivo y un botón “Descargar log del flujo” (export) al finalizar.
 - **Formato de export:** JSON Lines (una línea por evento) o JSON array; opcionalmente un resumen en texto/markdown al inicio (flujo, entidad, resultado global, duración total) para que la IA tenga un “resumen + detalle”.
 
-### 3.3 Uso por IA
+### 3.3 Export enriquecido: imágenes y Markdown (más contexto para la IA)
+
+Para que **la IA tenga cada vez más contexto**, los flujos de log pueden generar además de JSON:
+
+- **Imágenes:** Capturas o renders en hitos clave del flujo (ej. preview del sitio tras un paso de export, screenshot del estado del editor antes/después de una acción, gráficos de métricas en un análisis). El export del flujo incluye referencias a estas imágenes (URLs o IDs) o las embebe; la IA multimodal puede "ver" qué pasó, no solo leer texto.
+- **Markdown:** Resúmenes estructurados en .md por paso o por flujo (qué se hizo, resultado, enlaces a logs/imágenes). Así el contexto que se pasa a la IA es "resumen ejecutivo + detalle técnico + evidencia visual", lo que mejora resúmenes, diagnósticos y recomendaciones.
+
+Objetivo: **aumentar el contexto disponible para la IA** en cada export, de modo que las IAs especializadas (por app o por cliente) puedan dar respuestas más precisas sin depender solo de logs crudos.
+
+### 3.4 Uso por IA
 
 - **Input a la IA:** Se le pasa el export del flujo (o el stream ya terminado) como contexto: “Aquí están los logs del último análisis del repo X” o “Logs de la última publicación del sitio Y”.
 - **Prompt típico:** “Con estos logs, resume qué pasó, si hubo errores y qué recomiendas.”
@@ -134,6 +143,14 @@ El sistema de logs es muy útil para **testing** porque un flujo real queda regi
 
 Logs estructurados + `flowId` = contrato claro para humanos, para IA y para la pipeline de tests.
 
+### 4.6 IA especializada por app y bot del cliente (visión)
+
+- **IA especializada por app:** Cada aplicación (ATS, Anto Studios, hub integrado) puede tener una **IA propia** entrenada o afinada con el contexto de esa app: catálogo de componentes, tipos de flujo, esquemas, logs y exports enriquecidos (JSON + MD + imágenes). Así la IA de Anto entiende "secciones", "variantes" y "schema de página"; la IA de ATS entiende "repos", "Sonar", "sprints" y "informes". El cliente se beneficia de un asistente que habla el lenguaje de cada herramienta.
+- **Bot propio del cliente (tipo Claude):** Una capa por **cliente o por workspace** que actúa como **gestor de la app del cliente**: conoce su proyecto, su historial de flujos, sus publicaciones y su contexto (logs + MD + imágenes). Ese bot puede:
+  - Recibir **comandos por voz** (o por texto): "Cambia el botón del hero a azul", "Pon esta imagen de fondo en la sección de contacto", "Sustituye el título por…", "Publica a staging".
+  - Traducir la intención en acciones sobre el schema (Anto) o en órdenes al hub (ATS): el bot gestiona la app del cliente y el cliente solo da instrucciones en lenguaje natural.
+- **Flujos + contexto enriquecido:** Al generar imágenes y MD en los exports de flujo, el bot (y las IAs especializadas) tienen cada vez más contexto para entender qué hizo el usuario, qué ve la app y qué cambiar; así se habilita una experiencia "comando por voz / chat para cambiar un botón, un fondo, una imagen" sin tocar el editor manualmente.
+
 ---
 
 ## 5. Resumen de capacidades objetivo
@@ -144,7 +161,10 @@ Logs estructurados + `flowId` = contrato claro para humanos, para IA y para la p
 | **Flujo identificado** | Flujos largos tienen un `flowId`; todos los pasos del flujo llevan ese id para agrupar. |
 | **Stream en tiempo real** | Cliente (hub, CLI) puede suscribirse a los eventos de un flowId y ver logs en vivo (WebSocket/SSE o polling). |
 | **Export de logs** | Endpoint o acción “Descargar logs de este flujo” en formato JSON Lines o JSON, con o sin resumen en texto. |
+| **Export enriquecido (imágenes + MD)** | Los flujos pueden generar imágenes (capturas, previews, gráficos) y resúmenes en Markdown para que la IA tenga más contexto (multimodal y resumen ejecutivo + detalle). |
 | **Contexto para IA** | Se puede pasar a la IA el export de un flujo (o varios) para que resuma, diagnostique o recomiende. |
+| **IA especializada por app** | Cada app (ATS, Anto, hub) puede tener una IA propia afinada con su contexto; asistente que habla el lenguaje de cada herramienta. |
+| **Bot del cliente (voz/texto)** | Bot tipo Claude por cliente/workspace que gestiona la app; comandos por voz o texto (cambiar botón, fondo, imagen, publicar) traducidos a acciones. |
 | **Automatizar tests** | Re-ejecutar el flujo en CI y comparar logs/resultados con el de referencia; detectar regresiones sin asserts manuales por paso. |
 | **Escribir tests con un agente** | Un agente (IA) recibe el export de un flujo real y genera tests (E2E, integración) que reproducen esa secuencia. |
 | **Guardar flujos como template** | Definir secuencias reutilizables (pasos + parámetros) y ejecutarlas por nombre. |
@@ -161,6 +181,7 @@ Logs estructurados + `flowId` = contrato claro para humanos, para IA y para la p
 5. **Fase 5:** Flujos guardados como templates (definición + parámetros) y re-ejecución desde el hub.
 6. **Fase 6:** Integración con IA: enviar export de logs como contexto a Gemini (u otro) y respuestas en el hub (resumen, diagnóstico, sugerencia de siguiente paso o de flujo).
 7. **Fase 7 (opcional):** Usar flujos guardados como **oráculo para tests**: re-ejecutar en CI y comparar logs; y/o alimentar un agente que **genere tests** (E2E/integración) a partir del export de un flujo real.
+8. **Fase 8 (visión):** Export enriquecido (generar imágenes y MD en hitos del flujo); IAs especializadas por app; bot del cliente (voz/texto) que gestiona la app y traduce comandos naturales a acciones.
 
 ---
 
