@@ -208,9 +208,13 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
             this.store.dispatch(PageActions.loadPageSuccess({ page: { ...page, sections: normalizedSections } as any }));
           } else {
             const normalizedVSSections = PageSelectors.normalizeSectionsForDisplay(page.sections || []);
-            const storeIds = (currentStorePage.sections || []).map((s: any) => s.id).filter(Boolean).join(',');
+            const storeSections = currentStorePage.sections || [];
+            const storeIds = storeSections.map((s: any) => s.id).filter(Boolean).join(',');
             const vsIds = normalizedVSSections.map((s: any) => s.id).filter(Boolean).join(',');
-            const sectionsSame = storeIds === vsIds && (currentStorePage.sections?.length ?? 0) === normalizedVSSections.length;
+            // Include visibility so sidebar eye toggle (VariantService) syncs to store and canvas hides section
+            const storeFingerprint = storeSections.map((s: any) => `${s.id}:${s.visible}`).join('|');
+            const vsFingerprint = normalizedVSSections.map((s: any) => `${s.id}:${s.visible}`).join('|');
+            const sectionsSame = storeIds === vsIds && storeFingerprint === vsFingerprint && (storeSections.length === normalizedVSSections.length);
             const globalStylesSame = JSON.stringify(currentStorePage.globalStyles || {}) === JSON.stringify(page.globalStyles || {});
             if (!sectionsSame || !globalStylesSame) {
               this.store.dispatch(PageActions.updatePage({
