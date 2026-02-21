@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject, Inject, PLATFORM_ID, ViewContainerRef, TemplateRef, ViewChild, ElementRef, DOCUMENT } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, inject, Inject, PLATFORM_ID, ViewContainerRef, TemplateRef } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseEditorSectionComponent } from '../base-editor-section.component';
@@ -49,6 +49,7 @@ import {
 
 import { SlotResizeService } from './slot-resize.service';
 import { ResizeHandleDirective, ResizeEvent } from './resize-handle.directive';
+import { LayoutComponentPickerService } from './layout-component-picker.service';
 
 // Interfaces for better type safety
 interface SlotEditOrigin {
@@ -341,37 +342,7 @@ interface ComponentDefaultSize {
 
     </section>
 
-      <!-- Component Picker Modal: rendered in template but moved to body when open so it escapes canvas perspective/transform -->
-      <div *ngIf="showComponentPicker" #pickerOverlay class="component-picker-overlay" (click)="closeComponentPicker()">
-        <div class="component-picker-modal" (click)="$event.stopPropagation()">
-          <div class="modal-header">
-            <h3>Añadir Componente al Slot {{ editingSlotIndex + 1 }}</h3>
-            <button class="close-btn" (click)="closeComponentPicker()">✕</button>
-          </div>
-          
-          <!-- Category Tabs -->
-          <div class="category-tabs">
-            <button 
-              *ngFor="let cat of componentCategories" 
-              class="category-tab"
-              [class.active]="selectedCategory === cat.id"
-              (click)="selectedCategory = cat.id">
-              {{ cat.label }}
-            </button>
-          </div>
-
-          <!-- Components Grid -->
-          <div class="components-grid">
-            <button 
-              *ngFor="let comp of getFilteredComponents()" 
-              class="component-option"
-              (click)="assignComponent(comp)">
-              <span class="component-icon">{{ comp.icon }}</span>
-              <span class="component-name">{{ comp.label }}</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <!-- Component Picker is shown by LayoutComponentPickerModalComponent at root (main layout) via LayoutComponentPickerService -->
 
       <!-- Slot Config Modal -->
       <div *ngIf="showSlotConfig" class="slot-config-overlay" (click)="closeSlotConfig()">
@@ -1502,27 +1473,20 @@ export class EditorLayoutSectionComponent extends BaseEditorSectionComponent imp
     this.selectedSlotIndex = index;
   }
 
-  @ViewChild('pickerOverlay') pickerOverlayRef: ElementRef<HTMLElement> | null = null;
-  private doc = inject(DOCUMENT);
+  private layoutPickerService = inject(LayoutComponentPickerService);
 
   openComponentPicker(index: number, event: Event) {
     event.preventDefault();
     event.stopPropagation();
     this.editingSlotIndex = index;
-    this.showComponentPicker = true;
-    this.selectedCategory = 'all';
-    // Run CD then move overlay to body so it escapes .canvas-wrapper's perspective (which traps position:fixed)
-    setTimeout(() => {
-      this.cdr.detectChanges();
-      const el = this.pickerOverlayRef?.nativeElement;
-      if (el && this.doc.body && el.parentNode !== this.doc.body) {
-        this.doc.body.appendChild(el);
-      }
-    }, 0);
+    this.layoutPickerService.open(index, (comp) => {
+      this.assignComponent(comp);
+      this.editingSlotIndex = -1;
+    });
   }
 
   closeComponentPicker() {
-    this.showComponentPicker = false;
+    this.layoutPickerService.close();
     this.editingSlotIndex = -1;
   }
 

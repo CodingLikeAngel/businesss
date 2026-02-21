@@ -12,6 +12,7 @@ import { EditorHeaderSectionComponent } from '../../editor/components/header/edi
 import { EditorFooterSectionComponent } from '../../editor/components/footer/editor-footer-section.component';
 import { SUPPORTED_SECTION_TYPES } from '../../editor/components/section-renderer/section-type-registry';
 import { AICopilotComponent } from '../../../components/ai-copilot/ai-copilot.component';
+import { LayoutComponentPickerModalComponent } from '../../editor/components/layout-section/layout-component-picker-modal.component';
 import { Store } from '@ngrx/store';
 import * as PageSelectors from '../../../store/selectors/page.selectors';
 import { map, delay } from 'rxjs';
@@ -26,7 +27,8 @@ import { map, delay } from 'rxjs';
     VariantSelectorComponent,
     TemplateSelectorComponent,
     EditorFooterSectionComponent,
-    AICopilotComponent
+    AICopilotComponent,
+    LayoutComponentPickerModalComponent
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './main-desktop-layout.component.html',
