@@ -150,8 +150,18 @@
 | ✅ | **API pública:** `ExporterService` y `DownloadService` exportados desde `@negocio/shared-components` para uso en el editor. |
 | ✅ | **Persistencia de dimensiones:** `ResizeSectionCommand` y reducer aplican `section.size`; se guarda y restaura en el modelo de página (JSON). |
 | ✅ | **Tests export:** Tests unitarios para `ExporterService` (ZIP, HTML, secciones) y `WebComponentExporter` (escape, props, observedAttributes); todos pasan. |
-| ✅ | **Modo aislado unificado (P1):** Sidebar con pestañas Contenido \| Estilo \| Avanzado en estilos compartidos (`.sidebar-tabs`); aplicado en Title y Showcase; pestaña Avanzado con posición/tamaño. |
-| Pendiente | Smart-Adapt en todos los componentes de layout (ui-card, ui-list, etc.); extender pestañas unificadas al resto de modos aislados; CI y documentación. |
+| ✅ | **Modo aislado unificado (P1):** Sidebar con pestañas Contenido \| Estilo \| Avanzado (`.sidebar-tabs` en `_isolated-mode-shared.scss`). Aplicado en: Title, Showcase, Button, Accordion, Image, List, Chip, Card Animated, Card Premium, Card Product, Draggable Box. |
+| ✅ | **Smart-Adapt layout:** `.slot-component` con `height: auto` y `min-height: 80px` (100px en `.slot.flow-component`); estilo inline del slot sin `min-height: 100%` para no cortar contenido. |
+| ✅ | **CI:** Pipeline en `.github/workflows/ci.yml` (lint, test, build con `nx affected`; e2e opcional comentado). |
+| Pendiente | Pulido UI (cards, forms, gallery), vista previa móvil en editor, documentación in-app / onboarding, tests E2E si se desea. |
+
+---
+
+## 8. Documentación y onboarding (sugerido)
+
+- **In-app:** Tooltips o tour en primera visita (paneles, añadir sección, modo aislado, Publicar).
+- **Docs:** Enlace a guía de componentes y variantes; explicación del flujo Publicar → ZIP.
+- **README del repo:** Comandos `nx run antoStudios:serve`, `nx run antoStudios:build`, `nx run feature-editor:test`.
 
 **Última actualización:** Febrero 2026  
-**Versión:** 1.0
+**Versión:** 1.1

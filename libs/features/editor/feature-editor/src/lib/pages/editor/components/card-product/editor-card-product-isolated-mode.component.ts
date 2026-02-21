@@ -53,10 +53,15 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
         <!-- ===== BODY ===== -->
         <div class="isolated-mode-body">
           
-          <!-- Sidebar Controls -->
+          <!-- Sidebar: pestañas unificadas Contenido | Estilo | Avanzado -->
           <div class="controls-sidebar">
+            <div class="sidebar-tabs">
+              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">Contenido</button>
+              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">Estilo</button>
+              <button [class.active]="activeTab === 'advanced'" (click)="activeTab = 'advanced'">Avanzado</button>
+            </div>
             <div class="sidebar-scroll-content">
-              
+              <ng-container *ngIf="activeTab === 'content'">
               <!-- PRODUCT INFO -->
               <div class="sidebar-section">
                 <div class="section-header">
@@ -113,7 +118,8 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                   <input type="number" [(ngModel)]="editableContent.originalPrice" (ngModelChange)="onContentChange()" class="premium-input">
                 </div>
               </div>
-
+              </ng-container>
+              <ng-container *ngIf="activeTab === 'design'">
               <!-- APPEARANCE -->
               <div class="sidebar-section">
                 <div class="section-header">
@@ -170,6 +176,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                   </div>
                 </div>
               </div>
+              </ng-container>
             </div>
           </div>
 
@@ -275,6 +282,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 })
 export class EditorCardProductIsolatedModeComponent extends BaseIsolatedModeComponent {
   @ViewChild('canvas') canvasRef!: ElementRef;
+  activeTab: 'content' | 'design' | 'advanced' = 'content';
 
   protected override getCanvasElement(): HTMLElement | null {
     return this.canvasRef?.nativeElement;

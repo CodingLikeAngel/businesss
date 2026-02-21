@@ -56,9 +56,9 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
           <!-- Sidebar Controls -->
           <div class="controls-sidebar">
             <div class="sidebar-tabs">
-              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">CONTENIDO</button>
-              <button [class.active]="activeTab === 'style'" (click)="activeTab = 'style'">DISEÑO</button>
-              <button [class.active]="activeTab === 'pos'" (click)="activeTab = 'pos'">DIMENSIONES</button>
+              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">Contenido</button>
+              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">Estilo</button>
+              <button [class.active]="activeTab === 'advanced'" (click)="activeTab = 'advanced'">Avanzado</button>
             </div>
 
             <div class="sidebar-scroll-content">
@@ -84,7 +84,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
               </div>
 
               <!-- STYLE SECTION -->
-              <div class="sidebar-section" *ngIf="activeTab === 'style'">
+              <div class="sidebar-section" *ngIf="activeTab === 'design'">
                 <div class="section-header">
                   <span class="section-icon">🎨</span>
                   <h4>APARIENCIA</h4>
@@ -135,7 +135,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
               </div>
 
               <!-- POSITION SECTION -->
-              <div class="sidebar-section no-border" *ngIf="activeTab === 'pos'">
+              <div class="sidebar-section no-border" *ngIf="activeTab === 'advanced'">
                 <div class="section-header">
                   <span class="section-icon">📏</span>
                   <h4>TAMAÑO & POSICIÓN</h4>
@@ -267,7 +267,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 })
 export class EditorListIsolatedModeComponent extends BaseIsolatedModeComponent {
   @ViewChild('canvas') canvasRef!: ElementRef;
-  activeTab: 'content' | 'style' | 'pos' = 'content';
+  activeTab: 'content' | 'design' | 'advanced' = 'content';
   editableItems: string[] = [];
 
   protected override getCanvasElement(): HTMLElement | null {

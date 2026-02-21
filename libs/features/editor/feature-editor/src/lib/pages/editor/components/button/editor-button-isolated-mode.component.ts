@@ -68,10 +68,15 @@ export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
         </div>
 
         <div class="isolated-mode-body">
-          <!-- Sidebar Controls -->
+          <!-- Sidebar: pestañas unificadas Contenido | Estilo | Avanzado -->
           <div class="controls-sidebar">
+            <div class="sidebar-tabs">
+              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">Contenido</button>
+              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">Estilo</button>
+              <button [class.active]="activeTab === 'advanced'" (click)="activeTab = 'advanced'">Avanzado</button>
+            </div>
             <div class="sidebar-scroll-content">
-              
+              <ng-container *ngIf="activeTab === 'content'">
               <!-- SECCIÓN: CONTENIDO -->
               <div class="sidebar-section">
                 <div class="section-header">
@@ -105,7 +110,8 @@ export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                   </div>
                 </div>
               </div>
-
+              </ng-container>
+              <ng-container *ngIf="activeTab === 'design'">
               <!-- SECCIÓN: APARIENCIA -->
               <div class="sidebar-section">
                 <div class="section-header">
@@ -270,7 +276,8 @@ export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                   <input type="range" min="0.8" max="1.2" step="0.01" [(ngModel)]="hoverScale" (ngModelChange)="onStyleChange()" class="w-full">
                 </div>
               </div>
-
+              </ng-container>
+              <ng-container *ngIf="activeTab === 'advanced'">
               <!-- SECCIÓN: DIMENSIONES -->
               <div class="sidebar-section no-border">
                 <div class="section-header">
@@ -298,7 +305,7 @@ export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
                   </div>
                 </div>
               </div>
-
+              </ng-container>
             </div>
           </div>
 
@@ -433,6 +440,7 @@ export { IsolatedModeConfig } from '../enhanced-visual-editing.interfaces';
 })
 export class EditorButtonIsolatedModeComponent extends BaseIsolatedModeComponent {
   @ViewChild('canvas') canvasRef!: ElementRef;
+  activeTab: 'content' | 'design' | 'advanced' = 'content';
 
   private store = inject(Store<AppState>);
   globalColors$: Observable<string[]> = this.store.select(selectCurrentPageGlobalStyles).pipe(

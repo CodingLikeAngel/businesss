@@ -58,10 +58,15 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
         <!-- ===== BODY ===== -->
         <div class="isolated-mode-body">
           
-          <!-- Sidebar Controls -->
+          <!-- Sidebar: pestañas unificadas Contenido | Estilo | Avanzado -->
           <div class="controls-sidebar">
+            <div class="sidebar-tabs">
+              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">Contenido</button>
+              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">Estilo</button>
+              <button [class.active]="activeTab === 'advanced'" (click)="activeTab = 'advanced'">Avanzado</button>
+            </div>
             <div class="sidebar-scroll-content">
-              
+              <ng-container *ngIf="activeTab === 'content'">
               <!-- Content Section -->
               <div class="sidebar-section">
                 <div class="section-header">
@@ -77,7 +82,8 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                   <input type="text" [(ngModel)]="editableContent.alt" (ngModelChange)="onContentChange()" class="premium-input" placeholder="Descripción de la imagen...">
                 </div>
               </div>
-
+              </ng-container>
+              <ng-container *ngIf="activeTab === 'design'">
               <!-- Base Style Section -->
               <div class="sidebar-section">
                 <div class="section-header">
@@ -160,7 +166,8 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                   </div>
                 </div>
               </div>
-
+              </ng-container>
+              <ng-container *ngIf="activeTab === 'advanced'">
               <!-- Dimensions Section -->
               <div class="sidebar-section no-border">
                 <div class="section-header">
@@ -188,7 +195,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                   </div>
                 </div>
               </div>
-
+              </ng-container>
             </div>
           </div>
 
@@ -308,6 +315,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 })
 export class EditorImageIsolatedModeComponent extends BaseIsolatedModeComponent {
   @ViewChild('canvas') canvasRef!: ElementRef;
+  activeTab: 'content' | 'design' | 'advanced' = 'content';
 
   private store = inject(Store<AppState>);
   globalColors$: Observable<string[]> = this.store.select(selectCurrentPageGlobalStyles).pipe(

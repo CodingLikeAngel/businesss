@@ -201,7 +201,7 @@ interface ComponentDefaultSize {
 
           <!-- Filled Slot - Component Renderer -->
           <ng-container *ngIf="slotEntry.slot.componentType !== 'empty'">
-            <div class="slot-component" style="height: auto; min-height: 100%;">
+            <div class="slot-component" style="height: auto;">
               <!-- Editing Overlay -->
               <div *ngIf="(!isPreviewMode && isEditing) || showEditorControls" class="slot-controls">
                 <button *ngIf="isPositioned(slotEntry.globalIndex, slotEntry.slot)"

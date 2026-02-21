@@ -53,8 +53,9 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
           <!-- Sidebar Controls -->
           <div class="controls-sidebar">
             <div class="sidebar-tabs">
-              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">CONTENIDO</button>
-              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">DISEÑO</button>
+              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">Contenido</button>
+              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">Estilo</button>
+              <button [class.active]="activeTab === 'advanced'" (click)="activeTab = 'advanced'">Avanzado</button>
             </div>
 
             <div class="sidebar-scroll-content">
@@ -234,7 +235,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 export class EditorCardAnimatedIsolatedModeComponent extends BaseIsolatedModeComponent {
   @ViewChild('canvas') canvasRef!: ElementRef;
 
-  activeTab: 'content' | 'design' = 'content';
+  activeTab: 'content' | 'design' | 'advanced' = 'content';
 
   protected override getCanvasElement(): HTMLElement | null {
     return this.canvasRef?.nativeElement;

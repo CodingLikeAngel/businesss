@@ -63,9 +63,27 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
         </div>
 
         <div class="isolated-mode-body">
-          <!-- Sidebar Controls -->
+          <!-- Sidebar: pestañas unificadas Contenido | Estilo | Avanzado -->
           <div class="controls-sidebar">
+            <div class="sidebar-tabs">
+              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">Contenido</button>
+              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">Estilo</button>
+              <button [class.active]="activeTab === 'advanced'" (click)="activeTab = 'advanced'">Avanzado</button>
+            </div>
             <div class="sidebar-scroll-content">
+              <ng-container *ngIf="activeTab === 'content'">
+              <div class="sidebar-section">
+                <div class="section-header">
+                  <span class="section-icon">📝</span>
+                  <h4>CONTENIDO</h4>
+                </div>
+                <div class="control-group">
+                  <label>Texto de la caja</label>
+                  <input type="text" [(ngModel)]="editableContent.content" (ngModelChange)="onContentChange()" class="premium-input" placeholder="Drag me...">
+                </div>
+              </div>
+              </ng-container>
+              <ng-container *ngIf="activeTab === 'design'">
               <!-- SECCIÓN: ESTILO -->
               <div class="sidebar-section">
                 <div class="section-header">
@@ -165,7 +183,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                   </div>
                 </div>
               </div>
-
+              </ng-container>
             </div>
           </div>
 
@@ -349,6 +367,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 })
 export class EditorDraggableBoxIsolatedModeComponent extends BaseIsolatedModeComponent {
   @ViewChild('canvas') canvasRef!: ElementRef;
+  activeTab: 'content' | 'design' | 'advanced' = 'content';
   availableVariants = variants;
   borderRadiusUnit = 'px';
   paddingUnit = 'px';

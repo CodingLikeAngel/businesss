@@ -59,10 +59,15 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
         <!-- ===== BODY ===== -->
         <div class="isolated-mode-body">
           
-          <!-- Sidebar Controls -->
+          <!-- Sidebar: pestañas unificadas Contenido | Estilo | Avanzado -->
           <div class="controls-sidebar">
+            <div class="sidebar-tabs">
+              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">Contenido</button>
+              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">Estilo</button>
+              <button [class.active]="activeTab === 'advanced'" (click)="activeTab = 'advanced'">Avanzado</button>
+            </div>
             <div class="sidebar-scroll-content">
-              
+              <ng-container *ngIf="activeTab === 'content'">
               <!-- Content Section -->
               <div class="sidebar-section">
                 <div class="section-header">
@@ -82,7 +87,8 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                    <input type="text" [(ngModel)]="editableContent['avatarSrc']" (ngModelChange)="onContentChange()" class="premium-input" placeholder="https://...">
                 </div>
               </div>
-
+              </ng-container>
+              <ng-container *ngIf="activeTab === 'design'">
               <!-- Appearance Section -->
               <div class="sidebar-section">
                 <div class="section-header">
@@ -190,7 +196,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                   </div>
                 </div>
               </div>
-
+              </ng-container>
             </div>
           </div>
 
@@ -317,6 +323,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 })
 export class EditorChipIsolatedModeComponent extends BaseIsolatedModeComponent {
   @ViewChild('canvas') canvasRef!: ElementRef;
+  activeTab: 'content' | 'design' | 'advanced' = 'content';
   variants = chipVariants;
 
   protected override getCanvasElement(): HTMLElement | null {

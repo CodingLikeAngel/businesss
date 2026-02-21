@@ -63,8 +63,9 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
           <!-- Sidebar Controls -->
           <div class="controls-sidebar">
             <div class="sidebar-tabs">
-              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">CONTENIDO</button>
-              <button [class.active]="activeTab === 'style'" (click)="activeTab = 'style'">APARIENCIA</button>
+              <button [class.active]="activeTab === 'content'" (click)="activeTab = 'content'">Contenido</button>
+              <button [class.active]="activeTab === 'design'" (click)="activeTab = 'design'">Estilo</button>
+              <button [class.active]="activeTab === 'advanced'" (click)="activeTab = 'advanced'">Avanzado</button>
             </div>
 
             <div class="sidebar-scroll-content">
@@ -98,7 +99,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
               </div>
 
               <!-- STYLE SECTION -->
-              <div class="sidebar-section" *ngIf="activeTab === 'style'">
+              <div class="sidebar-section" *ngIf="activeTab === 'design'">
                 <div class="section-header">
                   <span class="section-icon">✨</span>
                   <h4>ESTILO & COMPONENTE</h4>
@@ -151,11 +152,13 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
                    <div class="custom-checkbox" [class.checked]="editableContent.dark"></div>
                    <span>Modo Oscuro (Ambient Dark)</span>
                 </div>
+              </div>
 
-                <!-- Dimensions within Style tab for optimization -->
-                <div class="section-header mt-8">
+              <!-- AVANZADO: posición y tamaño -->
+              <div class="sidebar-section no-border" *ngIf="activeTab === 'advanced'">
+                <div class="section-header">
                   <span class="section-icon">📏</span>
-                  <h4>TAMAÑO & POSICIÓN</h4>
+                  <h4>POSICIÓN & TAMAÑO</h4>
                 </div>
                 <div class="control-row grid grid-cols-2 gap-2">
                   <div class="control-group">
@@ -313,7 +316,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
 })
 export class EditorAccordionIsolatedModeComponent extends BaseIsolatedModeComponent {
   @ViewChild('canvas') canvasRef!: ElementRef;
-  activeTab: 'content' | 'style' = 'content';
+  activeTab: 'content' | 'design' | 'advanced' = 'content';
   availableVariants = variants;
 
   protected override getCanvasElement(): HTMLElement | null {
