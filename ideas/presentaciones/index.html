@@ -174,9 +174,12 @@
         <li><a href="#portada">Portada</a></li>
         <li><a href="#vision">Visión · IA y producción</a><span class="badge">CEO/CTO</span></li>
         <li><a href="#negocio-integrado">Negocio integrado</a><span class="badge">CEO/CTO</span></li>
+        <li><a href="#integracion">Integración ATS + Anto</a><span class="badge">CEO/CTO</span></li>
         <li><a href="#ats">ATS como herramienta</a><span class="badge">CEO/CTO</span></li>
         <li><a href="#negocio-anto">Oportunidades Anto Studios</a><span class="badge">CEO/CTO</span></li>
+        <li><a href="#mejoras">Mejoras (Anto Studios)</a><span class="badge">Producto / Dev</span></li>
         <li><a href="#logs">Logs y flujos para IA</a><span class="badge">Jefes desarrollo</span></li>
+        <li><a href="#cierre">Cierre</a></li>
       </ul>
     </nav>
 
@@ -186,7 +189,7 @@
         <h1>Visión, negocio e integración</h1>
         <p class="subtitle">Anto Studios · ATS · Sistema integrado</p>
         <p>Presentación para clientes, CTOs, CEOs y jefes de desarrollo.</p>
-        <p class="doc-ref">Documentos de referencia: Vision (modularización + IA), Oportunidades de negocio, Plan integrado, Logs y flujos.</p>
+        <p class="doc-ref">Esta presentación incluye el contenido de todos los documentos: Visión (modularización + IA + producción), Oportunidades de negocio (Anto e integrado), Integración ATS + Anto, Mejoras (Anto Studios), Logs y flujos para IA.</p>
       </section>
 
       <!-- VISIÓN MODULARIZACIÓN + IA + PRODUCCIÓN -->
@@ -194,6 +197,13 @@
         <span class="audience cto">Para CEO / CTO</span>
         <h1>Visión: modularización, IA y producción</h1>
         <p class="subtitle">Sistema modular, framework propio e integración con IA para generar y publicar aplicaciones de forma controlada.</p>
+
+        <h2>Estado actual</h2>
+        <ul>
+          <li><strong>Editor visual</strong> con secciones, layout flexible, modo aislado y variantes.</li>
+          <li><strong>Librería:</strong> ui-components y featured-components; store (estado de página, secciones, estilos globales) y exportación multi-framework en diseño.</li>
+          <li><strong>Monolito Nx:</strong> varias apps y libs en un solo repo; fuente de verdad en memoria/localStorage y JSON de variantes.</li>
+        </ul>
 
         <h2>Objetivo a futuro</h2>
         <ul>
@@ -205,14 +215,67 @@
 
         <h2>Capas del sistema</h2>
         <div class="card">
-          <strong>Presentación</strong> → Editor visual, Chat/API para IA, Dashboard<br>
-          <strong>API del builder (headless)</strong> → CRUD páginas/secciones, validar schema, preview<br>
-          <strong>Núcleo</strong> → Schema de página, registro de componentes, export<br>
-          <strong>Framework</strong> → ui-components, featured-components, variantes
+          <strong>Presentación (humanos o IA)</strong> → Editor visual (Angular), Chat/API para IA, Dashboard / CLI<br>
+          <strong>API del builder (headless)</strong> → Crear/actualizar/eliminar páginas y secciones, aplicar variantes, validar schema, generar preview<br>
+          <strong>Núcleo de negocio</strong> → Modelo de página (schema), registro de componentes, export<br>
+          <strong>Framework</strong> → ui-components, featured-components, variantes y temas
         </div>
 
-        <h2>Integración con IA</h2>
-        <p>La IA no pinta píxeles: genera o modifica <strong>datos</strong> (schema de página). Recibe un brief o instrucción y devuelve acciones sobre el schema (crear sección, editar contenido, cambiar variante). El sistema puede exponer API + catálogo de componentes documentado para que cualquier IA (propia o existente) consuma el contexto.</p>
+        <h2>Schema de página como contrato</h2>
+        <p>Página = lista de secciones ordenadas. Cada sección: <code>type</code> (hero, features, pricing…), <code>id</code>, <code>visible</code>, <code>variant</code>, <code>content</code>/<code>config</code>, <code>styles</code>/<code>layout</code>. Estilos globales (tema, fuentes, colores) forman parte del schema. Este JSON es lo que el editor persiste, lo que el exportador usa para generar HTML/React/Angular, y lo que la IA puede generar o modificar vía API.</p>
+
+        <h2>Registro de componentes como catálogo</h2>
+        <p>Catálogo maquinaable: tipos de sección con nombre, descripción, props/config (schema JSON), variantes disponibles, preview. Extender el section-type-registry a una <strong>API de registro</strong> que devuelva tipos disponibles, schema de configuración por tipo y validación de content/config. Así editor e IA saben qué se puede colocar y qué campos tiene cada bloque.</p>
+
+        <h2>Separación de runtimes</h2>
+        <p><strong>Runtime de edición:</strong> app Angular (editor + preview en tiempo real). <strong>Runtime de solo lectura (producción):</strong> misma app sirviendo solo vista preview con datos inyectados, o sitio estático generado por export, o app que lee schema desde CMS/API. El motor que interpreta el schema y renderiza debe poder usarse en edición y producción sin depender de la UI del editor.</p>
+
+        <h2>Integración con IA: idea central</h2>
+        <p>La IA <strong>no pinta píxeles</strong>: genera o modifica <strong>datos</strong> (schema de página + contenido). Recibe brief o instrucción y devuelve <strong>acciones</strong> sobre el schema (crear sección, editar contenido, cambiar variante, reordenar, eliminar) o el schema completo (o diff).</p>
+
+        <h3>Flujos posibles</h3>
+        <ul>
+          <li><strong>A) IA como asistente en el editor:</strong> Usuario escribe en chat; la IA traduce a operaciones sobre el store; el editor aplica y el usuario ve el resultado.</li>
+          <li><strong>B) IA que genera la app desde cero:</strong> Input tipo "Crea una landing para un gimnasio boutique". La IA elige secciones (hero, servicios, horarios, precios, contacto), rellena contenido y variantes; output = schema completo; el sistema persiste, muestra preview y opcionalmente exporta o publica.</li>
+          <li><strong>C) IA que modifica app existente:</strong> "Añade una sección de ofertas" o "Traduce todos los textos al inglés"; la IA devuelve diff o nuevo schema; el sistema aplica.</li>
+        </ul>
+
+        <h3>Qué necesita la IA</h3>
+        <ul>
+          <li>Documentación del catálogo (tipos de sección, campos, tipos de datos).</li>
+          <li>Schema de página bien definido (JSON Schema o equivalente).</li>
+          <li>API estable: listar tipos, crear/actualizar/eliminar sección, obtener/actualizar página, preview/export.</li>
+          <li>Ejemplos de páginas (por nicho) para few-shot o fine-tuning.</li>
+          <li>Opcional: reglas de buen diseño ("un hero suele ir primero", etc.).</li>
+        </ul>
+
+        <h3>IA propia vs existente</h3>
+        <p><strong>Existente (GPT, Claude):</strong> Uso vía API; se pasa contexto (catálogo, schema actual, instrucción) y se parsea la respuesta a operaciones; no requiere entrenar modelo; sí un "adapter" que convierta texto/JSON en llamadas al builder. <strong>Propia (fine-tuned):</strong> Entrenada con (brief, schema) o (instrucción, diff); control total, privacidad, coste predecible; requiere datos de calidad y pipeline. En ambos casos el contrato es el mismo: schema + catálogo.</p>
+
+        <h2>API del builder (headless)</h2>
+        <p>Exponer operaciones como API REST (o servicio in-process) para que UI, IA, CLI o CI las usen. La UI del editor sería un cliente de esta API. Endpoints sugeridos: <code>GET /api/components</code>, <code>GET/PUT /api/pages/:id</code>, <code>PATCH /api/pages/:id/sections</code>, <code>POST /api/pages/:id/preview</code>, <code>POST /api/pages/:id/export</code>, <code>POST /api/pages/:id/publish</code>. Autenticación: API keys u OAuth; permisos por proyecto; para publicar a producción solo roles con permiso explícito.</p>
+
+        <h2>Integración a producción (flujo)</h2>
+        <ol>
+          <li><strong>Edición:</strong> Cambios en editor o vía API; se guardan como borrador.</li>
+          <li><strong>Preview:</strong> URL de preview por versión (preview.antostudios.com/proyecto/xyz?version=abc).</li>
+          <li><strong>Staging (opcional):</strong> Versión "lista para revisar" en entorno estable.</li>
+          <li><strong>Producción:</strong> Acción "Publicar": se marca una versión como "live" y el sistema de despliegue actualiza el sitio.</li>
+          <li><strong>Rollback:</strong> "Volver a la versión anterior" = marcar otra versión como live y redesplegar.</li>
+        </ol>
+        <p><strong>Opciones técnicas:</strong> Hosting estático (Vercel, Netlify, S3+CDN) con export que genera HTML/CSS/JS y CI que sube artefactos; o backend que sirve schema (producción lee "live" desde API/CMS); o híbrido. <strong>Seguridad:</strong> Solo ciertos roles pueden publicar; registro de publicaciones (quién, cuándo, qué versión); opcional doble aprobación en enterprise. <strong>IA:</strong> Puede proponer cambios; humano aprueba y publica; o IA publica en staging y producción sigue siendo manual.</p>
+
+        <h2>Roadmap sugerido</h2>
+        <table>
+          <tr><th>Fase</th><th>Objetivo</th></tr>
+          <tr><td>1 (3–6 meses)</td><td>Schema estable, registro como catálogo maquinaable, export estable, API interna opcional.</td></tr>
+          <tr><td>2 (6–12 meses)</td><td>API REST (páginas, componentes, preview), documentación para IA, adapter IA → acciones, pruebas con LLM.</td></tr>
+          <tr><td>3</td><td>Flujo Publicar (versión, export, deploy), preview y staging, rollback, permisos.</td></tr>
+          <tr><td>4 (12+ meses)</td><td>Flujo "Generar app desde brief" con IA, fine-tuning si se desea, integración con aprobación y publicación.</td></tr>
+        </table>
+
+        <h2>Resumen visión</h2>
+        <p>Modularización: separar núcleo (schema, registro, export) de la UI; exponer API para que cualquier cliente (humano o IA) cree y modifique páginas. Framework propio = componentes + design tokens; la creación es generación de <strong>datos</strong> (schema). IA propia o existente genera o modifica schema; necesita catálogo documentado, schema claro y API estable. Producción: preview → staging → publicación explícita → despliegue con rollback y auditoría.</p>
         <p class="doc-ref">Documento completo: <a href="../DOC_VISION_MODULARIZACION_IA_PRODUCCION.md">DOC_VISION_MODULARIZACION_IA_PRODUCCION.md</a></p>
       </section>
 
@@ -226,30 +289,105 @@
           «Un solo hub donde ves todo tu código, tus métricas, tu IA y tus sitios en vivo, y publicas a producción con un clic y con control.»
         </div>
 
-        <h2>Qué aporta la integración</h2>
-        <ul>
-          <li><strong>ATS:</strong> Visión 360 (repos, calidad, seguridad, CI, dependencias, sprints, informes IA).</li>
-          <li><strong>Anto Studios:</strong> Creación de sitios/landings y export a código o publicación.</li>
-          <li><strong>Integración:</strong> Un único lugar para controlar (métricas + activos vivos) y actuar (analizar, publicar, rollback, auditar), con quality gates y trazabilidad.</li>
-        </ul>
+        <h2>Propuesta de valor</h2>
+        <p><strong>ATS</strong> aporta: visión 360 (repos, calidad, seguridad, CI, dependencias, sprints, roadmap, informes IA). <strong>Anto Studios</strong> aporta: creación de sitios/landings y export a código o publicación. <strong>Integración</strong> aporta: un único lugar para controlar (métricas + activos vivos) y actuar (analizar, publicar, rollback, auditar), con quality gates y trazabilidad completa.</p>
 
-        <h2>Segmentos objetivo</h2>
+        <h2>Diferenciación frente a productos por separado</h2>
+        <table>
+          <tr><th>Aspecto</th><th>Solo ATS</th><th>Solo Anto</th><th>Sistema integrado</th></tr>
+          <tr><td>Visión de código y calidad</td><td>✅</td><td>❌</td><td>✅</td></tr>
+          <tr><td>Creación de sitios/landings</td><td>❌</td><td>✅</td><td>✅</td></tr>
+          <tr><td>Publicación controlada desde un hub</td><td>❌</td><td>Parcial</td><td>✅ centralizado</td></tr>
+          <tr><td>Quality gate antes de publicar</td><td>N/A</td><td>❌</td><td>✅</td></tr>
+          <tr><td>Logs y flujos exportables para IA</td><td>Parcial</td><td>❌</td><td>✅ unificado</td></tr>
+          <tr><td>Un solo producto comercial</td><td>No</td><td>No</td><td><strong>Sí</strong></td></tr>
+        </table>
+        <p>El cliente integrado compra "control total + producción desde un solo sitio".</p>
+
+        <h2>Segmentos de cliente</h2>
         <table>
           <tr><th>Segmento</th><th>Propuesta</th><th>Precio orientativo</th></tr>
-          <tr><td>Agencias / dev shops</td><td>Hub único: análisis + métricas + diseño + publicación con quality gate</td><td>€199–499/mes</td></tr>
-          <tr><td>Product companies</td><td>Marketing diseña en Anto; ingeniería controla publicación desde el hub</td><td>€2.000–8.000/mes</td></tr>
-          <tr><td>Empresas multi-marca</td><td>Todos los sitios y repos en un hub; publicación y rollback centralizados</td><td>Enterprise €10k–50k/año</td></tr>
-          <tr><td>Freelancers</td><td>Dashboard profesional para mostrar al cliente; publicar con un clic</td><td>€49–99/mes</td></tr>
+          <tr><td>Agencias y dev shops</td><td>Hub único: análisis + métricas + diseño + publicación con quality gate y auditoría</td><td>€199–499/mes por equipo</td></tr>
+          <tr><td>Product companies (marketing + dev)</td><td>Marketing diseña en Anto; ingeniería ve estado del repo y publicaciones; nadie publica sin quality gate</td><td>€2.000–8.000/mes</td></tr>
+          <tr><td>Empresas multi-marca</td><td>Todos los sitios y repos en un hub; publicación y rollback centralizados; informes IA por marca</td><td>Enterprise €10k–50k/año</td></tr>
+          <tr><td>Freelancers</td><td>Dashboard profesional para mostrar al cliente; publicar con un clic; historial y rollback</td><td>€49–99/mes</td></tr>
         </table>
 
         <h2>Modelo SaaS por niveles</h2>
         <ul>
-          <li><strong>Starter</strong> (€49–79/mes): 1–2 repos, 1–2 sitios, publicación básica, logs exportables.</li>
-          <li><strong>Agency</strong> (€199–299/mes): Repos y sitios ampliados, quality gate, flujos guardados, export logs para IA.</li>
-          <li><strong>Company</strong> (€799–1.999/mes): Múltiples workspaces, SSO, roles, integraciones, API.</li>
-          <li><strong>Enterprise</strong> (€10k–50k/año): Instancia dedicada, SLA, soporte prioritario, formación.</li>
+          <li><strong>Starter</strong> (€49–79/mes): 1–2 repos, 1–2 sitios, publicación básica (staging y prod), logs exportables; sin flujos guardados avanzados.</li>
+          <li><strong>Agency</strong> (€199–299/mes): Repos ilimitados o límite alto, 5–10 sitios, quality gate configurable, historial de publicaciones y rollback, flujos guardados como templates, export de logs para IA.</li>
+          <li><strong>Company</strong> (€799–1.999/mes): Múltiples workspaces, SSO, roles (vista, publicar, admin), integraciones (GitHub, Vercel, Netlify), informes IA incluidos, API del hub para CI/CD.</li>
+          <li><strong>Enterprise</strong> (€10k–50k/año): Instancia dedicada o VPC, SLA, soporte prioritario, formación, flujos y políticas a medida.</li>
         </ul>
-        <p class="doc-ref">Documento completo: <a href="../PLAN_OPORTUNIDADES_NEGOCIO_INTEGRADO.md">PLAN_OPORTUNIDADES_NEGOCIO_INTEGRADO.md</a></p>
+
+        <h2>Add-ons y oportunidades por capacidad</h2>
+        <ul>
+          <li><strong>Add-ons:</strong> Más sitios Anto, más análisis de repos, informes IA premium, flujos automatizados (ej. cada merge a main → análisis + si pasa gate → publicar sitio X a staging), almacenamiento de logs y flujos (retención larga).</li>
+          <li><strong>Visión 360 + publicación:</strong> Vender "un solo panel" como producto premium; métrica de valor = reducción de tiempo "de decisión a producción".</li>
+          <li><strong>Quality gate:</strong> Empresas reguladas pagan por "no poder publicar si el repo no pasa"; posicionamiento "compliance y control".</li>
+          <li><strong>Logs y flujos para IA:</strong> Contexto exportable en tiempo real como feature diferenciador; en tiers altos incluido; en bajos como add-on.</li>
+          <li><strong>Flujos guardados y automatización:</strong> "Automatiza análisis + publicación"; cliente paga por ahorro de tiempo.</li>
+          <li><strong>Auditoría y cumplimiento:</strong> Historial de quién publicó qué y cuándo + logs exportables para finanzas, salud, sector público.</li>
+        </ul>
+
+        <h2>Go-to-market</h2>
+        <p><strong>Mensaje:</strong> "Controla tu código, tus sitios y tu producción desde un solo hub." Proof points: quality gate integrado, logs exportables para IA, rollback en un clic, visión 360 de repos y sitios. <strong>Canales:</strong> Desarrolladores y tech leads (Reddit, HN, dev.to, LinkedIn), agencias (LinkedIn, partnerships Vercel/Netlify), product companies (Product Hunt, contenido "unificar dev y marketing"). <strong>Packaging:</strong> Opción A = un solo producto "Angel Hub" con ATS + Anto + integración; Opción B = ATS y Anto por separado con "Hub" como add-on. Recomendación inicial: Opción A.</p>
+
+        <h2>Métricas de éxito</h2>
+        <p>Adopción (workspaces que usan ≥1 análisis ATS y ≥1 sitio Anto); % de publicaciones a prod desde el hub; uso de quality gate (publicaciones bloqueadas, clientes que activan gate); uso de logs/flujos para IA (exports y flujos guardados por cliente); MRR/ARR por tier y % de ingresos por add-ons.</p>
+        <p class="doc-ref">Documentos: <a href="../PLAN_OPORTUNIDADES_NEGOCIO_INTEGRADO.md">PLAN_OPORTUNIDADES_NEGOCIO_INTEGRADO.md</a>, <a href="../mejoras/DOC_INTEGRACION_ATS_ANTO_STUDIOS.md">mejoras/DOC_INTEGRACION_ATS_ANTO_STUDIOS.md</a></p>
+      </section>
+
+      <!-- INTEGRACIÓN TÉCNICA ATS + ANTO -->
+      <section id="integracion">
+        <span class="audience cto">Para CEO / CTO</span>
+        <h1>Integración técnica ATS + Anto Studios</h1>
+        <p class="subtitle">Cómo se conectan las dos apps: hub de control y motor de producción.</p>
+
+        <h2>Resumen de cada aplicación</h2>
+        <p><strong>ATS (ats):</strong> Análisis técnico y scoring de repos (AST, SonarQube, seguridad, CI/CD, dependencias); Gemini para informes estratégicos y evaluación de código; dashboard 360 (Hero Hub, Sonar, CI, Security, Sprints, Roadmap, etc.). <strong>Rol:</strong> Hub de control para devs: ver todo (métricas, IA, sprints) y actuar sobre builds, deploys y activos Anto.</p>
+        <p><strong>Anto Studios (businesss):</strong> Editor visual de páginas (secciones, layout, variantes, design tokens); store y schema de página; export React/Angular/Vue/Web Components. <strong>Rol:</strong> Motor de producción: lo que se construye (landings, webs) y lo que se exporta o despliega a preview/staging/producción.</p>
+
+        <h2>Visión del sistema integrado</h2>
+        <p>En el <strong>hub (ATS)</strong>: visión 360 (código, calidad, seguridad, CI, sprints, IA) + visión de "activos vivos" (sitios Anto en preview/staging/prod) + acciones directas (lanzar análisis, ver informes, publicar a producción, rollback, auditoría). <strong>Anto</strong> es la herramienta de creación que el hub orquesta ("Crear landing para proyecto X", "Exportar proyecto Y"), monitoriza (estado de builds, última publicación) y desde la que se despliega (schema → export → deploy) con flujo unificado.</p>
+
+        <h2>Cómo se complementan</h2>
+        <ul>
+          <li><strong>ATS aporta:</strong> Un solo lugar para ver todo; contexto para decisiones de publicación (score, Sonar pueden condicionar "Publicar"); IA estratégica que puede recomendar o alertar antes de publicar; trazabilidad si desde ATS se dispara una publicación de sitio Anto.</li>
+          <li><strong>Anto aporta:</strong> Activos listos para producción (páginas, landings, export); API del builder (cuando exista) para que el hub o la IA creen/editen páginas por API; en el futuro IA generativa que produce schema orquestada desde el hub.</li>
+        </ul>
+
+        <h2>Flujo "trabajar y producir en producción"</h2>
+        <ol>
+          <li><strong>Desde el hub:</strong> Dev ve panel "Anto Studios" (lista de sitios, estado borrador/staging/prod); elige proyecto, ve preview; pulsa "Publicar a producción" o "Promover staging → prod"; el hub llama a API de Anto (o deploy); resultado se muestra y queda registrado.</li>
+          <li><strong>Desde Anto:</strong> Dev diseña, guarda, genera preview/staging; puede ir al hub ("Abrir en Hub") para ver métricas del repo e informes IA y desde ahí "Publicar a producción" si se centraliza en ATS.</li>
+          <li><strong>Reglas:</strong> Solo ciertos roles pueden publicar; el hub puede exigir que el repo pase quality gate antes de permitir publicar; rollback y auditoría en un solo lugar.</li>
+        </ol>
+
+        <h2>Integración técnica por niveles</h2>
+        <table>
+          <tr><th>Nivel</th><th>Descripción</th></tr>
+          <tr><td>1. Dashboard unificado</td><td>En ATS: panel "Anto Studios" / "Sitios" con lista de proyectos (API REST de Anto o config), enlaces a preview/staging/prod, "Abrir en editor".</td></tr>
+          <tr><td>2. Acciones desde el hub</td><td><code>POST /api/anto/publish</code> (projectId, versionId, target); <code>POST /api/anto/rollback</code>; disparar export (React/Angular/Vue) y descargar ZIP.</td></tr>
+          <tr><td>3. Quality gate</td><td>Política: solo permitir Publicar si ATS score &gt; X y Sonar quality gate passed; el hub consulta métricas y habilita/deshabilita "Publicar" mostrando motivo.</td></tr>
+          <tr><td>4. IA y automatización</td><td>Gemini con contexto "estado de sitios Anto"; si Anto expone API headless, hub invoca "Generar landing para X" → IA produce schema → Anto guarda y devuelve preview → hub ofrece "Publicar".</td></tr>
+          <tr><td>Despliegue</td><td>Opción A: dos apps separadas, comunicación por API. B: monorepo con app "Portal" que agrupa ATS y editor Anto. C: microservicios (Anto API + ATS API + frontend Hub).</td></tr>
+        </table>
+
+        <h2>Visión 360 ampliada en el hub</h2>
+        <p>Lo que ATS ya ofrece: Repo (Hero Hub), ATS/Sonar/CI/Security/Deps, Roadmap, Sprints, Bundle, DevEx, Licenses, Team culture, Web performance, informes LLM, Prompt optimizer. <strong>Con Anto se añade:</strong> Panel "Sitios/Landings" con lista de proyectos Anto, estado (borrador/staging/prod), última publicación, acciones (Abrir editor, Preview, Staging, Publicar a prod, Rollback, Export); reglas de publicación (indicadores de quality gate); auditoría (historial de publicaciones desde el hub). Resultado: 360 de código + activos vivos + producción.</p>
+
+        <h2>Roadmap de integración</h2>
+        <table>
+          <tr><th>Fase</th><th>Objetivo</th></tr>
+          <tr><td>1</td><td>Visión en el hub: panel "Sitios Anto"; Anto expone API lista de proyectos y estado.</td></tr>
+          <tr><td>2</td><td>Publicar desde el hub: botón que llama API Anto; Anto implementa POST /publish y registro de versión.</td></tr>
+          <tr><td>3</td><td>Quality gate: comprobar métricas ATS/Sonar antes de permitir publicar.</td></tr>
+          <tr><td>4</td><td>Rollback y auditoría: botón Rollback, historial en hub; Anto API de rollback y almacén de versiones.</td></tr>
+          <tr><td>5</td><td>IA: estado de sitios Anto en contexto Gemini; Anto API headless para schema (IA o automatización).</td></tr>
+        </table>
+        <p class="doc-ref">Documento completo: <a href="../mejoras/DOC_INTEGRACION_ATS_ANTO_STUDIOS.md">mejoras/DOC_INTEGRACION_ATS_ANTO_STUDIOS.md</a></p>
       </section>
 
       <!-- ATS COMO HERRAMIENTA -->
@@ -328,34 +466,131 @@
 
         <div class="quote">«Diseña una vez, usa en todas partes.»</div>
 
+        <h2>Propuesta de valor central</h2>
+        <p>Editor visual que <strong>no solo diseña webs</strong>, sino que <strong>exporta componentes nativos</strong> para varios entornos (React, Angular, Vue, Web Components, HTML/CSS). Estética premium/cyberpunk/glass por defecto; <strong>componentes de nicho</strong> (gimnasio, restaurante, spa, portfolio) para verticales específicas y menor tiempo de entrega.</p>
+
         <h2>Ventaja competitiva</h2>
-        <p>Anto Studios no solo diseña webs: <strong>exporta componentes nativos</strong> para varios entornos. Estética premium por defecto; componentes de nicho (gimnasio, restaurante, spa, portfolio).</p>
         <table>
-          <tr><th>Capacidad</th><th>Wix</th><th>Figma</th><th>Anto Studios</th></tr>
-          <tr><td>Editor visual</td><td>✅</td><td>✅</td><td>✅</td></tr>
-          <tr><td>Design tokens</td><td>❌</td><td>✅</td><td>✅</td></tr>
-          <tr><td>Export React/Angular/Vue</td><td>❌</td><td>❌</td><td>✅</td></tr>
-          <tr><td>No-code + código real</td><td>❌</td><td>❌</td><td>✅</td></tr>
+          <tr><th>Capacidad</th><th>Wix</th><th>Figma</th><th>Storybook</th><th>Anto Studios</th></tr>
+          <tr><td>Editor visual</td><td>✅</td><td>✅</td><td>❌</td><td>✅</td></tr>
+          <tr><td>Design tokens</td><td>❌</td><td>✅</td><td>❌</td><td>✅</td></tr>
+          <tr><td>Export React/Angular/Vue</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td></tr>
+          <tr><td>Export Web Components</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td></tr>
+          <tr><td>No-code + código real</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td></tr>
         </table>
+        <p><strong>Component-as-Code:</strong> Lo que se diseña en el editor se entrega como código listo para integrar, no como HTML estático cerrado.</p>
 
         <h2>Líneas de negocio (Anto por separado)</h2>
         <ul>
-          <li><strong>SaaS Web Builder (B2C):</strong> €29–49/mes — Pequeños negocios, plantillas por industria.</li>
-          <li><strong>Component Builder Pro (B2B):</strong> €99–299/mes — Agencias, export sin marca de agua, API, Storybook.</li>
-          <li><strong>Template Marketplace:</strong> Revenue share 70/30 — Plantillas premium.</li>
-          <li><strong>SaaS vertical:</strong> «Anto Gyms», «Anto Resto» — €29–49/mes por vertical.</li>
-          <li><strong>Enterprise:</strong> €5.000–50.000/año — Design system centralizado, SSO, soporte.</li>
+          <li><strong>SaaS Web Builder (B2C):</strong> €29–49/mes. Target: pequeños negocios, emprendedores. "Tu web profesional en 30 minutos". Plantillas por industria, editor drag-and-drop, hosting, SEO básico. Nicho: negocios que valoran imagen (restaurantes, gimnasios, spas).</li>
+          <li><strong>Component Builder Pro (B2B):</strong> €99–299/mes por seat. Target: agencias, product companies. "Construye tu design system sin boilerplate". Export sin marca de agua, React/Angular/Vue/Web Components, API, preview para clientes, clonado de plantillas, colaboración multi-usuario, integración tipo Storybook.</li>
+          <li><strong>Template Marketplace:</strong> Revenue share 70% creador / 30% plataforma. Precios sugeridos: Basic €49, Industry €99–149, Full Business €199.</li>
+          <li><strong>Licencia Enterprise:</strong> €5.000–50.000/año. Design system centralizado, instancia dedicada, SSO/SAML, soporte prioritario, formación.</li>
+          <li><strong>SaaS vertical:</strong> "Anto Gyms", "Anto Resto", "Anto Spas" — €29–49/mes por vertical. Hosting, editor, plantillas del sector, funcionalidades de dominio (reservas, horarios, menús).</li>
+          <li><strong>Lifetime Deal (LTD):</strong> Para validación en AppSumo; €69–129 pago único.</li>
         </ul>
+
+        <h2>Segmentos de cliente prioritarios</h2>
+        <table>
+          <tr><th>Tier</th><th>Perfil</th><th>Precio orientativo</th></tr>
+          <tr><td>Tier 1</td><td>Agencias de desarrollo: velocidad y reutilización; mantener design systems</td><td>€199–499/seat/mes</td></tr>
+          <tr><td>Tier 2</td><td>Product companies: handoff diseño–desarrollo; single source of truth</td><td>€2.000–20.000/mes</td></tr>
+          <tr><td>Tier 3</td><td>Freelancers: entregar componentes reales, aspecto profesional</td><td>€29–99/mes</td></tr>
+          <tr><td>Tier 4</td><td>Dueños de negocios "de imagen" (restaurantes, fitness boutique, spas): web sofisticada sin agencia a €10k</td><td>€29–49/mes</td></tr>
+        </table>
+
+        <h2>Casos de uso concretos</h2>
+        <ul>
+          <li><strong>Agencia → App del cliente:</strong> Diseño en Anto → Export a React/Next.js → Integración en proyecto del cliente → Cliente puede mantener el código.</li>
+          <li><strong>Equipo de design system:</strong> Componentes en el editor → Export como librería (NPM) → Distribución interna.</li>
+          <li><strong>Empresa SaaS multi-producto:</strong> Componentes reutilizables diseñados una vez → Export y uso en varios productos → Consistencia total.</li>
+          <li><strong>Freelancer:</strong> Entrega de componentes reales y código limpio → Cliente valora el entregable → Upsell (mantenimiento, nuevas secciones).</li>
+          <li><strong>Restaurante / Gym / Spa:</strong> Plantilla de nicho → Personalización en editor → Publicación o export para web y reservas/horarios.</li>
+        </ul>
+
+        <h2>Integración y ecosistema</h2>
+        <p>Vercel/Netlify (publicación directa); Figma (plugin importación o export para documentar); Storybook (addon o generación de .stories en export); GitHub/GitLab (commit de código generado, ramas preview, CI/CD); pasarelas de pago para planes premium y marketplace.</p>
+
+        <h2>Quick wins de negocio</h2>
+        <ol>
+          <li>Export sin watermark → habilitar venta a agencias.</li>
+          <li>Preview links para clientes → freelancers y agencias cobran más por presentaciones profesionales.</li>
+          <li>Clonado de plantillas → clientes con múltiples sitios o proyectos.</li>
+          <li>Export React (luego Angular/Vue) → mercado más grande y adopción en equipos técnicos.</li>
+          <li>Design tokens en export → valor para enterprise y equipos de design system.</li>
+        </ol>
+
+        <h2>Riesgos y mitigación</h2>
+        <p><strong>Calidad del código exportado:</strong> Tests automáticos de export, opciones strict/flexible, feedback de comunidad. <strong>Soporte multi-framework:</strong> Priorizar 1–2 frameworks al inicio (React + Angular), documentar límites. <strong>No competir en precio con Wix en masa:</strong> Enfocarse en nicho y valor (código, estética, verticales).</p>
+
+        <h2>Resumen ejecutivo Anto</h2>
+        <p>Varias líneas en paralelo: B2C (builder por vertical o general), B2B (agencias y empresas, export de código), Marketplace (plantillas premium), Enterprise. Ventaja diferencial: editor visual + design tokens + <strong>exportación a código real</strong>, posicionando el producto entre no-code y código profesional; abre integración con IA, pipelines y ecosistema dev. Para negocio del sistema integrado (ATS + Anto), ver PLAN_OPORTUNIDADES_NEGOCIO_INTEGRADO.</p>
         <p class="doc-ref">Documento completo: <a href="../DOC_OPORTUNIDADES_NEGOCIO.md">DOC_OPORTUNIDADES_NEGOCIO.md</a></p>
+      </section>
+
+      <!-- MEJORAS ANTO STUDIOS -->
+      <section id="mejoras">
+        <span class="audience dev">Para producto / desarrollo</span>
+        <h1>Mejoras – Anto Studios Editor</h1>
+        <p class="subtitle">Lista priorizada de mejoras técnicas, de producto y UX para llevar el editor de MVP estable a producto comercial.</p>
+
+        <h2>1. Mejoras críticas (base)</h2>
+        <h3>1.1 Sistema de exportación y publicación</h3>
+        <ul>
+          <li>Reparar imports y rutas del módulo de exportación (libs/shared-components, servicios de export).</li>
+          <li>Verificar y completar WebComponentExporter y generación de código limpio.</li>
+          <li>Smoke test de build de producción (nx build) y flujo "Publicar" de punta a punta.</li>
+          <li>Generador ZIP: HTML/CSS/Assets empaquetados y descarga desde el editor.</li>
+          <li>Export multi-framework: React, Angular, Vue, Web Components con calidad producción (COMPONENT_EXPORT_ARCHITECTURE).</li>
+        </ul>
+        <h3>1.2 Layout y modo aislado (Smart-Adapt)</h3>
+        <ul>
+          <li>Extensión Smart-Adapt a todos los componentes de layout: height: auto, min-height preservado, sin height: 100% que corte contenido.</li>
+          <li>Componentes a adaptar: ui-card (todas las variantes), ui-list, ui-text, ui-button, ui-chip, draggable-box.</li>
+          <li>Persistencia: guardar en JSON dimensiones y estilos flexibles; al restaurar, aplicar min-height en componentes de flujo y height fija solo donde corresponda.</li>
+          <li>Interfaz unificada de modo aislado: sidebar a la derecha con pestañas (Contenido | Estilo | Avanzado), vista previa en vivo, evento applied consistente.</li>
+        </ul>
+        <h3>1.3 Redimensionamiento (resize)</h3>
+        <p>Comprobar handles de resize (integración visual y usabilidad). Persistir y restaurar dimensiones personalizadas en el modelo de página (JSON).</p>
+
+        <h2>2. Mejoras de componentes y UI</h2>
+        <h3>2.1 Librería base (ui-components)</h3>
+        <p>Button: más variantes (Glitch, Neon, Glass), estados hover/active, iconos. Card: contenido dinámico real, bordes animados, glassmorphism, sin alturas fijas en host. Accordion: transiciones suaves, iconos configurables. Input/Form: estilos alineados (dark/cyberpunk), validación y feedback. Gallery: grid masonry real, lightbox. Map: integración real o placeholder, estilos custom (dark mode).</p>
+        <h3>2.2 Componentes de negocio (featured-components)</h3>
+        <p>Hero: vídeo de fondo, tipografía destacada, CTAs; en modo aislado editar texto, imagen y vídeo. Pricing Table: toggle mensual/anual, destacar plan "Recomendado". Testimonials: carrusel estable, avatares, valoración. Contact Form: validación real y feedback de envío. Restaurant Menu, Gym Schedule, Stats/Steps: estructuras claras y animaciones. Templates por sección: uso consistente de title, botones, espaciado y variables.</p>
+        <h3>2.3 Consistencia visual y diseño</h3>
+        <p>Design tokens sistemáticos (--theme-*, --fs-*, --sp-*). Empty states claros. Accesibilidad: ARIA, contraste, foco y navegación por teclado en editor y preview.</p>
+
+        <h2>3. Mejoras de arquitectura y rendimiento</h2>
+        <p><strong>Limpieza:</strong> Eliminar legacy (wrappers antiguos), tree shaking, lazy loading de componentes de edición pesados. <strong>Rendimiento:</strong> Registro lazy de secciones, OnPush, distinctUntilChanged, vigilar bundle size. <strong>Estabilidad:</strong> Unit tests para exportadores y servicios críticos; CI con build, tests y export de ejemplo.</p>
+
+        <h2>4. Mejoras de experiencia (UX) y móvil</h2>
+        <p><strong>Responsive y móvil:</strong> Auto-stacking a 1 columna en móvil, font scaling, touch targets, vista previa móvil en editor (toggle desktop/tablet/móvil). <strong>Editor:</strong> Drag & drop con feedback visual (placeholder, highlight), Undo/Redo, guardado automático con indicador, atajos de teclado. <strong>Onboarding:</strong> Tooltips o tour, documentación in-app o enlaces a docs.</p>
+
+        <h2>5. Mejoras de negocio y producto</h2>
+        <p>Botón "Publicar" visible y fiable (artefactos, descarga o hosting). Preview público (enlace temporal, opcional auth). Versiones: guardar versiones nombradas o por fecha. Flujo premium (pago o validación antes de export sin marca de agua). Límites por plan (páginas, exportaciones, dominios). Landing del producto hecha con Anto; plantillas por nicho (Gym Dark/Neon, Restaurante Elegant, Portfolio Minimal) listas para clonar.</p>
+
+        <h2>6. Priorización sugerida</h2>
+        <table>
+          <tr><th>Prioridad</th><th>Área</th><th>Mejora principal</th></tr>
+          <tr><td>P0</td><td>Core</td><td>Export/publicación estable + ZIP</td></tr>
+          <tr><td>P0</td><td>Layout</td><td>Smart-Adapt en todos los componentes</td></tr>
+          <tr><td>P1</td><td>UX editor</td><td>Modo aislado unificado + persistencia</td></tr>
+          <tr><td>P1</td><td>Móvil</td><td>Responsive y vista previa móvil</td></tr>
+          <tr><td>P2</td><td>UI</td><td>Pulido de cards, forms, gallery</td></tr>
+          <tr><td>P2</td><td>Negocio</td><td>Botón Publicar + flujo premium</td></tr>
+          <tr><td>P3</td><td>Escala</td><td>Tests, CI, documentación y onboarding</td></tr>
+        </table>
+        <p class="doc-ref">Documento completo: <a href="../mejoras/DOC_MEJORAS.md">mejoras/DOC_MEJORAS.md</a></p>
       </section>
 
       <!-- LOGS Y FLUJOS (JEFES DE DESARROLLO) -->
       <section id="logs">
         <span class="audience dev">Para jefes de desarrollo / tech leads</span>
         <h1>Logs y flujos exportables para IA</h1>
-        <p class="subtitle">Buenas prácticas para trazabilidad, depuración y contexto que la IA puede consumir en cualquier flujo.</p>
+        <p class="subtitle">Buenas prácticas para trazabilidad, depuración y contexto que la IA puede consumir en cualquier flujo. ATS, Anto Studios y el sistema integrado se benefician.</p>
 
-        <h2>Por qué logs en cada paso</h2>
+        <h2>1. Por qué logs en cada paso</h2>
         <ul>
           <li><strong>Depuración:</strong> Saber en qué paso falló un análisis, export o publicación.</li>
           <li><strong>Auditoría:</strong> Quién hizo qué y cuándo (crítico al trabajar directo en producción).</li>
@@ -363,37 +598,53 @@
           <li><strong>Observabilidad:</strong> Duración por paso, tasa de error, volumen de operaciones.</li>
           <li><strong>Reproducibilidad:</strong> Reconstruir un flujo para reproducir un bug o re-ejecutar un escenario.</li>
         </ul>
+        <h3>"Cualquier paso" de la app</h3>
+        <p>Paso = cualquier unidad significativa de trabajo. <strong>ATS:</strong> inicio/fin de análisis de repo, llamada a SonarQube, generación de informe Gemini, cálculo de score, guardado de resultados, error en adapter. <strong>Anto Studios:</strong> carga de página, cambio de sección (añadir/editar/eliminar), cambio de variante, guardado, inicio/fin de export por framework, inicio/fin de publicación, fallo de validación de schema. <strong>Sistema integrado:</strong> llamada desde hub a API de Anto, comprobación de quality gate, disparo de deploy, rollback. Cada uno emite al menos: timestamp, paso/acción, entidad (repo, proyecto, sitio, versión), resultado (ok/error), payload mínimo (ids, opciones), opcionalmente usuario/sesión.</p>
 
-        <h2>Buenas prácticas: logs estructurados (JSON)</h2>
+        <h2>2. Buenas prácticas: logs estructurados (JSON)</h2>
         <p>Una línea por evento (JSON Lines). Campos comunes: <code>ts</code>, <code>level</code>, <code>app</code>, <code>flow</code>, <code>step</code>, <code>entity</code>, <code>result</code>, <code>duration_ms</code>, <code>message</code>, <code>payload</code> (sin datos sensibles). Cada flujo largo tiene un <code>flowId</code> (UUID) para agrupar todos los pasos.</p>
         <pre>{"ts":"2026-02-20T10:00:01.000Z","level":"info","app":"ats","flow":"repo-analysis","step":"sonar.analyze","entity":"repo:github.com/org/repo","result":"ok","duration_ms":12000,"message":"SonarQube analysis completed"}</pre>
+        <h3>Niveles y sin datos sensibles</h3>
+        <p>Niveles: debug (detalle interno), info (pasos completados), warn (degradación), error (fallo con código/mensaje). Filtrar por flow + entity para "todos los logs de este análisis". No loguear tokens, contraseñas, API keys ni PII; para auditoría usar user_id o identificador opaco.</p>
 
-        <h2>Exportables en tiempo real</h2>
-        <ul>
-          <li><strong>Stream en vivo:</strong> El cliente (hub, CLI) se suscribe por WebSocket/SSE al <code>flowId</code> y recibe eventos mientras el flujo corre.</li>
-          <li><strong>Export al finalizar:</strong> Descargar todos los logs del flujo en JSON Lines o JSON para dar contexto a la IA o a soporte.</li>
-          <li><strong>Uso por IA:</strong> Input = export del flujo; prompt tipo «Con estos logs, resume qué pasó, si hubo errores y qué recomiendas.» La IA entiende el flujo sin necesidad de ver código.</li>
-        </ul>
+        <h2>3. Exportables en tiempo real</h2>
+        <p>Stream: cliente (hub, CLI) consume eventos en vivo vía WebSocket/SSE o long-polling; logs en buffer/cola por flowId. Export: artefacto con todos los logs del flujo en JSON Lines o JSON; opcional resumen en texto para la IA. Backend: GET /flows/:flowId/logs (o event bus por flowId). En hub: panel "logs en vivo" y botón "Descargar log del flujo". Uso por IA: "Con estos logs, resume qué pasó, si hubo errores y qué recomiendas."</p>
 
-        <h2>Guardar flujos</h2>
-        <ul>
-          <li><strong>Como template:</strong> Secuencia de pasos + parámetros reutilizable (ej. «Análisis completo de repo», «Publicar sitio a producción»).</li>
-          <li><strong>Como historial:</strong> Cada ejecución guardada con flowId, parámetros, resultado y enlace a logs; permite re-ejecutar o exportar para IA.</li>
-          <li><strong>Integración IA:</strong> La IA puede sugerir flujos, resumir ejecuciones pasadas o proponer automatizaciones (ej. «cada viernes analizar repo X y publicar sitio Y a staging»).</li>
-        </ul>
+        <h2>4. Guardar flujos</h2>
+        <p><strong>Flujo guardado:</strong> Secuencia de pasos que se puede nombrar, guardar y re-ejecutar. Ejemplos: "Análisis completo de repo", "Publicar sitio a producción", "Export React + ZIP". Puede ser <strong>template</strong> (definición de pasos + parámetros) o <strong>flujo ejecutado</strong> (instancia con flowId, logs, resultado). <strong>Template:</strong> usuario define pasos + parámetros y guarda con nombre; "Ejecutar flujo" selecciona template y rellena parámetros. <strong>Historial:</strong> cada ejecución con flowId, parámetros, resultado, enlace a logs; re-ejecutar o exportar para IA. <strong>IA:</strong> sugiere flujos, resume ejecuciones ("los últimos 5 análisis fallaron en Sonar") o genera flujo nuevo ("cada viernes analizar repo X y publicar sitio Y a staging").</p>
 
-        <h2>Automatizar tests y escribirlos con un agente</h2>
+        <h2>5. Automatizar tests y escribirlos con un agente</h2>
         <p>El sistema de logs es especialmente útil para <strong>testing</strong>: un flujo real (análisis, export, publicación, etc.) queda registrado paso a paso. Con ese registro se puede:</p>
         <ul>
           <li><strong>Automatizar tests:</strong> Re-ejecutar el mismo flujo en CI y comparar logs (o resultados) con el flujo de referencia; detectar regresiones sin escribir asserts a mano para cada paso.</li>
           <li><strong>Escribir tests con un agente:</strong> Un agente (IA) recibe el export de un flujo real como contexto y genera tests (p. ej. E2E o de integración) que reproducen ese flujo. “Este flujo pasó en producción; genera un test que lo replique.”</li>
         </ul>
-        <p>Logs estructurados + <code>flowId</code> = contrato claro para humanos, para IA y para la pipeline de tests.</p>
+        <p>Logs estructurados + <code>flowId</code> = contrato claro para humanos, IA y pipeline de tests.</p>
 
-        <h2>Resumen para equipos técnicos</h2>
-        <div class="card">
-          Logs por paso → Flujo identificado (<code>flowId</code>) → Stream en tiempo real → Export de logs → Contexto para IA → <strong>Tests automáticos y generación de tests por agente a partir de flujos reales</strong> → Flujos guardados (templates + historial) → Reproducibilidad y auditoría.
-        </div>
+        <h2>6. Resumen de capacidades objetivo</h2>
+        <table>
+          <tr><th>Capacidad</th><th>Descripción</th></tr>
+          <tr><td>Logs por paso</td><td>Cada paso significativo emite evento JSON con ts, flow, step, entity, result, opcional duration y payload.</td></tr>
+          <tr><td>Flujo identificado</td><td>Flujos largos tienen flowId; todos los pasos llevan ese id.</td></tr>
+          <tr><td>Stream en tiempo real</td><td>Cliente se suscribe a eventos de un flowId (WebSocket/SSE o polling).</td></tr>
+          <tr><td>Export de logs</td><td>Descargar logs del flujo en JSON Lines o JSON, con o sin resumen.</td></tr>
+          <tr><td>Contexto para IA</td><td>Pasar export de flujo para que la IA resuma, diagnostique o recomiende.</td></tr>
+          <tr><td>Automatizar tests</td><td>Re-ejecutar en CI y comparar con referencia; detectar regresiones.</td></tr>
+          <tr><td>Escribir tests con agente</td><td>Agente recibe export de flujo real y genera tests E2E/integración.</td></tr>
+          <tr><td>Guardar flujos como template</td><td>Secuencias reutilizables ejecutables por nombre.</td></tr>
+          <tr><td>Historial de ejecuciones</td><td>Guardar cada ejecución; re-ejecutar o exportar.</td></tr>
+        </table>
+
+        <h2>7. Orden de implementación sugerido</h2>
+        <ol>
+          <li><strong>Fase 1:</strong> Estandarizar logs estructurados (JSON) en un flujo piloto; incluir flowId y step en cada evento.</li>
+          <li><strong>Fase 2:</strong> Persistir eventos por flowId y exponer GET /flows/:flowId/logs (y opcionalmente stream en vivo).</li>
+          <li><strong>Fase 3:</strong> UI en hub para "Ver logs en vivo" y "Exportar logs del flujo" al finalizar.</li>
+          <li><strong>Fase 4:</strong> Tipos de flujo (análisis, export, publicación) y guardar ejecuciones en historial con enlace a logs.</li>
+          <li><strong>Fase 5:</strong> Flujos guardados como templates y re-ejecución desde el hub.</li>
+          <li><strong>Fase 6:</strong> Integración con IA: export de logs como contexto a Gemini (u otro); respuestas en hub (resumen, diagnóstico, sugerencia).</li>
+          <li><strong>Fase 7 (opcional):</strong> Flujos como oráculo para tests: re-ejecutar en CI y comparar logs; y/o agente que genere tests a partir del export de un flujo real.</li>
+        </ol>
         <p class="doc-ref">Documento completo: <a href="../profundizar/DOC_LOGS_FLUJOS_IA.md">profundizar/DOC_LOGS_FLUJOS_IA.md</a></p>
       </section>
 
@@ -401,13 +652,15 @@
       <section id="cierre">
         <h1>Resumen y próximos pasos</h1>
         <ul>
-          <li><strong>Visión:</strong> Sistema modular con API headless, IA que genera/modifica schema de página y producción controlada (preview → staging → prod con rollback).</li>
-          <li><strong>Negocio integrado:</strong> Un solo producto (hub ATS + Anto) para agencias, product companies y empresas; SaaS por niveles y add-ons (quality gate, logs para IA, flujos).</li>
-          <li><strong>ATS:</strong> Hub gamificado para mejorar flujos de trabajo: análisis técnico + gestión de sprints (planning, daily, kudos, achievements, fun, birthdays) + avatares, niveles, XP y logros + IA (informes estratégicos, evaluación de código, optimizador de prompts). Visión 360 para CTOs y equipos.</li>
-          <li><strong>Anto Studios:</strong> Múltiples líneas (SaaS builder, Component Builder Pro, marketplace, verticales, enterprise).</li>
-          <li><strong>Logs y flujos:</strong> Logs estructurados por paso, export en tiempo real y flujos guardados para trazabilidad, depuración y contexto para IA — clave para jefes de desarrollo y equipos técnicos.</li>
+          <li><strong>Visión:</strong> Sistema modular (estado actual → objetivo): schema de página como contrato, registro de componentes, runtimes separados; IA que genera/modifica datos (no píxeles); flujos asistente / desde cero / modificar existente; API headless; producción controlada (preview → staging → prod con rollback); roadmap en 4 fases.</li>
+          <li><strong>Negocio integrado:</strong> Un solo hub (ATS + Anto): diferenciación frente a productos por separado; segmentos (agencias, product companies, multi-marca, freelancers); SaaS por niveles (Starter, Agency, Company, Enterprise); add-ons y oportunidades (quality gate, logs para IA, flujos, auditoría); go-to-market y métricas.</li>
+          <li><strong>Integración técnica:</strong> ATS = hub de control; Anto = motor de producción; flujo "trabajar y producir en producción"; niveles 1–4 (dashboard, acciones, quality gate, IA); visión 360 ampliada; roadmap de integración en 5 fases.</li>
+          <li><strong>ATS:</strong> Hub gamificado: Hero Hub, avatares, niveles/XP, trofeos, pilotos, quests; gestión de sprints completa (board, planning, refinement, daily, kudos, achievements, fun, vacations, birthdays, share); IA (informes Gemini, evaluación de código, automatización visión, optimizador de prompts); análisis técnico (Sonar, CI, Security, etc.); temas visuales; para equipos, CTOs y agencias.</li>
+          <li><strong>Anto Studios:</strong> Propuesta de valor (diseña una vez, usa en todas partes); ventaja competitiva (Component-as-Code); líneas de negocio (SaaS builder, Component Builder Pro, marketplace, enterprise, verticales, LTD); segmentos; casos de uso; integración ecosistema; quick wins; riesgos y mitigación.</li>
+          <li><strong>Mejoras (Anto):</strong> Críticas (export/publicación, Smart-Adapt, resize); componentes y UI (lib base, featured, consistencia); arquitectura y rendimiento; UX y móvil; negocio y producto; priorización P0–P3.</li>
+          <li><strong>Logs y flujos:</strong> Logs por paso ("cualquier paso" en ATS, Anto e integrado); buenas prácticas (JSON, niveles, sin datos sensibles); export en tiempo real (stream, GET /flows/:id/logs, uso por IA); guardar flujos (template, historial, IA); tests (automatizar en CI, escribir con agente); tabla de capacidades; 7 fases de implementación.</li>
         </ul>
-        <p style="margin-top:2rem; color: var(--text-muted); font-size: 0.9rem;">Presentación generada a partir de los documentos en <code>ideas/</code> y <code>ideas/profundizar/</code>. Febrero 2026.</p>
+        <p style="margin-top:2rem; color: var(--text-muted); font-size: 0.9rem;">Presentación completa a partir de los documentos en <code>ideas/</code>, <code>ideas/mejoras/</code> y <code>ideas/profundizar/</code>. Febrero 2026.</p>
       </section>
     </main>
   </div>
