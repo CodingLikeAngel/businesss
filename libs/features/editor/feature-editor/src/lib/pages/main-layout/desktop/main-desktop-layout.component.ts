@@ -14,6 +14,7 @@ import { SUPPORTED_SECTION_TYPES } from '../../editor/components/section-rendere
 import { AICopilotComponent } from '../../../components/ai-copilot/ai-copilot.component';
 import { LayoutComponentPickerModalComponent } from '../../editor/components/layout-section/layout-component-picker-modal.component';
 import { Store } from '@ngrx/store';
+import * as PageActions from '../../../store/actions/page.actions';
 import * as PageSelectors from '../../../store/selectors/page.selectors';
 import { map, delay } from 'rxjs';
 
@@ -53,6 +54,16 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
   exportGlobalStyles$ = this.store.select(PageSelectors.selectCurrentPage).pipe(
     map((page: any) => page?.globalStyles || {})
   );
+
+  @HostListener('window:keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    if ((event.ctrlKey || event.metaKey) && event.key === 's') {
+      event.preventDefault();
+      if (this.builderStep === 'editor') {
+        this.store.dispatch(PageActions.savePage());
+      }
+    }
+  }
 
   @HostListener('window:mousemove', ['$event'])
   onMouseMove(event: MouseEvent) {

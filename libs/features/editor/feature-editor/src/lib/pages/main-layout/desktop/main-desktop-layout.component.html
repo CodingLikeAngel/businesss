@@ -14,7 +14,7 @@
       <div class="logo-mark">AS</div>
       <div class="project-info">
         <span class="project-name">Anto Studios Editor</span>
-        <span class="save-status" [class.saving]="saving$ | async" [class.unsaved]="(hasUnsavedChanges$ | async) && !(saving$ | async)">
+        <span class="save-status" [class.saving]="saving$ | async" [class.unsaved]="(hasUnsavedChanges$ | async) && !(saving$ | async)" title="Ctrl+S para guardar">
           <span class="dot"></span>
           <ng-container *ngIf="saving$ | async">Guardando...</ng-container>
           <ng-container *ngIf="!(saving$ | async) && (hasUnsavedChanges$ | async)">Sin guardar</ng-container>
@@ -68,7 +68,7 @@
       >
         <span>✏️</span> <span>Volver a Editar</span>
       </button>
-      <button (click)="callNow()" class="btn-publish">
+      <button (click)="callNow()" class="btn-publish" title="Descargar proyecto como ZIP (HTML, CSS, assets)">
         <span>Publicar</span>
       </button>
     </div>

@@ -153,6 +153,9 @@
 | ✅ | **Modo aislado unificado (P1):** Sidebar con pestañas Contenido \| Estilo \| Avanzado (`.sidebar-tabs` en `_isolated-mode-shared.scss`). Aplicado en: Title, Showcase, Button, Accordion, Image, List, Chip, Card Animated, Card Premium, Card Product, Draggable Box. |
 | ✅ | **Smart-Adapt layout:** `.slot-component` con `height: auto` y `min-height: 80px` (100px en `.slot.flow-component`); estilo inline del slot sin `min-height: 100%` para no cortar contenido. |
 | ✅ | **CI:** Pipeline en `.github/workflows/ci.yml` (lint, test, build con `nx affected`; e2e opcional comentado). |
+| ✅ | **Guardado y atajos (MVP):** Ctrl+S dispara guardado (persistencia en localStorage); indicador en cabecera (Guardando… / Sin guardar / Guardado); tooltip "Ctrl+S para guardar". |
+| ✅ | **Empty state slot:** Hint "Clic para elegir tipo" en slots vacíos; tooltip en botón Añadir Componente. |
+| ✅ | **README:** Quick start del editor (serve, build, test) y tabla de comandos en raíz del repo. |
 | Pendiente | Pulido UI (cards, forms, gallery), vista previa móvil en editor, documentación in-app / onboarding, tests E2E si se desea. |
 
 ---

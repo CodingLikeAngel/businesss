@@ -193,9 +193,11 @@ interface ComponentDefaultSize {
           <!-- Empty Slot: click opens component picker (stopPropagation so slot select doesn't swallow it) -->
           <div *ngIf="slotEntry.slot.componentType === 'empty' && (!isPreviewMode || showEditorControls)" class="empty-slot">
             <button type="button" class="empty-content empty-content-btn"
-                    (click)="openComponentPicker(slotEntry.globalIndex, $event)">
+                    (click)="openComponentPicker(slotEntry.globalIndex, $event)"
+                    title="Clic para añadir botón, título, imagen, lista, etc.">
               <span class="plus-icon">+</span>
               <span class="slot-label">Añadir Componente</span>
+              <span class="slot-hint">Clic para elegir tipo</span>
             </button>
           </div>
 
@@ -828,6 +830,13 @@ interface ComponentDefaultSize {
       justify-content: center;
       border-radius: 12px;
       border: 1px solid rgba(99, 102, 241, 0.2);
+    }
+
+    .slot-hint {
+      font-size: 0.6rem;
+      font-weight: 500;
+      color: rgba(148, 163, 184, 0.7);
+      letter-spacing: 0.3px;
     }
 
     .slot-label { 

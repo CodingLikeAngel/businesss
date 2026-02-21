@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { of } from 'rxjs';
-import { map, mergeMap, catchError, tap, switchMap, withLatestFrom } from 'rxjs/operators';
+import { map, mergeMap, catchError, tap, switchMap, withLatestFrom, delay } from 'rxjs/operators';
 import * as PageActions from '../actions/page.actions';
 import { Page, PageSection } from '../../models/editor.model';
 import { TemplateService } from '../../services/template.service';
@@ -83,17 +83,20 @@ export class PageEffects {
     )
   );
 
-  // Save Page Effect
+  // Save Page Effect: persist to localStorage and report success (MVP)
   savePage$ = createEffect(() =>
     this.actions$.pipe(
       ofType(PageActions.savePage),
-      mergeMap(() =>
-        // TODO: Replace with actual API call when data-access layer is implemented
-        this.mockSavePage().pipe(
-          map(({ page, timestamp }) => PageActions.savePageSuccess({ page, timestamp })),
-          catchError(error => of(PageActions.savePageFailure({ error: error.message })))
-        )
-      )
+      withLatestFrom(this.store.select(PageSelectors.selectCurrentPage)),
+      mergeMap(([, currentPage]) => {
+        if (typeof window !== 'undefined' && (this.variantService as any).saveToLocalStorage) {
+          (this.variantService as any).saveToLocalStorage();
+        }
+        const page = currentPage || ({} as Page);
+        const timestamp = new Date();
+        return of(PageActions.savePageSuccess({ page, timestamp })).pipe(delay(120));
+      }),
+      catchError(error => of(PageActions.savePageFailure({ error: error.message })))
     )
   );
 
