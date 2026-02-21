@@ -73,16 +73,31 @@ function deduplicateSectionsById<T extends { id?: string }>(sections: T[]): T[] 
   });
 }
 
+/** If the array is exactly two copies of the same type sequence (e.g. [hero, features, hero, features]), keep only the first half. */
+function removeDuplicateSequence<T extends { type?: string }>(sections: T[]): T[] {
+  if (!sections?.length || sections.length < 2) return sections;
+  const half = Math.floor(sections.length / 2);
+  if (sections.length !== half * 2) return sections;
+  const types = (s: T) => (s.type || '').toLowerCase();
+  const firstTypes = sections.slice(0, half).map(types).join('\0');
+  const secondTypes = sections.slice(half).map(types).join('\0');
+  if (firstTypes !== secondTypes) return sections;
+  return sections.slice(0, half);
+}
+
 // Current page derived selectors
 export const selectCurrentPageSections = createSelector(
   selectCurrentPage,
   (page: Page | null) => page?.sections || []
 );
 
-/** Sections deduped by id first, then hero/header/footer single-instance. Use for editor canvas. */
+/** Sections deduped: remove duplicate sequence, then by id, then hero/header/footer single-instance. Use for editor canvas. */
 export const selectCurrentPageSectionsDeduped = createSelector(
   selectCurrentPageSections,
-  (sections: Section[]) => deduplicateSingleInstanceSections(deduplicateSectionsById(sections))
+  (sections: Section[]) =>
+    deduplicateSingleInstanceSections(
+      deduplicateSectionsById(removeDuplicateSequence(sections || []))
+    )
 );
 
 export const selectCurrentPageGlobalStyles = createSelector(

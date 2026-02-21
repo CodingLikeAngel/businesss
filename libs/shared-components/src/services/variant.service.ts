@@ -873,9 +873,23 @@ export class VariantService {
     });
   }
 
-  /** Full deduplication: by id first, then single-instance types. Use whenever setting or syncing sections. */
+  /** If the array is exactly two copies of the same type sequence, keep only the first half. */
+  private removeDuplicateSequence(sections: PageSection[]): PageSection[] {
+    if (!sections?.length || sections.length < 2) return sections;
+    const half = Math.floor(sections.length / 2);
+    if (sections.length !== half * 2) return sections;
+    const types = (s: PageSection) => (s.type || '').toLowerCase();
+    const firstTypes = sections.slice(0, half).map(types).join('\0');
+    const secondTypes = sections.slice(half).map(types).join('\0');
+    if (firstTypes !== secondTypes) return sections;
+    return sections.slice(0, half);
+  }
+
+  /** Full deduplication: remove duplicate sequence, then by id, then single-instance types. Use whenever setting or syncing sections. */
   private deduplicateSections(sections: PageSection[]): PageSection[] {
-    return this.deduplicateSingleInstanceSections(this.deduplicateSectionsById(sections || []));
+    const list = sections || [];
+    const noSequenceDupes = this.removeDuplicateSequence(list);
+    return this.deduplicateSingleInstanceSections(this.deduplicateSectionsById(noSequenceDupes));
   }
 
   /**

@@ -28,10 +28,23 @@ function deduplicateSingleInstanceSections<T extends { type?: string }>(sections
   });
 }
 
-/** Normalize sections so the store never persists duplicates (by id or duplicate hero/header/footer). */
+/** If the array is exactly two copies of the same type sequence, keep only the first half. */
+function removeDuplicateSequence<T extends { type?: string }>(sections: T[]): T[] {
+  if (!sections?.length || sections.length < 2) return sections;
+  const half = Math.floor(sections.length / 2);
+  if (sections.length !== half * 2) return sections;
+  const types = (s: T) => (s.type || '').toLowerCase();
+  const firstTypes = sections.slice(0, half).map(types).join('\0');
+  const secondTypes = sections.slice(half).map(types).join('\0');
+  if (firstTypes !== secondTypes) return sections;
+  return sections.slice(0, half);
+}
+
+/** Normalize sections so the store never persists duplicates (sequence, by id, or duplicate hero/header/footer). */
 function normalizeSections(sections: Section[] | undefined): Section[] {
   const list = sections ?? [];
-  return deduplicateSingleInstanceSections(deduplicateSectionsById(list)) as Section[];
+  const noSequenceDupes = removeDuplicateSequence(list) as Section[];
+  return deduplicateSingleInstanceSections(deduplicateSectionsById(noSequenceDupes)) as Section[];
 }
 
 export const initialPageState: PageState = {
