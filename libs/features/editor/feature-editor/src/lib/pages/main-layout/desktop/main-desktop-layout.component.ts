@@ -4,7 +4,7 @@ import {
   UIFooterComponent,
   UIHeaderComponent,
 } from '@negocio/ui-components';
-import { VariantSelectorComponent, TemplateSelectorComponent } from '@negocio/shared-components';
+import { VariantSelectorComponent, TemplateSelectorComponent, ExporterService, DownloadService } from '@negocio/shared-components';
 import { CommonModule } from '@angular/common';
 import { MainLayoutBaseComponent } from '../main-layout-base.component';
 
@@ -43,6 +43,8 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
   supportedSectionTypes = Array.from(SUPPORTED_SECTION_TYPES);
 
   private store = inject(Store);
+  private exporter = inject(ExporterService);
+  private downloadService = inject(DownloadService);
 
   saving$ = this.store.select(PageSelectors.selectPageSaving).pipe(delay(0));
   hasUnsavedChanges$ = this.store.select(PageSelectors.selectHasUnsavedChanges).pipe(delay(0));
@@ -94,8 +96,19 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
   }
 
   override callNow() {
-    console.log('Opening contact form or call action...');
-    this.scrollToSection('contacto');
+    this.publishProject();
+  }
+
+  /** Genera ZIP (HTML/CSS/Assets) y descarga. Flujo "Publicar" del plan de mejoras. */
+  async publishProject() {
+    try {
+      const config = this.variantService.getFullConfig();
+      const blob = await this.exporter.exportProject(config);
+      const name = `antostudios-${new Date().toISOString().slice(0, 10)}.zip`;
+      this.downloadService.download(blob, name);
+    } catch (e) {
+      console.error('Error al publicar:', e);
+    }
   }
 
 

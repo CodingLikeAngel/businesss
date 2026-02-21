@@ -138,5 +138,17 @@
 
 ---
 
+---
+
+## 7. Estado de implementación (según este plan)
+
+| Hecho | Descripción |
+|-------|-------------|
+| ✅ | **WebComponentExporter:** props opcionales, `styles` opcional, `escapeTemplateLiterals` corregido (`, \`, `${), uso de `baseClassName`/`htmlTag` por defecto. |
+| ✅ | **Export/ZIP:** `ExporterService` genera HTML por secciones (hero, features, pricing, contact, etc.), CSS con variables y tema dark/light, y ZIP con index.html, styles.css, main.ts, package.json y assets. |
+| ✅ | **Botón Publicar:** En el layout de escritorio del editor, "Publicar" descarga el ZIP (antostudios-YYYY-MM-DD.zip) usando `VariantService.getFullConfig()`, `ExporterService.exportProject()` y `DownloadService`. |
+| ✅ | **API pública:** `ExporterService` y `DownloadService` exportados desde `@negocio/shared-components` para uso en el editor. |
+| Pendiente | Smart-Adapt en todos los componentes de layout; modo aislado unificado (sidebar Contenido \| Estilo \| Avanzado); persistencia de dimensiones en JSON; tests y CI. |
+
 **Última actualización:** Febrero 2026  
 **Versión:** 1.0

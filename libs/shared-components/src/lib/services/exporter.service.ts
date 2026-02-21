@@ -81,29 +81,75 @@ export class ExporterService {
   }
 
   private generateBodyFromConfig(config: any): string {
-    // Simplificado: iteramos sobre sections y renderizamos componentes básicos.
     if (!config.sections || !Array.isArray(config.sections)) return '';
-    return config.sections
-      .map((sec: any) => this.renderSection(sec))
-      .join('\n');
+    const visible = config.sections.filter((s: any) => s.visible !== false);
+    return visible.map((sec: any) => this.renderSection(sec)).join('\n');
   }
 
   private renderSection(section: any): string {
-    // Cada sección tiene un tipo y contenido. Aquí solo manejamos algunos tipos comunes.
-    const type = section.type || 'div';
     const id = section.id ? ` id="${section.id}"` : '';
-    const classes = section.classes ? ` class="${section.classes.join(' ')}"` : '';
-    const content = section.content || '';
-    return `<${type}${id}${classes}>${content}</${type}>`;
+    const type = section.type || 'generic';
+    const sectionClass = `section section-${type}`;
+    const content = section.content || {};
+    const styles = section.styles || {};
+    const styleStr = this.inlineStyles(styles);
+    const styleAttr = styleStr ? ` style="${styleStr}"` : '';
+
+    let inner = '';
+    if (type === 'hero' || type === 'hero-minimal' || type === 'hero-split') {
+      const title = content.title || content.headline || 'Título';
+      const subtitle = content.subtitle || content.description || '';
+      inner = `<div class="hero-content"><h1>${this.escapeHtml(title)}</h1>${subtitle ? `<p class="hero-subtitle">${this.escapeHtml(subtitle)}</p>` : ''}</div>`;
+    } else if (type === 'features') {
+      const title = content.title || 'Características';
+      const items = content.items || content.features || [];
+      const itemsHtml = items.slice(0, 6).map((f: any) => `<li>${this.escapeHtml(f.title || f.name || f)}</li>`).join('');
+      inner = `<h2>${this.escapeHtml(title)}</h2><ul class="features-list">${itemsHtml}</ul>`;
+    } else if (type === 'pricing') {
+      const title = content.title || 'Precios';
+      inner = `<h2>${this.escapeHtml(title)}</h2><div class="pricing-grid"><!-- Planes --></div>`;
+    } else if (type === 'contact' || type === 'cta') {
+      const title = content.title || 'Contacto';
+      inner = `<h2>${this.escapeHtml(title)}</h2><div class="contact-form"><!-- Formulario --></div>`;
+    } else {
+      const title = content.title || content.name;
+      const text = content.text || content.description || (typeof content === 'string' ? content : '');
+      inner = title ? `<h2>${this.escapeHtml(title)}</h2>` : '';
+      if (text) inner += `<div class="section-body">${this.escapeHtml(String(text))}</div>`;
+    }
+    if (!inner) inner = `<div class="section-placeholder">Sección ${type}</div>`;
+
+    return `<section${id} class="${sectionClass}"${styleAttr}>\n  <div class="section-inner">\n  ${inner}\n  </div>\n</section>`;
+  }
+
+  private inlineStyles(styles: Record<string, string>): string {
+    if (!styles || typeof styles !== 'object') return '';
+    const allowed = ['minHeight', 'min-height', 'height', 'padding', 'backgroundColor', 'background-color', 'color'];
+    return Object.entries(styles)
+      .filter(([k]) => allowed.some(a => k === a || k.replace(/([A-Z])/g, '-$1').toLowerCase() === a))
+      .map(([k, v]) => `${k.replace(/([A-Z])/g, '-$1').toLowerCase()}: ${v}`)
+      .join('; ');
+  }
+
+  private escapeHtml(s: string): string {
+    if (!s) return '';
+    return String(s)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
   }
 
   private generateCss(config: any): string {
-    // Exporta variables CSS basadas en la variante seleccionada.
-    const vars = config.globalVariant || {};
-    const lines = Object.entries(vars).map(
+    const g = config.globalVariant || {};
+    const theme = (g.theme === 'dark' || g.dark) ? 'dark' : 'light';
+    const lines = Object.entries(g).filter(([, v]) => v != null && typeof v === 'string').map(
       ([key, value]) => `  --${key}: ${value};`
     );
-    return `:root {\n${lines.join('\n')}\n}\n\n/* Estilos básicos */\nbody {\n  margin: 0;\n  font-family: 'Inter', sans-serif;\n  background: var(--background, #f8fafc);\n  color: var(--text, #111827);\n}\n`;
+    const baseVars = theme === 'dark'
+      ? `  --background: #0f172a;\n  --text: #f1f5f9;\n  --accent: #6366f1;\n  --primary: #3b82f6;`
+      : `  --background: #f8fafc;\n  --text: #111827;\n  --accent: #6366f1;\n  --primary: #3b82f6;`;
+    return `:root {\n${baseVars}\n${lines.join('\n')}\n}\n\nbody { margin: 0; font-family: 'Inter', system-ui, sans-serif; background: var(--background); color: var(--text); }\n.section { min-height: 2rem; }\n.section-inner { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem; }\n.hero-content h1 { font-size: 2.5rem; margin-bottom: 0.5rem; }\n.hero-subtitle { font-size: 1.25rem; opacity: 0.9; }\n.features-list { list-style: none; padding: 0; display: grid; gap: 1rem; }\n`;
   }
 
   private generateMainTs(config: any): string {
