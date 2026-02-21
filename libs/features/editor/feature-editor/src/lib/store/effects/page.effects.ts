@@ -18,7 +18,7 @@ export class PageEffects {
   private variantService = inject(VariantService);
   private store = inject(Store<AppState>);
 
-  // Persistence Effect: Keep VariantService in sync with Store
+  // Persistence Effect: Keep VariantService in sync with Store (use deduped sections only)
   syncWithVariantService$ = createEffect(() =>
     this.actions$.pipe(
       ofType(
@@ -30,26 +30,25 @@ export class PageEffects {
         PageActions.loadPageSuccess,
         PageActions.setCurrentPage
       ),
-      withLatestFrom(this.store.select(PageSelectors.selectCurrentPage)),
-      tap(([action, currentPage]) => {
+      withLatestFrom(
+        this.store.select(PageSelectors.selectCurrentPage),
+        this.store.select(PageSelectors.selectCurrentPageSectionsDeduped)
+      ),
+      tap(([action, currentPage, sectionsDeduped]) => {
         if (currentPage) {
           const vCurrentPageId = (this.variantService as any).currentPageSubject.value?.id;
-          
-          // Debug logs for better tracking
           console.log(`Syncing Store -> VariantService [Action: ${action.type}] [Store: ${currentPage.id}] [VS: ${vCurrentPageId}]`);
 
-          // Sync sections to the structure subject
-          (this.variantService as any).sectionsSubject.next(currentPage.sections as any);
-          
-          // Check if sections are actually different from VS internal state to avoid infinite loops
+          (this.variantService as any).sectionsSubject.next(sectionsDeduped as any);
+
           const vsCurrentPage = (this.variantService as any).currentPageSubject.value;
-          const storeSectionsStr = JSON.stringify(currentPage.sections);
+          const storeSectionsStr = JSON.stringify(sectionsDeduped);
           const vsSectionsStr = vsCurrentPage ? JSON.stringify(vsCurrentPage.sections) : '';
 
           if (storeSectionsStr !== vsSectionsStr) {
             console.log('📤 Transmitting Store changes to VariantService persistence layer');
-            (this.variantService as any).updatePage(currentPage.id, { 
-              sections: currentPage.sections,
+            (this.variantService as any).updatePage(currentPage.id, {
+              sections: sectionsDeduped,
               globalStyles: currentPage.globalStyles,
               metadata: currentPage.metadata
             });

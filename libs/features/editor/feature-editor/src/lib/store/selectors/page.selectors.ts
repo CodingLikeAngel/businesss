@@ -61,16 +61,28 @@ function deduplicateSingleInstanceSections<T extends { type?: string }>(sections
   });
 }
 
+/** Remove duplicate sections by id (first occurrence kept). Fixes "all sections duplicated" when array is repeated. */
+function deduplicateSectionsById<T extends { id?: string }>(sections: T[]): T[] {
+  if (!sections?.length) return sections;
+  const seen = new Set<string>();
+  return sections.filter((s) => {
+    const id = s.id ?? '';
+    if (seen.has(id)) return false;
+    seen.add(id);
+    return true;
+  });
+}
+
 // Current page derived selectors
 export const selectCurrentPageSections = createSelector(
   selectCurrentPage,
   (page: Page | null) => page?.sections || []
 );
 
-/** Sections with duplicate hero/header/footer removed (first occurrence kept). Use for editor canvas. */
+/** Sections deduped by id first, then hero/header/footer single-instance. Use for editor canvas. */
 export const selectCurrentPageSectionsDeduped = createSelector(
   selectCurrentPageSections,
-  (sections: Section[]) => deduplicateSingleInstanceSections(sections)
+  (sections: Section[]) => deduplicateSingleInstanceSections(deduplicateSectionsById(sections))
 );
 
 export const selectCurrentPageGlobalStyles = createSelector(

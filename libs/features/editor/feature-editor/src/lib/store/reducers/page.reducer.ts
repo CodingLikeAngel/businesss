@@ -3,6 +3,37 @@ import { PageState, initialNavigationState, initialPreviewState, initialMigratio
 import * as PageActions from '../actions/page.actions';
 import { Page, Section, Element, NavigationState, PreviewState, MigrationState, MigrationRecord } from '../../models/editor.model';
 
+const SINGLE_INSTANCE_SECTION_TYPES = new Set<string>(['hero', 'header', 'footer']);
+
+function deduplicateSectionsById<T extends { id?: string }>(sections: T[]): T[] {
+  if (!sections?.length) return sections ?? [];
+  const seen = new Set<string>();
+  return sections.filter((s) => {
+    const id = s.id ?? '';
+    if (seen.has(id)) return false;
+    seen.add(id);
+    return true;
+  });
+}
+
+function deduplicateSingleInstanceSections<T extends { type?: string }>(sections: T[]): T[] {
+  if (!sections?.length) return sections;
+  const seen = new Set<string>();
+  return sections.filter((s) => {
+    const type = (s.type || '').toLowerCase();
+    if (!SINGLE_INSTANCE_SECTION_TYPES.has(type)) return true;
+    if (seen.has(type)) return false;
+    seen.add(type);
+    return true;
+  });
+}
+
+/** Normalize sections so the store never persists duplicates (by id or duplicate hero/header/footer). */
+function normalizeSections(sections: Section[] | undefined): Section[] {
+  const list = sections ?? [];
+  return deduplicateSingleInstanceSections(deduplicateSectionsById(list)) as Section[];
+}
+
 export const initialPageState: PageState = {
   currentPage: null,
   pages: [],
@@ -27,9 +58,10 @@ export const pageReducer = createReducer(
   })),
 
   on(PageActions.loadPageSuccess, (state, { page }) => {
-    // Ensure backward compatibility by setting default values
+    const sections = normalizeSections(page.sections);
     const compatiblePage: Page = {
       ...page,
+      sections,
       visibleInHeader: page.visibleInHeader !== undefined ? page.visibleInHeader : true,
       visibleInFooter: page.visibleInFooter !== undefined ? page.visibleInFooter : false,
       isHomePage: page.isHomePage !== undefined ? page.isHomePage : false,
@@ -58,9 +90,10 @@ export const pageReducer = createReducer(
   })),
 
   on(PageActions.createPageSuccess, (state, { page }) => {
-    // Ensure backward compatibility by setting default values
+    const sections = normalizeSections(page.sections);
     const compatiblePage: Page = {
       ...page,
+      sections,
       visibleInHeader: page.visibleInHeader !== undefined ? page.visibleInHeader : true,
       visibleInFooter: page.visibleInFooter !== undefined ? page.visibleInFooter : false,
       isHomePage: page.isHomePage !== undefined ? page.isHomePage : false,
@@ -79,20 +112,29 @@ export const pageReducer = createReducer(
   }),
 
   // Set Pages
-  on(PageActions.setPages, (state, { pages }) => ({
-    ...state,
-    pages: [...pages],
-    currentPage: state.currentPage ? (pages.find(p => p.id === state.currentPage?.id) || state.currentPage) : pages[0] || null,
-  })),
+  on(PageActions.setPages, (state, { pages }) => {
+    const normalizedPages = pages.map((p) => ({ ...p, sections: normalizeSections(p.sections) }));
+    const currentPage = state.currentPage
+      ? (normalizedPages.find(p => p.id === state.currentPage?.id) || { ...state.currentPage, sections: normalizeSections(state.currentPage.sections) })
+      : normalizedPages[0] || null;
+    return {
+      ...state,
+      pages: normalizedPages,
+      currentPage,
+    };
+  }),
 
   // Update Page
   on(PageActions.updatePage, (state, { pageId, changes }) => {
+    const normalizedChanges = { ...changes };
+    if (changes.sections !== undefined) {
+      normalizedChanges.sections = normalizeSections(changes.sections);
+    }
     const pages = state.pages.map(page =>
-      page.id === pageId ? { ...page, ...changes, updatedAt: new Date() } : page
+      page.id === pageId ? { ...page, ...normalizedChanges, updatedAt: new Date() } : page
     );
-    
-    const updatedCurrentPage = state.currentPage?.id === pageId 
-      ? { ...state.currentPage, ...changes, updatedAt: new Date() }
+    const updatedCurrentPage = state.currentPage?.id === pageId
+      ? { ...state.currentPage, ...normalizedChanges, updatedAt: new Date() }
       : state.currentPage;
 
     return {
@@ -233,9 +275,10 @@ export const pageReducer = createReducer(
   // Set Current Page
   on(PageActions.setCurrentPage, (state, { pageId }) => {
     const page = state.pages.find(p => p.id === pageId);
+    const currentPage = page ? { ...page, sections: normalizeSections(page.sections) } : null;
     return {
       ...state,
-      currentPage: page || null,
+      currentPage,
     };
   }),
 
@@ -401,16 +444,17 @@ export const pageReducer = createReducer(
     const targetPage = state.pages.find(p => p.id === pageId) || state.currentPage;
     if (!targetPage) return state;
 
-    const sections = [...targetPage.sections];
+    const sections = [...(targetPage.sections || [])];
     if (position !== undefined && position >= 0 && position <= sections.length) {
       sections.splice(position, 0, section);
     } else {
       sections.push(section);
     }
+    const normalizedSections = normalizeSections(sections);
 
     const updatedPage = {
       ...targetPage,
-      sections,
+      sections: normalizedSections,
       updatedAt: new Date(),
     };
 

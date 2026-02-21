@@ -844,7 +844,22 @@ export class VariantService {
   private static readonly SINGLE_INSTANCE_SECTION_TYPES = new Set<string>(['hero', 'header', 'footer']);
 
   /**
+   * Removes duplicate sections by id (first occurrence kept). Fixes "all sections duplicated" when array is repeated.
+   */
+  private deduplicateSectionsById(sections: PageSection[]): PageSection[] {
+    if (!sections?.length) return sections;
+    const seen = new Set<string>();
+    return sections.filter((s) => {
+      const id = s.id ?? '';
+      if (seen.has(id)) return false;
+      seen.add(id);
+      return true;
+    });
+  }
+
+  /**
    * Removes duplicate sections for single-instance types (hero, header, footer). Keeps the first occurrence of each type.
+   * Applied after deduplicateSectionsById so we first remove repeated ids, then single-instance type duplicates.
    */
   private deduplicateSingleInstanceSections(sections: PageSection[]): PageSection[] {
     if (!sections?.length) return sections;
@@ -856,6 +871,11 @@ export class VariantService {
       seen.add(type);
       return true;
     });
+  }
+
+  /** Full deduplication: by id first, then single-instance types. Use whenever setting or syncing sections. */
+  private deduplicateSections(sections: PageSection[]): PageSection[] {
+    return this.deduplicateSingleInstanceSections(this.deduplicateSectionsById(sections || []));
   }
 
   /**
@@ -1240,7 +1260,7 @@ export class VariantService {
   }
 
   setSections(sections: PageSection[]) {
-    const deduped = this.deduplicateSingleInstanceSections(sections || []);
+    const deduped = this.deduplicateSections(sections || []);
     this.sectionsSubject.next(deduped);
     this.saveToLocalStorage();
   }
@@ -1278,7 +1298,7 @@ export class VariantService {
   setCurrentPage(pageId: string): void {
     const page = this.pagesSubject.value.find(p => p.id === pageId);
     if (page) {
-      const dedupedSections = this.deduplicateSingleInstanceSections(page.sections || []);
+      const dedupedSections = this.deduplicateSections(page.sections || []);
       const hadDuplicates = dedupedSections.length < (page.sections || []).length;
       const pageWithDeduped = { ...page, sections: dedupedSections };
       this.currentPageSubject.next(pageWithDeduped);
@@ -1301,7 +1321,7 @@ export class VariantService {
       this.sectionsSubject.next([]);
       return;
     }
-    const dedupedSections = this.deduplicateSingleInstanceSections(page.sections || []);
+    const dedupedSections = this.deduplicateSections(page.sections || []);
     const pageWithDeduped = { ...page, sections: dedupedSections };
     const existing = this.currentPageSubject.getValue();
     if (existing?.id === page.id && JSON.stringify(existing.sections) === JSON.stringify(dedupedSections)) {
@@ -1320,7 +1340,7 @@ export class VariantService {
   }
 
   updatePage(pageId: string, changes: Partial<Page>): void {
-    const sectionsToUse = changes.sections ? this.deduplicateSingleInstanceSections(changes.sections) : undefined;
+    const sectionsToUse = changes.sections ? this.deduplicateSections(changes.sections) : undefined;
     const effectiveChanges = sectionsToUse !== undefined ? { ...changes, sections: sectionsToUse } : changes;
     const updatedPages = this.pagesSubject.value.map(page =>
       page.id === pageId ? { ...page, ...effectiveChanges, updatedAt: new Date() } : page
@@ -1366,7 +1386,7 @@ export class VariantService {
       if (alreadyHas) return;
     }
 
-    const updatedSections = this.deduplicateSingleInstanceSections([...(currentPage.sections || []), section]);
+    const updatedSections = this.deduplicateSections([...(currentPage.sections || []), section]);
     this.updatePage(currentPage.id, { sections: updatedSections });
   }
 
@@ -1580,11 +1600,11 @@ export class VariantService {
           if (state.products) this.productsConfigSubject.next(state.products);
           if (state.globalVariant) this.globalVariantSubject.next(state.globalVariant);
           if (state.componentVariants) this.componentVariantsSubject.next(state.componentVariants);
-          if (state.sections) this.sectionsSubject.next(this.deduplicateSingleInstanceSections(state.sections));
+          if (state.sections) this.sectionsSubject.next(this.deduplicateSections(state.sections));
           if (state.pages) {
             const pagesWithDeduped = (state.pages as Page[]).map((p: Page) => ({
               ...p,
-              sections: this.deduplicateSingleInstanceSections(p.sections || [])
+              sections: this.deduplicateSections(p.sections || [])
             }));
             this.pagesSubject.next(pagesWithDeduped);
             // Set current page
