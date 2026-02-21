@@ -149,6 +149,9 @@ Logs estructurados + `flowId` = contrato claro para humanos, para IA y para la p
 - **Bot propio del cliente (tipo Claude):** Una capa por **cliente o por workspace** que actúa como **gestor de la app del cliente**: conoce su proyecto, su historial de flujos, sus publicaciones y su contexto (logs + MD + imágenes). Ese bot puede:
   - Recibir **comandos por voz** (o por texto): "Cambia el botón del hero a azul", "Pon esta imagen de fondo en la sección de contacto", "Sustituye el título por…", "Publica a staging".
   - Traducir la intención en acciones sobre el schema (Anto) o en órdenes al hub (ATS): el bot gestiona la app del cliente y el cliente solo da instrucciones en lenguaje natural.
+  - **Clonarse y llevar conocimiento a otros proyectos:** El bot se puede clonar (o exportar su contexto y reglas) y "traer" ese conocimiento a proyectos nuevos o a otros proyectos de la empresa; así las mejores prácticas, flujos y preferencias se reutilizan entre equipos o entre clientes.
+  - **Dar tareas a agentes:** El bot puede delegar trabajo en agentes (análisis de repo, generación de contenido, revisión de métricas, ejecución de flujos); el usuario da una orden de alto nivel y el bot orquesta qué agente hace qué.
+  - **Analizar datos y métricas de negocio:** Con acceso a logs, flujos, publicaciones y métricas del hub (ATS, Anto, integrado), el bot puede analizar datos técnicos y de negocio: tiempos de publicación, tasas de error, uso de componentes, salud de repos, tendencias; y responder en lenguaje natural o generar informes.
 - **Flujos + contexto enriquecido:** Al generar imágenes y MD en los exports de flujo, el bot (y las IAs especializadas) tienen cada vez más contexto para entender qué hizo el usuario, qué ve la app y qué cambiar; así se habilita una experiencia "comando por voz / chat para cambiar un botón, un fondo, una imagen" sin tocar el editor manualmente.
 
 ---
@@ -164,7 +167,7 @@ Logs estructurados + `flowId` = contrato claro para humanos, para IA y para la p
 | **Export enriquecido (imágenes + MD)** | Los flujos pueden generar imágenes (capturas, previews, gráficos) y resúmenes en Markdown para que la IA tenga más contexto (multimodal y resumen ejecutivo + detalle). |
 | **Contexto para IA** | Se puede pasar a la IA el export de un flujo (o varios) para que resuma, diagnostique o recomiende. |
 | **IA especializada por app** | Cada app (ATS, Anto, hub) puede tener una IA propia afinada con su contexto; asistente que habla el lenguaje de cada herramienta. |
-| **Bot del cliente (voz/texto)** | Bot tipo Claude por cliente/workspace que gestiona la app; comandos por voz o texto (cambiar botón, fondo, imagen, publicar) traducidos a acciones. |
+| **Bot del cliente (voz/texto)** | Bot tipo Claude por cliente/workspace: comandos voz/texto, clonable (llevar conocimiento a otros proyectos/empresa), dar tareas a agentes, analizar datos y métricas de negocio, y más. |
 | **Automatizar tests** | Re-ejecutar el flujo en CI y comparar logs/resultados con el de referencia; detectar regresiones sin asserts manuales por paso. |
 | **Escribir tests con un agente** | Un agente (IA) recibe el export de un flujo real y genera tests (E2E, integración) que reproducen esa secuencia. |
 | **Guardar flujos como template** | Definir secuencias reutilizables (pasos + parámetros) y ejecutarlas por nombre. |
