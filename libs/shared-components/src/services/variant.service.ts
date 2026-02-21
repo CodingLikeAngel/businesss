@@ -5,6 +5,14 @@ import { footerVariants, bubbleVariants, cardRutasVariants, titleVariants, NavLi
 
 export type SectionType = 'hero' | 'features' | 'services' | 'products' | 'testimonials' | 'pricing' | 'gallery' | 'contact' | 'faq' | 'stats' | 'team' | 'blog' | 'cta' | 'promotions' | 'bubble' | 'custom' | 'header' | 'footer' | 'newsletter' | 'steps' | 'table' | 'breadcrumbs' | 'chip' | 'spinner' | 'chart' | 'showcase' | 'tabs' | 'accordion' | 'list' | 'navBar' | 'button' | 'image' | 'card-premium' | 'ui-card-premium' | 'card-rutas' | 'ui-card-rutas' | 'spacer' | 'ui-spacer';
 
+/** Section types that should appear at most once per page family (e.g. hero, header, footer). */
+export const SINGLE_INSTANCE_SECTION_TYPES = new Set<string>([
+  'hero', 'navbar', 'nav-bar', 'header', 'footer', 'services', 
+  'products', 'testimonials', 'pricing', 'gallery', 'faq', 
+  'contact', 'stats', 'team', 'blog', 'cta', 'promotions', 'features',
+  'pricingtable', 'pricing-table', 'servicestable', 'services-list', 'restaurant', 'gym', 'spa'
+]);
+
 export interface ElementStyles {
   [key: string]: string | undefined;
   color?: string;
@@ -840,11 +848,8 @@ export class VariantService {
   // SECTION MANAGEMENT METHODS
   // ========================================
 
-  /** Section types that should appear at most once per page (e.g. hero, header, footer). Duplicates are removed when setting sections. */
-  private static readonly SINGLE_INSTANCE_SECTION_TYPES = new Set<string>(['hero', 'header', 'footer']);
-
   /**
-   * Removes duplicate sections by id (first occurrence kept). Fixes "all sections duplicated" when array is repeated.
+   * Removes duplicate sections by id (first occurrence kept).
    */
   private deduplicateSectionsById(sections: PageSection[]): PageSection[] {
     if (!sections?.length) return sections;
@@ -857,35 +862,23 @@ export class VariantService {
     });
   }
 
-  /** Keep only the first occurrence of each section type. Fixes all sections duplicated (Hero, Features, Contact twice). */
-  private deduplicateByTypeKeepFirst(sections: PageSection[]): PageSection[] {
-    if (!sections?.length) return sections;
-    const seen = new Set<string>();
-    return sections.filter((s) => {
-      const type = (s.type || '').toLowerCase();
-      if (seen.has(type)) return false;
-      seen.add(type);
-      return true;
-    });
-  }
-
-  /** If the array is exactly two copies of the same type sequence, keep only the first half. */
-  private removeDuplicateSequence(sections: PageSection[]): PageSection[] {
+  /** Only when the entire array is exactly repeated once: [A,B,C,A,B,C] -> [A,B,C]. Does NOT limit one-per-type. */
+  private removeFullArrayDuplicate(sections: PageSection[]): PageSection[] {
     if (!sections?.length || sections.length < 2) return sections;
     const half = Math.floor(sections.length / 2);
     if (sections.length !== half * 2) return sections;
     const types = (s: PageSection) => (s.type || '').toLowerCase();
-    const firstTypes = sections.slice(0, half).map(types).join('\0');
-    const secondTypes = sections.slice(half).map(types).join('\0');
-    if (firstTypes !== secondTypes) return sections;
+    const first = sections.slice(0, half).map(types).join('\0');
+    const second = sections.slice(half).map(types).join('\0');
+    if (first !== second) return sections;
     return sections.slice(0, half);
   }
 
-  /** Full deduplication: remove duplicate sequence, by id, then one per type. Use whenever setting or syncing sections. */
+  /** Deduplication: by id + full-array duplicate only. Does NOT limit one per type (user can add multiple Features, etc.). */
   private deduplicateSections(sections: PageSection[]): PageSection[] {
     const list = sections || [];
-    const noSequenceDupes = this.removeDuplicateSequence(list);
-    return this.deduplicateByTypeKeepFirst(this.deduplicateSectionsById(noSequenceDupes));
+    const noFullDup = this.removeFullArrayDuplicate(list);
+    return this.deduplicateSectionsById(noFullDup);
   }
 
   /**
@@ -1331,14 +1324,19 @@ export class VariantService {
       this.sectionsSubject.next([]);
       return;
     }
-    const dedupedSections = this.deduplicateSections(page.sections || []);
-    const pageWithDeduped = { ...page, sections: dedupedSections };
+    const incomingDeduped = this.deduplicateSections(page.sections || []);
     const existing = this.currentPageSubject.getValue();
-    if (existing?.id === page.id && JSON.stringify(existing.sections) === JSON.stringify(dedupedSections)) {
-      return;
+    
+    // More robust comparison to avoid loops while still allowing legitimate updates
+    if (existing?.id === page.id) {
+       const existingStr = JSON.stringify(existing.sections);
+       const incomingStr = JSON.stringify(incomingDeduped);
+       if (existingStr === incomingStr) return;
     }
+    
+    const pageWithDeduped = { ...page, sections: incomingDeduped };
     this.currentPageSubject.next(pageWithDeduped);
-    this.sectionsSubject.next(dedupedSections);
+    this.sectionsSubject.next(incomingDeduped);
     // Keep pages list in sync if this page is in it
     const pages = this.pagesSubject.value;
     const idx = pages.findIndex(p => p.id === page.id);
@@ -1352,6 +1350,7 @@ export class VariantService {
   updatePage(pageId: string, changes: Partial<Page>): void {
     const sectionsToUse = changes.sections ? this.deduplicateSections(changes.sections) : undefined;
     const effectiveChanges = sectionsToUse !== undefined ? { ...changes, sections: sectionsToUse } : changes;
+
     const updatedPages = this.pagesSubject.value.map(page =>
       page.id === pageId ? { ...page, ...effectiveChanges, updatedAt: new Date() } : page
     );
@@ -1363,10 +1362,11 @@ export class VariantService {
       const updatedPage = updatedPages.find(p => p.id === pageId);
       if (updatedPage) {
         this.currentPageSubject.next(updatedPage);
-        this.sectionsSubject.next(updatedPage.sections || []);
+        if (updatedPage.sections) {
+          this.sectionsSubject.next(updatedPage.sections);
+        }
       }
     }
-
     this.saveToLocalStorage();
   }
 
@@ -1391,8 +1391,21 @@ export class VariantService {
     if (!currentPage) return;
 
     const type = (section.type || '').toLowerCase();
-    if (VariantService.SINGLE_INSTANCE_SECTION_TYPES.has(type)) {
-      const alreadyHas = (currentPage.sections || []).some((s) => (s.type || '').toLowerCase() === type);
+    
+    // Check family-based singleton
+    const isSingleton = Array.from(SINGLE_INSTANCE_SECTION_TYPES).some(f => 
+      type === f || type.startsWith(f + '-') || type.startsWith(f + '_')
+    );
+
+    if (isSingleton) {
+      const alreadyHas = (currentPage.sections || []).some((s) => {
+        const sType = (s.type || '').toLowerCase();
+        return sType === type || 
+               Array.from(SINGLE_INSTANCE_SECTION_TYPES).some(f => 
+                 (type === f || type.startsWith(f + '-') || type.startsWith(f + '_')) &&
+                 (sType === f || sType.startsWith(f + '-') || sType.startsWith(f + '_'))
+               );
+      });
       if (alreadyHas) return;
     }
 

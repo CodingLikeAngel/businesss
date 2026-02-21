@@ -7,7 +7,7 @@ import * as PageSelectors from '../../store/selectors/page.selectors';
 import { Page } from '../../models/editor.model';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
-import { Subscription, Observable, take, Subject, takeUntil, map } from 'rxjs';
+import { Subscription, Observable, take, Subject, takeUntil, map, distinctUntilChanged } from 'rxjs';
 import {
   VariantService,
   NavBarConfig,
@@ -169,9 +169,14 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
       this.modalState = state;
     });
 
-    // UNIFY WITH STORE: Use deduped sections so hero/header/footer are not duplicated
+    // UNIFY WITH STORE: Use deduped sections; emit only when section list actually changes to avoid repeated re-renders
     this.sections$ = this.store.select(PageSelectors.selectCurrentPageSectionsDeduped).pipe(
-      map((sections: any[]) => sections.map(s => ({
+      distinctUntilChanged((a, b) => {
+        const idsA = (a || []).map((s: any) => s.id).join(',');
+        const idsB = (b || []).map((s: any) => s.id).join(',');
+        return a?.length === b?.length && idsA === idsB;
+      }),
+      map((sections: any[]) => (sections || []).map(s => ({
         ...s,
         hasFloatingChildren: this.checkFloatingChildren(s)
       })))
@@ -194,25 +199,24 @@ export abstract class BaseEditorFeatureComponent implements OnInit, OnDestroy {
 
       if (page) {
         this.store.select(PageSelectors.selectCurrentPage).pipe(take(1)).subscribe(currentStorePage => {
+          // CRITICAL: Prevent re-dispatching if the data is already identical to what's in the store
+          // This stops the VariantService -> Store -> Effects -> VariantService infinite loop
+          
           if (!currentStorePage || currentStorePage.id !== page.id) {
             console.log('🔄 Syncing VariantService -> Store (Page Switch/Load Detected)');
             const normalizedSections = PageSelectors.normalizeSectionsForDisplay(page.sections || []);
             this.store.dispatch(PageActions.loadPageSuccess({ page: { ...page, sections: normalizedSections } as any }));
           } else {
-            // Same page, check if sections or content changed (e.g. added component from sidebar)
-            // Use a simple but effective check to avoid loops
-            const storeSectionsStr = JSON.stringify(currentStorePage.sections);
-            const vsSectionsStr = JSON.stringify(page.sections);
-            const storeGlobalStylesStr = JSON.stringify(currentStorePage.globalStyles || {});
-            const vsGlobalStylesStr = JSON.stringify(page.globalStyles || {});
-            
-            if (storeSectionsStr !== vsSectionsStr || storeGlobalStylesStr !== vsGlobalStylesStr) {
-              console.log('🔄 Syncing VariantService -> Store (Update Detected)');
-              const normalizedSections = PageSelectors.normalizeSectionsForDisplay(page.sections || []);
+            const normalizedVSSections = PageSelectors.normalizeSectionsForDisplay(page.sections || []);
+            const storeIds = (currentStorePage.sections || []).map((s: any) => s.id).filter(Boolean).join(',');
+            const vsIds = normalizedVSSections.map((s: any) => s.id).filter(Boolean).join(',');
+            const sectionsSame = storeIds === vsIds && (currentStorePage.sections?.length ?? 0) === normalizedVSSections.length;
+            const globalStylesSame = JSON.stringify(currentStorePage.globalStyles || {}) === JSON.stringify(page.globalStyles || {});
+            if (!sectionsSame || !globalStylesSame) {
               this.store.dispatch(PageActions.updatePage({
                 pageId: page.id,
                 changes: {
-                  sections: normalizedSections as any,
+                  sections: normalizedVSSections as any,
                   globalStyles: page.globalStyles as any
                 }
               }));

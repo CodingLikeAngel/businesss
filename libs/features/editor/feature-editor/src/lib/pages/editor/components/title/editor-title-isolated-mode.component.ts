@@ -275,7 +275,7 @@ import { BaseIsolatedModeComponent } from '../base-isolated-mode.component';
     </div>
   `,
   styles: [`
-    @import '../_isolated-mode-shared';
+    @use '../_isolated-mode-shared' as *;
     @include isolated-mode-foundation;
     @include resize-handles;
     @include modern-dock;

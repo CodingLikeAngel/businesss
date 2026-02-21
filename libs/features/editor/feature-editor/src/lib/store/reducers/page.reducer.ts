@@ -14,35 +14,23 @@ function deduplicateSectionsById<T extends { id?: string }>(sections: T[]): T[] 
   });
 }
 
-/** Keep only the first occurrence of each section type so the store never persists duplicates. */
-function deduplicateByTypeKeepFirst<T extends { type?: string }>(sections: T[]): T[] {
-  if (!sections?.length) return sections;
-  const seen = new Set<string>();
-  return sections.filter((s) => {
-    const type = (s.type || '').toLowerCase();
-    if (seen.has(type)) return false;
-    seen.add(type);
-    return true;
-  });
-}
-
-/** If the array is exactly two copies of the same type sequence, keep only the first half. */
-function removeDuplicateSequence<T extends { type?: string }>(sections: T[]): T[] {
+/** Only when the entire array is exactly repeated once: [A,B,C,A,B,C] -> [A,B,C]. Does NOT limit one-per-type. */
+function removeFullArrayDuplicate<T extends { type?: string }>(sections: T[]): T[] {
   if (!sections?.length || sections.length < 2) return sections;
   const half = Math.floor(sections.length / 2);
   if (sections.length !== half * 2) return sections;
   const types = (s: T) => (s.type || '').toLowerCase();
-  const firstTypes = sections.slice(0, half).map(types).join('\0');
-  const secondTypes = sections.slice(half).map(types).join('\0');
-  if (firstTypes !== secondTypes) return sections;
+  const first = sections.slice(0, half).map(types).join('\0');
+  const second = sections.slice(half).map(types).join('\0');
+  if (first !== second) return sections;
   return sections.slice(0, half);
 }
 
-/** Normalize sections so the store never persists duplicates (sequence, by id, one per type). */
+/** Normalize: duplicate ids + full-array duplicate only. Does NOT limit one per type. */
 function normalizeSections(sections: Section[] | undefined): Section[] {
   const list = sections ?? [];
-  const noSequenceDupes = removeDuplicateSequence(list) as Section[];
-  return deduplicateByTypeKeepFirst(deduplicateSectionsById(noSequenceDupes)) as Section[];
+  const noFullDup = removeFullArrayDuplicate(list) as Section[];
+  return deduplicateSectionsById(noFullDup) as Section[];
 }
 
 export const initialPageState: PageState = {

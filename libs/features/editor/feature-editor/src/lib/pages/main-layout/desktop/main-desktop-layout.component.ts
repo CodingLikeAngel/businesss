@@ -14,7 +14,7 @@ import { SUPPORTED_SECTION_TYPES } from '../../editor/components/section-rendere
 import { AICopilotComponent } from '../../../components/ai-copilot/ai-copilot.component';
 import { Store } from '@ngrx/store';
 import * as PageSelectors from '../../../store/selectors/page.selectors';
-import { map } from 'rxjs';
+import { map, delay } from 'rxjs';
 
 @Component({
   selector: 'lib-main-desktop-layout',
@@ -42,9 +42,9 @@ export class MainDesktopLayoutComponent extends MainLayoutBaseComponent {
 
   private store = inject(Store);
 
-  saving$ = this.store.select(PageSelectors.selectPageSaving);
-  hasUnsavedChanges$ = this.store.select(PageSelectors.selectHasUnsavedChanges);
-  lastSaved$ = this.store.select(PageSelectors.selectLastSaved);
+  saving$ = this.store.select(PageSelectors.selectPageSaving).pipe(delay(0));
+  hasUnsavedChanges$ = this.store.select(PageSelectors.selectHasUnsavedChanges).pipe(delay(0));
+  lastSaved$ = this.store.select(PageSelectors.selectLastSaved).pipe(delay(0));
   
   exportGlobalStyles$ = this.store.select(PageSelectors.selectCurrentPage).pipe(
     map((page: any) => page?.globalStyles || {})

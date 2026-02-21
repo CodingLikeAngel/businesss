@@ -36,24 +36,19 @@ export class PageEffects {
       ),
       tap(([action, currentPage, sectionsDeduped]) => {
         if (currentPage) {
-          const vCurrentPageId = (this.variantService as any).currentPageSubject.value?.id;
-          console.log(`Syncing Store -> VariantService [Action: ${action.type}] [Store: ${currentPage.id}] [VS: ${vCurrentPageId}]`);
-
-          (this.variantService as any).sectionsSubject.next(sectionsDeduped as any);
-
           const vsCurrentPage = (this.variantService as any).currentPageSubject.value;
-          const storeSectionsStr = JSON.stringify(sectionsDeduped);
-          const vsSectionsStr = vsCurrentPage ? JSON.stringify(vsCurrentPage.sections) : '';
-
-          if (storeSectionsStr !== vsSectionsStr) {
-            console.log('📤 Transmitting Store changes to VariantService persistence layer');
-            (this.variantService as any).updatePage(currentPage.id, {
-              sections: sectionsDeduped,
-              globalStyles: currentPage.globalStyles,
-              metadata: currentPage.metadata
-            });
-            (this.variantService as any).saveToLocalStorage();
+          const storeIds = (sectionsDeduped || []).map((s: { id?: string }) => s.id).filter(Boolean).join(',');
+          const vsIds = (vsCurrentPage?.sections || []).map((s: { id?: string }) => s.id).filter(Boolean).join(',');
+          if (storeIds === vsIds && (sectionsDeduped?.length ?? 0) === (vsCurrentPage?.sections?.length ?? 0)) {
+            return;
           }
+          (this.variantService as any).sectionsSubject.next(sectionsDeduped as any);
+          (this.variantService as any).updatePage(currentPage.id, {
+            sections: sectionsDeduped,
+            globalStyles: currentPage.globalStyles,
+            metadata: currentPage.metadata
+          });
+          (this.variantService as any).saveToLocalStorage();
         }
       })
     ),

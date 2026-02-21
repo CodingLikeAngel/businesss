@@ -34,6 +34,28 @@ import type {
   TestimonialsConfig,
 } from '@negocio/shared-components';
 
+/** Which config @Input(s) each section type accepts. Only these are set on the dynamic component to avoid NG0303. */
+const SECTION_CONFIG_KEYS: Record<string, string[]> = {
+  hero: ['heroConfig'],
+  'hero-minimal': ['heroConfig'],
+  'hero-split': ['heroConfig'],
+  features: ['featuresConfig'],
+  stats: ['statsConfig'],
+  services: ['serviceCardsConfig', 'titleConfig'],
+  products: ['productsConfig', 'titleConfig'],
+  testimonials: ['testimonialsConfig'],
+  pricing: ['pricingConfig'],
+  promotions: ['promotionsConfig'],
+  faq: ['faqConfig'],
+  gallery: ['galleryConfig', 'titleConfig'],
+  'gallery-new': ['galleryConfig', 'titleConfig'],
+  contact: ['titleConfig'],
+  bubble: ['bubbleConfig'],
+  header: ['navBarConfig'],
+  footer: ['footerConfig'],
+  chart: ['chartConfig'],
+};
+
 /** Context passed to dynamically created section components. All configs optional so any section can ignore unused ones. */
 export interface EditorSectionRendererContext {
   section: PageSection;
@@ -95,7 +117,8 @@ export class EditorSectionRendererComponent implements OnInit, OnChanges, OnDest
   private outputSubscriptions: (() => void)[] = [];
 
   ngOnInit(): void {
-    this.renderSection();
+    // Only create here if ngOnChanges did not already create (e.g. section was bound after first CD). Avoids double create when section is set before ngOnInit.
+    if (!this.componentRef && this.section?.type) this.renderSection();
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -114,6 +137,7 @@ export class EditorSectionRendererComponent implements OnInit, OnChanges, OnDest
         this.cdr.markForCheck();
       }
     } else if (this.section?.type) {
+      // First time section is available (or late binding): create once. ngOnInit will skip creating because we set componentRef here.
       this.renderSection();
     }
   }
@@ -166,22 +190,29 @@ export class EditorSectionRendererComponent implements OnInit, OnChanges, OnDest
     set('section', ctx.section);
     set('componentVariants', ctx.componentVariants);
     set('globalVariant', ctx.globalVariant);
-    set('heroConfig', ctx.heroConfig);
-    set('featuresConfig', ctx.featuresConfig);
-    set('statsConfig', ctx.statsConfig);
-    set('galleryConfig', ctx.galleryConfig);
-    set('titleConfig', ctx.titleConfig);
-    set('chartConfig', ctx.chartConfig);
-    set('navBarConfig', ctx.navBarConfig);
-    set('footerConfig', ctx.footerConfig);
-    set('bubbleConfig', ctx.bubbleConfig);
-    set('cardConfig', ctx.cardConfig);
-    set('serviceCardsConfig', ctx.serviceCardsConfig);
-    set('faqConfig', ctx.faqConfig);
-    set('pricingConfig', ctx.pricingConfig);
-    set('promotionsConfig', ctx.promotionsConfig);
-    set('productsConfig', ctx.productsConfig);
-    set('testimonialsConfig', ctx.testimonialsConfig);
+    const type = (this.section?.type || '').toLowerCase();
+    const configKeys = SECTION_CONFIG_KEYS[type] ?? [];
+    const configMap: Record<string, unknown> = {
+      heroConfig: ctx.heroConfig,
+      featuresConfig: ctx.featuresConfig,
+      statsConfig: ctx.statsConfig,
+      galleryConfig: ctx.galleryConfig,
+      titleConfig: ctx.titleConfig,
+      chartConfig: ctx.chartConfig,
+      navBarConfig: ctx.navBarConfig,
+      footerConfig: ctx.footerConfig,
+      bubbleConfig: ctx.bubbleConfig,
+      cardConfig: ctx.cardConfig,
+      serviceCardsConfig: ctx.serviceCardsConfig,
+      faqConfig: ctx.faqConfig,
+      pricingConfig: ctx.pricingConfig,
+      promotionsConfig: ctx.promotionsConfig,
+      productsConfig: ctx.productsConfig,
+      testimonialsConfig: ctx.testimonialsConfig,
+    };
+    for (const key of configKeys) {
+      if (configMap[key] !== undefined) set(key, configMap[key]);
+    }
   }
 
   private updateInputs(): void {

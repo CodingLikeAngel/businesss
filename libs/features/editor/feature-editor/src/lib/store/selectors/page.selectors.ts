@@ -58,34 +58,22 @@ function deduplicateSectionsById<T extends { id?: string }>(sections: T[]): T[] 
   });
 }
 
-/** If the array is exactly two copies of the same type sequence, keep only the first half. */
-function removeDuplicateSequence<T extends { type?: string }>(sections: T[]): T[] {
+/** Only remove when the entire array is exactly repeated once (e.g. [A,B,C,A,B,C] -> [A,B,C]). Does NOT limit one-per-type. */
+function removeFullArrayDuplicate<T extends { type?: string }>(sections: T[]): T[] {
   if (!sections?.length || sections.length < 2) return sections;
   const half = Math.floor(sections.length / 2);
   if (sections.length !== half * 2) return sections;
   const types = (s: T) => (s.type || '').toLowerCase();
-  const firstTypes = sections.slice(0, half).map(types).join('\0');
-  const secondTypes = sections.slice(half).map(types).join('\0');
-  if (firstTypes !== secondTypes) return sections;
+  const first = sections.slice(0, half).map(types).join('\0');
+  const second = sections.slice(half).map(types).join('\0');
+  if (first !== second) return sections;
   return sections.slice(0, half);
 }
 
-/** Keep only the first occurrence of each section type. Fixes "all sections duplicated" (Hero, Features, Contact each showing twice). */
-function deduplicateByTypeKeepFirst<T extends { type?: string }>(sections: T[]): T[] {
-  if (!sections?.length) return sections;
-  const seen = new Set<string>();
-  return sections.filter((s) => {
-    const type = (s.type || '').toLowerCase();
-    if (seen.has(type)) return false;
-    seen.add(type);
-    return true;
-  });
-}
-
-/** Public helper: normalize sections (sequence + by id + one per type). Use when syncing to store or for display. */
+/** Normalize for display/store: remove duplicate ids + fix full-array duplication only. Does NOT limit one per type. */
 export function normalizeSectionsForDisplay<T extends { id?: string; type?: string }>(sections: T[]): T[] {
   const list = sections ?? [];
-  return deduplicateByTypeKeepFirst(deduplicateSectionsById(removeDuplicateSequence(list)));
+  return deduplicateSectionsById(removeFullArrayDuplicate(list));
 }
 
 // Current page derived selectors
@@ -94,10 +82,26 @@ export const selectCurrentPageSections = createSelector(
   (page: Page | null) => page?.sections || []
 );
 
-/** Sections deduped: one per type (first only). Use for editor canvas. */
+/** Sections for canvas: dedupe by id + full-array duplicate only; exclude layout (header/footer/navbar) which are rendered elsewhere. */
 export const selectCurrentPageSectionsDeduped = createSelector(
   selectCurrentPageSections,
-  (sections: Section[]) => normalizeSectionsForDisplay(sections || [])
+  (sections: Section[]) => {
+    const raw = sections || [];
+    const list = normalizeSectionsForDisplay(raw);
+    const layoutTypes = ['header', 'footer', 'navbar', 'nav-bar'];
+    const layoutIds = ['global_header', 'global_footer', 'global_navbar', 'navbar'];
+    const out = list.filter(s => {
+      const type = (s.type || '').toLowerCase();
+      const id = (s.id || '').toLowerCase();
+      const isLayout = layoutTypes.some(t => type === t || type.startsWith(t + '-') || type.startsWith(t + '_'))
+        || layoutIds.some(t => id === t || id.startsWith(t + '_'));
+      return !isLayout;
+    });
+    if (typeof ngDevMode !== 'undefined' && ngDevMode && (raw.length !== out.length || raw.length > 5)) {
+      console.debug('[Sections] raw:', raw.length, '-> canvas:', out.length, 'ids:', out.map(s => s.id));
+    }
+    return out;
+  }
 );
 
 export const selectCurrentPageGlobalStyles = createSelector(
@@ -123,7 +127,10 @@ export const selectSectionsByType = (type: string) => createSelector(
 
 export const selectVisibleSections = createSelector(
   selectCurrentPageSections,
-  (sections: Section[]) => (sections || []).filter(section => section.visible)
+  (sections: Section[]) => {
+    const deduped = normalizeSectionsForDisplay(sections || []);
+    return deduped.filter(section => section.visible);
+  }
 );
 
 // Element selectors
