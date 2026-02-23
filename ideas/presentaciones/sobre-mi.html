@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sobre mí · Triple excepcionalidad</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Nunito:wght@400;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: rgba(22, 22, 32, 0.92);
+      --bg-card-border: rgba(255, 180, 100, 0.2);
+      --border: rgba(255,255,255,0.08);
+      --text: #f5f5f7;
+      --text-muted: #a0aec0;
+      --accent: #ff8c42;
+      --accent-cyan: #4dd4e0;
+      --accent-soft: rgba(255, 140, 66, 0.15);
+      --glow: 0 0 24px rgba(255, 140, 66, 0.2);
+      --nav-w: 240px;
+      --radius: 18px;
+      --radius-sm: 12px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Nunito', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 1rem;
+      background-image:
+        radial-gradient(ellipse 140% 90% at 50% -15%, rgba(255, 140, 66, 0.1), transparent 55%),
+        radial-gradient(ellipse 70% 50% at 105% 40%, rgba(77, 212, 224, 0.06), transparent),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 24px 24px;
+    }
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: var(--nav-w);
+      right: 0;
+      height: 6px;
+      background: rgba(255,255,255,0.08);
+      z-index: 100;
+      border-radius: 0 0 4px 0;
+    }
+    .progress-bar .fill {
+      height: 100%;
+      width: var(--scroll-pct, 0%);
+      border-radius: 0 4px 4px 0;
+      background: linear-gradient(90deg, var(--accent), var(--accent-cyan));
+      box-shadow: 0 0 12px rgba(255, 140, 66, 0.4);
+      transition: width 0.2s ease-out;
+    }
+    @media (max-width: 900px) { .progress-bar { left: 0; } }
+    .skip-link {
+      position: absolute;
+      top: -3rem;
+      left: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 700;
+      border-radius: 999px;
+      text-decoration: none;
+      z-index: 200;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 1rem; outline: 3px solid var(--accent-cyan); outline-offset: 2px; }
+    .layout {
+      display: grid;
+      grid-template-columns: var(--nav-w) 1fr;
+      min-height: 100vh;
+    }
+    @media (max-width: 900px) {
+      .layout { grid-template-columns: 1fr; }
+      .nav { position: relative; height: auto; padding: 1rem; border-bottom: 1px solid var(--border); background: rgba(12, 12, 18, 0.98); }
+      .nav ul { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+    }
+    .nav {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 1.5rem 1rem;
+      border-right: 1px solid var(--border);
+      background: rgba(12, 12, 18, 0.96);
+      backdrop-filter: blur(16px);
+    }
+    .nav h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin: 0 0 1rem 0.75rem;
+    }
+    .nav ul { list-style: none; padding: 0; margin: 0; }
+    .nav li { margin-bottom: 0.25rem; }
+    .nav a {
+      display: block;
+      padding: 0.65rem 0.9rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      transition: color .2s, background .2s, transform .2s, box-shadow .2s;
+      border: 1px solid transparent;
+    }
+    .nav a:hover { color: var(--text); background: var(--accent-soft); transform: translateX(4px); box-shadow: var(--glow); }
+    .nav a.active { color: var(--bg); background: linear-gradient(135deg, var(--accent), #ffb366); border-color: rgba(255,255,255,0.2); font-weight: 700; box-shadow: var(--glow), inset 0 1px 0 rgba(255,255,255,0.2); }
+    .nav .doc-link { font-size: 0.8rem; color: var(--accent-cyan); margin-top: 0.5rem; }
+    .main {
+      padding: 2.5rem 3rem 4rem;
+      max-width: 920px;
+    }
+    section {
+      margin-bottom: 3rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    section:last-of-type { border-bottom: 0; }
+    .section-num {
+      display: inline-block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--bg);
+      background: linear-gradient(135deg, var(--accent), #ffb366);
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      margin-bottom: 0.6rem;
+      box-shadow: 0 2px 8px rgba(255, 140, 66, 0.3);
+    }
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.1rem;
+      font-weight: 800;
+      margin: 0 0 0.5rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 0%, var(--accent-cyan) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { color: var(--text-muted); font-size: 1.05rem; margin: 0 0 1.5rem; font-family: 'Rajdhani', sans-serif; font-weight: 600; }
+    h2 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 1.75rem 0 0.75rem;
+      color: var(--text);
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid transparent;
+      border-image: linear-gradient(90deg, var(--accent), transparent) 1;
+    }
+    h2:first-of-type { margin-top: 0; }
+    h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.05rem; font-weight: 700; margin: 1.25rem 0 0.5rem; color: var(--text); }
+    p { margin: 0 0 0.6rem; color: var(--text); }
+    ul, ol { margin: 0 0 0.75rem; padding-left: 1.35rem; }
+    li { margin-bottom: 0.35rem; }
+    .img-diagram {
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+      border-radius: var(--radius);
+      border: 1px solid var(--bg-card-border);
+      box-shadow: var(--glow);
+      margin: 1.5rem 0;
+      display: block;
+    }
+    .venn-wrap {
+      margin: 1.5rem 0;
+      padding: 1.25rem;
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      border: 1px solid var(--bg-card-border);
+      box-shadow: var(--glow);
+    }
+    .venn-wrap figcaption { margin-top: 0.75rem; }
+    .overlap-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 0.5rem;
+      margin: 0.75rem 0;
+      list-style: none;
+      padding-left: 0;
+    }
+    .overlap-list li {
+      margin: 0;
+      padding: 0.5rem 0.75rem;
+      background: rgba(255, 140, 66, 0.08);
+      border-radius: var(--radius-sm);
+      border-left: 4px solid var(--accent);
+      font-size: 0.9rem;
+    }
+    .overlap-list.triple li { border-left-color: var(--accent-cyan); background: rgba(77, 212, 224, 0.08); }
+    .doc-ref { font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; }
+    .doc-ref a { color: var(--accent-cyan); text-decoration: none; font-weight: 500; }
+    .doc-ref a:hover { text-decoration: underline; color: var(--accent); }
+    .back-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      margin-right: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      color: var(--bg);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 700;
+      border: none;
+      border-radius: 999px;
+      background: linear-gradient(135deg, var(--accent), #ffb366);
+      box-shadow: 0 2px 12px rgba(255, 140, 66, 0.35);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .back-top:hover { transform: scale(1.03); box-shadow: var(--glow), 0 4px 16px rgba(255, 140, 66, 0.4); }
+    @media print {
+      .progress-bar, .skip-link, .back-top, .nav { display: none !important; }
+      .layout { grid-template-columns: 1fr; }
+      section { break-inside: avoid; }
+      body { background-image: none; }
+      h1 { -webkit-text-fill-color: #111; background: none; color: #111; }
+    }
+  </style>
+</head>
+<body>
+  <div class="progress-bar" role="presentation" aria-hidden="true"><div class="fill"></div></div>
+  <a href="#portada" class="skip-link">Ir al contenido</a>
+  <div class="layout">
+    <nav class="nav" role="navigation" aria-label="Índice Sobre mí">
+      <h2>Índice</h2>
+      <ul>
+        <li><a href="#portada">Portada</a></li>
+        <li><a href="#que-es">Qué es 2e y 3e</a></li>
+        <li><a href="#por-que">Por qué esta sección</a></li>
+        <li><a href="#diagrama">Diagrama Venn</a></li>
+        <li><a href="#resumen-condicion">Resumen por condición</a></li>
+        <li><a href="#solapamiento">Solapamiento de dos</a></li>
+        <li><a href="#triple-centro">Triple: rasgos del centro</a></li>
+        <li><a href="#referencias">Referencias</a></li>
+        <li class="doc-link" style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid var(--border);"><a href="index.html">← Visión y negocio</a></li>
+        <li class="doc-link"><a href="presupuesto-desarrollo.html">Presupuesto desarrollo</a></li>
+      </ul>
+    </nav>
+
+    <main class="main">
+      <section id="portada">
+        <p class="section-num">Sobre mí</p>
+        <h1>Sobre mí</h1>
+        <p class="subtitle">Triple excepcionalidad: contexto y por qué importa en equipo</p>
+        <p>Este documento está pensado para que el equipo comprenda el perfil de un compañero o compañera con <strong>triple excepcionalidad</strong> (TEA/Asperger, TDAH y altas capacidades). No se trata de pedir un trato “especial”, sino de que lo que a veces choca no se interprete como capricho o falta de esfuerzo.</p>
+        <p class="doc-ref"><a href="index.html">Presentación visión y negocio</a> · <a href="presupuesto-desarrollo.html">Presupuesto de desarrollo</a></p>
+      </section>
+
+      <section id="que-es">
+        <h2>Qué es la doble y la triple excepcionalidad</h2>
+        <p>Conviene partir de una idea clara: la <strong>doble excepcionalidad (2e)</strong> es la coexistencia de <strong>altas capacidades intelectuales</strong> con uno o más trastornos del neurodesarrollo — por ejemplo TDAH o TEA (autismo). La <strong>triple excepcionalidad (3e)</strong> se da cuando confluyen altas capacidades y dos de esas condiciones a la vez (TEA + TDAH + altas capacidades). No es una etiqueta del manual diagnóstico, sino un concepto clínico y educativo que describe un perfil real, en el que <strong>alto potencial y dificultades conviven y se solapan</strong>. Las capacidades pueden enmascarar los síntomas del TDAH o del TEA, y a la inversa el TDAH o el TEA pueden hacer que el talento pase desapercibido. Por eso muchas personas 2e/3e han recibido antes etiquetas injustas — "vago", "despistado", "raro" — y el diagnóstico en la edad adulta llega tarde, con trayectorias que no reflejan lo que realmente pueden aportar. <strong>Comparar a una persona 2e/3e con el resto "en igualdad de condiciones" no es equitativo:</strong> no se parte del mismo punto de partida ni se procesan las cosas de la misma forma.</p>
+      </section>
+
+      <section id="por-que">
+        <h2>Por qué esta sección</h2>
+        <p>Esta sección está pensada para que el equipo comprenda el perfil de un compañero o compañera con <strong>triple excepcionalidad</strong> (TEA/Asperger, TDAH y altas capacidades). No se trata de pedir un trato "especial", sino de que lo que a veces choca — ciertos comportamientos o necesidades — no se interprete como capricho o falta de esfuerzo: forma parte de cómo funciona esa persona. Cuando el entorno es muy rígido o exige "hacer como todos", quien presenta este perfil no siempre encaja; cuando hay <strong>autonomía, claridad y espacio para enfocarse en lo que se le da bien</strong>, su aportación suele ser muy alta. La evidencia en entornos laborales muestra que las personas neurodivergentes aportan innovación, pensamiento analítico, creatividad, hiperfoco y resolución de problemas complejos cuando el contexto se adapta a sus necesidades; no se trata de tratarlas "igual que a todos" en todo, sino de aplicar ajustes razonables que igualan el terreno.</p>
+        <p>Algo que ocurre con frecuencia en personas 2e/3e es que <strong>pasan desapercibidas o son subestimadas</strong>. En contextos donde su forma de hablar, organizarse o relacionarse no encaja, se las interpreta mal y puede parecer que "no dan el nivel". Ellas, a la vez, pueden tener la sensación de que "los demás no siguen" o no valoran lo mismo. Se crea así un círculo de desencuentro: hasta que no llega el momento de las pruebas concretas — entregas, resultados, análisis — no se ve el nivel real, y entonces <strong>suele haber sorpresa</strong>: se esperaba poco y el resultado está por encima. Eso a veces genera incomodidad en quien había subestimado. Además, buena parte del trabajo de quien presenta este perfil — organización, documentación, análisis previo, correcciones, trabajo en segundo plano — <strong>no es visible</strong> del mismo modo que lo son una reunión o una respuesta rápida; por eso la percepción puede ser que aporta menos de lo que realmente hace. Explicar este perfil desde el principio ayuda a que las expectativas sean justas y a que no se pierda talento por malentendidos.</p>
+        <p>Es habitual que quien tiene este perfil se pregunte a veces si está en el lugar que le corresponde — o si sí lo es. Lo que suele tener claro es que <strong>tiene mucho que aportar</strong> y que le frustra <strong>ver las cosas mal hechas</strong> o que no se aproveche el potencial cuando hay margen para mejorar. No es una queja: esa intensidad y esa necesidad de que las cosas estén bien hechas forman parte de su forma de ser. Ponerlo sobre la mesa sirve para que el equipo entienda el contexto.</p>
+        <p>También es frecuente que se le exija <strong>hacer las cosas como los demás</strong> — por ejemplo preguntar a una persona concreta en vez de poder investigar por su cuenta. La realidad es que <strong>avanza más rápido cuando puede indagar y resolver por sí mismo</strong>. Reunirse con alguien para explicarle un problema complejo y que le ayude a resolverlo no suele servirle: le retrasa, y al final es él o ella quien lo resuelve por su cuenta. No es que rechace el trabajo en equipo; es que su forma de procesar problemas complejos es más eficiente en autonomía. Se recomienda respetar esta forma de trabajar cuando el resultado está a la altura: permitir investigar y resolver sin obligar a seguir el mismo canal que el resto.</p>
+        <p>Otra cosa que suele ocurrir es que <strong>se le perciba como alguien sin empatía</strong> o que <strong>dice cosas que no gustan</strong>. No es que no le importe el otro; es que su forma de comunicar es más directa y literal, algo muy común en el TEA: dice lo que piensa sin el mismo "filtro" social que otras personas usan de forma automática. A veces lo que dice se interpreta como frío o brusco cuando la intención no es herir. Es útil que, si algo que dice molesta, se le indique con claridad para que pueda ajustarlo; lo importante es no asumir que falta empatía cuando en realidad se trata de otra forma de expresarse.</p>
+        <p>Por último: <strong>no debe ser tomado como la medida de nada</strong>, ni para bien ni para mal. No como el referente de "cómo hay que ser" ni como el que "no llega". Siempre habrá diferencias abismales entre su forma de funcionar y la de otros; usarlo como vara de medir — para lo bueno o para lo malo — no es justo con nadie.</p>
+      </section>
+
+      <section id="diagrama">
+        <h2>Diagrama: coincidencias en doble y triple excepcionalidad</h2>
+        <p>El diagrama de Venn siguiente ayuda a visualizar cómo se solapan <strong>Autismo (TEA)</strong>, <strong>TDAH</strong> y <strong>Altas Capacidades (AA. CC.)</strong>. Cada círculo representa los rasgos típicos de una condición; donde se cruzan dos círculos aparece lo que comparten dos; el <strong>centro</strong>, donde se cruzan los tres, es lo que define la triple excepcionalidad. Verlo así permite entender por qué el perfil no es "suma de tres etiquetas", sino una combinación propia.</p>
+        <figure class="venn-wrap">
+          <img src="image.png" alt="Diagrama de Venn: Coincidencias en doble excepcionalidad (Autismo, TDAH, Altas Capacidades)" class="img-diagram" />
+          <figcaption class="doc-ref">Coincidencias en doble y triple excepcionalidad. Original: Katy Higgins Lee, MTF. Adaptación: Blanca Santiago.</figcaption>
+        </figure>
+      </section>
+
+      <section id="resumen-condicion">
+        <h2>Resumen por condición</h2>
+        <p>Cada condición aporta rasgos que, en conjunto, explican tanto fortalezas como dificultades. A título orientativo:</p>
+        <p><strong>Autismo (TEA / Asperger):</strong> Dificultad con los cambios y la inflexibilidad, mantener amistades, intereses muy definidos, comunicación no verbal, necesidad de rutinas, sensibilidad sensorial, regulación emocional, patrones repetitivos, dificultad para entender perspectivas ajenas e ironía, perfeccionismo, ansiedad.</p>
+        <p><strong>TDAH:</strong> Dificultad para mantener la atención, impulsividad, hiperactividad motora, organizar tareas, regular el humor, seguir instrucciones, olvidos frecuentes, desorganización, búsqueda de estímulos, impaciencia, gestión del tiempo, cambios de humor, procrastinación.</p>
+        <p><strong>Altas capacidades (AA. CC.):</strong> Pensamiento abstracto, curiosidad intensa, rapidez de aprendizaje, creatividad e imaginación, vocabulario amplio, memoria destacada, intereses variados y profundos, perfeccionismo, sensibilidad emocional, necesidad de autonomía, resolución de problemas, pensamiento crítico, persistencia en lo que interesa, idealismo y sentido de la justicia, autodemandas altas, intuición desarrollada.</p>
+      </section>
+
+      <section id="solapamiento">
+        <h2>Solapamiento de dos condiciones</h2>
+        <p>Cuando coinciden dos de las tres condiciones, aparecen rasgos que suelen darse en esa combinación. A título orientativo:</p>
+        <h3>Autismo + TDAH</h3>
+        <ul>
+          <li>Dificultad para establecer y mantener relaciones, regular la atención, planificar y organizar; problemas de comunicación; sensibilidad a estímulos; problemas de sueño; gestión del tiempo; procesamiento de la información; autorregulación; contacto ocular; entender ironía y sarcasmo; hiperactividad; anticipar consecuencias; tomar decisiones; conducta impulsiva.</li>
+        </ul>
+        <h3>TDAH + Altas capacidades</h3>
+        <ul>
+          <li>Aburrimiento con tareas repetitivas; frustración ante el fracaso; pensamiento rápido; necesidad de novedad; dificultad para terminar proyectos y trabajar en equipo; desorganización; intensidad emocional; hiperfoco en intereses; sensibilidad a la crítica; impaciencia; dificultad para seguir normas/rutinas; tendencia a la distracción; perfeccionismo; ansiedad; baja autoestima.</li>
+        </ul>
+        <h3>Autismo + Altas capacidades</h3>
+        <ul>
+          <li>Perfeccionismo; intereses intensos y específicos; sensibilidad a estímulos; necesidad de lógica y orden; dificultad en la socialización; alta autodemandas; comunicación directa y sincera; pensamiento no convencional; aislamiento social voluntario; dificultad para entender normas sociales implícitas; ansiedad social; hipersensibilidad; intolerancia a la frustración; rigidez cognitiva; necesidad de precisión.</li>
+        </ul>
+      </section>
+
+      <section id="triple-centro">
+        <h2>Triple excepcionalidad: rasgos del centro (las tres condiciones)</h2>
+        <p>Cuando confluyen las tres condiciones suelen aparecer los rasgos que se listan a continuación. La investigación en doble y triple excepcionalidad (2e/3e) describe tanto <strong>fortalezas</strong> — razonamiento avanzado, pensamiento creativo y divergente, hiperfoco en lo que interesa, sentido fuerte de la justicia — como <strong>dificultades</strong> — rendimiento irregular según el contexto, función ejecutiva, regulación emocional, fatiga por sobreestimulación, interacción social. Conviene entender que no son "defectos" que haya que corregir, sino parte del perfil neurobiológico. Para el equipo: exigir a una persona 3e exactamente lo mismo que al resto en todo tiene un efecto desigual — en algunas áreas queda en desventaja y en otras su rendimiento puede ser muy superior. Un enfoque que tenga en cuenta las fortalezas y permita ajustes razonables (autonomía, instrucciones claras, entorno predecible) es lo que permite que este perfil aporte de forma singular.</p>
+        <ul class="overlap-list triple">
+          <li>Intensidad emocional</li>
+          <li>Perfeccionismo</li>
+          <li>Sensibilidad a la frustración</li>
+          <li>Problemas de sueño</li>
+          <li>Ansiedad</li>
+          <li>Dificultad para iniciar tareas</li>
+          <li>Hiperfoco</li>
+          <li>Sentido de la justicia</li>
+          <li>Pensamiento divergente</li>
+          <li>Fatiga mental por sobreestimulación</li>
+          <li>Dificultad en la autorregulación emocional</li>
+          <li>Hipersensibilidad</li>
+          <li>Necesidad de control</li>
+          <li>Tendencia a la reflexión profunda</li>
+          <li>Dificultad en la interacción social</li>
+          <li>Baja autoestima (en contextos inadecuados)</li>
+        </ul>
+        <p><strong>En resumen, para el equipo:</strong> Conocer la triple excepcionalidad sirve para dos cosas. Primero, para no interpretar como capricho o falta de esfuerzo lo que forma parte del funcionamiento neurodivergente. Segundo, para poder diseñar entornos — equipos, procesos, expectativas — donde el rendimiento y la aportación puedan ser realmente altos. No se trata de conceder privilegios, sino de que lo que a veces choca tenga sentido y de que el talento no se pierda por malentendidos. Cuando hay dudas, lo más útil es preguntar a la persona con claridad en lugar de asumir.</p>
+      </section>
+
+      <section id="referencias">
+        <h2>Referencias y lecturas</h2>
+        <ul>
+          <li>Katy Higgins Lee, MTF — diagrama original; adaptación Blanca Santiago.</li>
+          <li>Nesplora, "Doble excepcionalidad: altas capacidades, TEA y TDAH".</li>
+          <li>Diagnosticatea, "Doble excepcionalidad: altas capacidades y TDAH".</li>
+          <li>Frontiers in Education, "Twice-exceptional students: a systematic review" (2025).</li>
+          <li>Gifted Child Quarterly, "An operational definition of twice-exceptional learners" (Reis et al.).</li>
+          <li>Investigación sobre neurodiversidad en el trabajo: ajustes que igualan el terreno (autonomía, instrucciones claras, entorno predecible).</li>
+        </ul>
+        <p><a href="#portada" class="back-top">↑ Volver al inicio</a> · <a href="index.html" class="back-top">Visión y negocio</a> · <a href="presupuesto-desarrollo.html" class="back-top">Presupuesto</a></p>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    (function() {
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.nav a[href^="#"]');
+      const progressFill = document.querySelector('.progress-bar .fill');
+      function setActive() {
+        const scrollY = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (progressFill && docHeight > 0) {
+          const pct = Math.min(100, (scrollY / docHeight) * 100);
+          progressFill.parentElement.style.setProperty('--scroll-pct', pct + '%');
+        }
+        let current = '';
+        sections.forEach(s => {
+          const top = s.offsetTop - 80;
+          if (scrollY >= top) current = s.getAttribute('id');
+        });
+        navLinks.forEach(a => {
+          a.classList.remove('active');
+          if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+        });
+      }
+      window.addEventListener('scroll', setActive, { passive: true });
+      window.addEventListener('resize', setActive);
+      setActive();
+    })();
+  </script>
+</body>
+</html>
