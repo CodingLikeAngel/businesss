@@ -6,37 +6,76 @@
   <title>Presupuesto de desarrollo · Fases, equipo y tiempos</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800&family=Exo+2:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f0f14;
-      --bg-card: #18181f;
-      --border: rgba(255,255,255,0.08);
-      --text: #e4e4e7;
-      --text-muted: #a1a1aa;
-      --accent: #6366f1;
-      --accent-soft: rgba(99, 102, 241, 0.15);
-      --success: #22c55e;
-      --warning: #eab308;
+      --bg: #06060a;
+      --bg-card: rgba(18, 18, 28, 0.85);
+      --bg-card-border: rgba(245, 158, 11, 0.2);
+      --border: rgba(255,255,255,0.06);
+      --text: #f1f1f4;
+      --text-muted: #94a3b8;
+      --accent: #f59e0b;
+      --accent-cyan: #22d3ee;
+      --accent-soft: rgba(245, 158, 11, 0.12);
+      --success: #4ade80;
+      --warning: #facc15;
+      --glow-amber: 0 0 20px rgba(245, 158, 11, 0.12);
+      --nav-w: 240px;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       margin: 0;
-      font-family: 'Inter', sans-serif;
+      font-family: 'Exo 2', sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.6;
+      line-height: 1.65;
       font-size: 1rem;
+      background-image:
+        radial-gradient(ellipse 100% 60% at 50% -10%, rgba(245, 158, 11, 0.06), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 50%, rgba(34, 211, 238, 0.04), transparent);
     }
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: var(--nav-w);
+      right: 0;
+      height: 3px;
+      background: rgba(255,255,255,0.06);
+      z-index: 100;
+    }
+    .progress-bar .fill {
+      height: 100%;
+      width: var(--scroll-pct, 0%);
+      background: linear-gradient(90deg, var(--accent), var(--accent-cyan));
+      transition: width 0.15s ease-out;
+    }
+    @media (max-width: 900px) { .progress-bar { left: 0; } }
+    .skip-link {
+      position: absolute;
+      top: -3rem;
+      left: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      z-index: 200;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 1rem; outline: 2px solid var(--accent-cyan); outline-offset: 2px; }
     .layout {
       display: grid;
-      grid-template-columns: 240px 1fr;
+      grid-template-columns: var(--nav-w) 1fr;
       min-height: 100vh;
     }
     @media (max-width: 900px) {
       .layout { grid-template-columns: 1fr; }
-      .nav { position: relative; padding: 1rem; border-bottom: 1px solid var(--border); }
+      .nav { position: relative; height: auto; padding: 1rem; border-bottom: 1px solid var(--border); background: rgba(6, 6, 10, 0.98); }
       .nav ul { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     }
     .nav {
@@ -45,32 +84,35 @@
       height: 100vh;
       padding: 1.5rem 1rem;
       border-right: 1px solid var(--border);
-      background: var(--bg);
+      background: rgba(6, 6, 10, 0.97);
+      backdrop-filter: blur(12px);
     }
     .nav h2 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.75rem;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
       font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
-      color: var(--text-muted);
+      letter-spacing: 0.2em;
+      color: var(--accent);
       margin: 0 0 1rem 0.75rem;
     }
     .nav ul { list-style: none; padding: 0; margin: 0; }
     .nav li { margin-bottom: 0.2rem; }
     .nav a {
       display: block;
-      padding: 0.5rem 0.75rem;
+      padding: 0.6rem 0.75rem;
       color: var(--text-muted);
       text-decoration: none;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 0.9rem;
-      transition: color .2s, background .2s;
+      font-weight: 500;
+      transition: color .2s, background .2s, border-color .2s;
+      border: 1px solid transparent;
     }
-    .nav a:hover { color: var(--text); background: var(--accent-soft); }
-    .nav a.active { color: var(--accent); background: var(--accent-soft); font-weight: 600; }
+    .nav a:hover { color: var(--text); background: var(--accent-soft); border-color: rgba(245, 158, 11, 0.2); }
+    .nav a.active { color: var(--accent); background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(34, 211, 238, 0.08)); border-color: rgba(245, 158, 11, 0.3); font-weight: 600; box-shadow: var(--glow-amber); }
     .main {
-      padding: 2.5rem 2.5rem 4rem;
+      padding: 2.5rem 3rem 4rem;
       max-width: 920px;
     }
     section {
@@ -79,67 +121,132 @@
       border-bottom: 1px solid var(--border);
     }
     section:last-of-type { border-bottom: 0; }
-    h1 {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 2rem;
+    .section-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
       font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+    }
+    h1 {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 2.1rem;
+      font-weight: 800;
       margin: 0 0 0.5rem;
       letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 0%, var(--text-muted) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    .subtitle { color: var(--text-muted); font-size: 1rem; margin: 0 0 1.5rem; }
+    .subtitle { color: var(--text-muted); font-size: 1.05rem; margin: 0 0 1.5rem; font-family: 'Rajdhani', sans-serif; font-weight: 600; }
     h2 {
-      font-family: 'Space Grotesk', sans-serif;
+      font-family: 'Orbitron', sans-serif;
       font-size: 1.2rem;
       font-weight: 700;
       margin: 1.75rem 0 0.75rem;
       color: var(--text);
+      padding-bottom: 0.4rem;
+      border-bottom: 2px solid transparent;
+      border-image: linear-gradient(90deg, var(--accent), transparent) 1;
     }
-    h3 { font-size: 1rem; font-weight: 600; margin: 1.25rem 0 0.5rem; color: var(--text); }
+    h3 { font-family: 'Rajdhani', sans-serif; font-size: 1.05rem; font-weight: 700; margin: 1.25rem 0 0.5rem; color: var(--text); }
     p { margin: 0 0 0.6rem; color: var(--text); }
-    ul, ol { margin: 0 0 0.75rem; padding-left: 1.25rem; }
-    li { margin-bottom: 0.3rem; }
+    ul, ol { margin: 0 0 0.75rem; padding-left: 1.35rem; }
+    li { margin-bottom: 0.35rem; }
     .card {
       background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 1.25rem 1.5rem;
-      margin: 1rem 0;
+      border: 1px solid var(--bg-card-border);
+      border-radius: 14px;
+      padding: 1.35rem 1.5rem;
+      margin: 1.25rem 0;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--glow-amber), inset 0 1px 0 rgba(255,255,255,0.03);
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 0.88rem;
-      margin: 0.75rem 0;
+      font-size: 0.9rem;
+      margin: 1rem 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
     }
-    th, td { padding: 0.5rem 0.65rem; text-align: left; border-bottom: 1px solid var(--border); }
-    th { color: var(--text-muted); font-weight: 600; }
+    th, td { padding: 0.65rem 0.9rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th {
+      color: var(--text-muted);
+      font-weight: 600;
+      font-family: 'Rajdhani', sans-serif;
+      background: linear-gradient(180deg, rgba(245, 158, 11, 0.08), transparent);
+    }
+    tr:hover td { background: rgba(255,255,255,0.02); }
     .num { text-align: right; }
     .phase-tag {
       display: inline-block;
-      font-size: 0.7rem;
-      font-weight: 600;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.68rem;
+      font-weight: 700;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      padding: 0.25rem 0.5rem;
-      border-radius: 6px;
+      letter-spacing: 0.08em;
+      padding: 0.3rem 0.6rem;
+      border-radius: 8px;
       margin-right: 0.5rem;
+      border: 1px solid transparent;
     }
-    .phase-tag.base { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; }
-    .phase-tag.core { background: rgba(34, 197, 94, 0.2); color: #86efac; }
-    .phase-tag.api { background: rgba(234, 179, 8, 0.2); color: #fde047; }
-    .phase-tag.ia { background: rgba(236, 72, 153, 0.2); color: #f9a8d4; }
-    .phase-tag.adv { background: rgba(139, 92, 246, 0.2); color: #c4b5fd; }
+    .phase-tag.base { background: rgba(99, 102, 241, 0.2); color: #a5b4fc; border-color: rgba(99, 102, 241, 0.35); }
+    .phase-tag.core { background: rgba(34, 197, 94, 0.18); color: #86efac; border-color: rgba(34, 197, 94, 0.35); }
+    .phase-tag.api { background: rgba(245, 158, 11, 0.2); color: #fcd34d; border-color: rgba(245, 158, 11, 0.35); }
+    .phase-tag.ia { background: rgba(236, 72, 153, 0.18); color: #f9a8d4; border-color: rgba(236, 72, 153, 0.35); }
+    .phase-tag.adv { background: rgba(139, 92, 246, 0.18); color: #c4b5fd; border-color: rgba(139, 92, 246, 0.35); }
+    .timeline {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin: 1.25rem 0;
+    }
+    .timeline-item {
+      flex: 1 1 140px;
+      min-width: 0;
+      padding: 0.75rem 1rem;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      font-size: 0.85rem;
+    }
+    .timeline-item .phase { font-family: 'Orbitron', sans-serif; font-weight: 700; font-size: 0.75rem; margin-bottom: 0.25rem; }
+    .timeline-item .dur { color: var(--accent-cyan); font-weight: 600; }
     .doc-ref { font-size: 0.85rem; color: var(--text-muted); margin-top: 1rem; }
-    .doc-ref a { color: var(--accent); text-decoration: none; }
-    .doc-ref a:hover { text-decoration: underline; }
+    .doc-ref a { color: var(--accent-cyan); text-decoration: none; font-weight: 500; }
+    .doc-ref a:hover { text-decoration: underline; color: var(--accent); }
+    .back-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 1.5rem;
+      padding: 0.5rem 1rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 10px;
+      background: var(--accent-soft);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .back-top:hover { background: rgba(245, 158, 11, 0.2); box-shadow: var(--glow-amber); }
     @media print {
-      .nav { position: relative; height: auto; border: 0; }
+      .progress-bar, .skip-link, .back-top, .nav { display: none !important; }
       .layout { grid-template-columns: 1fr; }
       section { break-inside: avoid; }
+      body { background-image: none; }
+      h1 { -webkit-text-fill-color: #111; background: none; color: #111; }
     }
   </style>
 </head>
 <body>
+  <div class="progress-bar" role="presentation" aria-hidden="true"><div class="fill"></div></div>
+  <a href="#portada" class="skip-link">Ir al contenido</a>
   <div class="layout">
     <nav class="nav" role="navigation" aria-label="Índice del presupuesto">
       <h2>Índice</h2>
@@ -151,21 +258,31 @@
         <li><a href="#desglose">Desglose por fase</a></li>
         <li><a href="#presupuesto">Presupuesto económico</a></li>
         <li><a href="#hipotesis">Hipótesis y riesgos</a></li>
+        <li><a href="index.html">← Presentación visión y negocio</a></li>
       </ul>
     </nav>
 
     <main class="main">
       <!-- PORTADA -->
       <section id="portada">
+        <p class="section-num">Presupuesto</p>
         <h1>Presupuesto de desarrollo</h1>
-        <p class="subtitle">Sistema integrado ATS + Anto Studios · Fases, equipo, sprints y tiempos</p>
+        <p class="subtitle">Sistema integrado ATS + Editor · Fases, equipo, sprints y tiempos</p>
         <p>Documento orientativo para planificación de recursos, número de desarrolladores, duración por fase y sprints. Basado en los roadmaps de Visión (Anto), Integración ATS+Anto, Logs y flujos, y Mejoras.</p>
         <p class="doc-ref">Referencias: <a href="index.html">Presentación visión y negocio</a>, <a href="../DOC_VISION_MODULARIZACION_IA_PRODUCCION.md">DOC_VISION</a>, <a href="../mejoras/DOC_INTEGRACION_ATS_ANTO_STUDIOS.md">DOC_INTEGRACION</a>, <a href="../profundizar/DOC_LOGS_FLUJOS_IA.md">DOC_LOGS</a>, <a href="../mejoras/DOC_MEJORAS.md">DOC_MEJORAS</a>.</p>
       </section>
 
       <!-- RESUMEN EJECUTIVO -->
       <section id="resumen">
+        <p class="section-num">Resumen</p>
         <h1>Resumen ejecutivo</h1>
+        <div class="timeline" aria-label="Resumen de fases">
+          <div class="timeline-item"><span class="phase phase-tag base">F0</span><span class="dur">3 meses</span> · Base</div>
+          <div class="timeline-item"><span class="phase phase-tag core">F1</span><span class="dur">4 meses</span> · Núcleo</div>
+          <div class="timeline-item"><span class="phase phase-tag api">F2</span><span class="dur">6 meses</span> · API</div>
+          <div class="timeline-item"><span class="phase phase-tag ia">F3</span><span class="dur">6 meses</span> · IA</div>
+          <div class="timeline-item"><span class="phase phase-tag adv">F4</span><span class="dur">6+ meses</span> · Avanzado</div>
+        </div>
         <div class="card">
           <table>
             <tr><th>Concepto</th><th class="num">Valor</th></tr>
@@ -182,11 +299,12 @@
 
       <!-- EQUIPO Y ROLES -->
       <section id="equipo">
+        <p class="section-num">Equipo</p>
         <h1>Equipo y roles</h1>
         <p class="subtitle">Perfiles sugeridos por fase (orientativo).</p>
         <table>
           <tr><th>Rol</th><th>Fase típica</th><th>Responsabilidad principal</th></tr>
-          <tr><td>Dev Anto / Frontend (Angular)</td><td>F0–F4</td><td>Editor, export, UI, schema, componentes (Anto Studios).</td></tr>
+          <tr><td>Dev Anto / Frontend (Angular)</td><td>F0–F4</td><td>Editor, export, UI, schema, componentes (Editor).</td></tr>
           <tr><td>Dev ATS / Backend (NestJS)</td><td>F0–F4</td><td>Hub ATS, APIs, análisis, integración con Anto, logs.</td></tr>
           <tr><td>Dev fullstack / integración</td><td>F1–F4</td><td>API builder headless, flujo Publicar, quality gate, BFF si aplica.</td></tr>
           <tr><td>Dev IA / plataforma</td><td>F2–F4</td><td>Adapter IA→acciones, contexto Gemini, export enriquecido, bot del cliente (visión).</td></tr>
@@ -196,6 +314,7 @@
 
       <!-- FASES Y SPRINTS -->
       <section id="fases">
+        <p class="section-num">Fases</p>
         <h1>Fases y sprints</h1>
         <p class="subtitle">Sprint = 2 semanas. 1 mes ≈ 2 sprints.</p>
         <table>
@@ -246,6 +365,7 @@
 
       <!-- DESGLOSE POR FASE -->
       <section id="desglose">
+        <p class="section-num">Desglose</p>
         <h1>Desglose por fase</h1>
 
         <h2><span class="phase-tag base">F0 – Base (3 meses, 6 sprints, 2 devs)</span></h2>
@@ -316,6 +436,7 @@
 
       <!-- HIPÓTESIS Y RIESGOS -->
       <section id="hipotesis">
+        <p class="section-num">Riesgos</p>
         <h1>Hipótesis y riesgos</h1>
         <ul>
           <li><strong>Sprint de 2 semanas:</strong> Asumido como estándar; equipos que usen 1 o 3 semanas deben recalcular el número de sprints por fase.</li>
@@ -325,27 +446,37 @@
           <li><strong>Riesgo de alcance:</strong> Añadir funcionalidades no previstas en los docs (nuevas apps, integraciones) aumenta duración y/o equipo.</li>
         </ul>
         <p class="doc-ref">Este presupuesto debe revisarse con responsables de producto y técnicos; los documentos en <code>ideas/</code> y <code>ideas/profundizar/</code> son la fuente de verdad del alcance.</p>
+        <p><a href="#portada" class="back-top">↑ Volver al inicio</a> · <a href="index.html" class="back-top">Presentación visión y negocio</a></p>
       </section>
     </main>
   </div>
 
   <script>
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav a[href^="#"]');
-    function setActive() {
-      const scrollY = window.scrollY;
-      let current = '';
-      sections.forEach(s => {
-        const top = s.offsetTop - 80;
-        if (scrollY >= top) current = s.getAttribute('id');
-      });
-      navLinks.forEach(a => {
-        a.classList.remove('active');
-        if (a.getAttribute('href') === '#' + current) a.classList.add('active');
-      });
-    }
-    window.addEventListener('scroll', setActive);
-    setActive();
+    (function() {
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.nav a[href^="#"]');
+      const progressFill = document.querySelector('.progress-bar .fill');
+      function setActive() {
+        const scrollY = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (progressFill && docHeight > 0) {
+          const pct = Math.min(100, (scrollY / docHeight) * 100);
+          progressFill.parentElement.style.setProperty('--scroll-pct', pct + '%');
+        }
+        let current = '';
+        sections.forEach(s => {
+          const top = s.offsetTop - 80;
+          if (scrollY >= top) current = s.getAttribute('id');
+        });
+        navLinks.forEach(a => {
+          a.classList.remove('active');
+          if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+        });
+      }
+      window.addEventListener('scroll', setActive, { passive: true });
+      window.addEventListener('resize', setActive);
+      setActive();
+    })();
   </script>
 </body>
 </html>

@@ -23,9 +23,14 @@
       --warning: #facc15;
       --glow-amber: 0 0 20px rgba(245, 158, 11, 0.15);
       --glow-cyan: 0 0 20px rgba(34, 211, 238, 0.12);
+      --nav-w: 280px;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+    }
     body {
       margin: 0;
       font-family: 'Exo 2', sans-serif;
@@ -34,10 +39,26 @@
       line-height: 1.65;
       font-size: 1rem;
       background-image:
-        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(245, 158, 11, 0.06), transparent),
-        radial-gradient(ellipse 80% 50% at 100% 50%, rgba(34, 211, 238, 0.04), transparent),
-        radial-gradient(ellipse 60% 40% at 0% 80%, rgba(167, 139, 250, 0.04), transparent);
+        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(245, 158, 11, 0.08), transparent 50%),
+        radial-gradient(ellipse 80% 50% at 100% 50%, rgba(34, 211, 238, 0.05), transparent),
+        radial-gradient(ellipse 60% 40% at 0% 80%, rgba(167, 139, 250, 0.05), transparent);
     }
+    .progress-bar {
+      position: fixed;
+      top: 0;
+      left: var(--nav-w);
+      right: 0;
+      height: 3px;
+      background: rgba(255,255,255,0.06);
+      z-index: 100;
+    }
+    .progress-bar .fill {
+      height: 100%;
+      width: var(--scroll-pct, 0%);
+      background: linear-gradient(90deg, var(--accent), var(--accent-cyan));
+      transition: width 0.15s ease-out;
+    }
+    @media (max-width: 900px) { .progress-bar { left: 0; } }
     .layout {
       display: grid;
       grid-template-columns: 280px 1fr;
@@ -304,7 +325,56 @@
       font-size: 0.9rem;
     }
     .overlap-list.triple li { border-left-color: var(--accent-cyan); background: rgba(34, 211, 238, 0.06); }
+    .skip-link {
+      position: absolute;
+      top: -3rem;
+      left: 1rem;
+      padding: 0.5rem 1rem;
+      background: var(--accent);
+      color: var(--bg);
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+      z-index: 200;
+      transition: top 0.2s;
+    }
+    .skip-link:focus { top: 1rem; outline: 2px solid var(--accent-cyan); outline-offset: 2px; }
+    .section-num {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      opacity: 0.9;
+    }
+    .key-takeaway {
+      background: linear-gradient(135deg, rgba(34, 211, 238, 0.08), rgba(245, 158, 11, 0.06));
+      border-left: 4px solid var(--accent-cyan);
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      border-radius: 0 12px 12px 0;
+      font-size: 0.95rem;
+    }
+    .key-takeaway strong { color: var(--accent-cyan); }
+    .back-top {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 2rem;
+      padding: 0.5rem 1rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 10px;
+      background: var(--accent-soft);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .back-top:hover { background: rgba(245, 158, 11, 0.2); box-shadow: var(--glow-amber); }
     @media print {
+      .progress-bar, .skip-link, .back-top, .nav { display: none !important; }
       .nav { position: relative; height: auto; border: 0; background: #0a0a0e; }
       .layout { grid-template-columns: 1fr; }
       section { break-inside: avoid; }
@@ -314,6 +384,8 @@
   </style>
 </head>
 <body>
+  <div class="progress-bar" role="presentation" aria-hidden="true"><div class="fill"></div></div>
+  <a href="#portada" class="skip-link">Ir al contenido</a>
   <div class="layout">
     <nav class="nav" role="navigation" aria-label="Índice de la presentación">
       <h2>Índice</h2>
@@ -324,24 +396,25 @@
         <li><a href="#negocio-integrado">Negocio integrado</a><span class="badge">CEO/CTO</span></li>
         <li><a href="#integracion">Integración ATS + Anto</a><span class="badge">CEO/CTO</span></li>
         <li><a href="#ats">ATS como herramienta</a><span class="badge">CEO/CTO</span></li>
-        <li><a href="#negocio-anto">Oportunidades Anto Studios</a><span class="badge">CEO/CTO</span></li>
-        <li><a href="#mejoras">Mejoras (Anto Studios)</a><span class="badge">Producto / Dev</span></li>
+        <li><a href="#negocio-anto">Oportunidades del editor</a><span class="badge">CEO/CTO</span></li>
+        <li><a href="#mejoras">Mejoras del editor</a><span class="badge">Producto / Dev</span></li>
         <li><a href="#logs">Logs y flujos para IA</a><span class="badge">Jefes desarrollo</span></li>
         <li><a href="#cierre">Cierre</a></li>
-        <li><a href="presupuesto-desarrollo.html">Presupuesto desarrollo</a></li>
+        <li><a href="presupuesto-desarrollo.html">Presupuesto desarrollo</a><span class="badge">Doc</span></li>
       </ul>
     </nav>
 
     <main class="main">
       <!-- PORTADA -->
       <section id="portada">
+        <p class="section-num" aria-hidden="true">Presentación</p>
         <h1>Visión, negocio e integración</h1>
-        <p class="subtitle">Anto Studios · ATS · Sistema integrado</p>
+        <p class="subtitle">Editor · ATS · Sistema integrado</p>
         <div class="quote" style="margin: 1.5rem 0;">
           Evolución natural de <strong>Wix + Trello + Figma + CI/CD</strong> en un solo lugar: un agente puede hacer lo que hoy hace un dev, y los devs centran sus esfuerzos en <strong>mejorar la IA propia de la empresa</strong> para construir productos.
         </div>
         <p>Presentación para clientes, CTOs, CEOs y jefes de desarrollo.</p>
-        <p class="doc-ref">Esta presentación incluye el contenido de todos los documentos: Visión (modularización + IA + producción), Oportunidades de negocio (Anto e integrado), Integración ATS + Anto, Mejoras (Anto Studios), Logs y flujos para IA. <a href="presupuesto-desarrollo.html">Presupuesto de desarrollo</a> (fases, equipo, sprints, tiempos).</p>
+        <p class="doc-ref">Esta presentación incluye el contenido de todos los documentos: Visión (modularización + IA + producción), Oportunidades de negocio (Anto e integrado), Integración ATS + Anto, Mejoras del editor, Logs y flujos para IA. <a href="presupuesto-desarrollo.html">Presupuesto de desarrollo</a> (fases, equipo, sprints, tiempos).</p>
       </section>
 
       <!-- SOBRE MÍ -->
@@ -423,6 +496,7 @@
 
       <!-- VISIÓN MODULARIZACIÓN + IA + PRODUCCIÓN -->
       <section id="vision">
+        <p class="section-num">Visión</p>
         <span class="audience cto">Para CEO / CTO</span>
         <h1>Visión: modularización, IA y producción</h1>
         <p class="subtitle">Sistema modular, framework propio e integración con IA para generar y publicar aplicaciones de forma controlada.</p>
@@ -513,16 +587,17 @@
 
       <!-- NEGOCIO INTEGRADO -->
       <section id="negocio-integrado">
+        <p class="section-num">Negocio</p>
         <span class="audience cto">Para CEO / CTO</span>
         <h1>Oportunidades del sistema integrado</h1>
-        <p class="subtitle">ATS + Anto Studios como un solo producto: hub de control y producción.</p>
+        <p class="subtitle">ATS + Editor como un solo producto: hub de control y producción.</p>
 
         <div class="quote">
           «Un solo hub donde ves todo tu código, tus métricas, tu IA y tus sitios en vivo, y publicas a producción con un clic y con control.»
         </div>
 
         <h2>Propuesta de valor</h2>
-        <p><strong>ATS</strong> aporta: visión 360 (repos, calidad, seguridad, CI, dependencias, sprints, roadmap, informes IA). <strong>Anto Studios</strong> aporta: creación de sitios/landings y export a código o publicación. <strong>Integración</strong> aporta: un único lugar para controlar (métricas + activos vivos) y actuar (analizar, publicar, rollback, auditar), con quality gates y trazabilidad completa.</p>
+        <p><strong>ATS</strong> aporta: visión 360 (repos, calidad, seguridad, CI, dependencias, sprints, roadmap, informes IA). <strong>Editor</strong> aporta: creación de sitios/landings y export a código o publicación. <strong>Integración</strong> aporta: un único lugar para controlar (métricas + activos vivos) y actuar (analizar, publicar, rollback, auditar), con quality gates y trazabilidad completa.</p>
 
         <h2>Diferenciación frente a productos por separado</h2>
         <table>
@@ -573,13 +648,14 @@
 
       <!-- INTEGRACIÓN TÉCNICA ATS + ANTO -->
       <section id="integracion">
+        <p class="section-num">Integración</p>
         <span class="audience cto">Para CEO / CTO</span>
-        <h1>Integración técnica ATS + Anto Studios</h1>
+        <h1>Integración técnica ATS + Editor</h1>
         <p class="subtitle">Cómo se conectan las dos apps: hub de control y motor de producción.</p>
 
         <h2>Resumen de cada aplicación</h2>
         <p><strong>ATS (ats):</strong> Análisis técnico y scoring de repos (AST, SonarQube, seguridad, CI/CD, dependencias); Gemini para informes estratégicos y evaluación de código; dashboard 360 (Hero Hub, Sonar, CI, Security, Sprints, Roadmap, etc.). <strong>Rol:</strong> Hub de control para devs: ver todo (métricas, IA, sprints) y actuar sobre builds, deploys y activos Anto.</p>
-        <p><strong>Anto Studios (businesss):</strong> Editor visual de páginas (secciones, layout, variantes, design tokens); store y schema de página; export React/Angular/Vue/Web Components. <strong>Rol:</strong> Motor de producción: lo que se construye (landings, webs) y lo que se exporta o despliega a preview/staging/producción.</p>
+        <p><strong>Editor (businesss):</strong> Editor visual de páginas (secciones, layout, variantes, design tokens); store y schema de página; export React/Angular/Vue/Web Components. <strong>Rol:</strong> Motor de producción: lo que se construye (landings, webs) y lo que se exporta o despliega a preview/staging/producción.</p>
 
         <h2>Visión del sistema integrado</h2>
         <p>En el <strong>hub (ATS)</strong>: visión 360 (código, calidad, seguridad, CI, sprints, IA) + visión de "activos vivos" (sitios Anto en preview/staging/prod) + acciones directas (lanzar análisis, ver informes, publicar a producción, rollback, auditoría). <strong>Anto</strong> es la herramienta de creación que el hub orquesta ("Crear landing para proyecto X", "Exportar proyecto Y"), monitoriza (estado de builds, última publicación) y desde la que se despliega (schema → export → deploy) con flujo unificado.</p>
@@ -592,7 +668,7 @@
 
         <h2>Flujo "trabajar y producir en producción"</h2>
         <ol>
-          <li><strong>Desde el hub:</strong> Dev ve panel "Anto Studios" (lista de sitios, estado borrador/staging/prod); elige proyecto, ve preview; pulsa "Publicar a producción" o "Promover staging → prod"; el hub llama a API de Anto (o deploy); resultado se muestra y queda registrado.</li>
+          <li><strong>Desde el hub:</strong> Dev ve panel "Editor" (lista de sitios, estado borrador/staging/prod); elige proyecto, ve preview; pulsa "Publicar a producción" o "Promover staging → prod"; el hub llama a API de Anto (o deploy); resultado se muestra y queda registrado.</li>
           <li><strong>Desde Anto:</strong> Dev diseña, guarda, genera preview/staging; puede ir al hub ("Abrir en Hub") para ver métricas del repo e informes IA y desde ahí "Publicar a producción" si se centraliza en ATS.</li>
           <li><strong>Reglas:</strong> Solo ciertos roles pueden publicar; el hub puede exigir que el repo pase quality gate antes de permitir publicar; rollback y auditoría en un solo lugar.</li>
         </ol>
@@ -600,7 +676,7 @@
         <h2>Integración técnica por niveles</h2>
         <table>
           <tr><th>Nivel</th><th>Descripción</th></tr>
-          <tr><td>1. Dashboard unificado</td><td>En ATS: panel "Anto Studios" / "Sitios" con lista de proyectos (API REST de Anto o config), enlaces a preview/staging/prod, "Abrir en editor".</td></tr>
+          <tr><td>1. Dashboard unificado</td><td>En ATS: panel "Editor" / "Sitios" con lista de proyectos (API REST de Anto o config), enlaces a preview/staging/prod, "Abrir en editor".</td></tr>
           <tr><td>2. Acciones desde el hub</td><td><code>POST /api/anto/publish</code> (projectId, versionId, target); <code>POST /api/anto/rollback</code>; disparar export (React/Angular/Vue) y descargar ZIP.</td></tr>
           <tr><td>3. Quality gate</td><td>Política: solo permitir Publicar si ATS score &gt; X y Sonar quality gate passed; el hub consulta métricas y habilita/deshabilita "Publicar" mostrando motivo.</td></tr>
           <tr><td>4. IA y automatización</td><td>Gemini con contexto "estado de sitios Anto"; si Anto expone API headless, hub invoca "Generar landing para X" → IA produce schema → Anto guarda y devuelve preview → hub ofrece "Publicar".</td></tr>
@@ -624,6 +700,7 @@
 
       <!-- ATS COMO HERRAMIENTA -->
       <section id="ats">
+        <p class="section-num">ATS</p>
         <span class="audience cto">Para CEO / CTO</span>
         <h1>ATS · Automated Technical Scoring</h1>
         <p class="subtitle">Hub gamificado para mejorar todos los flujos de trabajo en equipo: análisis técnico, gestión de sprints, avatares, logros, IA e integración con reuniones y tareas.</p>
@@ -693,7 +770,7 @@
       <!-- OPORTUNIDADES ANTO STUDIOS -->
       <section id="negocio-anto">
         <span class="audience cto">Para CEO / CTO</span>
-        <h1>Oportunidades Anto Studios</h1>
+        <h1>Oportunidades del editor</h1>
         <p class="subtitle">Editor visual que exporta código real: React, Angular, Vue, Web Components.</p>
 
         <div class="quote">«Diseña una vez, usa en todas partes.»</div>
@@ -703,7 +780,7 @@
 
         <h2>Ventaja competitiva</h2>
         <table>
-          <tr><th>Capacidad</th><th>Wix</th><th>Figma</th><th>Storybook</th><th>Anto Studios</th></tr>
+          <tr><th>Capacidad</th><th>Wix</th><th>Figma</th><th>Storybook</th><th>Editor</th></tr>
           <tr><td>Editor visual</td><td>✅</td><td>✅</td><td>❌</td><td>✅</td></tr>
           <tr><td>Design tokens</td><td>❌</td><td>✅</td><td>❌</td><td>✅</td></tr>
           <tr><td>Export React/Angular/Vue</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td></tr>
@@ -762,8 +839,9 @@
 
       <!-- MEJORAS ANTO STUDIOS -->
       <section id="mejoras">
+        <p class="section-num">Mejoras</p>
         <span class="audience dev">Para producto / desarrollo</span>
-        <h1>Mejoras – Anto Studios Editor</h1>
+        <h1>Mejoras del editor</h1>
         <p class="subtitle">Lista priorizada de mejoras técnicas, de producto y UX para llevar el editor de MVP estable a producto comercial.</p>
 
         <h2>1. Mejoras críticas (base)</h2>
@@ -818,9 +896,10 @@
 
       <!-- LOGS Y FLUJOS (JEFES DE DESARROLLO) -->
       <section id="logs">
+        <p class="section-num">Logs y flujos</p>
         <span class="audience dev">Para jefes de desarrollo / tech leads</span>
         <h1>Logs y flujos exportables para IA</h1>
-        <p class="subtitle">Buenas prácticas para trazabilidad, depuración y contexto que la IA puede consumir en cualquier flujo. ATS, Anto Studios y el sistema integrado se benefician.</p>
+        <p class="subtitle">Buenas prácticas para trazabilidad, depuración y contexto que la IA puede consumir en cualquier flujo. ATS, Editor y el sistema integrado se benefician.</p>
 
         <h2>1. Por qué logs en cada paso</h2>
         <ul>
@@ -831,7 +910,7 @@
           <li><strong>Reproducibilidad:</strong> Reconstruir un flujo para reproducir un bug o re-ejecutar un escenario.</li>
         </ul>
         <h3>"Cualquier paso" de la app</h3>
-        <p>Paso = cualquier unidad significativa de trabajo. <strong>ATS:</strong> inicio/fin de análisis de repo, llamada a SonarQube, generación de informe Gemini, cálculo de score, guardado de resultados, error en adapter. <strong>Anto Studios:</strong> carga de página, cambio de sección (añadir/editar/eliminar), cambio de variante, guardado, inicio/fin de export por framework, inicio/fin de publicación, fallo de validación de schema. <strong>Sistema integrado:</strong> llamada desde hub a API de Anto, comprobación de quality gate, disparo de deploy, rollback. Cada uno emite al menos: timestamp, paso/acción, entidad (repo, proyecto, sitio, versión), resultado (ok/error), payload mínimo (ids, opciones), opcionalmente usuario/sesión.</p>
+        <p>Paso = cualquier unidad significativa de trabajo. <strong>ATS:</strong> inicio/fin de análisis de repo, llamada a SonarQube, generación de informe Gemini, cálculo de score, guardado de resultados, error en adapter. <strong>Editor:</strong> carga de página, cambio de sección (añadir/editar/eliminar), cambio de variante, guardado, inicio/fin de export por framework, inicio/fin de publicación, fallo de validación de schema. <strong>Sistema integrado:</strong> llamada desde hub a API de Anto, comprobación de quality gate, disparo de deploy, rollback. Cada uno emite al menos: timestamp, paso/acción, entidad (repo, proyecto, sitio, versión), resultado (ok/error), payload mínimo (ids, opciones), opcionalmente usuario/sesión.</p>
 
         <h2>2. Buenas prácticas: logs estructurados (JSON)</h2>
         <p>Una línea por evento (JSON Lines). Campos comunes: <code>ts</code>, <code>level</code>, <code>app</code>, <code>flow</code>, <code>step</code>, <code>entity</code>, <code>result</code>, <code>duration_ms</code>, <code>message</code>, <code>payload</code> (sin datos sensibles). Cada flujo largo tiene un <code>flowId</code> (UUID) para agrupar todos los pasos.</p>
@@ -856,7 +935,7 @@
         <p>Logs estructurados + <code>flowId</code> = contrato claro para humanos, IA y pipeline de tests.</p>
 
         <h2>5b. IA especializada por app y bot del cliente (visión)</h2>
-        <p><strong>IA especializada por app:</strong> Cada aplicación (ATS, Anto Studios, hub) puede tener una IA propia afinada con el contexto de esa app (catálogo de componentes, tipos de flujo, schema, logs + MD + imágenes). La IA de Anto entiende secciones, variantes y schema; la de ATS entiende repos, Sonar, sprints e informes. Así el cliente tiene un asistente que habla el lenguaje de cada herramienta.</p>
+        <p><strong>IA especializada por app:</strong> Cada aplicación (ATS, Editor, hub) puede tener una IA propia afinada con el contexto de esa app (catálogo de componentes, tipos de flujo, schema, logs + MD + imágenes). La IA de Anto entiende secciones, variantes y schema; la de ATS entiende repos, Sonar, sprints e informes. Así el cliente tiene un asistente que habla el lenguaje de cada herramienta.</p>
         <p><strong>Bot propio del cliente (tipo Claude):</strong> Una capa por cliente o workspace que <strong>gestiona la app del cliente</strong>: conoce su proyecto, historial de flujos, publicaciones y contexto (logs + MD + imágenes). El cliente da <strong>comandos por voz o texto</strong> ("cambia el botón del hero a azul", "publica a staging"); el bot traduce a acciones sobre el schema o al hub. Además el bot se puede <strong>clonar</strong> y llevar su conocimiento a otros proyectos o a proyectos de empresa (reutilizar mejores prácticas y flujos); puede <strong>dar tareas a agentes</strong> (delegar análisis, generación de contenido, ejecución de flujos); y puede <strong>analizar datos y métricas de negocio</strong> (tiempos de publicación, tasas de error, salud de repos, tendencias) y responder en lenguaje natural o generar informes. Muchas otras capacidades encajan en el mismo asistente (orquestación, reporting, delegación).</p>
 
         <h2>6. Resumen de capacidades objetivo</h2>
@@ -891,6 +970,7 @@
 
       <!-- CIERRE -->
       <section id="cierre">
+        <p class="section-num">Cierre</p>
         <h1>Resumen y próximos pasos</h1>
         <div class="quote" style="margin-bottom: 1.5rem;">
           Evolución natural de Wix + Trello + Figma + CI/CD en uno: el agente hace lo que hoy hace un dev; los devs mejoran la IA propia de la empresa para construir productos.
@@ -900,33 +980,42 @@
           <li><strong>Negocio integrado:</strong> Un solo hub (ATS + Anto): diferenciación frente a productos por separado; segmentos (agencias, product companies, multi-marca, freelancers); SaaS por niveles (Starter, Agency, Company, Enterprise); add-ons y oportunidades (quality gate, logs para IA, flujos, auditoría); go-to-market y métricas.</li>
           <li><strong>Integración técnica:</strong> ATS = hub de control; Anto = motor de producción; flujo "trabajar y producir en producción"; niveles 1–4 (dashboard, acciones, quality gate, IA); visión 360 ampliada; roadmap de integración en 5 fases.</li>
           <li><strong>ATS:</strong> Hub gamificado: Hero Hub, avatares, niveles/XP, trofeos, pilotos, quests; gestión de sprints completa (board, planning, refinement, daily, kudos, achievements, fun, vacations, birthdays, share); IA (informes Gemini, evaluación de código, automatización visión, optimizador de prompts); análisis técnico (Sonar, CI, Security, etc.); temas visuales; para equipos, CTOs y agencias.</li>
-          <li><strong>Anto Studios:</strong> Propuesta de valor (diseña una vez, usa en todas partes); ventaja competitiva (Component-as-Code); líneas de negocio (SaaS builder, Component Builder Pro, marketplace, enterprise, verticales, LTD); segmentos; casos de uso; integración ecosistema; quick wins; riesgos y mitigación.</li>
+          <li><strong>Editor:</strong> Propuesta de valor (diseña una vez, usa en todas partes); ventaja competitiva (Component-as-Code); líneas de negocio (SaaS builder, Component Builder Pro, marketplace, enterprise, verticales, LTD); segmentos; casos de uso; integración ecosistema; quick wins; riesgos y mitigación.</li>
           <li><strong>Mejoras (Anto):</strong> Críticas (export/publicación, Smart-Adapt, resize); componentes y UI (lib base, featured, consistencia); arquitectura y rendimiento; UX y móvil; negocio y producto; priorización P0–P3.</li>
           <li><strong>Logs y flujos:</strong> Logs por paso; export enriquecido (imágenes + MD); IAs especializadas por app; bot del cliente (tipo Claude): comandos voz/texto, clonable (llevar conocimiento a proyectos/empresa), dar tareas a agentes, analizar datos y métricas de negocio; guardar flujos; tests; 7 fases.</li>
         </ul>
         <p style="margin-top:2rem; color: var(--text-muted); font-size: 0.9rem;">Presentación completa a partir de los documentos en <code>ideas/</code>, <code>ideas/mejoras/</code> y <code>ideas/profundizar/</code>. Febrero 2026.</p>
+        <p><a href="#portada" class="back-top">↑ Volver al inicio</a></p>
       </section>
     </main>
   </div>
 
   <script>
-    // Marcar enlace activo según scroll (opcional)
-    const sections = document.querySelectorAll('section[id]');
-    const navLinks = document.querySelectorAll('.nav a[href^="#"]');
-    function setActive() {
-      const scrollY = window.scrollY;
-      let current = '';
-      sections.forEach(s => {
-        const top = s.offsetTop - 100;
-        if (scrollY >= top) current = s.getAttribute('id');
-      });
-      navLinks.forEach(a => {
-        a.classList.remove('active');
-        if (a.getAttribute('href') === '#' + current) a.classList.add('active');
-      });
-    }
-    window.addEventListener('scroll', setActive);
-    setActive();
+    (function() {
+      const sections = document.querySelectorAll('section[id]');
+      const navLinks = document.querySelectorAll('.nav a[href^="#"]');
+      const progressFill = document.querySelector('.progress-bar .fill');
+      function setActive() {
+        const scrollY = window.scrollY;
+        const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+        if (progressFill && docHeight > 0) {
+          const pct = Math.min(100, (scrollY / docHeight) * 100);
+          progressFill.parentElement.style.setProperty('--scroll-pct', pct + '%');
+        }
+        let current = '';
+        sections.forEach(s => {
+          const top = s.offsetTop - 100;
+          if (scrollY >= top) current = s.getAttribute('id');
+        });
+        navLinks.forEach(a => {
+          a.classList.remove('active');
+          if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+        });
+      }
+      window.addEventListener('scroll', setActive, { passive: true });
+      window.addEventListener('resize', setActive);
+      setActive();
+    })();
   </script>
 </body>
 </html>
