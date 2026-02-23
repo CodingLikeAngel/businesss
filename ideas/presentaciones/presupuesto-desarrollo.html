@@ -293,7 +293,7 @@
         <p class="section-num">Presupuesto</p>
         <h1>Presupuesto de desarrollo</h1>
         <p class="subtitle">Sistema integrado ATS + App editor · Fases, equipo, sprints y tiempos</p>
-        <p>Documento orientativo para planificación de recursos, número de desarrolladores, duración por fase y sprints. Basado en los roadmaps de Visión (Anto), Integración ATS+Anto, Logs y flujos, y Mejoras.</p>
+        <p>Documento orientativo para planificación de recursos, número de desarrolladores, duración por fase y sprints. Basado en los roadmaps de Visión (App editor), Integración ATS + App editor, Logs y flujos, y Mejoras.</p>
         <p class="doc-ref">Referencias: <a href="index.html">Presentación visión y negocio</a>, <a href="../DOC_VISION_MODULARIZACION_IA_PRODUCCION.md">DOC_VISION</a>, <a href="../mejoras/DOC_INTEGRACION_ATS_ANTO_STUDIOS.md">DOC_INTEGRACION</a>, <a href="../profundizar/DOC_LOGS_FLUJOS_IA.md">DOC_LOGS</a>, <a href="../mejoras/DOC_MEJORAS.md">DOC_MEJORAS</a>.</p>
       </section>
 
@@ -319,7 +319,7 @@
             <tr><td>Equipo máximo (F2–F4)</td><td class="num">3–4 desarrolladores</td></tr>
           </table>
         </div>
-        <p>Las fases se solapan en parte (Anto, ATS, integración y logs pueden avanzar en paralelo con un equipo de 3–4 devs). Los tiempos son orientativos y dependen de priorización y de si se externaliza parte del trabajo.</p>
+        <p>Las fases se solapan en parte (App editor, ATS, integración y logs pueden avanzar en paralelo con un equipo de 3–4 devs). Los tiempos son orientativos y dependen de priorización y de si se externaliza parte del trabajo.</p>
       </section>
 
       <!-- EQUIPO Y ROLES -->
@@ -329,12 +329,12 @@
         <p class="subtitle">Perfiles sugeridos por fase (orientativo).</p>
         <table>
           <tr><th>Rol</th><th>Fase típica</th><th>Responsabilidad principal</th></tr>
-          <tr><td>Dev Anto / Frontend (Angular)</td><td>F0–F4</td><td>Editor, export, UI, schema, componentes (App editor).</td></tr>
-          <tr><td>Dev ATS / Backend (NestJS)</td><td>F0–F4</td><td>Hub ATS, APIs, análisis, integración con Anto, logs.</td></tr>
+          <tr><td>Dev App editor / Frontend (Angular)</td><td>F0–F4</td><td>Editor, export, UI, schema, componentes (App editor).</td></tr>
+          <tr><td>Dev ATS / Backend (NestJS)</td><td>F0–F4</td><td>Hub ATS, APIs, análisis, integración con App editor, logs.</td></tr>
           <tr><td>Dev fullstack / integración</td><td>F1–F4</td><td>API builder headless, flujo Publicar, quality gate, BFF si aplica.</td></tr>
           <tr><td>Dev IA / plataforma</td><td>F2–F4</td><td>Adapter IA→acciones, contexto Gemini, export enriquecido, bot del cliente (visión).</td></tr>
         </table>
-        <p>En F0–F1 puede bastar con <strong>2 devs</strong> (1 más Anto/frontend, 1 más ATS/backend) si se prioriza bien. A partir de F2 se recomienda al menos <strong>3</strong> y en F3–F4 hasta <strong>4</strong> para no bloquear integración, IA y logs a la vez.</p>
+        <p>En F0–F1 puede bastar con <strong>2 devs</strong> (1 más App editor/frontend, 1 más ATS/backend) si se prioriza bien. A partir de F2 se recomienda al menos <strong>3</strong> y en F3–F4 hasta <strong>4</strong> para no bloquear integración, IA y logs a la vez.</p>
       </section>
 
       <!-- FASES Y SPRINTS -->
@@ -352,7 +352,7 @@
           </tr>
           <tr>
             <td><span class="phase-tag base">F0</span></td>
-            <td>Base (Anto P0 + Logs piloto)</td>
+            <td>Base (App editor P0 + Logs piloto)</td>
             <td class="num">3 meses</td>
             <td class="num">6</td>
             <td class="num">2</td>
@@ -394,27 +394,27 @@
         <h1>Desglose por fase</h1>
 
         <h2><span class="phase-tag base">F0 – Base (3 meses, 6 sprints, 2 devs)</span></h2>
-        <p><strong>Objetivo:</strong> Base estable de Anto (export/publicación + layout) y piloto de logs para que el resto de fases no se bloqueen.</p>
+        <p><strong>Objetivo:</strong> Base estable del App editor (export/publicación + layout) y piloto de logs para que el resto de fases no se bloqueen.</p>
         <ul>
-          <li><strong>Anto (Mejoras P0):</strong> Export/publicación estable + ZIP; Smart-Adapt en componentes de layout; resize persistente.</li>
-          <li><strong>Logs (Fases 1–2):</strong> Logs estructurados JSON con <code>flowId</code> y <code>step</code> en al menos un flujo piloto (ej. análisis ATS o export Anto); persistir por flowId y exponer <code>GET /flows/:flowId/logs</code>.</li>
+          <li><strong>App editor (Mejoras P0):</strong> Export/publicación estable + ZIP; Smart-Adapt en componentes de layout; resize persistente.</li>
+          <li><strong>Logs (Fases 1–2):</strong> Logs estructurados JSON con <code>flowId</code> y <code>step</code> en al menos un flujo piloto (ej. análisis ATS o export App editor); persistir por flowId y exponer <code>GET /flows/:flowId/logs</code>.</li>
         </ul>
         <p><strong>Entregables:</strong> Editor con export fiable y descarga ZIP; flujo de análisis o export con logs exportables por flowId.</p>
 
         <h2><span class="phase-tag core">F1 – Núcleo y visión en hub (4 meses, 8 sprints, 2–3 devs)</span></h2>
-        <p><strong>Objetivo:</strong> Schema y catálogo consolidados (Visión F1); panel de Anto en el hub; mejoras P1 Anto.</p>
+        <p><strong>Objetivo:</strong> Schema y catálogo consolidados (Visión F1); panel del App editor en el hub; mejoras P1 App editor.</p>
         <ul>
           <li><strong>Visión F1:</strong> Schema de página estable (JSON Schema), registro de componentes como catálogo maquinaable, export estable; opcional API interna.</li>
-          <li><strong>Integración F1:</strong> Panel “Sitios Anto” en ATS (lista + enlaces a preview/prod); API básica en Anto de lista de proyectos y estado de publicación (o mock).</li>
-          <li><strong>Anto P1:</strong> Modo aislado unificado + persistencia; responsive y vista previa móvil.</li>
+          <li><strong>Integración F1:</strong> Panel “Sitios (App editor)” en ATS (lista + enlaces a preview/prod); API básica en el editor de lista de proyectos y estado de publicación (o mock).</li>
+          <li><strong>App editor P1:</strong> Modo aislado unificado + persistencia; responsive y vista previa móvil.</li>
         </ul>
-        <p><strong>Entregables:</strong> Documentación de schema y catálogo; hub con panel Anto; editor con modo aislado y persistencia.</p>
+        <p><strong>Entregables:</strong> Documentación de schema y catálogo; hub con panel App editor; editor con modo aislado y persistencia.</p>
 
         <h2><span class="phase-tag api">F2 – API, publicación e integración (6 meses, 12 sprints, 3–4 devs)</span></h2>
         <p><strong>Objetivo:</strong> API del builder (headless), flujo Publicar con staging/rollback, integración publicar desde hub y quality gate, logs con UI y templates.</p>
         <ul>
           <li><strong>Visión F2–F3:</strong> API REST (páginas, componentes, preview); flujo “Publicar” (versión, export, deploy), preview y staging, rollback, permisos.</li>
-          <li><strong>Integración F2–F3:</strong> Botón “Publicar a producción” desde hub (API Anto); quality gate (métricas ATS/Sonar antes de permitir publicar).</li>
+          <li><strong>Integración F2–F3:</strong> Botón “Publicar a producción” desde hub (API del App editor); quality gate (métricas ATS/Sonar antes de permitir publicar).</li>
           <li><strong>Logs F3–F5:</strong> UI “Ver logs en vivo” y “Exportar logs del flujo”; tipos de flujo e historial; flujos guardados como templates y re-ejecución desde hub.</li>
         </ul>
         <p><strong>Entregables:</strong> API del builder operativa; publicación controlada (preview → staging → prod) con rollback; hub con publicar + quality gate; logs en vivo y flujos guardados.</p>
@@ -423,7 +423,7 @@
         <p><strong>Objetivo:</strong> IA que genera/modifica apps (desde brief o asistente); integración rollback/auditoría y IA en contexto; logs para IA y tests.</p>
         <ul>
           <li><strong>Visión F4:</strong> Flujo “Generar app desde brief” con IA; adapter IA → acciones; integración con aprobación y publicación.</li>
-          <li><strong>Integración F4–F5:</strong> Rollback y auditoría desde hub; estado de sitios Anto en contexto Gemini; API headless Anto para IA/automatización.</li>
+          <li><strong>Integración F4–F5:</strong> Rollback y auditoría desde hub; estado de sitios (App editor) en contexto Gemini; API headless del editor para IA/automatización.</li>
           <li><strong>Logs F6–F7:</strong> Export de logs como contexto a Gemini (u otro); respuestas en hub (resumen, diagnóstico, sugerencia); flujos como oráculo para tests (re-ejecutar en CI, agente que genera tests desde flujo real).</li>
         </ul>
         <p><strong>Entregables:</strong> Chat/API que genera o modifica schema desde brief; informes y recomendaciones IA en hub; tests generados o validados desde flujos.</p>
@@ -432,7 +432,7 @@
         <p><strong>Objetivo:</strong> Export enriquecido (imágenes + MD), IAs especializadas por app, bot del cliente (voz/texto, clonable, tareas a agentes, análisis datos/métricas); mejoras P2–P3.</p>
         <ul>
           <li><strong>Logs F8 (visión):</strong> Export enriquecido (imágenes y Markdown en hitos del flujo); IAs especializadas por app; bot del cliente (comandos voz/texto, clonable, dar tareas a agentes, analizar datos y métricas de negocio).</li>
-          <li><strong>Anto P2–P3:</strong> Pulido UI (cards, forms, gallery), botón Publicar + flujo premium; tests, CI, documentación y onboarding.</li>
+          <li><strong>App editor P2–P3:</strong> Pulido UI (cards, forms, gallery), botón Publicar + flujo premium; tests, CI, documentación y onboarding.</li>
         </ul>
         <p><strong>Entregables:</strong> Exports de flujo con imágenes y MD; bot por cliente/workspace con voz y orquestación de agentes; producto estable y documentado.</p>
       </section>
@@ -465,7 +465,7 @@
         <h1>Hipótesis y riesgos</h1>
         <ul>
           <li><strong>Sprint de 2 semanas:</strong> Asumido como estándar; equipos que usen 1 o 3 semanas deben recalcular el número de sprints por fase.</li>
-          <li><strong>Paralelismo:</strong> Anto, ATS, integración y logs pueden repartirse entre devs; los plazos pueden acortarse si el equipo trabaja en paralelo sin bloqueos.</li>
+          <li><strong>Paralelismo:</strong> App editor, ATS, integración y logs pueden repartirse entre devs; los plazos pueden acortarse si el equipo trabaja en paralelo sin bloqueos.</li>
           <li><strong>Priorización:</strong> Si se recorta alcance (ej. solo integración básica sin IA avanzada), F3–F4 se reducen; si se prioriza bot y export enriquecido antes que “Generar app desde brief”, el orden de ítems dentro de F3–F4 puede cambiar.</li>
           <li><strong>Dependencias:</strong> F2 depende de F0–F1 (export estable, panel en hub); F3 depende de API builder y logs F1–F5. Retrasos en F0–F1 impactan el resto.</li>
           <li><strong>Riesgo de alcance:</strong> Añadir funcionalidades no previstas en los docs (nuevas apps, integraciones) aumenta duración y/o equipo.</li>
