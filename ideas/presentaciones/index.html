@@ -6,24 +6,27 @@
   <title>Presentación · Visión, Negocio e Integración</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@500;600;700&family=Exo+2:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Nunito:wght@400;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #06060a;
-      --bg-card: rgba(18, 18, 28, 0.85);
-      --bg-card-border: rgba(245, 158, 11, 0.25);
-      --border: rgba(255,255,255,0.06);
-      --text: #f1f1f4;
-      --text-muted: #94a3b8;
-      --accent: #f59e0b;
-      --accent-cyan: #22d3ee;
-      --accent-purple: #a78bfa;
-      --accent-soft: rgba(245, 158, 11, 0.12);
-      --success: #4ade80;
-      --warning: #facc15;
-      --glow-amber: 0 0 20px rgba(245, 158, 11, 0.15);
-      --glow-cyan: 0 0 20px rgba(34, 211, 238, 0.12);
+      --bg: #0a0a0f;
+      --bg-card: rgba(22, 22, 32, 0.92);
+      --bg-card-border: rgba(255, 180, 100, 0.2);
+      --border: rgba(255,255,255,0.08);
+      --text: #f5f5f7;
+      --text-muted: #a0aec0;
+      --accent: #ff8c42;
+      --accent-cyan: #4dd4e0;
+      --accent-green: #5eead4;
+      --accent-purple: #b794f6;
+      --accent-soft: rgba(255, 140, 66, 0.15);
+      --success: #68d391;
+      --warning: #f6e05e;
+      --glow: 0 0 24px rgba(255, 140, 66, 0.2);
+      --glow-cyan: 0 0 20px rgba(77, 212, 224, 0.15);
       --nav-w: 280px;
+      --radius: 18px;
+      --radius-sm: 12px;
     }
     * { box-sizing: border-box; }
     html { scroll-behavior: smooth; }
@@ -33,30 +36,35 @@
     }
     body {
       margin: 0;
-      font-family: 'Exo 2', sans-serif;
+      font-family: 'Nunito', sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.65;
+      line-height: 1.7;
       font-size: 1rem;
       background-image:
-        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(245, 158, 11, 0.08), transparent 50%),
-        radial-gradient(ellipse 80% 50% at 100% 50%, rgba(34, 211, 238, 0.05), transparent),
-        radial-gradient(ellipse 60% 40% at 0% 80%, rgba(167, 139, 250, 0.05), transparent);
+        radial-gradient(ellipse 140% 90% at 50% -15%, rgba(255, 140, 66, 0.12), transparent 55%),
+        radial-gradient(ellipse 70% 50% at 105% 40%, rgba(77, 212, 224, 0.08), transparent),
+        radial-gradient(ellipse 50% 40% at -5% 90%, rgba(183, 148, 246, 0.06), transparent),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.015) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 24px 24px;
     }
     .progress-bar {
       position: fixed;
       top: 0;
       left: var(--nav-w);
       right: 0;
-      height: 3px;
-      background: rgba(255,255,255,0.06);
+      height: 6px;
+      background: rgba(255,255,255,0.08);
       z-index: 100;
+      border-radius: 0 0 4px 0;
     }
     .progress-bar .fill {
       height: 100%;
       width: var(--scroll-pct, 0%);
+      border-radius: 0 4px 4px 0;
       background: linear-gradient(90deg, var(--accent), var(--accent-cyan));
-      transition: width 0.15s ease-out;
+      box-shadow: 0 0 12px rgba(255, 140, 66, 0.4);
+      transition: width 0.2s ease-out;
     }
     @media (max-width: 900px) { .progress-bar { left: 0; } }
     .layout {
@@ -66,7 +74,7 @@
     }
     @media (max-width: 900px) {
       .layout { grid-template-columns: 1fr; }
-      .nav { position: relative; height: auto; padding: 1rem; border-bottom: 1px solid var(--border); background: rgba(6, 6, 10, 0.98); }
+      .nav { position: relative; height: auto; padding: 1rem; border-bottom: 1px solid var(--border); background: rgba(10, 10, 15, 0.98); }
       .nav ul { display: flex; flex-wrap: wrap; gap: 0.5rem; }
     }
     .nav {
@@ -75,8 +83,8 @@
       height: 100vh;
       padding: 2rem 1rem;
       border-right: 1px solid var(--border);
-      background: rgba(6, 6, 10, 0.97);
-      backdrop-filter: blur(12px);
+      background: rgba(12, 12, 18, 0.96);
+      backdrop-filter: blur(16px);
     }
     .nav h2 {
       font-family: 'Orbitron', sans-serif;
@@ -86,33 +94,33 @@
       letter-spacing: 0.2em;
       color: var(--accent);
       margin: 0 0 1.25rem 1rem;
-      text-shadow: var(--glow-amber);
+      text-shadow: var(--glow);
     }
     .nav ul { list-style: none; padding: 0; margin: 0; }
-    .nav li { margin-bottom: 0.2rem; }
+    .nav li { margin-bottom: 0.25rem; }
     .nav a {
       display: block;
-      padding: 0.65rem 1rem;
+      padding: 0.7rem 1rem;
       color: var(--text-muted);
       text-decoration: none;
-      border-radius: 10px;
+      border-radius: 999px;
       font-size: 0.9rem;
-      font-weight: 500;
-      transition: color .2s, background .2s, box-shadow .2s, border-color .2s;
+      font-weight: 600;
+      transition: color .2s, background .2s, transform .2s, box-shadow .2s;
       border: 1px solid transparent;
     }
     .nav a:hover {
       color: var(--text);
       background: var(--accent-soft);
-      border-color: rgba(245, 158, 11, 0.2);
-      box-shadow: var(--glow-amber);
+      transform: translateX(4px);
+      box-shadow: var(--glow);
     }
     .nav a.active {
-      color: var(--accent);
-      background: linear-gradient(135deg, rgba(245, 158, 11, 0.15), rgba(34, 211, 238, 0.08));
-      border-color: rgba(245, 158, 11, 0.35);
-      font-weight: 600;
-      box-shadow: var(--glow-amber);
+      color: var(--bg);
+      background: linear-gradient(135deg, var(--accent), #ffb366);
+      border-color: rgba(255,255,255,0.2);
+      font-weight: 700;
+      box-shadow: var(--glow), inset 0 1px 0 rgba(255,255,255,0.2);
     }
     .nav .badge {
       font-size: 0.6rem;
@@ -138,7 +146,7 @@
       font-weight: 800;
       margin: 0 0 0.5rem;
       letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #fff 0%, var(--text-muted) 100%);
+      background: linear-gradient(135deg, #fff 0%, var(--accent-cyan) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -176,11 +184,11 @@
     .card {
       background: var(--bg-card);
       border: 1px solid var(--bg-card-border);
-      border-radius: 14px;
+      border-radius: var(--radius);
       padding: 1.5rem 1.75rem;
       margin: 1.25rem 0;
-      backdrop-filter: blur(8px);
-      box-shadow: var(--glow-amber), inset 0 1px 0 rgba(255,255,255,0.03);
+      backdrop-filter: blur(12px);
+      box-shadow: var(--glow), inset 0 1px 0 rgba(255,255,255,0.06);
     }
     .card strong { color: var(--text); }
     table {
@@ -188,30 +196,30 @@
       border-collapse: collapse;
       font-size: 0.9rem;
       margin: 1.25rem 0;
-      border-radius: 12px;
+      border-radius: var(--radius);
       overflow: hidden;
       border: 1px solid var(--border);
     }
-    th, td { padding: 0.7rem 0.9rem; text-align: left; border-bottom: 1px solid var(--border); }
+    th, td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid var(--border); }
     th {
       color: var(--text-muted);
-      font-weight: 600;
+      font-weight: 700;
       font-family: 'Rajdhani', sans-serif;
       font-size: 0.95rem;
       letter-spacing: 0.04em;
-      background: linear-gradient(180deg, rgba(245, 158, 11, 0.08), transparent);
+      background: linear-gradient(180deg, rgba(255, 140, 66, 0.12), rgba(77, 212, 224, 0.06));
     }
-    tr:hover td { background: rgba(255,255,255,0.02); }
+    tr:hover td { background: rgba(255,255,255,0.03); }
     .quote {
-      border-left: 4px solid var(--accent);
-      padding: 1rem 0 1rem 1.5rem;
+      border-left: 5px solid var(--accent);
+      padding: 1.25rem 1.5rem;
       margin: 1.5rem 0;
       color: var(--text);
       font-style: italic;
       font-size: 1.05rem;
-      background: linear-gradient(90deg, rgba(245, 158, 11, 0.06), transparent);
-      border-radius: 0 10px 10px 0;
-      box-shadow: var(--glow-amber);
+      background: linear-gradient(90deg, rgba(255, 140, 66, 0.08), transparent);
+      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+      box-shadow: var(--glow);
     }
     .audience {
       display: inline-block;
@@ -220,38 +228,38 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      padding: 0.4rem 0.75rem;
-      border-radius: 8px;
+      padding: 0.5rem 0.9rem;
+      border-radius: 999px;
       margin-bottom: 0.75rem;
       border: 1px solid;
     }
     .audience.cto {
-      background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(34, 211, 238, 0.08));
-      color: var(--success);
-      border-color: rgba(74, 222, 128, 0.3);
+      background: linear-gradient(135deg, rgba(94, 234, 212, 0.2), rgba(77, 212, 224, 0.1));
+      color: var(--accent-green);
+      border-color: rgba(94, 234, 212, 0.4);
     }
     .audience.dev {
-      background: linear-gradient(135deg, rgba(250, 204, 21, 0.15), rgba(245, 158, 11, 0.08));
+      background: linear-gradient(135deg, rgba(246, 224, 94, 0.2), rgba(255, 140, 66, 0.1));
       color: var(--warning);
-      border-color: rgba(250, 204, 21, 0.3);
+      border-color: rgba(246, 224, 94, 0.4);
     }
     pre {
-      background: rgba(2, 6, 12, 0.9);
-      border: 1px solid rgba(245, 158, 11, 0.2);
-      border-radius: 10px;
+      background: rgba(8, 10, 18, 0.95);
+      border: 1px solid rgba(255, 140, 66, 0.2);
+      border-radius: var(--radius-sm);
       padding: 1.25rem;
       overflow-x: auto;
       font-size: 0.8rem;
       color: var(--text-muted);
-      box-shadow: inset 0 0 30px rgba(0,0,0,0.3), 0 0 15px rgba(245, 158, 11, 0.05);
+      box-shadow: inset 0 0 30px rgba(0,0,0,0.3), 0 0 20px rgba(255, 140, 66, 0.06);
     }
     code {
-      font-family: 'Exo 2', ui-monospace, monospace;
+      font-family: 'Nunito', ui-monospace, monospace;
       font-size: 0.88em;
       color: var(--accent-cyan);
-      background: rgba(34, 211, 238, 0.08);
-      padding: 0.15em 0.4em;
-      border-radius: 6px;
+      background: rgba(77, 212, 224, 0.12);
+      padding: 0.2em 0.5em;
+      border-radius: 8px;
     }
     pre code { background: none; padding: 0; color: inherit; }
     .doc-ref {
@@ -280,25 +288,25 @@
     }
     section#portada .quote {
       font-size: 1.08rem;
-      padding: 1.25rem 0 1.25rem 1.5rem;
+      padding: 1.25rem 1.5rem;
     }
     .img-diagram {
       width: 100%;
       max-width: 900px;
       height: auto;
-      border-radius: 14px;
+      border-radius: var(--radius);
       border: 1px solid var(--bg-card-border);
-      box-shadow: var(--glow-amber);
+      box-shadow: var(--glow);
       margin: 1.5rem 0;
       display: block;
     }
     .venn-wrap {
       margin: 1.5rem 0;
-      padding: 1rem;
-      background: rgba(18, 18, 28, 0.6);
-      border-radius: 14px;
+      padding: 1.25rem;
+      background: var(--bg-card);
+      border-radius: var(--radius);
       border: 1px solid var(--bg-card-border);
-      box-shadow: var(--glow-amber);
+      box-shadow: var(--glow);
     }
     .venn-svg {
       width: 100%;
@@ -332,21 +340,25 @@
       padding: 0.5rem 1rem;
       background: var(--accent);
       color: var(--bg);
-      font-weight: 600;
-      border-radius: 8px;
+      font-weight: 700;
+      border-radius: 999px;
       text-decoration: none;
       z-index: 200;
       transition: top 0.2s;
     }
-    .skip-link:focus { top: 1rem; outline: 2px solid var(--accent-cyan); outline-offset: 2px; }
+    .skip-link:focus { top: 1rem; outline: 3px solid var(--accent-cyan); outline-offset: 2px; }
     .section-num {
+      display: inline-block;
       font-family: 'Orbitron', sans-serif;
-      font-size: 0.7rem;
+      font-size: 0.68rem;
       font-weight: 700;
       letter-spacing: 0.2em;
-      color: var(--accent);
-      margin-bottom: 0.5rem;
-      opacity: 0.9;
+      color: var(--bg);
+      background: linear-gradient(135deg, var(--accent), #ffb366);
+      padding: 0.35rem 0.8rem;
+      border-radius: 999px;
+      margin-bottom: 0.6rem;
+      box-shadow: 0 2px 8px rgba(255, 140, 66, 0.3);
     }
     .key-takeaway {
       background: linear-gradient(135deg, rgba(34, 211, 238, 0.08), rgba(245, 158, 11, 0.06));
@@ -372,7 +384,7 @@
       background: var(--accent-soft);
       transition: background 0.2s, box-shadow 0.2s;
     }
-    .back-top:hover { background: rgba(245, 158, 11, 0.2); box-shadow: var(--glow-amber); }
+    .back-top:hover { background: rgba(245, 158, 11, 0.2); box-shadow: var(--glow); }
     @media print {
       .progress-bar, .skip-link, .back-top, .nav { display: none !important; }
       .nav { position: relative; height: auto; border: 0; background: #0a0a0e; }
@@ -409,7 +421,7 @@
       <section id="portada">
         <p class="section-num" aria-hidden="true">Presentación</p>
         <h1>Visión, negocio e integración</h1>
-        <p class="subtitle">Editor · ATS · Sistema integrado</p>
+        <p class="subtitle">App editor · ATS · Sistema integrado</p>
         <div class="quote" style="margin: 1.5rem 0;">
           Evolución natural de <strong>Wix + Trello + Figma + CI/CD</strong> en un solo lugar: un agente puede hacer lo que hoy hace un dev, y los devs centran sus esfuerzos en <strong>mejorar la IA propia de la empresa</strong> para construir productos.
         </div>
@@ -780,7 +792,7 @@
 
         <h2>Ventaja competitiva</h2>
         <table>
-          <tr><th>Capacidad</th><th>Wix</th><th>Figma</th><th>Storybook</th><th>Editor</th></tr>
+          <tr><th>Capacidad</th><th>Wix</th><th>Figma</th><th>Storybook</th><th>App editor</th></tr>
           <tr><td>Editor visual</td><td>✅</td><td>✅</td><td>❌</td><td>✅</td></tr>
           <tr><td>Design tokens</td><td>❌</td><td>✅</td><td>❌</td><td>✅</td></tr>
           <tr><td>Export React/Angular/Vue</td><td>❌</td><td>❌</td><td>❌</td><td>✅</td></tr>
